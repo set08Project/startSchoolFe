@@ -7,7 +7,8 @@ import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { jwtDecode } from "jwt-decode";
 import { loginSchool, verifySchool } from "../../api/schoolAPIs";
-import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
+import { loginState } from "../../global/reduxState";
 
 const SignIn = () => {
   const { token } = useParams();
@@ -23,61 +24,20 @@ const SignIn = () => {
     setLoading(true);
     const val = { email: state, enrollmentID: password };
 
-    loginSchool(val)
-      .then((res) => {
+    loginSchool(val).then((res) => {
+      if (res.status === 201) {
+        dispatch(loginState(res.data));
+        toast.success("login successful");
         setLoading(false);
 
-        // if (res.response.status === 404) {
-
-        // } else {
-        //   Swal.fire({
-        //     position: "center",
-        //     icon: "error",
-        //     title: `tytyt`,
-        //     text: "You won't be able to revert this!",
-        //     showConfirmButton: false,
-        //     timer: 2500,
-        //   }).then(() => {
-        //     // navigate("/")
-        //     console.log("you can now Navigate!");
-        //   });
-        // }
-
-        if (res.statusCode === 201) {
-          console.log(res);
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: `welcome back`,
-            text: "You won't be able to revert this!",
-            showConfirmButton: false,
-            timer: 2500,
-          });
-        } else {
-          console.log(res);
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: `tytyt`,
-            text: "You won't be able to revert this!",
-            showConfirmButton: false,
-            timer: 2500,
-          });
+        {
+          !loading && navigate("/");
         }
-      })
-      .catch((err) => {
-        console.log("reading error: ", err);
-      });
-    // .then(() => {
-    //   Swal.fire({
-    //     position: "top-end",
-    //     icon: "success",
-    //     title: "Your work has been saved",
-
-    //     showConfirmButton: false,
-    //     timer: 1500,
-    //   });
-    // })
+      } else {
+        setLoading(false);
+        toast.error(`${res?.response?.data?.message}`);
+      }
+    });
   };
 
   useEffect(() => {
@@ -89,6 +49,7 @@ const SignIn = () => {
 
   return (
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
+      <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <div className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px]">
           SCH

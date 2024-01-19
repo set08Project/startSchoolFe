@@ -8,11 +8,13 @@ interface iInputProps extends InputHTMLAttributes<HTMLInputElement> {
   show?: boolean;
   showView?: boolean;
   errorText?: string;
+  bg?: string;
 }
 
 const Input: FC<iInputProps> = ({
   placeholder,
   show,
+  bg,
   className,
   errorText,
   value,
@@ -44,7 +46,9 @@ const Input: FC<iInputProps> = ({
       }}
     >
       <label
-        className={`text-[lightgray] transition-all duration-300 absolute  bg-white text-[12px] ml-2 px-[2px]
+        className={`text-[lightgray] transition-all duration-300 absolute ${
+          bg ? bg : "bg-white"
+        }  text-[12px] ml-2 px-[2px]
         `}
         style={{
           top: `${
@@ -52,6 +56,7 @@ const Input: FC<iInputProps> = ({
               ? "-0.75rem"
               : "0.75rem" && `${value ? "-0.75rem" : "0.75rem"}`
           }`,
+          backgroundColor: `${bg ? bg : "white"}`,
         }}
       >
         {placeholder}
