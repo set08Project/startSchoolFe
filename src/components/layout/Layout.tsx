@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../static/Header";
 import Sider from "../static/Sider";
 import { useDispatch, useSelector } from "react-redux";
+import LittleHeader from "./LittleHeader";
 
 const Layout = () => {
   const memberState = useSelector((state: any) => state.memberToggle);
@@ -22,7 +23,6 @@ const Layout = () => {
             }}
           >
             <Outlet />
-
             {memberState && (
               //   <div className="relative  ">
               <div

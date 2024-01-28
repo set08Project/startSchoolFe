@@ -3,10 +3,21 @@ import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { FaBarsProgress } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
+import { changeMenuState } from "../../global/reduxState";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
+
+  const handleToggleMenuFalse = () => {
+    if (!document.startViewTransition) {
+      dispatch(changeMenuState(false));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(changeMenuState(false));
+      });
+    }
+  };
 
   return (
     <div className="w-full border-r bg-white text-blue-900 flex flex-col ">
@@ -17,16 +28,16 @@ const Sider = () => {
       </div>
 
       {/* top box */}
-      <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-2">
+      {/* <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-2">
         <div className="mb-0 text-[14px] font-medium">
           Your Annual subscription for you and your Family is:
           <br />
           <strong></strong>
         </div>
-      </div>
+      </div> */}
 
       {/* top box */}
-      <div className="mt-5 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
+      <div className="mt-20 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[18px] font-medium">
           You are currently on an{" "}
         </div>
@@ -34,7 +45,7 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            name="You can't Add Member Now"
+            name="Add a staff"
             className="bg-black text-white border-none font-medium  leading-tight"
             onClick={() => {
               // onHandleClick();
@@ -65,30 +76,33 @@ const Sider = () => {
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-2 flex items-center justify-between "
               : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-2 flex items-center justify-between "
           }
+          onClick={handleToggleMenuFalse}
         >
           Stats
           <MdQueryStats />
         </NavLink>
         <NavLink
-          to="/view-family"
+          to="/view-staff"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-2 flex items-center justify-between "
               : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-2 flex items-center justify-between "
           }
+          onClick={handleToggleMenuFalse}
         >
-          View Families
+          View Staffs
           <MdPeople />
         </NavLink>
         <NavLink
-          to="/appointments"
+          to="/report"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-2 flex items-center justify-between "
               : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-2 flex items-center justify-between "
           }
+          onClick={handleToggleMenuFalse}
         >
-          Book Appointment
+          Complains
           <FaBarsProgress />
         </NavLink>
         <NavLink
@@ -98,6 +112,7 @@ const Sider = () => {
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-2 flex items-center justify-between "
               : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-2 flex items-center justify-between "
           }
+          onClick={handleToggleMenuFalse}
         >
           View Medical History
           <MdReport />
@@ -112,6 +127,7 @@ const Sider = () => {
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-2 flex items-center justify-between "
               : "duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-2"
           }
+          onClick={handleToggleMenuFalse}
         >
           Settings
           <MdSettings />

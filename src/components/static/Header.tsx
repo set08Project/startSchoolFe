@@ -1,9 +1,17 @@
-import { FaArrowDown } from "react-icons/fa6";
+import { FaArrowDown, FaBarsProgress } from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
 
 import SmallPiece from "./SmallPiece";
-import { MdClose, MdMenu } from "react-icons/md";
+import {
+  MdAccountCircle,
+  MdClose,
+  MdMenu,
+  MdPeople,
+  MdQueryStats,
+  MdReport,
+} from "react-icons/md";
+import { changeMenuState } from "../../global/reduxState";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -12,10 +20,16 @@ const Header = () => {
 
   return (
     <div
-      className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0"
-      onClick={() => {}}
+      className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
+      onClick={() => {
+        dispatch(changeMenuState(!toggle));
+      }}
     >
+      {/* <div> */}
       <div className="flex items-center  justify-end w-[90%]">
+        <div className="mr-5 font-medium">
+          23/24 <span className="text-[12px]">Academic Session</span>
+        </div>
         <div
           className="flex items-center px-2 py-1 border rounded-full gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
           onClick={() => {}}
@@ -38,12 +52,19 @@ const Header = () => {
         </div>
       </div>
 
+      {/* </div> */}
+
       <div
         className={`absolute duration-300 transition-all ${
-          toggle ? "right-6 top-14  " : "right-6 -top-36  "
+          toggle ? "right-6 top-14  " : "right-6 -top-56  "
         }`}
       >
-        <SmallPiece />
+        <SmallPiece
+          name={[
+            { title: "Account", icon: <MdAccountCircle />, to: "settings" },
+          ]}
+          log
+        />
       </div>
 
       {toggleMenu && (
@@ -52,7 +73,31 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <SmallPiece />
+          {/* <SmallPiece
+            name={[
+              {
+                title: "Stats",
+                icon: <MdQueryStats />,
+                to: "/",
+              },
+              {
+                title: "Teams",
+                icon: <MdPeople />,
+                to: "teams",
+              },
+              {
+                title: "Projects",
+                icon: <FaBarsProgress />,
+                to: "projects",
+              },
+              {
+                title: "Report",
+                icon: <MdReport />,
+                to: "report",
+              },
+            ]}
+            but
+          /> */}
         </div>
       )}
     </div>

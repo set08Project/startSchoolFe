@@ -9,6 +9,10 @@ import PrivateRouter from "./PrivateRouter";
 import MakeShift from "./MakeShift";
 import SecondStep from "../pages/home/start/SecondStep";
 import ThirdScreen from "../pages/home/start/ThirdStep";
+import ViewCommentsAndReportScreen from "../pages/report/ViewCommentsAndReportScreen";
+import HomeView from "../pages/home/HomeView";
+import SettingScreen from "../pages/settings/Setting";
+import ViewStaffScreen from "../pages/staffs/ViewStaffScreen";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -23,8 +27,31 @@ export const mainRouter = createBrowserRouter([
         element: <Layout />,
         children: [
           {
-            index: true,
             element: <HomeScreen />,
+            children: [
+              {
+                index: true,
+                element: <HomeView />,
+              },
+
+              {
+                index: true,
+                path: "report",
+                element: <ViewCommentsAndReportScreen />,
+              },
+            ],
+          },
+
+          {
+            index: true,
+            path: "view-staff",
+            element: <ViewStaffScreen />,
+          },
+
+          {
+            index: true,
+            path: "settings",
+            element: <SettingScreen />,
           },
         ],
       },

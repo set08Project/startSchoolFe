@@ -1,6 +1,17 @@
 import ClipLoader from "react-spinners/ClipLoader";
+import Button from "../reUse/Button";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const LoadingScreen = () => {
+  const [state, setState] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setState(true);
+      clearTimeout(timer);
+    }, 13000);
+  }, [state]);
   return (
     <div
       className="w-full h-screen absolute top-0 left-0 flex flex-col justify-center items-center "
@@ -12,6 +23,16 @@ const LoadingScreen = () => {
       }}
     >
       <ClipLoader color="#000000" size={20} />
+
+      {state && (
+        <div className="w-full flex-col flex items-center ">
+          {" "}
+          <p className="mt-10">You've been Logged Out</p>
+          <Link to="/auth/login" className="">
+            <Button name="Login Again" className="bg-blue-950 " />
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

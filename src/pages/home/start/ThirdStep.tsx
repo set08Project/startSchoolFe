@@ -15,7 +15,7 @@ const ThirdScreen = () => {
   return (
     <div className="flex text-blue-950 flex-col w-full h-screen items-center pt-20 ">
       <div className="w-full px-6 mb-10">
-        <LittleHeader name="Step One" />
+        <LittleHeader name="Step Two" />
       </div>
 
       <div className="mt-0" />

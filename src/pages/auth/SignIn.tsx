@@ -82,7 +82,10 @@ const SignIn = () => {
           className="w-[97%]"
           show
           //   errorText="Password has to be passed"
-          errorText={password && "Hope this is the right family token code?"}
+          errorText={
+            password &&
+            "Please ensure you're putting in the right school's EnrollemntID!"
+          }
           required
           value={password}
           onChange={(e: any) => {

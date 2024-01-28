@@ -17,13 +17,16 @@ const Register = () => {
     console.log("I was just clikcked...!");
     setLoading(true);
     if (email !== "") {
-      registerSchool(email)
-        .then(() => {
+      registerSchool(email).then((res) => {
+        if (res.status === 201) {
           setLoading(false);
-        })
-        .then(() => {
           navigate("/auth/register-message");
-        });
+          console.log(res);
+        } else {
+          console.log(res);
+          setLoading(false);
+        }
+      });
     }
   };
 

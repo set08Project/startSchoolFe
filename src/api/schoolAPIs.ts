@@ -64,9 +64,11 @@ export const readSchool = async (schoolID: string) => {
 
 export const logout = async () => {
   try {
-    return await axios.delete(`${URL}/logout`).then((res: any) => {
-      return res?.data;
-    });
+    return await axios
+      .delete(`${URL}/logout-school`, { withCredentials: true })
+      .then((res: any) => {
+        return res?.data;
+      });
   } catch (error) {
     return error;
   }
