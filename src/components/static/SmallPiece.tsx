@@ -1,11 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
 import { FC, ReactNode, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
-import { changeMenuState, logoutState } from "../../global/reduxState";
+import { changeToggleMenuState, logoutState } from "../../global/reduxState";
 import { logout } from "../../api/schoolAPIs";
+import { useSchoolData } from "../../hook/useSchoolAuth";
 
 interface iData {
   title?: string;
@@ -21,14 +22,15 @@ interface iProps {
 }
 
 const SmallPiece: FC<iProps> = ({ log, name, but }) => {
+  const { data } = useSchoolData();
   const dispatch = useDispatch();
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
-      dispatch(changeMenuState(false));
+      dispatch(changeToggleMenuState(false));
     } else {
       document.startViewTransition(() => {
-        dispatch(changeMenuState(false));
+        dispatch(changeToggleMenuState(false));
       });
     }
   };
@@ -116,7 +118,9 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       )}
       <div className="mt-4" />
       <hr />
-      <p className="p-2">SCH</p>
+      <p className="p-2 text-center break-words text-[12px] font-bold uppercase ">
+        {data?.schoolName}
+      </p>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { LiaGreaterThanSolid } from "react-icons/lia";
-import { FaUnlockKeyhole } from "react-icons/fa6";
+import { FaSchoolLock, FaUnlockKeyhole } from "react-icons/fa6";
 import { MdHealthAndSafety } from "react-icons/md";
 import { Link, Outlet } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const PersonalSetting: FC = () => {
 
   const pathData = [
     {
-      icon: <MdHealthAndSafety size={55} />,
+      icon: <FaSchoolLock size={55} />,
       title: "Why isn’t my info shown here?",
       detail: "We’re hiding some account details to protect your identity.",
       url: "/",
@@ -23,6 +23,13 @@ const PersonalSetting: FC = () => {
         "Contact info and personal details can be edited. If this info was used to verify your identity, you’ll need to get verified again the next time you book—or to continue hosting.",
       url: "/",
       size: 35,
+    },
+    {
+      icon: <MdHealthAndSafety size={55} />,
+      title: "Why isn’t my info shown here?",
+      detail: "We’re hiding some account details to protect your identity.",
+      url: "/",
+      size: 55,
     },
   ];
 

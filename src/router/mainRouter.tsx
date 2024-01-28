@@ -12,7 +12,9 @@ import ThirdScreen from "../pages/home/start/ThirdStep";
 import ViewCommentsAndReportScreen from "../pages/report/ViewCommentsAndReportScreen";
 import HomeView from "../pages/home/HomeView";
 import SettingScreen from "../pages/settings/Setting";
-import ViewStaffScreen from "../pages/staffs/ViewStaffScreen";
+import ViewStaffScreen from "../pages/staff/ViewStaffScreen";
+import PersonalSetting from "../pages/settings/PersonalSetting";
+import PersonalInfoScreen from "../pages/settings/PersonalInfoScreen";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -52,6 +54,28 @@ export const mainRouter = createBrowserRouter([
             index: true,
             path: "settings",
             element: <SettingScreen />,
+          },
+
+          {
+            path: "my-personal-info",
+            element: <PersonalSetting />,
+            children: [
+              {
+                index: true,
+                path: "info",
+                element: <PersonalInfoScreen />,
+              },
+              // {
+              //   index: true,
+              //   path: "my-main-info",
+              //   element: <ProfressionInfoScreen />,
+              // },
+              // {
+              //   index: true,
+              //   path: "choose-hospital",
+              //   element: <HospitalChice />,
+              // },
+            ],
           },
         ],
       },

@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Button from "../../components/reUse/Button";
-import GeneralDataScreen from "./GeneralDataScreen";
 import LittleHeader from "../../components/layout/LittleHeader";
 
 const HomeScreen = () => {
@@ -11,8 +10,9 @@ const HomeScreen = () => {
         <Outlet />
       </div>
       <div className="col-span-1 border p-2 rounded-md h-[200px] sticky transition-all duration-300 top-16">
-        <p className="font-medium text-[14px] mb-10">
-          <GeneralDataScreen />
+        <p className="font-medium text-[14px] mb-5">
+          {/* <GeneralDataScreen /> */}
+          Quick Action
         </p>
 
         <Button

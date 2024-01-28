@@ -1,14 +1,12 @@
 import { useState } from "react";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
-import { useUser, useUserID } from "../../hooks/useUserID";
 import { MdSave } from "react-icons/md";
-import { getUserNameAPI, getUserPhoneAPI } from "../../api/userAPI";
 import BeatLoader from "react-spinners/ClipLoader";
+import { useSchoolData } from "../../hook/useSchoolAuth";
 
 const PersonalInfoScreen = () => {
-  const { user: userID }: any = useUserID();
-  const { user: data }: any = useUser(userID);
+  const { data } = useSchoolData();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,8 +22,10 @@ const PersonalInfoScreen = () => {
   const onToggle = () => {
     if (!document.startViewTransition) {
       setToggle(!toggle);
+      setToggle2(false);
     } else {
       document.startViewTransition(() => {
+        setToggle2(false);
         setToggle(!toggle);
       });
     }
@@ -34,9 +34,11 @@ const PersonalInfoScreen = () => {
   const onToggle1 = () => {
     if (!document.startViewTransition) {
       setToggle1(!toggle1);
+      setToggle2(false);
     } else {
       document.startViewTransition(() => {
         setToggle1(!toggle1);
+        setToggle2(false);
       });
     }
   };
@@ -44,9 +46,11 @@ const PersonalInfoScreen = () => {
   const onToggle2 = () => {
     if (!document.startViewTransition) {
       setToggle2(!toggle2);
+      setToggle(false);
     } else {
       document.startViewTransition(() => {
         setToggle2(!toggle2);
+        setToggle(false);
       });
     }
   };
@@ -55,13 +59,64 @@ const PersonalInfoScreen = () => {
       {/* forms */}
       <div>
         <div className="flex w-[100%] justify-between h-[100px] relative ">
-          {" "}
           <div>
             <div>Legal Name</div>
-            <div>
-              {data?.firstName ? data?.firstName : "No First Name yet"}{" "}
-              {data?.lastName ? data?.lastName : "No Last Name yet"}
-            </div>
+            {toggle ? (
+              <div
+                className="absolute top-6 z-10 -left-1
+                h-[200px] w-[100%] sm:w-[120%] md:w-[105%] lg:w-[110%]  bg-blue-500 py-4
+                "
+                style={{
+                  background: "rgba(252, 254, 255, 0.25)",
+                  backdropFilter: " blur( 4px )",
+                }}
+              >
+                <div className="z-20">
+                  <div className="flex w-full">
+                    <Input
+                      className="flex-1 mr-1 placeholder:text-gray-400 "
+                      placeholder="Enter First Name"
+                      value={firstName}
+                      onChange={(e: any) => {
+                        setFirstName(e.target.value);
+                      }}
+                    />
+                    <Input
+                      className="flex-1 ml-1"
+                      placeholder="Enter Last Name "
+                      value={lastName}
+                      onChange={(e: any) => {
+                        setLastName(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      name={`${loading ? " Loading" : "save name"}`}
+                      icon={
+                        loading ? (
+                          <BeatLoader
+                            color={"color"}
+                            size={18}
+                            className="mb-[0.12rem]"
+                          />
+                        ) : (
+                          <MdSave />
+                        )
+                      }
+                      className={` bg-blue-950 transition-all duration-300 ${
+                        loading && "h-12"
+                      }`}
+                      onClick={() => {
+                        setLoading(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>No First Name yet</div>
+            )}
           </div>
           <div
             className="text-[12px] underline font-[500] hover:cursor-pointer  ml-10"
@@ -70,63 +125,6 @@ const PersonalInfoScreen = () => {
             Change
           </div>
         </div>
-        {toggle && (
-          <div
-            className="absolute left:0 sm:left-[0px] md:left-[260px] top-56 h-[200px] w-[95%] sm:w-[46%] bg-blue-500 py-4 z-10"
-            style={{
-              background: "rgba(252, 254, 255, 0.25)",
-              backdropFilter: " blur( 4px )",
-            }}
-          >
-            <div className="z-20">
-              <div className="flex w-full">
-                <Input
-                  className="flex-1 mr-1 placeholder:text-gray-400 "
-                  placeholder="Enter First Name"
-                  value={firstName}
-                  onChange={(e: any) => {
-                    setFirstName(e.target.value);
-                  }}
-                />
-                <Input
-                  className="flex-1 ml-1"
-                  placeholder="Enter Last Name "
-                  value={lastName}
-                  onChange={(e: any) => {
-                    setLastName(e.target.value);
-                  }}
-                />
-              </div>
-              <div>
-                <Button
-                  name={`${loading ? " Loading" : "save"}`}
-                  icon={
-                    loading ? (
-                      <BeatLoader
-                        color={"color"}
-                        size={18}
-                        className="mb-[0.12rem]"
-                      />
-                    ) : (
-                      <MdSave />
-                    )
-                  }
-                  className={` bg-blue-950 transition-all duration-300 ${
-                    loading && "h-12"
-                  }`}
-                  onClick={() => {
-                    setLoading(true);
-
-                    getUserNameAPI(userID, { firstName, lastName }).then(() => {
-                      onToggle();
-                      setLoading(false);
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* forms */}
@@ -164,9 +162,58 @@ const PersonalInfoScreen = () => {
           {" "}
           <div>
             <div>Phone numbers</div>
-            <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
-              Add a your contact phone Number: {data?.phoneNumber}
-            </div>
+
+            {toggle2 ? (
+              <div
+                className="absolute top-5 z-10 
+                h-[200px] w-[100%] sm:w-[120%] md:w-[90%]   bg-blue-500 py-4
+                "
+                style={{
+                  background: "rgba(252, 254, 255, 0.25)",
+                  backdropFilter: " blur( 4px )",
+                }}
+              >
+                <div className="z-20">
+                  <div className="flex w-full">
+                    <Input
+                      className="flex-1 mr-1 placeholder:text-gray-400 "
+                      placeholder="Enter your contact mobile number "
+                      value={phone}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setPhone(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      name={`${loading ? " Loading" : "save number"}`}
+                      icon={
+                        loading ? (
+                          <BeatLoader
+                            color={"color"}
+                            size={18}
+                            className="mb-[0.12rem]"
+                          />
+                        ) : (
+                          <MdSave />
+                        )
+                      }
+                      className={` bg-blue-950 transition-all duration-300 ${
+                        loading && "h-12"
+                      }`}
+                      onClick={() => {
+                        setLoading(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
+                Add a your contact phone Number: {data?.phoneNumber}
+              </div>
+            )}
+
             <div>
               <div className="font-[400] mt-3">
                 {toggle2 ? (
@@ -193,56 +240,6 @@ const PersonalInfoScreen = () => {
             Change
           </div>
         </div>
-        {toggle2 && (
-          <div
-            className="absolute left:0 sm:left-[0px] md:left-[260px] top-[460px] h-[200px] w-[95%] sm:w-[45%]   bg-blue-500 py-4 z-10"
-            style={{
-              background: "rgba(255, 255, 255, 0.25)",
-              backdropFilter: " blur( 4px )",
-            }}
-          >
-            <div className="z-20">
-              <div className="flex w-full">
-                <Input
-                  className="flex-1 mr-1 placeholder:text-gray-400 "
-                  placeholder="Enter your contact mobile number "
-                  value={phone}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setPhone(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="w-[200px] mt-3">
-                <Button
-                  name={`${loading ? " Loading" : "save"}`}
-                  icon={
-                    loading ? (
-                      <BeatLoader
-                        color={"color"}
-                        size={18}
-                        className="mb-[0.12rem]"
-                      />
-                    ) : (
-                      <MdSave />
-                    )
-                  }
-                  className={` bg-blue-950 transition-all duration-300 ${
-                    loading && "h-12"
-                  }`}
-                  onClick={() => {
-                    setLoading(true);
-
-                    getUserPhoneAPI(userID, phone).then(() => {
-                      onToggle2();
-                      setLoading(false);
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
