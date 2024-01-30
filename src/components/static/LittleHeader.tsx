@@ -10,7 +10,7 @@ const LittleHeader: FC<iProps> = ({ name }) => {
     <div>
       {" "}
       <div className="flex items-center text-blue-950">
-        New Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
+        Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
         <div className="capitalize">{name}</div>
       </div>
       <div className="text-blue-800 mt-5 font-[500] text-[30px] capitalize">

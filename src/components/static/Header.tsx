@@ -108,9 +108,9 @@ const Header = () => {
                 to: "view-staff",
               },
               {
-                title: "View Studients",
+                title: "View Students",
                 icon: <FaBarsProgress />,
-                to: "view-student",
+                to: "view-students",
               },
               {
                 title: "Reports",

@@ -78,7 +78,7 @@ const SignIn = () => {
           }}
         />
         <Input
-          placeholder="Family Token Code"
+          placeholder="School Enrollment ID"
           className="w-[97%]"
           show
           //   errorText="Password has to be passed"

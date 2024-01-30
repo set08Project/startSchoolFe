@@ -1,7 +1,10 @@
-import React from "react";
-
 const HomeView = () => {
-  return <div>HomeView</div>;
+  return (
+    <div>
+      <div />
+      <div>Home screen Data</div>
+    </div>
+  );
 };
 
 export default HomeView;

@@ -9,7 +9,7 @@ const LittleHeader: FC<iProps> = ({ name }) => {
   return (
     <div>
       {" "}
-      <div className="flex items-center text-blue-950">
+      <div className="flex items-center text-blue-950 ">
         Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
         <div className="capitalize">{name}</div>
       </div>

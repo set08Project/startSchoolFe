@@ -1,11 +1,34 @@
+document.title = "Welcome Back";
 import { Outlet } from "react-router-dom";
 import Button from "../../components/reUse/Button";
-import LittleHeader from "../../components/layout/LittleHeader";
+import LittleHeader from "../../components/static/LittleHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { displayDelay, displayStudent } from "../../global/reduxState";
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+  const view = useSelector((state: any) => state.showStudent);
+
+  const handleDisplayStudent = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayStudent(true));
+      dispatch(displayDelay(true));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayStudent(true));
+        const timer = setTimeout(() => {
+          clearTimeout(timer);
+          dispatch(displayDelay(true));
+        }, 100);
+      });
+    }
+  };
+
+  console.log(view);
+
   return (
     <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
-      <div className=" p-2 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
+      <div className="  col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
         <LittleHeader name={"Dashboard"} />
         <Outlet />
       </div>
@@ -21,8 +44,9 @@ const HomeScreen = () => {
         />
 
         <Button
-          name="Recruit New Staff"
+          name="Register new Student"
           className="bg-blue-950 text-[13px] w-[95%] py-2 mb-2"
+          onClick={handleDisplayStudent}
         />
       </div>
     </div>

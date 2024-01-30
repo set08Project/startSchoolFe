@@ -20,6 +20,9 @@ const initialState = {
   delayToggled: false,
   toggleMenu: false,
   showStaffComp: false,
+
+  showStudent: false,
+
   schoolInfo: {} || null,
   categoryData: data,
   categoryPicked: Array<iProps>,
@@ -67,6 +70,10 @@ const reduxState = createSlice({
       state.showStaffComp = payload;
     },
 
+    displayStudent: (state, { payload }) => {
+      state.showStudent = payload;
+    },
+
     displayDelay: (state, { payload }) => {
       state.delayToggled = payload;
     },
@@ -84,6 +91,7 @@ export const {
   changeToggleMenuState,
   displayStaffComp,
   displayDelay,
+  displayStudent,
 } = reduxState.actions;
 
 export default reduxState.reducer;

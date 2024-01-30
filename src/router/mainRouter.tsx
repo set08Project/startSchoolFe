@@ -15,6 +15,7 @@ import SettingScreen from "../pages/settings/Setting";
 import ViewStaffScreen from "../pages/staff/ViewStaffScreen";
 import PersonalSetting from "../pages/settings/PersonalSetting";
 import PersonalInfoScreen from "../pages/settings/PersonalInfoScreen";
+import ViewStudent from "../pages/student/ViewStudent";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -35,15 +36,18 @@ export const mainRouter = createBrowserRouter([
                 index: true,
                 element: <HomeView />,
               },
-
-              {
-                index: true,
-                path: "report",
-                element: <ViewCommentsAndReportScreen />,
-              },
             ],
           },
-
+          {
+            index: true,
+            path: "report",
+            element: <ViewCommentsAndReportScreen />,
+          },
+          {
+            index: true,
+            path: "view-students",
+            element: <ViewStudent />,
+          },
           {
             index: true,
             path: "view-staff",
