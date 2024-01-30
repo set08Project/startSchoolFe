@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 import AddNewStaff from "../../pages/staff/AddNewStaff";
 import { FC } from "react";
 import AddNewStudent from "../../pages/student/AddNewStudent";
+import AddSession from "../static/AddSession";
 
 const Layout: FC = () => {
   const show = useSelector((state: any) => state.showStaffComp);
   const showII = useSelector((state: any) => state.showStudent);
+  const showIII = useSelector((state: any) => state.sessionToggle);
 
   return (
     <div className="flex w-[100%]">
@@ -54,6 +56,20 @@ const Layout: FC = () => {
                 }}
               >
                 <AddNewStudent />
+              </div>
+            )}
+
+            {showIII && (
+              <div
+                className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
+                style={{
+                  background: "rgba(73, 154, 255, 0.2)",
+                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  backdropFilter: "blur(5px)",
+                  border: "1px solid rgba(73, 154, 255, 0.3)",
+                }}
+              >
+                <AddSession />
               </div>
             )}
           </div>

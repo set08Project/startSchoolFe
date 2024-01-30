@@ -7,7 +7,7 @@ interface iProps {
 const Tooltip: FC<PropsWithChildren<iProps>> = ({ children, tip }) => {
   return (
     <div>
-      <div className="lg:tooltip" data-tip={tip}>
+      <div className="md:tooltip -mt-5" data-tip={tip}>
         {children}
       </div>
     </div>

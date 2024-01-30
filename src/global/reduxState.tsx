@@ -22,6 +22,8 @@ const initialState = {
   showStaffComp: false,
 
   showStudent: false,
+  sessionToggle: false,
+  sessionToggled: false,
 
   schoolInfo: {} || null,
   categoryData: data,
@@ -77,6 +79,14 @@ const reduxState = createSlice({
     displayDelay: (state, { payload }) => {
       state.delayToggled = payload;
     },
+
+    displaySession: (state, { payload }) => {
+      state.sessionToggle = payload;
+    },
+
+    displaySessioned: (state, { payload }) => {
+      state.sessionToggled = payload;
+    },
   },
 });
 
@@ -92,6 +102,8 @@ export const {
   displayStaffComp,
   displayDelay,
   displayStudent,
+  displaySession,
+  displaySessioned,
 } = reduxState.actions;
 
 export default reduxState.reducer;

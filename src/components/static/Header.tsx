@@ -19,13 +19,16 @@ import {
 import {
   changeMenuState,
   changeToggleMenuState,
+  displaySessioned,
 } from "../../global/reduxState";
 import { useState } from "react";
+import Session from "./Session";
 
 const Header = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state: any) => state.toggle);
   const toggleMenu = useSelector((state: any) => state.toggleMenu);
+  const toggleSession = useSelector((state: any) => state.sessionToggled);
 
   const [sess, setSess] = useState<boolean>(false);
 
@@ -46,12 +49,13 @@ const Header = () => {
       className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
       onClick={() => {}}
     >
-      {/* <div> */}
+      {/* <div>  */}
       <div className="flex items-center  justify-end w-[90%]">
         <div
           className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
           onClick={() => {
             setSess(!sess);
+            dispatch(displaySessioned(true));
           }}
         >
           {" "}
@@ -60,7 +64,7 @@ const Header = () => {
             Session: <span>23/24 </span>
           </span>
           <div className="transition-all duration-300 ">
-            {sess ? (
+            {toggleSession ? (
               <FaAngleDown className="-rotate-180 duration-300 transition-all" />
             ) : (
               <FaAngleDown className="-rotate-0 duration-300 transition-all" />
@@ -71,7 +75,7 @@ const Header = () => {
         <div
           className="flex items-center px-2 py-1 border rounded-full gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
           onClick={() => {
-            // setSess(false);
+            setSess(false);
 
             dispatch(changeMenuState(!toggle));
             dispatch(changeToggleMenuState(false));
@@ -118,15 +122,10 @@ const Header = () => {
 
       <div
         className={`absolute duration-300 transition-all ${
-          sess ? "right-24 top-14  " : "right-24 -top-56  "
+          toggleSession ? "right-24 top-14  " : "right-24 -top-56  "
         }`}
       >
-        <SmallPiece
-          name={[
-            { title: "Account", icon: <MdAccountCircle />, to: "settings" },
-          ]}
-          log
-        />
+        <Session />
       </div>
 
       {toggleMenu && (

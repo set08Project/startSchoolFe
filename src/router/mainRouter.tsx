@@ -16,6 +16,7 @@ import ViewStaffScreen from "../pages/staff/ViewStaffScreen";
 import PersonalSetting from "../pages/settings/PersonalSetting";
 import PersonalInfoScreen from "../pages/settings/PersonalInfoScreen";
 import ViewStudent from "../pages/student/ViewStudent";
+import StaffDetail from "../pages/staff/StaffDetail";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -52,6 +53,11 @@ export const mainRouter = createBrowserRouter([
             index: true,
             path: "view-staff",
             element: <ViewStaffScreen />,
+          },
+          {
+            index: true,
+            path: "staff-details/:staffID",
+            element: <StaffDetail />,
           },
 
           {

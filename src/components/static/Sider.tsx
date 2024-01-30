@@ -10,6 +10,7 @@ import {
 } from "../../global/reduxState";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
+import Tooltip from "./Tooltip";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -59,9 +60,13 @@ const Sider = () => {
         <div className="ml-2">
           {/* TODO: Add tooltip */}
           <p className="break-words font-bold">
-            {data?.schoolName.length > 16
-              ? `${data?.schoolName.substring(0, 16)}...`
-              : data?.schoolName}
+            {data?.schoolName.length > 16 ? (
+              <Tooltip tip={data?.schoolName}>
+                <p>{data?.schoolName.substring(0, 16)}...</p>
+              </Tooltip>
+            ) : (
+              data?.schoolName
+            )}
           </p>
           <p className="break-words font-medium text-slate-400 text-[14px] mt-2">
             ID: {data?.enrollmentID}
