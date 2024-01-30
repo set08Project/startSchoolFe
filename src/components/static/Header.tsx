@@ -1,4 +1,9 @@
-import { FaArrowDown, FaBarsProgress } from "react-icons/fa6";
+import {
+  FaAngleDown,
+  FaArrowDown,
+  FaBarsProgress,
+  FaCalendar,
+} from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,11 +20,14 @@ import {
   changeMenuState,
   changeToggleMenuState,
 } from "../../global/reduxState";
+import { useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state: any) => state.toggle);
   const toggleMenu = useSelector((state: any) => state.toggleMenu);
+
+  const [sess, setSess] = useState<boolean>(false);
 
   const handleMenu = () => {
     if (!document.startViewTransition) {
@@ -40,12 +48,31 @@ const Header = () => {
     >
       {/* <div> */}
       <div className="flex items-center  justify-end w-[90%]">
-        <div className="mr-5 font-medium">
-          23/24 <span className="text-[12px]">Academic Session</span>
+        <div
+          className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
+          onClick={() => {
+            setSess(!sess);
+          }}
+        >
+          {" "}
+          <FaCalendar />
+          <span className="text-[12px] mx-1">
+            Session: <span>23/24 </span>
+          </span>
+          <div className="transition-all duration-300 ">
+            {sess ? (
+              <FaAngleDown className="-rotate-180 duration-300 transition-all" />
+            ) : (
+              <FaAngleDown className="-rotate-0 duration-300 transition-all" />
+            )}
+          </div>
         </div>
+
         <div
           className="flex items-center px-2 py-1 border rounded-full gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
           onClick={() => {
+            // setSess(false);
+
             dispatch(changeMenuState(!toggle));
             dispatch(changeToggleMenuState(false));
           }}
@@ -79,6 +106,19 @@ const Header = () => {
       <div
         className={`absolute duration-300 transition-all ${
           toggle ? "right-6 top-14  " : "right-6 -top-56  "
+        }`}
+      >
+        <SmallPiece
+          name={[
+            { title: "Account", icon: <MdAccountCircle />, to: "settings" },
+          ]}
+          log
+        />
+      </div>
+
+      <div
+        className={`absolute duration-300 transition-all ${
+          sess ? "right-24 top-14  " : "right-24 -top-56  "
         }`}
       >
         <SmallPiece
