@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import pix from "../../assets/pix.jpg";
 import Button from "../../components/reUse/Button";
 import LittleHeader from "../../components/static/LittleHeader";
-import { displayDelay, displayStaffComp } from "../../global/reduxState";
-import Tooltip from "../../components/static/Tooltip";
-import Toggle from "../../components/static/Toggle";
+import { displayDelay, displayStudent } from "../../global/reduxState";
+import { Link } from "react-router-dom";
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
@@ -14,12 +13,12 @@ const ViewStudent = () => {
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
-      dispatch(displayStaffComp(true));
+      dispatch(displayStudent(true));
       dispatch(displayDelay(true));
     } else {
       document.startViewTransition(() => {
         dispatch(displayDelay(true));
-        dispatch(displayStaffComp(true));
+        dispatch(displayStudent(true));
       });
     }
   };
@@ -127,13 +126,16 @@ const ViewStudent = () => {
 
                   <div className="w-[80px] border-r">3 of 5</div>
 
-                  <div className="w-[180px] border-r">
+                  <Link
+                    to={`student-details/:staffID`}
+                    className="w-[180px] border-r"
+                  >
                     <Button
                       name="View Detail"
                       className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
                       onClick={() => {}}
                     />
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

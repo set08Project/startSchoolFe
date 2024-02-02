@@ -1,7 +1,7 @@
 import { MdPeople, MdQueryStats, MdReport, MdSettings } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
-import { FaBarsProgress } from "react-icons/fa6";
+import { FaBarsProgress, FaStore } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeMenuState,
@@ -81,15 +81,16 @@ const Sider = () => {
 
       {/* top box */}
       <div className="mt-20 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
-        <div className="mb-4 text-[18px] font-medium">
-          You are currently on an{" "}
+        <div className="mb-4 text-[13px] font-medium ">
+          Encourage Parents to Purchase Learning Materials for thier child by
+          having more items in your Library Store{" "}
         </div>
         <div className="flex w-full justify-center">
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            name="Add a staff"
-            className="bg-black text-white border-none font-medium  leading-tight"
+            name="Add to Store"
+            className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
             onClick={() => {
               handleDisplayStaff();
             }}
@@ -145,7 +146,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          View Studients
+          View Students
           <FaBarsProgress />
         </NavLink>
         <NavLink
@@ -159,6 +160,18 @@ const Sider = () => {
         >
           Reports
           <MdReport />
+        </NavLink>
+        <NavLink
+          to="/store"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Store
+          <FaStore />
         </NavLink>
 
         <div className="flex-1" />

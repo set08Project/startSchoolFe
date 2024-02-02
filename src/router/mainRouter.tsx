@@ -17,6 +17,9 @@ import PersonalSetting from "../pages/settings/PersonalSetting";
 import PersonalInfoScreen from "../pages/settings/PersonalInfoScreen";
 import ViewStudent from "../pages/student/ViewStudent";
 import StaffDetail from "../pages/staff/StaffDetail";
+import StudentDetail from "../pages/student/StudentDetail";
+import ViewStoreItems from "../pages/store/ViewStoreItems";
+import ViewReport from "../pages/report/ViewReport";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -42,7 +45,8 @@ export const mainRouter = createBrowserRouter([
           {
             index: true,
             path: "report",
-            element: <ViewCommentsAndReportScreen />,
+            element: <ViewReport />,
+            // element: <ViewCommentsAndReportScreen />,
           },
           {
             index: true,
@@ -56,14 +60,25 @@ export const mainRouter = createBrowserRouter([
           },
           {
             index: true,
-            path: "staff-details/:staffID",
+            path: "view-staff/staff-details/:staffID",
             element: <StaffDetail />,
+          },
+          {
+            index: true,
+            path: "view-students/student-details/:staffID",
+            element: <StudentDetail />,
           },
 
           {
             index: true,
             path: "settings",
             element: <SettingScreen />,
+          },
+
+          {
+            index: true,
+            path: "store",
+            element: <ViewStoreItems />,
           },
 
           {

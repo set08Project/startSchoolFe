@@ -28,7 +28,8 @@
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.10.3",
     "swr": "^2.2.4",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^2.2.0",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

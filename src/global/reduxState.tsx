@@ -21,6 +21,8 @@ const initialState = {
   toggleMenu: false,
   showStaffComp: false,
 
+  cartToggle: false,
+
   showStudent: false,
   sessionToggle: false,
   sessionToggled: false,
@@ -87,6 +89,10 @@ const reduxState = createSlice({
     displaySessioned: (state, { payload }) => {
       state.sessionToggled = payload;
     },
+
+    displayCart: (state, { payload }) => {
+      state.cartToggle = payload;
+    },
   },
 });
 
@@ -104,6 +110,7 @@ export const {
   displayStudent,
   displaySession,
   displaySessioned,
+  displayCart,
 } = reduxState.actions;
 
 export default reduxState.reducer;
