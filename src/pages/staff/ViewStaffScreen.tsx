@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 7 });
+  const data = Array.from({ length: 3 });
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {

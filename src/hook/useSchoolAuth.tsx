@@ -1,5 +1,10 @@
 import useSWR from "swr";
-import { getSchoolCookie, readSchool, registerSchool } from "../api/schoolAPIs";
+import {
+  getSchoolCookie,
+  readSchool,
+  registerSchool,
+  viewSchoolByName,
+} from "../api/schoolAPIs";
 
 export const useSchoolRegister = (reader: any) => {
   const { mutate } = useSWR("api/register-school", () => {
@@ -35,4 +40,13 @@ export const useSchoolData = () => {
     });
   });
   return { data, isLoading };
+};
+
+export const useSchoolDataByName = (schoolName: string) => {
+  const { data: schoolInfo } = useSWR(`api/view-school/${schoolName}`, () => {
+    return viewSchoolByName(schoolName!).then((res) => {
+      return res.data;
+    });
+  });
+  return { schoolInfo };
 };

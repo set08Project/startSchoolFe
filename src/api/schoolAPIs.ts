@@ -131,3 +131,15 @@ export const changeSchoolStarted = async (schoolID: string) => {
     return error;
   }
 };
+
+export const viewSchoolByName = async (schoolName: string) => {
+  try {
+    return await axios
+      .get(`${URL}/get-school-by-name/${schoolName}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

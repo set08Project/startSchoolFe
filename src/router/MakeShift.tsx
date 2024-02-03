@@ -3,6 +3,8 @@ import { getSchoolCookie, readSchool } from "../api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 import LoadingScreen from "../components/static/LoadingScreen";
 import FirstScreen from "../pages/home/start/FirstScreen";
+import DirectAdmin from "./DirectAdmin";
+import DirectTeacher from "./DirectTeacher";
 
 const MakeShift = () => {
   const [state, setState] = useState<any>({} || "" || 0);
@@ -64,4 +66,8 @@ export default MakeShift;
     </div>
   )}
 </div>; */
+}
+
+{
+  /* <Outlet />; */
 }

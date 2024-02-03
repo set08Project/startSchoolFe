@@ -24,8 +24,6 @@ const HomeScreen = () => {
     }
   };
 
-  console.log(view);
-
   return (
     <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
       <div className="  col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">

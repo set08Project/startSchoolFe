@@ -1,8 +1,5 @@
-import React from "react";
 import LittleHeader from "../../components/static/LittleHeader";
 import pix from "../../assets/pix.jpg";
-import { Link } from "react-router-dom";
-import Button from "../../components/reUse/Button";
 
 const ViewReport = () => {
   const data = Array.from({ length: 7 });

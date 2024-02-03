@@ -1,9 +1,10 @@
-import { RouterProvider } from "react-router-dom";
-import { mainRouter } from "./router/mainRouter";
 import { PersistGate } from "redux-persist/integration/react";
 import persistStore from "redux-persist/es/persistStore";
 import { store } from "./global/store";
 import { Provider } from "react-redux";
+import RouterScreen from "./RouterScreen";
+import { ErrorBoundary } from "react-error-boundary";
+import LoadingScreen from "./components/static/LoadingScreen";
 
 let persistor = persistStore(store);
 
@@ -12,7 +13,9 @@ const App = () => {
     <div>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <RouterProvider router={mainRouter} />
+          <ErrorBoundary fallback={<div>LOadding...</div>}>
+            <RouterScreen />
+          </ErrorBoundary>
         </PersistGate>
       </Provider>
     </div>

@@ -7,6 +7,7 @@ import {
   categoryState,
   changeCategoryState,
   getSchoolInfo,
+  pickedCategory,
 } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
 import {
@@ -77,6 +78,7 @@ const SecondStep = () => {
                 changeSchoolStarted(dataID);
 
                 dispatch(getSchoolInfo({}));
+                dispatch(pickedCategory([]));
               }}
             />
           </Link>
