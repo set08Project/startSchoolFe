@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSchoolDataByName } from "../pages/hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
-import MainHeader from "./MainHeader";
+import SchoolPage from "./SchoolPage";
 
 const MainSchoolPage = () => {
   const { schoolName } = useParams();
@@ -22,7 +22,7 @@ const MainSchoolPage = () => {
   return (
     <div>
       {schoolInfo?.schoolName !== undefined ? (
-        <MainHeader props={schoolInfo} />
+        <SchoolPage props={schoolInfo} />
       ) : (
         <div>no page found</div>
       )}

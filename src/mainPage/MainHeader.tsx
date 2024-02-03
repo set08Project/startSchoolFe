@@ -5,6 +5,7 @@ interface iProps {
   props?: any;
 }
 const MainHeader: FC<iProps> = ({ props }) => {
+  console.log("reading this: ", props);
   return (
     <div
       className="fixed border-b w-full h-[70px] flex justify-center items-center
