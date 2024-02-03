@@ -2,9 +2,9 @@ import { Outlet } from "react-router-dom";
 import Header from "../static/Header";
 import Sider from "../static/Sider";
 import { useSelector } from "react-redux";
-import AddNewStaff from "../../pages/staff/AddNewStaff";
+import AddNewStaff from "../../pages/page/staff/AddNewStaff";
 import { FC } from "react";
-import AddNewStudent from "../../pages/student/AddNewStudent";
+import AddNewStudent from "../../pages/page/student/AddNewStudent";
 import AddSession from "../static/AddSession";
 
 const Layout: FC = () => {

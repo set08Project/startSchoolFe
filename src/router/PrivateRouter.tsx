@@ -1,5 +1,9 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { getSchoolCookie, openServerAPI, readSchool } from "../api/schoolAPIs";
+import {
+  getSchoolCookie,
+  openServerAPI,
+  readSchool,
+} from "../pages/api/schoolAPIs";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 

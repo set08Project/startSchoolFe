@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSchoolCookie, readSchool } from "../api/schoolAPIs";
+import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { RouterProvider } from "react-router-dom";
 import { adminRouter } from "./adminRouter";
 import { mainRouter } from "./mainRouter";
@@ -21,9 +21,8 @@ const RouterScreen = () => {
         });
       });
       clearTimeout(timer);
-    }, 1000);
+    });
   }, []);
-
   return (
     <div>
       {state.status === "school-admin" ? (
@@ -38,9 +37,9 @@ const RouterScreen = () => {
         <div>
           <RouterProvider router={studentRouter} />
         </div>
-      ) : (
+      ) : state?.status === "" ? (
         <RouterProvider router={mainRouter} />
-      )}
+      ) : null}
     </div>
   );
 };

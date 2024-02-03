@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSchoolCookie } from "../../../hook/useSchoolAuth";
+import { useSchoolCookie } from "../../hook/useSchoolAuth";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
 

@@ -5,8 +5,8 @@ import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
 import { changeToggleMenuState, logoutState } from "../../global/reduxState";
-import { logout } from "../../api/schoolAPIs";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { logout } from "../../pages/api/schoolAPIs";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 
 interface iData {
   title?: string;

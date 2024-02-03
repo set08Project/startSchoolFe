@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { displayDelay, displayStudent } from "../../global/reduxState";
+import { displayDelay, displayStudent } from "../../../global/reduxState";
 import AddStudent from "./AddStudent";
 
 const AddNewStaff = () => {

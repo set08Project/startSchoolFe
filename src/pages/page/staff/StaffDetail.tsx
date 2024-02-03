@@ -1,7 +1,7 @@
 document.title = "staff Detail's Page";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import LittleHeader from "../../components/layout/LittleHeader";
-import Button from "../../components/reUse/Button";
+import LittleHeader from "../../../components/layout/LittleHeader";
+import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
 
 const StaffDetail = () => {

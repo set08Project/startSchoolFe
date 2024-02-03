@@ -1,8 +1,8 @@
 document.title = "Report and Complains";
 import { FaCheckDouble } from "react-icons/fa6";
-import LittleHeader from "../../components/layout/LittleHeader";
+import LittleHeader from "../../../components/layout/LittleHeader";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import Tooltip from "../../components/static/Tooltip";
+import Tooltip from "../../../components/static/Tooltip";
 
 const ViewCommentsAndReportScreen = () => {
   const data = Array.from({ length: 6 });

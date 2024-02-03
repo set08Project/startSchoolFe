@@ -1,7 +1,7 @@
-import pix from "../../assets/pix.jpg";
+import pix from "../../../assets/pix.jpg";
 import { BsCart4 } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { displayCart } from "../../global/reduxState";
+import { displayCart } from "../../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
 
 const StoreView = () => {

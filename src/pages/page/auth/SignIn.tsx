@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Button from "../../components/reUse/Button";
-import Input from "../../components/reUse/Input";
+import Button from "../../../components/reUse/Button";
+import Input from "../../../components/reUse/Input";
 import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { jwtDecode } from "jwt-decode";
 import { loginSchool, verifySchool } from "../../api/schoolAPIs";
 import toast, { Toaster } from "react-hot-toast";
-import { loginState } from "../../global/reduxState";
+import { loginState } from "../../../global/reduxState";
 
 const SignIn = () => {
   const { token } = useParams();

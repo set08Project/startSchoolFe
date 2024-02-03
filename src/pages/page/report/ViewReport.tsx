@@ -1,5 +1,5 @@
-import LittleHeader from "../../components/static/LittleHeader";
-import pix from "../../assets/pix.jpg";
+import LittleHeader from "../../../components/static/LittleHeader";
+import pix from "../../../assets/pix.jpg";
 
 const ViewReport = () => {
   const data = Array.from({ length: 7 });

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { displayDelay, displayStaffComp } from "../../global/reduxState";
+import { displayDelay, displayStaffComp } from "../../../global/reduxState";
 import AddStaff from "./AddStaff";
 
 const AddNewStaff = () => {

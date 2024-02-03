@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-import PersonalSetting from "../pages/settings/PersonalSetting";
-import PersonalInfoScreen from "../pages/settings/PersonalInfoScreen";
-import ViewStoreItems from "../pages/store/ViewStoreItems";
-import SettingScreen from "../pages/settings/Setting";
-import StudentDetail from "../pages/student/StudentDetail";
-import StaffDetail from "../pages/staff/StaffDetail";
-import ViewStaffScreen from "../pages/staff/ViewStaffScreen";
-import ViewStudent from "../pages/student/ViewStudent";
-import ViewReport from "../pages/report/ViewReport";
+import PersonalSetting from "../pages/page/settings/PersonalSetting";
+import PersonalInfoScreen from "../pages/page/settings/PersonalInfoScreen";
+import ViewStoreItems from "../pages/page/store/ViewStoreItems";
+import SettingScreen from "../pages/page/settings/Setting";
+import StudentDetail from "../pages/page/student/StudentDetail";
+import StaffDetail from "../pages/page/staff/StaffDetail";
+import ViewStaffScreen from "../pages/page/staff/ViewStaffScreen";
+import ViewStudent from "../pages/page/student/ViewStudent";
+import ViewReport from "../pages/page/report/ViewReport";
 import HomeView from "../pages/home/HomeView";
 import HomeScreen from "../pages/home/HomeScreen";
 import Layout from "../components/layout/Layout";
@@ -113,5 +113,10 @@ export const adminRouter = createBrowserRouter([
   {
     path: "/step-third-data",
     element: <SecondStep />,
+  },
+
+  {
+    path: "*",
+    element: <LoadingScreen />,
   },
 ]);

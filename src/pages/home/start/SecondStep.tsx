@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { useSchoolCookie } from "../../../hook/useSchoolAuth";
+import { useSchoolCookie } from "../../hook/useSchoolAuth";
 import Button from "../../../components/reUse/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,7 +15,7 @@ import {
   changeSchoolName,
   changeSchoolStarted,
   changeSchoolTags,
-} from "../../../api/schoolAPIs";
+} from "../../api/schoolAPIs";
 
 const SecondStep = () => {
   const dispatch = useDispatch();

@@ -1,15 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "../components/layout/AuthLayout";
-import Register from "../pages/auth/Register";
-import SignIn from "../pages/auth/SignIn";
-import RegisterCard from "../pages/auth/RegisterCard";
+import Register from "../pages/page/auth/Register";
+import SignIn from "../pages/page/auth/SignIn";
+import RegisterCard from "../pages/page/auth/RegisterCard";
 
 import SecondStep from "../pages/home/start/SecondStep";
 import ThirdScreen from "../pages/home/start/ThirdStep";
-import MainSchoolPage from "../mainPage/MainSchoolPage";
 import LoadingScreen from "../components/static/LoadingScreen";
+import LandingPageScreen from "../mainPage/view/LandingPageScreen";
 
 export const mainRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPageScreen />,
+  },
+
   {
     path: "/auth",
     element: <AuthLayout />,

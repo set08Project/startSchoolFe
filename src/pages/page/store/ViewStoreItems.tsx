@@ -1,12 +1,12 @@
 document.title = "School's Store";
 import { useState } from "react";
-import LittleHeader from "../../components/layout/LittleHeader";
-import Button from "../../components/reUse/Button";
+import LittleHeader from "../../../components/layout/LittleHeader";
+import Button from "../../../components/reUse/Button";
 import StoreView from "./StoreView";
 import StoreItems from "./StoreItems";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemScreen from "./CartItemScreen";
-import { displayCart } from "../../global/reduxState";
+import { displayCart } from "../../../global/reduxState";
 
 const ViewStoreItems = () => {
   const dispatch = useDispatch();

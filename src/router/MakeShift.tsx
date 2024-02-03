@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSchoolCookie, readSchool } from "../api/schoolAPIs";
+import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 import LoadingScreen from "../components/static/LoadingScreen";
 import FirstScreen from "../pages/home/start/FirstScreen";

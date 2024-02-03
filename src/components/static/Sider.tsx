@@ -8,7 +8,7 @@ import {
   displayDelay,
   displayStaffComp,
 } from "../../global/reduxState";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 

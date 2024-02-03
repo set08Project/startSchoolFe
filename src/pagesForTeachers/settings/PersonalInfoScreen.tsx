@@ -3,7 +3,7 @@ import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import BeatLoader from "react-spinners/ClipLoader";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();

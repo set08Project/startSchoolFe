@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSchoolDataByName } from "../hook/useSchoolAuth";
+import { useSchoolDataByName } from "../pages/hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import MainHeader from "./MainHeader";
 

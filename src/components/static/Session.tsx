@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { FC, useState } from "react";
 import { displaySession, displaySessioned } from "../../global/reduxState";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import { FaCheckDouble } from "react-icons/fa6";
 
 const Session: FC = () => {
