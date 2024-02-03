@@ -8,6 +8,7 @@ import SecondStep from "../pages/home/start/SecondStep";
 import ThirdScreen from "../pages/home/start/ThirdStep";
 import LoadingScreen from "../components/static/LoadingScreen";
 import LandingPageScreen from "../mainPage/view/LandingPageScreen";
+import MainSchoolPage from "../mainPage/MainSchoolPage";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -55,10 +56,10 @@ export const mainRouter = createBrowserRouter([
     path: "*",
     element: <LoadingScreen />,
   },
-  // {
-  //   path: "/:schoolName",
-  //   element: <MainSchoolPage />,
-  // },
+  {
+    path: "/:schoolName",
+    element: <MainSchoolPage />,
+  },
 ]);
 
 // {

@@ -17,9 +17,15 @@ const MainSchoolPage = () => {
 
   document.title = `${schoolInfo?.schoolName}`;
 
+  console.log(schoolInfo?.schoolName);
+
   return (
     <div>
-      <MainHeader props={schoolInfo} />
+      {schoolInfo?.schoolName !== undefined ? (
+        <MainHeader props={schoolInfo} />
+      ) : (
+        <div>no page found</div>
+      )}
     </div>
   );
 };

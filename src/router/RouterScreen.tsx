@@ -23,6 +23,7 @@ const RouterScreen = () => {
       clearTimeout(timer);
     });
   }, []);
+
   return (
     <div>
       {state.status === "school-admin" ? (
@@ -37,7 +38,7 @@ const RouterScreen = () => {
         <div>
           <RouterProvider router={studentRouter} />
         </div>
-      ) : state?.status === "" ? (
+      ) : !state?.status ? (
         <RouterProvider router={mainRouter} />
       ) : null}
     </div>
@@ -45,9 +46,3 @@ const RouterScreen = () => {
 };
 
 export default RouterScreen;
-{
-  /* <RouterProvider router={adminRouter} /> */
-}
-{
-  /* <RouterProvider router={mainRouter} /> */
-}
