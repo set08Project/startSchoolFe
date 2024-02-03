@@ -15,6 +15,8 @@ import MakeShift from "./MakeShift";
 import PrivateRouter from "./PrivateRouter";
 import { ErrorBoundary } from "react-error-boundary";
 import LoadingScreen from "../components/static/LoadingScreen";
+import ThirdScreen from "../pages/home/start/ThirdStep";
+import SecondStep from "../pages/home/start/SecondStep";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -101,5 +103,15 @@ export const adminRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+
+  {
+    path: "/step-two-data",
+    element: <ThirdScreen />,
+  },
+
+  {
+    path: "/step-third-data",
+    element: <SecondStep />,
   },
 ]);

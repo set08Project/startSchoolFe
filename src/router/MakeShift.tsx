@@ -3,8 +3,6 @@ import { getSchoolCookie, readSchool } from "../api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 import LoadingScreen from "../components/static/LoadingScreen";
 import FirstScreen from "../pages/home/start/FirstScreen";
-import DirectAdmin from "./DirectAdmin";
-import DirectTeacher from "./DirectTeacher";
 
 const MakeShift = () => {
   const [state, setState] = useState<any>({} || "" || 0);
@@ -16,7 +14,6 @@ const MakeShift = () => {
           if (resp.status === 200) {
             return setState(resp.data);
           } else if (resp?.response?.status === 404) {
-            console.log("reading outside: ", state);
             return setState(resp?.response?.status);
           }
         });
@@ -47,27 +44,3 @@ const MakeShift = () => {
 };
 
 export default MakeShift;
-
-{
-  /* <div>
-  {state?.started ? (
-    <div>
-      <Outlet />
-    </div>
-  ) : (
-    <div>
-      {state !== null ? (
-        <div>
-          <FirstScreen />{" "}
-        </div>
-      ) : (
-        <div>lll</div>
-      )}
-    </div>
-  )}
-</div>; */
-}
-
-{
-  /* <Outlet />; */
-}

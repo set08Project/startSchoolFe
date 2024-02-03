@@ -29,7 +29,7 @@ const initialState = {
 
   schoolInfo: {} || null,
   categoryData: data,
-  categoryPicked: Array<iProps>,
+  categoryPicked: Array<iProps> || null,
 };
 
 const reduxState = createSlice({
@@ -48,7 +48,7 @@ const reduxState = createSlice({
       state.user = null;
     },
     categoryState: (state) => {
-      state.categoryData = data;
+      state.categoryData = data!;
     },
 
     pickedCategory: (state, { payload }) => {

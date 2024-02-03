@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { getSchoolCookie, readSchool } from "./api/schoolAPIs";
+import { useEffect, useState } from "react";
+import { getSchoolCookie, readSchool } from "../api/schoolAPIs";
 import { RouterProvider } from "react-router-dom";
-import { adminRouter } from "./router/adminRouter";
-import { mainRouter } from "./router/mainRouter";
-import { ErrorBoundary } from "react-error-boundary";
-import LoadingScreen from "./components/static/LoadingScreen";
+import { adminRouter } from "./adminRouter";
+import { mainRouter } from "./mainRouter";
+import { teacherRouter } from "./teacherRouter";
+import { studentRouter } from "./studentRouter";
 
 const RouterScreen = () => {
   const [state, setState] = useState<any>({} || "" || 0);
@@ -16,7 +16,6 @@ const RouterScreen = () => {
           if (resp.status === 200) {
             return setState(resp.data);
           } else if (resp?.response?.status === 404) {
-            console.log("reading outside: ", state);
             return setState(resp?.response?.status);
           }
         });
@@ -29,9 +28,15 @@ const RouterScreen = () => {
     <div>
       {state.status === "school-admin" ? (
         <div>
-          {/*  */}
           <RouterProvider router={adminRouter} />
-          {/* <div>Add</div> */}
+        </div>
+      ) : state.status === "school-teacher" ? (
+        <div>
+          <RouterProvider router={teacherRouter} />
+        </div>
+      ) : state.status === "school-student" ? (
+        <div>
+          <RouterProvider router={studentRouter} />
         </div>
       ) : (
         <RouterProvider router={mainRouter} />

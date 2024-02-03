@@ -78,7 +78,7 @@ const SecondStep = () => {
                 changeSchoolStarted(dataID);
 
                 dispatch(getSchoolInfo({}));
-                dispatch(pickedCategory([]));
+                dispatch(pickedCategory(null));
               }}
             />
           </Link>
