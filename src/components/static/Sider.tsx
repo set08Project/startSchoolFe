@@ -1,4 +1,10 @@
-import { MdPeople, MdQueryStats, MdReport, MdSettings } from "react-icons/md";
+import {
+  MdPeople,
+  MdQueryStats,
+  MdReport,
+  MdSchool,
+  MdSettings,
+} from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { FaBarsProgress, FaStore } from "react-icons/fa6";
@@ -148,6 +154,18 @@ const Sider = () => {
         >
           View Students
           <FaBarsProgress />
+        </NavLink>
+        <NavLink
+          to="/class-room"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          View Classrooms
+          <MdSchool />
         </NavLink>
         <NavLink
           to="/report"

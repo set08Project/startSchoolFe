@@ -51,9 +51,15 @@ const SignIn = () => {
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
-        <div className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px]">
+        <div
+          className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px] cursor-pointer"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           SCH
         </div>
+
         <div className="text-[26px] font-bold mb-3 text-blue-900">
           Welcome Back
         </div>

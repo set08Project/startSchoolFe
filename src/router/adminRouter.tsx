@@ -17,6 +17,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import LoadingScreen from "../components/static/LoadingScreen";
 import ThirdScreen from "../pages/home/start/ThirdStep";
 import SecondStep from "../pages/home/start/SecondStep";
+import ClassRoomScreen from "../pages/page/class/ClassRoomScreen";
+import ClassDetailScreen from "../pages/page/class/ClassDetailScreen";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -55,6 +57,16 @@ export const adminRouter = createBrowserRouter([
             index: true,
             path: "view-staff",
             element: <ViewStaffScreen />,
+          },
+          {
+            index: true,
+            path: "class-room",
+            element: <ClassRoomScreen />,
+          },
+          {
+            index: true,
+            path: "class-room/class-details/:classID",
+            element: <ClassDetailScreen />,
           },
           {
             index: true,

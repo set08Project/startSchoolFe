@@ -1,5 +1,6 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import Button from "../components/reUse/Button";
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: any;
@@ -20,17 +21,17 @@ const MainHeader: FC<iProps> = ({ props }) => {
     >
       <div className="w-[90%] flex justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-[100px] h-[60px] object-contain flex justify-center items-center border rounded-md ">
+          <div className="w-[80px] h-[40px] object-contain flex justify-center items-center border rounded-md ">
             SCH.
           </div>
-          <div className="font-bold text-[25px]">{props?.schoolName}</div>
+          <div className="font-bold text-[18px]">{props?.schoolName}</div>
         </div>
-        <div>
+        <Link to="/auth/login">
           <Button
             name="Get Started"
             className="bg-blue-950 text-[12px] py-4 px-8 hover:bg-blue-900 transition-all duration-300 "
           />
-        </div>
+        </Link>
       </div>
     </div>
   );
