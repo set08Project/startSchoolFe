@@ -24,20 +24,24 @@ const SignIn = () => {
     setLoading(true);
     const val = { email: state, enrollmentID: password };
 
-    loginSchool(val).then((res) => {
-      if (res.status === 201) {
-        dispatch(loginState(res.data));
-        toast.success("login successful");
-        setLoading(false);
+    loginSchool(val)
+      .then((res) => {
+        if (res.status === 201) {
+          dispatch(loginState(res.data));
+          toast.success("login successful");
+          setLoading(false);
 
-        {
-          !loading && navigate("/");
+          {
+            !loading && navigate("/");
+          }
+        } else {
+          setLoading(false);
+          toast.error(`${res?.response?.data?.message}`);
         }
-      } else {
-        setLoading(false);
-        toast.error(`${res?.response?.data?.message}`);
-      }
-    });
+      })
+      .then(() => {
+        window.location.reload();
+      });
   };
 
   useEffect(() => {

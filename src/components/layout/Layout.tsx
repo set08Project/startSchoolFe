@@ -1,16 +1,62 @@
 import { Outlet } from "react-router-dom";
 import Header from "../static/Header";
 import Sider from "../static/Sider";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddNewStaff from "../../pages/page/staff/AddNewStaff";
-import { FC } from "react";
+import { FC, useState } from "react";
 import AddNewStudent from "../../pages/page/student/AddNewStudent";
 import AddSession from "../static/AddSession";
+import AddAnyItem from "../static/AddAnyItems";
+import { displayClass } from "../../global/reduxState";
+import {
+  createSchoolClassroom,
+  createSchoolSubject,
+} from "../../pages/api/schoolAPIs";
+import toast from "react-hot-toast";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 
 const Layout: FC = () => {
+  const { data } = useSchoolData();
   const show = useSelector((state: any) => state.showStaffComp);
   const showII = useSelector((state: any) => state.showStudent);
-  const showIII = useSelector((state: any) => state.sessionToggle);
+
+  const classroom = useSelector((state: any) => state.classroomToggled);
+  const dispatch = useDispatch();
+
+  const [classRM, setClassRM] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleDisplaySubjectOff = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayClass(false));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayClass(false));
+      });
+    }
+  };
+
+  //createSchoolClassroom
+
+  const handleCreateClassRoom = () => {
+    try {
+      setLoading(true);
+      createSchoolClassroom(data._id, {
+        className: classRM,
+      }).then((res: any) => {
+        if (res.status === 201) {
+          setLoading(false);
+          handleDisplaySubjectOff();
+        } else {
+          setLoading(false);
+          toast.error(`${res.response.data.message}`);
+          console.log(res);
+        }
+      });
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <div className="flex w-[100%]">
@@ -59,7 +105,7 @@ const Layout: FC = () => {
               </div>
             )}
 
-            {showIII && (
+            {classroom && (
               <div
                 className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
                 style={{
@@ -69,7 +115,22 @@ const Layout: FC = () => {
                   border: "1px solid rgba(73, 154, 255, 0.3)",
                 }}
               >
-                <AddSession />
+                <AddAnyItem
+                  titleCall="Creating new classroom"
+                  offFn={handleDisplaySubjectOff}
+                  text="Place the name this would be generally called accross the life-span of the school's existance!"
+                  placeStart="JSS 1A"
+                  placeEnd="JSS 1A"
+                  startTitle="Enter Class Name"
+                  endTitle="Class Assigned"
+                  // setEnd={setClassAssigned}
+                  setStart={setClassRM}
+                  start={classRM}
+                  // end={classAssigned}
+                  handleFn={handleCreateClassRoom}
+                  loading={loading}
+                  // setLoading={setLoading}
+                />
               </div>
             )}
           </div>

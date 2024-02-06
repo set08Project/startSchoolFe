@@ -1,26 +1,34 @@
 document.title = "View Students";
 // import moment from "moment"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import pix from "../../../assets/pix.jpg";
 import star from "../../../assets/star.png";
 import { Link } from "react-router-dom";
-import { displayDelay, displayStudent } from "../../../global/reduxState";
+import {
+  displayClass,
+  displayDelay,
+  displayStudent,
+} from "../../../global/reduxState";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
+import { useSchoolClassRM, useSchoolData } from "../../hook/useSchoolAuth";
 
 const ClassRoomScreen = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 7 });
+  const data = Array.from({ length: 0 });
+  const { data: userID } = useSchoolData();
+  const { schoolClassroom } = useSchoolClassRM(userID?._id);
+  const classroom = useSelector((state: any) => state.classroomToggled);
 
-  const handleDisplayStaff = () => {
+  console.log(schoolClassroom);
+
+  const handleDisplayClassroom = () => {
     if (!document.startViewTransition) {
-      dispatch(displayStudent(true));
-      dispatch(displayDelay(true));
+      dispatch(displayClass(!classroom));
     } else {
       document.startViewTransition(() => {
-        dispatch(displayDelay(true));
-        dispatch(displayStudent(true));
+        dispatch(displayClass(!classroom));
       });
     }
   };
@@ -37,7 +45,7 @@ const ClassRoomScreen = () => {
         <Button
           name="Add new ClassRoom"
           className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
-          onClick={handleDisplayStaff}
+          onClick={handleDisplayClassroom}
         />
       </div>
       <div
@@ -62,7 +70,7 @@ const ClassRoomScreen = () => {
         </div>
 
         <div className=" w-[1220px] overflow-hidden">
-          {data?.map((props: any, i: number) => (
+          {schoolClassroom?.classRooms?.map((props: any, i: number) => (
             <div>
               <div>
                 <div
@@ -71,9 +79,11 @@ const ClassRoomScreen = () => {
                     i % 2 === 0 ? "bg-slate-50" : "bg-white"
                   }`}
                 >
-                  <div className="w-[80px] border-r">JSS 1A</div>
+                  <div className="w-[80px] border-r">{props.className}</div>
 
-                  <div className={`w-[100px] border-r`}>59</div>
+                  <div className={`w-[100px] border-r`}>
+                    {props.classStudents.length}
+                  </div>
                   <div className={`w-[100px] border-r`}>90%</div>
 
                   <div className="w-[270px] border-r flex justify-between pr-2 gap-4">

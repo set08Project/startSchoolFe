@@ -143,3 +143,53 @@ export const viewSchoolByName = async (schoolName: string) => {
     return error;
   }
 };
+
+export const createSchoolTeacher = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/create-school-teacher-admin/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+// subject API
+
+export const createSchoolSubject = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/create-subject/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createSchoolClassroom = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/create-classroom/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolClassroom = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classrooms/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

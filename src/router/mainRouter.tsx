@@ -12,11 +12,6 @@ import MainSchoolPage from "../mainPage/MainSchoolPage";
 
 export const mainRouter = createBrowserRouter([
   {
-    path: "/",
-    element: <LandingPageScreen />,
-  },
-
-  {
     path: "/auth",
     element: <AuthLayout />,
     children: [
@@ -59,6 +54,11 @@ export const mainRouter = createBrowserRouter([
   {
     path: "/:schoolName",
     element: <MainSchoolPage />,
+  },
+
+  {
+    path: "/",
+    element: <LandingPageScreen />,
   },
 ]);
 

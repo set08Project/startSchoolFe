@@ -8,6 +8,7 @@ import { studentRouter } from "./studentRouter";
 
 const RouterScreen = () => {
   const [state, setState] = useState<any>({} || "" || 0);
+  const [loadingState, setLoadingState] = useState<boolean>(false);
 
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -20,8 +21,17 @@ const RouterScreen = () => {
           }
         });
       });
-      clearTimeout(timer);
+
+      clearTimeout(timer)
     });
+
+    
+    const timing = setTimeout(() => {
+      if (!state.status) {
+        setLoadingState(true);
+      }
+      clearTimeout(timing);
+    }, 200);
   }, []);
 
   return (
@@ -38,9 +48,15 @@ const RouterScreen = () => {
         <div>
           <RouterProvider router={studentRouter} />
         </div>
-      ) : !state?.status ? (
-        <RouterProvider router={mainRouter} />
-      ) : null}
+      ) : (
+        <div>
+          {loadingState && (
+            <div>
+              {!state?.status && <RouterProvider router={mainRouter} />}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

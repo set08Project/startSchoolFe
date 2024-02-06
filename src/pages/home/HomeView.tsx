@@ -1,8 +1,13 @@
+import HomeScreen from "../page/stats/HomeScreen";
+import ScreenHome from "./stat/ScreenHome";
+
 const HomeView = () => {
   return (
     <div>
       <div />
-      <div>Home screen Data</div>
+      <div>
+        <ScreenHome />
+      </div>
     </div>
   );
 };

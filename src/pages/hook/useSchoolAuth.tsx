@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  getSchoolClassroom,
   getSchoolCookie,
   readSchool,
   registerSchool,
@@ -49,4 +50,16 @@ export const useSchoolDataByName = (schoolName: string) => {
     });
   });
   return { schoolInfo };
+};
+
+export const useSchoolClassRM = (schoolID: string) => {
+  const { data: schoolClassroom } = useSWR(
+    `api/view-classrooms/${schoolID}`,
+    () => {
+      return getSchoolClassroom(schoolID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolClassroom };
 };

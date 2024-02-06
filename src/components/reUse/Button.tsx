@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface iButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  name: string;
+  name?: any;
   icon?: ReactNode;
 }
 
