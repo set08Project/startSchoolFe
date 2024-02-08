@@ -28,6 +28,8 @@ const initialState = {
   sessionToggled: false,
   subjectToggled: false,
   classroomToggled: false,
+  notice: false,
+  event: false,
 
   schoolInfo: {} || null,
   categoryData: data,
@@ -103,6 +105,14 @@ const reduxState = createSlice({
     displayClass: (state, { payload }) => {
       state.classroomToggled = payload;
     },
+
+    displayNotice: (state, { payload }) => {
+      state.notice = payload;
+    },
+
+    displayNoticeEvent: (state, { payload }) => {
+      state.event = payload;
+    },
   },
 });
 
@@ -123,6 +133,8 @@ export const {
   displayCart,
   displaySubject,
   displayClass,
+  displayNotice,
+  displayNoticeEvent,
 } = reduxState.actions;
 
 export default reduxState.reducer;

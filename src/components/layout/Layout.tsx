@@ -5,13 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import AddNewStaff from "../../pages/page/staff/AddNewStaff";
 import { FC, useState } from "react";
 import AddNewStudent from "../../pages/page/student/AddNewStudent";
-import AddSession from "../static/AddSession";
+
 import AddAnyItem from "../static/AddAnyItems";
 import { displayClass } from "../../global/reduxState";
-import {
-  createSchoolClassroom,
-  createSchoolSubject,
-} from "../../pages/api/schoolAPIs";
+import { createSchoolClassroom } from "../../pages/api/schoolAPIs";
 import toast from "react-hot-toast";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 
@@ -24,6 +21,10 @@ const Layout: FC = () => {
   const dispatch = useDispatch();
 
   const [classRM, setClassRM] = useState<string>("");
+  const [num1, setNumb1] = useState<number>(0);
+  const [num2, setNumb2] = useState<number>(0);
+  const [num3, setNumb3] = useState<number>(0);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleDisplaySubjectOff = () => {
@@ -43,6 +44,9 @@ const Layout: FC = () => {
       setLoading(true);
       createSchoolClassroom(data._id, {
         className: classRM,
+        class1stFee: num1,
+        class2ndFee: num2,
+        class3rdFee: num3,
       }).then((res: any) => {
         if (res.status === 201) {
           setLoading(false);
@@ -116,6 +120,7 @@ const Layout: FC = () => {
                 }}
               >
                 <AddAnyItem
+                  fee
                   titleCall="Creating new classroom"
                   offFn={handleDisplaySubjectOff}
                   text="Place the name this would be generally called accross the life-span of the school's existance!"
@@ -123,13 +128,16 @@ const Layout: FC = () => {
                   placeEnd="JSS 1A"
                   startTitle="Enter Class Name"
                   endTitle="Class Assigned"
-                  // setEnd={setClassAssigned}
                   setStart={setClassRM}
                   start={classRM}
-                  // end={classAssigned}
                   handleFn={handleCreateClassRoom}
                   loading={loading}
-                  // setLoading={setLoading}
+                  num1={num1}
+                  num2={num2}
+                  num3={num3}
+                  setNumb1={setNumb1}
+                  setNumb2={setNumb2}
+                  setNumb3={setNumb3}
                 />
               </div>
             )}

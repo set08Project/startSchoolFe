@@ -193,3 +193,49 @@ export const getSchoolClassroom = async (schoolID: string) => {
     return error;
   }
 };
+
+export const getSchoolAnncoement = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-announcement/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolEvent = async (schoolID: string) => {
+  try {
+    return await axios.get(`${URL}/view-event/${schoolID}`).then((res: any) => {
+      return res?.data;
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createSchoolEvent = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-event/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createSchoolAnnouncement = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-announcement/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

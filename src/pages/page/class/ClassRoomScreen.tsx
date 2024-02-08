@@ -91,19 +91,25 @@ const ClassRoomScreen = () => {
                       <label className="text-[10px] font-medium">
                         1st Term
                       </label>
-                      <p className="mt-3 font-bold">₦40,000</p>
+                      <p className="mt-3 font-bold">
+                        ₦{parseInt(props.class1stFee).toLocaleString()}
+                      </p>
                     </div>
                     <div className="flex flex-col items-center">
                       <label className="text-[10px] font-medium">
                         2nd Term
                       </label>
-                      <p className="mt-3 font-bold">₦40,000</p>
+                      <p className="mt-3 font-bold">
+                        ₦{parseInt(props.class2ndFee).toLocaleString()}
+                      </p>
                     </div>
                     <div className="flex flex-col items-center">
                       <label className="text-[10px] font-medium">
                         3rd Term
                       </label>
-                      <p className="mt-3 font-bold">₦40,000</p>
+                      <p className="mt-3 font-bold">
+                        ₦{parseInt(props.class3rdFee).toLocaleString()}
+                      </p>
                     </div>
                   </div>
                   <div className="w-[20px] border-r">-</div>
@@ -129,19 +135,25 @@ const ClassRoomScreen = () => {
                   </div>
 
                   {/* name */}
-                  <div className="w-[220px] flex gap-2 border-r">
-                    <img
-                      className="w-16 shadow-md h-14 rounded-2xl border object-cover"
-                      src={pix}
-                    />
-                    <div>
-                      <p className="leading-tight">class Teacher Name</p>
-                      <div className="mt-2" />
-                      <p className="flex items-center gap-1">
-                        <FaStar className="ml-1 mb-1" />
-                        <span>4</span>
-                      </p>
-                    </div>
+                  <div className="w-[220px]">
+                    {props.classTeacherName ? (
+                      <div className="w-[220px] flex gap-2 border-r">
+                        <img
+                          className="w-16 shadow-md h-14 rounded-2xl border object-cover"
+                          src={pix}
+                        />
+                        <div>
+                          <p className="leading-tight">class Teacher Name</p>
+                          <div className="mt-2" />
+                          <p className="flex items-center gap-1">
+                            <FaStar className="ml-1 mb-1" />
+                            <span>4</span>
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>no teacher assigned yet</div>
+                    )}
                   </div>
 
                   <div className="w-[150px] border-r  ">90%</div>

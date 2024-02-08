@@ -1,7 +1,9 @@
 import useSWR from "swr";
 import {
+  getSchoolAnncoement,
   getSchoolClassroom,
   getSchoolCookie,
+  getSchoolEvent,
   readSchool,
   registerSchool,
   viewSchoolByName,
@@ -62,4 +64,27 @@ export const useSchoolClassRM = (schoolID: string) => {
     }
   );
   return { schoolClassroom };
+};
+
+export const useSchoolAnnouncement = () => {
+  const { dataID } = useSchoolCookie();
+  const { data: schoolAnnouncement } = useSWR(
+    `api/view-announcement/${dataID}`,
+    () => {
+      return getSchoolAnncoement(dataID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolAnnouncement };
+};
+
+export const useSchoolEvent = () => {
+  const { dataID } = useSchoolCookie();
+  const { data: schoolEvent } = useSWR(`api/view-event/${dataID}`, () => {
+    return getSchoolEvent(dataID!).then((res) => {
+      return res.data;
+    });
+  });
+  return { schoolEvent };
 };

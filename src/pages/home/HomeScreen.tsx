@@ -1,32 +1,42 @@
-document.title = "Welcome Back";
+document.title = "Welcome Back Dashboard";
 import { Outlet } from "react-router-dom";
 import Button from "../../components/reUse/Button";
 import LittleHeader from "../../components/static/LittleHeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   displayDelay,
+  displayNotice,
+  displayNoticeEvent,
   displayStudent,
   displaySubject,
 } from "../../global/reduxState";
 import AddAnyItem from "../../components/static/AddAnyItems";
 import { useState } from "react";
-import { createSchoolSubject } from "../api/schoolAPIs";
+import {
+  createSchoolAnnouncement,
+  createSchoolEvent,
+  createSchoolSubject,
+} from "../api/schoolAPIs";
 import { useSchoolData } from "../hook/useSchoolAuth";
 import toast from "react-hot-toast";
+import Announcement from "./Announcement";
+import moment from "moment";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const view = useSelector((state: any) => state.showStudent);
   const showIV = useSelector((state: any) => state.subjectToggled);
+  const notice = useSelector((state: any) => state.notice);
+  const event = useSelector((state: any) => state.event);
 
-  const classroom = useSelector((state: any) => state.classroomToggled);
   const { data } = useSchoolData();
-
-  console.log(data);
 
   const [subject, setSubject] = useState("");
   const [classAssigned, setClassAssigned] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [startDateTime, setStartDateTime] = useState<any>(new Date());
+  const [title, setTitle] = useState<string>("");
+  const [details, setDetails] = useState<string>("");
 
   const handleDisplayStudent = () => {
     if (!document.startViewTransition) {
@@ -39,6 +49,26 @@ const HomeScreen = () => {
           clearTimeout(timer);
           dispatch(displayDelay(true));
         }, 100);
+      });
+    }
+  };
+
+  const handleDisplayEvent = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayNoticeEvent(!event));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayNoticeEvent(!event));
+      });
+    }
+  };
+
+  const handleDisplayNotice = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayNotice(!notice));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayNotice(!notice));
       });
     }
   };
@@ -84,11 +114,65 @@ const HomeScreen = () => {
     }
   };
 
+  const handleCreateAnnouncement = () => {
+    try {
+      setLoading(true);
+      createSchoolAnnouncement(data._id, {
+        title,
+        details,
+        date: moment(startDateTime).format("LLL"),
+      }).then((res: any) => {
+        if (res.status === 201) {
+          setLoading(false);
+          handleDisplayEvent();
+          setStartDateTime(null);
+          setTitle("");
+          setDetails("");
+        } else {
+          setLoading(false);
+          toast.error(`${res.response.data.message}`);
+          console.log(res);
+        }
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handleCreateEvent = () => {
+    try {
+      setLoading(true);
+      createSchoolEvent(data._id, {
+        title,
+        details,
+        date: moment(startDateTime).format("LLL"),
+      }).then((res: any) => {
+        if (res.status === 201) {
+          setLoading(false);
+          handleDisplayNotice();
+          setStartDateTime(null);
+          setTitle("");
+          setDetails("");
+        } else {
+          setLoading(false);
+          toast.error(`${res.response.data.message}`);
+          console.log(res);
+        }
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
   return (
     <div>
       <LittleHeader name={"Dashboard"} />
       <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
         <div className="mt-24 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
+          <div className="w-full min-h-[130px] bg-blue-950 rounded-lg mt-1 text-white p-3">
+            <p className="text-[20px] mb-2">Announcement/Event</p>
+            <Announcement />
+          </div>
           <Outlet />
         </div>
 
@@ -102,6 +186,7 @@ const HomeScreen = () => {
               <Button
                 name="Push Announcement"
                 className="bg-black hover:bg-neutral-800 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                onClick={handleDisplayNotice}
               />
 
               <Button
@@ -113,6 +198,7 @@ const HomeScreen = () => {
               <Button
                 name="Create Event"
                 className="bg-purple-900 hover:bg-purple-950 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                onClick={handleDisplayEvent}
               />
 
               <Button
@@ -180,19 +266,76 @@ const HomeScreen = () => {
           />
         </div>
       )}
+
+      {notice && (
+        <div
+          className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
+          style={{
+            background: "rgba(73, 154, 255, 0.2)",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(5px)",
+            border: "1px solid rgba(73, 154, 255, 0.3)",
+          }}
+        >
+          <AddAnyItem
+            titleCall="Make Announcement"
+            offFn={handleDisplayNotice}
+            date
+            text="Make a public Announcement to give an importance notice to all teachers and student about something very important...!"
+            placeStart="Title this Announcement"
+            placeEnd="Mon. 21st Feb 2024"
+            startTitle="Enter Announcement Title"
+            endTitle="Date the Announcement"
+            // setEnd={setDea}
+            setStart={setTitle}
+            setAnnounce={setDetails}
+            announce={details}
+            start={title}
+            end={classAssigned}
+            handleFn={handleCreateAnnouncement}
+            loading={loading}
+            setLoading={setLoading}
+            startDateTime={startDateTime}
+            startDateTimeFn={(date: any) => setStartDateTime(date)}
+          />
+        </div>
+      )}
+
+      {event && (
+        <div
+          className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
+          style={{
+            background: "rgba(73, 154, 255, 0.2)",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(5px)",
+            border: "1px solid rgba(73, 154, 255, 0.3)",
+          }}
+        >
+          <AddAnyItem
+            titleCall="Create a new Event"
+            offFn={handleDisplayEvent}
+            date
+            text="Make a public Announcement to give an importance notice to all teachers and student about something very important...!"
+            placeStart="Title this Announcement"
+            placeEnd="Mon. 21st Feb 2024"
+            startTitle="Enter Announcement Title"
+            endTitle="Date the Announcement"
+            // setEnd={setDea}
+            setStart={setTitle}
+            setAnnounce={setDetails}
+            announce={details}
+            start={title}
+            end={classAssigned}
+            handleFn={handleCreateEvent}
+            loading={loading}
+            setLoading={setLoading}
+            startDateTime={startDateTime}
+            startDateTimeFn={(date: any) => setStartDateTime(date)}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 export default HomeScreen;
-
-// text,
-//   handleFn,
-//   start,
-//   end,
-//   setStart,
-//   setEnd,
-//   placeStart,
-//   placeEnd,
-//   startTitle,
-//   endTitle,
