@@ -39,7 +39,7 @@ interface iProps {
   setAnnounce?: React.Dispatch<React.SetStateAction<string>>;
   announce?: string;
   date?: boolean;
-  note?: boolean;
+  sub?: boolean;
   startDateTime?: any;
   startDateTimeFn?: any;
 }
@@ -69,7 +69,7 @@ const AddAnyItem: FC<iProps> = ({
   date,
   setAnnounce,
   announce,
-  note,
+  sub,
 
   startDateTime,
   startDateTimeFn,
@@ -226,6 +226,32 @@ const AddAnyItem: FC<iProps> = ({
         )}
 
         {date && (
+          <div className="w-full flex justify-end transition-all duration-300">
+            {start !== "" && announce !== "" && startDateTime !== "" ? (
+              <Button
+                name={
+                  loading ? (
+                    <div>
+                      <ClipLoader color="#fff" size={12} />{" "}
+                      <span>Loading...</span>
+                    </div>
+                  ) : (
+                    "Publish"
+                  )
+                }
+                className="bg-blue-950  mx-0"
+                onClick={handleFn}
+              />
+            ) : (
+              <Button
+                name="Can't Publish"
+                className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+              />
+            )}
+          </div>
+        )}
+
+        {sub && (
           <div className="w-full flex justify-end transition-all duration-300">
             {start !== "" && announce !== "" && startDateTime !== "" ? (
               <Button

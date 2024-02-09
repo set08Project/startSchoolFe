@@ -144,10 +144,22 @@ export const viewSchoolByName = async (schoolName: string) => {
   }
 };
 
-export const createSchoolTeacher = async (schoolID: string) => {
+export const createSchoolTeacher = async (schoolID: string, data: {}) => {
   try {
     return await axios
-      .get(`${URL}/create-school-teacher-admin/${schoolID}`)
+      .post(`${URL}/create-school-teacher/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewSchoolTeacher = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-teacher/${schoolID}`)
       .then((res: any) => {
         return res?.data;
       });
@@ -194,7 +206,47 @@ export const getSchoolClassroom = async (schoolID: string) => {
   }
 };
 
+export const updateClassroomTeacher = async (
+  schoolID: string,
+  classID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-classrooms-teacher/${schoolID}/${classID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getClassroom = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classroom-info/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getSchoolAnncoement = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-announcement/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolClassromm = async (schoolID: string) => {
   try {
     return await axios
       .get(`${URL}/view-announcement/${schoolID}`)
@@ -232,6 +284,18 @@ export const createSchoolAnnouncement = async (schoolID: string, data: {}) => {
   try {
     return await axios
       .post(`${URL}/create-announcement/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createSchoolStudent = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-student/${schoolID}`, data)
       .then((res: any) => {
         return res?.data;
       });

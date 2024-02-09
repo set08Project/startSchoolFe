@@ -110,7 +110,7 @@ const Sider = () => {
       <div className="w-full flex justify-center">
         <div className="transition-all duration-300 text-center text-[12px] font-medium mt-3 w-[90%] ">
           {toggleText ? (
-            <div>A new member has been added to your family list</div>
+            <div>A new staff has been added to your staff list</div>
           ) : (
             <div></div>
           )}
@@ -120,7 +120,7 @@ const Sider = () => {
       {/* Settings */}
       <div className="mt-16 px-2 flex flex-col h-[90%]">
         <NavLink
-          to="/"
+          to="/dashboard"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "

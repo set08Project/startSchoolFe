@@ -1,12 +1,15 @@
 import useSWR from "swr";
 import {
+  getClassroom,
   getSchoolAnncoement,
   getSchoolClassroom,
   getSchoolCookie,
   getSchoolEvent,
   readSchool,
   registerSchool,
+  updateClassroomTeacher,
   viewSchoolByName,
+  viewSchoolTeacher,
 } from "../api/schoolAPIs";
 
 export const useSchoolRegister = (reader: any) => {
@@ -54,16 +57,39 @@ export const useSchoolDataByName = (schoolName: string) => {
   return { schoolInfo };
 };
 
-export const useSchoolClassRM = (schoolID: string) => {
+export const useSchoolClassRM = () => {
+  const { dataID } = useSchoolCookie();
   const { data: schoolClassroom } = useSWR(
-    `api/view-classrooms/${schoolID}`,
+    `api/view-classrooms/${dataID}`,
     () => {
-      return getSchoolClassroom(schoolID!).then((res) => {
+      return getSchoolClassroom(dataID!).then((res) => {
         return res.data;
       });
     }
   );
   return { schoolClassroom };
+};
+
+export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
+  const { dataID } = useSchoolCookie();
+  const { data: schoolClassroom } = useSWR(
+    `api/update-classrooms-teacher/${dataID}/${classID}`,
+    () => {
+      return updateClassroomTeacher(dataID!, classID, data).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolClassroom };
+};
+
+export const useSchoolClassRMDetail = (classID: string) => {
+  const { data: classroom } = useSWR(`api/view-classrooms/${classID}`, () => {
+    return getClassroom(classID!).then((res) => {
+      return res.data;
+    });
+  });
+  return { classroom };
 };
 
 export const useSchoolAnnouncement = () => {
@@ -87,4 +113,18 @@ export const useSchoolEvent = () => {
     });
   });
   return { schoolEvent };
+};
+
+export const useSchoolTeacher = () => {
+  const { dataID } = useSchoolCookie();
+
+  const { data: schoolTeacher } = useSWR(
+    `api/view-school-teacher/${dataID}`,
+    () => {
+      return viewSchoolTeacher(dataID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolTeacher };
 };

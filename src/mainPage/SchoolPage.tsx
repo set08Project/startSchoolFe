@@ -2,6 +2,7 @@ import { FC } from "react";
 import MainHeader from "./MainHeader";
 import Footer from "./Footer";
 import HeroScreen from "./HeroScreen";
+import SchoolHome from "./SchoolHome";
 
 interface iProps {
   props?: any;
@@ -12,9 +13,8 @@ const SchoolPage: FC<iProps> = ({ props }) => {
     <div>
       <MainHeader props={props} />
       <HeroScreen />
-      <div className="absolute bottom-0 w-full">
-        <Footer />
-      </div>
+      <SchoolHome />
+      <div className="absolute bottom-0 w-full">{/* <Footer /> */}</div>
     </div>
   );
 };

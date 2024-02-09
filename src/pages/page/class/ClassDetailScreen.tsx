@@ -9,11 +9,25 @@ import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
 import { useState } from "react";
 import Input from "../../../components/reUse/Input";
+import { useParams } from "react-router-dom";
+
+import toast, { Toaster } from "react-hot-toast";
+import {
+  useSchoolClassRMDetail,
+  useSchoolCookie,
+  useSchoolTeacher,
+} from "../../hook/useSchoolAuth";
+import { updateClassroomTeacher } from "../../api/schoolAPIs";
 
 const ClassDetailScreen = () => {
+  const { classID } = useParams();
+  const { dataID } = useSchoolCookie();
+  const { classroom } = useSchoolClassRMDetail(classID!);
   const dispatch = useDispatch();
   const [subject, setSubject] = useState<string>("");
   const [subjectTeacher, setSubjectTeacher] = useState<string>("");
+
+  const { schoolTeacher } = useSchoolTeacher();
 
   const [teacher, setTeacher] = useState<string>("");
 
@@ -26,17 +40,35 @@ const ClassDetailScreen = () => {
       });
     }
   };
+
+  const updateTeacher = () => {
+    return updateClassroomTeacher(dataID!, classID!, {
+      staffName: teacher,
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success("class teacher updated");
+        handleToggleMenuFalse();
+      } else {
+        toast.error("error updating class teacher");
+        handleToggleMenuFalse();
+        console.log(teacher);
+      }
+    });
+  };
+
+  console.log();
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
-
-      <div>Class: JSS 1A</div>
+      <Toaster position="top-center" reverseOrder={true} />
+      <div>Class: {classroom?.className}</div>
 
       <div className="w-full text-blue-950 h-[90px] rounded-lg border flex justify-between overflow-hidden ">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            59 <span className="text-[20px]">Students</span>
+            {classroom?.classStudents.length}{" "}
+            <span className="text-[20px]">Students</span>
           </div>
         </div>
         <div className=" px-4 py-1 rounded-lg text-center flex items-end flex-col">
@@ -49,8 +81,27 @@ const ClassDetailScreen = () => {
       <div className="my-6 border-t" />
 
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4 ">
-        <div className="uppercase px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 flex justify-between items-center">
-          <p className="text-[20px] font-bold">₦50,000</p>
+        <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 flex justify-between items-center ">
+          <div className="flex gap-2 font-normal">
+            <p className="text-[12px]">
+              <p className="font-normal">First Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class2ndFee.toLocaleString()}
+              </p>
+            </p>
+            <p className="text-[12px]">
+              <p className="font-normal">Second Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class3rdFee.toLocaleString()}
+              </p>
+            </p>
+            <p className="text-[12px]">
+              <p className="font-normal">Third Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class1stFee.toLocaleString()}
+              </p>
+            </p>
+          </div>
           {/* <Button name="" className="text-blue-950 bg-white" /> */}
           <button className="btn text-white bg-blue-950 hover:bg-blue-900 transition-all duration-300 px-8 uppercase ">
             update Class Fee
@@ -112,8 +163,11 @@ const ClassDetailScreen = () => {
                       <option disabled selected>
                         Select a Teacher
                       </option>
-                      <option value="ames Okon">James Okon</option>
-                      <option value="Tunde Rashedi">Tunde Rashedi</option>
+                      {schoolTeacher?.staff?.map((props: any, i: number) => (
+                        <option key={i} value={props?.staffName}>
+                          {props?.staffName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -123,7 +177,7 @@ const ClassDetailScreen = () => {
                     <Button
                       name="Proceed"
                       className="bg-blue-950  mx-0"
-                      onClick={handleToggleMenuFalse}
+                      onClick={updateTeacher}
                     />
                   ) : (
                     <Button
@@ -145,7 +199,9 @@ const ClassDetailScreen = () => {
           <img className="w-10 h-10 object-cover rounded-full" src={pix} />
           <p>
             <p className="m-0 leading-tight text-[14px] font-bold">
-              Tunde Rashedi
+              {classroom?.classTeacherName
+                ? classroom?.classTeacherName
+                : "Hasn't been assigned"}
             </p>
             <p className="text-[12px] mt-2">
               <FaStar />

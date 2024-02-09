@@ -41,8 +41,14 @@ export const adminRouter = createBrowserRouter([
                 index: true,
                 element: <HomeView />,
               },
+              {
+                index: true,
+                path: "dashboard",
+                element: <HomeView />,
+              },
             ],
           },
+
           {
             index: true,
             path: "report",
@@ -75,7 +81,7 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
-            path: "view-students/student-details/:staffID",
+            path: "view-students/student-details/:studentID",
             element: <StudentDetail />,
           },
 

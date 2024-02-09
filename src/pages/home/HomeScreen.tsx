@@ -53,26 +53,6 @@ const HomeScreen = () => {
     }
   };
 
-  const handleDisplayEvent = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayNoticeEvent(!event));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayNoticeEvent(!event));
-      });
-    }
-  };
-
-  const handleDisplayNotice = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayNotice(!notice));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayNotice(!notice));
-      });
-    }
-  };
-
   const handleDisplaySubject = () => {
     if (!document.startViewTransition) {
       dispatch(displaySubject(!showIV));
@@ -96,16 +76,16 @@ const HomeScreen = () => {
   const handleCreateSubject = () => {
     try {
       setLoading(true);
-      createSchoolSubject(data._id, {
+      createSchoolSubject(data?._id, {
         subjectTitle: subject,
         designated: classAssigned,
       }).then((res: any) => {
-        if (res.status === 201) {
+        if (res?.status === 201) {
           setLoading(false);
           handleDisplaySubject();
         } else {
           setLoading(false);
-          toast.error(`${res.response.data.message}`);
+          toast.error(`${res?.response?.data?.message}`);
           console.log(res);
         }
       });
@@ -124,13 +104,13 @@ const HomeScreen = () => {
       }).then((res: any) => {
         if (res.status === 201) {
           setLoading(false);
-          handleDisplayEvent();
+          handleDisplayNotice();
           setStartDateTime(null);
           setTitle("");
           setDetails("");
         } else {
           setLoading(false);
-          toast.error(`${res.response.data.message}`);
+          toast.error(`${res?.response?.data?.message}`);
           console.log(res);
         }
       });
@@ -161,6 +141,26 @@ const HomeScreen = () => {
       });
     } catch (error) {
       return error;
+    }
+  };
+
+  const handleDisplayEvent = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayNoticeEvent(!event));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayNoticeEvent(!event));
+      });
+    }
+  };
+
+  const handleDisplayNotice = () => {
+    if (!document.startViewTransition) {
+      dispatch(displayNotice(!notice));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displayNotice(!notice));
+      });
     }
   };
 
@@ -251,6 +251,7 @@ const HomeScreen = () => {
             titleCall="Add New Subject"
             offFn={handleDisplaySubjectOff}
             en
+            sub
             text="Place the title fo the subject you are about to create and the Class that is meant to have this created subject!"
             placeStart="Mathematics"
             placeEnd="JSS 1A"
@@ -286,7 +287,6 @@ const HomeScreen = () => {
             placeEnd="Mon. 21st Feb 2024"
             startTitle="Enter Announcement Title"
             endTitle="Date the Announcement"
-            // setEnd={setDea}
             setStart={setTitle}
             setAnnounce={setDetails}
             announce={details}
@@ -312,15 +312,14 @@ const HomeScreen = () => {
           }}
         >
           <AddAnyItem
-            titleCall="Create a new Event"
+            titleCall="Create/Schedule a new Event"
             offFn={handleDisplayEvent}
             date
-            text="Make a public Announcement to give an importance notice to all teachers and student about something very important...!"
-            placeStart="Title this Announcement"
+            text="Create/Schedule an Event and publish it so that everyone can see and get excited about this upcoming event!"
+            placeStart="Title this Event"
             placeEnd="Mon. 21st Feb 2024"
-            startTitle="Enter Announcement Title"
-            endTitle="Date the Announcement"
-            // setEnd={setDea}
+            startTitle="Enter Event Title"
+            endTitle="Date for the Event"
             setStart={setTitle}
             setAnnounce={setDetails}
             announce={details}

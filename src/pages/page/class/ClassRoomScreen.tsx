@@ -17,8 +17,8 @@ import { useSchoolClassRM, useSchoolData } from "../../hook/useSchoolAuth";
 const ClassRoomScreen = () => {
   const dispatch = useDispatch();
   const data = Array.from({ length: 0 });
-  const { data: userID } = useSchoolData();
-  const { schoolClassroom } = useSchoolClassRM(userID?._id);
+  const { schoolClassroom } = useSchoolClassRM();
+
   const classroom = useSelector((state: any) => state.classroomToggled);
 
   console.log(schoolClassroom);
@@ -159,7 +159,7 @@ const ClassRoomScreen = () => {
                   <div className="w-[150px] border-r  ">90%</div>
 
                   <Link
-                    to={`class-details/:classID`}
+                    to={`class-details/${props?._id}`}
                     className="w-[180px] border-r"
                   >
                     <Button

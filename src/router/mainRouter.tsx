@@ -56,10 +56,10 @@ export const mainRouter = createBrowserRouter([
     element: <MainSchoolPage />,
   },
 
-  {
-    path: "/",
-    element: <LandingPageScreen />,
-  },
+  // {
+  //   path: "/",
+  //   element: <LandingPageScreen />,
+  // },
 ]);
 
 // {

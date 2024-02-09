@@ -6,6 +6,8 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStaffComp } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
+import { useSchoolTeacher } from "../../hook/useSchoolAuth";
+import moment from "moment";
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,8 @@ const ViewStaffScreen = () => {
       });
     }
   };
+
+  const { schoolTeacher } = useSchoolTeacher();
 
   return (
     <div className="">
@@ -61,7 +65,7 @@ const ViewStaffScreen = () => {
         </div>
 
         <div className=" w-[2060px] overflow-hidden">
-          {data?.map((props: any, i: number) => (
+          {schoolTeacher?.staff?.map((props: any, i: number) => (
             <div>
               <div>
                 <div
@@ -70,14 +74,16 @@ const ViewStaffScreen = () => {
                     i % 2 === 0 ? "bg-slate-50" : "bg-white"
                   }`}
                 >
-                  <div className="w-[130px] border-r">{"22-22-22"}</div>
+                  <div className="w-[130px] border-r">
+                    {moment(props?.createdAt).format("ll")}
+                  </div>
 
                   <div
                     className={`w-[80px] border-r ${
-                      i % 2 === 0 ? "text-red-600" : "text-green-600"
+                      props?.activeStatus ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {i % 2 === 0 ? "Idle" : "Active"}
+                    {props?.activeStatus ? "Active" : "Idle"}
                   </div>
 
                   <div className="w-[100px] border-r">2:10</div>
@@ -85,22 +91,58 @@ const ViewStaffScreen = () => {
                   <div className="w-[150px] flex justify-center border-r">
                     <img
                       className="w-14 h-14 rounded-md border object-cover"
-                      src={pix}
+                      src={props?.avatar ? props?.avatar : pix}
                     />
                   </div>
-                  <div className="w-[200px] border-r">name</div>
+                  <div className="w-[200px] border-r">{props?.staffName}</div>
 
-                  <div className="w-[100px] border-r  ">Role</div>
-                  <div className="w-[150px] border-r  ">phone</div>
-                  <div className="w-[200px] border-r  ">contact</div>
-                  <div className="w-[200px] border-r  ">Suject Taking</div>
-                  <div className="w-[200px] border-r  ">Class Handle</div>
-                  <div className="w-[200px] border-r  ">Class Teaches</div>
+                  <div className="w-[100px] border-r  ">{props?.staffRole}</div>
+                  <div className="w-[150px] border-r  ">
+                    {props?.phone
+                      ? props?.phone
+                      : "Phone Number Not Yet Assigned"}
+                  </div>
+                  <div className="w-[200px] border-r  ">
+                    {props?.staffAddress
+                      ? props?.staffAddress
+                      : "Address Not Yet Assigned"}
+                  </div>
+                  <div className="w-[200px] border-r  ">
+                    {props?.subjectAssigned.length > 0 ? (
+                      <div>
+                        {props?.subjectAssigned.map((props: any) => (
+                          <div className="gap-2">
+                            <p>{props}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "Not Yet Assigned"
+                    )}
+                  </div>
+                  <div className="w-[200px] border-r  ">
+                    {props?.classesAssigned.length > 0 ? (
+                      <div>
+                        {props?.classesAssigned.map((props: any) => (
+                          <div className="gap-2">
+                            <p>{props}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "Not Yet Assigned"
+                    )}
+                  </div>
+                  <div className="w-[200px] border-r  ">
+                    {props?.classAssigned
+                      ? props?.classAssigned
+                      : "Not Yet Assigned"}
+                  </div>
 
-                  <div className="w-[80px] border-r">3 of 5</div>
+                  <div className="w-[80px] border-r">{props?.staffRating}</div>
 
                   <Link
-                    to="staff-details/yuustaffID"
+                    to={`staff-details/${props?._id}`}
                     className="w-[180px] border-r"
                   >
                     <Button
