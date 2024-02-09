@@ -167,6 +167,19 @@ const Sider = () => {
           View Classrooms
           <MdSchool />
         </NavLink>
+
+        <NavLink
+          to="/subjects"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          View Subjects
+          <MdSchool />
+        </NavLink>
         <NavLink
           to="/report"
           className={({ isActive }) =>

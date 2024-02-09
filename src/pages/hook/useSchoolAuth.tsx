@@ -9,8 +9,10 @@ import {
   registerSchool,
   updateClassroomTeacher,
   viewSchoolByName,
+  viewSchoolSubjects,
   viewSchoolTeacher,
 } from "../api/schoolAPIs";
+import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
 
 export const useSchoolRegister = (reader: any) => {
   const { mutate } = useSWR("api/register-school", () => {
@@ -125,6 +127,33 @@ export const useSchoolTeacher = () => {
         return res.data;
       });
     }
+    // { refreshInterval: 5000 }
   );
   return { schoolTeacher };
+};
+
+export const useSchoolSubject = () => {
+  const { dataID } = useSchoolCookie();
+
+  const { data: schoolSubject } = useSWR(
+    `api/view-school-subject/${dataID}`,
+    () => {
+      return viewSchoolSubjects(dataID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolSubject };
+};
+
+export const useSchoolTeacherDetail = (teacherID: string) => {
+  const { data: schoolSubjectTeacherDetail } = useSWR(
+    `api/view-school-subject-teacher/${teacherID}`,
+    () => {
+      return viewTeacherDetail(teacherID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolSubjectTeacherDetail };
 };

@@ -303,3 +303,31 @@ export const createSchoolStudent = async (schoolID: string, data: {}) => {
     return error;
   }
 };
+
+export const viewSchoolSubjects = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subjects/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateSchoolSubjectTeacher = async (
+  schoolID: string,
+  subjectID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-subject-teacher/${schoolID}/${subjectID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

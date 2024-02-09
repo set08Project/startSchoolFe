@@ -11,7 +11,6 @@ import moment from "moment";
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 3 });
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -66,16 +65,17 @@ const ViewStaffScreen = () => {
 
         <div className=" w-[2060px] overflow-hidden">
           {schoolTeacher?.staff?.map((props: any, i: number) => (
-            <div>
+            <div key={props}>
               <div>
                 <div
-                  key={props}
                   className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
                     i % 2 === 0 ? "bg-slate-50" : "bg-white"
                   }`}
                 >
+                  {/* start */}
+
                   <div className="w-[130px] border-r">
-                    {moment(props?.createdAt).format("ll")}
+                    {moment(props?.createdAt)?.format("ll")}
                   </div>
 
                   <div
@@ -96,23 +96,28 @@ const ViewStaffScreen = () => {
                   </div>
                   <div className="w-[200px] border-r">{props?.staffName}</div>
 
+                  {/* check */}
                   <div className="w-[100px] border-r  ">{props?.staffRole}</div>
                   <div className="w-[150px] border-r  ">
                     {props?.phone
                       ? props?.phone
                       : "Phone Number Not Yet Assigned"}
                   </div>
+
                   <div className="w-[200px] border-r  ">
                     {props?.staffAddress
                       ? props?.staffAddress
                       : "Address Not Yet Assigned"}
                   </div>
+
+                  {/* check II */}
+
                   <div className="w-[200px] border-r  ">
-                    {props?.subjectAssigned.length > 0 ? (
+                    {props?.subjectAssigned?.length > 0 ? (
                       <div>
-                        {props?.subjectAssigned.map((props: any) => (
+                        {props?.subjectAssigned?.map((props: any) => (
                           <div className="gap-2">
-                            <p>{props}</p>
+                            <p>{props?.title}</p>
                           </div>
                         ))}
                       </div>
@@ -120,14 +125,12 @@ const ViewStaffScreen = () => {
                       "Not Yet Assigned"
                     )}
                   </div>
+
+                  {/*good  */}
                   <div className="w-[200px] border-r  ">
-                    {props?.classesAssigned.length > 0 ? (
-                      <div>
-                        {props?.classesAssigned.map((props: any) => (
-                          <div className="gap-2">
-                            <p>{props}</p>
-                          </div>
-                        ))}
+                    {props?.classesAssigned ? (
+                      <div className="gap-2">
+                        <p>{props?.classesAssigned}</p>
                       </div>
                     ) : (
                       "Not Yet Assigned"

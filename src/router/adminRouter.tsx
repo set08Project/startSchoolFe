@@ -19,6 +19,7 @@ import ThirdScreen from "../pages/home/start/ThirdStep";
 import SecondStep from "../pages/home/start/SecondStep";
 import ClassRoomScreen from "../pages/page/class/ClassRoomScreen";
 import ClassDetailScreen from "../pages/page/class/ClassDetailScreen";
+import ViewSubjects from "../pages/page/subject/ViewSubject";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -47,6 +48,12 @@ export const adminRouter = createBrowserRouter([
                 element: <HomeView />,
               },
             ],
+          },
+
+          {
+            index: true,
+            path: "subjects",
+            element: <ViewSubjects />,
           },
 
           {
