@@ -6,23 +6,71 @@ import pix from "../../../assets/pix.jpg";
 import { MdClose, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 import {
+  useClassSubjects,
   useSchoolClassRMDetail,
   useSchoolCookie,
   useSchoolTeacher,
 } from "../../hook/useSchoolAuth";
-import { updateClassroomTeacher } from "../../api/schoolAPIs";
+import {
+  createSchoolSubject,
+  updateClassroomTeacher,
+} from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import TimeTableScreen from "./TimeTableScreen";
+import ClassModel from "./ClassModel";
 
 interface iProps {
   props?: string;
 }
+
+const ClassSubjectScreen: FC = () => {
+  const { classID } = useParams();
+  const { readSubject } = useClassSubjects(classID!);
+
+  return (
+    <div>
+      {readSubject?.length > 0 ? (
+        <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
+          {readSubject?.map((props: any) => (
+            <div
+              key={props._id}
+              className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4"
+            >
+              <div className="mt-3 flex justify-between items-center font-bold">
+                <p>{props?.subjectTitle}</p>
+                <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
+                  <MdDelete className="hover:text-blue-900" />
+                </div>
+              </div>
+              <div className="flex">
+                <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
+                  compulsory
+                </p>
+              </div>
+              <div className="flex-1" />
+              <p className="text-[13px] font-medium">
+                Subject Teacher Name: <span></span>
+              </p>
+              <div className="flex mb-4 gap-2 flex-wrap">
+                <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
+                  {props?.subjectTeacherName}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>No subject added yet</div>
+      )}
+    </div>
+  );
+};
 
 const StaffDetail: FC<iProps> = ({ props }) => {
   const { teacherDetail } = useTeacherDetail(props!);
@@ -56,7 +104,6 @@ const ClassDetailScreen = () => {
   const { classroom } = useSchoolClassRMDetail(classID!);
   const dispatch = useDispatch();
   const [subject, setSubject] = useState<string>("");
-  const [subjectTeacher, setSubjectTeacher] = useState<string>("");
 
   const { schoolTeacher } = useSchoolTeacher();
 
@@ -72,6 +119,22 @@ const ClassDetailScreen = () => {
     }
   };
 
+  const addClassSubject = () => {
+    createSchoolSubject(dataID!, {
+      subjectTeacherName: teacher,
+      subjectTitle: subject,
+      designated: classroom?.className,
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success("class teacher updated");
+        handleToggleMenuFalse();
+      } else {
+        toast.error(`${res?.response?.data?.messgae}`);
+        handleToggleMenuFalse();
+      }
+    });
+  };
+
   const updateTeacher = () => {
     updateClassroomTeacher(dataID!, classID!, {
       classTeacherName: teacher,
@@ -80,7 +143,7 @@ const ClassDetailScreen = () => {
         toast.success("class teacher updated");
         handleToggleMenuFalse();
       } else {
-        toast.error(`${res.response.data.messgae}`);
+        toast.error(`${res?.response?.data?.messgae}`);
         handleToggleMenuFalse();
         console.log(teacher);
       }
@@ -108,9 +171,7 @@ const ClassDetailScreen = () => {
           <p className="font-medium">Add Teacher to supervise this class</p>
         </div>
       </div>
-
       <div className="my-6 border-t" />
-
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4 ">
         <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 flex justify-between items-center ">
           <div className="flex gap-2 font-normal">
@@ -230,8 +291,9 @@ const ClassDetailScreen = () => {
         <div className="text-[12px]"> class Teacher Assigned</div>
         <StaffDetail props={classroom?.teacherID} />
       </div>
-
       <div className="my-6 border-t" />
+
+      {/* SUbjects */}
 
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Manage Class Subject for JSS 1A </p>
@@ -266,54 +328,70 @@ const ClassDetailScreen = () => {
                 </label>
               </p>
               <hr />
-
               <p className="mt-2 leading-tight text-[13px] font-medium">
                 Please note that by assigning this subject to this class, it
                 automtically becomes one of the class must take suject.
+                <br />
+                <br />
+                You are about to add this subject:{" "}
+                {subject ? subject : "********"} to this class:{" "}
+                {classroom?.className} and assigning it to: {teacher}
               </p>
-
               <div className="mt-10 w-full gap-2 flex flex-col items-center">
                 <div className="w-full">
                   <label className="font-medium text-[12px]">
                     Subject Title <span className="text-red-500">*</span>
                   </label>
-                  <Input
-                    placeholder="Enter the here: English"
-                    className="mx-0 h-12 w-full"
-                    value={subject}
-                    onChange={(e: any) => {
-                      setSubject(e.target.value);
-                    }}
-                  />
-                </div>
-
-                <div className="w-full flex flex-col">
-                  <label className="font-medium text-[12px]">
-                    Subject Teacher <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="select select-info mt-1 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
-                    value={subjectTeacher}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      setSubjectTeacher(e.target.value);
-                    }}
-                  >
-                    <option disabled selected>
-                      Select the subject Teacher
-                    </option>
-                    <option value={"James Okon"}>James Okon</option>
-                    <option value={"Tunde Rashedi"}>Tunde Rashedi</option>
-                  </select>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter the here: English"
+                      className="mx-0 h-12 w-[100%]"
+                      value={subject}
+                      onChange={(e: any) => {
+                        setSubject(e.target.value);
+                      }}
+                    />
+                    <div className="-mt-4 w-full gap-2 flex flex-col items-center">
+                      <div className="w-full flex flex-col">
+                        <label className="font-medium text-[12px] mb-2">
+                          Subject Teacher{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
+                          value={teacher}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setTeacher(e.target.value);
+                          }}
+                        >
+                          <option disabled selected>
+                            Select a Teacher
+                          </option>
+                          {schoolTeacher?.staff?.map(
+                            (props: any, i: number) => (
+                              <option key={i} value={props?.staffName}>
+                                {props?.staffName}
+                              </option>
+                            )
+                          )}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="w-full flex justify-end transition-all duration-300">
-                {subject !== "" && subjectTeacher !== "" ? (
-                  <Button
-                    name="Proceed"
-                    className="bg-blue-950  mx-0"
-                    // onClick={handleToggleMenuFalse}
-                  />
+                {subject !== "" && teacher !== "" ? (
+                  <label
+                    htmlFor="assign_class_subject"
+                    className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
+                    onClick={addClassSubject}
+                  >
+                    Proceed
+                  </label>
                 ) : (
                   <Button
                     name="Can't Proceed"
@@ -329,38 +407,16 @@ const ClassDetailScreen = () => {
           </div>
         </div>
 
-        <div className="mt-1 w-full grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
-          <div className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
-            <div className="mt-3 flex justify-between items-center font-bold">
-              <p>Mathematics</p>
-              <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                <MdDelete className="hover:text-blue-900" />
-              </div>
-            </div>
-            <div className="flex">
-              <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
-                compulsory
-              </p>
-            </div>
-            <div className="flex-1" />
-            <p className="text-[13px] font-medium">Subject Teacher Name</p>
-            <div className="flex mb-4 gap-2 flex-wrap">
-              <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
-                John Amadi
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Populate Class St */}
+        <ClassSubjectScreen />
       </div>
-
-      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
         </p>
         <div className="flex gap-4 mt-5"></div>
       </div>
-
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Viewing Students</p>
         <p className="text-[13px]  flex items-center font-bold">
@@ -368,12 +424,17 @@ const ClassDetailScreen = () => {
         </p>
         <div className="flex gap-4 mt-5"></div>
       </div>
-
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Viewing Class TimeTable</p>
-        <p className="text-[13px]  flex items-center font-bold">
-          Here are all the students in this class:{" "}
-        </p>
+        <div className="flex items-center w-full justify-between">
+          <div>
+            <p>Viewing Class TimeTable</p>
+            <p className="text-[13px]  flex items-center font-bold">
+              Here are all the students in this class:{" "}
+            </p>
+          </div>
+
+          <ClassModel />
+        </div>
         <div className="flex gap-4 mt-5">
           <TimeTableScreen />
         </div>

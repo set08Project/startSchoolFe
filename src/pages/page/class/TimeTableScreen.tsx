@@ -1,6 +1,18 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useClassTimeTable } from "../../hook/useSchoolAuth";
 
 const TimeTableScreen = () => {
+  const { classID } = useParams();
+  const { timetbale } = useClassTimeTable(classID!);
+  let data: any = Object.values(timetbale!)[1];
+
+  console.log(
+    data.map((el: any) => {
+      return el._id;
+    })
+  );
+
   return (
     <div className="w-full">
       <div className="">
@@ -22,7 +34,17 @@ const TimeTableScreen = () => {
           </div>
 
           <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
-            <div className="w-[200px] h-6 border-r">Monday</div>
+            <div className="w-[200px] h-6 border-r">
+              {Object.keys(timetbale)[1]}
+            </div>
+
+            {data.map((props: any) => (
+              <div className="w-[200px] h-6 border-r">{props?.subject}</div>
+            ))}
+          </div>
+          {/* 
+          <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
+            
             <div className="w-[300px] h-6  border-r">Assembly</div>
             <div className="w-[300px] h-6  border-r">Chemistry</div>
             <div className="w-[300px] h-6  border-r">time</div>
@@ -34,7 +56,7 @@ const TimeTableScreen = () => {
             <div className="w-[300px] h-6  border-r">time</div>
             <div className="w-[300px] h-6  border-r">time</div>
             <div className="w-[300px] h-6  border-r">time</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

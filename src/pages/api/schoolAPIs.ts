@@ -316,16 +316,38 @@ export const viewSchoolSubjects = async (schoolID: string) => {
   }
 };
 
-export const updateSchoolSubjectTeacher = async (
+export const getClassSubjects = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classroom-info/${classID}/`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getClassTimeTable = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-time-table/${classID}/`)
+      .then((res: any) => {
+        return res?.data.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createTimeTable = async (
   schoolID: string,
-  subjectID: string,
+  classID: string,
   data: {}
 ) => {
   try {
     return await axios
-      .patch(`${URL}/update-subject-teacher/${schoolID}/${subjectID}`, {
-        subjectTeacherName: data,
-      })
+      .post(`${URL}/create-time-table/${schoolID}/${classID}`, data)
       .then((res: any) => {
         return res?.data;
       });

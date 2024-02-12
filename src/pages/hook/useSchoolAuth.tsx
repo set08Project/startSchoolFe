@@ -1,5 +1,7 @@
 import useSWR from "swr";
 import {
+  getClassSubjects,
+  getClassTimeTable,
   getClassroom,
   getSchoolAnncoement,
   getSchoolClassroom,
@@ -156,4 +158,26 @@ export const useSchoolTeacherDetail = (teacherID: string) => {
     }
   );
   return { schoolSubjectTeacherDetail };
+};
+
+export const useClassSubjects = (classID: string) => {
+  const { data: readSubject } = useSWR(`api/view-class-info/${classID}`, () => {
+    return getClassSubjects(classID!).then((res) => {
+      return res?.data?.classSubjects;
+    });
+  });
+
+  return { readSubject };
+};
+
+export const useClassTimeTable = (classID: string) => {
+  const { data: timetbale } = useSWR(`api/view-time-table/${classID}`, () => {
+    return getClassTimeTable(classID!).then((res) => {
+      return res;
+    });
+  });
+
+  console.log(timetbale);
+
+  return { timetbale };
 };
