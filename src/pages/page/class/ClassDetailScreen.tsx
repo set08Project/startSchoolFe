@@ -1,13 +1,12 @@
 document.title = "class room Detail's Page";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { FaCheckDouble, FaStar } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import { MdClose, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
 
@@ -18,6 +17,37 @@ import {
   useSchoolTeacher,
 } from "../../hook/useSchoolAuth";
 import { updateClassroomTeacher } from "../../api/schoolAPIs";
+import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
+
+interface iProps {
+  props?: string;
+}
+
+const StaffDetail: FC<iProps> = ({ props }) => {
+  const { teacherDetail } = useTeacherDetail(props!);
+
+  return (
+    <div className="flex gap-2 mt-1 items-start  ">
+      <img
+        className="w-10 h-10 object-cover rounded-full"
+        src={teacherDetail?.avatar ? teacherDetail?.avatar : pix}
+      />
+      <p>
+        <p className="m-0 leading-tight text-[14px] font-bold">
+          {teacherDetail?.staffName
+            ? teacherDetail?.staffName
+            : "Hasn't been assigned"}
+        </p>
+        <p className="text-[12px] mt-2 flex items-center gap-1">
+          <span className="font-bold text-[15px]">
+            {teacherDetail?.staffRating}
+          </span>{" "}
+          <FaStar />
+        </p>
+      </p>
+    </div>
+  );
+};
 
 const ClassDetailScreen = () => {
   const { classID } = useParams();
@@ -42,14 +72,14 @@ const ClassDetailScreen = () => {
   };
 
   const updateTeacher = () => {
-    return updateClassroomTeacher(dataID!, classID!, {
-      staffName: teacher,
+    updateClassroomTeacher(dataID!, classID!, {
+      classTeacherName: teacher,
     }).then((res) => {
       if (res.status === 201) {
         toast.success("class teacher updated");
         handleToggleMenuFalse();
       } else {
-        toast.error("error updating class teacher");
+        toast.error(`${res.response.data.messgae}`);
         handleToggleMenuFalse();
         console.log(teacher);
       }
@@ -174,11 +204,13 @@ const ClassDetailScreen = () => {
 
                 <div className="w-full flex justify-end transition-all duration-300">
                   {teacher !== "" ? (
-                    <Button
-                      name="Proceed"
-                      className="bg-blue-950  mx-0"
+                    <label
+                      htmlFor="assign_teacher"
+                      className="bg-blue-950 text-white px-8 py-3 rounded-md cursor-pointer"
                       onClick={updateTeacher}
-                    />
+                    >
+                      Proceed
+                    </label>
                   ) : (
                     <Button
                       name="Can't Proceed"
@@ -195,19 +227,7 @@ const ClassDetailScreen = () => {
           </div>
         </div>
         <div className="text-[12px]"> class Teacher Assigned</div>
-        <div className="flex gap-2 mt-1 items-start  ">
-          <img className="w-10 h-10 object-cover rounded-full" src={pix} />
-          <p>
-            <p className="m-0 leading-tight text-[14px] font-bold">
-              {classroom?.classTeacherName
-                ? classroom?.classTeacherName
-                : "Hasn't been assigned"}
-            </p>
-            <p className="text-[12px] mt-2">
-              <FaStar />
-            </p>
-          </p>
-        </div>
+        <StaffDetail props={classroom?.teacherID} />
       </div>
 
       <div className="my-6 border-t" />

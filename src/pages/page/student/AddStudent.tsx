@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { createSchoolStudent } from "../../api/schoolAPIs";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
+import { MdClose } from "react-icons/md";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const AddStudent = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,8 @@ const AddStudent = () => {
 
   const [assignedClass, setAssignedClass] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data } = useSchoolData();
@@ -26,6 +30,7 @@ const AddStudent = () => {
       studentFirstName: lastName,
       studentAddress: location,
       classAssigned: assignedClass,
+      gender,
     })
       .then((res: any) => {
         if (res.status === 201) {
@@ -46,10 +51,26 @@ const AddStudent = () => {
   };
 
   return (
-    <div className="px-4 h-full ">
+    <div className="px-4 h-full overflow-y-auto ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mt-20" />
-      <LittleHeader name={"Adding New Student"} />
+      <div className="flex justify-between items-center">
+        <LittleHeader name={"Add New Student"} />
+
+        <MdClose
+          className="cursor-pointer w-10 h-10 p-2 rounded-full hover:rotate-90 transition-all duration-300 hover:bg-slate-50"
+          onClick={() => {
+            dispatch(displayDelay(false));
+            const timing = setTimeout(() => {
+              dispatch(displayStudent(false));
+
+              clearTimeout(timing);
+            }, 500);
+
+            // setShow(!show);
+          }}
+        />
+      </div>
 
       <div className="border rounded-md w-full h-[80%]  p-4 mt-4 ">
         <div className="mt-10" />
@@ -75,6 +96,25 @@ const AddStudent = () => {
               setLastName(e.target.value);
             }}
           />
+        </div>
+        <div className="mt-1 flex flex-col mb-6">
+          <label className="text-[14px] mb-2">
+            Gender:{" "}
+            <span className="font-bold text-[10px]">Choose a Genders</span>
+          </label>
+          <select
+            className="ml-0 select select-bordered w-full "
+            value={gender}
+            onChange={(e: any) => {
+              setGender(e.target.value);
+            }}
+          >
+            <option disabled selected value="Choose a Genders">
+              Choose a Gender
+            </option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </div>
         <div className="mt-1">
           <label className="text-[14px]">Student Address</label>
@@ -103,7 +143,16 @@ const AddStudent = () => {
 
         <div className="w-full flex justify-center">
           <Button
-            name="Register Student"
+            name={
+              loading ? (
+                <div className="flex gap-2 items-center">
+                  <ClipLoader color="#fff" size={20} />
+                  <p>Processing Registration...</p>
+                </div>
+              ) : (
+                "Register Student"
+              )
+            }
             className="w-full mx-0 bg-blue-950 py-4"
             onClick={handleStudentCreation}
           />

@@ -323,7 +323,9 @@ export const updateSchoolSubjectTeacher = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/update-subject-teacher/${schoolID}/${subjectID}`, data)
+      .patch(`${URL}/update-subject-teacher/${schoolID}/${subjectID}`, {
+        subjectTeacherName: data,
+      })
       .then((res: any) => {
         return res?.data;
       });

@@ -54,8 +54,10 @@ const Sider = () => {
     }
   };
 
+  // overflow - y - auto;
+
   return (
-    <div className="w-full border-r bg-white text-blue-900 flex flex-col ">
+    <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
         <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
           <img

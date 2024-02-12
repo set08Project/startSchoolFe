@@ -3,11 +3,10 @@ import { FC } from "react";
 // import _ from "lodash";
 import moment from "moment";
 import { FaCheckDouble } from "react-icons/fa6";
+import { useSchoolData } from "../../hook/useSchoolAuth";
 
 const Personal: FC = () => {
-  // const { data } = useAllClients();
-  // const { data: studio } = useAllStudios();
-  // const { data: studioBookings } = useAllStudioBookings();
+  const { data } = useSchoolData();
 
   // let costMonth = _.groupBy(studioBookings, (item) =>
   //   new Date(item?.createdAt).getMonth()
@@ -28,11 +27,10 @@ const Personal: FC = () => {
   //   new Date(item?.createdAt).getMonth()
   // );
 
-  const data = Array.from({ length: 3 });
+  // const data = Array.from({ length: 3 });
 
   return (
     <div>
-      {/* data bar */}
       <p className="mb-2 text-blue-950">
         <span className="font-bold text-[12px] ">Population Counts</span>
         <div className="grid grid-cols-2 gap-3 mt-2">
@@ -41,18 +39,15 @@ const Personal: FC = () => {
               Total Students Registered:
             </p>
 
-            <h1
-              className="text-[40px] font-medium"
-              style={{ color: "var(--primary)" }}
-            >
-              {data?.length}
+            <h1 className="text-[40px] font-medium">
+              {data?.students?.length}
             </h1>
           </div>
 
           <div className="border rounded-md min-h-[60px] p-4">
             <p className="font-medium leading-tight">Total Teachers Hired:</p>
 
-            <h1 className="text-[40px] font-medium">{data?.length}</h1>
+            <h1 className="text-[40px] font-medium">{data?.staff?.length}</h1>
           </div>
           <div className="border rounded-md min-h-[60px] p-4">
             <p className="font-medium leading-tight">Total Subjects</p>
@@ -61,7 +56,7 @@ const Personal: FC = () => {
               className="text-[25px] mt-5 font-bold"
               style={{ color: "var(--primary)" }}
             >
-              23
+              {data?.subjects?.length}
               <span className="text-[12px]"></span>
             </h1>
           </div>
@@ -69,7 +64,7 @@ const Personal: FC = () => {
             <p className="font-medium leading-tight">Total Classrooms</p>
 
             <h1 className="text-[25px] mt-5  font-bold break-words leading-tight">
-              17
+              {data?.classRooms?.length}
             </h1>
           </div>
 
@@ -80,52 +75,26 @@ const Personal: FC = () => {
               {!null ? (
                 <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 justify-center gap-[0.30rem]">
                   <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>
-                      Last Month (
-                      {
-                        moment(new Date().setMonth(-1))
-                          .format("LL")
-                          .split(" ")[0]
-                      }
-                      )
-                    </p>
-                    <p className="font-medium mt-2 text-[14px] ">2000</p>
+                    <p>First Term Reevnue </p>
+                    <p className="font-medium mt-2 text-[14px] ">₦0</p>
                     <p className="leading-tight mt-2 text-center">
-                      Total Studio Booked
+                      Total Term's Revenue
                     </p>
                   </div>
 
                   <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>
-                      Last Month (
-                      {
-                        moment(new Date().setMonth(-1))
-                          .format("LL")
-                          .split(" ")[0]
-                      }
-                      )
-                    </p>
-                    <p className="font-medium mt-2 text-[14px] ">₦20000</p>
+                    <p>Second Term Revenue</p>
+                    <p className="font-medium mt-2 text-[14px] ">₦0</p>
                     <p className="leading-tight mt-2 text-center">
-                      Total Studio Revenue
+                      Total Term's Revenue
                     </p>
                   </div>
 
                   <div className="sm:col-span-2 xl:col-span-1 border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>
-                      Last Month (
-                      {
-                        moment(new Date().setMonth(-1))
-                          .format("LL")
-                          .split(" ")[0]
-                      }
-                      )
-                    </p>
-                    <p className="font-medium mt-2 text-[14px] ">
-                      {/* {Object.values(studioCreated)[2]?.length} */}
-                    </p>
+                    <p>Third Term Revenue</p>
+                    <p className="font-medium mt-2 text-[14px] ">₦0</p>
                     <p className="leading-tight mt-2 text-center">
-                      Total Studio Created
+                      Total Term's Revenue
                     </p>
                   </div>
                 </div>
@@ -141,6 +110,12 @@ const Personal: FC = () => {
           </div>
         </div>
       </p>
+      <div className="border-t my-5" />
+      <div className="w-full">
+        <p>Chart</p>
+
+        <p className="text-[12px]">Male vs Female</p>
+      </div>
     </div>
   );
 };

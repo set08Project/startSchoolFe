@@ -82,7 +82,7 @@ const Layout: FC = () => {
             {show && (
               //   <div className="relative  ">
               <div
-                className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
+                className="top-0 w-full h-full left-0 absolute overflow-hidden rounded-md "
                 style={{
                   background: "rgba(73, 154, 255, 0.2)",
                   boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",

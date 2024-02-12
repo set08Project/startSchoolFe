@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { FaBuildingUser, FaCheckDouble } from "react-icons/fa6";
 import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "../../page/stats/Personal";
+import StudentPerformance from "./StudentPerformance";
+import TopRatedTeacher from "./TopRatedTeacher";
 
 const ScreenHome = () => {
   document.title = "Studio Record and Stats";
@@ -31,14 +33,16 @@ const ScreenHome = () => {
                       type="checkbox"
                       value={state}
                       onChange={() => {
-                        setState("");
+                        document.startViewTransition(() => {
+                          setState("");
+                        });
                       }}
                       className="sr-only peer"
                     />
 
                     <div className="absolute -bottom-0 w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-900 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-950" />
-                    <span className="absolute text-[12px] leading-tight mt-2 font-medium text-gray-900 dark:text-gray-300">
-                      View Subs Status
+                    <span className="absolute text-[11px] leading-tight mt-2 font-medium text-gray-900 dark:text-gray-300">
+                      View Subscription Status
                     </span>
                   </label>
                 ) : (
@@ -48,43 +52,44 @@ const ScreenHome = () => {
                       className="sr-only peer"
                       value={state}
                       onChange={() => {
-                        setState("dd");
+                        document.startViewTransition(() => {
+                          setState("dd");
+                        });
                       }}
                     />
 
                     <div className=" absolute -bottom-0 w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-950" />
 
-                    <span className="absolute text-[12px] leading-tight mt-2 font-medium text-gray-900 dark:text-gray-300">
-                      View Subs Status
+                    <span className="absolute text-[11px] leading-tight mt-2 font-medium text-gray-900 dark:text-gray-300 mb-0">
+                      View Subscription Status
                     </span>
                   </label>
                 )}
               </div>
               <div className="w-[60%] text-blue-950">
                 {state ? (
-                  <div>
-                    Sign up for this Month: <span>{20}</span>
-                  </div>
+                  <div>Subscription ends Monday Feb, 26 2024</div>
                 ) : (
-                  <div>
-                    Sign up for this Week: <span>{3}</span>
-                  </div>
+                  <div>****************</div>
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="min-w-[300px] h-full flex flex-col rounded-md border p-4">
+        <div className="min-w-[300px] overflow-hidden h-full flex flex-col rounded-md border p-4">
           <div className="mb-10 text-[14px] font-normal capitalize">
-            complains
+            Performance
           </div>
 
           <div>
             {readData?.length > 0 ? (
-              <div className="flex justify-center gap-3 w-full items-center ">
+              <div className="flex justify-center flex-col gap-3 w-full items-center ">
                 {/* from complain */}
-                ComplainScreen
+                <p>Top 5 Performancing Students</p>
+                <div className=" overflow-hidden">
+                  <StudentPerformance />
+                </div>
               </div>
             ) : (
               <div className="flex flex-col w-full items-center">
@@ -100,12 +105,10 @@ const ScreenHome = () => {
           <div className="border-b my-5" />
 
           <div className="flex flex-col items-center w-full justify-center">
-            <p className="mb-3 text-[14px] font-medium">
-              Studio With the Most Complain
-            </p>
+            <p className="mb-3 text-[14px] font-medium">Top Rated Teacher</p>
 
             <div className=" flex justify-center gap-3 w-full items-center">
-              {/* <MostComplainScreen /> */}
+              <TopRatedTeacher />
             </div>
           </div>
         </div>

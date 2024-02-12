@@ -55,16 +55,18 @@ const ViewSubjects = () => {
   const { schoolTeacher } = useSchoolTeacher();
 
   const onTeacherSubject = (subjectID: string) => {
-    updateSchoolSubjectTeacher(dataID, subjectID, {
-      subjectTeacherName: subjectTeacher,
-    }).then((res) => {
-      if (res.status === 201) {
-        toast.success("Teacher Assigned Successfully");
-      } else {
-        toast.error(`${res.response.data.message}`);
+    updateSchoolSubjectTeacher(dataID, subjectID, subjectTeacher).then(
+      (res) => {
+        if (res.status === 201) {
+          toast.success("Teacher Assigned Successfully");
+        } else {
+          toast.error(`${res.response.data.message}`);
+        }
       }
-    });
+    );
   };
+
+  const [state, setState] = useState("");
 
   //   console.log(schoolSubject?.subjects);
   //   console.log(schoolSubject);
@@ -111,11 +113,18 @@ const ViewSubjects = () => {
                   </div>
 
                   <div className="w-[100px] border-r">{props?.designated}</div>
+
                   <div className="w-[200px] border-r">
                     <div className="mt-5 text-[13px] font-medium">
                       <label
                         htmlFor="assign_class_subject"
                         className=" my-3 bg-blue-950 text-white py-2 px-4 rounded-md text-[12px] transition-all duration-300 hover:text-white cursor-pointer "
+                        onClick={() => {
+                          console.log("props: ", props._id);
+                          setState(props._id);
+
+                          console.log(state);
+                        }}
                       >
                         + Assign Teacher
                       </label>
@@ -184,8 +193,7 @@ const ViewSubjects = () => {
                                 bg-blue-950 text-white px-6 py-2 rounded-md cursor-pointer
                                 "
                                 onClick={() => {
-                                  onTeacherSubject(props?._id);
-                                  console.log(subjectTeacher);
+                                  onTeacherSubject(state);
                                 }}
                               >
                                 Proceed

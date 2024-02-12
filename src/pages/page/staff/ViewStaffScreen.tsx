@@ -117,7 +117,9 @@ const ViewStaffScreen = () => {
                       <div>
                         {props?.subjectAssigned?.map((props: any) => (
                           <div className="gap-2">
-                            <p>{props?.title}</p>
+                            <p>
+                              {props?.title}: {props?.classMeant}
+                            </p>
                           </div>
                         ))}
                       </div>
