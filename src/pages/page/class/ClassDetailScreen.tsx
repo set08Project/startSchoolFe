@@ -18,6 +18,7 @@ import {
 } from "../../hook/useSchoolAuth";
 import { updateClassroomTeacher } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
+import TimeTableScreen from "./TimeTableScreen";
 
 interface iProps {
   props?: string;
@@ -366,6 +367,16 @@ const ClassDetailScreen = () => {
           Here are all the students in this class:{" "}
         </p>
         <div className="flex gap-4 mt-5"></div>
+      </div>
+
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+        <p>Viewing Class TimeTable</p>
+        <p className="text-[13px]  flex items-center font-bold">
+          Here are all the students in this class:{" "}
+        </p>
+        <div className="flex gap-4 mt-5">
+          <TimeTableScreen />
+        </div>
       </div>
 
       {/* Attendance */}

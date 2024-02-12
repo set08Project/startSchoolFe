@@ -4,6 +4,7 @@ import { FC } from "react";
 import moment from "moment";
 import { FaCheckDouble } from "react-icons/fa6";
 import { useSchoolData } from "../../hook/useSchoolAuth";
+import MaleFemaleTeacherScreen from "./MaleFemaleTeacherScreen";
 
 const Personal: FC = () => {
   const { data } = useSchoolData();
@@ -31,7 +32,7 @@ const Personal: FC = () => {
 
   return (
     <div>
-      <p className="mb-2 text-blue-950">
+      <div className="mb-2 text-blue-950">
         <span className="font-bold text-[12px] ">Population Counts</span>
         <div className="grid grid-cols-2 gap-3 mt-2">
           <div className="border rounded-md min-h-[100px] p-4">
@@ -109,10 +110,12 @@ const Personal: FC = () => {
             </h1>
           </div>
         </div>
-      </p>
+      </div>
       <div className="border-t my-5" />
       <div className="w-full">
         <p>Chart</p>
+
+        <MaleFemaleTeacherScreen />
 
         <p className="text-[12px]">Male vs Female</p>
       </div>

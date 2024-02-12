@@ -54,8 +54,6 @@ const Sider = () => {
     }
   };
 
-  // overflow - y - auto;
-
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
@@ -67,7 +65,7 @@ const Sider = () => {
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}
-          <p className="break-words font-bold">
+          <div className="break-words font-bold">
             {data?.schoolName.length > 16 ? (
               <Tooltip tip={data?.schoolName}>
                 <p>{data?.schoolName.substring(0, 16)}...</p>
@@ -75,7 +73,7 @@ const Sider = () => {
             ) : (
               data?.schoolName
             )}
-          </p>
+          </div>
           <p className="break-words font-medium text-slate-400 text-[14px] mt-2">
             ID: {data?.enrollmentID}
           </p>
