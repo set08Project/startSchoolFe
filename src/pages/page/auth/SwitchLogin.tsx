@@ -9,8 +9,9 @@ import { jwtDecode } from "jwt-decode";
 import { loginSchool, verifySchool } from "../../api/schoolAPIs";
 import toast, { Toaster } from "react-hot-toast";
 import { loginState } from "../../../global/reduxState";
+import { loginTeacher } from "../../../pagesForTeachers/api/teachersAPI";
 
-const SignIn = () => {
+const SwitchLogin = () => {
   const { token } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,17 +23,19 @@ const SignIn = () => {
   const handleSubmit = () => {
     // e.preventDefault();
     setLoading(true);
-    const val = { email: state, enrollmentID: password };
+    const val = { email: state, password };
 
-    loginSchool(val)
+    loginTeacher(val)
       .then((res) => {
         if (res.status === 201) {
           dispatch(loginState(res.data));
           toast.success("login successful");
           setLoading(false);
 
+          console.log(res);
+
           {
-            !loading && navigate("/");
+            // !loading && navigate("/");
           }
         } else {
           setLoading(false);
@@ -40,16 +43,9 @@ const SignIn = () => {
         }
       })
       .then(() => {
-        window.location.reload();
+        // window.location.reload();
       });
   };
-
-  useEffect(() => {
-    if (token) {
-      const { id }: any = jwtDecode(token);
-      verifySchool(id);
-    }
-  });
 
   return (
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
@@ -67,9 +63,9 @@ const SignIn = () => {
         <div className="text-[26px] font-bold mb-3 text-blue-900">
           Welcome Back
         </div>
-        <div className="text-[14px] -mt-4">
+        <div className="text-[14px] -mt-3 w-[70%] leading-tight">
           {" "}
-          Sign in now to continue your Experience.
+          Sign in as Teacher, Student or Parent to continue your Experience.
         </div>
       </div>
 
@@ -88,13 +84,12 @@ const SignIn = () => {
           }}
         />
         <Input
-          placeholder="School Enrollment ID"
+          placeholder="Your Password"
           className="w-[97%]"
           show
           //   errorText="Password has to be passed"
           errorText={
-            password &&
-            "Please ensure you're putting in the right school's EnrollemntID!"
+            password && "Please ensure you're putting your correct Password"
           }
           required
           value={password}
@@ -112,11 +107,9 @@ const SignIn = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
           />
 
-          <Link to="/auth/switch-login">
-            <div className="text-[12px] ml-2 font-bold cursor-pointer">
-              Teacher and Student, Switch Login
-            </div>
-          </Link>
+          <div className="text-[12px] ml-2 font-bold cursor-pointer">
+            Teacher and Student, Switch Login
+          </div>
         </div>
         <div className="mt-10 mb-0 mx-2 text-[13px] font-medium flex  justify-between ">
           <div>Sign in with social network</div>
@@ -139,4 +132,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SwitchLogin;

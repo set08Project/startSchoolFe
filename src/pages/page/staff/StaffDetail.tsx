@@ -90,11 +90,11 @@ const StaffDetail = () => {
 
         <div className="mt-5 text-[13px] font-medium">Subjects Handle</div>
 
-        <div className="mt-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+        <div className="mt-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {teacherDetail?.subjectAssigned.map((props: any) => (
             <div className="bg-white border flex flex-col w-full rounded-2xl min-h-[200px] px-4 pt-4">
               <div className="mt-3 flex  justify-between items-center font-bold">
-                <p className="break-words w-full">{props}</p>
+                <p className="break-words w-full">{props?.title}</p>
                 <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
                   <BsThreeDotsVertical className="hover:text-blue-900" />
                 </div>

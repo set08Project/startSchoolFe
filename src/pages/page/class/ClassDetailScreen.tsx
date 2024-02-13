@@ -3,10 +3,10 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
-import { MdClose, MdDelete } from "react-icons/md";
+import { MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
 
@@ -22,8 +22,9 @@ import {
   updateClassroomTeacher,
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
-import TimeTableScreen from "./TimeTableScreen";
+// import TimeTableScreen from "./TimeTableScreen";
 import ClassModel from "./ClassModel";
+import TimeTableScreen from "./TimeTableScreen";
 
 interface iProps {
   props?: string;
@@ -150,7 +151,7 @@ const ClassDetailScreen = () => {
     });
   };
 
-  console.log();
+  console.log(classroom);
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -238,6 +239,17 @@ const ClassDetailScreen = () => {
                   Please note that this teacher you're about to assign to this
                   class will exhibit all feature, roles and previlage to
                   supervise this class.
+                  <br />
+                  <br />
+                  <div className="flex gap-2  items-center">
+                    <p> Teacher: {teacher}</p>
+                    {teacher && (
+                      <div className="flex items-center font-bold">
+                        <span>selected</span>
+                        <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                      </div>
+                    )}
+                  </div>
                 </p>
 
                 <div className="mt-10 w-full gap-2 flex flex-col items-center">
@@ -252,7 +264,7 @@ const ClassDetailScreen = () => {
                         setTeacher(e.target.value);
                       }}
                     >
-                      <option disabled selected>
+                      <option disabled defaultValue={"Select a Teacher"}>
                         Select a Teacher
                       </option>
                       {schoolTeacher?.staff?.map((props: any, i: number) => (

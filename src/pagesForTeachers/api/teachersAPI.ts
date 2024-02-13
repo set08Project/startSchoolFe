@@ -25,3 +25,13 @@ export const updaetTeacherSalary = async (teacherID: string, data: {}) => {
     return error;
   }
 };
+
+export const loginTeacher = async (data: {}) => {
+  try {
+    return await axios.post(`${URL}/login-teacher/`, data).then((res: any) => {
+      return res?.data;
+    });
+  } catch (error) {
+    return error;
+  }
+};

@@ -1,15 +1,17 @@
 import { useState } from "react";
 import Button from "../../../components/reUse/Button";
-import { MdClose } from "react-icons/md";
-import { createTimeTable } from "../../api/schoolAPIs";
+import { MdCheck, MdClose } from "react-icons/md";
 import { useClassSubjects, useSchoolData } from "../../hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { createTimeTable } from "../../api/schoolAPIs";
 
 const periodicData = [
+  "07:45AM - 08:10AM",
   "08:10AM - 08:50AM",
   "08:50AM - 09:30AM ",
   "09:30AM - 10:10AM",
+  "10:10AM - 10:20AM",
   "10:20AM - 11:00AM",
   "11:00AM - 11:40AM",
   "11:40AM - 12:00NOON ",
@@ -30,8 +32,6 @@ const ClassModel = () => {
 
   const { readSubject } = useClassSubjects(classID!);
 
-  console.log(readSubject);
-
   const onCreateTimeTable = () => {
     createTimeTable(data?._id, classID!, {
       day,
@@ -39,10 +39,10 @@ const ClassModel = () => {
       time: period,
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res?.status === 201) {
           toast.success("Added Successfully...!");
         } else {
-          toast.error(`${res.response.data.message}`);
+          toast.error(`${res?.response?.data?.message}`);
         }
       })
       .then(() => {
@@ -54,7 +54,7 @@ const ClassModel = () => {
 
   return (
     <div>
-      <Toaster position="top-center" reverseOrder={true} />
+      {/* <Toaster position="top-center" reverseOrder={true} /> */}
       <div className="mt-5 text-[13px] font-medium">
         <label
           htmlFor="assign_subject_timetable"
@@ -71,7 +71,7 @@ const ClassModel = () => {
         />
         <div className="modal rounded-md" role="dialog">
           <div className="modal-box  rounded-md">
-            <p className="flex items-center justify-between my-4 ">
+            <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Add New Subject to TimeTable</p>
 
               <label
@@ -80,17 +80,41 @@ const ClassModel = () => {
               >
                 <MdClose />
               </label>
-            </p>
+            </div>
             <hr />
-            <p className="mt-2 leading-tight text-[13px] font-medium">
+            <div className="mt-2 leading-tight text-[13px] font-medium">
               Please note that by assigning this subject to this class, it
               automtically becomes one of the class must take suject.
               <br />
               <br />
-              {subject}
-              {period}
-              {day}
-            </p>
+              <div className="flex gap-2  items-center">
+                <p> Subject: {subject}</p>
+                {subject && (
+                  <div className="flex items-center font-bold">
+                    <span>selected</span>
+                    <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2  items-center">
+                <p> Peroid: {period}</p>
+                {period && (
+                  <div className="flex items-center font-bold">
+                    <span>selected</span>
+                    <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2  items-center">
+                <p> Day: {day}</p>
+                {day && (
+                  <div className="flex items-center font-bold">
+                    <span>selected</span>
+                    <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="mt-10 w-full gap-2 flex flex-col items-center">
               <div className="w-full">
                 <label className="font-medium text-[12px]">
@@ -104,11 +128,19 @@ const ClassModel = () => {
                     setSubject(e.target.value);
                   }}
                 >
-                  <option value={"Short Break"}>Short Break</option>
+                  <option value={"Short Break"} defaultValue={"Short Break"}>
+                    Short Break
+                  </option>
                   <option value={"Long Break"}>Long Break</option>
-                  {readSubject.map((props: any, i: number) => (
-                    <option key={i} value={props} className="py-4 my-8">
-                      {props.subjectTitle}
+                  <option value={"Free Period"}>Free Period</option>
+                  <option value={"Assembly"}>Assembly</option>
+                  {readSubject?.map((props: any, i: number) => (
+                    <option
+                      key={i}
+                      value={props.subjectTitle}
+                      className="py-4 my-8"
+                    >
+                      {props?.subjectTitle}
                     </option>
                   ))}
                 </select>
@@ -123,7 +155,11 @@ const ClassModel = () => {
                         setPeriod(e.target.value);
                       }}
                     >
-                      <option value={"Choose Peroid"} disabled selected>
+                      <option
+                        value={"Choose Peroid"}
+                        disabled
+                        defaultValue={"Choose Peroid"}
+                      >
                         Choose Peroid
                       </option>
                       {periodicData.map((props: any, i: number) => (

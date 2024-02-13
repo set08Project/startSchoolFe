@@ -1,17 +1,27 @@
-import React from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useClassTimeTable } from "../../hook/useSchoolAuth";
+import lodash from "lodash";
 
-const TimeTableScreen = () => {
+const TimeTableScreen: FC = () => {
   const { classID } = useParams();
   const { timetbale } = useClassTimeTable(classID!);
-  let data: any = Object.values(timetbale!)[1];
 
-  console.log(
-    data.map((el: any) => {
-      return el._id;
-    })
-  );
+  let [data, setData] = useState<Array<{}>>([]);
+  let [title, setTitle] = useState<Array<string>>([]);
+
+  //   console.log("Got it: ", timetbale?.data?.timeTable);
+
+  const viewTable = lodash.groupBy(timetbale?.data?.timeTable, "day");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setData(Object.values(viewTable));
+      setTitle(Object.keys(viewTable));
+
+      clearTimeout(timer);
+    }, 200);
+  }, []);
 
   return (
     <div className="w-full">
@@ -20,6 +30,7 @@ const TimeTableScreen = () => {
           {/* Header */}
           <div className="flex w-[2600px] gap-4 bg-white py-3 px-1">
             <div className="w-[200px] h-6 border-r">days</div>
+
             <div className="w-[300px] h-6  border-r">07:45AM - 08:10AM </div>
             <div className="w-[300px] h-6  border-r">08:10AM - 08:50AM </div>
             <div className="w-[300px] h-6  border-r">08:50AM - 09:30AM </div>
@@ -35,12 +46,36 @@ const TimeTableScreen = () => {
 
           <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
             <div className="w-[200px] h-6 border-r">
-              {Object.keys(timetbale)[1]}
+              {title?.map((props: string, i: number) => (
+                <div
+                  key={i}
+                  className={`py-2 ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}`}
+                >
+                  {props}
+                </div>
+              ))}
             </div>
 
-            {data.map((props: any) => (
-              <div className="w-[200px] h-6 border-r">{props?.subject}</div>
-            ))}
+            <div className="">
+              {data?.map((props: any, i: number) => (
+                <div
+                  key={i}
+                  className={`
+                flex flex-col py-2 ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}
+                `}
+                >
+                  <div className="flex   ">
+                    {props?.map((props: any, e: number) => (
+                      <div className="flex">
+                        <div key={e} className="w-[200px] h-6 border-r ">
+                          {props.subject}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           {/* 
           <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">

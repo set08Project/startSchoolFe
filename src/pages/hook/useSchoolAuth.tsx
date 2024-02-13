@@ -177,7 +177,5 @@ export const useClassTimeTable = (classID: string) => {
     });
   });
 
-  console.log(timetbale);
-
   return { timetbale };
 };

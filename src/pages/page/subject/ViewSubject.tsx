@@ -10,10 +10,10 @@ import {
 } from "../../hook/useSchoolAuth";
 import Button from "../../../components/reUse/Button";
 import { useState, FC } from "react";
-import { MdClose } from "react-icons/md";
-import { updateSchoolSubjectTeacher } from "../../api/schoolAPIs";
+import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
+import { updateSchoolSubjectTeacher } from "../../api/schoolAPIs";
 
 interface iProps {
   props?: any;
@@ -22,7 +22,6 @@ interface iProps {
 const TeacherInfo: FC<iProps> = ({ props }) => {
   const { schoolSubjectTeacherDetail } = useSchoolTeacherDetail(props);
 
-  console.log("teachers info:", schoolSubjectTeacherDetail);
   return (
     <div className="flex items-center gap-3">
       <div className="avatar">
@@ -153,6 +152,17 @@ const ViewSubjects = () => {
                             Please note that by assigning this subject to this
                             class, it automtically becomes one of the class must
                             take suject.
+                            <br />
+                            <br />
+                            <div className="flex gap-2  items-center">
+                              <p> Subject: {subjectTeacher}</p>
+                              {subjectTeacher && (
+                                <div className="flex items-center font-bold">
+                                  <span>selected</span>
+                                  <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                                </div>
+                              )}
+                            </div>
                           </p>
 
                           <div className="mt-10 w-full gap-2 flex flex-col items-center">

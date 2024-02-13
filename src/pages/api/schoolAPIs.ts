@@ -333,7 +333,7 @@ export const getClassTimeTable = async (classID: string) => {
     return await axios
       .get(`${URL}/view-time-table/${classID}/`)
       .then((res: any) => {
-        return res?.data.data;
+        return res?.data;
       });
   } catch (error) {
     return error;
@@ -348,6 +348,24 @@ export const createTimeTable = async (
   try {
     return await axios
       .post(`${URL}/create-time-table/${schoolID}/${classID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateSchoolSubjectTeacher = async (
+  schoolID: string,
+  classID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-subject-teacher/${schoolID}/${classID}`, {
+        subjectTeacherName: data,
+      })
       .then((res: any) => {
         return res?.data;
       });
