@@ -5,6 +5,10 @@ import { adminRouter } from "./adminRouter";
 import { mainRouter } from "./mainRouter";
 import { teacherRouter } from "./teacherRouter";
 import { studentRouter } from "./studentRouter";
+import {
+  readTeacherCookie,
+  viewTeacherDetail,
+} from "../pagesForTeachers/api/teachersAPI";
 
 const RouterScreen = () => {
   const [state, setState] = useState<any>({} || "" || 0);
@@ -22,10 +26,20 @@ const RouterScreen = () => {
         });
       });
 
-      clearTimeout(timer)
+      readTeacherCookie().then((res: any) => {
+        console.log(res);
+        return viewTeacherDetail(res.data).then((resp) => {
+          if (resp.status === 200) {
+            return setState(resp.data);
+          } else if (resp?.response?.status === 404) {
+            return setState(resp?.response?.status);
+          }
+        });
+      });
+
+      clearTimeout(timer);
     });
 
-    
     const timing = setTimeout(() => {
       if (!state.status) {
         setLoadingState(true);

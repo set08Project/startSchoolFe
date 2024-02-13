@@ -28,9 +28,23 @@ export const updaetTeacherSalary = async (teacherID: string, data: {}) => {
 
 export const loginTeacher = async (data: {}) => {
   try {
-    return await axios.post(`${URL}/login-teacher/`, data).then((res: any) => {
-      return res?.data;
-    });
+    return await axios
+      .post(`${URL}/login-teacher/`, data, { withCredentials: true })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readTeacherCookie = async () => {
+  try {
+    return await axios
+      .get(`${URL}/read-teacher-cookie/`, { withCredentials: true })
+      .then((res: any) => {
+        return res?.data;
+      });
   } catch (error) {
     return error;
   }

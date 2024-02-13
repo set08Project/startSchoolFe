@@ -3,6 +3,10 @@ import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 import LoadingScreen from "../components/static/LoadingScreen";
 import FirstScreen from "../pages/home/start/FirstScreen";
+import {
+  readTeacherCookie,
+  viewTeacherDetail,
+} from "../pagesForTeachers/api/teachersAPI";
 
 const MakeShift = () => {
   const [state, setState] = useState<any>({} || "" || 0);
@@ -18,9 +22,23 @@ const MakeShift = () => {
           }
         });
       });
+
+      readTeacherCookie().then((res: any) => {
+        console.log(res);
+        return viewTeacherDetail(res.data).then((resp) => {
+          if (resp.status === 200) {
+            return setState(resp.data);
+          } else if (resp?.response?.status === 404) {
+            return setState(resp?.response?.status);
+          }
+        });
+      });
+
       clearTimeout(timer);
     }, 1000);
   }, []);
+
+  console.log("showing; ", state);
 
   return (
     <div>
