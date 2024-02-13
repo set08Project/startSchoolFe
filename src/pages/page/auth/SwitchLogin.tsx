@@ -8,11 +8,10 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { jwtDecode } from "jwt-decode";
 import { loginSchool, verifySchool } from "../../api/schoolAPIs";
 import toast, { Toaster } from "react-hot-toast";
-import { loginState } from "../../../global/reduxState";
+import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginTeacher } from "../../../pagesForTeachers/api/teachersAPI";
 
 const SwitchLogin = () => {
-  const { token } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [state, setState] = useState<string>("");
@@ -29,6 +28,7 @@ const SwitchLogin = () => {
       .then((res) => {
         if (res.status === 201) {
           dispatch(loginState(res.data));
+          dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
 

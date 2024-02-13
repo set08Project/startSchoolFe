@@ -2,7 +2,7 @@ import axios from "axios";
 
 const URL: string = "http://localhost:2244/api";
 
-export const viewTeacherDetail = async (teacherID: string) => {
+export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
     return await axios
       .get(`${URL}/view-teacher-detail/${teacherID}`)

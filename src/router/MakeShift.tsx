@@ -8,31 +8,36 @@ import {
   viewTeacherDetail,
 } from "../pagesForTeachers/api/teachersAPI";
 
+import { useSelector } from "react-redux";
+
 const MakeShift = () => {
+  const userStatus = useSelector((state: any) => state.userStatus);
   const [state, setState] = useState<any>({} || "" || 0);
 
   useEffect(() => {
     let timer = setTimeout(() => {
-      getSchoolCookie().then((res: any) => {
-        return readSchool(res.data).then((resp) => {
-          if (resp.status === 200) {
-            return setState(resp.data);
-          } else if (resp?.response?.status === 404) {
-            return setState(resp?.response?.status);
-          }
+      if (userStatus === "school-admin") {
+        getSchoolCookie().then((res: any) => {
+          return readSchool(res.data).then((resp) => {
+            if (resp.status === 200) {
+              return setState(resp.data);
+            } else if (resp?.response?.status === 404) {
+              return setState(resp?.response?.status);
+            }
+          });
         });
-      });
-
-      readTeacherCookie().then((res: any) => {
-        console.log(res);
-        return viewTeacherDetail(res.data).then((resp) => {
-          if (resp.status === 200) {
-            return setState(resp.data);
-          } else if (resp?.response?.status === 404) {
-            return setState(resp?.response?.status);
-          }
+      } else if (userStatus === "school-teacher") {
+        readTeacherCookie().then((res: any) => {
+          console.log(res);
+          return viewTeacherDetail(res.data).then((resp: any) => {
+            if (resp.status === 200) {
+              return setState(resp.data);
+            } else if (resp?.response?.status === 404) {
+              return setState(resp?.response?.status);
+            }
+          });
         });
-      });
+      }
 
       clearTimeout(timer);
     }, 1000);

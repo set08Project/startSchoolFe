@@ -4,7 +4,11 @@ import { FC, ReactNode, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
-import { changeToggleMenuState, logoutState } from "../../global/reduxState";
+import {
+  changeToggleMenuState,
+  displayUserStatus,
+  logoutState,
+} from "../../global/reduxState";
 import { logout } from "../../pages/api/schoolAPIs";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 
@@ -107,6 +111,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           onClick={() => {
             logout();
             dispatch(logoutState());
+            dispatch(displayUserStatus(null));
             // window.location.reload();
           }}
         >

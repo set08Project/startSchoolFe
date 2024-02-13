@@ -16,6 +16,7 @@ let data = [
 
 const initialState = {
   user: "" || null,
+  userStatus: "" || null,
   toggle: false,
   delayToggled: false,
   toggleMenu: false,
@@ -113,6 +114,10 @@ const reduxState = createSlice({
     displayNoticeEvent: (state, { payload }) => {
       state.event = payload;
     },
+
+    displayUserStatus: (state, { payload }) => {
+      state.userStatus = payload;
+    },
   },
 });
 
@@ -135,6 +140,7 @@ export const {
   displayClass,
   displayNotice,
   displayNoticeEvent,
+  displayUserStatus,
 } = reduxState.actions;
 
 export default reduxState.reducer;

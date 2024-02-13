@@ -152,7 +152,7 @@ export const useSchoolTeacherDetail = (teacherID: string) => {
   const { data: schoolSubjectTeacherDetail } = useSWR(
     `api/view-school-subject-teacher/${teacherID}`,
     () => {
-      return viewTeacherDetail(teacherID!).then((res) => {
+      return viewTeacherDetail(teacherID!).then((res: any) => {
         return res.data;
       });
     }

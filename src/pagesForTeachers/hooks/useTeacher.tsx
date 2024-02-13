@@ -6,7 +6,7 @@ export const useTeacherDetail = (teacherID: string) => {
   const { data: teacherDetail } = useSWR(
     `api/view-teacher-detail/${teacherID}`,
     () => {
-      return viewTeacherDetail(teacherID!).then((res) => {
+      return viewTeacherDetail(teacherID!).then((res: any) => {
         return res.data;
       });
     }
@@ -20,7 +20,7 @@ export const useTeacherInfo = () => {
   const { data: teacherInfo } = useSWR(
     `api/view-teacher-detail/${dataID}`,
     () => {
-      return viewTeacherDetail(dataID!).then((res) => {
+      return viewTeacherDetail(dataID!).then((res: any) => {
         return res.data;
       });
     }
