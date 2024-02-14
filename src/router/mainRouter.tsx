@@ -7,7 +7,6 @@ import RegisterCard from "../pages/page/auth/RegisterCard";
 import SecondStep from "../pages/home/start/SecondStep";
 import ThirdScreen from "../pages/home/start/ThirdStep";
 import LoadingScreen from "../components/static/LoadingScreen";
-import LandingPageScreen from "../mainPage/view/LandingPageScreen";
 import MainSchoolPage from "../mainPage/MainSchoolPage";
 import SwitchLogin from "../pages/page/auth/SwitchLogin";
 

@@ -6,9 +6,10 @@ import Schedule from "../pagesForTeachers/pages/schedule/Schedule";
 import MyClass from "../pagesForTeachers/pages/class/MyClass";
 import Subjects from "../pagesForTeachers/pages/subject/Subjects";
 import LessonNote from "../pagesForTeachers/pages/lessonNote/LessonNote";
-import Store from "../pagesForTeachers/pages/store/Store";
 import Exams from "../pagesForTeachers/pages/exams/Exams";
 import WeekReport from "../pagesForTeachers/pages/report/WeekReport";
+import ViewStoreItems from "../pagesForTeachers/pages/store/ViewStoreItems";
+import StudentDetail from "../pagesForTeachers/pages/class/StudentDetail";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const teacherRouter = createBrowserRouter([
         element: <MyClass />,
       },
       {
+        path: "my-class/student-details/:studentID",
+        element: <StudentDetail />,
+      },
+      {
         path: "subjects",
         element: <Subjects />,
       },
@@ -46,7 +51,7 @@ export const teacherRouter = createBrowserRouter([
       },
       {
         path: "store",
-        element: <Store />,
+        element: <ViewStoreItems />,
       },
       {
         path: "exams",

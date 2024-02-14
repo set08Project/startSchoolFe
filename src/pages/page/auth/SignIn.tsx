@@ -33,7 +33,7 @@ const SignIn = () => {
           setLoading(false);
 
           {
-            // !loading && navigate("/");
+            !loading && navigate("/");
           }
         } else {
           setLoading(false);

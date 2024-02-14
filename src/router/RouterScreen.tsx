@@ -31,7 +31,6 @@ const RouterScreen = () => {
         });
       } else if (userStatus === "school-teacher") {
         readTeacherCookie().then((res: any) => {
-          console.log(res);
           return viewTeacherDetail(res.data).then((resp: any) => {
             if (resp.status === 200) {
               return setState(resp.data);

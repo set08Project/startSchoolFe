@@ -31,11 +31,10 @@ const SwitchLogin = () => {
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
-
           console.log(res);
 
           {
-            // !loading && navigate("/");
+            !loading && navigate("/");
           }
         } else {
           setLoading(false);
@@ -43,7 +42,7 @@ const SwitchLogin = () => {
         }
       })
       .then(() => {
-        // window.location.reload();
+        window.location.reload();
       });
   };
 
@@ -108,7 +107,7 @@ const SwitchLogin = () => {
           />
 
           <div className="text-[12px] ml-2 font-bold cursor-pointer">
-            Teacher and Student, Switch Login
+            {/* Teacher and Student, Switch Login */}
           </div>
         </div>
         <div className="mt-10 mb-0 mx-2 text-[13px] font-medium flex  justify-between ">

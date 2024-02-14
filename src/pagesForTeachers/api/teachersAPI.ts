@@ -49,3 +49,63 @@ export const readTeacherCookie = async () => {
     return error;
   }
 };
+
+export const readClassInfo = async (className: string) => {
+  try {
+    return await axios
+      .post(`${URL}/view-classroom-info-name/`, { className })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readClassInfoTimeTable = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classroom-info-timetable/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readClassInfoSubject = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classroom-info-subject/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readClassInfoStudent = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classroom-info-student/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readTeacherSchedule = async (teacherID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-teacher-schedule/${teacherID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

@@ -105,7 +105,7 @@ const ClassRoomScreen = () => {
                   <div className="w-[80px] border-r">{props.className}</div>
 
                   <div className={`w-[100px] border-r`}>
-                    {props.classStudents.length}
+                    {props?.students?.length}
                   </div>
                   <div className={`w-[100px] border-r`}>
                     {props?.classSubjects.length}

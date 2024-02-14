@@ -7,6 +7,8 @@ import {
   getSchoolClassroom,
   getSchoolCookie,
   getSchoolEvent,
+  getSchoolStudentDetail,
+  getSchoolStudents,
   readSchool,
   registerSchool,
   updateClassroomTeacher,
@@ -171,11 +173,43 @@ export const useClassSubjects = (classID: string) => {
 };
 
 export const useClassTimeTable = (classID: string) => {
-  const { data: timetbale } = useSWR(`api/view-time-table/${classID}`, () => {
-    return getClassTimeTable(classID!).then((res) => {
-      return res;
-    });
-  });
+  const { data: timetbale } = useSWR(
+    `api/view-time-table/${classID}`,
+    () => {
+      return getClassTimeTable(classID!).then((res) => {
+        return res;
+      });
+    },
+    { refreshInterval: 10000 }
+  );
+
+  return { timetbale };
+};
+
+export const useSchoolStudents = (schoolID: string) => {
+  const { data: timetbale } = useSWR(
+    `api/read-student/${schoolID}`,
+    () => {
+      return getSchoolStudents(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    { refreshInterval: 10000 }
+  );
+
+  return { timetbale };
+};
+
+export const useSchoolStudentDetail = (studentID: string) => {
+  const { data: timetbale } = useSWR(
+    `api/read-student-info/${studentID}`,
+    () => {
+      return getSchoolStudentDetail(studentID!).then((res) => {
+        return res;
+      });
+    },
+    { refreshInterval: 10000 }
+  );
 
   return { timetbale };
 };

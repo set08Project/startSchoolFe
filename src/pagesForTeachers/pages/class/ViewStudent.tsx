@@ -6,15 +6,10 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
   const data = Array.from({ length: 7 });
-
-  // const {} = use
-
-  const { classStudents } = useClassStudent("");
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {

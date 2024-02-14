@@ -340,6 +340,30 @@ export const getClassTimeTable = async (classID: string) => {
   }
 };
 
+export const getSchoolStudents = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-student/${schoolID}/`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolStudentDetail = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-student-info/${studentID}/`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const createTimeTable = async (
   schoolID: string,
   classID: string,

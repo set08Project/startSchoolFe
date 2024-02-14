@@ -1,7 +1,12 @@
 import React from "react";
+import MyClassRoomScreen from "./MyClassRoom";
 
 const MyClass = () => {
-  return <div>MyClass</div>;
+  return (
+    <div>
+      <MyClassRoomScreen />
+    </div>
+  );
 };
 
 export default MyClass;
