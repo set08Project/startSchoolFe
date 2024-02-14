@@ -187,7 +187,7 @@ export const useClassTimeTable = (classID: string) => {
 };
 
 export const useSchoolStudents = (schoolID: string) => {
-  const { data: timetbale } = useSWR(
+  const { data: students } = useSWR(
     `api/read-student/${schoolID}`,
     () => {
       return getSchoolStudents(schoolID!).then((res) => {
@@ -197,11 +197,11 @@ export const useSchoolStudents = (schoolID: string) => {
     { refreshInterval: 10000 }
   );
 
-  return { timetbale };
+  return { students };
 };
 
 export const useSchoolStudentDetail = (studentID: string) => {
-  const { data: timetbale } = useSWR(
+  const { data: studentDetails } = useSWR(
     `api/read-student-info/${studentID}`,
     () => {
       return getSchoolStudentDetail(studentID!).then((res) => {
@@ -211,5 +211,5 @@ export const useSchoolStudentDetail = (studentID: string) => {
     { refreshInterval: 10000 }
   );
 
-  return { timetbale };
+  return { studentDetails };
 };

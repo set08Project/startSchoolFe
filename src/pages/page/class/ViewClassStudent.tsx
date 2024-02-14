@@ -1,20 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import pix from "../../../assets/pix.jpg";
-import Button from "../../components/reUse/Button";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { useDispatch } from "react-redux";
 import { FC } from "react";
-import { useClassStudent } from "../../hooks/useTeacher";
 import { FaCheckDouble } from "react-icons/fa6";
+import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
+import Button from "../../../components/reUse/Button";
 
 interface iProps {
   props?: any;
 }
-const ReadingClassStudents: FC<iProps> = ({ props }) => {
+const ViewClassStudent: FC<iProps> = () => {
+  const { classID } = useParams();
   const dispatch = useDispatch();
-  const data = Array.from({ length: 0 });
 
-  const { classStudents } = useClassStudent(props);
+  const { classStudents } = useClassStudent(classID!);
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -148,8 +148,8 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                 ))}
               </div>
             ) : (
-              <div>
-                <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+              <div className="flex ">
+                <div className="flex flex-col items-center w-[30%] justify-center px-4 py-1 mt-3">
                   <FaCheckDouble size={13} />
                   <p className="mt-3 text-[12px] font-medium">
                     No Subject added yet
@@ -164,4 +164,4 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
   );
 };
 
-export default ReadingClassStudents;
+export default ViewClassStudent;

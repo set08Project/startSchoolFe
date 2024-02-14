@@ -1,5 +1,6 @@
 import LittleHeader from "../../components/layout/LittleHeader";
 import { useTeacherInfo, useTeacherSchedule } from "../../hooks/useTeacher";
+import lodash from "lodash";
 
 const periodicData = [
   "07:45AM - 08:10AM",
@@ -19,14 +20,9 @@ const daysData = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const MyScheduleScreen = () => {
   const { teacherInfo } = useTeacherInfo();
-  const { teacherSchedule } = useTeacherSchedule(teacherInfo?._id);
-  const title = Array.from({ length: 5 }, () => {
-    return { title: daysData[Math.ceil(Math.random() * daysData.length - 1)] };
-  });
-  const data = Array.from({ length: 10 });
+  const { teacherSchedule: dataData } = useTeacherSchedule(teacherInfo?._id);
 
-  console.log("kk ", teacherInfo);
-  console.log("kk ", teacherSchedule);
+  const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
 
   return (
     <div>
@@ -35,7 +31,7 @@ const MyScheduleScreen = () => {
         <div className="">
           <div className=" w-full bg-slate-50 min-h-[calc(100vh-240px)] border rounded-md p-2 overflow-x-auto gap-4">
             {/* Header */}
-            <div className="flex w-[2600px] gap-4 bg-white py-3 px-1">
+            {/* <div className="flex w-[2600px] gap-4 bg-white py-3 px-1">
               <div className="w-[295px] h-6 border-r">days</div>
 
               <div className="w-[300px] h-6  border-r">08:10AM - 08:50AM </div>
@@ -52,33 +48,37 @@ const MyScheduleScreen = () => {
               </div>
               <div className="w-[300px] h-6  border-r">12:40PM - 01:20PM </div>
               <div className="w-[300px] h-6  border-r">01:20PM - 02:00PM </div>
-            </div>
+            </div> */}
 
             <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
               <div className="w-[200px] h-6 border-r">
-                {title?.map((props: any, i: number) => (
+                {daysData?.map((props: any, i: number) => (
                   <div
                     key={i}
                     className={`py-2 border rounded-lg bg-white h-[170px] my-2 flex justify-center items-center  `}
                   >
-                    {props?.title}
+                    {props}
                   </div>
                 ))}
               </div>
 
-              <div className="">
+              <div className="flex ">
                 {data?.map((props: any, i: number) => (
                   <div
                     key={i}
                     className={`
-                flex flex-col py-2 ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}
+                flex flex-col py-2 my-0  $
                 `}
                   >
-                    <div className="flex   ">
+                    <div className="flex gap-4 ">
                       {props?.map((props: any, e: number) => (
                         <div className="flex">
-                          <div key={e} className="w-[200px] h-6 border-r ">
-                            {props.subject}
+                          <div
+                            key={e}
+                            className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] bg-white border"
+                          >
+                            <p>{props?.subject}</p>
+                            <p>{props?.time}</p>
                           </div>
                         </div>
                       ))}

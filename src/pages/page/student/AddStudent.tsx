@@ -26,8 +26,8 @@ const AddStudent = () => {
   const handleStudentCreation = () => {
     setLoading(true);
     createSchoolStudent(data?._id, {
-      studentLastName: name,
-      studentFirstName: lastName,
+      studentLastName: lastName,
+      studentFirstName: name,
       studentAddress: location,
       classAssigned: assignedClass,
       gender,

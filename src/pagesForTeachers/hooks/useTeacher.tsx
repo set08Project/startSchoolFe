@@ -103,7 +103,7 @@ export const useTeacherStudent = (classID: string) => {
 
 export const useClassStudent = (classID: string) => {
   const { data: classStudents } = useSWR(
-    `api/view-class-students/${classID}`,
+    `api/view-all-class-students/${classID}`,
     () => {
       return readClassInfoStudent(classID!).then((res: any) => {
         return res.data;

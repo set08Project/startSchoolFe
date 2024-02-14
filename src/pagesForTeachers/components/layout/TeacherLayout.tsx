@@ -63,7 +63,7 @@ const TeacherLayout: FC = () => {
   };
 
   return (
-    <div className="flex w-[100%]">
+    <div className="flex w-[100%] text-blue-950">
       <div className="md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50">
         <Sider />
       </div>

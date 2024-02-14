@@ -10,7 +10,7 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { readClassInfo } from "../../api/teachersAPI";
 import TimeTableScreen from "./TimeTableScreen";
-import { FaStar } from "react-icons/fa6";
+import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
 
@@ -54,7 +54,12 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
           ))}
         </div>
       ) : (
-        <div>No subject added yet</div>
+        <div>
+          <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+            <FaCheckDouble size={13} />
+            <p className="mt-3 text-[12px] font-medium">No Subject added yet</p>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -99,6 +104,8 @@ const MyClassRoomScreen = () => {
     });
   }, []);
 
+  console.log("ID: ", classInfo?._id);
+
   return (
     <div className="text-blue-950">
       <LittleHeader name="My ClassRoom Details" />
@@ -108,7 +115,7 @@ const MyClassRoomScreen = () => {
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            {classInfo?.classStudents.length}{" "}
+            {classInfo?.classStudents?.length}{" "}
             <span className="text-[20px]">Students</span>
           </div>
         </div>
@@ -171,7 +178,16 @@ const MyClassRoomScreen = () => {
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
         </p>
-        <div className="flex gap-4 mt-5"></div>
+        <div className="flex gap-4 mt-5">
+          <div className="flex justify-center w-full">
+            <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+              <FaCheckDouble size={13} />
+              <p className="mt-3 text-[12px] font-medium">
+                No Student rated yet
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* viewing Students */}

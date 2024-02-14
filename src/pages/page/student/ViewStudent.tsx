@@ -7,14 +7,15 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
 import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
+import { useSchoolData, useSchoolStudents } from "../../hook/useSchoolAuth";
+import moment from "moment";
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 7 });
 
   // const {} = use
-
-  const { classStudents } = useClassStudent("");
+  const { data: UI } = useSchoolData();
+  const { students } = useSchoolStudents(UI?._id);
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -68,83 +69,103 @@ const ViewStudent = () => {
         </div>
 
         <div className=" w-[1920px] overflow-hidden">
-          {data?.map((props: any, i: number) => (
+          {students?.data?.students?.length > 0 ? (
             <div>
-              <div>
-                <div
-                  key={props}
-                  className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
-                    i % 2 === 0 ? "bg-slate-50" : "bg-white"
-                  }`}
-                >
-                  <div className="w-[130px] border-r">{"22-22-22"}</div>
+              {students?.data?.students?.map((props: any, i: number) => (
+                <div>
+                  <div>
+                    <div
+                      key={props}
+                      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+                        i % 2 === 0 ? "bg-slate-50" : "bg-white"
+                      }`}
+                    >
+                      <div className="w-[130px] border-r">
+                        {moment(props?.createdAt).format("ll")}
+                      </div>
 
-                  <div
-                    className={`w-[100px] border-r ${
-                      i % 2 === 0 ? "text-red-600" : "text-green-600"
-                    }`}
-                  >
-                    {i % 2 === 0 ? "Absent" : "Present"}
-                  </div>
+                      <div
+                        className={`w-[100px] border-r ${
+                          i % 2 === 0 ? "text-red-600" : "text-green-600"
+                        }`}
+                      >
+                        {i % 2 === 0 ? "Absent" : "Present"}
+                      </div>
 
-                  <div className="w-[100px] border-r">2:10</div>
-                  <div className="w-[220px] border-r flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <label>1st Term</label>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
-                        // checked
-                      />
+                      <div className="w-[100px] border-r">2:10</div>
+                      <div className="w-[220px] border-r flex gap-4">
+                        <div className="flex flex-col items-center">
+                          <label>1st Term</label>
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
+                            // checked
+                          />
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <label>2nd Term</label>
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                            // checked
+                          />
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <label>3rd Term</label>
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                            // checked
+                          />
+                        </div>
+                      </div>
+
+                      {/* name */}
+                      <div className="w-[150px] flex justify-center border-r">
+                        <img
+                          className="w-14 h-14 rounded-md border object-cover"
+                          src={pix}
+                        />
+                      </div>
+                      <div className="w-[200px] border-r gap-2 font-bold">
+                        {props?.studentFirstName} {props?.studentLastName}
+                      </div>
+
+                      <div className="w-[100px] border-r  ">
+                        {props?.classAssigned}
+                      </div>
+                      <div className="w-[150px] border-r  ">
+                        {props?.phone ? props?.phone : "Not yet Added"}
+                      </div>
+                      <div className="w-[200px] border-r  ">
+                        {props?.studentAddress
+                          ? props?.studentAddress
+                          : "Not yet Added"}
+                      </div>
+                      <div className="w-[200px] border-r  ">
+                        {props?.perfomance ? props?.perfomance : "0"}
+                      </div>
+
+                      <div className="w-[80px] border-r">3 of 5</div>
+
+                      <Link
+                        to={`student-details/${props?._id}`}
+                        className="w-[180px] border-r"
+                      >
+                        <Button
+                          name="View Detail"
+                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                          onClick={() => {}}
+                        />
+                      </Link>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <label>2nd Term</label>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                        // checked
-                      />
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <label>3rd Term</label>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                        // checked
-                      />
-                    </div>
                   </div>
-
-                  {/* name */}
-                  <div className="w-[150px] flex justify-center border-r">
-                    <img
-                      className="w-14 h-14 rounded-md border object-cover"
-                      src={pix}
-                    />
-                  </div>
-                  <div className="w-[200px] border-r">name</div>
-
-                  <div className="w-[100px] border-r  ">Role</div>
-                  <div className="w-[150px] border-r  ">phone</div>
-                  <div className="w-[200px] border-r  ">contact</div>
-                  <div className="w-[200px] border-r  ">Suject Taking</div>
-
-                  <div className="w-[80px] border-r">3 of 5</div>
-
-                  <Link
-                    to={`student-details/:staffID`}
-                    className="w-[180px] border-r"
-                  >
-                    <Button
-                      name="View Detail"
-                      className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                      onClick={() => {}}
-                    />
-                  </Link>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div>No student yet</div>
+          )}
         </div>
       </div>
     </div>

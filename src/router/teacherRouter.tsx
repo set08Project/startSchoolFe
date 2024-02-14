@@ -10,6 +10,7 @@ import Exams from "../pagesForTeachers/pages/exams/Exams";
 import WeekReport from "../pagesForTeachers/pages/report/WeekReport";
 import ViewStoreItems from "../pagesForTeachers/pages/store/ViewStoreItems";
 import StudentDetail from "../pagesForTeachers/pages/class/StudentDetail";
+import QuizSetupScreen from "../pagesForTeachers/pages/quiz/QuizSetupScreen";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -55,7 +56,7 @@ export const teacherRouter = createBrowserRouter([
       },
       {
         path: "exams",
-        element: <Exams />,
+        element: <QuizSetupScreen />,
       },
       {
         path: "week-report",

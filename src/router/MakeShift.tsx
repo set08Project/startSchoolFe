@@ -42,8 +42,6 @@ const MakeShift = () => {
     }, 1000);
   }, []);
 
-  console.log("showing; ", state);
-
   return (
     <div>
       {Object.keys(state)?.length === 0 ? (

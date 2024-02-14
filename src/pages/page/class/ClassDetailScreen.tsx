@@ -1,7 +1,7 @@
 document.title = "class room Detail's Page";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { FaStar } from "react-icons/fa6";
+import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import { MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -25,6 +25,9 @@ import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 // import TimeTableScreen from "./TimeTableScreen";
 import ClassModel from "./ClassModel";
 import TimeTableScreen from "./TimeTableScreen";
+import ViewStudent from "../../../pagesForTeachers/pages/class/ViewStudent";
+import ReadingClassStudents from "../../../pagesForTeachers/pages/class/ReadingClassStudents";
+import ViewClassStudent from "./ViewClassStudent";
 
 interface iProps {
   props?: string;
@@ -67,7 +70,12 @@ const ClassSubjectScreen: FC = () => {
           ))}
         </div>
       ) : (
-        <div>No subject added yet</div>
+        <div>
+          <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+            <FaCheckDouble size={13} />
+            <p className="mt-3 text-[12px] font-medium">No Subject added yet</p>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -151,7 +159,6 @@ const ClassDetailScreen = () => {
     });
   };
 
-  console.log(classroom);
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -162,7 +169,7 @@ const ClassDetailScreen = () => {
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            {classroom?.classStudents.length}{" "}
+            {classroom?.classStudents?.length}{" "}
             <span className="text-[20px]">Students</span>
           </div>
         </div>
@@ -422,20 +429,37 @@ const ClassDetailScreen = () => {
         {/* Populate Class St */}
         <ClassSubjectScreen />
       </div>
+
+      {/* Performance */}
       <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
         </p>
-        <div className="flex gap-4 mt-5"></div>
+        <div className="flex gap-4 mt-5">
+          <div className="w-full justify-center flex">
+            <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+              <FaCheckDouble size={13} />
+              <p className="mt-3 text-[12px] font-medium">
+                No Student rated yet
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* All Students */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Viewing Students</p>
         <p className="text-[13px]  flex items-center font-bold">
           Here are all the students in this class:{" "}
         </p>
-        <div className="flex gap-4 mt-5"></div>
+        <div className="flex gap-4 mt-5 overflow-x-auto">
+          <ViewClassStudent />
+        </div>
       </div>
+
+      {/* timetable */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <div className="flex items-center w-full justify-between">
           <div>
