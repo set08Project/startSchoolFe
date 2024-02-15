@@ -2,6 +2,8 @@ import useSWR from "swr";
 import {
   readClassInfoStudent,
   readClassInfoSubject,
+  readSubjectDetail,
+  readSubjectQuiz,
   readTeacherCookie,
   readTeacherSchedule,
   viewTeacherDetail,
@@ -111,4 +113,28 @@ export const useClassStudent = (classID: string) => {
     }
   );
   return { classStudents };
+};
+
+export const useSujectInfo = (subjectID: string) => {
+  const { data: subjectInfo } = useSWR(
+    `api/view-subject-info/${subjectID}`,
+    () => {
+      return readSubjectDetail(subjectID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { subjectInfo };
+};
+
+export const useSujectQuiz = (subjectID: string) => {
+  const { data: subjectQuiz } = useSWR(
+    `api/view-subject-quiz/${subjectID}`,
+    () => {
+      return readSubjectQuiz(subjectID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { subjectQuiz };
 };

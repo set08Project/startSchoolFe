@@ -91,6 +91,7 @@ export const readClassInfoStudent = async (classID: string) => {
     return await axios
       .get(`${URL}/view-classroom-info-student/${classID}`)
       .then((res: any) => {
+        console.log("first: ", res);
         return res?.data;
       });
   } catch (error) {
@@ -102,6 +103,64 @@ export const readTeacherSchedule = async (teacherID: string) => {
   try {
     return await axios
       .get(`${URL}/view-teacher-schedule/${teacherID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readSubjectDetail = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subjects-info/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readSubjectQuiz = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subject-quiz/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createQuiz = async (
+  classID: string,
+  subjectID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-subject-quiz/${classID}/${subjectID}`, {
+        quiz: data,
+      })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createTeacherLessonNote = async (
+  schoolID: string,
+  teacherID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-lesson-note/${schoolID}/${teacherID}`, data)
       .then((res: any) => {
         return res?.data;
       });

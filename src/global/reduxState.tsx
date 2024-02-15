@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface iProps {
   val: string;
@@ -15,6 +15,8 @@ let data = [
 ];
 
 const initialState = {
+  test: [{ instruction: {} }, { question: [] }],
+  testTry: { instruction: {}, question: [] },
   user: "" || null,
   userStatus: "" || null,
   toggle: false,
@@ -118,10 +120,33 @@ const reduxState = createSlice({
     displayUserStatus: (state, { payload }) => {
       state.userStatus = payload;
     },
+
+    addTestInstruction: (state, { payload }: any): any => {
+      state.test[0].instruction = payload;
+    },
+
+    addTestQuestion: (state, { payload }: any) => {
+      state.test[1].question?.push(payload);
+    },
+
+    addTestQuestionTry: (state, { payload }: any) => {
+      const vale = { ...payload };
+      state.testTry.question?.push(vale);
+    },
+
+    displayEmptyTest: (state) => {
+      state.test = [{ instruction: {} }, { question: [] }];
+
+      // state.test[1].question = [];
+      // state.test[0].instruction = {};
+    },
   },
 });
 
 export const {
+  displayEmptyTest,
+  addTestInstruction,
+  addTestQuestion,
   loginState,
   logoutState,
   pickedCategory,
