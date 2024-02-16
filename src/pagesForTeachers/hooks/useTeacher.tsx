@@ -18,17 +18,6 @@ export const useTeacherCookie = () => {
   return { dataID };
 };
 
-// export const useSchoolData = () => {
-//   const { dataID } = useSchoolCookie();
-
-//   const { data, isLoading } = useSWR(`api/view-school/${dataID}`, () => {
-//     return readSchool(dataID!).then((res) => {
-//       return res.data;
-//     });
-//   });
-//   return { data, isLoading };
-// };
-
 export const useTeacherDetail = (teacherID: string) => {
   const { data: teacherDetail } = useSWR(
     `api/view-teacher-detail/${teacherID}`,

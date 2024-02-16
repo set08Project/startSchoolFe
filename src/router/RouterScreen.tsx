@@ -10,6 +10,10 @@ import {
   viewTeacherDetail,
 } from "../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
+import {
+  readStudentCookie,
+  viewStduentDetail,
+} from "../pagesForStudents/api/studentAPI";
 
 const RouterScreen = () => {
   const userStatus = useSelector((state: any) => state.userStatus);
@@ -39,6 +43,19 @@ const RouterScreen = () => {
             }
           });
         });
+      } else if (userStatus === "school-student") {
+        readStudentCookie().then((res: any) => {
+          console.log(res);
+          return viewStduentDetail(res.data).then((resp: any) => {
+            console.log(resp);
+            if (resp.status === 200) {
+              console.log(resp.data);
+              return setState(resp.data);
+            } else if (resp?.response?.status === 404) {
+              return setState(resp?.response?.status);
+            }
+          });
+        });
       }
 
       clearTimeout(timer);
@@ -51,6 +68,8 @@ const RouterScreen = () => {
       clearTimeout(timing);
     }, 200);
   }, []);
+
+  console.log(state);
 
   return (
     <div>

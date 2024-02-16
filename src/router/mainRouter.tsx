@@ -9,6 +9,7 @@ import ThirdScreen from "../pages/home/start/ThirdStep";
 import LoadingScreen from "../components/static/LoadingScreen";
 import MainSchoolPage from "../mainPage/MainSchoolPage";
 import SwitchLogin from "../pages/page/auth/SwitchLogin";
+import StudentLogin from "../pages/page/auth/StudentLogin";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -28,6 +29,11 @@ export const mainRouter = createBrowserRouter([
         index: true,
         path: "switch-login",
         element: <SwitchLogin />,
+      },
+      {
+        index: true,
+        path: "student-login",
+        element: <StudentLogin />,
       },
       {
         index: true,
