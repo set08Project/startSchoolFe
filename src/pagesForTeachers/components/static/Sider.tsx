@@ -5,7 +5,7 @@ import {
   MdSchool,
   MdSettings,
 } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Button from "../reUse/Button";
 import { FaBarsProgress, FaStore } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -86,19 +86,19 @@ const Sider = () => {
 
       <div className="mt-20 px-2 text- center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
-          Encourage Parents to Purchase Learning Materials for thier child by
-          having more items in your Library Store{" "}
+          Mark students Attendance with the Button below{" "}
         </div>
         <div className="flex w-full justify-center">
           {/* <NavLink to="upgrade"> */}
-
-          <Button
-            name="Add to Store"
-            className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
-            onClick={() => {
-              handleDisplayStaff();
-            }}
-          />
+          <Link to="/attendance">
+            <Button
+              name="Attendance"
+              className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
+              onClick={() => {
+                // handleDisplayStaff();
+              }}
+            />
+          </Link>
 
           {/* </NavLink> */}
         </div>
@@ -186,7 +186,7 @@ const Sider = () => {
           <FaStore />
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/exams"
           className={({ isActive }) =>
             isActive
@@ -197,7 +197,7 @@ const Sider = () => {
         >
           No of Exams
           <FaStore />
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/week-report"

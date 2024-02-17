@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  classAttendance,
   readClassInfoStudent,
   readClassInfoSubject,
   readQuiz,
@@ -136,4 +137,17 @@ export const useQuiz = (quizID: string) => {
     });
   });
   return { quizData };
+};
+
+export const useAttendance = (classID: string) => {
+  const { data: attendance } = useSWR(
+    `api/view-class-attendance/${classID}`,
+    () => {
+      return classAttendance(classID!).then((res: any) => {
+        return res.data;
+      });
+    },
+    { refreshInterval: 1000 }
+  );
+  return { attendance };
 };

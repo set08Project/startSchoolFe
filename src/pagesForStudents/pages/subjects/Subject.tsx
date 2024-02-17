@@ -1,12 +1,7 @@
 import { Link } from "react-router-dom";
-// import { useSchoolTeacherDetail } from "../../../pages/hook/useSchoolAuth";
+
 import { FC, useEffect, useState } from "react";
 import pix from "../../../assets/pix.jpg";
-// import {
-//   useClassSubject,
-//   useSujectInfo,
-//   useTeacherInfo,
-// } from "../../hooks/useTeacher";
 
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";

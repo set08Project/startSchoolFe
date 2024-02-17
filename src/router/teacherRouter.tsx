@@ -13,6 +13,7 @@ import QuizSetupScreen from "../pagesForTeachers/pages/quiz/QuizSetupScreen";
 import QuizTestScreen from "../pagesForTeachers/pages/quiz/QuizTestScreen";
 import CreateQuiz from "../pagesForTeachers/pages/quiz/CreateQuiz";
 import CreateLesson from "../pagesForTeachers/pages/lessonNote/CreateLessonNote";
+import AttendanceScreen from "../pagesForTeachers/pages/attendance/AttendanceScreen";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const teacherRouter = createBrowserRouter([
       {
         path: "subjects/:subjectID",
         element: <QuizSetupScreen />,
+      },
+      {
+        path: "attendance",
+        element: <AttendanceScreen />,
       },
       {
         path: "quiz/details/:quizID",

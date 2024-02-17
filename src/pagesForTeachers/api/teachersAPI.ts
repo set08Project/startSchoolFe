@@ -91,7 +91,6 @@ export const readClassInfoStudent = async (classID: string) => {
     return await axios
       .get(`${URL}/view-classroom-info-student/${classID}`)
       .then((res: any) => {
-        console.log("first: ", res);
         return res?.data;
       });
   } catch (error) {
@@ -174,6 +173,48 @@ export const readQuiz = async (quizID: string) => {
     return await axios.get(`${URL}/view-quiz/${quizID}`).then((res: any) => {
       return res?.data;
     });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const markAttendancePresent = async (
+  teacherID: string,
+  studentID: string
+) => {
+  try {
+    return await axios
+      .post(`${URL}/present/${teacherID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const markAttendanceAbsent = async (
+  teacherID: string,
+  studentID: string
+) => {
+  try {
+    return await axios
+      .post(`${URL}/absent/${teacherID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const classAttendance = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/viewing-class-attendance/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
   } catch (error) {
     return error;
   }

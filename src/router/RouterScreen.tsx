@@ -47,9 +47,7 @@ const RouterScreen = () => {
         readStudentCookie().then((res: any) => {
           console.log(res);
           return viewStduentDetail(res.data).then((resp: any) => {
-            console.log(resp);
             if (resp.status === 200) {
-              console.log(resp.data);
               return setState(resp.data);
             } else if (resp?.response?.status === 404) {
               return setState(resp?.response?.status);
@@ -68,8 +66,6 @@ const RouterScreen = () => {
       clearTimeout(timing);
     }, 200);
   }, []);
-
-  console.log(state);
 
   return (
     <div>
