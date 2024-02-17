@@ -114,7 +114,7 @@ const CreateQuiz = () => {
                   onClick={() => {
                     setToggle(true);
                     let data = { duration, instruction, mark };
-                    dispatch(addTestInstruction(data));
+                    dispatch(addTestInstruction(data!));
                   }}
                 />
               )}

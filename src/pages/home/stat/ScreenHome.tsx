@@ -4,6 +4,7 @@ import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "../../page/stats/Personal";
 import StudentPerformance from "./StudentPerformance";
 import TopRatedTeacher from "./TopRatedTeacher";
+import MostActiveScreen from "../../page/stats/MostActiveStudio";
 
 const ScreenHome = () => {
   document.title = "Studio Record and Stats";
@@ -118,12 +119,15 @@ const ScreenHome = () => {
 
           <div className=" rounded-md w-full  p-4">
             <div className="mb-4 text-medium capitalize">
-              Top 5 Most Active studio
+              Top 5 Most Active Student
             </div>
 
             <div>
               {readData?.length > 0 ? (
-                <div>{/* <MostActiveScreen /> */}screen</div>
+                <div>
+                  {" "}
+                  <MostActiveScreen />{" "}
+                </div>
               ) : (
                 <div className="flex flex-col w-full items-center">
                   <MdPlaylistAddCheck size={30} />

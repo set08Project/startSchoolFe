@@ -11,6 +11,7 @@ import {
   getSchoolStudents,
   readSchool,
   registerSchool,
+  topSchoolStudent,
   updateClassroomTeacher,
   viewSchoolByName,
   viewSchoolSubjects,
@@ -212,4 +213,18 @@ export const useSchoolStudentDetail = (studentID: string) => {
   );
 
   return { studentDetails };
+};
+
+export const useTopSchoolStudent = (studentID: string) => {
+  const { data: perform } = useSWR(
+    `api/view-school-top-student/${studentID}`,
+    () => {
+      return topSchoolStudent(studentID!).then((res) => {
+        return res;
+      });
+    },
+    { refreshInterval: 10000 }
+  );
+
+  return { perform };
 };

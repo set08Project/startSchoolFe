@@ -1,6 +1,5 @@
 import {
   MdAssignmentAdd,
-  MdClass,
   MdOutlineArticle,
   MdQueryStats,
   MdSettings,
@@ -13,18 +12,18 @@ import {
   displayDelay,
   displayStaffComp,
 } from "../../global/reduxState";
-import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
 import { FaTable } from "react-icons/fa6";
+import { useStudentInfo } from "../hooks/useStudentHook";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
   const showing = useSelector((state: any) => state.showStaffComp);
-  const { data } = useSchoolData();
+  const { studentInfo } = useStudentInfo();
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -57,27 +56,27 @@ const Sider = () => {
   };
 
   return (
-    <div className="w-full border-r bg-white text-blue-900 flex flex-col ">
+    <div className="overflow-y-auto w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
         <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
           <img
             className="w-full h-full object-cover rounded-full border"
-            src={data?.logo ? data?.logo : pix}
+            src={studentInfo?.avatar ? studentInfo?.avatar : pix}
           />
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}
           <p className="break-words font-bold">
-            {data?.schoolName.length > 16 ? (
-              <Tooltip tip={data?.schoolName}>
-                <p>{data?.schoolName.substring(0, 16)}...</p>
+            {studentInfo?.schoolName.length > 16 ? (
+              <Tooltip tip={studentInfo?.schoolName}>
+                <p>{studentInfo?.schoolName.substring(0, 16)}...</p>
               </Tooltip>
             ) : (
-              data?.schoolName
+              studentInfo?.schoolName
             )}
           </p>
           <p className="break-words font-medium text-slate-400 text-[14px] mt-2">
-            ID: {data?.enrollmentID}
+            ID: {studentInfo?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: 2023/2024
@@ -134,6 +133,18 @@ const Sider = () => {
           <MdQueryStats />
         </NavLink>
         <NavLink
+          to="/my-classroom"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          My ClassRoom
+          <MdSubject />
+        </NavLink>
+        <NavLink
           to="/your-subjects"
           className={({ isActive }) =>
             isActive
@@ -142,7 +153,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-         My Subjects
+          My Subjects
           <MdSubject />
         </NavLink>
 
@@ -156,7 +167,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           TimeTable
-          < FaTable />
+          <FaTable />
         </NavLink>
 
         <NavLink
@@ -169,7 +180,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Profile
-          <CgProfile  />
+          <CgProfile />
         </NavLink>
 
         <NavLink
@@ -195,7 +206,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Assignments
-          <MdAssignmentAdd /> 
+          <MdAssignmentAdd />
         </NavLink>
 
         <div className="flex-1" />
@@ -204,8 +215,8 @@ const Sider = () => {
           to="/your-profile"
           className={({ isActive }) =>
             isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
+              ? "mt-10 duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
+              : "mt-10 duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
           }
           onClick={handleToggleMenuFalse}
         >

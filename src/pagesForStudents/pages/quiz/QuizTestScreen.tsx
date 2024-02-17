@@ -1,9 +1,11 @@
 import { useState } from "react";
-import LittleHeader from "../../components/layout/LittleHeader";
-import Button from "../../components/reUse/Button";
-import { useParams } from "react-router-dom";
-import { useQuiz, useSujectQuiz } from "../../hooks/useTeacher";
-import { MdPlayArrow, MdPlayCircle } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
+import { MdPlayCircle } from "react-icons/md";
+import Button from "../../../components/reUse/Button";
+import LittleHeader from "../../../components/layout/LittleHeader";
+import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
+import { performanceTest } from "../../api/studentAPI";
+import { useStudentInfo } from "../../hooks/useStudentHook";
 
 interface TestDetails {
   question: string;
@@ -19,81 +21,13 @@ interface iTestProps {
   gradeScore: number;
 }
 
-const testData: iTestProps = {
-  id: 2,
-  subjectTest: "Maths Test1",
-  time: "2hrs",
-
-  testDetails: [
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "Obasenjo" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "James" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "Obasenjo" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "Obasenjo" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "Obasenjo" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-    {
-      question: "Who is the President of Nigeria",
-      answer: "Buhari",
-      options: [
-        { a: "Obasenjo" },
-        { b: "Buhari" },
-        { c: "Goodluck" },
-        { d: "Peter" },
-      ],
-    },
-  ],
-  gradeScore: 5,
-};
-
 const QuizTestScreen = () => {
+  const navigate = useNavigate();
   const { quizID } = useParams();
   const [state, setState] = useState<any>({});
   const { quizData } = useQuiz(quizID!);
   const [start, setStart] = useState<boolean>(false);
+  const { studentInfo } = useStudentInfo();
 
   // console.log(quizData?.quiz[1].question);
 
@@ -105,15 +39,59 @@ const QuizTestScreen = () => {
   };
 
   const handleSubmit = () => {
+    console.log("Clicked:");
+
     let correctAnswer: Array<string> = [];
     let score: number = 0;
+    let percentage: number = 0;
+    let remark: string = "";
+    let grade: string = "";
 
     for (let i = 0; i < quizData?.quiz[1]?.question?.length; i++) {
       correctAnswer.push(quizData?.quiz[1]?.question[i].answer);
       if (correctAnswer[i] === Object.values(state)[i]) {
         score++;
       }
+      console.log(score);
     }
+    percentage = Math.ceil((score / quizData?.quiz[1]?.question.length) * 100);
+    if (percentage >= 0 && percentage <= 45) {
+      remark = "Very very poor Performance!";
+    } else if (percentage >= 46 && percentage <= 55) {
+      remark = "A Poor Performance!";
+    } else if (percentage >= 56 && percentage <= 65) {
+      remark = "A Good Performance, can still do Better!";
+    } else if (percentage >= 66 && percentage <= 75) {
+      remark = "Congratulation.... A Good Performance, Keep it Up!";
+    } else if (percentage >= 76 && percentage <= 85) {
+      remark = "Congratulation.... An Very Good Performance, Keep it Up!";
+    } else if (percentage >= 86 && percentage <= 100) {
+      remark = "Congratulation.... An Excellent Performance, Keep it Up!";
+    }
+
+    if (percentage >= 0 && percentage <= 45) {
+      grade = "F";
+    } else if (percentage >= 46 && percentage <= 55) {
+      grade = "E";
+    } else if (percentage >= 56 && percentage <= 65) {
+      grade = "D";
+    } else if (percentage >= 66 && percentage <= 75) {
+      grade = "C";
+    } else if (percentage >= 76 && percentage <= 85) {
+      grade = "B";
+    } else if (percentage >= 86 && percentage <= 100) {
+      grade = "A";
+    }
+
+    console.log(score, grade, remark);
+
+    performanceTest(studentInfo?._id, quizID!, {
+      studentScore: score,
+      studentGrade: grade,
+      remark,
+    }).then(() => {
+      navigate("");
+    });
   };
 
   return (
@@ -124,7 +102,7 @@ const QuizTestScreen = () => {
           <div className="absolute top-20 left-1/3 z-10 ">
             <MdPlayCircle
               size={200}
-              className="cursor-pointer"
+              className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
               onClick={() => {
                 if (!document.startViewTransition) {
                   setStart(true);
@@ -245,7 +223,6 @@ const QuizTestScreen = () => {
                 <Button
                   className="bg-blue-950 px-12 mt-14 py-4 "
                   name={"Submit"}
-                  onClick={handleSubmit}
                 />
               </div>
             </div>

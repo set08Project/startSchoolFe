@@ -49,3 +49,22 @@ export const readClassInfo = async (className: string) => {
     return error;
   }
 };
+
+export const performanceTest = async (
+  studentID: string,
+  quizID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(
+        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/`,
+        data
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

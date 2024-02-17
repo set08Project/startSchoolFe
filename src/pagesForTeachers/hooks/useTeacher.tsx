@@ -2,6 +2,7 @@ import useSWR from "swr";
 import {
   readClassInfoStudent,
   readClassInfoSubject,
+  readQuiz,
   readSubjectDetail,
   readSubjectQuiz,
   readTeacherCookie,
@@ -126,4 +127,13 @@ export const useSujectQuiz = (subjectID: string) => {
     }
   );
   return { subjectQuiz };
+};
+
+export const useQuiz = (quizID: string) => {
+  const { data: quizData } = useSWR(`api/view-quiz/${quizID}`, () => {
+    return readQuiz(quizID!).then((res: any) => {
+      return res.data;
+    });
+  });
+  return { quizData };
 };

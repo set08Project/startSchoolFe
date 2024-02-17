@@ -7,6 +7,10 @@ import Article from "../pagesForStudents/Article";
 import TimeTable from "../pagesForStudents/TimeTable";
 import StudentProfile from "../pagesForStudents/StudentProfile";
 import Layout from "../pagesForStudents/layout/Layout";
+import MyClassroom from "../pagesForStudents/pages/subjects/Subject";
+import QuizSetupScreen from "../pagesForStudents/pages/quiz/QuizSetupScreen";
+import QuizTestScreen from "../pagesForStudents/pages/quiz/QuizTestScreen";
+import MyClassRoomScreen from "../pagesForStudents/pages/class/MyClassRoom";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -23,12 +27,24 @@ export const studentRouter = createBrowserRouter([
         element: <StudentProfile />,
       },
       {
+        path: "/my-classroom",
+        element: <MyClassRoomScreen />,
+      },
+      {
         path: "/articles",
         element: <Article />,
       },
       {
         path: "/your-subjects",
-        element: <MySubjects />,
+        element: <MyClassroom />,
+      },
+      {
+        path: "subjects/:subjectID",
+        element: <QuizSetupScreen />,
+      },
+      {
+        path: "/quiz/details/:quizID",
+        element: <QuizTestScreen />,
       },
       {
         path: "/assignment",

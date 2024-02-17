@@ -123,18 +123,6 @@ export const readSubjectDetail = async (subjectID: string) => {
   }
 };
 
-export const readSubjectQuiz = async (subjectID: string) => {
-  try {
-    return await axios
-      .get(`${URL}/view-subject-quiz/${subjectID}`)
-      .then((res: any) => {
-        return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
 export const createQuiz = async (
   classID: string,
   subjectID: string,
@@ -164,6 +152,28 @@ export const createTeacherLessonNote = async (
       .then((res: any) => {
         return res?.data;
       });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readSubjectQuiz = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subject-quiz/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readQuiz = async (quizID: string) => {
+  try {
+    return await axios.get(`${URL}/view-quiz/${quizID}`).then((res: any) => {
+      return res?.data;
+    });
   } catch (error) {
     return error;
   }

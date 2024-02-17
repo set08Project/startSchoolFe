@@ -397,3 +397,15 @@ export const updateSchoolSubjectTeacher = async (
     return error;
   }
 };
+
+export const topSchoolStudent = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-top-student/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

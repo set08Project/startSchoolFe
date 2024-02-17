@@ -2,11 +2,7 @@ import { useState } from "react";
 import Button from "../../components/reUse/Button";
 import Input from "../../components/reUse/Input";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addTestQuestion,
-  displayEmptyTest,
-  displayTest,
-} from "../../../global/reduxState";
+import { addTestQuestion, displayEmptyTest } from "../../../global/reduxState";
 
 const JustQuestionScreen = () => {
   const dispatch = useDispatch();
