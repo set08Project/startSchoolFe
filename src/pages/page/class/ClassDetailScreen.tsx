@@ -475,10 +475,10 @@ const ClassDetailScreen = () => {
             Attendance Record:{" "}
             <span className="font-medium">
               {(
-                (mainAttendance.data.attendance.filter(
-                  (el: any) => el.present === true
+                (mainAttendance?.data?.attendance.filter(
+                  (el: any) => el?.present === true
                 ).length /
-                  mainAttendance.data.attendance.length) *
+                  mainAttendance?.data?.attendance?.length) *
                 100
               ).toFixed(2)}
               %
@@ -489,11 +489,11 @@ const ClassDetailScreen = () => {
           <div className="w-3 h-3 border bg-white" /> */}
 
             <div className="flex flex-wrap gap-1 w-full">
-              {mainAttendance.data.attendance.map((props: any) => (
+              {mainAttendance?.data?.attendance?.map((props: any) => (
                 <div className="tooltip">
                   <div
                     className={`w-4 h-4 rounded-[3px] border ${
-                      props.present ? "bg-green-500" : "bg-white"
+                      props?.present ? "bg-green-500" : "bg-white"
                     }`}
                   />
                 </div>
