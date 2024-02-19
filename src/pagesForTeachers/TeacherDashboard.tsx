@@ -4,6 +4,8 @@ import picc from "../assets/pix.jpg";
 import Personal from "./Chart/Personal";
 import Calendar from "./Chart/Calendar";
 import StudentPerformance from "./Chart/PerformingStudent";
+import { Link } from "react-router-dom";
+import ClassModelAssignment from "./pages/quiz/AddAssignment";
 
 const TeacherDashboard = () => {
   document.title = "Teacher's Record and Stats";
@@ -30,6 +32,24 @@ const TeacherDashboard = () => {
 
         <div className="min-w-[300px] overflow-hidden min-h-[300px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
+            <div>
+              <div className=" flex gap-2  mb-10">
+                {/* <Link to={`/create-quiz/${subjectID}`}> */}
+                <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-2 rounded-sm text-[12px] text-center">
+                  + Create Quiz
+                </p>
+                {/* </Link> */}
+                {/* <Link to={`/create-quiz/${subjectID}`}> */}
+                <p className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm text-center">
+                  + Create Test
+                </p>
+                {/* </Link> */}
+
+                <div className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
+                  <ClassModelAssignment />
+                </div>
+              </div>
+            </div>
             {readData?.length > 0 ? (
               <div className="flex justify-center flex-col gap-3 w-full items-center ">
                 {/* from complain */}

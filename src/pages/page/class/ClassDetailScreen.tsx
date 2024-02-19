@@ -159,8 +159,6 @@ const ClassDetailScreen = () => {
 
   const { mainAttendance } = useClassAttendance(classID!);
 
-  console.log(mainAttendance?.attendance?.length);
-
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -486,12 +484,12 @@ const ClassDetailScreen = () => {
             </span>
           </p>
           <div className="w-full flex gap-1">
-            {/* <div className="w-3 h-3 border bg-green-300" />
-          <div className="w-3 h-3 border bg-white" /> */}
-
             <div className="flex flex-wrap gap-1 w-full">
               {mainAttendance?.attendance?.map((props: any) => (
-                <div className="tooltip">
+                <div
+                  className="tooltip"
+                  datatype={`${props.present ? "Present" : "Absent"}`}
+                >
                   <div
                     className={`w-4 h-4 rounded-[3px] border ${
                       props?.present ? "bg-green-500" : "bg-white"

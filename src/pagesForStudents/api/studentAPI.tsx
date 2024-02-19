@@ -80,3 +80,15 @@ export const viewStudentAttendance = async (studentID: string) => {
     return error;
   }
 };
+
+export const classAssignment = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-class-assignment/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

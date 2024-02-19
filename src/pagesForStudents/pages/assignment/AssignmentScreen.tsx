@@ -4,7 +4,7 @@ import { MdPlayCircle } from "react-icons/md";
 import { FaCheckDouble } from "react-icons/fa6";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useSujectQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
-import { useStudentInfo } from "../../hooks/useStudentHook";
+import { useAssignment, useStudentInfo } from "../../hooks/useStudentHook";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../api/studentAPI";
 
@@ -21,6 +21,10 @@ const AssignmentScreen = () => {
     });
   }, []);
 
+  const { classAssignments } = useAssignment(state?._id);
+
+  console.log("view Assignment: ", classAssignments?.assignment);
+
   return (
     <div className="text-blue-950 relative">
       <LittleHeader
@@ -33,9 +37,9 @@ const AssignmentScreen = () => {
         <p>View Assignment</p>
       </div>
 
-      {subjectQuiz?.quiz?.length > 0 ? (
+      {classAssignments?.assignment?.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
-          {subjectQuiz?.quiz?.map((props: any, i: number) => (
+          {classAssignments?.assignment?.map((props: any, i: number) => (
             <div key={i}>
               <div className="border p-4 rounded-md h-[270px] flex flex-col relative overflow-hidden">
                 <div className="absolute top-0 right-0 text-[300px] opacity-5 font-bold">
@@ -43,14 +47,14 @@ const AssignmentScreen = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <p className="font-bold mt-0 text-[20px] ">
-                    {subjectQuiz?.subjectTitle} Test {i + 1}
+                    {/* {props?.subjectTitle} Test {i + 1} */}
                   </p>
-                  <Link to={`/quiz/details/${props._id}`}>
+                  {/* <Link to={`/quiz/details/${props._id}`}>
                     <MdPlayCircle
                       size={90}
                       className="rotate-0 opacity-60 text-red-600 hover:text-red-400 transition-all duration-300 absolute right-0 top-2"
                     />
-                  </Link>
+                  </Link> */}
                 </div>
 
                 <div className="flex">
@@ -77,21 +81,21 @@ const AssignmentScreen = () => {
                 <div className="flex justify-between text-[13px]">
                   <div>
                     Questions:{" "}
-                    <span className="font-bold">
-                      {props?.quiz[1]?.question?.length}
-                    </span>
+                    <span className="font-bold">{props?.assignmentTopic}</span>
                   </div>
+                </div>
+                <div className="flex justify-between text-[13px]">
                   <div>
-                    Mark/Question:{" "}
+                    Submission Deadline:{" "}
                     <span className="font-bold">
-                      {props?.quiz[0]?.instruction?.mark}
+                      {props?.assignmentDeadline}
                     </span>
                   </div>
                 </div>
                 <div className="text-[12px] mt-2 font-bold">
                   Instrunction:{" "}
                   <span className="font-normal">
-                    {`${props?.quiz[0]?.instruction?.instruction}`.slice(
+                    {`${props?.assignmentDetails}`.slice(
                       0,
                       Math.ceil(Math.random() * (100 - 70)) + 70
                     )}
@@ -108,8 +112,6 @@ const AssignmentScreen = () => {
           <p className="mt-3 text-[12px] font-medium">No QUIZ set yet</p>
         </div>
       )}
-
-      <div className="absolute top-0"></div>
     </div>
   );
 };

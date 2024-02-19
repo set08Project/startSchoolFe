@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  classAssignment,
   classAttendance,
   readClassInfoStudent,
   readClassInfoSubject,
@@ -175,4 +176,16 @@ export const useSchoolEvent = (schoolID: string) => {
     });
   });
   return { schoolEvent };
+};
+
+export const useSubjectAssignment = (subjectID: string) => {
+  const { data: subjectAssignment } = useSWR(
+    `api/view-subject-assignment/${subjectID}`,
+    () => {
+      return classAssignment(subjectID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { subjectAssignment };
 };

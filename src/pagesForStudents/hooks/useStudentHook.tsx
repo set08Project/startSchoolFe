@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  classAssignment,
   readStudentCookie,
   viewStduentDetail,
   viewStudentAttendance,
@@ -38,4 +39,16 @@ export const useStudentAttendant = (studentID: string) => {
     }
   );
   return { studentAttendance };
+};
+
+export const useAssignment = (classID: string) => {
+  const { data: classAssignments } = useSWR(
+    `api/viewing-class-assignment/${classID}`,
+    () => {
+      return classAssignment(classID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { classAssignments };
 };

@@ -219,3 +219,31 @@ export const classAttendance = async (classID: string) => {
     return error;
   }
 };
+
+export const createAssignment = async (
+  classID: string,
+  subjectID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-subject-assignment/${classID}/${subjectID}/`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const classAssignment = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-class-assignment/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

@@ -155,10 +155,10 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           My Subjects
-          <MdSubject />
+          <FaTable />
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/time-table"
           className={({ isActive }) =>
             isActive
@@ -169,7 +169,7 @@ const Sider = () => {
         >
           TimeTable
           <FaTable />
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/your-profile"
