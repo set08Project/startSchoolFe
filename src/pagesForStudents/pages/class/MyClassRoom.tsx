@@ -104,9 +104,6 @@ const MyClassRoomScreen = () => {
     });
   }, []);
 
-  console.log("ID: ", studentInfo);
-  console.log("ID: ", classInfo);
-
   return (
     <div className="text-blue-950">
       <LittleHeader name="My ClassRoom Details" />

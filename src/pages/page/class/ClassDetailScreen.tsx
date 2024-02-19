@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 import {
+  useClassAttendance,
   useClassSubjects,
   useSchoolClassRMDetail,
   useSchoolCookie,
@@ -22,11 +23,8 @@ import {
   updateClassroomTeacher,
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
-// import TimeTableScreen from "./TimeTableScreen";
 import ClassModel from "./ClassModel";
 import TimeTableScreen from "./TimeTableScreen";
-import ViewStudent from "../../../pagesForTeachers/pages/class/ViewStudent";
-import ReadingClassStudents from "../../../pagesForTeachers/pages/class/ReadingClassStudents";
 import ViewClassStudent from "./ViewClassStudent";
 
 interface iProps {
@@ -34,6 +32,7 @@ interface iProps {
 }
 
 const ClassSubjectScreen: FC = () => {
+  // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
 
@@ -159,12 +158,13 @@ const ClassDetailScreen = () => {
     });
   };
 
+  const { mainAttendance } = useClassAttendance(classID!);
+
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
       <div>Class: {classroom?.className}</div>
-
       <div className="w-full text-blue-950 h-[90px] rounded-lg border flex justify-between overflow-hidden ">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
@@ -311,9 +311,7 @@ const ClassDetailScreen = () => {
         <StaffDetail props={classroom?.teacherID} />
       </div>
       <div className="my-6 border-t" />
-
       {/* SUbjects */}
-
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Manage Class Subject for JSS 1A </p>
         <p className="text-[13px] font-bold">
@@ -429,7 +427,6 @@ const ClassDetailScreen = () => {
         {/* Populate Class St */}
         <ClassSubjectScreen />
       </div>
-
       {/* Performance */}
       <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
@@ -447,7 +444,6 @@ const ClassDetailScreen = () => {
           </div>
         </div>
       </div>
-
       {/* All Students */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Viewing Students</p>
@@ -458,7 +454,6 @@ const ClassDetailScreen = () => {
           <ViewClassStudent />
         </div>
       </div>
-
       {/* timetable */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <div className="flex items-center w-full justify-between">
@@ -471,12 +466,42 @@ const ClassDetailScreen = () => {
 
           <ClassModel />
         </div>
-        <div className="flex gap-4 mt-5">
+        <div className="flex gap-4 mt-5 h-[450px]">
           <TimeTableScreen />
         </div>
-      </div>
 
-      {/* Attendance */}
+        <div className="mt-6 w-full min-h-[60px] py-5 bg-slate-50 rounded-lg border  px-4 ">
+          <p className="mb-2">
+            Attendance Record:{" "}
+            <span className="font-medium">
+              {(
+                (mainAttendance.data.attendance.filter(
+                  (el: any) => el.present === true
+                ).length /
+                  mainAttendance.data.attendance.length) *
+                100
+              ).toFixed(2)}
+              %
+            </span>
+          </p>
+          <div className="w-full flex gap-1">
+            {/* <div className="w-3 h-3 border bg-green-300" />
+          <div className="w-3 h-3 border bg-white" /> */}
+
+            <div className="flex flex-wrap gap-1 w-full">
+              {mainAttendance.data.attendance.map((props: any) => (
+                <div className="tooltip">
+                  <div
+                    className={`w-4 h-4 rounded-[3px] border ${
+                      props.present ? "bg-green-500" : "bg-white"
+                    }`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

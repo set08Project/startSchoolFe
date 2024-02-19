@@ -1,12 +1,17 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useSchoolAnnouncement, useSchoolEvent } from "../hook/useSchoolAuth";
+
 import lodash from "lodash";
 import moment from "moment";
 import { MdChecklist } from "react-icons/md";
+import {
+  useSchoolAnnouncement,
+  useSchoolEvent,
+  useTeacherInfo,
+} from "../hooks/useTeacher";
 
-const Announcement = () => {
+const GetAnnouncement = () => {
   var settings = {
     infinite: true,
     slidesToShow: 1,
@@ -15,8 +20,9 @@ const Announcement = () => {
     autoplaySpeed: 5000,
     pauseOnHover: true,
   };
-  const { schoolAnnouncement } = useSchoolAnnouncement();
-  const { schoolEvent } = useSchoolEvent();
+  const { teacherInfo } = useTeacherInfo();
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs!);
+  const { schoolEvent } = useSchoolEvent(teacherInfo?.schoolIDs!);
 
   let announce = schoolAnnouncement?.announcements?.slice(0, 5);
   let eve = schoolEvent?.events?.slice(0, 5);
@@ -56,4 +62,4 @@ const Announcement = () => {
   );
 };
 
-export default Announcement;
+export default GetAnnouncement;

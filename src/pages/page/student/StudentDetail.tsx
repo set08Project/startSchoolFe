@@ -3,13 +3,18 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
-import { useSchoolStudentDetail } from "../../hook/useSchoolAuth";
+import {
+  useClassAttendance,
+  useSchoolStudentDetail,
+  useStudentAttendance,
+} from "../../hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../../pagesForTeachers/api/teachersAPI";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
+  const { mainStudentAttendance } = useStudentAttendance(studentID!);
 
   const attendanceData = Array.from({ length: 59 }, (i: number) => {
     const counted = Math.floor(Math.random() * 1000);
@@ -60,11 +65,11 @@ const StudentDetail = () => {
 
         {classHolder?.length > 0 ? (
           <div>
-            {classHolder?.map((props: any) => (
-              <div className="mt-1 w-full grid grid-cols-2 ">
-                <div className="bg-white border flex flex-col  rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
+            <div className="mt-1 w-full grid grid-cols-2 gap-2">
+              {classHolder?.map((props: any) => (
+                <div className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
                   <div className="mt-3 flex justify-between items-center font-bold">
-                    <p>Mathematics</p>
+                    <p>{props.subjectTitle}</p>
                     <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
                       <BsThreeDotsVertical className="hover:text-blue-900" />
                     </div>
@@ -80,7 +85,7 @@ const StudentDetail = () => {
                   </p>
                   <div className="flex mb-4 gap-2 flex-wrap">
                     <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
-                      John Amadi
+                      {props?.subjectTeacherName}
                     </div>
                   </div>
 
@@ -91,19 +96,24 @@ const StudentDetail = () => {
 
                     <div className="font-medium text-[12px] flex items-center gap-3">
                       <p className="border rounded-full bg-orange-500 text-white px-4 py-2">
-                        Total Quiz: <span className="font-bold">2</span>
+                        Total Quiz:{" "}
+                        <span className="font-bold">{props?.quiz?.length}</span>
                       </p>
                       <p className="border rounded-full bg-pink-500 text-white px-4 py-2">
-                        Total Test: <span className="font-bold">2</span>
+                        Total Test:{" "}
+                        <span className="font-bold">{props?.test?.length}</span>
                       </p>
                       <p className="border rounded-full bg-blue-950 text-white px-4 py-2">
-                        Examination: <span className="font-bold">0</span>
+                        Assignment:{" "}
+                        <span className="font-bold">
+                          {props?.assignment?.length}
+                        </span>
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ) : (
           <div>
@@ -154,8 +164,10 @@ const StudentDetail = () => {
           Attendance Heatmap:{" "}
           <span className="font-medium">
             {(
-              (attendanceData.filter((el) => el.record === true).length /
-                attendanceData.length) *
+              (mainStudentAttendance?.data?.attendance.filter(
+                (el: any) => el.present === true
+              ).length /
+                mainStudentAttendance?.data?.attendance.length) *
               100
             ).toFixed(2)}
             %
@@ -166,11 +178,14 @@ const StudentDetail = () => {
           <div className="w-3 h-3 border bg-white" /> */}
 
           <div className="flex flex-wrap gap-1 w-full">
-            {attendanceData.map((props: any) => (
-              <div className="tooltip">
+            {mainStudentAttendance?.data?.attendance.map((props: any) => (
+              <div
+                className="tooltip"
+                data-tip={`${props.present ? "present" : "absent"}`}
+              >
                 <div
                   className={`w-4 h-4 rounded-[3px] border ${
-                    props.record ? "bg-green-500" : "bg-white"
+                    props.present ? "bg-green-500" : "bg-white"
                   }`}
                 />
               </div>

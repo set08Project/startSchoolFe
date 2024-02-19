@@ -1,5 +1,9 @@
 import useSWR from "swr";
-import { readStudentCookie, viewStduentDetail } from "../api/studentAPI";
+import {
+  readStudentCookie,
+  viewStduentDetail,
+  viewStudentAttendance,
+} from "../api/studentAPI";
 
 export const useStudentCookie = () => {
   const { data: dataID } = useSWR(`api/read-student-cookie/`, () => {
@@ -22,4 +26,16 @@ export const useStudentInfo = () => {
     }
   );
   return { studentInfo };
+};
+
+export const useStudentAttendant = (studentID: string) => {
+  const { data: studentAttendance } = useSWR(
+    `api/viewing-student-attendance/${studentID}`,
+    () => {
+      return viewStudentAttendance(studentID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { studentAttendance };
 };

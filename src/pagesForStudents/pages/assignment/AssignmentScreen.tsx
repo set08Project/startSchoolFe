@@ -4,19 +4,33 @@ import { MdPlayCircle } from "react-icons/md";
 import { FaCheckDouble } from "react-icons/fa6";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useSujectQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
+import { useStudentInfo } from "../../hooks/useStudentHook";
+import { useEffect, useState } from "react";
+import { readClassInfo } from "../../api/studentAPI";
 
-const QuizSetupScreen = () => {
+const AssignmentScreen = () => {
   const { subjectID } = useParams();
+  const { studentInfo } = useStudentInfo();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
+
+  const [state, setState] = useState<any>({});
+
+  useEffect(() => {
+    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+      setState(res.data);
+    });
+  }, []);
 
   return (
     <div className="text-blue-950 relative">
-      <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
+      <LittleHeader
+        name={`Viewing ${studentInfo?.classAssigned} Assignments`}
+      />
 
       <div className="mt-10" />
 
       <div className="mb-16 flex justify-between items-center ">
-        <p>View Quiz</p>
+        <p>View Assignment</p>
       </div>
 
       {subjectQuiz?.quiz?.length > 0 ? (
@@ -100,4 +114,4 @@ const QuizSetupScreen = () => {
   );
 };
 
-export default QuizSetupScreen;
+export default AssignmentScreen;

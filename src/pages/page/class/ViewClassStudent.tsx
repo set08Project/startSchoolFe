@@ -4,12 +4,50 @@ import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { useDispatch } from "react-redux";
 import { FC } from "react";
 import { FaCheckDouble } from "react-icons/fa6";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useAttendance,
+  useClassStudent,
+} from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
+import moment from "moment";
 
 interface iProps {
   props?: any;
+  id?: string;
+  data?: any;
 }
+
+const Remark: FC<iProps> = ({ id, data }) => {
+  const { attendance } = useAttendance(id!);
+
+  let name2 = data?.studentFirstName;
+
+  let result = attendance?.attendance?.find((el: any) => {
+    return el?.studentFirstName === name2;
+  });
+
+  let timer = Date.now();
+
+  return (
+    <div
+      className={`w-[100px] border-r 
+      ${
+        result?.present
+          ? "text-green-600"
+          : result?.absent
+          ? "text-red-600"
+          : null
+      }`}
+    >
+      {moment(result?.createdAt).format("ll") === moment(timer).format("ll") &&
+      result?.present
+        ? "Present"
+        : result?.absent
+        ? "Absent"
+        : null}
+    </div>
+  );
+};
 const ViewClassStudent: FC<iProps> = () => {
   const { classID } = useParams();
   const dispatch = useDispatch();
@@ -64,17 +102,11 @@ const ViewClassStudent: FC<iProps> = () => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
-                        <div className="w-[130px] border-r">{"22-22-22"}</div>
-
-                        <div
-                          className={`w-[100px] border-r ${
-                            i % 2 === 0 ? "text-red-600" : "text-green-600"
-                          }`}
-                        >
-                          {i % 2 === 0 ? "Absent" : "Present"}
+                        <div className="w-[130px] border-r">
+                          {moment(props.createdAt).format("ll")}
                         </div>
-
-                        <div className="w-[100px] border-r">2:10</div>
+                        <Remark data={props} id={classStudents?._id} />
+                        <div className="w-[100px] border-r">2:100</div>
                         <div className="w-[220px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
@@ -101,7 +133,6 @@ const ViewClassStudent: FC<iProps> = () => {
                             />
                           </div>
                         </div>
-
                         {/* name */}
                         <div className="w-[150px] flex justify-center border-r">
                           <img
@@ -112,7 +143,6 @@ const ViewClassStudent: FC<iProps> = () => {
                         <div className="w-[200px] border-r">
                           {props?.studentFirstName} {props?.studentLastName}
                         </div>
-
                         <div className="w-[100px] border-r  ">
                           {classStudents?.className}
                         </div>
@@ -127,11 +157,9 @@ const ViewClassStudent: FC<iProps> = () => {
                         <div className="w-[200px] border-r  ">
                           {Math.ceil(Math.random() * 100)}%
                         </div>
-
                         <div className="w-[80px] border-r">
                           {Math.ceil(Math.random() * (5 - 1)) + 1} of 5
                         </div>
-
                         <Link
                           to={`student-details/:studentID`}
                           className="w-[180px] border-r"

@@ -1,9 +1,11 @@
-import React from 'react'
+import AssignmentScreen from "./pages/assignment/AssignmentScreen";
 
 const Assignment = () => {
   return (
-    <div>Assignment</div>
-  )
-}
+    <div>
+      <AssignmentScreen />
+    </div>
+  );
+};
 
-export default Assignment
+export default Assignment;

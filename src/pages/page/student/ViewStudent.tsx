@@ -6,9 +6,72 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
-import { useSchoolData, useSchoolStudents } from "../../hook/useSchoolAuth";
+import {
+  useAttendance,
+  useClassStudent,
+} from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useSchoolData,
+  useSchoolStudents,
+  useStudentAttendance,
+} from "../../hook/useSchoolAuth";
 import moment from "moment";
+import { FC } from "react";
+
+interface iProps {
+  props?: any;
+  id?: string;
+  data?: any;
+}
+
+const Remark: FC<iProps> = ({ id, data, props }) => {
+  const { mainStudentAttendance } = useStudentAttendance(id!);
+
+  let name2 = data?.studentFirstName;
+
+  let result = mainStudentAttendance?.data?.attendance?.find((el: any) => {
+    return el?.studentFirstName === name2;
+  });
+
+  let timer = Date.now();
+
+  return (
+    <div
+      className={`w-[100px] border-r 
+      ${
+        result?.present
+          ? "text-green-600"
+          : result?.absent
+          ? "text-red-600"
+          : null
+      }`}
+    >
+      {moment(result?.createdAt).format("ll") === moment(timer).format("ll") &&
+      result?.present
+        ? "Present"
+        : result?.absent
+        ? "Absent"
+        : null}
+    </div>
+  );
+};
+
+const AttendanceRatio: FC<iProps> = ({ props }) => {
+  const { mainStudentAttendance } = useStudentAttendance(props?._id);
+
+  return (
+    <div>
+      {(
+        (mainStudentAttendance?.data?.attendance.filter(
+          (el: any) => el.present === true
+        ).length /
+          mainStudentAttendance?.data?.attendance.length) *
+        100
+      ).toFixed(2)}
+      %
+    </div>
+  );
+};
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
@@ -44,14 +107,11 @@ const ViewStudent = () => {
           onClick={handleDisplayStaff}
         />
       </div>
-      <div
-        className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
-        style={{ color: "var(--secondary)" }}
-      >
+      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
         <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
-          <div className="w-[100px] border-r">This team Attendance Ratio</div>
+          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[220px] border-r">Session Fee</div>
 
           <div className="w-[150px] border-r">student Image</div>
@@ -84,15 +144,11 @@ const ViewStudent = () => {
                         {moment(props?.createdAt).format("ll")}
                       </div>
 
-                      <div
-                        className={`w-[100px] border-r ${
-                          i % 2 === 0 ? "text-red-600" : "text-green-600"
-                        }`}
-                      >
-                        {i % 2 === 0 ? "Absent" : "Present"}
-                      </div>
+                      <Remark data={props} id={props?._id} />
 
-                      <div className="w-[100px] border-r">2:10</div>
+                      <div className="w-[100px] border-r">
+                        <AttendanceRatio props={props} />
+                      </div>
                       <div className="w-[220px] border-r flex gap-4">
                         <div className="flex flex-col items-center">
                           <label>1st Term</label>

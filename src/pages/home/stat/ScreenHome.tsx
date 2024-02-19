@@ -145,26 +145,14 @@ const ScreenHome = () => {
           <div className=" grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 gap-3">
             <div className="border rounded-md flex gap-2 w-full p-2 overflow-hidden">
               <FaBuildingUser size={25} />
-              {/* <HospitalDetails
-                state={data?.familyHospital[0]}
-                choice="First Choice"
-              /> */}
             </div>
 
             <div className="border rounded-md flex gap-2 w-full p-2">
               <FaBuildingUser size={25} />
-              {/* <HospitalDetails
-                state={data?.familyHospital[1]}
-                choice="Second Choice"
-              /> */}
             </div>
 
             <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  xl:col-span-1  ">
               <FaBuildingUser size={25} />
-              {/* <HospitalDetails
-                state={data?.familyHospital[2]}
-                choice="Third Choice"
-              /> */}
             </div>
           </div>
         ) : (

@@ -409,3 +409,27 @@ export const topSchoolStudent = async (schoolID: string) => {
     return error;
   }
 };
+
+export const classAttendance = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/viewing-class-attendance/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const studentAttendance = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/viewing-student-attendance/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

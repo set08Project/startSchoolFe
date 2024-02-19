@@ -5,6 +5,7 @@ import { FC } from "react";
 import { useAttendance, useClassStudent } from "../../hooks/useTeacher";
 import { FaCheckDouble } from "react-icons/fa6";
 import moment from "moment";
+import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
@@ -40,6 +41,23 @@ const Remark: FC<iProps> = ({ id, data }) => {
         : result?.absent
         ? "Absent"
         : null}
+    </div>
+  );
+};
+
+const AttendanceRatio: FC<iProps> = ({ props }) => {
+  const { mainStudentAttendance } = useStudentAttendance(props);
+
+  return (
+    <div>
+      {(
+        (mainStudentAttendance?.data?.attendance.filter(
+          (el: any) => el.present === true
+        ).length /
+          mainStudentAttendance?.data?.attendance.length) *
+        100
+      ).toFixed(2)}
+      %
     </div>
   );
 };
@@ -83,11 +101,15 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
-                        <div className="w-[130px] border-r">{"22-22-22"}</div>
+                        <div className="w-[130px] border-r">
+                          {moment(props.createdAt).format("ll")}
+                        </div>
 
                         <Remark data={props} id={classStudents?._id} />
 
-                        <div className="w-[100px] border-r">2:10</div>
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props?._id} />
+                        </div>
                         <div className="w-[220px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>

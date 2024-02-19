@@ -26,18 +26,6 @@ export const loginStudent = async (data: {}) => {
   }
 };
 
-export const readStudentCookie = async () => {
-  try {
-    return await axios
-      .get(`${URL}/read-student-cookie/`, { withCredentials: true })
-      .then((res: any) => {
-        return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
 export const readClassInfo = async (className: string) => {
   try {
     return await axios
@@ -61,6 +49,30 @@ export const performanceTest = async (
         `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/`,
         data
       )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readStudentCookie = async () => {
+  try {
+    return await axios
+      .get(`${URL}/read-student-cookie/`, { withCredentials: true })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewStudentAttendance = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/viewing-student-attendance/${studentID}`)
       .then((res: any) => {
         return res?.data;
       });

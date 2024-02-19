@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  classAttendance,
   getClassSubjects,
   getClassTimeTable,
   getClassroom,
@@ -11,6 +12,7 @@ import {
   getSchoolStudents,
   readSchool,
   registerSchool,
+  studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
   viewSchoolByName,
@@ -227,4 +229,30 @@ export const useTopSchoolStudent = (studentID: string) => {
   );
 
   return { perform };
+};
+
+export const useClassAttendance = (classID: string) => {
+  const { data: mainAttendance } = useSWR(
+    `api/view-class-attendance/${classID}`,
+    () => {
+      return classAttendance(classID!).then((res) => {
+        return res;
+      });
+    }
+  );
+
+  return { mainAttendance };
+};
+
+export const useStudentAttendance = (studentID: string) => {
+  const { data: mainStudentAttendance } = useSWR(
+    `api/view-student-attendance/${studentID}`,
+    () => {
+      return studentAttendance(studentID!).then((res) => {
+        return res;
+      });
+    }
+  );
+
+  return { mainStudentAttendance };
 };

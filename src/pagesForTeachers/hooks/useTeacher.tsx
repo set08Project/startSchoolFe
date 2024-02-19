@@ -10,6 +10,10 @@ import {
   readTeacherSchedule,
   viewTeacherDetail,
 } from "../api/teachersAPI";
+import {
+  getSchoolAnncoement,
+  getSchoolEvent,
+} from "../../pages/api/schoolAPIs";
 
 export const useTeacherCookie = () => {
   const { data: dataID } = useSWR(`api/read-teacher-cookie/`, () => {
@@ -150,4 +154,25 @@ export const useAttendance = (classID: string) => {
     { refreshInterval: 1000 }
   );
   return { attendance };
+};
+
+export const useSchoolAnnouncement = (schoolID: string) => {
+  const { data: schoolAnnouncement } = useSWR(
+    `api/view-announcement/${schoolID}`,
+    () => {
+      return getSchoolAnncoement(schoolID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { schoolAnnouncement };
+};
+
+export const useSchoolEvent = (schoolID: string) => {
+  const { data: schoolEvent } = useSWR(`api/view-event/${schoolID}`, () => {
+    return getSchoolEvent(schoolID!).then((res) => {
+      return res.data;
+    });
+  });
+  return { schoolEvent };
 };

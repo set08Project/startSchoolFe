@@ -11,6 +11,7 @@ import MyClassroom from "../pagesForStudents/pages/subjects/Subject";
 import QuizSetupScreen from "../pagesForStudents/pages/quiz/QuizSetupScreen";
 import QuizTestScreen from "../pagesForStudents/pages/quiz/QuizTestScreen";
 import MyClassRoomScreen from "../pagesForStudents/pages/class/MyClassRoom";
+import ReportScreen from "../pagesForStudents/pages/report/ReportScreen";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/assignment",
         element: <Assignment />,
+      },
+      {
+        path: "/report",
+        element: <ReportScreen />,
       },
     ],
   },
