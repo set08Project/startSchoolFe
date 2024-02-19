@@ -153,12 +153,13 @@ const ClassDetailScreen = () => {
       } else {
         toast.error(`${res?.response?.data?.messgae}`);
         handleToggleMenuFalse();
-        console.log(teacher);
       }
     });
   };
 
   const { mainAttendance } = useClassAttendance(classID!);
+
+  console.log(mainAttendance?.attendance?.length);
 
   return (
     <div className="text-blue-950">
@@ -169,14 +170,14 @@ const ClassDetailScreen = () => {
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            {classroom?.classStudents?.length}{" "}
+            {classroom?.students?.length}{" "}
             <span className="text-[20px]">Students</span>
           </div>
         </div>
         <div className=" px-4 py-1 rounded-lg text-center flex items-end flex-col">
           <div className="flex-1" />
-          <div className="mr-0 ">Next Recommended action:</div>
-          <p className="font-medium">Add Teacher to supervise this class</p>
+          <div className="mr-0 ">Next Recommended action</div>
+          <p className="font-medium"></p>
         </div>
       </div>
       <div className="my-6 border-t" />
@@ -203,7 +204,7 @@ const ClassDetailScreen = () => {
             </p>
           </div>
           {/* <Button name="" className="text-blue-950 bg-white" /> */}
-          <button className="btn text-white bg-blue-950 hover:bg-blue-900 transition-all duration-300 px-8 uppercase ">
+          <button className="btn text-blue-950 bg-white hover:bg-blue-900 transition-all duration-300 px-8 uppercase ">
             update Class Fee
           </button>
         </div>
@@ -475,10 +476,10 @@ const ClassDetailScreen = () => {
             Attendance Record:{" "}
             <span className="font-medium">
               {(
-                (mainAttendance?.data?.attendance.filter(
+                (mainAttendance?.attendance.filter(
                   (el: any) => el?.present === true
                 ).length /
-                  mainAttendance?.data?.attendance?.length) *
+                  mainAttendance?.attendance?.length) *
                 100
               ).toFixed(2)}
               %
@@ -489,7 +490,7 @@ const ClassDetailScreen = () => {
           <div className="w-3 h-3 border bg-white" /> */}
 
             <div className="flex flex-wrap gap-1 w-full">
-              {mainAttendance?.data?.attendance?.map((props: any) => (
+              {mainAttendance?.attendance?.map((props: any) => (
                 <div className="tooltip">
                   <div
                     className={`w-4 h-4 rounded-[3px] border ${
