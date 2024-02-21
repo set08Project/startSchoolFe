@@ -2,6 +2,8 @@ import useSWR from "swr";
 import {
   classAssignment,
   classLessonNotes,
+  getOneArticle,
+  getSchoolArticle,
   lessonNotes,
   readClassInfo,
   readStudentCookie,
@@ -104,4 +106,28 @@ export const useReadMyClassInfoData = (classAssigned: string) => {
   }, []);
 
   return { state };
+};
+
+export const useOneArticle = (studentID: string) => {
+  const { data: oneArticle } = useSWR(
+    `api/viewing-one-article/${studentID}`,
+    () => {
+      return getOneArticle(studentID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { oneArticle };
+};
+
+export const useSchoolArticle = (schoolID: string) => {
+  const { data: allArticle } = useSWR(
+    `api/viewing-all-article/${schoolID}`,
+    () => {
+      return getSchoolArticle(schoolID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { allArticle };
 };

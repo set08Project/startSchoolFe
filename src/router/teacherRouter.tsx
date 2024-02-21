@@ -15,6 +15,7 @@ import CreateQuiz from "../pagesForTeachers/pages/quiz/CreateQuiz";
 import CreateLesson from "../pagesForTeachers/pages/lessonNote/CreateLessonNote";
 import AttendanceScreen from "../pagesForTeachers/pages/attendance/AttendanceScreen";
 import ViewTeacherNote from "../pagesForTeachers/pages/lessonNote/ViewTeacherNote";
+import Article from "../pagesForTeachers/pages/article/Article";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -67,6 +68,15 @@ export const teacherRouter = createBrowserRouter([
       {
         path: "lesson-note",
         element: <LessonNote />,
+      },
+      {
+        path: "view-articles/:view",
+        element: <Article />,
+      },
+
+      {
+        path: "view-articles",
+        element: <Article />,
       },
       {
         path: "lesson-note/:noteID",

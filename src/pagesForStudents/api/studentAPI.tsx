@@ -132,3 +132,52 @@ export const rateNote = async (
     return error;
   }
 };
+
+export const createStudentArticle = async (
+  schoolID: string,
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-article/${schoolID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getOneArticle = async (articleID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-article/${articleID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolArticle = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-article/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};

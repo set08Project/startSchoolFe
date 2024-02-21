@@ -1,4 +1,5 @@
 import {
+  MdArticle,
   MdPeople,
   MdQueryStats,
   MdReport,
@@ -212,6 +213,20 @@ const Sider = () => {
           Lesson Note
           <FaNoteSticky />
         </NavLink>
+
+        <NavLink
+          to="/view-articles"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          View Articles
+          <MdArticle />
+        </NavLink>
+
         <NavLink
           to="/store"
           className={({ isActive }) =>

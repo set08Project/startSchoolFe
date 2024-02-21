@@ -484,3 +484,21 @@ export const viewStore = async (schoolID: string) => {
     return error;
   }
 };
+
+export const deleteArticle = async (
+  schoolID: string,
+  studentID: string,
+  articleID: string
+) => {
+  try {
+    return await axios
+      .delete(
+        `${URL}/delete-school-article/${schoolID}/${studentID}/${articleID}`
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

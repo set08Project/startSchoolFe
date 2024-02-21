@@ -13,6 +13,7 @@ import MyClassRoomScreen from "../pagesForStudents/pages/class/MyClassRoom";
 import ReportScreen from "../pagesForStudents/pages/report/ReportScreen";
 import ClassLessonNote from "../pagesForStudents/pages/studentNote/StudentNote";
 import ViewClassNoteDetail from "../pagesForStudents/pages/studentNote/ViewNotes";
+import CreateArticle from "../pagesForStudents/pages/article/CreateArticle";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/articles",
         element: <Article />,
+      },
+      {
+        path: "/articles/:view",
+        element: <Article />,
+      },
+      {
+        path: "/create-article",
+        element: <CreateArticle />,
       },
       {
         path: "/your-subjects",

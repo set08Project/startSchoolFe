@@ -1,12 +1,12 @@
-import React from "react";
-import LittleHeader from "../components/layout/LittleHeader";
-import { MdAutoAwesome } from "react-icons/md";
+document.title = "Articles";
+import LittleHeader from "../../../components/static/LittleHeader";
+import articleDummy from "../../../assets/dummy-article-img.jpg";
 import { Link, useParams } from "react-router-dom";
-import { useSchoolArticle, useStudentInfo } from "./hooks/useStudentHook";
-import ViewArticleScreen from "./pages/article/ViewArticleScreen";
+import ViewArticleScreen from "./ViewArticleScreen";
+import { useEffect, useState } from "react";
+import { getSchoolArticle } from "../../api/studentAPI";
+import { useSchoolArticle, useStudentInfo } from "../../hooks/useStudentHook";
 import moment from "moment";
-import articleDummy from "../assets/dummy-article-img.jpg";
-document.title = "School's Student's Article Page";
 
 const Article = () => {
   const { view } = useParams();
@@ -28,7 +28,7 @@ const Article = () => {
               </button>
             </Link>
           </div>
-
+          fjjfdj
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-10 gap-4">
             {allArticle &&
               allArticle?.map((el: any) => (
