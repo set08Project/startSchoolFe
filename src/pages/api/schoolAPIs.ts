@@ -457,3 +457,30 @@ export const approveNoted = async (schoolID: string, lessonID: string) => {
     return error;
   }
 };
+
+export const createStore = async (schoolID: string, data: {}) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-store/${schoolID}/`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewStore = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-store/${schoolID}/`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

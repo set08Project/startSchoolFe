@@ -19,6 +19,7 @@ import {
   viewSchoolByName,
   viewSchoolSubjects,
   viewSchoolTeacher,
+  viewStore,
 } from "../api/schoolAPIs";
 import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
 
@@ -261,6 +262,16 @@ export const useStudentAttendance = (studentID: string) => {
 export const useNotes = (schoolID: string) => {
   const { data: notes } = useSWR(`api/view-lesson-notes/${schoolID}`, () => {
     return readNoted(schoolID!).then((res) => {
+      return res;
+    });
+  });
+
+  return { notes };
+};
+
+export const useStore = (schoolID: string) => {
+  const { data: notes } = useSWR(`api/view-store/${schoolID}`, () => {
+    return viewStore(schoolID!).then((res) => {
       return res;
     });
   });

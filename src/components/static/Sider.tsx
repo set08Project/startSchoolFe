@@ -22,6 +22,7 @@ import {
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
+import StoreScreen from "./StoreScreen";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -99,13 +100,15 @@ const Sider = () => {
         <div className="flex w-full justify-center">
           {/* <NavLink to="upgrade"> */}
 
-          <Button
+          {/* <Button
             name="Add to Store"
             className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
             onClick={() => {
               handleDisplayStaff();
             }}
-          />
+          /> */}
+
+          <StoreScreen />
 
           {/* </NavLink> */}
         </div>

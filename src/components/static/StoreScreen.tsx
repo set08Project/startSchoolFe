@@ -1,43 +1,54 @@
 import { useState } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
-import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import Button from "../reUse/Button";
-
-const periodicData = [
-  "07:45AM - 08:10AM",
-  "08:10AM - 08:50AM",
-  "08:50AM - 09:30AM ",
-  "09:30AM - 10:10AM",
-  "10:10AM - 10:20AM",
-  "10:20AM - 11:00AM",
-  "11:00AM - 11:40AM",
-  "11:40AM - 12:00NOON ",
-  "12:00NOON - 12:40PM",
-  "12:40PM - 01:20PM",
-  "01:20PM - 02:00PM",
-];
-
-const daysData = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+import Input from "../reUse/Input";
+import { createStore } from "../../pages/api/schoolAPIs";
 
 const StoreScreen = () => {
+  const { data } = useSchoolData();
   const [subject, setSubject] = useState<string>("");
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
 
-  const { data } = useSchoolData();
-  const { classID } = useParams();
+  const [image, setImage] = useState("");
+
+  const handleUpload = (e: any) => {
+    const file = e.target.files[0];
+    setImage(file);
+  };
+
+  const onHandleAdd = () => {
+    const formData = new FormData();
+    formData.append("title", subject);
+    formData.append("description", period);
+    formData.append("cost", `${parseInt(day)}`);
+    formData.append("avatar", image);
+
+    createStore(data?._id, formData).then((res: any) => {
+      console.log(res);
+      if (res.status === 201) {
+        toast.success("Product Uploaded");
+      } else {
+        toast.error("Product Error");
+      }
+    });
+  };
+
+  console.log(data?._id);
 
   return (
     <div>
-      {/* <Toaster position="top-center" reverseOrder={true} /> */}
-      <div className="mt-5 text-[13px] font-medium">
+      <Toaster position="top-center" reverseOrder={true} />
+      <div className="mt-5 text-[13px] font-medium text-blue-950 flex justify-start w-full">
         <label
           htmlFor="assign_subject_timetable"
-          className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
+          //   className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
+
+          className="bg-black text-white border-none font-medium py-4 px-9 leading-tight rounded-md cursor-pointer"
         >
-          + Add to TimeTable
+          Add item to Store
         </label>
         <div className="mt-5" />
         {/* Put this part before </body> tag */}
@@ -49,7 +60,7 @@ const StoreScreen = () => {
         <div className="modal rounded-md" role="dialog">
           <div className="modal-box  rounded-md">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Add New Subject to TimeTable</p>
+              <p className="font-bold">Add New Items to Store</p>
 
               <label
                 htmlFor="assign_subject_timetable"
@@ -59,13 +70,13 @@ const StoreScreen = () => {
               </label>
             </div>
             <hr />
-            <div className="mt-2 leading-tight text-[13px] font-medium">
+            <div className="mt-2 leading-tight text-[13px] font-medium text-left">
               Please note that by assigning this subject to this class, it
               automtically becomes one of the class must take suject.
               <br />
               <br />
               <div className="flex gap-2  items-center">
-                <p> Subject: {subject}</p>
+                <p> Product Title: {subject}</p>
                 {subject && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
@@ -74,7 +85,7 @@ const StoreScreen = () => {
                 )}
               </div>
               <div className="flex gap-2  items-center">
-                <p> Peroid: {period}</p>
+                <p> Product Cost: {period}</p>
                 {period && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
@@ -83,7 +94,7 @@ const StoreScreen = () => {
                 )}
               </div>
               <div className="flex gap-2  items-center">
-                <p> Day: {day}</p>
+                <p> Product Description: {day}</p>
                 {day && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
@@ -92,80 +103,64 @@ const StoreScreen = () => {
                 )}
               </div>
             </div>
-            <div className="mt-10 w-full gap-2 flex flex-col items-center">
+            <div className="mt-10 flex w-full justify-start">
+              <label
+                className=" text-white bg-blue-950 border px-6 py-3 cursor-pointer rounded-md  mt-4 "
+                htmlFor="pix"
+              >
+                Upload Image
+              </label>
+
+              <input
+                id="pix"
+                className="hidden"
+                type="file"
+                onChange={handleUpload}
+              />
+            </div>
+            <div className="mt-4 w-full gap-2 flex flex-col items-center text-left">
               <div className="w-full">
-                <label className="font-medium text-[12px]">
-                  Subject Title <span className="text-red-500">*</span>
+                <label className="font-medium text-[12px] mt-4">
+                  Product Title <span className="text-red-500">*</span>
                 </label>
 
                 {/* // readSubject */}
-                <select
-                  className="select select-bordered w-full mt-2 mb-8"
+                <Input
+                  className=" w-full mt-2 mb-8 ml-0"
+                  placeholder="ProductTitle"
+                  value={subject}
                   onChange={(e: any) => {
                     setSubject(e.target.value);
                   }}
-                >
-                  <option value={"Short Break"} defaultValue={"Short Break"}>
-                    Short Break
-                  </option>
-                  <option value={"Long Break"}>Long Break</option>
-                  <option value={"Free Period"}>Free Period</option>
-                  <option value={"Assembly"}>Assembly</option>
-                  {/* {readSubject?.map((props: any, i: number) => (
-                    <option
-                      key={i}
-                      value={props.subjectTitle}
-                      className="py-4 my-8"
-                    >
-                      {props?.subjectTitle}
-                    </option>
-                  ))} */}
-                </select>
+                />
                 <div className="flex w-full gap-2 mb-10">
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
-                      Period Time <span className="text-red-500">*</span>
+                      Product Cost <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="select select-bordered w-full mt-2"
+                    <Input
+                      value={period}
+                      placeholder="Product Cost"
+                      className="w-full mt-2 ml-0"
                       onChange={(e: any) => {
                         setPeriod(e.target.value);
                       }}
-                    >
-                      <option
-                        value={"Choose Peroid"}
-                        disabled
-                        defaultValue={"Choose Peroid"}
-                      >
-                        Choose Peroid
-                      </option>
-                      {periodicData.map((props: any, i: number) => (
-                        <option key={i} value={props}>
-                          {props}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
-                      Day of the Week <span className="text-red-500">*</span>
+                      Product Description{" "}
+                      <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="select select-bordered w-full mt-2"
+                    <Input
+                      value={day}
+                      placeholder="Product Description"
+                      className="ml-0 w-full mt-2"
                       onChange={(e: any) => {
                         setDay(e.target.value);
                       }}
-                    >
-                      <option value={"Choose Day"} disabled selected>
-                        Choose Day
-                      </option>
-                      {daysData.map((props: any, i: number) => (
-                        <option key={i} value={props}>
-                          {props}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                 </div>
               </div>
@@ -174,9 +169,9 @@ const StoreScreen = () => {
             <div className="w-full flex justify-end transition-all duration-300">
               {subject !== "" && period !== "" && day !== "" ? (
                 <label
-                  htmlFor="assign_subject_timetable"
+                  //   htmlFor="assign_subject_timetable"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
-                  //   onClick={onCreateTimeTable}
+                  onClick={onHandleAdd}
                 >
                   Proceed
                 </label>
