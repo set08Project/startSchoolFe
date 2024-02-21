@@ -433,3 +433,27 @@ export const studentAttendance = async (studentID: string) => {
     return error;
   }
 };
+
+export const readNoted = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/admin-view-lesson-note/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const approveNoted = async (schoolID: string, lessonID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/approve-lesson-note/${schoolID}/${lessonID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

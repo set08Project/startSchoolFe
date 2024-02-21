@@ -6,7 +6,7 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
 import { useClassStudent, useTeacherInfo } from "../../hooks/useTeacher";
-import { readClassInfo } from "../../api/teachersAPI";
+import { readClassInfo, remark } from "../../api/teachersAPI";
 
 interface iProps {
   props?: any;
@@ -65,8 +65,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const WeekReport = () => {
   const { teacherInfo } = useTeacherInfo();
-
   const [state, setState] = useState<any>({});
+  const [stateValue, setStateValue] = useState("");
 
   useEffect(() => {
     readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
@@ -140,13 +140,19 @@ const WeekReport = () => {
                         <textarea
                           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
                           placeholder="Give a Remark"
+                          value={stateValue}
+                          onChange={(e) => {
+                            setStateValue(e.target.value);
+                          }}
                         />
                       </div>
                       <div className="w-[180px] border-r">
                         <Button
                           name="Submit Report"
                           className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                          onClick={() => {}}
+                          onClick={() => {
+                            remark(teacherInfo?._id, props?.id, stateValue);
+                          }}
                         />
                       </div>
                     </div>

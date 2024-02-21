@@ -10,8 +10,6 @@ const MyScheduleScreen = () => {
 
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
 
-  console.log(data);
-
   return (
     <div>
       <LittleHeader name="My Schedule" />

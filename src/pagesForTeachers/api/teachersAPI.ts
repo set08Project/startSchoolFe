@@ -259,3 +259,19 @@ export const lessonNote = async (lessonID: string) => {
     return error;
   }
 };
+
+export const remark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-remark/${teacherID}/${studentID}`, { remark: data })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

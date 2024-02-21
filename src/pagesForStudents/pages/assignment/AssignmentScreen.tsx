@@ -23,8 +23,6 @@ const AssignmentScreen = () => {
 
   const { classAssignments } = useAssignment(state?._id);
 
-  console.log("view Assignment: ", classAssignments?.assignment);
-
   return (
     <div className="text-blue-950 relative">
       <LittleHeader
@@ -46,20 +44,12 @@ const AssignmentScreen = () => {
                   {i + 1}
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="font-bold mt-0 text-[20px] ">
-                    {/* {props?.subjectTitle} Test {i + 1} */}
-                  </p>
-                  {/* <Link to={`/quiz/details/${props._id}`}>
-                    <MdPlayCircle
-                      size={90}
-                      className="rotate-0 opacity-60 text-red-600 hover:text-red-400 transition-all duration-300 absolute right-0 top-2"
-                    />
-                  </Link> */}
+                  <p className="font-bold mt-0 text-[20px] "></p>
                 </div>
 
                 <div className="flex">
                   <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 ">
-                    Quiz
+                    {props?.subjectTitle} Assignment
                   </p>
                 </div>
 

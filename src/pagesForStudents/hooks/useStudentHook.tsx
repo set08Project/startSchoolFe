@@ -93,3 +93,15 @@ export const useReadMyClassInfo = () => {
 
   return { state };
 };
+
+export const useReadMyClassInfoData = (classAssigned: string) => {
+  const [state, setState] = useState<any>({});
+
+  useEffect(() => {
+    readClassInfo(classAssigned).then((res: any) => {
+      setState(res.data);
+    });
+  }, []);
+
+  return { state };
+};

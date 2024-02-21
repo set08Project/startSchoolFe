@@ -87,7 +87,7 @@ const AddStudent = () => {
           />
         </div>
         <div className="mt-1">
-          <label className="text-[14px]">Student First Name</label>
+          <label className="text-[14px]">Student Last Name</label>
           <Input
             placeholder="Enter Student Address"
             className="ml-0 w-full"

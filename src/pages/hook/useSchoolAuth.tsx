@@ -10,6 +10,7 @@ import {
   getSchoolEvent,
   getSchoolStudentDetail,
   getSchoolStudents,
+  readNoted,
   readSchool,
   registerSchool,
   studentAttendance,
@@ -255,4 +256,14 @@ export const useStudentAttendance = (studentID: string) => {
   );
 
   return { mainStudentAttendance };
+};
+
+export const useNotes = (schoolID: string) => {
+  const { data: notes } = useSWR(`api/view-lesson-notes/${schoolID}`, () => {
+    return readNoted(schoolID!).then((res) => {
+      return res;
+    });
+  });
+
+  return { notes };
 };

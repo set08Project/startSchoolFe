@@ -17,7 +17,7 @@ import {
   createSchoolEvent,
   createSchoolSubject,
 } from "../api/schoolAPIs";
-import { useSchoolData } from "../hook/useSchoolAuth";
+import { useSchoolData, useSchoolSubject } from "../hook/useSchoolAuth";
 import toast from "react-hot-toast";
 import Announcement from "./Announcement";
 import moment from "moment";
@@ -29,6 +29,7 @@ const HomeScreen = () => {
   const event = useSelector((state: any) => state.event);
 
   const { data } = useSchoolData();
+  const { schoolSubject } = useSchoolSubject();
 
   const [subject, setSubject] = useState("");
   const [classAssigned, setClassAssigned] = useState("");
@@ -220,18 +221,14 @@ const HomeScreen = () => {
               {/* <GeneralDataScreen /> */}
               Subjects
             </p>
-            <div className="font-medium text-[13px]">
-              <div>Junior Mathimatics</div>
-              <div>Senior Mathimatics</div>
-              <div>Junior English</div>
-              <div>Senior English</div>
-              <div>Chemistry</div>
-              <div>Physics</div>
-              <div>Biology</div>
-              <div>Integrated Science</div>
-              <div>Introduction to Technology</div>
-              <div>Economics</div>
-              <div>Agricultural Science</div>
+            <div className="font-medium text-[12px]">
+              {schoolSubject?.subjects?.map((props: any) => (
+                <div key={props?._id} className="my-1">
+                  <span className="font-bold">{props?.subjectTitle}</span>{" "}
+                  &middot; {props?.designated} &middot;{" "}
+                  {props?.subjectTeacherName}
+                </div>
+              ))}
             </div>
           </div>
         </div>

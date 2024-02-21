@@ -32,23 +32,15 @@ const ViewReportScreen = () => {
 
   for (let i = 0; i < state?.classSubjects?.length; i++) {
     let x = state?.classSubjects[i]?.quiz?.length;
-    // console.log(x);
+
     recordQuiz.push(x);
   }
 
   for (let i = 0; i < state?.classSubjects?.length; i++) {
     let x = state?.assignment.length;
-    // console.log(x);
+
     recordAssignment.push(x);
   }
-
-  // let total = recordQuiz?.reduce((a: number, b: number) => {
-  //   return a + b;
-  // });
-
-  // console.log("Attendance: ", lodash.sumBy(recordQuiz));
-  // console.log("Attendance: ", lodash.sumBy(recordAssignment));
-  console.log("Attendance: ", state?.assignment);
 
   return (
     <div>

@@ -1,7 +1,4 @@
 import { FC } from "react";
-// import { useUser } from "../../hooks/useUserID";
-// import { useSingleStudioBookingName } from "../../hooks/useStudio";
-// import SingleStudioName from "../SingleStudioName";
 import pix from "../../../assets/pix.jpg";
 
 interface iProps {
@@ -14,19 +11,7 @@ interface iProps {
   costData?: number;
 }
 
-const UserSingleDataActive: FC<iProps> = ({
-  image,
-  owner,
-  contact,
-  cost,
-  name,
-  props,
-  costData,
-}) => {
-  // const { user } = useUser(props?.accountHolderID);
-
-  // const { studioNameData } = useSingleStudioBookingName(props?.studioName);
-
+const UserSingleDataActive: FC<iProps> = ({ image, name }) => {
   return (
     <div>
       <div>

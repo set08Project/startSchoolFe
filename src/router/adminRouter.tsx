@@ -20,6 +20,8 @@ import SecondStep from "../pages/home/start/SecondStep";
 import ClassRoomScreen from "../pages/page/class/ClassRoomScreen";
 import ClassDetailScreen from "../pages/page/class/ClassDetailScreen";
 import ViewSubjects from "../pages/page/subject/ViewSubject";
+import AdminLessonNote from "../pages/page/less/LessonNote";
+import ViewTeacherNoteByAdmin from "../pages/page/less/ViewTeacherNote";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -48,6 +50,18 @@ export const adminRouter = createBrowserRouter([
                 element: <HomeView />,
               },
             ],
+          },
+
+          {
+            index: true,
+            path: "lesson-note",
+            element: <AdminLessonNote />,
+          },
+
+          {
+            index: true,
+            path: "/lesson-note/:noteID",
+            element: <ViewTeacherNoteByAdmin />,
           },
 
           {

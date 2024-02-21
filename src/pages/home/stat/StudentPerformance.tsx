@@ -1,5 +1,25 @@
+import { FC } from "react";
 import pix from "../../../assets/pix.jpg";
+import { useStudentAttendant } from "../../../pagesForStudents/hooks/useStudentHook";
 import { useSchoolData, useTopSchoolStudent } from "../../hook/useSchoolAuth";
+
+interface iProps {
+  props?: any;
+}
+const StudentRatio: FC<iProps> = ({ props }) => {
+  const { studentAttendance } = useStudentAttendant(props);
+  console.log(studentAttendance);
+
+  const arrayData = studentAttendance?.attendance?.filter((el: any) => {
+    return el.present === true;
+  });
+
+  let ratio = (
+    arrayData?.length / studentAttendance?.attendance.length
+  ).toFixed(2);
+
+  return <span>{ratio}</span>;
+};
 
 const StudentPerformance = () => {
   const { data } = useSchoolData();
@@ -41,7 +61,7 @@ const StudentPerformance = () => {
                     <p>
                       Att. Ratio:{" "}
                       <span className="mr- capitalize font-bold">
-                        {props?.attendance}
+                        <StudentRatio props={props?._id} />
                       </span>
                     </p>
                   </div>

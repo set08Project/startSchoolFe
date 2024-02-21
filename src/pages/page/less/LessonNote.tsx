@@ -1,16 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { FaBook } from "react-icons/fa6";
 import { MdAutoAwesome } from "react-icons/md";
-import { useLessonNote } from "../../../pagesForStudents/hooks/useStudentHook";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useNotes, useSchoolData } from "../../hook/useSchoolAuth";
 
-const LessonNote = () => {
-  const { teacherInfo } = useTeacherInfo();
-  const { lessonNote } = useLessonNote(
-    teacherInfo?.schoolIDs,
-    teacherInfo?._id
-  );
+const AdminLessonNote = () => {
+  const { data } = useSchoolData();
+  const { notes } = useNotes(data?._id);
 
   return (
     <div>
@@ -22,9 +18,9 @@ const LessonNote = () => {
             <p className="font-bold mb-7">Lesson Note</p>
             <div className="">
               <div>
-                {lessonNote?.lessonNotes?.length > 0 ? (
+                {notes?.data?.lessonNotes?.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
-                    {lessonNote?.lessonNotes?.map((props: any) => (
+                    {notes?.data?.lessonNotes?.map((props: any) => (
                       <NavLink
                         key={props?._id}
                         to={`/lesson-note/${props?._id}`}
@@ -77,7 +73,7 @@ const LessonNote = () => {
                   <div className=" mt-32 w-full h-full flex flex-col items-center justify-center ">
                     <MdAutoAwesome />
                     <div className="opacity-50 mt-5">
-                      No Article Published yet
+                      No Lesson note Published yet
                     </div>
                   </div>
                 )}
@@ -90,4 +86,4 @@ const LessonNote = () => {
   );
 };
 
-export default LessonNote;
+export default AdminLessonNote;

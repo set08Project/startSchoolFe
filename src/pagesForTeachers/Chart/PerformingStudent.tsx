@@ -17,8 +17,6 @@ const StudentPerformance = () => {
 
   const { classStudents } = useClassStudent(state?._id);
 
-  console.log(classStudents?.students);
-
   return (
     <div className="">
       <div className="carousel carousel-center h-[400px] rounded-box *:bg-slate-100 gap-2">

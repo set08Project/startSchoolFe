@@ -31,9 +31,6 @@ const Personal: FC = () => {
 
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
 
-  console.log("reading sechedddTime: ", moment("9").hour());
-  console.log("reading secheddd: ", moment(Date.now()).minute());
-
   return (
     <div>
       <div className="mb-2 text-blue-950">
