@@ -92,3 +92,43 @@ export const classAssignment = async (classID: string) => {
     return error;
   }
 };
+
+export const lessonNotes = async (schoolID: string, staffID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-lesson-note/${schoolID}/${staffID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const classLessonNotes = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-class-lesson-note/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const rateNote = async (
+  studentID: string,
+  lessonID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/rate-lesson-note/${studentID}/${lessonID}`, { rate: data })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

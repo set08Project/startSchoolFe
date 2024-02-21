@@ -474,7 +474,7 @@ const ClassDetailScreen = () => {
             Attendance Record:{" "}
             <span className="font-medium">
               {(
-                (mainAttendance?.attendance.filter(
+                (mainAttendance?.attendance?.filter(
                   (el: any) => el?.present === true
                 ).length /
                   mainAttendance?.attendance?.length) *

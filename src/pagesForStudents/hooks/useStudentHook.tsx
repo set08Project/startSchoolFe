@@ -1,10 +1,14 @@
 import useSWR from "swr";
 import {
   classAssignment,
+  classLessonNotes,
+  lessonNotes,
+  readClassInfo,
   readStudentCookie,
   viewStduentDetail,
   viewStudentAttendance,
 } from "../api/studentAPI";
+import { useEffect, useState } from "react";
 
 export const useStudentCookie = () => {
   const { data: dataID } = useSWR(`api/read-student-cookie/`, () => {
@@ -51,4 +55,41 @@ export const useAssignment = (classID: string) => {
     }
   );
   return { classAssignments };
+};
+
+export const useLessonNote = (schoolID: string, staffID: string) => {
+  const { data: lessonNote } = useSWR(
+    `api/view-lession-note/${staffID}`,
+    () => {
+      return lessonNotes(schoolID, staffID).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { lessonNote };
+};
+
+export const useClassLessonNote = (classID: string) => {
+  const { data: classLessonNote } = useSWR(
+    `api/view-lession-note/${classID}`,
+    () => {
+      return classLessonNotes(classID).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { classLessonNote };
+};
+
+export const useReadMyClassInfo = () => {
+  const [state, setState] = useState<any>({});
+  const { studentInfo } = useStudentInfo();
+
+  useEffect(() => {
+    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+      setState(res.data);
+    });
+  }, []);
+
+  return { state };
 };

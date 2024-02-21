@@ -9,11 +9,11 @@ interface iTextArea extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 const TextArea: FC<iTextArea> = ({ label, value, placeholder, ...props }) => {
   return (
     <div>
-      {label}
+      <div className="mb-1 text-[12px]">{label}</div>
       <textarea
         value={value}
-        placeholder="Previous Knowledge"
-        className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3 "
+        placeholder={placeholder}
+        className="w-full col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3 "
         {...props}
       />
     </div>

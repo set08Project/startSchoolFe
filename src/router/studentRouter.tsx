@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import StudentDashboard from "../pagesForStudents/StudentDashboard";
 // import Layout from "../components/layout/Layout";
 import Assignment from "../pagesForStudents/Assignment";
-import MySubjects from "../pagesForStudents/MySubjects";
 import Article from "../pagesForStudents/Article";
 import TimeTable from "../pagesForStudents/TimeTable";
 import StudentProfile from "../pagesForStudents/StudentProfile";
@@ -12,6 +11,8 @@ import QuizSetupScreen from "../pagesForStudents/pages/quiz/QuizSetupScreen";
 import QuizTestScreen from "../pagesForStudents/pages/quiz/QuizTestScreen";
 import MyClassRoomScreen from "../pagesForStudents/pages/class/MyClassRoom";
 import ReportScreen from "../pagesForStudents/pages/report/ReportScreen";
+import ClassLessonNote from "../pagesForStudents/pages/studentNote/StudentNote";
+import ViewClassNoteDetail from "../pagesForStudents/pages/studentNote/ViewNotes";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -30,6 +31,14 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/my-classroom",
         element: <MyClassRoomScreen />,
+      },
+      {
+        path: "/lesson",
+        element: <ClassLessonNote />,
+      },
+      {
+        path: "/lesson/:noteID",
+        element: <ViewClassNoteDetail />,
       },
       {
         path: "/articles",

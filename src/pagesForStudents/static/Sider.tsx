@@ -120,7 +120,7 @@ const Sider = () => {
       </div>
 
       {/* Settings */}
-      <div className="mt-16 px-2 flex flex-col h-[90%]">
+      <div className="mt-8 px-2 flex flex-col h-[90%]">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -158,8 +158,8 @@ const Sider = () => {
           <FaTable />
         </NavLink>
 
-        {/* <NavLink
-          to="/time-table"
+        <NavLink
+          to="/lesson"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
@@ -167,9 +167,9 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          TimeTable
+          Lessons
           <FaTable />
-        </NavLink> */}
+        </NavLink>
 
         <NavLink
           to="/your-profile"

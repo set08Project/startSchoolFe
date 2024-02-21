@@ -6,14 +6,10 @@ import lodash from "lodash";
 import LittleHeader from "../../components/layout/LittleHeader";
 import InputWithLabel from "./InputWithLabel";
 import { createTeacherLessonNote } from "../../api/teachersAPI";
-import { useSchool, useSchoolCookie } from "../../../pages/hook/useSchoolAuth";
-import { useTeacherCookie } from "../../hooks/useTeacher";
+import { useTeacherInfo } from "../../hooks/useTeacher";
 import TextArea from "./TextArea";
 
 document.title = "Lesson Note";
-
-// const { dataID } = useSchoolCookie();
-// const { staffID } = useTeacherCookie();
 
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"],
@@ -40,9 +36,11 @@ const modules = {
 };
 
 const CreateLesson = () => {
+  const { teacherInfo } = useTeacherInfo();
+
   const [value, setValue]: any = useState("");
-  //   const [prevKnow, setPrevKnow]: any = useState("");
-  const [prevKnow, setPrevKnow]: any = useState("");
+  const [areaOne, setAreaOne]: any = useState("");
+  const [areaTwo, setAreaTwo]: any = useState("");
 
   const [iValue, setiValue]: any = useState([""]);
 
@@ -55,9 +53,37 @@ const CreateLesson = () => {
       },
       {}
     );
+    const convertedData1 = lodash.reduce(
+      areaOne,
+      (result: any, { label, value }) => {
+        result[label] = value;
+        return result;
+      },
+      {}
+    );
+    const convertedData2 = lodash.reduce(
+      areaTwo,
+      (result: any, { label, value }) => {
+        result[label] = value;
+        return result;
+      },
+      {}
+    );
 
-    // createTeacherLessonNote(dataID, staffID, convertedData);
-    console.log(convertedData);
+    const gatheredData = {
+      ...convertedData,
+      ...convertedData1,
+      ...convertedData2,
+      content: value,
+    };
+
+    createTeacherLessonNote(
+      teacherInfo?.schoolIDs,
+      teacherInfo?._id,
+      gatheredData
+    ).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
@@ -82,25 +108,24 @@ const CreateLesson = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <textarea
-          value={prevKnow}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setPrevKnow(e.target.value)
-          }
-          placeholder="Previous Knowledge"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3 "
-        />
-        {/* <TextArea
-          value={prevKnow}
-          placeholder="Previous Knowledge"
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setPrevKnow(e.target.value)
-          }
-        /> */}
-        <textarea
-          placeholder="Specific Objectives"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3 "
-        />
+        {[
+          { placeholder: "Previous Knowledge", name: "previousKnowledge" },
+          { placeholder: "Specific Objectives", name: "specificObjectives" },
+        ].map((el, i: number) => (
+          <TextArea
+            value={areaOne[i] ? areaOne[i].value : ""}
+            placeholder={el.placeholder}
+            label={el.placeholder}
+            onChange={(e: any) => {
+              const newValue = e.target.value;
+              setAreaOne((prevValues: any) => {
+                const updatedValues = [...prevValues];
+                updatedValues[i] = { label: el.name, value: newValue };
+                return updatedValues;
+              });
+            }}
+          />
+        ))}
       </div>
       <div className="w-full mt-4">
         <ReactQuill
@@ -113,22 +138,26 @@ const CreateLesson = () => {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2  gap-4 mt-16">
-        <textarea
-          placeholder="Evaluation"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3"
-        ></textarea>
-        <textarea
-          placeholder="Summary"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3"
-        ></textarea>
-        <textarea
-          placeholder="Presentation"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3"
-        ></textarea>
-        <textarea
-          placeholder="Assignment"
-          className="w-auto col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3"
-        ></textarea>
+        {[
+          { placeholder: "Evaluation", name: "evaluation" },
+          { placeholder: "Summary", name: "summary" },
+          { placeholder: "Presentation", name: "presentation" },
+          { placeholder: "Assignment", name: "assignment" },
+        ].map((el, i: number) => (
+          <TextArea
+            value={areaTwo[i] ? areaTwo[i].value : ""}
+            placeholder={el.placeholder}
+            label={el.placeholder}
+            onChange={(e: any) => {
+              const newValue = e.target.value;
+              setAreaTwo((prevValues: any) => {
+                const updatedValues = [...prevValues];
+                updatedValues[i] = { label: el.name, value: newValue };
+                return updatedValues;
+              });
+            }}
+          />
+        ))}
       </div>
       <button
         onClick={handleSubmit}

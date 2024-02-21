@@ -4,11 +4,15 @@ export const inputData = [
     placeholder: "Week 1",
     name: "week",
   },
-  { label: "Input the started date", placeholder: "10/02/2024", name: "date" },
+  {
+    label: "Input the started date",
+    placeholder: "10/02/2024",
+    name: "createDate",
+  },
   {
     label: "This lesson is for what class?",
     placeholder: "JSS 1B",
-    name: "class",
+    name: "classes",
   },
   {
     label: "This lesson is for what subject?",
@@ -23,12 +27,12 @@ export const inputData = [
   {
     label: "This lesson is for what sub-topic?",
     placeholder: "Sub-Topic",
-    name: "sub-topic",
+    name: "subTopic",
   },
   {
     label: "This lesson is for how many periods?",
     placeholder: "2 - 5",
-    name: "periods",
+    name: "period",
   },
   {
     label: "How long will this lesson take?",
@@ -38,11 +42,11 @@ export const inputData = [
   {
     label: "What are your teaching materials?",
     placeholder: "die, coins, or charts",
-    name: "teachMaterials",
+    name: "instructionalMaterial",
   },
   {
     label: "What are your reference materials?",
     placeholder: "Integrated Mathematics",
-    name: "refMaterials",
+    name: "referenceMaterial",
   },
 ];

@@ -22,23 +22,33 @@ const ViewReportScreen = () => {
 
   let record: number = 0;
   let recordQuiz: any = [];
+  let recordAssignment: any = [];
 
   for (let i = 0; i < studentAttendance?.attendance?.length; i++) {
     if (studentAttendance?.attendance[i].present) {
       record++;
     }
   }
+
   for (let i = 0; i < state?.classSubjects?.length; i++) {
     let x = state?.classSubjects[i]?.quiz?.length;
     // console.log(x);
     recordQuiz.push(x);
   }
 
+  for (let i = 0; i < state?.classSubjects?.length; i++) {
+    let x = state?.assignment.length;
+    // console.log(x);
+    recordAssignment.push(x);
+  }
+
   // let total = recordQuiz?.reduce((a: number, b: number) => {
   //   return a + b;
   // });
 
-  console.log("Attendance: ", lodash.sumBy(recordQuiz));
+  // console.log("Attendance: ", lodash.sumBy(recordQuiz));
+  // console.log("Attendance: ", lodash.sumBy(recordAssignment));
+  console.log("Attendance: ", state?.assignment);
 
   return (
     <div>
@@ -91,7 +101,7 @@ const ViewReportScreen = () => {
                 {record} / {studentAttendance?.attendance?.length}
               </div>
               <div className="p-4 text-slate-500">
-                {studentInfo?.performance?.length}/{lodash.sumBy(recordQuiz)}
+                {studentInfo?.performance?.length}/{state?.assignment?.length}
               </div>
               {}
 

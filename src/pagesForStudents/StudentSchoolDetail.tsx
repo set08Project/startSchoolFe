@@ -1,78 +1,82 @@
-import { FC, useState } from "react";
-import Input from "../components/reUse/Input";
+import { FC, useEffect, useState } from "react";
+import { useStudentInfo } from "./hooks/useStudentHook";
+import { useSchoolStudents } from "../pages/hook/useSchoolAuth";
+import { readClassInfo } from "../pagesForTeachers/api/teachersAPI";
 
 interface iPersonal {
-  change: boolean;
+  change?: boolean;
+  studentID?: string;
 }
-const StudentSchoolDetail: FC<iPersonal> = ({ change }) => {
-  const [schAddress, setSchAddress] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [teacherContact, setTeacherContact] = useState<string>("");
-  const [changePassword, setChangePassword] = useState<string>("");
-  const [schoolMission, setSchoolMission] = useState<string>("");
-  const [schoolVision, setSchoolVision] = useState<string>("");
+const StudentSchoolDetail: FC<iPersonal> = ({}) => {
+  const { studentInfo } = useStudentInfo();
+  const { students } = useSchoolStudents(studentInfo?.schoolIDs);
+
+  const [state, setState] = useState<any>({});
+
+  useEffect(() => {
+    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+      setState(res);
+    });
+  }, []);
+
   return (
-    <div className="overflow-hidden">
-      <div className="ml-[40px] mt-4 grid w-[100%] grid-cols-1 md:grid-cols-2 md:w-[60%] overflow-hidden ">
-        <Input
-          placeholder="School address"
-          className="md:w-[87%] w-[80%]   text-black"
-          type="name"
-          required
-          value={schAddress}
-          onChange={(e: any) => {
-            setSchAddress(e.target.value);
-          }}
-        />
-        <Input
-          placeholder="Class Teacher"
-          className="w-[80%] md:w-[87%]  text-black"
-          type="name"
-          required
-          value={teacherContact}
-          onChange={(e: any) => {
-            setTeacherContact(e.target.value);
-          }}
-        />
-        <Input
-          placeholder="Current password"
-          className="md:w-[95%] w-[80%]  text-black"
-          type="name"
-          required
-          value={password}
-          onChange={(e: any) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <Input
-          placeholder="Change password"
-          className="md:w-[95%] w-[80%] md:ml-5 text-black"
-          type="text"
-          required
-          value={changePassword}
-          onChange={(e: any) => {
-            setChangePassword(e.target.value);
-          }}
-        />
+    <div className="overflow-hidden w-full">
+      <div className="ml-[40px] mt-4 grid w-full grid-cols-1 md:grid-cols-2">
+        <div className="mb-8">
+          <a className="text-[14px] text-gray-400 ">School Name</a>
+          <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
+            {students?.data?.schoolName}
+          </div>
+        </div>
+        <div className="mb-8 w-full">
+          <a className="text-[14px] text-gray-400 ">Class teacher</a>
+          <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
+            {state?.data?.classTeacherName}
+          </div>
+        </div>
+        <div className="mb-8">
+          <a className="text-[14px] text-gray-400 ">School address</a>
+          <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
+            {students?.data?.address}
+          </div>
+        </div>
+        <div className="mb-8">
+          <a className="text-[14px] text-gray-400 ">My Class</a>
+          <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
+            {studentInfo?.classAssigned}
+          </div>
+        </div>
       </div>
-      <textarea
-        placeholder="School Mission"
-        className="md:w-[40%] h-[156px] w-[80%] ml-12 md:ml-12 text-black border-gray-300 p-3 rounded-md border resize-none outline-blue-500"
-        required
-        value={schoolMission}
-        onChange={(e: any) => {
-          setSchoolMission(e.target.value);
-        }}
-      />
-      <textarea
-        placeholder="School Vision"
-        className="md:w-[40%] h-[156px] w-[80%] ml-11 md:ml-11 text-black border-gray-300 p-3 rounded-md border resize-none outline-blue-500"
-        required
-        value={schoolVision}
-        onChange={(e: any) => {
-          setSchoolVision(e.target.value);
-        }}
-      />
+
+      <div className="mb-8 ml-[40px] w-[70%]">
+        <a className="text-[14px] text-gray-400 ">School Mission</a>
+        <div className="md:w-[100%] py-4 lg:w-[100%] p-1 border min-h-[156px] w-[100%] pl-5 mt-[10px] border-gray-400 rounded-md">
+          {students?.data?.mission ? (
+            students?.data?.mission
+          ) : (
+            <div className="opacity-40 text-[14px]">
+              Pledging to our country, To be faithful, loyal and honest to serve
+              Nigeria wth all my strength, to defend her unity and uphold her
+              honor and glory. So help me God of our athers' land. Amen
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="mb-8 ml-[40px] w-[70%]">
+        <a className="text-[14px] text-gray-400 ">School Vision</a>
+        <div className="md:w-[100%] p-1 py-4 border min-h-[156px] w-[100%] pl-5 mt-[10px] border-gray-400 rounded-md">
+          {students?.data?.vision ? (
+            students?.data?.vision
+          ) : (
+            <div className="opacity-40 text-[14px]">
+              Knowledege is our strength! Glory of the Lord, the sun is shining
+              on the path evryday. We have a sherpherd, loving and tender. He
+              radince pasture, greatness of childreb. We have him who care for
+              his children.
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

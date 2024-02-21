@@ -2,20 +2,6 @@ import LittleHeader from "../../components/layout/LittleHeader";
 import { useTeacherInfo, useTeacherSchedule } from "../../hooks/useTeacher";
 import lodash from "lodash";
 
-const periodicData = [
-  "07:45AM - 08:10AM",
-  "08:10AM - 08:50AM",
-  "08:50AM - 09:30AM ",
-  "09:30AM - 10:10AM",
-  "10:10AM - 10:20AM",
-  "10:20AM - 11:00AM",
-  "11:00AM - 11:40AM",
-  "11:40AM - 12:00NOON ",
-  "12:00NOON - 12:40PM",
-  "12:40PM - 01:20PM",
-  "01:20PM - 02:00PM",
-];
-
 const daysData = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const MyScheduleScreen = () => {
@@ -23,6 +9,8 @@ const MyScheduleScreen = () => {
   const { teacherSchedule: dataData } = useTeacherSchedule(teacherInfo?._id);
 
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
+
+  console.log(data);
 
   return (
     <div>
@@ -44,12 +32,12 @@ const MyScheduleScreen = () => {
                 ))}
               </div>
 
-              <div className="flex ">
+              <div className="flex flex-col py-2 ">
                 {data?.map((props: any, i: number) => (
                   <div
                     key={i}
                     className={`
-                flex flex-col py-2 my-0  $
+                flex flex-col my-0 
                 `}
                   >
                     <div className="flex gap-4 ">
@@ -57,7 +45,7 @@ const MyScheduleScreen = () => {
                         <div className="flex">
                           <div
                             key={e}
-                            className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] bg-white border"
+                            className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] bg-white border mb-2"
                           >
                             <p>{props?.subject}</p>
                             <p>{props?.time}</p>

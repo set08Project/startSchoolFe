@@ -140,22 +140,6 @@ export const createQuiz = async (
   }
 };
 
-export const createTeacherLessonNote = async (
-  schoolID: string,
-  teacherID: string,
-  data: {}
-) => {
-  try {
-    return await axios
-      .post(`${URL}/create-lesson-note/${schoolID}/${teacherID}`, data)
-      .then((res: any) => {
-        return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
 export const readSubjectQuiz = async (subjectID: string) => {
   try {
     return await axios
@@ -240,6 +224,34 @@ export const classAssignment = async (subjectID: string) => {
   try {
     return await axios
       .get(`${URL}/view-class-assignment/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createTeacherLessonNote = async (
+  schoolID: string,
+  teacherID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-lesson-note/${schoolID}/${teacherID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const lessonNote = async (lessonID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-lesson-note-detail/${lessonID}`)
       .then((res: any) => {
         return res?.data;
       });
