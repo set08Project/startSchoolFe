@@ -1,3 +1,5 @@
+document.title = "Teacher's Lesson Notes Approved";
+
 import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useLessonNote } from "../../../pagesForTeachers/hooks/useTeacher";

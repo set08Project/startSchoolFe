@@ -1,3 +1,4 @@
+document.title = "Teacher's Lession Notes";
 import { NavLink } from "react-router-dom";
 import { FaBook } from "react-icons/fa6";
 import { MdAutoAwesome } from "react-icons/md";

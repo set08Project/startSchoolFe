@@ -75,7 +75,9 @@ const SecondStep = () => {
                 });
 
                 changeSchoolTags(dataID, { schoolTags: readValue });
-                changeSchoolStarted(dataID);
+                changeSchoolStarted(dataID).then(() => {
+                  window.location.reload();
+                });
 
                 dispatch(getSchoolInfo({}));
                 dispatch(pickedCategory(null));

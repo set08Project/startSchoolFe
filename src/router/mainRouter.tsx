@@ -10,8 +10,45 @@ import LoadingScreen from "../components/static/LoadingScreen";
 import MainSchoolPage from "../mainPage/MainSchoolPage";
 import SwitchLogin from "../pages/page/auth/SwitchLogin";
 import StudentLogin from "../pages/page/auth/StudentLogin";
+import LandingLayout from "../LandingPage1/LandingLayout";
+import ABetter from "../LandingPage1/Homescreen/ABetter";
+import Contact from "../LandingPage1/Contact";
+import About from "../LandingPage1/About";
+import StartUsing from "../LandingPage1/Homescreen/StartUsing";
+
+import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
 
 export const mainRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingLayout />,
+    children: [
+      {
+        index: true,
+        element: <LandingScreen />,
+      },
+      {
+        index: true,
+        path: "/features",
+        element: <ABetter />,
+      },
+      {
+        index: true,
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        index: true,
+        path: "/about",
+        element: <About />,
+      },
+      {
+        index: true,
+        path: "/service",
+        element: <StartUsing />,
+      },
+    ],
+  },
   {
     path: "/auth",
     element: <AuthLayout />,
@@ -72,78 +109,3 @@ export const mainRouter = createBrowserRouter([
   //   element: <LandingPageScreen />,
   // },
 ]);
-
-// {
-//         element: <Layout />,
-//         children: [
-//           {
-//             element: <HomeScreen />,
-//             children: [
-//               {
-//                 index: true,
-//                 element: <HomeView />,
-//               },
-//             ],
-//           },
-//           {
-//             index: true,
-//             path: "report",
-//             element: <ViewReport />,
-//             // element: <ViewCommentsAndReportScreen />,
-//           },
-//           {
-//             index: true,
-//             path: "view-students",
-//             element: <ViewStudent />,
-//           },
-//           {
-//             index: true,
-//             path: "view-staff",
-//             element: <ViewStaffScreen />,
-//           },
-//           {
-//             index: true,
-//             path: "view-staff/staff-details/:staffID",
-//             element: <StaffDetail />,
-//           },
-//           {
-//             index: true,
-//             path: "view-students/student-details/:staffID",
-//             element: <StudentDetail />,
-//           },
-
-//           {
-//             index: true,
-//             path: "settings",
-//             element: <SettingScreen />,
-//           },
-
-//           {
-//             index: true,
-//             path: "store",
-//             element: <ViewStoreItems />,
-//           },
-
-//           {
-//             path: "my-personal-info",
-//             element: <PersonalSetting />,
-//             children: [
-//               {
-//                 index: true,
-//                 path: "info",
-//                 element: <PersonalInfoScreen />,
-//               },
-//               // {
-//               //   index: true,
-//               //   path: "my-main-info",
-//               //   element: <ProfressionInfoScreen />,
-// },
-// {
-//   index: true,
-//   path: "choose-hospital",
-//   element: <HospitalChice />,
-// },
-//       ],
-//     },
-//   ],
-// },
