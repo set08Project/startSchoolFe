@@ -7,7 +7,6 @@ import {
   MdSettings,
 } from "react-icons/md";
 import { NavLink } from "react-router-dom";
-import Button from "../reUse/Button";
 import {
   FaBarsProgress,
   FaNoteSticky,
@@ -15,11 +14,7 @@ import {
   FaStore,
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeMenuState,
-  displayDelay,
-  displayStaffComp,
-} from "../../global/reduxState";
+import { changeMenuState } from "../../global/reduxState";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
@@ -28,7 +23,6 @@ import StoreScreen from "./StoreScreen";
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
-  const showing = useSelector((state: any) => state.showStaffComp);
   const { data } = useSchoolData();
 
   const handleToggleMenuFalse = () => {
@@ -37,26 +31,6 @@ const Sider = () => {
     } else {
       document.startViewTransition(() => {
         dispatch(changeMenuState(false));
-      });
-    }
-  };
-
-  const handleDisplayStaff = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayStaffComp(!showing));
-      dispatch(displayDelay(showing));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayDelay(!showing));
-
-        if (showing === true) {
-          const timer = setTimeout(() => {
-            clearTimeout(timer);
-            dispatch(displayStaffComp(!showing));
-          }, 500);
-        } else {
-          dispatch(displayStaffComp(!showing));
-        }
       });
     }
   };

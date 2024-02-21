@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { displayCart } from "../../../global/reduxState";
 import { MdClose, MdExpandLess } from "react-icons/md";

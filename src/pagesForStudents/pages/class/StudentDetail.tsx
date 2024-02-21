@@ -5,8 +5,6 @@ import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
 
 const StudentDetail = () => {
-  const recoded = Array.from({ length: 59 });
-  let count = 0;
   const attendanceData = Array.from({ length: 59 }, (i: number) => {
     // count++;
     const counted = Math.floor(Math.random() * 1000);

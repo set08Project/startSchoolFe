@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 const PrivateRouter: FC<PropsWithChildren> = ({ children }) => {
   const stateToken = useSelector((state: any) => state.user);
   const [state, setState] = useState<any>({});
+
   useEffect(() => {
     openServerAPI();
     getSchoolCookie().then((res: any) => {
@@ -18,7 +19,6 @@ const PrivateRouter: FC<PropsWithChildren> = ({ children }) => {
       });
     });
   }, []);
-
   return (
     <div>
       {stateToken ? <div>{children}</div> : <Navigate to="/auth/login" />}

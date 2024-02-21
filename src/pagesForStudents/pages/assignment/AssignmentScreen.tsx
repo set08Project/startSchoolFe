@@ -1,17 +1,13 @@
 import pix from "../../../assets/pix.jpg";
-import { Link, useParams } from "react-router-dom";
-import { MdPlayCircle } from "react-icons/md";
 import { FaCheckDouble } from "react-icons/fa6";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useSujectQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useAssignment, useStudentInfo } from "../../hooks/useStudentHook";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../api/studentAPI";
 
 const AssignmentScreen = () => {
-  const { subjectID } = useParams();
   const { studentInfo } = useStudentInfo();
-  const { subjectQuiz } = useSujectQuiz(subjectID!);
+  // const { subjectQuiz } = useSujectQuiz(subjectID!);
 
   const [state, setState] = useState<any>({});
 

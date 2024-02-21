@@ -1,6 +1,5 @@
 import { FC } from "react";
 import MainHeader from "./MainHeader";
-import Footer from "./Footer";
 import HeroScreen from "./HeroScreen";
 import SchoolHome from "./SchoolHome";
 

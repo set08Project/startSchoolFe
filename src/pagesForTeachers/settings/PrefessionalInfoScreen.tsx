@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useUser, useUserID } from "../../hooks/useUserID";
 import Button from "../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import Input from "../../components/reUse/Input";
 
 const ProfressionInfoScreen = () => {
-  const { user: userID }: any = useUserID();
-  const { user: data }: any = useUser(userID);
+  const { user: data }: any = {};
 
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggle1, setToggle1] = useState<boolean>(false);

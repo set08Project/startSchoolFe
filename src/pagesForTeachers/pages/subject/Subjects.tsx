@@ -1,13 +1,9 @@
 import { Link } from "react-router-dom";
 import Button from "../../components/reUse/Button";
-import { useSchoolTeacherDetail } from "../../../pages/hook/useSchoolAuth";
+
 import { FC } from "react";
 import pix from "../../../assets/pix.jpg";
-import {
-  useClassSubject,
-  useSujectInfo,
-  useTeacherInfo,
-} from "../../hooks/useTeacher";
+import { useSujectInfo, useTeacherInfo } from "../../hooks/useTeacher";
 import LittleHeader from "../../components/layout/LittleHeader";
 
 document.title = "view teacher subject";

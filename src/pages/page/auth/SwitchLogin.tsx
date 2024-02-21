@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../../../components/reUse/Button";
 import Input from "../../../components/reUse/Input";
 import { FaGoogle } from "react-icons/fa6";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
-import { jwtDecode } from "jwt-decode";
-import { loginSchool, verifySchool } from "../../api/schoolAPIs";
+
 import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginTeacher } from "../../../pagesForTeachers/api/teachersAPI";
@@ -31,7 +30,6 @@ const SwitchLogin = () => {
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
-          console.log(res);
 
           {
             !loading && navigate("/");

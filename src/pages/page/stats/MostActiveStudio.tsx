@@ -1,7 +1,6 @@
 import { FC } from "react";
 import pix from "../../../assets/pix.jpg";
 import { useSchoolData, useSchoolStudents } from "../../hook/useSchoolAuth";
-import { getClassSubjects } from "../../api/schoolAPIs";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
@@ -15,7 +14,6 @@ const GetClassTeacher: FC<iProps> = ({ props }) => {
 };
 
 const MostActiveScreen = () => {
-  const enter = Array.from({ length: 4 });
   const { data } = useSchoolData();
   const { students } = useSchoolStudents(data?._id);
 

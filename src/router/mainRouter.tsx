@@ -15,8 +15,6 @@ import ABetter from "../LandingPage1/Homescreen/ABetter";
 import Contact from "../LandingPage1/Contact";
 import About from "../LandingPage1/About";
 import StartUsing from "../LandingPage1/Homescreen/StartUsing";
-import HomeScreen from "../LandingPage1/Homescreen/HomeScreen";
-import HeroScreen from "../mainPage/HeroScreen";
 import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
 
 export const mainRouter = createBrowserRouter([

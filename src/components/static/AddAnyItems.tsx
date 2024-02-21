@@ -1,6 +1,4 @@
-import { FC, useState } from "react";
-import { useDispatch } from "react-redux";
-import { displaySubject } from "../../global/reduxState";
+import { FC } from "react";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
@@ -9,7 +7,6 @@ import { Toaster } from "react-hot-toast";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
 
 interface iProps {
   props?: any;

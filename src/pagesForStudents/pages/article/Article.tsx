@@ -3,8 +3,6 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import articleDummy from "../../../assets/dummy-article-img.jpg";
 import { Link, useParams } from "react-router-dom";
 import ViewArticleScreen from "./ViewArticleScreen";
-import { useEffect, useState } from "react";
-import { getSchoolArticle } from "../../api/studentAPI";
 import { useSchoolArticle, useStudentInfo } from "../../hooks/useStudentHook";
 import moment from "moment";
 

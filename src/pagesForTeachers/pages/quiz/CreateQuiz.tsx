@@ -103,8 +103,8 @@ const CreateQuiz = () => {
                   className="text-white bg-blue-950 uppercase text-[12px]px-8 py-4"
                   onClick={() => {
                     setToggle(true);
-                    let data = { duration, instruction, mark };
-                    dispatch(addTestInstruction(data));
+                    let data: any = { duration, instruction, mark };
+                    dispatch(addTestInstruction(data!));
                   }}
                 />
               ) : (
@@ -113,7 +113,7 @@ const CreateQuiz = () => {
                   className="text-white bg-red-500 uppercase text-[12px]px-8 py-4"
                   onClick={() => {
                     setToggle(true);
-                    let data = { duration, instruction, mark };
+                    let data: any = { duration, instruction, mark };
                     dispatch(addTestInstruction(data!));
                   }}
                 />

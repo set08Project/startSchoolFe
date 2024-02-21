@@ -1,10 +1,8 @@
 import { MdPlaylistAddCheck } from "react-icons/md";
 
-import picc from "../assets/pix.jpg";
 import Personal from "./Chart/Personal";
 import Calendar from "./Chart/Calendar";
 import StudentPerformance from "./Chart/PerformingStudent";
-import { Link } from "react-router-dom";
 import ClassModelAssignment from "./pages/quiz/AddAssignment";
 
 const TeacherDashboard = () => {

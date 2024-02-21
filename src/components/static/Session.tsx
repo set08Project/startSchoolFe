@@ -1,11 +1,10 @@
 import { useDispatch } from "react-redux";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { displaySession, displaySessioned } from "../../global/reduxState";
-import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import { FaCheckDouble } from "react-icons/fa6";
 
 const Session: FC = () => {
-  const { data } = useSchoolData();
+  // const { data } = useSchoolData();
   const dispatch = useDispatch();
 
   const handleToggleMenuFalse = () => {
@@ -20,22 +19,22 @@ const Session: FC = () => {
     }
   };
 
-  const [state, setState] = useState<string>("");
+  // const [state, setState] = useState<string>("");
 
-  const changeImage = (e: any) => {
-    const file = e.target.files[0];
+  // const changeImage = (e: any) => {
+  //   const file = e.target.files[0];
 
-    const formData: any = new FormData();
-    formData.append("avatar", file);
-    setState(file);
-    console.log(state);
+  //   const formData: any = new FormData();
+  //   formData.append("avatar", file);
+  //   setState(file);
+  //   console.log(state);
 
-    if (state) {
-      const timer = setTimeout(() => {
-        clearTimeout(timer);
-      }, 1000);
-    }
-  };
+  //   if (state) {
+  //     const timer = setTimeout(() => {
+  //       clearTimeout(timer);
+  //     }, 1000);
+  //   }
+  // };
 
   const arrayData = Array.from({ length: 0 });
 
@@ -47,7 +46,7 @@ const Session: FC = () => {
           <div>
             {arrayData?.map((props: any, i: number) => (
               <div
-                key={i}
+                key={`${i + props}`}
                 className="w-full
           "
                 // onClick={handleToggleMenuFalse}

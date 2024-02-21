@@ -1,30 +1,11 @@
 import pix from "../../../assets/logo.png";
 // import LittleHeader from "../../../components/layout/LittleHeader";
-import { useParams } from "react-router-dom";
 // import { useUser } from "../../../hooks/useUserID";
 import { FaCheckDouble } from "react-icons/fa6";
-import GetSingleStudioData from "./ViewingStudioScreen";
 import LittleHeader from "../../../../components/layout/LittleHeader";
 
 const ViewClientDetail = () => {
-  const { id } = useParams();
-  // const { user } = useUser(id!);
-
-  // const myObject: any = {
-  //   key1: user?.email,
-  //   key2: user?.lastName,
-  //   key3: user?.firstName,
-  //   key4: user?.avatar,
-  //   key5: user?.phoneNumber,
-  // };
-
   let counter = 0;
-
-  // for (const key in myObject) {
-  //   if (myObject[key]) {
-  //     counter++;
-  //   }
-  // }
 
   return (
     <div

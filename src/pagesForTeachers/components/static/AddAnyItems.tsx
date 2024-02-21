@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import { displaySubject } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";

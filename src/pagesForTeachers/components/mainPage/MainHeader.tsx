@@ -1,6 +1,6 @@
 import { FC } from "react";
-import Button from "../components/reUse/Button";
 import { Link } from "react-router-dom";
+import Button from "../reUse/Button";
 
 interface iProps {
   props?: any;

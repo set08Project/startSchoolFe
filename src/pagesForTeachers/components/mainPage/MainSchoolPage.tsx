@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSchoolDataByName } from "../pages/hook/useSchoolAuth";
+
 import { useParams } from "react-router-dom";
 import SchoolPage from "./SchoolPage";
+import { useSchoolDataByName } from "../../../pages/hook/useSchoolAuth";
 
 const MainSchoolPage = () => {
   const { schoolName } = useParams();

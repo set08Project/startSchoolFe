@@ -1,8 +1,8 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
-import { useStudentInfo } from "../../hooks/useStudentHook";
-import { createStudentArticle } from "../../api/studentAPI";
 import { useNavigate } from "react-router-dom";
+import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import { createStudentArticle } from "../../../pagesForStudents/api/studentAPI";
 
 const CreateArticle = () => {
   const [area, setArea] = useState<string>("");

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import pix from "../../../assets/pix.jpg";
-import { displayDelay, displayStudent } from "../../../global/reduxState";
-import { useDispatch } from "react-redux";
+
 import { FC } from "react";
 import { FaCheckDouble } from "react-icons/fa6";
 import Button from "../../../components/reUse/Button";

@@ -7,20 +7,6 @@ import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 
-interface TestDetails {
-  question: string;
-  answer: string;
-  options: { [key: string]: string }[];
-}
-
-interface iTestProps {
-  id: number;
-  subjectTest: string;
-  time: string;
-  testDetails: TestDetails[];
-  gradeScore: number;
-}
-
 const QuizTestScreen = () => {
   const navigate = useNavigate();
   const { quizID } = useParams();
@@ -132,7 +118,6 @@ const QuizTestScreen = () => {
                         Choose your Options carefully
                       </p>
                       {props.options.map((props: any, i: number) => {
-                        const choiceValue = Object.values(props)[0];
                         const choice: any = Object.keys(props)[0];
 
                         let val: string = "";
@@ -187,7 +172,6 @@ const QuizTestScreen = () => {
                         Choose your Options carefully
                       </p>
                       {props.options.map((props: any, i: number) => {
-                        const choiceValue = Object.values(props)[0];
                         const choice: any = Object.keys(props)[0];
 
                         let val: string = "";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { useSchoolCookie } from "../../hook/useSchoolAuth";
+import { useSchoolCookie, useSchoolData } from "../../hook/useSchoolAuth";
 import Button from "../../../components/reUse/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,7 +23,7 @@ const SecondStep = () => {
 
   const schoolInfo = useSelector((state: any) => state.schoolInfo);
 
-  const { dataID } = useSchoolCookie();
+  const { data } = useSchoolData();
 
   let readValue = dataInfo?.filter((el: any) => el.state === true);
 
@@ -69,13 +69,15 @@ const SecondStep = () => {
               name="Submit"
               className="bg-blue-950 w-[80%] py-4 "
               onClick={() => {
-                changeSchoolName(dataID, { schoolName: schoolInfo.schoolName });
-                changeSchoolLocation(dataID, {
+                changeSchoolName(data?._id, {
+                  schoolName: schoolInfo.schoolName,
+                });
+                changeSchoolLocation(data?._id, {
                   address: schoolInfo.schoolLocation,
                 });
 
-                changeSchoolTags(dataID, { schoolTags: readValue });
-                changeSchoolStarted(dataID).then(() => {
+                changeSchoolTags(data?._id, { schoolTags: readValue });
+                changeSchoolStarted(data?._id).then(() => {
                   window.location.reload();
                 });
 

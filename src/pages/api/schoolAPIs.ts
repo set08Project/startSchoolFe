@@ -1,6 +1,17 @@
 import axios from "axios";
 
-const URL: string = "http://localhost:2244/api";
+// const URL: string = "http://localhost:2244/api";
+const URL: string = "https://startschoolbe.onrender.com";
+
+export const getStarted = async () => {
+  try {
+    return await axios.get(`${URL}`).then((res: any) => {
+      return res?.data;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const registerSchool = async (data: any) => {
   try {

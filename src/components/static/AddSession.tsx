@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";

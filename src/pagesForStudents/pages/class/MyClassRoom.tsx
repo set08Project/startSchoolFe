@@ -1,5 +1,5 @@
 document.title = "class room Detail's Page";
-import { MdCheck, MdClose, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { FC, useEffect, useState } from "react";
 
 import {

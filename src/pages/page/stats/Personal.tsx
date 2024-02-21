@@ -1,10 +1,9 @@
 import { FC } from "react";
 
 // import _ from "lodash";
-import moment from "moment";
-import { FaCheckDouble } from "react-icons/fa6";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import MaleFemaleTeacherScreen from "./MaleFemaleTeacherScreen";
+import { FaCheckDouble } from "react-icons/fa6";
 
 const Personal: FC = () => {
   const { data } = useSchoolData();
@@ -13,7 +12,7 @@ const Personal: FC = () => {
   //   new Date(item?.createdAt).getMonth()
   // );
 
-  const sumByMonth: any = {};
+  // const sumByMonth: any = {};
 
   // _.forEach(costMonth, (data, month) => {
   //   sumByMonth[month!] = _.sumBy(data, "cost");

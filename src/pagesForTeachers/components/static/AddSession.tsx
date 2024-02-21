@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { displaySession } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
+import { displaySession } from "../../../global/reduxState";
 
 const AddSession = () => {
   const dispatch = useDispatch();

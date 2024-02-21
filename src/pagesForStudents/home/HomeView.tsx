@@ -1,4 +1,4 @@
-import ScreenHome from "./stat/ScreenHome";
+import ScreenHome from "../../pages/home/stat/ScreenHome";
 
 const HomeView = () => {
   return (

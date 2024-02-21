@@ -1,7 +1,7 @@
 document.title = "Report and Complains";
 import { FaCheckDouble } from "react-icons/fa6";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { MdVisibilityOff } from "react-icons/md";
 import Tooltip from "../../../components/static/Tooltip";
 
 const ViewCommentsAndReportScreen = () => {
@@ -14,8 +14,8 @@ const ViewCommentsAndReportScreen = () => {
 
       {data?.length > 1 ? (
         <div className=" grid grid-cols-1   lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-3 gap-2 first-line:break-words">
-          {data?.map((props: any, i: number) => (
-            <div key={i} className="border px-1 rounded-md min-h-[320px]  ">
+          {data?.map((props: any) => (
+            <div key={props} className="border px-1 rounded-md min-h-[320px]  ">
               <p className="border-b mb-1 rounded-md w-full py-1 h-[75%]">
                 Content
               </p>

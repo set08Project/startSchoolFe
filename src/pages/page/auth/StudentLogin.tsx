@@ -29,7 +29,6 @@ const StudentLogin = () => {
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
-          console.log(res);
 
           {
             !loading && navigate("/");

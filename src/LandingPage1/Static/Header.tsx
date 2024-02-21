@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { FaAngleDown, FaTimes } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import logo from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import BtnProps from "../Props/BtnProps";
 
 const Header = () => {
   const [drop, setDrop] = useState<boolean>(false);
-  const [toggle2, setToggle2] = useState<boolean>(false);
-
-  const toggleFunction2 = () => {
-    setToggle2(!toggle2);
-  };
 
   return (
     <div>
@@ -114,12 +109,6 @@ const Header = () => {
                     </div>
                   </div>
                 </nav>
-              </div>
-            ) : null}
-
-            {toggle2 ? (
-              <div className="w-[300px] h-[200px] hidden bg-slate-100 border  rounded-lg justify-center items-center absolute top-[65px] right-[380px] md:flex">
-                <div className=""></div>
               </div>
             ) : null}
           </div>

@@ -6,10 +6,7 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
-import {
-  useAttendance,
-  useClassStudent,
-} from "../../../pagesForTeachers/hooks/useTeacher";
+
 import {
   useSchoolData,
   useSchoolStudents,
@@ -24,7 +21,7 @@ interface iProps {
   data?: any;
 }
 
-const Remark: FC<iProps> = ({ id, data, props }) => {
+const Remark: FC<iProps> = ({ id, data }) => {
   const { mainStudentAttendance } = useStudentAttendance(id!);
 
   let name2 = data?.studentFirstName;

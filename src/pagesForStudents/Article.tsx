@@ -1,6 +1,5 @@
-import React from "react";
+
 import LittleHeader from "../components/layout/LittleHeader";
-import { MdAutoAwesome } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { useSchoolArticle, useStudentInfo } from "./hooks/useStudentHook";
 import ViewArticleScreen from "./pages/article/ViewArticleScreen";
