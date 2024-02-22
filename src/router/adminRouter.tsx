@@ -22,6 +22,9 @@ import ClassDetailScreen from "../pages/page/class/ClassDetailScreen";
 import ViewSubjects from "../pages/page/subject/ViewSubject";
 import AdminLessonNote from "../pages/page/less/LessonNote";
 import ViewTeacherNoteByAdmin from "../pages/page/less/ViewTeacherNote";
+import ViewSchoolSettings from "../pages/page/settings/ViewSchoolSettings";
+import SchoolTheme from "../pages/page/settings/SchoolTheme";
+import GallerySettings from "../pages/page/settings/GallerySettings";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -127,17 +130,29 @@ export const adminRouter = createBrowserRouter([
                 path: "info",
                 element: <PersonalInfoScreen />,
               },
-              // {
-              //   index: true,
-              //   path: "my-main-info",
-              //   element: <ProfressionInfoScreen />,
-
-              // {
-              //   index: true,
-              //   path: "choose-hospital",
-              //   element: <HospitalChice />,
-              // },
             ],
+          },
+
+          {
+            path: "school-info",
+            element: <ViewSchoolSettings />,
+            children: [
+              {
+                index: true,
+                path: "view-school-settings",
+                element: <ViewSchoolSettings />,
+              },
+            ],
+          },
+          {
+            index: true,
+            path: "school-info/view-settings/theme-settings",
+            element: <SchoolTheme />,
+          },
+          {
+            index: true,
+            path: "school-info/view-settings/gallery-settings",
+            element: <GallerySettings />,
           },
         ],
       },

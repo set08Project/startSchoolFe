@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/Next Logo 3w.png";
 import { Link, NavLink } from "react-router-dom";
 import BtnProps from "../Props/BtnProps";
 
@@ -13,12 +13,8 @@ const Header = () => {
       <div className="h-[70px] w-full flex justify-center items-center shadow-md fixed top-0 z-10 bg-blue-950">
         <div className="h-[90%] w-[99%] flex justify-between items-center">
           <div className="w-full flex  justify-between items-center ">
-            <div className="">
-              <img
-                src={logo}
-                alt=""
-                className="w-[150px] h-[68px] object-contain"
-              />
+            <div className=" ml-3">
+              <img src={logo} alt="" className="h-[40px] object-contain" />
             </div>
             <div className="hidden items-center text-[18px] gap-[30px] text-white md:flex">
               <NavLink to="/" className=" cursor-pointer">

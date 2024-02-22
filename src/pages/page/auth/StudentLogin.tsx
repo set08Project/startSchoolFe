@@ -8,6 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginStudent } from "../../../pagesForStudents/api/studentAPI";
+import logo from "../../../assets/Next Logo 3.png";
 
 const StudentLogin = () => {
   const dispatch = useDispatch();
@@ -47,15 +48,7 @@ const StudentLogin = () => {
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
-        <div
-          className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px] cursor-pointer"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          SCH
-        </div>
-
+        <img className="mb-5  w-28 h-28  object-contain" src={logo} />{" "}
         <div className="text-[26px] font-bold mb-3 text-blue-900">
           Welcome Back
         </div>

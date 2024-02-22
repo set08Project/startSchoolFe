@@ -5,6 +5,8 @@ import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { registerSchool } from "../../api/schoolAPIs";
+import logo from "../../../assets/Next Logo 3.png";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,11 +19,13 @@ const Register = () => {
     setLoading(true);
     if (email !== "") {
       registerSchool(email).then((res) => {
+        console.log(res);
         if (res.status === 201) {
           setLoading(false);
           navigate("/auth/register-message");
         } else {
           setLoading(false);
+          toast.error(`${res?.response?.data?.message}`);
         }
       });
     }
@@ -29,10 +33,10 @@ const Register = () => {
 
   return (
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
+      <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
-        <div className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px]">
-          SCH
-        </div>
+        <img className="mb-5 w-28 h-28  object-contain" src={logo} />
+
         <div className="text-[26px] font-bold mb-3">Create an Account</div>
         <div className="text-[14px] -mt-4 ">
           sign up now and get free account instant.

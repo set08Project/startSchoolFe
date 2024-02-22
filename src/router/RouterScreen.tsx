@@ -17,27 +17,30 @@ import {
 
 const RouterScreen = () => {
   const userStatus = useSelector((state: any) => state.userStatus);
+  const user = useSelector((state: any) => state.user);
 
   const [state, setState] = useState<any>({} || "" || 0);
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
+  console.log("show me: ", user);
   useEffect(() => {
     let timer = setTimeout(() => {
       if (userStatus === "school-admin") {
-        getSchoolCookie().then((res: any) => {
-          return readSchool(res.data).then((resp) => {
-            if (resp.status === 200) {
-              return setState(resp.data);
-            } else if (resp?.response?.status === 404) {
-              return setState(resp?.response?.status);
-            }
-          });
+        // getSchoolCookie().then((res: any) => {
+        return readSchool(user?.id).then((resp) => {
+          console.log("okay h,,mmmmmm", resp);
+          if (resp.status === 200) {
+            return setState(resp?.data);
+          } else if (resp?.response?.status === 404) {
+            return setState(resp?.response?.status);
+          }
+          // });
         });
       } else if (userStatus === "school-teacher") {
         readTeacherCookie().then((res: any) => {
           return viewTeacherDetail(res.data).then((resp: any) => {
             if (resp.status === 200) {
-              return setState(resp.data);
+              return setState(resp?.data);
             } else if (resp?.response?.status === 404) {
               return setState(resp?.response?.status);
             }
@@ -48,7 +51,7 @@ const RouterScreen = () => {
           console.log(res);
           return viewStduentDetail(res.data).then((resp: any) => {
             if (resp.status === 200) {
-              return setState(resp.data);
+              return setState(resp?.data);
             } else if (resp?.response?.status === 404) {
               return setState(resp?.response?.status);
             }
@@ -66,6 +69,8 @@ const RouterScreen = () => {
       clearTimeout(timing);
     }, 200);
   }, []);
+
+  console.log("reading state: ", state);
 
   return (
     <div>
