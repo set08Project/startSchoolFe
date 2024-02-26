@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
-import logo from "../../assets/Next Logo 3w.png";
+import logo from "../../assets/mainLogoW.png";
 import { Link, NavLink } from "react-router-dom";
 import BtnProps from "../Props/BtnProps";
 

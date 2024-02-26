@@ -7,11 +7,18 @@ import WorkWithUs from "./WorkWithUs";
 // import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import HeroScreen from "../Hero";
 
 const LandingScreen = () => {
   return (
     <div>
-      <WorkWithUs />
+      {/* <WorkWithUs />
+      <ABetter />
+      <TrustedBy />
+      <Everything />
+      <StartUsing /> */}
+
+      {/* <HeroScreen /> */}
       <ABetter />
       <TrustedBy />
       <Everything />
@@ -21,3 +28,21 @@ const LandingScreen = () => {
 };
 
 export default LandingScreen;
+
+{
+  /* <Hero />
+      <ABetter/>
+      <TrustedBy/>
+      <Everything/>
+      <StartUsing/> 
+    
+    */
+}
+{
+  /* <WorkWithUs/> */
+}
+{
+  /* <LandingSections /> */
+}
+
+//

@@ -32,16 +32,16 @@ const TeacherDashboard = () => {
           <div>
             <div>
               <div className=" flex gap-2  mb-10">
-                {/* <Link to={`/create-quiz/${subjectID}`}> */}
+                {/* <Link to={`/create-quiz/${subjectID}`}>
                 <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-2 rounded-sm text-[12px] text-center">
                   + Create Quiz
                 </p>
-                {/* </Link> */}
-                {/* <Link to={`/create-quiz/${subjectID}`}> */}
+                </Link>
+                <Link to={`/create-quiz/${subjectID}`}>
                 <p className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm text-center">
                   + Create Test
                 </p>
-                {/* </Link> */}
+                </Link> */}
 
                 <div className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
                   <ClassModelAssignment />

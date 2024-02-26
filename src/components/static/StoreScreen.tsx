@@ -5,38 +5,52 @@ import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import Button from "../reUse/Button";
 import Input from "../reUse/Input";
 import { createStore } from "../../pages/api/schoolAPIs";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const StoreScreen = () => {
   const { data } = useSchoolData();
   const [subject, setSubject] = useState<string>("");
   const [day, setDay] = useState<string>("");
-  const [period, setPeriod] = useState<string>("");
+  const [period, setPeriod] = useState<number>(0);
 
   const [image, setImage] = useState("");
+  const [pix, setPix] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const handleUpload = (e: any) => {
     const file = e.target.files[0];
+    const save = URL.createObjectURL(file);
+    setPix(save);
     setImage(file);
   };
 
   const onHandleAdd = () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("title", subject);
-    formData.append("description", period);
-    formData.append("cost", `${parseInt(day)}`);
+    formData.append("cost", `${period}`);
+
+    formData.append("description", `${day}`);
     formData.append("avatar", image);
 
-    createStore(data?._id, formData).then((res: any) => {
-      console.log(res);
-      if (res.status === 201) {
-        toast.success("Product Uploaded");
-      } else {
-        toast.error("Product Error");
-      }
-    });
+    createStore(data?._id, formData)
+      .then((res: any) => {
+        if (res.status === 201) {
+          setLoading(false);
+          toast.success("Product Uploaded");
+        } else {
+          setLoading(false);
+          toast.error(`${res?.response?.data?.message}`);
+        }
+      })
+      .then(() => {
+        setPeriod(0);
+        setPix("");
+        setDay("");
+        setSubject("");
+      });
   };
-
-  console.log(data?._id);
 
   return (
     <div>
@@ -103,20 +117,28 @@ const StoreScreen = () => {
                 )}
               </div>
             </div>
-            <div className="mt-10 flex w-full justify-start">
-              <label
-                className=" text-white bg-blue-950 border px-6 py-3 cursor-pointer rounded-md  mt-4 "
-                htmlFor="pix"
-              >
-                Upload Image
-              </label>
+            <div>
+              <div className="mt-10 flex gap-4 w-full justify-start">
+                <label
+                  className=" text-white bg-blue-950 border px-6 py-3 cursor-pointer rounded-md  mt-4 "
+                  htmlFor="pix"
+                >
+                  Upload Image
+                </label>
+                {pix && (
+                  <img
+                    className="w-16 h-10 border rounded-md mt-4 object-cover"
+                    src={pix}
+                  />
+                )}
 
-              <input
-                id="pix"
-                className="hidden"
-                type="file"
-                onChange={handleUpload}
-              />
+                <input
+                  id="pix"
+                  className="hidden"
+                  type="file"
+                  onChange={handleUpload}
+                />
+              </div>
             </div>
             <div className="mt-4 w-full gap-2 flex flex-col items-center text-left">
               <div className="w-full">
@@ -140,6 +162,7 @@ const StoreScreen = () => {
                     </label>
                     <Input
                       value={period}
+                      type="number"
                       placeholder="Product Cost"
                       className="w-full mt-2 ml-0"
                       onChange={(e: any) => {
@@ -167,13 +190,20 @@ const StoreScreen = () => {
             </div>
 
             <div className="w-full flex justify-end transition-all duration-300">
-              {subject !== "" && period !== "" && day !== "" ? (
+              {subject !== "" && period !== 0 && day !== "" ? (
                 <label
                   //   htmlFor="assign_subject_timetable"
-                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
+                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer transition-all duration-300 "
                   onClick={onHandleAdd}
                 >
-                  Proceed
+                  {loading ? (
+                    <div>
+                      <ClipLoader size={10} color="white" />
+                      <span className="ml-2">Loading....</span>
+                    </div>
+                  ) : (
+                    "Proceed"
+                  )}
                 </label>
               ) : (
                 <Button

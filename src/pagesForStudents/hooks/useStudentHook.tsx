@@ -11,14 +11,16 @@ import {
   viewStudentAttendance,
 } from "../api/studentAPI";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export const useStudentCookie = () => {
+  const user = useSelector((state: any) => state.user);
   const { data: dataID } = useSWR(`api/read-student-cookie/`, () => {
     return readStudentCookie().then((res: any) => {
       return res.data;
     });
   });
-  return { dataID };
+  return { dataID: user?.id };
 };
 
 export const useStudentInfo = () => {

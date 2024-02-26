@@ -11,7 +11,7 @@ const AdminLessonNote = () => {
 
   return (
     <div>
-      <LittleHeader name="Teacher's Lession Notes" />
+      <LittleHeader name="Teacher's Lesson Notes" />
       <div className="min-h-[82vh] text-blue-950">
         <div>
           <div className="flex float-end"></div>

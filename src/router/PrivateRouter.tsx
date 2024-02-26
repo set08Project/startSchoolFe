@@ -19,11 +19,7 @@ const PrivateRouter: FC<PropsWithChildren> = ({ children }) => {
       });
     });
   }, []);
-  return (
-    <div>
-      {stateToken ? <div>{children}</div> : <Navigate to="/auth/login" />}
-    </div>
-  );
+  return <div>{stateToken ? <div>{children}</div> : <Navigate to="/" />}</div>;
 };
 
 export default PrivateRouter;

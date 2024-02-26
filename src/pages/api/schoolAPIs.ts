@@ -1,14 +1,26 @@
 import axios from "axios";
 
 // const URL: string = "http://localhost:2244/api";
+// const URL2: string = "http://localhost:2244";
 const URL: string = "https://startschoolbe.onrender.com/api";
+const URL2: string = "https://startschoolbe.onrender.com";
 
 export const getStarted = async () => {
   try {
-    return await axios.get(`${URL}`).then((res: any) => {
+    return await axios.get(`${URL2}`).then((res: any) => {
       return res?.data;
     });
   } catch (error: any) {
+    return error;
+  }
+};
+
+export const openServerAPI = async () => {
+  try {
+    return await axios.get(`${URL2}`).then((res: any) => {
+      return res?.message;
+    });
+  } catch (error) {
     return error;
   }
 };
@@ -28,7 +40,11 @@ export const registerSchool = async (data: any) => {
 export const loginSchool = async (data: {}) => {
   try {
     return await axios
-      .post(`${URL}/login-school`, data, { withCredentials: true })
+      .post(
+        `${URL}/login-school`,
+        data
+        // { withCredentials: true }
+      )
       .then((res: any) => {
         return res?.data;
       });
@@ -40,7 +56,10 @@ export const loginSchool = async (data: {}) => {
 export const getSchoolCookie = async () => {
   try {
     return await axios
-      .get(`${URL}/read-school-cookie`, { withCredentials: true })
+      .get(
+        `${URL}/read-school-cookie`
+        // { withCredentials: true }
+      )
       .then((res: any) => {
         return res?.data;
       });
@@ -80,16 +99,6 @@ export const logout = async () => {
       .then((res: any) => {
         return res?.data;
       });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const openServerAPI = async () => {
-  try {
-    return await axios.get(`http://localhost:2244/`).then((res: any) => {
-      return res?.message;
-    });
   } catch (error) {
     return error;
   }
@@ -506,6 +515,48 @@ export const deleteArticle = async (
       .delete(
         `${URL}/delete-school-article/${schoolID}/${studentID}/${articleID}`
       )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createGallaryRestrict = async (schoolID: string, data: {}) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-restrict-gallary/${schoolID}/`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createGallary = async (schoolID: string, data: {}) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-gallary/${schoolID}/`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewGallary = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-gallary/${schoolID}/`)
       .then((res: any) => {
         return res?.data;
       });

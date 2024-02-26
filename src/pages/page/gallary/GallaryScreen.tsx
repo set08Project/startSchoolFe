@@ -5,7 +5,7 @@ import { addToCart, displayCart } from "../../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
 import { useSchoolData, useStore } from "../../hook/useSchoolAuth";
 
-const StoreView = () => {
+const GallaryScreen = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
   const cartToggle = useSelector((state: any) => state.cartToggle);
@@ -52,6 +52,7 @@ const StoreView = () => {
                     alt="Shoes"
                   />
                 </figure>
+                started
                 <div className="card-body pb-4 px-3">
                   <h2 className="card-title">{props?.title}</h2>
 
@@ -91,4 +92,4 @@ const StoreView = () => {
   );
 };
 
-export default StoreView;
+export default GallaryScreen;

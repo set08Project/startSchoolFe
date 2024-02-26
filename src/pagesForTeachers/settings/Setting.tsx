@@ -27,7 +27,7 @@ const SettingScreen: FC = () => {
       icon: <HiMiniBuildingOffice2 size={45} />,
       title: "School's Info",
       detail: "Provide studio details and how we can reach you.",
-      url: "/my-personal-info/choose-hospital",
+      url: "/my-personal-info/theme-settings",
       size: 35,
     },
   ];

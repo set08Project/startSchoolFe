@@ -32,16 +32,28 @@ const SchoolTheme = () => {
   }, []);
 
   const handleViewMode = () => {
-    setViewMode(true);
+    if (!document.startViewTransition) {
+      setViewMode(true);
+    } else {
+      document.startViewTransition(() => {
+        setViewMode(true);
+      });
+    }
   };
 
   const handleEditMode = () => {
-    setViewMode(false);
+    if (!document.startViewTransition) {
+      setViewMode(false);
+    } else {
+      document.startViewTransition(() => {
+        setViewMode(false);
+      });
+    }
   };
 
   const ViewHeropage = () => (
     <div
-      className={`w-full border border-blue-950 p-[20px]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${
+      className={`w-full border rounded-md border-blue-950 p-[20px]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${
         viewMode ? "opacity-100" : "opacity-0"
       } ${startViewTransition ? "transition-opacity duration-500" : ""}`}
     >
@@ -245,7 +257,7 @@ const SchoolTheme = () => {
 
     return (
       <div
-        className={`w-full min-h-[300px] p-[20px] rounded-md border border-blue-950  grid grid-cols-1  absolute top-[170px] ${
+        className={`w-full min-h-[300px] p-[20px] rounded-md border border-blue-950 grid grid-cols-1  absolute top-[170px] ${
           !viewMode ? "opacity-100" : "opacity-0"
         } ${startViewTransition ? "transition-opacity duration-500" : ""}`}
       >
@@ -263,8 +275,15 @@ const SchoolTheme = () => {
                 <div
                   className="flex gap-1 text-blue-950 items-center cursor-pointer"
                   onClick={() => {
-                    setHeaderToggle(!headerToggle);
-                    setHeroToggle(false);
+                    if (!document.startViewTransition) {
+                      setHeaderToggle(!headerToggle);
+                      setHeroToggle(false);
+                    } else {
+                      document.startViewTransition(() => {
+                        setHeaderToggle(!headerToggle);
+                        setHeroToggle(false);
+                      });
+                    }
                   }}
                 >
                   <div>Header Section</div>
@@ -309,8 +328,15 @@ const SchoolTheme = () => {
                 <div
                   className="flex gap-1 text-blue-950  items-center cursor-pointer"
                   onClick={() => {
-                    setHeroToggle(!heroToggle);
-                    setHeaderToggle(false);
+                    if (!document.startViewTransition) {
+                      setHeroToggle(!heroToggle);
+                      setHeaderToggle(false);
+                    } else {
+                      document.startViewTransition(() => {
+                        setHeroToggle(!heroToggle);
+                        setHeaderToggle(false);
+                      });
+                    }
                   }}
                 >
                   <div>Hero Section</div>
@@ -356,9 +382,17 @@ const SchoolTheme = () => {
                 <div
                   className="flex gap-1 text-blue-950  items-center cursor-pointer"
                   onClick={() => {
-                    setWelcomeToggle(!welcomeToggle);
-                    setHeaderToggle(false);
-                    setHeroToggle(false);
+                    if (!document.startViewTransition) {
+                      setWelcomeToggle(!welcomeToggle);
+                      setHeaderToggle(false);
+                      setHeroToggle(false);
+                    } else {
+                      document.startViewTransition(() => {
+                        setWelcomeToggle(!welcomeToggle);
+                        setHeaderToggle(false);
+                        setHeroToggle(false);
+                      });
+                    }
                   }}
                 >
                   <div>Welcome Section</div>
@@ -429,10 +463,19 @@ const SchoolTheme = () => {
                 <div
                   className="flex gap-1 text-blue-950 items-center cursor-pointer"
                   onClick={() => {
-                    setTeacherToggle(!teacherToggle);
-                    setHeroToggle(false);
-                    setWelcomeToggle(false);
-                    setHeaderToggle(false);
+                    if (!document.startViewTransition) {
+                      setTeacherToggle(!teacherToggle);
+                      setHeroToggle(false);
+                      setWelcomeToggle(false);
+                      setHeaderToggle(false);
+                    } else {
+                      document.startViewTransition(() => {
+                        setTeacherToggle(!teacherToggle);
+                        setHeroToggle(false);
+                        setWelcomeToggle(false);
+                        setHeaderToggle(false);
+                      });
+                    }
                   }}
                 >
                   <div>Teacher Section</div>
@@ -477,11 +520,21 @@ const SchoolTheme = () => {
                 <div
                   className="flex gap-1 text-blue-950 items-center cursor-pointer"
                   onClick={() => {
-                    setContactToggle(!contactToggle);
-                    setHeroToggle(false);
-                    setWelcomeToggle(false);
-                    setHeaderToggle(false);
-                    setTeacherToggle(false);
+                    if (!document.startViewTransition) {
+                      setContactToggle(!contactToggle);
+                      setHeroToggle(false);
+                      setWelcomeToggle(false);
+                      setHeaderToggle(false);
+                      setTeacherToggle(false);
+                    } else {
+                      document.startViewTransition(() => {
+                        setContactToggle(!contactToggle);
+                        setHeroToggle(false);
+                        setWelcomeToggle(false);
+                        setHeaderToggle(false);
+                        setTeacherToggle(false);
+                      });
+                    }
                   }}
                 >
                   <div>Contact Section</div>
@@ -521,9 +574,9 @@ const SchoolTheme = () => {
       </div>
     );
   };
-
+  //  className="w-full rounded-lg border grid col-span-3 min-h-[100px] text-blue-950 "
   return (
-    <div className="w-full bg-white relative ">
+    <div className="w-[130%] px-4 bg-white relative rounded-lg border grid col-span-3 min-h-[100px] text-blue-950 ">
       <div className="mb-5 text-blue-950 text-[25px]">Theme</div>
       <div className="mb-5 text-blue-950">
         Manage Your Themes or Select a new one
@@ -532,24 +585,24 @@ const SchoolTheme = () => {
         <div
           className={`h-full ml-[10px] pb-1  cursor-pointer text-blue-950 flex items-center gap-2 ${
             viewMode
-              ? "border-b-[2px] text-black border-blue-950 transition-all duration-300"
+              ? "border-b text-black border-blue-950 transition-all duration-300"
               : ""
           }`}
           onClick={handleViewMode}
         >
           <GrView />
-          View Heropage
+          View Demo Pages
         </div>
         <div
           className={`h-full cursor-pointer pb-1 text-blue-950 flex items-center gap-2 ${
             viewMode
               ? ""
-              : "border-b-[2px] border-blue-950 transition-all duration-300"
+              : "border-b border-blue-950 transition-all duration-300"
           }`}
           onClick={handleEditMode}
         >
           <FiEdit />
-          Edit Heropage
+          Edit Demo Pages
         </div>
       </div>
 

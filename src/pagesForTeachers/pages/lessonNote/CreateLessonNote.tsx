@@ -8,6 +8,8 @@ import InputWithLabel from "./InputWithLabel";
 import { createTeacherLessonNote } from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import TextArea from "./TextArea";
+import { useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 document.title = "Lesson Note";
 
@@ -36,8 +38,10 @@ const modules = {
 };
 
 const CreateLesson = () => {
+  const navigate = useNavigate();
   const { teacherInfo } = useTeacherInfo();
 
+  const [loading, setLoading]: any = useState(false);
   const [value, setValue]: any = useState("");
   const [areaOne, setAreaOne]: any = useState("");
   const [areaTwo, setAreaTwo]: any = useState("");
@@ -45,6 +49,7 @@ const CreateLesson = () => {
   const [iValue, setiValue]: any = useState([""]);
 
   const handleSubmit = () => {
+    setLoading(true);
     const convertedData = lodash.reduce(
       iValue,
       (result: any, { label, value }) => {
@@ -82,7 +87,12 @@ const CreateLesson = () => {
       teacherInfo?._id,
       gatheredData
     ).then((res) => {
-      console.log(res);
+      if (res.status === 201) {
+        setLoading(false);
+        navigate("/lesson-note");
+      } else {
+        setLoading(false);
+      }
     });
   };
 
@@ -163,7 +173,14 @@ const CreateLesson = () => {
         onClick={handleSubmit}
         className="btn text-white bg-blue-950 mt-3 hover:bg-blue-900 border-none"
       >
-        Submit
+        {loading ? (
+          <div>
+            <ClipLoader size={10} color="white" />
+            <span>Processing...</span>
+          </div>
+        ) : (
+          "Submit"
+        )}
       </button>
     </div>
   );

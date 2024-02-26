@@ -16,14 +16,16 @@ import {
   getSchoolAnncoement,
   getSchoolEvent,
 } from "../../pages/api/schoolAPIs";
+import { useSelector } from "react-redux";
 
 export const useTeacherCookie = () => {
+  const user = useSelector((state: any) => state.user);
   const { data: dataID } = useSWR(`api/read-teacher-cookie/`, () => {
     return readTeacherCookie().then((res: any) => {
       return res.data;
     });
   });
-  return { dataID };
+  return { dataID: user?.id };
 };
 
 export const useTeacherDetail = (teacherID: string) => {

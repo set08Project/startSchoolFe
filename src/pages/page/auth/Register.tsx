@@ -5,7 +5,7 @@ import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { registerSchool } from "../../api/schoolAPIs";
-import logo from "../../../assets/Next Logo 3.png";
+import logo from "../../../assets/mainLogo.png";
 import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {

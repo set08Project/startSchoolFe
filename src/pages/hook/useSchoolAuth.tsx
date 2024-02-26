@@ -16,12 +16,14 @@ import {
   studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
+  viewGallary,
   viewSchoolByName,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewStore,
 } from "../api/schoolAPIs";
 import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
+import { useSelector } from "react-redux";
 
 export const useSchoolRegister = (reader: any) => {
   const { mutate } = useSWR("api/register-school", () => {
@@ -40,12 +42,13 @@ export const useSchool = (schoolID: string) => {
 };
 
 export const useSchoolCookie = () => {
+  const user = useSelector((state: any) => state.user);
   const { data: dataID } = useSWR(`api/read-school-cookie/`, () => {
     return getSchoolCookie().then((res) => {
       return res.data;
     });
   });
-  return { dataID };
+  return { dataID: user?.id };
 };
 
 export const useSchoolData = () => {
@@ -270,11 +273,21 @@ export const useNotes = (schoolID: string) => {
 };
 
 export const useStore = (schoolID: string) => {
-  const { data: notes } = useSWR(`api/view-store/${schoolID}`, () => {
+  const { data: store } = useSWR(`api/view-store/${schoolID}`, () => {
     return viewStore(schoolID!).then((res) => {
       return res;
     });
   });
 
-  return { notes };
+  return { store };
+};
+
+export const useGallary = (schoolID: string) => {
+  const { data: gallary } = useSWR(`api/view-gallary/${schoolID}`, () => {
+    return viewGallary(schoolID!).then((res) => {
+      return res;
+    });
+  });
+
+  return { gallary };
 };

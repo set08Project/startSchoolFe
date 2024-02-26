@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FC } from "react";
 import { displaySession, displaySessioned } from "../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
@@ -6,6 +6,7 @@ import { FaCheckDouble } from "react-icons/fa6";
 const Session: FC = () => {
   // const { data } = useSchoolData();
   const dispatch = useDispatch();
+  const session = useSelector((state: any) => state.sessionToggle);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {

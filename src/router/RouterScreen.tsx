@@ -22,13 +22,11 @@ const RouterScreen = () => {
   const [state, setState] = useState<any>({} || "" || 0);
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
-  console.log("show me: ", user);
   useEffect(() => {
     let timer = setTimeout(() => {
       if (userStatus === "school-admin") {
         // getSchoolCookie().then((res: any) => {
         return readSchool(user?.id).then((resp) => {
-          console.log("okay h,,mmmmmm", resp);
           if (resp.status === 200) {
             return setState(resp?.data);
           } else if (resp?.response?.status === 404) {
@@ -37,25 +35,25 @@ const RouterScreen = () => {
           // });
         });
       } else if (userStatus === "school-teacher") {
-        readTeacherCookie().then((res: any) => {
-          return viewTeacherDetail(res.data).then((resp: any) => {
-            if (resp.status === 200) {
-              return setState(resp?.data);
-            } else if (resp?.response?.status === 404) {
-              return setState(resp?.response?.status);
-            }
-          });
+        // readTeacherCookie().then((res: any) => {
+        return viewTeacherDetail(user?.id).then((resp: any) => {
+          if (resp.status === 200) {
+            return setState(resp?.data);
+          } else if (resp?.response?.status === 404) {
+            return setState(resp?.response?.status);
+          }
+          // });
         });
       } else if (userStatus === "school-student") {
-        readStudentCookie().then((res: any) => {
-          console.log(res);
-          return viewStduentDetail(res.data).then((resp: any) => {
-            if (resp.status === 200) {
-              return setState(resp?.data);
-            } else if (resp?.response?.status === 404) {
-              return setState(resp?.response?.status);
-            }
-          });
+        // readStudentCookie().then((res: any) => {
+        // console.log(res);
+        return viewStduentDetail(user?.id).then((resp: any) => {
+          if (resp.status === 200) {
+            return setState(resp?.data);
+          } else if (resp?.response?.status === 404) {
+            return setState(resp?.response?.status);
+          }
+          // });
         });
       }
 
@@ -69,8 +67,6 @@ const RouterScreen = () => {
       clearTimeout(timing);
     }, 200);
   }, []);
-
-  console.log("reading state: ", state);
 
   return (
     <div>

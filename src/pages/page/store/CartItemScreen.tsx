@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { displayCart } from "../../../global/reduxState";
+import {
+  addToCart,
+  changeCartPick,
+  displayCart,
+} from "../../../global/reduxState";
 import { MdClose, MdExpandLess } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
 
 const CartItemScreen = () => {
   const dispatch = useDispatch();
+  const cart = useSelector((state: any) => state.cart);
   const cartToggle = useSelector((state: any) => state.cartToggle);
 
   const changeView = () => {
@@ -45,17 +50,38 @@ const CartItemScreen = () => {
             <p className="font-bold">Cart Total </p>
             <p className="font-medium my-5 flex justify-between items-center">
               <p>SubTotal</p>
-              <p className="font-bold">₦100,000</p>
+              <p className="font-bold">
+                ₦
+                {cart
+                  .map((el: any) => {
+                    return el.cost * el.QTY;
+                  })
+                  .reduce((a: number, b: number) => {
+                    return a + b;
+                  })
+                  .toLocaleString()}
+              </p>
             </p>
             <p className="font-medium my-5 flex justify-between items-center">
               <p>Extra Charges</p>
-              <p className="font-bold">₦0</p>
+              <p className="font-bold">₦500</p>
             </p>
             <div className="mt-10 border-t border-neutral" />
 
             <p className="font-medium my-1 flex justify-between items-center">
               <p>Total</p>
-              <p className="font-bold">₦100,000</p>
+              <p className="font-bold">
+                ₦
+                {(
+                  cart
+                    .map((el: any) => {
+                      return el.cost * el.QTY;
+                    })
+                    .reduce((a: number, b: number) => {
+                      return a + b;
+                    }) + 500
+                ).toLocaleString()}
+              </p>
             </p>
 
             <div className="w-full flex justify-center mt-10">
@@ -67,29 +93,56 @@ const CartItemScreen = () => {
           </div>
 
           <div className="col-span-2 h-[300px] pl-2 md:border-l border-neutral-500 w-full flex flex-col items-center ">
-            <div className="flex items-center w-full gap-2 border-b border-neutral py-5 ">
-              <MdClose />
-              <div className="w-[120px] h-[120px] border rounded-sm bg-red-500 ml-2" />
+            {cart.length > 0 ? (
+              <div className="w-full">
+                {cart.map((props: any) => (
+                  <div
+                    key={props?._id}
+                    className="flex items-center w-full gap-2 border-b border-[gray] py-5 "
+                  >
+                    <MdClose />
+                    <img
+                      className="w-[200px] h-[120px] border rounded-lg ml-2"
+                      src={props?.avatar}
+                    />
 
-              <div className="w-[45%] ">
-                <p className="font-bold text-[18px]">Title</p>
-                <p className="leading-tight text-neutral-900">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.{" "}
-                </p>
+                    <div className="w-[90%] ">
+                      <p className="font-bold text-[18px]">{props?.title}</p>
+                      <p className="leading-tight text-neutral-900">
+                        {props?.description}{" "}
+                      </p>
+
+                      <div className="flex mt-5 font-bold text-[20px]">
+                        ₦{(props?.cost * props?.QTY).toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="w-[15%] flex flex-col justify-center h-full items-center gap-3">
+                      <p
+                        className="bg-blue-950 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer"
+                        onClick={() => {
+                          dispatch(addToCart(props));
+                        }}
+                      >
+                        <MdExpandLess />
+                      </p>
+                      <p className="font-bold">{props.QTY}</p>
+
+                      <p
+                        className="bg-orange-600 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer rotate-180"
+                        onClick={() => {
+                          dispatch(changeCartPick(props));
+                        }}
+                      >
+                        <MdExpandLess />
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="w-[15%] flex flex-col justify-center h-full items-center gap-3">
-                <p className="bg-blue-950 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer">
-                  <MdExpandLess />
-                </p>
-                <p className="font-bold">4</p>
-                <p className="bg-orange-600 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer rotate-180">
-                  <MdExpandLess />
-                </p>
-              </div>
-              <div className="w-[13%] flex justify-end font-bold text-[20px]">
-                ₦200
-              </div>
-            </div>
+            ) : (
+              <div>No Items Yet</div>
+            )}
           </div>
         </div>
       </div>

@@ -1,10 +1,11 @@
 import { useDispatch } from "react-redux";
 import { MdLogout } from "react-icons/md";
 import { FC, ReactNode, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
 import {
+  changeMenuState,
   changeToggleMenuState,
   displayUserStatus,
   logoutState,
@@ -28,6 +29,7 @@ interface iProps {
 const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const { data } = useSchoolData();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -38,6 +40,19 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       });
     }
   };
+
+  const handleMenu = () => {
+    if (!document.startViewTransition) {
+      dispatch(changeToggleMenuState(false));
+      dispatch(changeMenuState(false));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(changeToggleMenuState(false));
+        dispatch(changeMenuState(false));
+      });
+    }
+  };
+
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
@@ -64,7 +79,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
             to={`${to}`}
             className="w-full
           "
-            onClick={handleToggleMenuFalse}
+            onClick={handleMenu}
           >
             <div className="text-[12px] w-full py-3 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between">
               <div>{title}</div>
@@ -89,7 +104,8 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            // dispatch(logoutState());
+            dispatch(logoutState());
+            handleMenu();
           }}
         >
           <label htmlFor="id">Upload Avatar</label>
@@ -109,10 +125,13 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
+            console.log("you've logged out");
             logout();
             dispatch(logoutState());
             dispatch(displayUserStatus(null));
-            // window.location.reload();
+            handleMenu();
+            window.location.reload();
+            navigate("/");
           }}
         >
           <div>Log-out</div>

@@ -55,7 +55,7 @@ const Header = () => {
           className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
           onClick={() => {
             setSess(!sess);
-            dispatch(displaySessioned(true));
+            dispatch(displaySessioned(!toggleSession));
           }}
         >
           {" "}

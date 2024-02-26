@@ -25,6 +25,7 @@ const initialState = {
   showStaffComp: false,
 
   cartToggle: false,
+  cart: [],
 
   showStudent: false,
   sessionToggle: false,
@@ -134,6 +135,34 @@ const reduxState = createSlice({
       state.testTry.question?.push(vale);
     },
 
+    addToCart: (state, { payload }: any) => {
+      const check = state.cart.findIndex((el) => el.id === payload.id);
+      if (check >= 0) {
+        state.cart[check].QTY += 1;
+      } else {
+        const addValue = {
+          ...payload,
+          QTY: 1,
+        };
+        state.cart.push(addValue);
+      }
+    },
+
+    changeCartPick: (state, { payload }) => {
+      const check = state.cart.findIndex((el) => el.id === payload.id);
+      let checkValue = state.cart[check].QTY;
+
+      if (state.cart[check].QTY > 1) {
+        state.cart[check].QTY -= 1;
+      } else if (checkValue === 1) {
+        state.cart = state.cart.filter((fl) => fl.id !== payload.id);
+      }
+    },
+
+    removeFromCart: (state, { payload }) => {
+      state.cart = state.cart.filter((fl) => fl.id !== payload.id);
+    },
+
     displayEmptyTest: (state) => {
       state.test = [{ instruction: {} }, { question: [] }];
 
@@ -144,6 +173,9 @@ const reduxState = createSlice({
 });
 
 export const {
+  addToCart,
+  removeFromCart,
+  changeCartPick,
   displayEmptyTest,
   addTestInstruction,
   addTestQuestion,

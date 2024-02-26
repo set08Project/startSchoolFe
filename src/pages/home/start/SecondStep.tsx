@@ -9,7 +9,7 @@ import {
   getSchoolInfo,
   pickedCategory,
 } from "../../../global/reduxState";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   changeSchoolLocation,
   changeSchoolName,
@@ -18,6 +18,7 @@ import {
 } from "../../api/schoolAPIs";
 
 const SecondStep = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const dataInfo = useSelector((state: any) => state.categoryData);
 
@@ -64,11 +65,18 @@ const SecondStep = () => {
               onClick={() => {}}
             />
           </Link>
-          <Link to="/" className="flex w-full justify-center">
+
+          <div
+            // to="/"
+            className="flex w-full justify-center"
+          >
             <Button
               name="Submit"
               className="bg-blue-950 w-[80%] py-4 "
               onClick={() => {
+                console.log("Just clicked: ");
+                console.log("reading Data: ", data?._id);
+
                 changeSchoolName(data?._id, {
                   schoolName: schoolInfo.schoolName,
                 });
@@ -77,15 +85,17 @@ const SecondStep = () => {
                 });
 
                 changeSchoolTags(data?._id, { schoolTags: readValue });
+
                 changeSchoolStarted(data?._id).then(() => {
-                  window.location.reload();
+                  // window.location.reload();
+                  navigate("/dashboard");
                 });
 
                 dispatch(getSchoolInfo({}));
                 dispatch(pickedCategory(null));
               }}
             />
-          </Link>
+          </div>
         </div>
       </div>
 

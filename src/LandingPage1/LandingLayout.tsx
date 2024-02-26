@@ -6,7 +6,7 @@ import { getStarted } from "../pages/api/schoolAPIs";
 
 const LandingLayout = () => {
   useEffect(() => {
-    getStarted();
+    // getStarted();
   }, []);
   return (
     <div>

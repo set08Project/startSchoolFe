@@ -1,6 +1,8 @@
 import {
   MdArticle,
   MdPeople,
+  MdPhone,
+  MdPhoto,
   MdQueryStats,
   MdReport,
   MdSchool,
@@ -19,6 +21,7 @@ import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
+import { FaPhotoVideo } from "react-icons/fa";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -90,18 +93,9 @@ const Sider = () => {
       </div>
 
       {/* Nav Links */}
-      <div className="w-full flex justify-center">
-        <div className="transition-all duration-300 text-center text-[12px] font-medium mt-3 w-[90%] ">
-          {toggleText ? (
-            <div>A new staff has been added to your staff list</div>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      </div>
 
       {/* Settings */}
-      <div className="mt-16 px-2 flex flex-col h-[90%]">
+      <div className="mt-10 px-2 flex flex-col h-[90%]">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
@@ -189,7 +183,7 @@ const Sider = () => {
         </NavLink>
 
         <NavLink
-          to="/view-articles"
+          to="/view-gallery"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
@@ -197,8 +191,8 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          View Articles
-          <MdArticle />
+          Gallaries
+          <FaPhotoVideo />
         </NavLink>
 
         <NavLink

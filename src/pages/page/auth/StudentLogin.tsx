@@ -8,7 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginStudent } from "../../../pagesForStudents/api/studentAPI";
-import logo from "../../../assets/Next Logo 3.png";
+import logo from "../../../assets/mainLogo.png";
 
 const StudentLogin = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const StudentLogin = () => {
     loginStudent(val)
       .then((res) => {
         if (res.status === 201) {
-          dispatch(loginState(res.data));
+          dispatch(loginState(res));
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);

@@ -25,6 +25,9 @@ import ViewTeacherNoteByAdmin from "../pages/page/less/ViewTeacherNote";
 import ViewSchoolSettings from "../pages/page/settings/ViewSchoolSettings";
 import SchoolTheme from "../pages/page/settings/SchoolTheme";
 import GallerySettings from "../pages/page/settings/GallerySettings";
+import GallaryScreen from "../pages/page/gallary/GallaryScreen";
+import ThemeScreen from "../pages/page/settings/ThemeScreen";
+import TestGallary from "../pages/page/gallary/TestGallary";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -55,6 +58,11 @@ export const adminRouter = createBrowserRouter([
             ],
           },
 
+          {
+            index: true,
+            path: "test",
+            element: <TestGallary />,
+          },
           {
             index: true,
             path: "lesson-note",
@@ -122,6 +130,12 @@ export const adminRouter = createBrowserRouter([
           },
 
           {
+            index: true,
+            path: "gallary",
+            element: <GallaryScreen />,
+          },
+
+          {
             path: "my-personal-info",
             element: <PersonalSetting />,
             children: [
@@ -129,6 +143,17 @@ export const adminRouter = createBrowserRouter([
                 index: true,
                 path: "info",
                 element: <PersonalInfoScreen />,
+              },
+
+              {
+                index: true,
+                path: "theme-settings",
+                element: <SchoolTheme />,
+              },
+              {
+                index: true,
+                path: "theme-setting",
+                element: <ThemeScreen />,
               },
             ],
           },
@@ -144,14 +169,10 @@ export const adminRouter = createBrowserRouter([
               },
             ],
           },
+
           {
             index: true,
-            path: "school-info/view-settings/theme-settings",
-            element: <SchoolTheme />,
-          },
-          {
-            index: true,
-            path: "school-info/view-settings/gallery-settings",
+            path: "view-gallery",
             element: <GallerySettings />,
           },
         ],

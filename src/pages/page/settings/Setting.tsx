@@ -21,14 +21,14 @@ const SettingScreen: FC = () => {
 
       title: "Professional Info",
       detail: "Provide personal details and how we can reach you.",
-      url: "/my-personal-info/my-main-info",
+      url: "/my-personal-info/theme-setting",
       size: 35,
     },
     {
       icon: <HiMiniBuildingOffice2 size={45} />,
       title: "School's Info",
       detail: "Provide studio details and how we can reach you.",
-      url: "/my-personal-info/view-settings",
+      url: "/my-personal-info/theme-settings",
       size: 35,
     },
   ];

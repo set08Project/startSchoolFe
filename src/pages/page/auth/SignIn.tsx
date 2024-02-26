@@ -13,7 +13,7 @@ import {
 } from "../../api/schoolAPIs";
 import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
-import logo from "../../../assets/Next Logo 3.png";
+import logo from "../../../assets/mainLogo.png";
 
 const SignIn = () => {
   const { token } = useParams();
@@ -43,7 +43,7 @@ const SignIn = () => {
           setLoading(false);
 
           {
-            // !loading && navigate("/");
+            !loading && navigate("/");
           }
         } else {
           setLoading(false);
@@ -51,7 +51,7 @@ const SignIn = () => {
         }
       })
       .then(() => {
-        // window.location.reload();
+        window.location.reload();
       });
   };
 
