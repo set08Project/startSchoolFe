@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import {
   classAttendance,
   getClassSubjects,
@@ -18,12 +18,14 @@ import {
   updateClassroomTeacher,
   viewGallary,
   viewSchoolByName,
+  viewSchoolSession,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewStore,
 } from "../api/schoolAPIs";
 import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export const useSchoolRegister = (reader: any) => {
   const { mutate } = useSWR("api/register-school", () => {
@@ -43,18 +45,21 @@ export const useSchool = (schoolID: string) => {
 
 export const useSchoolCookie = () => {
   const user = useSelector((state: any) => state.user);
+
   const { data: dataID } = useSWR(`api/read-school-cookie/`, () => {
     return getSchoolCookie().then((res) => {
       return res.data;
     });
   });
+
   return { dataID: user?.id };
 };
 
 export const useSchoolData = () => {
   const { dataID } = useSchoolCookie();
+  const user = useSelector((state: any) => state.user);
 
-  const { data, isLoading } = useSWR(`api/view-school/${dataID}`, () => {
+  const { data, isLoading } = useSWR(`api/view-school/${user?.id}`, () => {
     return readSchool(dataID!).then((res) => {
       return res.data;
     });
@@ -73,21 +78,24 @@ export const useSchoolDataByName = (schoolName: string) => {
 
 export const useSchoolClassRM = () => {
   const { dataID } = useSchoolCookie();
-  const { data: schoolClassroom } = useSWR(
-    `api/view-classrooms/${dataID}`,
+  const { data: schoolClassroom, mutate } = useSWR(
+    `api/view-classrooms/`,
     () => {
       return getSchoolClassroom(dataID!).then((res) => {
         return res.data;
       });
     }
+
+    // { refreshInterval: 2000 }
   );
-  return { schoolClassroom };
+  return { schoolClassroom, mutate };
 };
 
 export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
   const { dataID } = useSchoolCookie();
+  const user = useSelector((state: any) => state.user);
   const { data: schoolClassroom } = useSWR(
-    `api/update-classrooms-teacher/${dataID}/${classID}`,
+    `api/update-classrooms-teacher/${user?.id}/${classID}`,
     () => {
       return updateClassroomTeacher(dataID!, classID, data).then((res) => {
         return res.data;
@@ -139,7 +147,6 @@ export const useSchoolTeacher = () => {
         return res.data;
       });
     }
-    // { refreshInterval: 5000 }
   );
   return { schoolTeacher };
 };
@@ -187,8 +194,8 @@ export const useClassTimeTable = (classID: string) => {
       return getClassTimeTable(classID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 10000 }
+    }
+    // { refreshInterval: 10000 }
   );
 
   return { timetbale };
@@ -201,8 +208,8 @@ export const useSchoolStudents = (schoolID: string) => {
       return getSchoolStudents(schoolID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 10000 }
+    }
+    // { refreshInterval: 10000 }
   );
 
   return { students };
@@ -215,8 +222,8 @@ export const useSchoolStudentDetail = (studentID: string) => {
       return getSchoolStudentDetail(studentID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 10000 }
+    }
+    // { refreshInterval: 10000 }
   );
 
   return { studentDetails };
@@ -229,8 +236,8 @@ export const useTopSchoolStudent = (studentID: string) => {
       return topSchoolStudent(studentID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 10000 }
+    }
+    // { refreshInterval: 10000 }
   );
 
   return { perform };
@@ -291,3 +298,39 @@ export const useGallary = (schoolID: string) => {
 
   return { gallary };
 };
+
+export const useSchoolSessionData = (schoolID: string) => {
+  const { data: schoolInfo, isLoading: loading } = useSWR(
+    `api/view-school-session/${schoolID}`,
+    () => {
+      return viewSchoolSession(schoolID).then((res: any) => {
+        return res?.data;
+      });
+    }
+  );
+  return { schoolInfo, loading };
+};
+
+let liveQueries = new Set();
+
+export function trackLiveQueries(useSWRNext: any) {
+  return (key: any, fetcher: any, config: any) => {
+    const swr = useSWRNext(key, fetcher, config);
+
+    useEffect(() => {
+      liveQueries.add(key);
+
+      return () => {
+        liveQueries.delete(key);
+      };
+    }, [key]);
+
+    return swr;
+  };
+}
+
+export async function revalidateLiveQueries() {
+  let promises = [...liveQueries.values()].map((key: any) => mutate(key));
+
+  return Promise.all(promises);
+}

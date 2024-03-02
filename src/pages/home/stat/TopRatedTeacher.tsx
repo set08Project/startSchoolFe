@@ -5,7 +5,7 @@ const TopRatedTeacher = () => {
   const { schoolTeacher } = useSchoolTeacher();
 
   let rate = lodash.orderBy(schoolTeacher?.staff, "staffRating");
-  console.log(rate);
+
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">
       {rate?.map((props: any, i: number) => (

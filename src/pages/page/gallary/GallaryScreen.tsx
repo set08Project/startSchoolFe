@@ -13,7 +13,7 @@ const GallaryScreen = () => {
   const { data } = useSchoolData();
   const { store: storeData } = useStore(data?._id);
 
-  document.title = "View Store ";
+  document.title = "View School's Gallary ";
 
   const changeView = () => {
     if (!document.startViewTransition) {

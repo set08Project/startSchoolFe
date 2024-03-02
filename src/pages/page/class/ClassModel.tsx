@@ -1,10 +1,15 @@
 import { useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { MdCheck, MdClose } from "react-icons/md";
-import { useClassSubjects, useSchoolData } from "../../hook/useSchoolAuth";
+import {
+  revalidateLiveQueries,
+  useClassSubjects,
+  useSchoolData,
+} from "../../hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { createTimeTable } from "../../api/schoolAPIs";
+import { mutate } from "swr";
 
 const periodicData = [
   "07:45AM - 08:10AM",
@@ -40,6 +45,7 @@ const ClassModel = () => {
     })
       .then((res) => {
         if (res?.status === 201) {
+          mutate(`api/view-time-table/${classID}`);
           toast.success("Added Successfully...!");
         } else {
           toast.error(`${res?.response?.data?.message}`);
@@ -57,7 +63,7 @@ const ClassModel = () => {
       {/* <Toaster position="top-center" reverseOrder={true} /> */}
       <div className="mt-5 text-[13px] font-medium">
         <label
-          htmlFor="assign_subject_timetable"
+          htmlFor="assign_subject_timetable_for_class"
           className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
         >
           + Add to TimeTable
@@ -66,7 +72,7 @@ const ClassModel = () => {
         {/* Put this part before </body> tag */}
         <input
           type="checkbox"
-          id="assign_subject_timetable"
+          id="assign_subject_timetable_for_class"
           className="modal-toggle"
         />
         <div className="modal rounded-md" role="dialog">
@@ -75,7 +81,7 @@ const ClassModel = () => {
               <p className="font-bold">Add New Subject to TimeTable</p>
 
               <label
-                htmlFor="assign_subject_timetable"
+                htmlFor="assign_subject_timetable_for_class"
                 className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
               >
                 <MdClose />
@@ -128,9 +134,15 @@ const ClassModel = () => {
                     setSubject(e.target.value);
                   }}
                 >
-                  <option value={"Short Break"} defaultValue={"Short Break"}>
-                    Short Break
+                  <option
+                    value={"Subject"}
+                    disabled
+                    selected
+                    defaultValue={"Subject"}
+                  >
+                    Choose Period
                   </option>
+                  <option value={"Short Break"}>Short Break</option>
                   <option value={"Long Break"}>Long Break</option>
                   <option value={"Free Period"}>Free Period</option>
                   <option value={"Assembly"}>Assembly</option>
@@ -156,11 +168,12 @@ const ClassModel = () => {
                       }}
                     >
                       <option
-                        value={"Choose Peroid"}
+                        value={"Choose Period"}
                         disabled
-                        defaultValue={"Choose Peroid"}
+                        selected
+                        defaultValue={"Choose Period"}
                       >
-                        Choose Peroid
+                        Choose Period
                       </option>
                       {periodicData.map((props: any, i: number) => (
                         <option key={i} value={props}>
@@ -197,7 +210,7 @@ const ClassModel = () => {
             <div className="w-full flex justify-end transition-all duration-300">
               {subject !== "" && period !== "" && day !== "" ? (
                 <label
-                  htmlFor="assign_subject_timetable"
+                  htmlFor="assign_subject_timetable_for_class"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
                   onClick={onCreateTimeTable}
                 >
@@ -212,7 +225,10 @@ const ClassModel = () => {
             </div>
           </div>
 
-          <label className="modal-backdrop" htmlFor="assign_subject_timetable">
+          <label
+            className="modal-backdrop"
+            htmlFor="assign_subject_timetable_for_class"
+          >
             Close
           </label>
         </div>

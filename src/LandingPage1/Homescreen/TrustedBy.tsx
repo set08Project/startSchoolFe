@@ -1,15 +1,13 @@
-import React from "react";
-
 const TrustedBy = () => {
   return (
-    <div className=" ">
-      <div className="bg-white w-full py-24 sm:py-32 px-28">
+    <div className="my-0 ">
+      <div className="w-full py-10 sm:py-10 px-28 ">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-center text-lg font-semibold leading-8 text-gray-900">
+          <h2 className="text-center mb-10 text-[24px] font-bold leading-8 text-gray-900 opacity-60">
             Trusted by the most innovative teams
           </h2>
-          <div className=" w-[95%]">
-            <div className="mx-auto  grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
+          <div className="w-full  ">
+            <div className="mx-auto grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5 text-blue-950">
               <img
                 className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                 src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg"

@@ -11,19 +11,19 @@ const MyScheduleScreen = () => {
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
 
   return (
-    <div>
-      <LittleHeader name="My Schedule" />
+    <div className="text-blue-950">
+      <LittleHeader name="My Schedule " />
       <div className="w-full">
         <div className="">
-          <div className=" w-full bg-slate-50 min-h-[calc(100vh-240px)] border rounded-md p-2 overflow-x-auto gap-4">
+          <div className=" w-full bg-slate-50 min-h-[calc(100vh-240px)] border rounded-md p-2 overflow-x-auto gap-4 ">
             {/* Header */}
 
-            <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
+            <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2 ">
               <div className="w-[200px] h-6 border-r">
                 {daysData?.map((props: any, i: number) => (
                   <div
                     key={i}
-                    className={`py-2 border rounded-lg bg-white h-[170px] my-2 flex justify-center items-center  `}
+                    className={`py-2 border rounded-lg bg-white h-[170px] my-2 flex justify-center items-center `}
                   >
                     {props}
                   </div>
@@ -45,8 +45,10 @@ const MyScheduleScreen = () => {
                             key={e}
                             className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] bg-white border mb-2"
                           >
-                            <p>{props?.subject}</p>
-                            <p>{props?.time}</p>
+                            <p className="font-medium">{props?.subject}</p>
+                            <p className="font-extralight text-[13px]">
+                              {props?.time}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -55,21 +57,6 @@ const MyScheduleScreen = () => {
                 ))}
               </div>
             </div>
-            {/* 
-          <div className="flex w-[2600px] gap-4 px-1 py-3 mt-2">
-            
-            <div className="w-[300px] h-6  border-r">Assembly</div>
-            <div className="w-[300px] h-6  border-r">Chemistry</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">Short Break</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">Long Break</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-            <div className="w-[300px] h-6  border-r">time</div>
-          </div> */}
           </div>
         </div>
       </div>

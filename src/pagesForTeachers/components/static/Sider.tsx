@@ -223,7 +223,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Weekly-Report
-          <FaStore />
+          <MdReport />
         </NavLink>
 
         <div className="flex-1" />

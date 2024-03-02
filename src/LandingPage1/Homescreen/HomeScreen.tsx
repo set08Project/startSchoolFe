@@ -8,19 +8,19 @@ import WorkWithUs from "./WorkWithUs";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeroScreen from "../Hero";
+import UnlockScreen from "./UnlockScreen";
+import PeopleScreen from "./PeopleScreen";
 
 const LandingScreen = () => {
   return (
     <div>
-      {/* <WorkWithUs />
       <ABetter />
       <TrustedBy />
-      <Everything />
-      <StartUsing /> */}
-
-      {/* <HeroScreen /> */}
-      <ABetter />
-      <TrustedBy />
+      <div className="my-20" />
+      <UnlockScreen />
+      <div className="my-32" />
+      <PeopleScreen />
+      <div className="my-24" />
       <Everything />
       <StartUsing />
     </div>
@@ -28,21 +28,3 @@ const LandingScreen = () => {
 };
 
 export default LandingScreen;
-
-{
-  /* <Hero />
-      <ABetter/>
-      <TrustedBy/>
-      <Everything/>
-      <StartUsing/> 
-    
-    */
-}
-{
-  /* <WorkWithUs/> */
-}
-{
-  /* <LandingSections /> */
-}
-
-//

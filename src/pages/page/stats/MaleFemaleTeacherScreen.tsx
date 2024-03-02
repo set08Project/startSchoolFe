@@ -12,7 +12,7 @@ const MaleFemaleTeacherScreen = () => {
   let female: number = 0;
 
   for (let i = 0; i < students?.data?.students?.length; i++) {
-    if (students?.data?.students[i].gender === "male") {
+    if (students?.data?.students[i].gender === "Male") {
       male++;
     } else {
       female++;

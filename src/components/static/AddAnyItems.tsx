@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useSchoolClassRM } from "../../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
@@ -72,6 +73,8 @@ const AddAnyItem: FC<iProps> = ({
   startDateTimeFn,
 }) => {
   //
+  const { schoolClassroom } = useSchoolClassRM();
+
   return (
     <div className={`flex ${date ? "mt-32" : "mt-60"} justify-center`}>
       <div className="w-[500px] min-h-[300px] border rounded-md bg-white shadow-md p-4">
@@ -80,7 +83,7 @@ const AddAnyItem: FC<iProps> = ({
           <Toaster position="top-center" reverseOrder={true} />
 
           <p
-            className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+            className="hover:bg-blue-50 transition-all duration-300 cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
             onClick={offFn}
           >
             <MdClose />
@@ -97,7 +100,7 @@ const AddAnyItem: FC<iProps> = ({
             </label>
             <Input
               placeholder={placeStart}
-              className="mx-0 h-10 w-full"
+              className="mx-0 h-12 w-full"
               value={start}
               onChange={(e: any) => {
                 setStart!(e.target.value);
@@ -106,18 +109,34 @@ const AddAnyItem: FC<iProps> = ({
           </div>
 
           {en && (
-            <div className="w-full">
+            <div className="w-full -mt-5">
               <label className="font-medium text-[12px]">
                 {endTitle} <span className="text-red-500">*</span>
               </label>
-              <Input
-                placeholder={placeEnd}
-                className="mx-0 h-10  w-full"
-                value={end}
-                onChange={(e: any) => {
-                  setEnd!(e.target.value);
+
+              <select
+                className="select select-bordered w-full max-w-xs mt-2"
+                onChange={(e) => {
+                  setEnd(e.target.value);
                 }}
-              />
+              >
+                <option disabled selected>
+                  Assign Class
+                </option>
+                {schoolClassroom?.classRooms
+                  ?.sort((a: any, b: any) => {
+                    return a.className - b.className;
+                  })
+                  ?.map((props: any) => (
+                    <option
+                      key={props?._id}
+                      value={props?.className}
+                      className="my-2 font-medium py-2"
+                    >
+                      {props?.className}
+                    </option>
+                  ))}
+              </select>
             </div>
           )}
 

@@ -6,6 +6,7 @@ import Button from "../reUse/Button";
 import Input from "../reUse/Input";
 import { createStore } from "../../pages/api/schoolAPIs";
 import ClipLoader from "react-spinners/ClipLoader";
+import { mutate } from "swr";
 
 const StoreScreen = () => {
   const { data } = useSchoolData();
@@ -37,6 +38,7 @@ const StoreScreen = () => {
     createStore(data?._id, formData)
       .then((res: any) => {
         if (res.status === 201) {
+          mutate(`api/view-store/${data?._id}`);
           setLoading(false);
           toast.success("Product Uploaded");
         } else {
@@ -99,7 +101,7 @@ const StoreScreen = () => {
                 )}
               </div>
               <div className="flex gap-2  items-center">
-                <p> Product Cost: {period}</p>
+                <p> Product Cost: {period > 0 && period}</p>
                 {period && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
@@ -108,7 +110,7 @@ const StoreScreen = () => {
                 )}
               </div>
               <div className="flex gap-2  items-center">
-                <p> Product Description: {day}</p>
+                <p> Product Description: {day.slice(0, 30)}...</p>
                 {day && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
@@ -192,7 +194,7 @@ const StoreScreen = () => {
             <div className="w-full flex justify-end transition-all duration-300">
               {subject !== "" && period !== 0 && day !== "" ? (
                 <label
-                  //   htmlFor="assign_subject_timetable"
+                  // htmlFor="assign_subject_timetable"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer transition-all duration-300 "
                   onClick={onHandleAdd}
                 >

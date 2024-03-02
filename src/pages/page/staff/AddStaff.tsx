@@ -13,6 +13,7 @@ import {
 import ClipLoader from "react-spinners/ClipLoader";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { MdClose } from "react-icons/md";
+import { mutate } from "swr";
 
 const AddStaff = () => {
   const dispatch = useDispatch();
@@ -37,8 +38,9 @@ const AddStaff = () => {
       gender,
     }).then((res) => {
       if (res.status === 201) {
+        mutate(`api/view-school-teacher/${data?._id}`);
         setLoading(false);
-        toast.success("student registered successful");
+        toast.success("staff registered successful");
         dispatch(displayDelay(false));
         const timing = setTimeout(() => {
           dispatch(displayStudent(false));
@@ -138,7 +140,7 @@ const AddStaff = () => {
               }}
             />
           </div>
-          <div className="mt-1">
+          {/* <div className="mt-1">
             <label className="text-[14px]">Staff Taking Subject</label>
             <Input
               placeholder="Enter Staff Taking Subject"
@@ -148,7 +150,7 @@ const AddStaff = () => {
                 setAssignedSubject(e.target.value);
               }}
             />
-          </div>
+          </div> */}
           <div className="mt-1">
             <label className="text-[14px]">Staff Role</label>
             <Input

@@ -13,6 +13,7 @@ import {
   markAttendancePresent,
   readClassInfo,
 } from "../../api/teachersAPI";
+import { mutate } from "swr";
 
 interface iProps {
   props?: string;
@@ -74,7 +75,11 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           } ${result?.absent && "bg-red-500"}`}
           checked={result?.absent}
           onChange={() => {
-            markAttendanceAbsent(teacherInfo?._id, id!);
+            markAttendanceAbsent(teacherInfo?._id, id!).then((res: any) => {
+              if (res.status === 201) {
+                mutate(`api/view-all-class-students/${props!}`);
+              }
+            });
           }}
         />
       </div>
@@ -88,7 +93,11 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           } ${result?.present && "bg-green-500"}`}
           checked={result?.present}
           onChange={() => {
-            markAttendancePresent(teacherInfo?._id, id!);
+            markAttendancePresent(teacherInfo?._id, id!).then((res: any) => {
+              if (res.status === 201) {
+                mutate(`api/view-all-class-students/${props!}`);
+              }
+            });
           }}
         />
       </div>

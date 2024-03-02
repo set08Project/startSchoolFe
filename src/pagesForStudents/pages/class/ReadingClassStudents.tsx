@@ -114,12 +114,12 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                         <div className="w-[100px] border-r">
                           <AttendanceRatio props={props?._id} />
                         </div>
-                        <div className="w-[220px] border-r flex gap-4">
+                        <div className="w-[220px] border-r flex gap-4 ">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
+                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950 text-white "
                               // checked
                             />
                           </div>

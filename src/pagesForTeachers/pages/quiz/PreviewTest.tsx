@@ -5,6 +5,7 @@ import { displayEmptyTest } from "../../../global/reduxState";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSujectQuiz } from "../../hooks/useTeacher";
+import { mutate } from "swr";
 
 const PreviewTest = () => {
   const navigate = useNavigate();
@@ -21,8 +22,6 @@ const PreviewTest = () => {
       setState(res.data);
     });
   });
-
-  console.log(subjectQuiz);
 
   return (
     <div>
@@ -82,10 +81,14 @@ const PreviewTest = () => {
         onClick={() => {
           // setToggle(true);
 
-          createQuiz(state?._id!, subjectID!, testQuestion).then(() => {
-            dispatch(displayEmptyTest());
+          createQuiz(state?._id!, subjectID!, testQuestion).then((res: any) => {
+            if (res.status === 201) {
+              mutate(`api/view-subject-quiz/${subjectID}`);
 
-            navigate(`/subjects/${subjectID}`);
+              dispatch(displayEmptyTest());
+
+              navigate(`/subjects/${subjectID}`);
+            }
           });
         }}
       />

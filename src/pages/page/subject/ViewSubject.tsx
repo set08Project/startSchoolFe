@@ -14,6 +14,7 @@ import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
 import { updateSchoolSubjectTeacher } from "../../api/schoolAPIs";
+import { mutate } from "swr";
 
 interface iProps {
   props?: any;
@@ -57,6 +58,7 @@ const ViewSubjects = () => {
     updateSchoolSubjectTeacher(dataID, subjectID, subjectTeacher).then(
       (res) => {
         if (res.status === 201) {
+          mutate(`api/view-school-subject/${dataID}`);
           toast.success("Teacher Assigned Successfully");
         } else {
           toast.error(`${res.response.data.message}`);

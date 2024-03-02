@@ -1,24 +1,22 @@
 const Everything = () => {
   return (
     <div id="/about">
-      <div className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-950">
+      <div className="mx-20  ">
+        <div className="max-w-7xl">
+          <div className=" ">
+            <div className="text-base font-semibold leading-7 text-blue-950">
               Manage your school effectively and faster.
-            </h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">
+            </div>
+            <p className="mt-5 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl ">
               You've got a school to run right? 🤩{" "}
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 ">
               {" "}
-              Wrangling school chaos? Take <b className="text-blue-950">
-                NEXT
-              </b>{" "}
-              like a personal assistant for your school. Our platform is
-              designed to streamline administrative tasks, enhance
-              communication, and provide a robust framework for effective school
-              governance.
+              Wrangling school chaos? Take{" "}
+              <b className="text-blue-950 font-bold text-[25px]">NEXT</b> like a
+              personal assistant for your school. Our platform is designed to
+              streamline administrative tasks, enhance communication, and
+              provide a robust framework for effective school governance.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">

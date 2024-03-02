@@ -10,7 +10,11 @@ import AddAnyItem from "../static/AddAnyItems";
 import { displayClass } from "../../global/reduxState";
 import { createSchoolClassroom } from "../../pages/api/schoolAPIs";
 import toast from "react-hot-toast";
-import { useSchoolData } from "../../pages/hook/useSchoolAuth";
+import {
+  useSchoolClassRM,
+  useSchoolData,
+} from "../../pages/hook/useSchoolAuth";
+import { mutate } from "swr";
 
 const Layout: FC = () => {
   const { data } = useSchoolData();
@@ -42,13 +46,14 @@ const Layout: FC = () => {
   const handleCreateClassRoom = () => {
     try {
       setLoading(true);
-      createSchoolClassroom(data._id, {
-        className: classRM,
+      createSchoolClassroom(data?._id, {
+        className: classRM.toLocaleUpperCase(),
         class1stFee: num1,
         class2ndFee: num2,
         class3rdFee: num3,
       }).then((res: any) => {
         if (res.status === 201) {
+          mutate(`api/view-classrooms/`);
           setLoading(false);
           handleDisplaySubjectOff();
         } else {
@@ -63,7 +68,7 @@ const Layout: FC = () => {
   };
 
   return (
-    <div className="flex w-[100%]">
+    <div className="flex w-[100%] ">
       <div className="md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50">
         <Sider />
       </div>

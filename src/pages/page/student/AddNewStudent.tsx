@@ -14,10 +14,7 @@ const AddNewStaff = () => {
       setShow(toggled);
       clearTimeout(timing);
     }, 60);
-
-    console.log(toggled);
   }, [show, toggled]);
-  console.log("new try");
 
   return (
     <div className="w-full h-full flex justify-end overflow-hidden ">

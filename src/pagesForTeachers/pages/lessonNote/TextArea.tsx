@@ -13,7 +13,7 @@ const TextArea: FC<iTextArea> = ({ label, value, placeholder, ...props }) => {
       <textarea
         value={value}
         placeholder={placeholder}
-        className="w-full col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md p-3 "
+        className="w-full col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md py-1 px-2 text-[13px] h-[100px] resize-none"
         {...props}
       />
     </div>

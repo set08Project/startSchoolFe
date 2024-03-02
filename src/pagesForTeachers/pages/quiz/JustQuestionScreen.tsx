@@ -93,13 +93,13 @@ const JustQuestionScreen = () => {
 
       <div className="flex-1" />
 
-      <Button
+      {/* <Button
         name={"Empty"}
         className="text-white bg-red-500 uppercase text-[12px]px-8 py-4"
         onClick={() => {
           dispatch(displayEmptyTest());
         }}
-      />
+      /> */}
       {quest !== "" ? (
         <Button
           name={"add to Preview"}

@@ -7,11 +7,16 @@ import StoreItems from "./StoreItems";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemScreen from "./CartItemScreen";
 import { displayCart } from "../../../global/reduxState";
+import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useStore } from "../../../pages/hook/useSchoolAuth";
 
 const ViewStoreItems = () => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
   const cartToggle = useSelector((state: any) => state.cartToggle);
+
+  const { teacherInfo } = useTeacherInfo();
+  const { store: storeData } = useStore(teacherInfo?.schoolIDs);
 
   return (
     <div className="text-blue-950 relative">

@@ -2,6 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { FC } from "react";
 import { displaySession, displaySessioned } from "../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
+import {
+  useSchoolData,
+  useSchoolSessionData,
+} from "../../pages/hook/useSchoolAuth";
 
 const Session: FC = () => {
   // const { data } = useSchoolData();
@@ -38,22 +42,32 @@ const Session: FC = () => {
   // };
 
   const arrayData = Array.from({ length: 0 });
-
+  const { data } = useSchoolData();
+  const { schoolInfo } = useSchoolSessionData(data?._id);
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm min-h-42 rounded-md p-1 ">
-      <p className="text-[14px] mt-2 font-bold ml-2">Academic Session</p>
+      <p className="text-[14px] mt-2 font-bold ml-2">
+        Academic Sessions created
+      </p>
       <div className="flex flex-col items-between  w-full">
-        {arrayData.length > 0 ? (
+        {schoolInfo?.length > 0 ? (
           <div>
-            {arrayData?.map((props: any, i: number) => (
+            {schoolInfo?.map((props: any, i: number) => (
               <div
                 key={`${i + props}`}
-                className="w-full
-          "
-                // onClick={handleToggleMenuFalse}
+                className="w-full"
+                onClick={() => {
+                  if (!document.startViewTransition) {
+                    dispatch(displaySessioned(false));
+                  } else {
+                    document.startViewTransition(() => {
+                      dispatch(displaySessioned(false));
+                    });
+                  }
+                }}
               >
                 <div className="text-[12px] w-full py-2 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
-                  <div>Session: 2023/2024</div>
+                  <div>Session: {props?.year}</div>
                   <div className="text-[17px]"></div>
                 </div>
               </div>

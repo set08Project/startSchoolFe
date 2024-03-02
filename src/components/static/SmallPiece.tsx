@@ -61,7 +61,6 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
     const formData: any = new FormData();
     formData.append("avatar", file);
     setState(file);
-    console.log(state);
 
     if (state) {
       const timer = setTimeout(() => {
@@ -125,13 +124,15 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            console.log("you've logged out");
-            logout();
+            // logout();
             dispatch(logoutState());
             dispatch(displayUserStatus(null));
             handleMenu();
-            window.location.reload();
-            navigate("/");
+            const timer = setTimeout(() => {
+              window.location.reload();
+              navigate("/");
+              clearTimeout(timer);
+            }, 200);
           }}
         >
           <div>Log-out</div>

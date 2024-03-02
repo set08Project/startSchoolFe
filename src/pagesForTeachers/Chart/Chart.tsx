@@ -22,7 +22,7 @@ const Chart = () => {
   let female: number = 0;
 
   for (let i = 0; i < classStudents?.students?.length; i++) {
-    if (classStudents?.students[i].gender === "male") {
+    if (classStudents?.students[i].gender === "Male") {
       male++;
     } else {
       female++;
@@ -33,7 +33,7 @@ const Chart = () => {
     labels: [`Male: ${male}, Female: ${female}`],
     datasets: [
       {
-        label: "My Class Male vs. Female Chart",
+        label: "My Class Male Chart vs. Female Chart",
         data: [male, female],
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],

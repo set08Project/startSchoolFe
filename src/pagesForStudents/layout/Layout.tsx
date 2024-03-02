@@ -10,8 +10,8 @@ import { displayClass } from "../../global/reduxState";
 import { createSchoolClassroom } from "../../pages/api/schoolAPIs";
 import toast from "react-hot-toast";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
-import Header from "../../components/static/Header";
 import Sider from "../static/Sider";
+import Header from "../static/Header";
 
 const Layout: FC = () => {
   const { data } = useSchoolData();

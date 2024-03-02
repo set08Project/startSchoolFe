@@ -8,7 +8,6 @@ interface iProps {
 }
 const StudentRatio: FC<iProps> = ({ props }) => {
   const { studentAttendance } = useStudentAttendant(props);
-  console.log(studentAttendance);
 
   const arrayData = studentAttendance?.attendance?.filter((el: any) => {
     return el.present === true;

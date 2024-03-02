@@ -27,8 +27,7 @@ const QuizSetupScreen = () => {
 
   const combine: Array<any> = quiz?.concat(assign);
 
-  console.log("view.: ", combine);
-
+  console.log(subjectAssignment);
   return (
     <div className="text-blue-950 relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />

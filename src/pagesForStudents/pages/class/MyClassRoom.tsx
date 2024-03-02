@@ -130,19 +130,19 @@ const MyClassRoomScreen = () => {
             <p className="text-[12px]">
               <p className="font-normal">First Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class2ndFee.toLocaleString()}
+                ₦{classInfo?.class1stFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Second Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class3rdFee.toLocaleString()}
+                ₦{classInfo?.class2ndFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Third Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class1stFee.toLocaleString()}
+                ₦{classInfo?.class3rdFee?.toLocaleString()}
               </p>
             </p>
           </div>

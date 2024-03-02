@@ -15,6 +15,31 @@ export const getStarted = async () => {
   }
 };
 
+export const getSchoolCookie = async () => {
+  try {
+    return await axios
+      .get(
+        `${URL}/read-school-cookie`
+        // { withCredentials: true }
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getSchoolLandingPage = async (schoolName: string) => {
+  try {
+    return await axios.get(`${URL2}/${schoolName}`).then((res: any) => {
+      return res?.data;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const openServerAPI = async () => {
   try {
     return await axios.get(`${URL2}`).then((res: any) => {
@@ -53,21 +78,6 @@ export const loginSchool = async (data: {}) => {
   }
 };
 
-export const getSchoolCookie = async () => {
-  try {
-    return await axios
-      .get(
-        `${URL}/read-school-cookie`
-        // { withCredentials: true }
-      )
-      .then((res: any) => {
-        return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
 export const verifySchool = async (schoolID: string) => {
   try {
     return await axios
@@ -95,7 +105,10 @@ export const readSchool = async (schoolID: string) => {
 export const logout = async () => {
   try {
     return await axios
-      .delete(`${URL}/logout-school`, { withCredentials: true })
+      .delete(
+        `${URL}/logout-school`
+        // { withCredentials: true }
+      )
       .then((res: any) => {
         return res?.data;
       });
@@ -561,6 +574,75 @@ export const viewGallary = async (schoolID: string) => {
         return res?.data;
       });
   } catch (error) {
+    return error;
+  }
+};
+
+export const viewSchoolSession = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-session/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const verifyPayment1st = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-fees-1st/${schoolID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const verifyPayment2nd = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-fees-2nd/${schoolID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const verifyPayment3rd = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-fees-3rd/${schoolID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createNewSession = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-new-school-session/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
     return error;
   }
 };

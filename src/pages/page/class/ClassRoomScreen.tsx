@@ -43,8 +43,6 @@ const ClassRoomScreen = () => {
 
   const classroom = useSelector((state: any) => state.classroomToggled);
 
-  console.log(schoolClassroom);
-
   const handleDisplayClassroom = () => {
     if (!document.startViewTransition) {
       dispatch(displayClass(!classroom));
@@ -54,7 +52,6 @@ const ClassRoomScreen = () => {
       });
     }
   };
-  console.log(schoolClassroom?.classRooms);
   return (
     <div className="">
       {/* header */}

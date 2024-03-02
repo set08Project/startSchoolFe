@@ -137,7 +137,7 @@ const CreateLesson = () => {
           />
         ))}
       </div>
-      <div className="w-full mt-4">
+      <div className="w-full my-4 ">
         <ReactQuill
           theme="snow"
           value={value}
@@ -147,7 +147,7 @@ const CreateLesson = () => {
           placeholder="Content"
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-4 mt-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16">
         {[
           { placeholder: "Evaluation", name: "evaluation" },
           { placeholder: "Summary", name: "summary" },
@@ -171,7 +171,7 @@ const CreateLesson = () => {
       </div>
       <button
         onClick={handleSubmit}
-        className="btn text-white bg-blue-950 mt-3 hover:bg-blue-900 border-none"
+        className="btn text-white bg-blue-950 mt-3 px-12 hover:bg-blue-900 border-none"
       >
         {loading ? (
           <div>

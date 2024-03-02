@@ -7,7 +7,7 @@ import TopRatedTeacher from "./TopRatedTeacher";
 import MostActiveScreen from "../../page/stats/MostActiveStudio";
 
 const ScreenHome = () => {
-  document.title = "Studio Record and Stats";
+  document.title = "School's Record and Stats";
 
   const [state, setState] = useState<string>("");
 

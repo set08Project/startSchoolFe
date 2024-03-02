@@ -1,6 +1,8 @@
 import { FC, useState } from "react";
 import Input from "../components/reUse/Input";
 import { useStudentInfo } from "./hooks/useStudentHook";
+import Button from "../components/reUse/Button";
+import { updateProfile } from "./api/studentAPI";
 
 interface iPersonal {
   change: boolean;
@@ -11,7 +13,7 @@ const StudentsPersonal: FC<iPersonal> = ({ change }) => {
   // const [firstName, setFirstName] = useState<string>("");
   // const [lastName, setLastName] = useState<string>("");
   // const [number, setNumber] = useState<string>("");
-  // const [bio, setBio] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
 
@@ -32,12 +34,22 @@ const StudentsPersonal: FC<iPersonal> = ({ change }) => {
           </div>
         </div>
         <div className="mb-8">
-          <a className="text-[14px] text-gray-400">Phone number</a>
-          <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
-            {studentInfo?.phone ? (
-              studentInfo?.phone
+          <div className="md:w-[87%] w-[100%]  border-b-gray-400 pl-5 mt-[10px]">
+            {studentInfo?.parentEmail ? (
+              <div>
+                <div className="text-sm mb-3">Parent's email</div>
+                <div className=" border-b pb-2 border-gray-400 ">
+                  {studentInfo?.parentEmail}
+                </div>
+              </div>
             ) : (
-              <div className="opacity-40 text-[14px]">No Phone Number Yet</div>
+              <Input
+                name="Email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="ml-0 w-full "
+              />
             )}
           </div>
         </div>
@@ -65,6 +77,18 @@ const StudentsPersonal: FC<iPersonal> = ({ change }) => {
           )}
         </div>
       </div>
+
+      {email.length >= 1 ? (
+        <Button
+          onClick={() => {
+            updateProfile(studentInfo?._id, { parentEmail: email });
+          }}
+          name={"Submit"}
+          className="bg-blue-950 text-[18px] ml-10 mt-4 font-bold"
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

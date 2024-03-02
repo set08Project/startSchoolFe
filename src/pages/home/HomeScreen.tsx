@@ -21,6 +21,7 @@ import { useSchoolData, useSchoolSubject } from "../hook/useSchoolAuth";
 import toast from "react-hot-toast";
 import Announcement from "./Announcement";
 import moment from "moment";
+import { mutate } from "swr";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const HomeScreen = () => {
         designated: classAssigned,
       }).then((res: any) => {
         if (res?.status === 201) {
+          mutate(`api/view-school-subject/${data?._id}`);
           setLoading(false);
           handleDisplaySubject();
         } else {
@@ -98,12 +100,13 @@ const HomeScreen = () => {
   const handleCreateAnnouncement = () => {
     try {
       setLoading(true);
-      createSchoolAnnouncement(data._id, {
+      createSchoolAnnouncement(data?._id, {
         title,
         details,
         date: moment(startDateTime).format("LLL"),
       }).then((res: any) => {
         if (res.status === 201) {
+          mutate(`api/view-announcement/${data?._id}`);
           setLoading(false);
           handleDisplayNotice();
           setStartDateTime(null);
@@ -128,6 +131,7 @@ const HomeScreen = () => {
         details,
         date: moment(startDateTime).format("LLL"),
       }).then((res: any) => {
+        mutate(`api/view-event/${data?._id}`);
         if (res.status === 201) {
           setLoading(false);
           handleDisplayNotice();
@@ -221,7 +225,7 @@ const HomeScreen = () => {
               {/* <GeneralDataScreen /> */}
               Subjects
             </p>
-            <div className="font-medium text-[12px]">
+            <div className="font-medium text-[12px] h-[280px]  overflow-y-auto ">
               {schoolSubject?.subjects?.map((props: any) => (
                 <div key={props?._id} className="my-1">
                   <span className="font-bold">{props?.subjectTitle}</span>{" "}

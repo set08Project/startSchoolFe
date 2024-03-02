@@ -26,21 +26,23 @@ const StudentLogin = () => {
     loginStudent(val)
       .then((res) => {
         if (res.status === 201) {
+          console.log(res);
           dispatch(loginState(res));
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
-
-          {
-            !loading && navigate("/");
-          }
         } else {
           setLoading(false);
           toast.error(`${res?.response?.data?.message}`);
         }
       })
       .then(() => {
-        window.location.reload();
+        setTimeout(() => {
+          {
+            !loading && navigate("/");
+            window.location.reload();
+          }
+        }, 2000);
       });
   };
 

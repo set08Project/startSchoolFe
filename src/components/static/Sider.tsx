@@ -1,8 +1,5 @@
 import {
-  MdArticle,
   MdPeople,
-  MdPhone,
-  MdPhoto,
   MdQueryStats,
   MdReport,
   MdSchool,
@@ -17,7 +14,11 @@ import {
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuState } from "../../global/reduxState";
-import { useSchoolData } from "../../pages/hook/useSchoolAuth";
+import {
+  useSchoolCookie,
+  useSchoolData,
+  useSchoolSessionData,
+} from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
@@ -26,7 +27,10 @@ import { FaPhotoVideo } from "react-icons/fa";
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
+
   const { data } = useSchoolData();
+  const { dataID } = useSchoolCookie();
+  const { schoolInfo, loading }: any = useSchoolSessionData(dataID);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -62,7 +66,11 @@ const Sider = () => {
             ID: {data?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: 2023/2024
+            Session:{" "}
+            {loading
+              ? ""
+              : schoolInfo[(schoolInfo?.length ? schoolInfo?.length : 1) - 1]!
+                  ?.year}
           </p>
         </div>
       </div>

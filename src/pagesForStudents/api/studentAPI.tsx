@@ -18,7 +18,11 @@ export const viewStduentDetail: any = async (studentID: string) => {
 export const loginStudent = async (data: {}) => {
   try {
     return await axios
-      .post(`${URL}/login-student/`, data, { withCredentials: true })
+      .post(
+        `${URL}/login-student/`,
+        data
+        // { withCredentials: true }
+      )
       .then((res: any) => {
         return res?.data;
       });
@@ -172,6 +176,21 @@ export const getSchoolArticle = async (schoolID: string) => {
   try {
     return await axios
       .get(`${URL}/view-school-article/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateProfile = async (studntID: string, data: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student/${studntID}`, data)
       .then((res: any) => {
         return res?.data;
       })

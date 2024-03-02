@@ -7,6 +7,7 @@ import { changeToggleMenuState, logoutState } from "../../global/reduxState";
 import { logout } from "../../pages/api/schoolAPIs";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import Button from "../../components/reUse/Button";
+import { useStudentInfo } from "../hooks/useStudentHook";
 
 interface iData {
   title?: string;
@@ -22,7 +23,7 @@ interface iProps {
 }
 
 const SmallPiece: FC<iProps> = ({ log, name, but }) => {
-  const { data } = useSchoolData();
+  const { studentInfo } = useStudentInfo();
   const dispatch = useDispatch();
 
   const handleToggleMenuFalse = () => {
@@ -105,7 +106,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            logout();
+            // logout();
             dispatch(logoutState());
             // window.location.reload();
           }}
@@ -119,7 +120,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       <div className="mt-4" />
       <hr />
       <p className="p-2 text-center break-words text-[12px] font-bold uppercase ">
-        {data?.schoolName}
+        {studentInfo?.schoolName}
       </p>
     </div>
   );

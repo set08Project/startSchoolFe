@@ -18,7 +18,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
   return (
     <div className="w-full ">
       <div className=" h-screen">
-        <div className=" w-full h-[400px] bg-slate-100  border rounded-md p-2 overflow-x-auto gap-4">
+        <div className=" w-full h-[415px] bg-slate-100  border rounded-md p-2 overflow-x-auto gap-4">
           {/* Header */}
           <div className="flex w-[2600px] gap-4 bg-white py-3 px-1">
             <div className="w-[300px] h-6 border-r">days</div>

@@ -8,15 +8,8 @@ import { useGallary, useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 document.title = "School's Gallery";
-import PhotoAlbum from "react-photo-album";
-import slides, { advancedSlides } from "../gallary/slides";
 
-import Captions from "yet-another-react-lightbox/plugins/captions";
-import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import Video from "yet-another-react-lightbox/plugins/video";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { mutate } from "swr";
 
 const GallerySettings = () => {
   const { data } = useSchoolData();
@@ -42,6 +35,7 @@ const GallerySettings = () => {
 
         createGallaryRestrict(data?._id, formData).then((res) => {
           if (res.status === 201) {
+            mutate(`api/view-gallary/${data?._id}`);
             toast.success(`Image Uploaded`);
             setLoading(false);
             setImage("");
@@ -58,40 +52,10 @@ const GallerySettings = () => {
   }, [avatar]);
 
   const { gallary } = useGallary(data?._id);
-  const [open, setOpen] = useState<boolean>(false);
-  const [index, setIndex] = useState<number>(-1);
 
   let images = gallary?.data?.map((el: any) => {
     return { src: el.avatar };
   });
-  console.log(images);
-
-  let testImages = [
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708847559/bq5g9pxktgwolppdu1rb.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708847570/iavduio1195tjwwv7qer.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708847601/sdi1kqws9da6itjxldci.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708847980/cwv0tohovozjehjsatv1.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708848491/m7en8esm36spvx46cbuc.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708848769/hkmf7p7t1jkan8ic4fxr.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708848808/luopluixzkcxewl5yqnb.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708848863/xa0a0skpbrscho6txru1.png",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708848961/cmvhddntcrkcrkuc5iup.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708849023/x3ez1ysm8yhtpqktrgkp.jpg",
-    "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708849135/rabpe5mpnt0wlnmmmbcy.jpg",
-  ];
-
-  const photos = [
-    {
-      src: "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708847559/bq5g9pxktgwolppdu1rb.jpg",
-      width: 800,
-      height: 600,
-    },
-    {
-      src: "https://res.cloudinary.com/dv4dlmp4e/image/upload/v1708849135/rabpe5mpnt0wlnmmmbcy.jpg",
-      width: 800,
-      height: 600,
-    },
-  ];
 
   return (
     <div>
@@ -130,16 +94,16 @@ const GallerySettings = () => {
             </div>
           </div>
         </div>
-        <button type="button" onClick={() => setOpen(true)}>
+        {/* <button type="button" onClick={() => setOpen(true)}>
           Open Lightbox
-        </button>
-        <div className=" min-h-[400px] mb-10 w-full border flex justify-start items-center transition-all duration-300">
+        </button> */}
+        <div className="p-2 min-h-[400px] mb-10 w-full border flex justify-start items-center transition-all duration-300">
           <div className="w-full">
             {gallary?.data?.length > 0 ? (
               <div className="w-full gap-4 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  ">
                 {gallary?.data?.map((props: any) => (
                   <img
-                    className="w-full h-[300px] rounded-md flex object-cover bg-red-600"
+                    className="w-full h-[300px] rounded-md flex object-cover "
                     src={props?.avatar}
                   />
                 ))}

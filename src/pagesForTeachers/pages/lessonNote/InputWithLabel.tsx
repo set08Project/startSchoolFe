@@ -19,7 +19,7 @@ const InputWithLabel: FC<iInputLabel> = ({
         {label}
         <Input
           placeholder={placeholder}
-          className="w-auto"
+          className="w-auto ml-0"
           value={value}
           {...props}
         />

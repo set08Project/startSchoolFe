@@ -23,12 +23,19 @@ import {
 } from "../../global/reduxState";
 import { useState } from "react";
 import Session from "./Session";
+import AddSession from "./AddSession";
+import {
+  useSchoolData,
+  useSchoolSessionData,
+} from "../../pages/hook/useSchoolAuth";
 
 const Header = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state: any) => state.toggle);
   const toggleMenu = useSelector((state: any) => state.toggleMenu);
   const toggleSession = useSelector((state: any) => state.sessionToggled);
+
+  const session = useSelector((state: any) => state?.sessionToggle);
 
   const [sess, setSess] = useState<boolean>(false);
 
@@ -43,6 +50,9 @@ const Header = () => {
       });
     }
   };
+
+  const { data } = useSchoolData();
+  const { schoolInfo } = useSchoolSessionData(data?._id);
 
   return (
     <div
@@ -61,7 +71,7 @@ const Header = () => {
           {" "}
           <FaCalendar />
           <span className="text-[12px] mx-1">
-            Session: <span>23/24 </span>
+            Session: <span>{schoolInfo && schoolInfo[0]?.year} </span>
           </span>
           <div className="transition-all duration-300 ">
             {toggleSession ? (
@@ -127,6 +137,12 @@ const Header = () => {
       >
         <Session />
       </div>
+
+      {session && (
+        <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">
+          <AddSession />
+        </div>
+      )}
 
       {toggleMenu && (
         <div

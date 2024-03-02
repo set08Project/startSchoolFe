@@ -24,8 +24,9 @@ import {
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import ClassModel from "./ClassModel";
-import TimeTableScreen from "./TimeTableScreen";
 import ViewClassStudent from "./ViewClassStudent";
+import { mutate } from "swr";
+import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
 
 interface iProps {
   props?: string;
@@ -134,6 +135,7 @@ const ClassDetailScreen = () => {
       designated: classroom?.className,
     }).then((res) => {
       if (res.status === 201) {
+        mutate(`api/view-class-info/${classID}`);
         toast.success("class teacher updated");
         handleToggleMenuFalse();
       } else {
@@ -148,6 +150,8 @@ const ClassDetailScreen = () => {
       classTeacherName: teacher,
     }).then((res) => {
       if (res.status === 201) {
+        mutate(`api/view-classrooms/${classID}`);
+
         toast.success("class teacher updated");
         handleToggleMenuFalse();
       } else {
@@ -185,19 +189,19 @@ const ClassDetailScreen = () => {
             <p className="text-[12px]">
               <p className="font-normal">First Term</p>
               <p className="font-bold">
-                ₦{classroom?.class2ndFee.toLocaleString()}
+                ₦{classroom?.class1stFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Second Term</p>
               <p className="font-bold">
-                ₦{classroom?.class3rdFee.toLocaleString()}
+                ₦{classroom?.class2ndFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Third Term</p>
               <p className="font-bold">
-                ₦{classroom?.class1stFee.toLocaleString()}
+                ₦{classroom?.class3rdFee?.toLocaleString()}
               </p>
             </p>
           </div>
@@ -466,7 +470,8 @@ const ClassDetailScreen = () => {
           <ClassModel />
         </div>
         <div className="flex gap-4 mt-5 h-[450px]">
-          <TimeTableScreen />
+          {/* <TimeTableScreen /> */}
+          <TimeTableScreen props={classID!} />
         </div>
 
         <div className="mt-6 w-full min-h-[60px] py-5 bg-slate-50 rounded-lg border  px-4 ">

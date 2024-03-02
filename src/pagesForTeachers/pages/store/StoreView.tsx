@@ -1,14 +1,20 @@
 import pix from "../../../assets/pix.jpg";
 import { BsCart4 } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { displayCart } from "../../../global/reduxState";
+import { addToCart, displayCart } from "../../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
+import { useStore } from "../../../pages/hook/useSchoolAuth";
+import { useTeacherInfo } from "../../hooks/useTeacher";
 
 const StoreView = () => {
   const dispatch = useDispatch();
+  const cart = useSelector((state: any) => state.cart);
   const cartToggle = useSelector((state: any) => state.cartToggle);
 
-  const store = Array.from({ length: 0 });
+  const { teacherInfo } = useTeacherInfo();
+  const { store: storeData } = useStore(teacherInfo?.schoolIDs);
+
+  document.title = "View Store ";
 
   const changeView = () => {
     if (!document.startViewTransition) {
@@ -20,35 +26,53 @@ const StoreView = () => {
     }
     // displayCart;
   };
+
   return (
     <div>
       <div className="w-full flex justify-end mb-10">
         <div className="mr-10 relative cursor-pointer" onClick={changeView}>
           <BsCart4 size={25} />
           <div className="absolute -top-1 flex justify-center items-center bg-red-500 text-white rounded-full w-4 h-4 text-[12px] font-medium -right-1">
-            3
+            {cart.length}
           </div>
         </div>
       </div>
 
-      {store.length > 0 ? (
+      {storeData?.data?.length > 0 ? (
         <div>
           {" "}
           <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {store.map((props: any, i: number) => (
-              <div className="card min-w-60 bg-base-100 shadow-sm border rounded-md pb-0">
+            {storeData?.data?.map((props: any, i: number) => (
+              <div
+                key={props?._id}
+                className="card min-w-60 bg-base-100 shadow-sm border rounded-md pb-0"
+              >
                 <figure>
                   <img
                     className="h-[290px] w-full object-cover"
-                    src={pix}
+                    src={props?.avatar ? props?.avatar : pix}
                     alt="Shoes"
                   />
                 </figure>
                 <div className="card-body pb-4 px-3">
-                  <h2 className="card-title">Item's Title!</h2>
-                  <p>Item's Descriptions?</p>
+                  <h2 className="card-title">{props?.title}</h2>
+
+                  <div className="flex justify-between items-center w-full ">
+                    <p className="text-[12px] font-medium">
+                      {props?.description}
+                    </p>
+                    <p className="flex justify-end font-bold">
+                      {" "}
+                      ₦{props?.cost.toLocaleString()}
+                    </p>
+                  </div>
                   <div className="card-actions justify-end">
-                    <button className="btn bg-blue-950 hover:bg-blue-900 text-white rounded-md mt-4 ">
+                    <button
+                      className="btn bg-blue-950 hover:bg-blue-900 text-white rounded-md mt-4 "
+                      onClick={() => {
+                        dispatch(addToCart(props));
+                      }}
+                    >
                       Add to Cart
                     </button>
                   </div>
