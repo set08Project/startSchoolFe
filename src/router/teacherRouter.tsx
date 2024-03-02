@@ -16,6 +16,8 @@ import CreateLesson from "../pagesForTeachers/pages/lessonNote/CreateLessonNote"
 import AttendanceScreen from "../pagesForTeachers/pages/attendance/AttendanceScreen";
 import ViewTeacherNote from "../pagesForTeachers/pages/lessonNote/ViewTeacherNote";
 import Article from "../pagesForTeachers/pages/article/Article";
+import GallerySettings from "../pages/page/settings/GallerySettings";
+import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -96,6 +98,11 @@ export const teacherRouter = createBrowserRouter([
       {
         path: "exams",
         element: <QuizSetupScreen />,
+      },
+
+      {
+        path: "Gallary",
+        element: <GalleryScreen />,
       },
 
       {

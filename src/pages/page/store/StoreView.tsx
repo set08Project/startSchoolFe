@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, displayCart } from "../../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
 import { useSchoolData, useStore } from "../../hook/useSchoolAuth";
+import { UnLazyImage } from "@unlazy/react";
 
 const StoreView = () => {
   const dispatch = useDispatch();
@@ -46,10 +47,14 @@ const StoreView = () => {
                 className="card min-w-60 bg-base-100 shadow-sm border rounded-md pb-0"
               >
                 <figure>
-                  <img
-                    className="h-[290px] w-full object-cover"
+                  <UnLazyImage
+                    // blurhash="LKO2:N%2Tw=w]~RBVZRi};RPxuwH"
+                    // srcSet="image-320w.jpg 320w, image-640w.jpg 640w"
+                    alt={props?.title}
+                    thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
                     src={props?.avatar ? props?.avatar : pix}
-                    alt="Shoes"
+                    autoSizes
+                    className="h-[290px] w-full object-cover"
                   />
                 </figure>
                 <div className="card-body pb-4 px-3">

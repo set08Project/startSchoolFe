@@ -6,6 +6,7 @@ import {
 } from "../../../global/reduxState";
 import { MdClose, MdExpandLess } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
+import { UnLazyImage } from "@unlazy/react";
 
 const CartItemScreen = () => {
   const dispatch = useDispatch();
@@ -101,9 +102,13 @@ const CartItemScreen = () => {
                     className="flex items-center w-full gap-2 border-b border-[gray] py-5 "
                   >
                     <MdClose />
-                    <img
-                      className="w-[200px] h-[120px] border rounded-lg ml-2"
+
+                    <UnLazyImage
+                      alt={props?.title}
+                      thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
                       src={props?.avatar}
+                      autoSizes
+                      className="w-[200px] h-[120px] border rounded-lg ml-2"
                     />
 
                     <div className="w-[90%] ">

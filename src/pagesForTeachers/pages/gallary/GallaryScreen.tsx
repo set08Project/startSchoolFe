@@ -1,59 +1,18 @@
-import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useEffect, useState } from "react";
-import { BsCamera } from "react-icons/bs";
-import { createGallaryRestrict } from "../../api/schoolAPIs";
-import { useGallary, useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
-import ClipLoader from "react-spinners/ClipLoader";
 import { UnLazyImage } from "@unlazy/react";
 
 document.title = "School's Gallery";
 
 import { mutate } from "swr";
+import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useGallary } from "../../../pages/hook/useSchoolAuth";
 
-const GallerySettings = () => {
-  const { data } = useSchoolData();
-  const [image, setImage] = useState("");
-  const [avatar, setAvatar] = useState("");
+const GalleryScreen = () => {
+  const { teacherInfo } = useTeacherInfo();
 
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const onHandleImage = (e: any) => {
-    const file = e.target.files[0];
-    const save = URL.createObjectURL(file);
-
-    setImage(file);
-    setAvatar(save);
-  };
-
-  useEffect(() => {
-    let timimg = setTimeout(() => {
-      if (avatar !== "") {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("avatar", image);
-
-        createGallaryRestrict(data?._id, formData).then((res) => {
-          if (res.status === 201) {
-            mutate(`api/view-gallary/${data?._id}`);
-            toast.success(`Image Uploaded`);
-            setLoading(false);
-            setImage("");
-            setAvatar("");
-          } else {
-            toast.error(`${res?.response?.data?.message}`);
-            setLoading(false);
-          }
-        });
-      }
-
-      clearTimeout(timimg);
-    });
-  }, [avatar]);
-
-  const { gallary } = useGallary(data?._id);
+  const { gallary } = useGallary(teacherInfo?.schoolIDs);
 
   let images = gallary?.data?.map((el: any) => {
     return { src: el.avatar };
@@ -64,7 +23,7 @@ const GallerySettings = () => {
       <Toaster position="top-center" reverseOrder={true} />
       <div className="w-full bg-white py-[20px] ">
         <LittleHeader name={document.title} />
-        {data?._id && (
+        {/* {data?._id && (
           <div className="flex justify-between items-end">
             <div className="mb-5 text-blue-950">
               Upload School Photos to your custom gallery here
@@ -97,7 +56,7 @@ const GallerySettings = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="p-2 min-h-[400px] mb-10 w-full border flex justify-start items-center transition-all duration-300">
           <div className="w-full">
@@ -159,4 +118,4 @@ const GallerySettings = () => {
   );
 };
 
-export default GallerySettings;
+export default GalleryScreen;

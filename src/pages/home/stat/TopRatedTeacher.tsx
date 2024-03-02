@@ -1,3 +1,4 @@
+import { UnLazyImage } from "@unlazy/react";
 import pix from "../../../assets/pix.jpg";
 import { useSchoolTeacher } from "../../hook/useSchoolAuth";
 import lodash from "lodash";
@@ -12,7 +13,15 @@ const TopRatedTeacher = () => {
         <div key={props?._id} className="carousel-item w-1/2">
           {i < 3 && (
             <div className="w-full h-[300px]">
-              <img src={pix} className="w-full h-[70%] object-cover" />
+              {/* <img src={pix}/> */}
+
+              <UnLazyImage
+                alt={props?.title}
+                thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
+                src={props?.avatar ? props?.avatar : pix}
+                autoSizes
+                className="w-full h-[70%] object-cover"
+              />
               <div className="p-2 text-[12px]">
                 <p>
                   Name:{" "}
