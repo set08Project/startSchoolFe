@@ -34,29 +34,36 @@ const Personal: FC = () => {
     <div>
       <div className="mb-2 text-blue-950">
         <p className="font-bold"></p>
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          <div className="border rounded-md h-[130px] p-4">
-            <p className="font-medium leading-tight">Number of Students:</p>
 
-            <div className="flex items-end gap-2">
-              <h1 className="text-[70px] font-bold">
+        {/* start */}
+        <div className="grid grid-cols-2 gap-3 mt-2">
+          <div className="border rounded-md min-h-[130px] p-2 pb-0 ">
+            <p className="font-medium leading-tight">Number of Students:</p>
+            <div className="mt-5" />
+            <div className="flex items-end gap-2 ">
+              <h1 className="text-[60px] md:text-[70px] font-medium mb-0 leading-none">
                 {state?.students?.length}
               </h1>{" "}
-              <span className="mb-6 font-medium text-[20px]">students</span>
+              <span className="mb-1 font-medium text-[15px] -ml-2">
+                students
+              </span>
             </div>
           </div>
 
-          <div className="border rounded-md h-[130px] p-4">
+          <div className="border rounded-md min-h-[130px] p-2 pb-0 ">
             <p className="font-medium leading-tight">Number of Subjects:</p>
-
-            <div className="flex items-end gap-2">
-              <h1 className="text-[70px] font-bold">
+            <div className="mt-5" />
+            <div className="flex items-end gap-2 ">
+              <h1 className="text-[60px] md:text-[70px] font-medium mb-0 leading-none">
                 {state?.classSubjects?.length}
               </h1>{" "}
-              <span className="mb-6 font-medium text-[20px]">Subjects</span>
+              <span className="mb-1 font-medium text-[15px] -ml-2">
+                Subjects
+              </span>
             </div>
           </div>
         </div>
+        {/* end */}
       </div>
       <div className="border-t my-5" />
 
