@@ -2,46 +2,57 @@ import { FC, useEffect, useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
-import { createAssignment, readClassInfo } from "../../api/teachersAPI";
-import { useSujectInfo } from "../../hooks/useTeacher";
+import {
+  createAssignment,
+  readClassInfo,
+  studentOfTheWeek,
+} from "../../api/teachersAPI";
+import {
+  useClassStudent,
+  useSujectInfo,
+  useTeacherInfo,
+} from "../../hooks/useTeacher";
 import Input from "../../components/reUse/Input";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { mutate } from "swr";
+import {
+  useReadMyClassInfo,
+  useReadMyClassInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
 }
 
-const ClassModelAssignment: FC<iProps> = ({ props }) => {
+const StudentOfTheWeek: FC<iProps> = ({ props }) => {
   const [subject, setSubject] = useState<string>("");
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
 
   const { subjectInfo } = useSujectInfo(props!);
-  const [state, setState] = useState<any>({});
 
-  useEffect(() => {
-    readClassInfo(subjectInfo?.designated).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
+  const { teacherInfo } = useTeacherInfo();
+  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
+
+  const { classStudents } = useClassStudent(state?._id);
 
   const [startDateTime, setStartDateTime] = useState<any>(new Date());
 
   // api/view-subject-assignment/${subjectID}
 
   const onCreateAssignment = () => {
-    createAssignment(state?._id, props!, {
-      assignmentDetails: period,
-      assignmentTopic: subject,
-      assignmentDeadline: moment(startDateTime).format("LLL"),
+    studentOfTheWeek(teacherInfo?._id, {
+      remark: period,
+      studentName: subject,
     })
       .then((res) => {
+        console.log(res);
         if (res?.status === 201) {
-          mutate(`api/view-subject-assignment/${subjectInfo?._id}`);
+          //   mutate(`api/view-subject-assignment/${subjectInfo?._id}`);
           toast.success("Added Successfully...!");
         } else {
           toast.error(`${res?.response?.data?.message}`);
@@ -60,7 +71,7 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
       <div className=" text-[13px] font-medium">
         <label
           htmlFor="assign_subject_timetable"
-          className=" transition-all duration-300  cursor-pointer "
+          className=" transition-all duration-300 cursor-pointer "
         >
           + Student of the Week
         </label>
@@ -85,25 +96,17 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
             </div>
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
-              Please note that by assigning this subject to this class, it
-              automtically becomes one of the class must take suject.
+              Please note that by doing this... you are crediting the Student
+              below as the Student of the Week!
               <br />
               <br />
-              <div className="flex gap-2  items-center">
-                <p> Assignment Topic: {subject}</p>
-                {subject && (
-                  <div className="flex items-center font-bold">
-                    <span>selected</span>
-                    <MdCheck className="text-green-500 text-[25px] mb-1 " />
-                  </div>
-                )}
-              </div>
               <div className="flex gap-2  items-center">
                 <p>
                   {" "}
-                  Assignment Deadline: {moment(startDateTime).format("LLL")}
+                  Student of the Week:{" "}
+                  <span className="font-medium">{subject}</span>
                 </p>
-                {moment(startDateTime).format("LLL") && (
+                {subject && (
                   <div className="flex items-center font-bold">
                     <span>selected</span>
                     <MdCheck className="text-green-500 text-[25px] mb-1 " />
@@ -114,7 +117,7 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
             <div className="mt-10 w-full gap-2 flex flex-col items-center">
               <div className="w-full">
                 <label className="font-medium text-[12px]">
-                  Assignment Detail <span className="text-red-500">*</span>
+                  Remark Detail <span className="text-red-500">*</span>
                 </label>
 
                 {/* // readSubject */}
@@ -124,39 +127,34 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
                   onChange={(e) => {
                     setPeriod(e.target.value);
                   }}
-                  placeholder="Assignment Details"
+                  placeholder="Remark Detail"
                 />
                 <div className="flex w-full gap-2 mb-10">
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
-                      Assignment Title <span className="text-red-500">*</span>
+                      Student of the Week{" "}
+                      <span className="text-red-500">*</span>
                     </label>
-                    <Input
-                      placeholder="Assignment Title"
+
+                    <select
+                      className="select select-bordered w-full mt-2"
                       value={subject}
                       onChange={(e) => {
                         setSubject(e.target.value);
                       }}
-                      className="w-full ml-0"
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <div className="w-full ml-2  mt-0">
-                      <label className="font-medium text-[12px] mb-0">
-                        Assignment Deadline{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-
-                      <DatePicker
-                        className="text-[12px] font-medium h-12 px-2 mt-2 border rounded-md w-[220px]  "
-                        placeholderText="add date here"
-                        selected={startDateTime!}
-                        onChange={(date: any) => setStartDateTime(date)}
-                        showTimeSelect
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                      />
-                    </div>
+                    >
+                      <option>Choose Student of the Week</option>
+                      {classStudents?.students?.map((props: any) => {
+                        return (
+                          <option
+                            key={props?._id}
+                            value={` ${props?.studentFirstName} ${props?.studentLastName}`}
+                          >
+                            {props?.studentFirstName} {props?.studentLastName}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -169,7 +167,7 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
                   className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
                   onClick={onCreateAssignment}
                 >
-                  Confirm and Publish
+                  Publish This Student
                 </label>
               ) : (
                 <Button
@@ -189,4 +187,4 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
   );
 };
 
-export default ClassModelAssignment;
+export default StudentOfTheWeek;

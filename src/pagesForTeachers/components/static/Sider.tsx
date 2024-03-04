@@ -1,5 +1,6 @@
 import {
   MdArticle,
+  MdBadge,
   MdPeople,
   MdQueryStats,
   MdReport,
@@ -18,11 +19,13 @@ import {
 import pix from "../../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const showing = useSelector((state: any) => state.showStaffComp);
   const { teacherInfo } = useTeacherInfo();
+  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -78,14 +81,19 @@ const Sider = () => {
             ID: {teacherInfo?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: 2023/2024
+            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
           </p>
+          <div className="text-[12px] font-bold">
+            {teacherInfo?.staffName?.length > 16
+              ? `${teacherInfo?.staffName.substring(0, 16)}...`
+              : teacherInfo?.staffName}
+          </div>
         </div>
       </div>
 
       {/* top box */}
 
-      <div className="mt-20 px-2 text- center flex flex-col border mx-2 rounded-md py-4">
+      <div className="mt-10 px-2 text- center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
           Mark students Attendance with the Button below{" "}
         </div>
@@ -224,6 +232,19 @@ const Sider = () => {
         >
           Weekly-Report
           <MdReport />
+        </NavLink>
+
+        <NavLink
+          to="/complain"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Complains
+          <MdBadge />
         </NavLink>
 
         <div className="flex-1" />

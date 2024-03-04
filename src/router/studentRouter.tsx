@@ -14,6 +14,8 @@ import ReportScreen from "../pagesForStudents/pages/report/ReportScreen";
 import ClassLessonNote from "../pagesForStudents/pages/studentNote/StudentNote";
 import ViewClassNoteDetail from "../pagesForStudents/pages/studentNote/ViewNotes";
 import CreateArticle from "../pagesForStudents/pages/article/CreateArticle";
+import StudentGalleryScreen from "../pagesForStudents/pages/Gallary/GallaryScreen";
+import ViewReport from "../pagesForStudents/pages/complain/ViewReport";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -40,6 +42,10 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/lesson/:noteID",
         element: <ViewClassNoteDetail />,
+      },
+      {
+        path: "/gallary",
+        element: <StudentGalleryScreen />,
       },
       {
         path: "/articles",
@@ -72,6 +78,10 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/report",
         element: <ReportScreen />,
+      },
+      {
+        path: "/complain",
+        element: <ViewReport />,
       },
     ],
   },

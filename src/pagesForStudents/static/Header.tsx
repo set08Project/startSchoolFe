@@ -23,13 +23,16 @@ import {
 import { useState } from "react";
 import Session from "./Session";
 import SmallPiece from "./SmallPiece";
+import { useStudentInfo } from "../hooks/useStudentHook";
+import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 
 const Header = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state: any) => state.toggle);
   const toggleMenu = useSelector((state: any) => state.toggleMenu);
   const toggleSession = useSelector((state: any) => state.sessionToggled);
-
+  const { studentInfo } = useStudentInfo();
+  const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
   const [sess, setSess] = useState<boolean>(false);
 
   const handleMenu = () => {
@@ -51,17 +54,11 @@ const Header = () => {
     >
       {/* <div>  */}
       <div className="flex items-center  justify-end w-[90%]">
-        <div
-          className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
-          onClick={() => {
-            setSess(!sess);
-            dispatch(displaySessioned(!toggleSession));
-          }}
-        >
+        <div className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
           {" "}
           <FaCalendar />
           <span className="text-[12px] mx-1">
-            Session: <span>23/24 </span>
+            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
           </span>
           <div className="transition-all duration-300 ">
             {toggleSession ? (

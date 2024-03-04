@@ -16,6 +16,7 @@ import {
   studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
+  viewComplains,
   viewGallary,
   viewSchoolByName,
   viewSchoolSession,
@@ -334,3 +335,15 @@ export async function revalidateLiveQueries() {
 
   return Promise.all(promises);
 }
+
+export const useComplain = (schoolID: string) => {
+  const { data: complainData } = useSWR(
+    `api/view-school-complain/${schoolID}`,
+    () => {
+      return viewComplains(schoolID!).then((res) => {
+        return res.data.complain;
+      });
+    }
+  );
+  return { complainData };
+};

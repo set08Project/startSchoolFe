@@ -6,6 +6,7 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
+import toast, { Toaster } from "react-hot-toast";
 
 const QuizTestScreen = () => {
   const navigate = useNavigate();
@@ -25,8 +26,6 @@ const QuizTestScreen = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Clicked:");
-
     let correctAnswer: Array<string> = [];
     let score: number = 0;
     let percentage: number = 0;
@@ -38,7 +37,6 @@ const QuizTestScreen = () => {
       if (correctAnswer[i] === Object.values(state)[i]) {
         score++;
       }
-      console.log(score);
     }
     percentage = Math.ceil((score / quizData?.quiz[1]?.question.length) * 100);
     if (percentage >= 0 && percentage <= 45) {
@@ -69,19 +67,25 @@ const QuizTestScreen = () => {
       grade = "A";
     }
 
-    console.log(score, grade, remark);
-
     performanceTest(studentInfo?._id, quizID!, {
       studentScore: score,
       studentGrade: grade,
       remark,
-    }).then(() => {
-      navigate("");
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success("Quiz summitted successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      } else {
+        toast.error("Something went wrong");
+      }
     });
   };
 
   return (
     <div>
+      <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader name={`${quizData?.subjectTitle} Test Screen`} />
       <div className="relative">
         {!start && (

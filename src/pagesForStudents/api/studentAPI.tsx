@@ -201,3 +201,54 @@ export const updateProfile = async (studntID: string, data: {}) => {
     return error;
   }
 };
+
+export const makeComplains = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/create-student-complain/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewComplains = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-complain/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewClassTimetable = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-time-table/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateTeacherActiveness = async (
+  studentID: string,
+  data: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/staff-active/${studentID}`, { teacherName: data })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

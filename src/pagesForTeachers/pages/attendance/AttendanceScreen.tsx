@@ -14,6 +14,7 @@ import {
   readClassInfo,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
+import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: string;
@@ -54,6 +55,7 @@ const Remark: FC<iProps> = ({ props, data }) => {
 
 const Attendance: FC<iProps> = ({ id, props, data }) => {
   const { teacherInfo } = useTeacherInfo();
+  const { state } = useReadMyClassInfoData(teacherInfo.classesAssigned);
 
   let name2 = data?.studentFirstName;
 
@@ -62,7 +64,7 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
   let result = attendance?.attendance?.find((el: any) => {
     return el?.studentFirstName === name2;
   });
-
+  // api/view-class-attendance/${classID}
   return (
     <div className="flex justify-between px-4">
       {}
@@ -77,7 +79,7 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           onChange={() => {
             markAttendanceAbsent(teacherInfo?._id, id!).then((res: any) => {
               if (res.status === 201) {
-                mutate(`api/view-all-class-students/${props!}`);
+                mutate(`api/view-all-class-students/${state?._id!}`);
               }
             });
           }}
@@ -95,7 +97,7 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           onChange={() => {
             markAttendancePresent(teacherInfo?._id, id!).then((res: any) => {
               if (res.status === 201) {
-                mutate(`api/view-all-class-students/${props!}`);
+                mutate(`api/view-all-class-students/${state?._id!}`);
               }
             });
           }}
@@ -197,7 +199,9 @@ const AttendanceScreen = () => {
                         {props?.perfomance ? props?.perfomance : "0"}
                       </div>
 
-                      <div className="w-[80px] border-r">3 of 5</div>
+                      <div className="w-[80px] border-r">
+                        {props?.perfomance ? props?.perfomance : "0"} of 5
+                      </div>
                     </div>
                   </div>
                 </div>

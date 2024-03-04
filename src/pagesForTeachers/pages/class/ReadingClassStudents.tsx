@@ -72,7 +72,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
           <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
             <div className="w-[130px] border-r">Reg. Date</div>
             <div className="w-[100px] border-r">Today's Attendance</div>
-            <div className="w-[100px] border-r">This team Attendance Ratio</div>
+            <div className="w-[100px] border-r">Student's Attendance Ratio</div>
             <div className="w-[220px] border-r">Session Fee</div>
 
             <div className="w-[150px] border-r">student Image</div>
@@ -160,11 +160,17 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             : "no Address yet"}
                         </div>
                         <div className="w-[200px] border-r  ">
-                          {Math.ceil(Math.random() * 100)}%
+                          {props?.totalPerformance
+                            ? props?.totalPerformance
+                            : 0}
+                          %
                         </div>
 
                         <div className="w-[80px] border-r">
-                          {Math.ceil(Math.random() * (5 - 1)) + 1} of 5
+                          {props?.totalPerformance
+                            ? Math.floor(props?.totalPerformance / 20)
+                            : 0}{" "}
+                          of 5
                         </div>
 
                         <Link

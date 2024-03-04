@@ -1,9 +1,11 @@
 import {
   MdAssignmentAdd,
+  MdClass,
   MdOutlineArticle,
   MdQueryStats,
   MdReport,
   MdSettings,
+  MdStadium,
   MdSubject,
 } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -17,14 +19,16 @@ import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
-import { FaTable } from "react-icons/fa6";
+import { FaPhotoFilm, FaTable } from "react-icons/fa6";
 import { useStudentInfo } from "../hooks/useStudentHook";
+import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
   const showing = useSelector((state: any) => state.showStaffComp);
   const { studentInfo } = useStudentInfo();
+  const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -67,10 +71,10 @@ const Sider = () => {
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}
-          <p className="break-words font-bold">
-            {studentInfo?.schoolName.length > 16 ? (
+          <p className="font-bold text-left flex justify-start w-full">
+            {studentInfo?.schoolName.length > 14 ? (
               <Tooltip tip={studentInfo?.schoolName}>
-                <p>{studentInfo?.schoolName.substring(0, 16)}...</p>
+                <p>{studentInfo?.schoolName.substring(0, 14)}...</p>
               </Tooltip>
             ) : (
               studentInfo?.schoolName
@@ -80,15 +84,30 @@ const Sider = () => {
             ID: {studentInfo?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: 2023/2024
+            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
           </p>
+          <div className="text-[12px] font-bold">
+            {(
+              studentInfo?.studentFirstName +
+              " " +
+              studentInfo?.studentLastName
+            )?.length > 16
+              ? `${(
+                  studentInfo?.studentFirstName +
+                  " " +
+                  studentInfo?.studentLastName
+                ).substring(0, 16)}...`
+              : studentInfo?.studentFirstName +
+                " " +
+                studentInfo?.studentLastName}
+          </div>
         </div>
       </div>
 
       {/* top box */}
 
       {/* top box */}
-      <div className="mt-20 px-2 text- center flex flex-col border mx-2 rounded-md py-4">
+      <div className="mt-10 px-2  center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
           Encourage Parents to Purchase Learning Materials for thier child by
           having more items in your Library Store{" "}
@@ -97,7 +116,7 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            name="Add to Store"
+            name="Pay Fees"
             className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
             onClick={() => {
               handleDisplayStaff();
@@ -120,7 +139,7 @@ const Sider = () => {
       </div>
 
       {/* Settings */}
-      <div className="mt-8 px-2 flex flex-col h-[90%]">
+      <div className="mt-8 px-2 flex text-[15px] flex-col h-[90%]">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -143,7 +162,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           My ClassRoom
-          <MdSubject />
+          <MdStadium />
         </NavLink>
 
         <NavLink
@@ -169,7 +188,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Lessons
-          <FaTable />
+          <MdClass />
         </NavLink>
 
         <NavLink
@@ -212,6 +231,19 @@ const Sider = () => {
         </NavLink>
 
         <NavLink
+          to="/gallary"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Gallary
+          <FaPhotoFilm />
+        </NavLink>
+
+        <NavLink
           to="/report"
           className={({ isActive }) =>
             isActive
@@ -221,6 +253,19 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Report
+          <MdReport />
+        </NavLink>
+
+        <NavLink
+          to="/complain"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Complain
           <MdReport />
         </NavLink>
 

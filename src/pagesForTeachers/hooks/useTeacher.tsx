@@ -10,6 +10,7 @@ import {
   readSubjectQuiz,
   readTeacherCookie,
   readTeacherSchedule,
+  viewComplains,
   viewTeacherDetail,
 } from "../api/teachersAPI";
 import {
@@ -203,4 +204,16 @@ export const useLessonNote = (lessonID: string) => {
     }
   );
   return { lessonNoteData };
+};
+
+export const useComplain = (teacherID: string) => {
+  const { data: complainData } = useSWR(
+    `api/view-teacher-complain/${teacherID}`,
+    () => {
+      return viewComplains(teacherID!).then((res) => {
+        return res.data.complain;
+      });
+    }
+  );
+  return { complainData };
 };

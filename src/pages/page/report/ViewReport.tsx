@@ -1,8 +1,79 @@
 import LittleHeader from "../../../components/static/LittleHeader";
 import pix from "../../../assets/pix.jpg";
+import { useComplain, useSchoolData } from "../../hook/useSchoolAuth";
+import { FC } from "react";
+import {
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useTeacherDetail,
+  useTeacherInfo,
+} from "../../../pagesForTeachers/hooks/useTeacher";
+import { markResolveComplains, markSeenComplains } from "../../api/schoolAPIs";
+import toast from "react-hot-toast";
+import { mutate } from "swr";
+
+interface iProps {
+  props?: any;
+}
+
+const ReporterDetail: FC<iProps> = ({ props }) => {
+  const { studentInfoData } = useStudentInfoData(props);
+  const { data } = useSchoolData();
+  const { teacherDetail } = useTeacherDetail(props);
+
+  return (
+    <div className="flex items-center">
+      <div className={`w-[200px] border-r `}>
+        <div className="flex items-center gap-3">
+          <div className="avatar">
+            <div className="mask mask-squircle w-12 h-12">
+              <img
+                src={
+                  teacherDetail?.avatar
+                    ? teacherDetail?.avatar
+                    : studentInfoData?.avatar
+                    ? studentInfoData?.avatar
+                    : pix
+                }
+                alt="Avatar"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold">
+              {teacherDetail?.staffName
+                ? teacherDetail?.staffName
+                : `${studentInfoData?.studentFirstName} ${studentInfoData?.studentLastName}`}
+            </div>
+            <div className="text-[12px] opacity-50 ">
+              {teacherDetail?.classesAssigned
+                ? teacherDetail?.classesAssigned
+                : studentInfoData?.classAssigned}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-[100px] border-r ml-2">
+        {teacherDetail
+          ? teacherDetail?.status.split("-")[1]
+          : studentInfoData?.status.split("-")[1]}
+      </div>
+      {/* name */}
+    </div>
+  );
+};
 
 const ViewReport = () => {
-  const data = Array.from({ length: 7 });
+  // const data = Array.from({ length: 7 });
+
+  const { data } = useSchoolData();
+  const { complainData } = useComplain(data?._id);
+
+  console.log(complainData);
+
   return (
     <div>
       <LittleHeader name={"Report and Complains"} />
@@ -30,7 +101,7 @@ const ViewReport = () => {
         </div>
 
         <div className=" w-[1090px] overflow-hidden ">
-          {data?.map((props: any, i: number) => (
+          {complainData?.map((props: any, i: number) => (
             <div>
               <div>
                 <div
@@ -41,47 +112,58 @@ const ViewReport = () => {
                 >
                   <div className="w-[80px] border-r">
                     <label>
-                      <input type="checkbox" className="checkbox" />
+                      <input
+                        checked={props?.resolve}
+                        type="checkbox"
+                        className="checkbox"
+                      />
                     </label>
                   </div>
+                  <ReporterDetail props={props.reporterID} />
 
-                  <div className={`w-[200px] border-r `}>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img src={pix} alt="Avatar" />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Hart Hagerty</div>
-                        <div className="text-[12px] opacity-50 ">
-                          JSS 2C Teacher
-                        </div>
-                      </div>
-                    </div>
+                  <div className="w-[400px] py-2 flex justify-start border-r font-normal ml-2">
+                    {props?.title}
                   </div>
-
-                  <div className="w-[100px] border-r">Teacher</div>
-                  {/* name */}
-                  <div className="w-[400px] py-2 flex justify-center border-r font-normal">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Vel, obcaecati quae maiores soluta vero expedita repudiandae
-                    temporibus provident quas perferendis explicabo quos magni
-                    hic ad sit dolores in, odit culpa.
-                  </div>
-                  <div className="w-[100px] border-r">Very Urgent</div>
-
+                  <div className="w-[100px] border-r">{props?.importance}</div>
                   <div className="w-[80px] border-r pl-6 ">
-                    <label>
+                    <label
+                      onClick={() => {
+                        markSeenComplains(data?._id, props?._id).then(
+                          (res: any) => {
+                            if (res.status === 201) {
+                              mutate(`api/view-school-complain/${data?._id}`);
+                              toast.success("complain has been marked as Seen");
+                            } else {
+                              toast.error("something went wrong");
+                            }
+                          }
+                        );
+                      }}
+                    >
                       <input
+                        checked={props?.seen}
                         type="checkbox"
                         className="checkbox checkbox-error"
                       />
                     </label>
                   </div>
                   <div className="w-[80px] border-r  pl-6">
-                    <label>
+                    <label
+                      onClick={() => {
+                        markResolveComplains(data?._id, props?._id).then(
+                          (res: any) => {
+                            if (res.status === 201) {
+                              mutate(`api/view-school-complain/${data?._id}`);
+                              toast.success("complain has been resolved");
+                            } else {
+                              toast.error("something went wrong");
+                            }
+                          }
+                        );
+                      }}
+                    >
                       <input
+                        checked={props?.resolve}
                         type="checkbox"
                         className="checkbox checkbox-warning "
                       />

@@ -646,3 +646,45 @@ export const createNewSession = async (schoolID: string, data: {}) => {
     return error;
   }
 };
+
+export const viewComplains = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-complain/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const markSeenComplains = async (
+  schoolID: string,
+  complainID: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/mark-seen/${schoolID}/${complainID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const markResolveComplains = async (
+  schoolID: string,
+  complainID: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/mark-resolve/${schoolID}/${complainID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

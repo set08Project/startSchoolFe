@@ -18,6 +18,7 @@ import ViewTeacherNote from "../pagesForTeachers/pages/lessonNote/ViewTeacherNot
 import Article from "../pagesForTeachers/pages/article/Article";
 import GallerySettings from "../pages/page/settings/GallerySettings";
 import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
+import ViewReport from "../pagesForTeachers/pages/complain/ViewReport";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ export const teacherRouter = createBrowserRouter([
       {
         index: true,
         element: <TeacherDashboard />,
+      },
+      {
+        index: true,
+        path: "complain",
+        element: <ViewReport />,
       },
       {
         path: "/dashboard",

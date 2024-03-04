@@ -7,6 +7,8 @@ import {
   lessonNotes,
   readClassInfo,
   readStudentCookie,
+  viewClassTimetable,
+  viewComplains,
   viewStduentDetail,
   viewStudentAttendance,
 } from "../api/studentAPI";
@@ -35,6 +37,18 @@ export const useStudentInfo = () => {
     }
   );
   return { studentInfo };
+};
+
+export const useStudentInfoData = (studentID) => {
+  const { data: studentInfoData } = useSWR(
+    `api/view-student-info/${studentID}`,
+    () => {
+      return viewStduentDetail(studentID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { studentInfoData };
 };
 
 export const useStudentAttendant = (studentID: string) => {
@@ -132,4 +146,28 @@ export const useSchoolArticle = (schoolID: string) => {
     }
   );
   return { allArticle };
+};
+
+export const useComplain = (studentID: string) => {
+  const { data: complainData } = useSWR(
+    `api/view-student-complain/${studentID}`,
+    () => {
+      return viewComplains(studentID!).then((res) => {
+        return res.data.complain;
+      });
+    }
+  );
+  return { complainData };
+};
+
+export const useClassTimeTableViewer = (classID: string) => {
+  const { data: viewTimeTable } = useSWR(
+    `api/view-time-table/${classID}`,
+    () => {
+      return viewClassTimetable(classID!).then((res) => {
+        return res.data.timeTable;
+      });
+    }
+  );
+  return { viewTimeTable };
 };

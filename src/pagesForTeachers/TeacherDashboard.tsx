@@ -4,11 +4,18 @@ import Personal from "./Chart/Personal";
 import Calendar from "./Chart/Calendar";
 import StudentPerformance from "./Chart/PerformingStudent";
 import ClassModelAssignment from "./pages/quiz/AddAssignment";
+import { useTeacherInfo } from "./hooks/useTeacher";
+import StudentOfTheWeek from "./pages/quiz/StudentWeek";
+import { useReadMyClassInfoData } from "../pagesForStudents/hooks/useStudentHook";
 
+import pix from "./../assets/pix.jpg";
+import MakeComplains from "./pages/quiz/MarkCOmplains";
 const TeacherDashboard = () => {
-  document.title = "Teacher's Record and Stats";
+  const { teacherInfo } = useTeacherInfo();
+  document.title = `${teacherInfo?.staffName}'s Record and Stats`;
 
   const readData = Array.from({ length: 2 });
+  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -16,7 +23,7 @@ const TeacherDashboard = () => {
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
           <div className="mb-4 text-medium capitalize font-semibold flex gap-4">
             <div> My Class: </div>
-            <div className="font-bold">JSS 1B</div>
+            <div className="font-bold">{teacherInfo?.classesAssigned}</div>
           </div>
           <Personal />
 
@@ -32,19 +39,38 @@ const TeacherDashboard = () => {
           <div>
             <div>
               <div className=" flex gap-2  mb-10">
-                {/* <Link to={`/create-quiz/${subjectID}`}>
-                <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-2 rounded-sm text-[12px] text-center">
-                  + Create Quiz
-                </p>
-                </Link>
-                <Link to={`/create-quiz/${subjectID}`}>
-                <p className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm text-center">
-                  + Create Test
-                </p>
-                </Link> */}
+                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
+                  <StudentOfTheWeek />
+                </div>
+                <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-2 rounded-sm  text-center">
+                  <MakeComplains />
+                </div>
+              </div>
 
-                <div className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
-                  <ClassModelAssignment />
+              <div className="font-medium text-[12px] text-blue-950 px-6 py-2 rounded-sm  text-center w-full flex flex-col items-center overflow-hidden">
+                <p className="font-bold text-left pb-3 text-[15px] ">
+                  Student of the Week for class {teacherInfo?.classesAssigned}
+                </p>
+
+                <div className="w-[260px]  rounded-t-md min-h-[320px] border">
+                  <img
+                    className="w-full h-[300px] object-cover rounded-t-md"
+                    src={
+                      state?.weekStudent?.student?.avatar
+                        ? state?.weekStudent?.student?.avatar
+                        : pix
+                    }
+                  />
+                  <p className="flex px-2 justify-start my-2 text-[15px]">
+                    Name:{" "}
+                    <span className="font-bold ml-2">
+                      {state?.weekStudent?.student?.studentFirstName}{" "}
+                      {state?.weekStudent?.student?.studentLastName}
+                    </span>
+                  </p>
+                  <p className="text-left px-2 pb-2">
+                    {state?.weekStudent?.remark}
+                  </p>
                 </div>
               </div>
             </div>

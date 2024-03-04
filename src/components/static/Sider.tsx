@@ -174,7 +174,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Reports
+          Complains
           <MdReport />
         </NavLink>
         <NavLink

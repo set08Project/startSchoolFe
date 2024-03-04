@@ -12,11 +12,9 @@ const ViewClassNoteDetail = () => {
   const { lessonNoteData } = useLessonNote(noteID!);
   const [state, setState] = useState<number>(0);
 
-  const check = lessonNoteData.rateData.some((el: any) => {
+  const check = lessonNoteData?.rateData?.some((el: any) => {
     return el.id === studentInfo?._id;
   });
-
-  console.log(check);
 
   return (
     <div>

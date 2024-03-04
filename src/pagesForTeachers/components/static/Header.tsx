@@ -52,25 +52,20 @@ const Header = () => {
       className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
       onClick={() => {}}
     >
-      <h1>Welcome to Teacher Dashboard</h1>
-      <div className="flex items-center  justify-end w-[90%]">
-        <div
-          className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
-          // onClick={() => {
-          //   setSess(!sess);
-          //   dispatch(displaySessioned(true));
-          // }}
-        >
-          <FaCalendar />
-          <span className="text-[12px] mx-1">
-            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
-          </span>
-          <div className="transition-all duration-300 ">
-            {toggleSession ? (
-              <FaAngleDown className="-rotate-180 duration-300 transition-all" />
-            ) : (
-              <FaAngleDown className="-rotate-0 duration-300 transition-all" />
-            )}
+      <div className="flex items-center justify-end w-[90%]">
+        <div className="hidden sm:flex">
+          <div className="flex mr-5 font-medium cursor-pointer items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
+            <FaCalendar />
+            <span className="text-[12px] mx-1">
+              Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
+            </span>
+            <div className="transition-all duration-300 ">
+              {toggleSession ? (
+                <FaAngleDown className="-rotate-180 duration-300 transition-all" />
+              ) : (
+                <FaAngleDown className="-rotate-0 duration-300 transition-all" />
+              )}
+            </div>
           </div>
         </div>
 
@@ -92,7 +87,7 @@ const Header = () => {
           )}
         </div>
 
-        <div className=" md:hidden text-[30px] cursor-pointer ml-3  duration-300 transition-all">
+        <div className="md:hidden text-[30px] cursor-pointer ml-3  duration-300 transition-all">
           {toggleMenu ? (
             <MdClose
               className="duration-500 transition-all"
