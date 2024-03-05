@@ -7,7 +7,6 @@ import RegisterCard from "../pages/page/auth/RegisterCard";
 import SecondStep from "../pages/home/start/SecondStep";
 import ThirdScreen from "../pages/home/start/ThirdStep";
 import LoadingScreen from "../components/static/LoadingScreen";
-import MainSchoolPage from "../mainPage/MainSchoolPage";
 import SwitchLogin from "../pages/page/auth/SwitchLogin";
 import StudentLogin from "../pages/page/auth/StudentLogin";
 import LandingLayout from "../LandingPage1/LandingLayout";
@@ -16,8 +15,6 @@ import Contact from "../LandingPage1/Contact";
 import About from "../LandingPage1/About";
 import StartUsing from "../LandingPage1/Homescreen/StartUsing";
 import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
-import HomeScreen from "../mainSchoolPage/Pages/HomeScreen";
-import WelcomePage from "../mainSchoolPage/Pages/WelcomePage";
 import SchoolLandingPage from "../mainSchoolPage/Pages/SchoolLandingPage";
 
 export const mainRouter = createBrowserRouter([
@@ -102,12 +99,12 @@ export const mainRouter = createBrowserRouter([
     element: <LoadingScreen />,
   },
   {
-    path: "/:schoolName",
+    path: "/school/:schoolName",
     element: <SchoolLandingPage />,
   },
 
   // {
-  //   path: "/",
-  //   element: <LandingPageScreen />,
+  //   path: "/loading",
+  //   element: <LoadingScreen />,
   // },
 ]);

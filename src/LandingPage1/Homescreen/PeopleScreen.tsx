@@ -34,23 +34,28 @@ const PeopleScreen = () => {
     },
   ];
   return (
-    <div className="mt-10 mx-20 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 3xl:grid-cols-4 gap-4">
+    <div className="mx-2 md:mx-20 mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 3xl:grid-cols-4 gap-4">
       {data?.map((props: any, i: number) => (
         <div
           key={i}
-          className={`rounded-md p-4 overflow-hidden h-[350px] border `}
-          style={{
-            backgroundColor: `${props?.color}`,
-            backgroundPosition: "right",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url(${props.images})`,
-          }}
+          className={`rounded-md p-4 overflow-hidden h-[250px] brk:h-[300px] border relative`}
+          style={{ backgroundColor: `${props?.color}` }}
         >
-          <p className="font-medium text-[25px] mb-5 ">{props?.title}</p>
+          <div
+            className="absolute top-0 w-full h-full hidden min-[375px]:block"
+            style={{
+              backgroundPosition: "right",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `url(${props.images})`,
+            }}
+          />
+          <p className="font-bold text-[29px] brk:font-medium brk:text-[25px] mb-5 ">
+            {props?.title}
+          </p>
           <div className="grid grid-cols-3">
             <p className="span-col-1 mb-40 relative ">
-              <p className="absolute top-10 text-[14px] md:text-[18px] w-[170%]">
+              <p className="absolute top-10 text-[14px] md:text-[18px] w-[300%] block text-black brk:w-[170%]">
                 {props?.detail}
               </p>
             </p>

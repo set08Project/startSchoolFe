@@ -1,7 +1,7 @@
 import { FaPhone } from "react-icons/fa6";
 import { IoIosTime, IoIosTimer } from "react-icons/io";
 import { CiLocationOn } from "react-icons/ci";
-import img from "../../assets/Next Logo1.png";
+import img from "../../assets/mainLogoW.png";
 
 const Footer = () => {
   return (

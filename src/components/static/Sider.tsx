@@ -66,11 +66,7 @@ const Sider = () => {
             ID: {data?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session:{" "}
-            {loading
-              ? ""
-              : schoolInfo[(schoolInfo?.length ? schoolInfo?.length : 1) - 1]!
-                  ?.year}
+            Session: {loading ? "" : schoolInfo[0]?.year}
           </p>
         </div>
       </div>

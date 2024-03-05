@@ -2,8 +2,10 @@ import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
 import logo from "../../assets/mainLogoW.png";
+import logo2 from "../../../public/favW.png";
 import { Link, NavLink } from "react-router-dom";
 import BtnProps from "../Props/BtnProps";
+import ThemeButton from "./ThemeButton";
 
 const Header = () => {
   const [drop, setDrop] = useState<boolean>(false);
@@ -14,7 +16,16 @@ const Header = () => {
         <div className="h-[90%] w-[99%] flex justify-between items-center">
           <div className="w-full flex  justify-between items-center ">
             <div className=" ml-3">
-              <img src={logo} alt="" className="h-[40px] object-contain" />
+              <img
+                src={logo}
+                alt=""
+                className="hidden md:block  h-[40px] object-contain"
+              />
+              <img
+                src={logo2}
+                alt=""
+                className=" block md:hidden h-[30px] object-contain"
+              />
             </div>
             <div className="hidden items-center text-[18px] gap-[30px] text-white md:flex">
               <NavLink to="/" className=" cursor-pointer">
@@ -33,26 +44,29 @@ const Header = () => {
                 {/* {toggleFunction2 ? <FaAngleDown /> : <FaAngleUp />} */}
               </NavLink>
             </div>
-            <Link to="/auth" className=" w-[150px] hidden md:block">
-              <button className=" py-2 px-6 bg-white rounded-md">
+            <Link
+              to="/auth"
+              className=" w-[150px] text-[12px] md:text-[15px] font-medium"
+            >
+              <button className=" py-2 px-6 bg-white rounded-sm">
                 Get Started
               </button>
             </Link>
           </div>
 
-          <div className="flex justify-center items-center gap-3">
+          {/* <div className="flex justify-center items-center gap-3">
             <div
               className="text-[18px] font-bold cursor-pointer relative md:hidden"
-              onClick={() => {
-                setDrop(!drop);
-              }}
+              // onClick={() => {
+              //   setDrop(!drop);
+              // }}
             >
               {drop ? (
                 <FaTimes
                   className="text-[30px] text-white"
-                  onClick={() => {
-                    setDrop(true);
-                  }}
+                  // onClick={() => {
+                  //   setDrop(true);
+                  // }}
                 />
               ) : (
                 <AiOutlineMenu
@@ -107,7 +121,7 @@ const Header = () => {
                 </nav>
               </div>
             ) : null}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

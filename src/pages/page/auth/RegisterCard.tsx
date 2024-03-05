@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom";
 import logo from "../../../assets/mainLogo.png";
 const RegisterCard = () => {
   return (
     <div className="w-full h-[94vh] flex items-center justify-center flex-col">
       <div className=" p-4 border rounded-md flex flex-col items-center transition-all duration-300 w-[90%] md:w-[600px]">
         {" "}
-        <img className="mb-5  w-28 h-28  object-contain" src={logo} />{" "}
+        <Link to="/">
+          <img className="mb-5 w-56 h-28 object-contain" src={logo} />{" "}
+        </Link>
         {/* <div className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px]">
           HMO
         </div> */}

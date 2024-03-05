@@ -2,7 +2,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Button from "../reUse/Button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import fav from "../../../public/fav.png";
 const LoadingScreen = () => {
   const [state, setState] = useState<boolean>(false);
 
@@ -22,14 +22,17 @@ const LoadingScreen = () => {
         border: "1px solid rgba(73, 154, 255, 0.3)",
       }}
     >
-      <ClipLoader color="#000000" size={20} />
+      <div className="relative flex justify-center items-center mb-7">
+        <ClipLoader color="#000000" size={20} className="absolute top-9" />
+        <img className=" h-[20px] mt-2 animate-pulse" src={fav} />
+      </div>
 
       {state && (
         <div className="w-full flex-col flex items-center ">
           {" "}
-          <p className="mt-10">You've been Logged Out</p>
-          <Link to="/auth/login" className="">
-            <Button name="Login Again" className="bg-blue-950 " />
+          <p className="mt-8">Something went wrong</p>
+          <Link to="/" className="">
+            <Button name="Retry" className="bg-blue-950 " />
           </Link>
         </div>
       )}

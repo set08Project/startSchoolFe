@@ -6,10 +6,18 @@ export default {
     // "node_modules/flowbite-react/lib/esm/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        brk: "375px",
+      },
+    },
   },
   plugins: [
     // require("flowbite/plugin")
     require("daisyui"),
   ],
+
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
 };

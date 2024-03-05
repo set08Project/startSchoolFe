@@ -1,5 +1,5 @@
 import { CiMenuFries } from "react-icons/ci";
-import img from "../../assets/Next Logo1w.png";
+import img from "../../assets/mainLogoW.png";
 import { MdRestaurantMenu } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
 import { BsCalendarEvent } from "react-icons/bs";

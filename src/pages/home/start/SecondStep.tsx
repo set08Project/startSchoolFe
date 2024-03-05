@@ -74,21 +74,21 @@ const SecondStep = () => {
               name="Submit"
               className="bg-blue-950 w-[80%] py-4 "
               onClick={() => {
-                console.log("Just clicked: ");
-                console.log("reading Data: ", data?._id);
-
                 changeSchoolName(data?._id, {
                   schoolName: schoolInfo.schoolName,
-                });
-                changeSchoolLocation(data?._id, {
-                  address: schoolInfo.schoolLocation,
-                });
-
-                changeSchoolTags(data?._id, { schoolTags: readValue });
-
-                changeSchoolStarted(data?._id).then(() => {
-                  // window.location.reload();
-                  navigate("/dashboard");
+                }).then(() => {
+                  changeSchoolTags(data?._id, { schoolTags: readValue });
+                  changeSchoolLocation(data?._id, {
+                    address: schoolInfo.schoolLocation,
+                  }).then(() => {
+                    changeSchoolStarted(data?._id).then(() => {
+                      const x = setTimeout(() => {
+                        window.location.reload();
+                        clearTimeout(x);
+                      }, 200);
+                      navigate("/");
+                    });
+                  });
                 });
 
                 dispatch(getSchoolInfo({}));

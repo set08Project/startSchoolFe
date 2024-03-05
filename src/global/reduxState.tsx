@@ -7,11 +7,11 @@ interface iProps {
 }
 
 let data = [
-  { val: "Nursary School", state: false, id: 1 },
-  { val: "Primay School", state: true, id: 2 },
+  { val: "Nursery School", state: false, id: 1 },
+  { val: "Primary School", state: true, id: 2 },
   { val: "Secondary School.", state: false, id: 3 },
-  { val: "Tertary School.", state: false, id: 4 },
-  { val: "Kindagartin Schhol.", state: false, id: 5 },
+  { val: "Tertiary School.", state: false, id: 4 },
+  { val: "Kindergarten Schhol.", state: false, id: 5 },
 ];
 
 const initialState = {

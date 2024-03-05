@@ -1,7 +1,7 @@
 const Everything = () => {
   return (
     <div id="/about">
-      <div className="mx-20  ">
+      <div className="mx-5 sm:mx-12   ">
         <div className="max-w-7xl">
           <div className=" ">
             <div className="text-base font-semibold leading-7 text-blue-950">

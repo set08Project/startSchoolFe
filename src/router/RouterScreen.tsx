@@ -65,7 +65,7 @@ const RouterScreen = () => {
         setLoadingState(true);
       }
       clearTimeout(timing);
-    }, 200);
+    }, 10);
   }, []);
 
   return (

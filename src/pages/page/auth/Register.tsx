@@ -25,7 +25,13 @@ const Register = () => {
           navigate("/auth/register-message");
         } else {
           setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
+          toast.error(
+            `${
+              res?.response?.data?.data.includes("duplicate")
+                ? "Email has Already been used before!"
+                : res?.response?.data?.mwssage
+            }`
+          );
         }
       });
     }
@@ -35,7 +41,9 @@ const Register = () => {
     <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
-        <img className="mb-5 w-28 h-28  object-contain" src={logo} />
+        <Link to="/">
+          <img className="mb-5 w-56 h-28 object-contain" src={logo} />{" "}
+        </Link>
 
         <div className="text-[26px] font-bold mb-3">Create an Account</div>
         <div className="text-[14px] -mt-4 ">
@@ -72,8 +80,8 @@ const Register = () => {
         </div>
         <div className="flex flex-col">
           <Button
-            name="Continue with Google"
-            className="h-14 bg-red-500 hover:bg-red-600 hover:text-white  transition-all duration-300 font-medium text-[#ababab]"
+            name="Continue with Google (coming soon)"
+            className="h-14 bg-red-900 hover:bg-red-600 opacity-50 hover:text-white  transition-all duration-300 font-medium text-[#ababab] leading-tight w-[97%]text-center text-[12px] sm:text-base "
             icon={<FaGoogle />}
           />
         </div>

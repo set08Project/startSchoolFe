@@ -16,9 +16,9 @@ const LandingScreen = () => {
     <div>
       <ABetter />
       <TrustedBy />
-      <div className="my-20" />
+      <div className="my-5" />
       <UnlockScreen />
-      <div className="my-32" />
+      <div className="my-14" />
       <PeopleScreen />
       <div className="my-24" />
       <Everything />

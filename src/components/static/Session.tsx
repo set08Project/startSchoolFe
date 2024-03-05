@@ -53,23 +53,27 @@ const Session: FC = () => {
         {schoolInfo?.length > 0 ? (
           <div>
             {schoolInfo?.map((props: any, i: number) => (
-              <div
-                key={`${i + props}`}
-                className="w-full"
-                onClick={() => {
-                  if (!document.startViewTransition) {
-                    dispatch(displaySessioned(false));
-                  } else {
-                    document.startViewTransition(() => {
-                      dispatch(displaySessioned(false));
-                    });
-                  }
-                }}
-              >
-                <div className="text-[12px] w-full py-2 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
-                  <div>Session: {props?.year}</div>
-                  <div className="text-[17px]"></div>
-                </div>
+              <div>
+                {i < 3 && (
+                  <div
+                    key={`${i + props}`}
+                    className="w-full"
+                    onClick={() => {
+                      if (!document.startViewTransition) {
+                        dispatch(displaySessioned(false));
+                      } else {
+                        document.startViewTransition(() => {
+                          dispatch(displaySessioned(false));
+                        });
+                      }
+                    }}
+                  >
+                    <div className="text-[12px] w-full py-2 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
+                      <div>Session: {props?.year}</div>
+                      <div className="text-[17px]"></div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

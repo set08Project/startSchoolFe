@@ -89,18 +89,6 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
             </div>
             <div className="mt-10 w-full gap-2 flex flex-col items-center">
               <div className="w-full">
-                {/* <label className="font-medium text-[12px]">
-                  Complains Detail <span className="text-red-500">*</span>
-                </label>
-
-                <textarea
-                  className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 outline-none"
-                  value={period}
-                  onChange={(e) => {
-                    setPeriod(e.target.value);
-                  }}
-                  placeholder="Complains Detail"
-                /> */}
                 <div className="flex w-full gap-2 mb-10">
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
@@ -123,7 +111,10 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
                         Choose Subject ongoing
                       </option>
                       {subjectData?.classSubjects?.map((props: any) => (
-                        <option value={props?.subjectTeacherName}>
+                        <option
+                          key={props?._id}
+                          value={props?.subjectTeacherName}
+                        >
                           {props?.subjectTitle}
                         </option>
                       ))}

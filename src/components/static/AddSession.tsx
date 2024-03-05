@@ -5,14 +5,16 @@ import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
 import { createNewSession } from "../../pages/api/schoolAPIs";
-import { useSchoolCookie } from "../../pages/hook/useSchoolAuth";
+import { useSchoolCookie, useSchoolData } from "../../pages/hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
+import { mutate } from "swr";
 
 const AddSession = () => {
   const dispatch = useDispatch();
   const [start, setStart] = useState<string>("");
   const [end, setEnd] = useState<string>("");
   const { dataID } = useSchoolCookie();
+  const { data } = useSchoolData();
 
   const handleToggleMenuFalse = () => {
     createNewSession(dataID, { year: start, term: end });
@@ -29,23 +31,27 @@ const AddSession = () => {
   const handleSubmit = () => {
     createNewSession(dataID, { year: start, term: end }).then((res) => {
       if (res.status === 201) {
+        mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
+          // api/view-school-session/${schoolID}
           toast.success("Session created");
         } else {
           document.startViewTransition(() => {
-            toast.success("Session created");
+            toast.error("Something went wrong");
             dispatch(displaySession(false));
           });
         }
       } else {
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
-          toast.error("Something went wrong");
+          mutate(`api/view-school-session/${data?._id}`);
+          toast.success("Session created");
         } else {
           document.startViewTransition(() => {
+            mutate(`api/view-school-session/${data?._id}`);
             console.log(res?.response?.data?.message);
-            toast.error("Something went wrong");
+            toast.success("Session created");
             dispatch(displaySession(false));
           });
         }
