@@ -28,9 +28,6 @@ import GallerySettings from "../pages/page/settings/GallerySettings";
 import GallaryScreen from "../pages/page/gallary/GallaryScreen";
 import ThemeScreen from "../pages/page/settings/ThemeScreen";
 import TestGallary from "../pages/page/gallary/TestGallary";
-import SchoolPage from "../mainPage/SchoolPage";
-import MainSchoolPage from "../mainPage/MainSchoolPage";
-import SchoolHome from "../mainPage/SchoolHome";
 
 export const adminRouter = createBrowserRouter([
   {

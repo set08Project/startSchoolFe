@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { ErrorBoundary } from "react-error-boundary";
 import LoadingScreen from "./components/static/LoadingScreen";
 import RouterScreen from "./router/RouterScreen";
+import PrivateRouter from "./router/PrivateRouter";
 
 let persistor = persistStore(store);
 

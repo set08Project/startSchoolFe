@@ -86,7 +86,7 @@ const SecondStep = () => {
                         window.location.reload();
                         clearTimeout(x);
                       }, 200);
-                      navigate("/");
+                      navigate("/dashboard");
                     });
                   });
                 });
