@@ -54,127 +54,131 @@ const AddStudent = () => {
   };
 
   return (
-    <div className="px-4 h-full overflow-y-auto ">
+    <div className="px-4 h-full overflow-y-auto w-full">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mt-20" />
-      <div className="flex justify-between items-center">
-        <LittleHeader name={"Add New Student"} />
+      <div className="flex w-full justify-end">
+        <div className="flex justify-between items-center w-[58%] sm:w-[80%] md:w-[100%] min-[425px]:w-[80%] min-[375px]:w-[70%] ">
+          <LittleHeader name={"Add New Student"} />
 
-        <MdClose
-          className="cursor-pointer w-10 h-10 p-2 rounded-full hover:rotate-90 transition-all duration-300 hover:bg-slate-50"
-          onClick={() => {
-            dispatch(displayDelay(false));
-            const timing = setTimeout(() => {
-              dispatch(displayStudent(false));
+          <MdClose
+            className="cursor-pointer w-10 h-10 p-2 rounded-full hover:rotate-90 transition-all duration-300 hover:bg-slate-50"
+            onClick={() => {
+              dispatch(displayDelay(false));
+              const timing = setTimeout(() => {
+                dispatch(displayStudent(false));
 
-              clearTimeout(timing);
-            }, 500);
+                clearTimeout(timing);
+              }, 500);
 
-            // setShow(!show);
-          }}
-        />
+              // setShow(!show);
+            }}
+          />
+        </div>
       </div>
 
-      <div className="border rounded-md w-full h-[80%]  p-4 mt-4 ">
-        <div className="mt-10" />
+      <div className=" flex w-full justify-end">
+        <div className="border rounded-md w-[58%] sm:w-[80%] md:w-[100%] min-[425px]:w-[80%] min-[375px]:w-[70%]  h-[80%]  p-4 mt-4 ">
+          <div className="mt-10" />
 
-        <div className="mt-1">
-          <label className="text-[14px]">Student First Name</label>
-          <Input
-            placeholder="Enter Student First Name"
-            className="ml-0 w-full"
-            value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setName(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mt-1">
-          <label className="text-[14px]">Student Last Name</label>
-          <Input
-            placeholder="Enter Student Last Name"
-            className="ml-0 w-full"
-            value={lastName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setLastName(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mt-1 flex flex-col mb-6">
-          <label className="text-[14px] mb-2">
-            Gender:{" "}
-            <span className="font-bold text-[10px]">Choose a Genders</span>
-          </label>
-          <select
-            className="ml-0 select select-bordered w-full "
-            value={gender}
-            onChange={(e: any) => {
-              setGender(e.target.value);
-            }}
-          >
-            <option disabled selected value="Choose a Genders">
-              Choose a Gender
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div className="mt-1">
-          <label className="text-[14px]">Student Address</label>
-          <Input
-            placeholder="Enter Student Address"
-            className="ml-0 w-full"
-            value={location}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setLocation(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mt-1">
-          <label className="text-[14px]">Student Assined Class</label>
+          <div className="mt-1">
+            <label className="text-[14px]">Student First Name</label>
+            <Input
+              placeholder="Enter Student First Name"
+              className="ml-0 w-full"
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setName(e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-1">
+            <label className="text-[14px]">Student Last Name</label>
+            <Input
+              placeholder="Enter Student Last Name"
+              className="ml-0 w-full"
+              value={lastName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setLastName(e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-1 flex flex-col mb-6">
+            <label className="text-[14px] mb-2">
+              Gender:{" "}
+              <span className="font-bold text-[10px]">Choose a Genders</span>
+            </label>
+            <select
+              className="ml-0 select select-bordered w-full "
+              value={gender}
+              onChange={(e: any) => {
+                setGender(e.target.value);
+              }}
+            >
+              <option disabled selected value="Choose a Genders">
+                Choose a Gender
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div className="mt-1">
+            <label className="text-[14px]">Student Address</label>
+            <Input
+              placeholder="Enter Student Address"
+              className="ml-0 w-full"
+              value={location}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setLocation(e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-1">
+            <label className="text-[14px]">Student Assined Class</label>
 
-          <select
-            className="select select-bordered w-full mt-2"
-            onChange={(e) => {
-              setAssignedClass(e.target.value);
-            }}
-          >
-            <option disabled selected>
-              Assign Class
-            </option>
-            {schoolClassroom?.classRooms
-              ?.sort((a: any, b: any) => {
-                return a.className - b.className;
-              })
-              ?.map((props: any) => (
-                <option
-                  key={props?._id}
-                  value={props?.className}
-                  className="my-2 font-medium py-2"
-                >
-                  {props?.className}
-                </option>
-              ))}
-          </select>
-        </div>
+            <select
+              className="select select-bordered w-full mt-2"
+              onChange={(e) => {
+                setAssignedClass(e.target.value);
+              }}
+            >
+              <option disabled selected>
+                Assign Class
+              </option>
+              {schoolClassroom?.classRooms
+                ?.sort((a: any, b: any) => {
+                  return a.className - b.className;
+                })
+                ?.map((props: any) => (
+                  <option
+                    key={props?._id}
+                    value={props?.className}
+                    className="my-2 font-medium py-2"
+                  >
+                    {props?.className}
+                  </option>
+                ))}
+            </select>
+          </div>
 
-        <div className="mt-10" />
+          <div className="mt-10" />
 
-        <div className="w-full flex justify-center">
-          <Button
-            name={
-              loading ? (
-                <div className="flex gap-2 items-center">
-                  <ClipLoader color="#fff" size={20} />
-                  <p>Processing Registration...</p>
-                </div>
-              ) : (
-                "Register Student"
-              )
-            }
-            className="w-full mx-0 bg-blue-950 py-4"
-            onClick={handleStudentCreation}
-          />
+          <div className="w-full flex justify-center">
+            <Button
+              name={
+                loading ? (
+                  <div className="flex gap-2 items-center">
+                    <ClipLoader color="#fff" size={20} />
+                    <p>Processing Registration...</p>
+                  </div>
+                ) : (
+                  "Register Student"
+                )
+              }
+              className="w-full mx-0 bg-blue-950 py-4"
+              onClick={handleStudentCreation}
+            />
+          </div>
         </div>
       </div>
     </div>

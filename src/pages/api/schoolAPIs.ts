@@ -688,3 +688,18 @@ export const markResolveComplains = async (
     return error;
   }
 };
+
+export const updateAvatar = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .patch(`${URL}/upload-school-avatar/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

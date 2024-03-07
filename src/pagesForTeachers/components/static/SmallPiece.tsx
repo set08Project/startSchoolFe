@@ -4,9 +4,20 @@ import { FC, ReactNode, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
-import { changeToggleMenuState, logoutState } from "../../../global/reduxState";
+import {
+  changeMenuState,
+  changeToggleMenuState,
+  displayImageToggle,
+  logoutState,
+} from "../../../global/reduxState";
 import { logout } from "../../../pages/api/schoolAPIs";
 import { useSchoolData } from "../../../pages/hook/useSchoolAuth";
+import { mutate } from "swr";
+import toast from "react-hot-toast";
+import { updateStudentAvatar } from "../../../pagesForStudents/api/studentAPI";
+import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import { updateTeacherAvatar } from "../../api/teachersAPI";
+import { useTeacherInfo } from "../../hooks/useTeacher";
 
 interface iData {
   title?: string;
@@ -25,6 +36,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const { data } = useSchoolData();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { studentInfo } = useStudentInfo();
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -35,20 +47,45 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       });
     }
   };
+
+  const handleMenu = () => {
+    if (!document.startViewTransition) {
+      dispatch(changeToggleMenuState(false));
+      dispatch(changeMenuState(false));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(changeToggleMenuState(false));
+        dispatch(changeMenuState(false));
+      });
+    }
+  };
+  const { teacherInfo } = useTeacherInfo();
+
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
+    console.log("start...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();
     formData.append("avatar", file);
     setState(file);
-    console.log(state);
 
     if (state) {
+      dispatch(displayImageToggle(true));
       const timer = setTimeout(() => {
+        updateTeacherAvatar(teacherInfo?._id, formData).then((res) => {
+          mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
+          if (res.status === 201) {
+            toast.success("Image has been updated");
+            dispatch(displayImageToggle(false));
+          } else {
+            toast.error(`${res?.response?.data?.message}`);
+            dispatch(displayImageToggle(false));
+          }
+        });
         clearTimeout(timer);
-      }, 1000);
+      }, 50);
     }
   };
 
@@ -83,10 +120,12 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       )}
 
       {log && (
-        <div
+        <label
+          htmlFor="id"
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
             // dispatch(logoutState());
+            handleMenu();
           }}
         >
           <label htmlFor="id">Upload Avatar</label>
@@ -99,7 +138,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           <div>
             <IoMdImages size={17} />
           </div>
-        </div>
+        </label>
       )}
 
       {log && (

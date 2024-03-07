@@ -252,3 +252,18 @@ export const updateTeacherActiveness = async (
     return error;
   }
 };
+
+export const updateStudentAvatar = async (studentID: string, data: string) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .patch(`${URL}/upload-student-avatar/${studentID}`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

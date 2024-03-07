@@ -43,7 +43,6 @@ const MakeShift = () => {
       clearTimeout(timer);
     }, 1000);
   }, []);
-  console.log(state);
   return (
     <div>
       {Object.keys(state)?.length === 0 ? (

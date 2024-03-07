@@ -7,11 +7,14 @@ import { IoMdImages } from "react-icons/io";
 import {
   changeMenuState,
   changeToggleMenuState,
+  displayImageToggle,
   displayUserStatus,
   logoutState,
 } from "../../global/reduxState";
-import { logout } from "../../pages/api/schoolAPIs";
+import { logout, updateAvatar } from "../../pages/api/schoolAPIs";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
+import toast from "react-hot-toast";
+import { mutate } from "swr";
 
 interface iData {
   title?: string;
@@ -56,6 +59,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
+    console.log("updated...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();
@@ -63,9 +67,20 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
     setState(file);
 
     if (state) {
+      dispatch(displayImageToggle(true));
       const timer = setTimeout(() => {
+        updateAvatar(data?._id, formData).then((res) => {
+          mutate(`api/view-school/${data?._id}`);
+          if (res.status === 201) {
+            toast.success("Image has been updated");
+            dispatch(displayImageToggle(false));
+          } else {
+            toast.error(`${res?.response?.data?.message}`);
+            dispatch(displayImageToggle(false));
+          }
+        });
         clearTimeout(timer);
-      }, 1000);
+      }, 50);
     }
   };
 
@@ -100,10 +115,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       )}
 
       {log && (
-        <div
+        <label
+          htmlFor="id"
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            dispatch(logoutState());
+            // dispatch(logoutState());
             handleMenu();
           }}
         >
@@ -117,7 +133,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           <div>
             <IoMdImages size={17} />
           </div>
-        </div>
+        </label>
       )}
 
       {log && (

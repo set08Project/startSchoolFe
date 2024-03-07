@@ -20,9 +20,11 @@ import pix from "../../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Sider = () => {
   const dispatch = useDispatch();
+  const toggleImage = useSelector((state: any) => state.imageToggle);
   const showing = useSelector((state: any) => state.showStaffComp);
   const { teacherInfo } = useTeacherInfo();
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
@@ -61,10 +63,18 @@ const Sider = () => {
     <div className="overflow-y-auto w-full border-r bg-white text-blue-900 flex flex-col text-[15px]">
       <div className="w-full flex px-2 mt-6 ">
         <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
-          <img
-            className="w-full h-full object-cover rounded-full border"
-            src={teacherInfo?.avatar ? teacherInfo?.avatar : pix}
-          />
+          <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
+            {toggleImage ? (
+              <div className="flex justify-center items-center w-full h-full object-cover rounded-full border">
+                <ClipLoader size={20} color="#172554" />
+              </div>
+            ) : (
+              <img
+                className="w-full h-full object-cover rounded-full border"
+                src={teacherInfo?.avatar ? teacherInfo?.avatar : pix}
+              />
+            )}
+          </div>
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}

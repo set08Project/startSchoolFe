@@ -23,10 +23,12 @@ import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
+  const toggleImage = useSelector((state: any) => state.imageToggle);
 
   const { data } = useSchoolData();
   const { dataID } = useSchoolCookie();
@@ -46,10 +48,16 @@ const Sider = () => {
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
         <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
-          <img
-            className="w-full h-full object-cover rounded-full border"
-            src={data?.logo ? data?.logo : pix}
-          />
+          {toggleImage ? (
+            <div className="flex justify-center items-center w-full h-full object-cover rounded-full border">
+              <ClipLoader size={20} color="#172554" />
+            </div>
+          ) : (
+            <img
+              className="w-full h-full object-cover rounded-full border"
+              src={data?.avatar ? data?.avatar : pix}
+            />
+          )}
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}

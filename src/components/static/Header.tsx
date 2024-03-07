@@ -28,11 +28,13 @@ import {
   useSchoolData,
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Header = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state: any) => state.toggle);
   const toggleMenu = useSelector((state: any) => state.toggleMenu);
+  const toggleImage = useSelector((state: any) => state.imageToggle);
   const toggleSession = useSelector((state: any) => state.sessionToggled);
 
   const session = useSelector((state: any) => state?.sessionToggle);
@@ -91,7 +93,16 @@ const Header = () => {
             dispatch(changeToggleMenuState(false));
           }}
         >
-          <img className="w-8 h-8 rounded-full border object-cover" src={pic} />
+          <div className="w-8 h-8 rounded-full border flex justify-center items-center">
+            {toggleImage ? (
+              <ClipLoader color="#172554" size={13} />
+            ) : (
+              <img
+                className="w-full h-full rounded-full border object-cover"
+                src={data?.avatar ? data?.avatar : pic}
+              />
+            )}
+          </div>
 
           {toggle ? (
             <FaArrowDown className="rotate-180 duration-300 transition-all" />

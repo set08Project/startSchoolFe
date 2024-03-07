@@ -25,6 +25,7 @@ const initialState = {
   showStaffComp: false,
 
   cartToggle: false,
+  imageToggle: false,
   cart: [],
 
   showStudent: false,
@@ -122,6 +123,10 @@ const reduxState = createSlice({
       state.userStatus = payload;
     },
 
+    displayImageToggle: (state, { payload }) => {
+      state.imageToggle = payload;
+    },
+
     addTestInstruction: (state, { payload }: any): any => {
       state.test[0].instruction = payload;
     },
@@ -198,6 +203,7 @@ export const {
   displayNotice,
   displayNoticeEvent,
   displayUserStatus,
+  displayImageToggle,
 } = reduxState.actions;
 
 export default reduxState.reducer;

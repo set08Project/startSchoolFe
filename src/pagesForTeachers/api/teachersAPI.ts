@@ -312,3 +312,18 @@ export const viewComplains = async (teacherID: string) => {
     return error;
   }
 };
+
+export const updateTeacherAvatar = async (teacherID: string, data: string) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .patch(`${URL}/upload-staff-avatar/${teacherID}`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

@@ -46,7 +46,7 @@ const SwitchLogin = () => {
   };
 
   return (
-    <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
+    <div className=" w-full min-h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
@@ -81,9 +81,7 @@ const SwitchLogin = () => {
           className="w-[97%]"
           show
           //   errorText="Password has to be passed"
-          errorText={
-            password && "Please ensure you're putting your correct Password"
-          }
+          errorText={password && "Ensure your Password correct"}
           required
           value={password}
           onChange={(e: any) => {
