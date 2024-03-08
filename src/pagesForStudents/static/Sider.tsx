@@ -3,6 +3,7 @@ import {
   MdClass,
   MdOutlineArticle,
   MdQueryStats,
+  MdQuiz,
   MdReport,
   MdSettings,
   MdStadium,
@@ -185,6 +186,32 @@ const Sider = () => {
         >
           My Subjects
           <FaTable />
+        </NavLink>
+
+        <NavLink
+          to="/lesson"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Practice Quiz
+          <MdQuiz />
+        </NavLink>
+
+        <NavLink
+          to="/quiz"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Quiz
+          <MdQuiz />
         </NavLink>
 
         <NavLink

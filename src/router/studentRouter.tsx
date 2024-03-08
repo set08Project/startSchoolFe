@@ -16,6 +16,8 @@ import ViewClassNoteDetail from "../pagesForStudents/pages/studentNote/ViewNotes
 import CreateArticle from "../pagesForStudents/pages/article/CreateArticle";
 import StudentGalleryScreen from "../pagesForStudents/pages/Gallary/GallaryScreen";
 import ViewReport from "../pagesForStudents/pages/complain/ViewReport";
+import PassQuestionQuiz from "../pagesForStudents/pages/quiz/PassQuestionQuiz";
+import PastQuestionScreen from "../pagesForStudents/pages/quiz/PastQuestionScreen";
 
 export const studentRouter = createBrowserRouter([
   {
@@ -74,6 +76,14 @@ export const studentRouter = createBrowserRouter([
       {
         path: "/assignment",
         element: <Assignment />,
+      },
+      {
+        path: "/quiz",
+        element: <PassQuestionQuiz />,
+      },
+      {
+        path: "/quiz/:subject",
+        element: <PastQuestionScreen />,
       },
       {
         path: "/report",
