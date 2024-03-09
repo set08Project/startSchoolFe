@@ -33,7 +33,7 @@ const SwitchLogin = () => {
           setLoading(false);
 
           {
-            !loading && navigate("/");
+            !loading && navigate("/dashboard");
           }
         } else {
           setLoading(false);

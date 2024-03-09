@@ -21,6 +21,7 @@ import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
 import ViewReport from "../pagesForTeachers/pages/complain/ViewReport";
 import ReportCard from "../pagesForTeachers/pages/ReportCard/ReportCard";
 import TableTag from "../pagesForTeachers/pages/ReportCard/TableTag";
+import CardReport from "../pagesForTeachers/pages/ReportCard/CardReport";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -83,8 +84,8 @@ export const teacherRouter = createBrowserRouter([
         element: <TableTag />,
       },
       {
-        path: "reportcard",
-        element: <ReportCard />,
+        path: "report-card",
+        element: <CardReport />,
       },
       {
         path: "view-articles/:view",

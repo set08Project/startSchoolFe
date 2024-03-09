@@ -232,7 +232,7 @@ const Sider = () => {
         </NavLink>
 
         <NavLink
-          to="/reportcard"
+          to="/report-card"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
@@ -253,7 +253,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Weekly-Report
+          Weekly Report
           <MdReport />
         </NavLink>
 

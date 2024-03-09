@@ -27,7 +27,7 @@ const RouterScreen = () => {
       if (userStatus === "school-admin") {
         // getSchoolCookie().then((res: any) => {
         return readSchool(user?.id).then((resp) => {
-          if (resp.status === 200) {
+          if (resp?.status === 200) {
             return setState(resp?.data);
           } else if (resp?.response?.status === 404) {
             return setState(resp?.response?.status);
@@ -37,7 +37,7 @@ const RouterScreen = () => {
       } else if (userStatus === "school-teacher") {
         // readTeacherCookie().then((res: any) => {
         return viewTeacherDetail(user?.id).then((resp: any) => {
-          if (resp.status === 200) {
+          if (resp?.status === 200) {
             return setState(resp?.data);
           } else if (resp?.response?.status === 404) {
             return setState(resp?.response?.status);
@@ -61,7 +61,7 @@ const RouterScreen = () => {
     });
 
     const timing = setTimeout(() => {
-      if (!state.status) {
+      if (!state?.status) {
         setLoadingState(true);
       }
       clearTimeout(timing);
@@ -70,15 +70,15 @@ const RouterScreen = () => {
 
   return (
     <div>
-      {state.status === "school-admin" ? (
+      {state?.status === "school-admin" ? (
         <div>
           <RouterProvider router={adminRouter} />
         </div>
-      ) : state.status === "school-teacher" ? (
+      ) : state?.status === "school-teacher" ? (
         <div>
           <RouterProvider router={teacherRouter} />
         </div>
-      ) : state.status === "school-student" ? (
+      ) : state?.status === "school-student" ? (
         <div>
           <RouterProvider router={studentRouter} />
         </div>

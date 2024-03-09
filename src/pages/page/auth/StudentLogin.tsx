@@ -39,7 +39,7 @@ const StudentLogin = () => {
       .then(() => {
         setTimeout(() => {
           {
-            !loading && navigate("/");
+            !loading && navigate("/dashboard");
             window.location.reload();
           }
         }, 2000);
