@@ -5,11 +5,12 @@ import Gallery from "./Gallery";
 import Teachers from "./Teachers";
 import Footer from "./Footer";
 import Header from "../Block/Header";
+import SchoolPageHeader from "../../schoolPage/layout/SchoolPageHeader";
 
 const SchoolLandingPage = () => {
   return (
     <div>
-      <Header />
+      <SchoolPageHeader />
       <HomeScreen />
       <WelcomePage />
       <Gallery />

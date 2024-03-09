@@ -16,6 +16,8 @@ import About from "../LandingPage1/About";
 import StartUsing from "../LandingPage1/Homescreen/StartUsing";
 import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
 import SchoolLandingPage from "../mainSchoolPage/Pages/SchoolLandingPage";
+import SchoolPageLayout from "../schoolPage/layout/SchoolPageLayout";
+import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -101,6 +103,13 @@ export const mainRouter = createBrowserRouter([
   {
     path: "/school/:schoolName",
     element: <SchoolLandingPage />,
+    // element: <SchoolPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <SchoolPageEntry />,
+      },
+    ],
   },
 
   // {
