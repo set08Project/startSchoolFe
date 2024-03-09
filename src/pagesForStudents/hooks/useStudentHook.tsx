@@ -3,6 +3,7 @@ import {
   classAssignment,
   classLessonNotes,
   getOneArticle,
+  getOneStudentHistory,
   getSchoolArticle,
   lessonNotes,
   readClassInfo,
@@ -158,6 +159,18 @@ export const useComplain = (studentID: string) => {
     }
   );
   return { complainData };
+};
+
+export const usePastQuestionHistory = (studentID: string) => {
+  const { data: pastQuestionData } = useSWR(
+    `api/view-question-history/${studentID}`,
+    () => {
+      return getOneStudentHistory(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { pastQuestionData };
 };
 
 export const useClassTimeTableViewer = (classID: string) => {

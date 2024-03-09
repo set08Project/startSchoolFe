@@ -1,23 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { MdPlayCircle } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
-import { performanceTest } from "../../api/studentAPI";
-import { useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
-import seven from "./english/2007.json";
+import moment from "moment";
+import { createPastQuestionHistory } from "../../api/studentAPI";
+import { useStudentInfo } from "../../hooks/useStudentHook";
 
 const PastQuestionScreen = () => {
-  const navigate = useNavigate();
-  const { quizID } = useParams();
-  const [state, setState] = useState<any>({});
-  const { quizData } = useQuiz(quizID!);
-  const [start, setStart] = useState<boolean>(false);
   const { studentInfo } = useStudentInfo();
 
-  // console.log(quizData?.quiz[1].question);
+  var { subject } = useParams();
+  var { year } = useParams();
+
+  const [start, setStart] = useState(false);
+  const [sevenData, setSevenData] = useState(null);
+
+  let now: any = new Date().getHours();
+  let duration: any = new Date().setHours(now + 1);
+  duration = moment(duration).format("LLLL");
+
+  const [minute, setMinute] = useState(59);
+  const [second, setSecond] = useState(59);
+
+  let intervalId: any;
+
+  const startTest = () => {
+    intervalId = setInterval(() => {
+      setSecond((prevSecond) => {
+        if (prevSecond > 0) {
+          return prevSecond - 1;
+        } else {
+          if (minute > 0) {
+            setMinute((prevMinute) => prevMinute - 1);
+            return 59;
+          } else {
+            clearInterval(intervalId);
+            handleSubmit();
+            return 0;
+          }
+        }
+      });
+    }, 1000);
+
+    setStart(true);
+  };
+
+  useEffect(() => {
+    const importSevenData = async () => {
+      try {
+        const { default: seven } = await import(
+          `./subjects/${subject}/${year}.json`
+        );
+        setSevenData(seven);
+      } catch (error) {
+        console.error("Error loading JSON file:", error);
+      }
+    };
+
+    importSevenData();
+  }, [subject, year]);
+
+  const navigate = useNavigate();
+  const [state, setState] = useState<any>({});
 
   const handleStateChange = (questionValue: any, optionValue: any) => {
     setState((el: any) => ({
@@ -33,13 +78,13 @@ const PastQuestionScreen = () => {
     let remark: string = "";
     let grade: string = "";
 
-    for (let i = 0; i < quizData?.quiz[1]?.question?.length; i++) {
-      correctAnswer.push(quizData?.quiz[1]?.question[i].answer);
+    for (let i = 0; i < sevenData?.data.length; i++) {
+      correctAnswer.push(sevenData?.data[i].answer);
       if (correctAnswer[i] === Object.values(state)[i]) {
         score++;
       }
     }
-    percentage = Math.ceil((score / quizData?.quiz[1]?.question.length) * 100);
+    percentage = Math.ceil((score / sevenData?.data.length) * 100);
     if (percentage >= 0 && percentage <= 45) {
       remark = "Very very poor Performance!";
     } else if (percentage >= 46 && percentage <= 55) {
@@ -68,168 +113,138 @@ const PastQuestionScreen = () => {
       grade = "A";
     }
 
-    performanceTest(studentInfo?._id, quizID!, {
-      studentScore: score,
-      studentGrade: grade,
-      remark,
+    createPastQuestionHistory(studentInfo?._id, {
+      subject,
+      year,
+      percent: percentage,
+      score,
     }).then((res) => {
       if (res.status === 201) {
-        toast.success("Quiz summitted successfully");
+        toast.success(`Remark: ${remark}`);
         setTimeout(() => {
-          navigate("/");
-        }, 1500);
+          navigate("/history/quiz");
+        }, 6000);
       } else {
         toast.error("Something went wrong");
       }
     });
+
+    clearInterval(intervalId);
   };
 
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
-      <LittleHeader name={`${seven?.subject} Test Screen`} />
-      <div className="relative">
-        {/* {!start && (
-          <div className="absolute top-20 left-1/3 z-10 ">
-            <MdPlayCircle
-              size={200}
-              className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
-              onClick={() => {
-                if (!document.startViewTransition) {
-                  setStart(true);
-                } else {
-                  document.startViewTransition(() => {
-                    setStart(true);
-                  });
-                }
-              }}
-            />
-            <p className="font-bold">Push Play to start your Test</p>
-          </div>
-        )} */}
-        <div className="bg-slate-50 justify-center flex min-h-[100vh]">
-          <div className=" bg-white w-full px-5">
-            {seven.data
-              ?.map((props: any, index: number) => (
-                <div>
-                  <p className="text-[14px] font-bold mt-10">
-                    Question {index + 1}.
-                  </p>
-                  <i>Instruction: {props?.section}</i>
-                  <div className="ml-4 ">
-                    <p
-                      className="text-[18px]"
-                      dangerouslySetInnerHTML={{ __html: props?.question }}
-                    ></p>
 
-                    <div className="ml-8">
-                      <p className="text-[12px] mt-5">
-                        Choose your Options carefully
-                      </p>
-                      {Object.entries(props.option).map(
-                        (props: any, i: number) => {
-                          const choice: any = props[1];
+      {start ? (
+        <>
+          <LittleHeader name={`${subject.toUpperCase()} ${year} Test Screen`} />
 
-                          let val: string = props[1];
-
-                          //   if (typeof props === "string") {
-                          //     val = props.split(",")[choice];
-                          //   }
-
-                          return (
-                            <>
-                              <div
-                                key={i}
-                                className="flex items-center gap-2 ml-4"
-                              >
-                                <input
-                                  className="radio radio-sm"
-                                  type="radio"
-                                  onChange={() => {
-                                    handleStateChange(index, val);
-                                  }}
-                                  id={`${index} - ${choice}`}
-                                  value={`${val}`}
-                                  checked={state[index] === val}
-                                />
-                                <label htmlFor={`${index} - ${choice}`}>
-                                  {val}
-                                </label>
-                              </div>
-                            </>
-                          );
-                        }
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
-              .splice(0, 60)}
-
-            <div>
-              <Button
-                className="bg-blue-950 px-12 mt-14 py-4 "
-                name={"Submit"}
-                onClick={handleSubmit}
-              />
+          <div className="relative">
+            <div className="fixed rounded-full md:w-[70px] md:h-[70px] flex justify-center items-center w-[70px] h-[70px] border-[8px] top-56 right-4 ">
+              {`${minute}:${second < 10 ? "0" : ""}${second}`}
             </div>
-          </div>
 
-          <div className="relative blur-sm bg-white w-full px-5">
-            {quizData?.quiz[1]?.question?.map((props: any, index: number) => (
-              <div>
-                <p className="text-[14px] font-bold mt-10">
-                  Question {index + 1}.
-                </p>
-                <div className="ml-4 ">
-                  <p className="text-[18px]">{props.question}</p>
+            <div className="bg-slate-50 justify-center flex min-h-[100vh]">
+              <div className=" bg-white w-full px-5">
+                {sevenData?.data
+                  ?.map((props: any, index: number) => (
+                    <div>
+                      <p className="text-[14px] font-bold mt-10">
+                        Question {index + 1}.
+                      </p>
+                      <i className="text-blue-950">
+                        {props?.section && (
+                          <>
+                            "Instruction:"
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: props?.section,
+                              }}
+                            />
+                          </>
+                        )}
+                      </i>
+                      <div className="ml-4 ">
+                        <p
+                          className="text-[18px]"
+                          dangerouslySetInnerHTML={{ __html: props?.question }}
+                        ></p>
 
-                  <div className="ml-8">
-                    <p className="text-[12px] mt-5">
-                      Choose your Options carefully
-                    </p>
-                    {props.options.map((props: any, i: number) => {
-                      const choice: any = Object.keys(props)[1];
+                        <div className="ml-8">
+                          <p className="text-[12px] mt-5">
+                            Choose your Options carefully
+                          </p>
+                          {Object.entries(props.option).map(
+                            (props: any, i: number) => {
+                              const choice: any = props[0];
 
-                      let val: string = "";
+                              let val: string = props[1];
 
-                      if (typeof props === "string") {
-                        val = choice;
-                      }
+                              //   if (typeof props === "string") {
+                              //     val = props.split(",")[choice];
+                              //   }
 
-                      console.log("choice", choice);
-                      console.log("choice", val);
-
-                      return (
-                        <div key={i} className="flex items-center gap-2 ml-4">
-                          <input
-                            className="radio radio-sm"
-                            type="radio"
-                            onChange={() => {
-                              handleStateChange(index, val);
-                            }}
-                            id={`${index} - ${choice}`}
-                            value={`${val}`}
-                            checked={state[index] === val}
-                          />
-                          <label htmlFor={`${index} - ${choice}`}>{val}</label>
+                              return (
+                                <>
+                                  <div
+                                    key={i}
+                                    className="flex items-center gap-2 ml-4"
+                                  >
+                                    <input
+                                      className="radio radio-sm"
+                                      type="radio"
+                                      onChange={() => {
+                                        handleStateChange(index, choice);
+                                      }}
+                                      id={`${index} - ${choice}`}
+                                      value={`${choice}`}
+                                      checked={state[index] === choice}
+                                    />
+                                    <label htmlFor={`${index} - ${choice}`}>
+                                      {val}
+                                    </label>
+                                  </div>
+                                </>
+                              );
+                            }
+                          )}
                         </div>
-                      );
-                    })}
-                  </div>
+                      </div>
+                    </div>
+                  ))
+                  .splice(0, 60)}
+
+                <div>
+                  <Button
+                    className="bg-blue-950 px-12 mt-14 py-4 "
+                    name={"Submit"}
+                    onClick={handleSubmit}
+                  />
                 </div>
               </div>
-            ))}
-
-            <div>
-              <Button
-                className="bg-blue-950 px-12 mt-14 py-4 "
-                name={"Submit"}
-              />
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <LittleHeader name={`Commence ${subject} ${year} Test`} />
+
+          <div className="text-[17px]">
+            Please click on the button to begin test for the duration of an hour
+          </div>
+
+          <Button
+            name={"Start"}
+            className="bg-blue-950"
+            onClick={() => {
+              startTest();
+
+              setState(true);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };
