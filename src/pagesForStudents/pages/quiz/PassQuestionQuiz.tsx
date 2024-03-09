@@ -1,0 +1,50 @@
+import React from "react";
+import LittleHeader from "../../../components/layout/LittleHeader";
+import { Link } from "react-router-dom";
+
+const PassQuestionQuiz = () => {
+  const data = [
+    "English",
+    "Mathematics",
+    "Commerce",
+    "Accounting",
+    "Literature",
+    "Chemistry",
+    "Government",
+    "Physics",
+    "Economics",
+    "History",
+    "Civic Education",
+    "Insurance",
+    "Geography",
+    "Current Affairs",
+  ];
+
+  return (
+    <div>
+      <LittleHeader />
+      <div className="text-blue-950 text-[30px] ">
+        Welcome To Quiz Your Session
+      </div>
+      <div className="grid grid-cols-1  gap-4">
+        <div className="min-h-[200px] p-[50px] grid grid-cols-1 border rounded-md">
+          <div className=" flex justify-center items-center flex-col">
+            <div className="py-[20px]">Kindly Select Subjects Here</div>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4">
+              {data.map((el) => (
+                <Link
+                  to={el.toLowerCase()}
+                  className="h-[100px] w-full border rounded-md flex justify-center items-center"
+                >
+                  {el}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PassQuestionQuiz;
