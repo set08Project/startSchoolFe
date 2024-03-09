@@ -188,7 +188,7 @@ const Sider = () => {
           <FaTable />
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/lesson"
           className={({ isActive }) =>
             isActive
@@ -199,10 +199,10 @@ const Sider = () => {
         >
           Practice Quiz
           <MdQuiz />
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
-          to="/quiz"
+          to="/CBT"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
@@ -210,7 +210,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Quiz
+          CBT
           <MdQuiz />
         </NavLink>
 

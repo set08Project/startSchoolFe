@@ -84,15 +84,15 @@ export const studentRouter = createBrowserRouter([
         element: <QuizHistory />,
       },
       {
-        path: "/quiz",
+        path: "/CBT",
         element: <PassQuestionQuiz />,
       },
       {
-        path: "/quiz/:subject/:year",
+        path: "/CBT/:subject/:year",
         element: <PastQuestionScreen />,
       },
       {
-        path: "/quiz/:subject",
+        path: "/CBT/:subject",
         element: <PastQuestionYears />,
       },
       {

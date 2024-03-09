@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
 import { createPastQuestionHistory } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
+import { MdPlayCircle } from "react-icons/md";
 
 const PastQuestionScreen = () => {
   const { studentInfo } = useStudentInfo();
@@ -136,7 +137,7 @@ const PastQuestionScreen = () => {
     <div>
       <Toaster position="top-center" reverseOrder={true} />
 
-      {start ? (
+      <div className="relative w-full h-full">
         <>
           <LittleHeader name={`${subject.toUpperCase()} ${year} Test Screen`} />
 
@@ -145,8 +146,8 @@ const PastQuestionScreen = () => {
               {`${minute}:${second < 10 ? "0" : ""}${second}`}
             </div>
 
-            <div className="bg-slate-50 justify-center flex min-h-[100vh]">
-              <div className=" bg-white w-full px-5">
+            <div className="bg-white justify-center flex min-h-[100vh]">
+              <div className=" bg-white w-[90%] px-5">
                 {sevenData?.data
                   ?.map((props: any, index: number) => (
                     <div>
@@ -168,7 +169,9 @@ const PastQuestionScreen = () => {
                       <div className="ml-4 ">
                         <p
                           className="text-[18px]"
-                          dangerouslySetInnerHTML={{ __html: props?.question }}
+                          dangerouslySetInnerHTML={{
+                            __html: props?.question,
+                          }}
                         ></p>
 
                         <div className="ml-8">
@@ -180,10 +183,6 @@ const PastQuestionScreen = () => {
                               const choice: any = props[0];
 
                               let val: string = props[1];
-
-                              //   if (typeof props === "string") {
-                              //     val = props.split(",")[choice];
-                              //   }
 
                               return (
                                 <>
@@ -226,25 +225,35 @@ const PastQuestionScreen = () => {
             </div>
           </div>
         </>
-      ) : (
-        <>
-          <LittleHeader name={`Commence ${subject} ${year} Test`} />
 
-          <div className="text-[17px]">
-            Please click on the button to begin test for the duration of an hour
+        {!start && (
+          <div className="fixed top-0 left-0 z-10 backdrop-blur-sm  w-full h-full flex flex-col items-center justify-start pt-32 pl-0 md:pl-52">
+            <LittleHeader name={`Commence ${subject} ${year} Test`} />
+            <MdPlayCircle
+              size={200}
+              className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
+              onClick={() => {
+                if (!document.startViewTransition) {
+                  setStart(true);
+                  startTest();
+                } else {
+                  document.startViewTransition(() => {
+                    setStart(true);
+                    startTest();
+                  });
+                }
+              }}
+            />
+            <p className="font-bold w-[70%] text-center mt-5 ">
+              {/* Push Play to start your Test */}
+              Please click on the Play Button to begin test, duration is 1hr
+              <br />
+              <br />
+              <span className="text-[25px]">All the Best</span>
+            </p>
           </div>
-
-          <Button
-            name={"Start"}
-            className="bg-blue-950"
-            onClick={() => {
-              startTest();
-
-              setState(true);
-            }}
-          />
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };
