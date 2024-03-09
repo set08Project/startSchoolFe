@@ -19,6 +19,8 @@ import Article from "../pagesForTeachers/pages/article/Article";
 import GallerySettings from "../pages/page/settings/GallerySettings";
 import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
 import ViewReport from "../pagesForTeachers/pages/complain/ViewReport";
+import ReportCard from "../pagesForTeachers/pages/ReportCard/ReportCard";
+import TableTag from "../pagesForTeachers/pages/ReportCard/TableTag";
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -72,10 +74,17 @@ export const teacherRouter = createBrowserRouter([
         path: "create-quiz/:subjectID",
         element: <CreateQuiz />,
       },
-
       {
         path: "lesson-note",
         element: <LessonNote />,
+      },
+      {
+        path: "table-tag",
+        element: <TableTag />,
+      },
+      {
+        path: "reportcard",
+        element: <ReportCard />,
       },
       {
         path: "view-articles/:view",

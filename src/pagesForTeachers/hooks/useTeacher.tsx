@@ -155,8 +155,8 @@ export const useAttendance = (classID: string) => {
       return classAttendance(classID!).then((res: any) => {
         return res.data;
       });
-    },
-    { refreshInterval: 1000 }
+    }
+    // { refreshInterval: 1000 }
   );
   return { attendance };
 };

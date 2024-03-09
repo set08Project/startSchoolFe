@@ -19,6 +19,7 @@
     "@types/redux-persist": "^4.3.1",
     "axios": "^1.6.5",
     "chart.js": "^4.4.1",
+    "date-fns": "^3.3.1",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
