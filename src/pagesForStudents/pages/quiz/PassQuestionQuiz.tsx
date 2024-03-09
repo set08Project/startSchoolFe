@@ -18,18 +18,18 @@ const PassQuestionQuiz = () => {
     "Insurance",
     "Geography",
     "Current Affairs",
+    "CRK",
+    "IRK",
   ];
 
   return (
     <div>
-      <LittleHeader />
-      <div className="text-blue-950 text-[30px] ">
-        Welcome To Quiz Your Session
-      </div>
+      <LittleHeader name="Subject Selection" />
+
       <div className="grid grid-cols-1  gap-4">
         <div className="min-h-[200px] p-[50px] grid grid-cols-1 border rounded-md">
           <div className=" flex justify-center items-center flex-col">
-            <div className="py-[20px]">Kindly Select Subjects Here</div>
+            <div className="py-[20px]">Kindly Select A Subject Here</div>
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4">
               {data.map((el) => (
                 <Link
