@@ -3,6 +3,9 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaNoteSticky,
+  FaSchool,
+  FaStore,
 } from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +18,8 @@ import {
   MdPeople,
   MdQueryStats,
   MdReport,
+  MdSchool,
+  MdSettings,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -29,6 +34,7 @@ import {
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FaPhotoVideo } from "react-icons/fa";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -179,9 +185,39 @@ const Header = () => {
                 to: "view-students",
               },
               {
-                title: "Reports",
+                title: "View Classrooms",
+                icon: <FaSchool />,
+                to: "view-students",
+              },
+              {
+                title: "View Subjects",
+                icon: <MdSchool />,
+                to: "subjects",
+              },
+              {
+                title: "Complains",
                 icon: <MdReport />,
                 to: "report",
+              },
+              {
+                title: "Lesson Notes",
+                icon: <FaNoteSticky />,
+                to: "lesson-note",
+              },
+              {
+                title: "Gallaries",
+                icon: <FaPhotoVideo />,
+                to: "view-gallery",
+              },
+              {
+                title: "Store",
+                icon: <FaStore />,
+                to: "store",
+              },
+              {
+                title: "Settings",
+                icon: <MdSettings />,
+                to: "settings",
               },
             ]}
             but

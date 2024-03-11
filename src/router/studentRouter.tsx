@@ -28,6 +28,10 @@ export const studentRouter = createBrowserRouter([
     children: [
       { index: true, element: <StudentDashboard /> },
       {
+        path: "/dashboard",
+        element: <StudentDashboard />,
+      },
+      {
         path: "/time-table",
         element: <TimeTable />,
       },

@@ -33,7 +33,6 @@ interface iProps {
 }
 
 const SmallPiece: FC<iProps> = ({ log, name, but }) => {
-  const { data } = useSchoolData();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { studentInfo } = useStudentInfo();
@@ -90,8 +89,8 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   };
 
   return (
-    <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1 ">
-      <div className="flex flex-col items-between  w-full">
+    <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1">
+      <div className="flex flex-col items-between  w-full  overflow-y-auto">
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
             key={i}
@@ -112,7 +111,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div className="w-full flex justify-center mt-3">
           <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
             <Button
-              name="upgrade"
+              name="Make Attendance"
               className="text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[3px]"
             />
           </NavLink>
@@ -160,7 +159,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       <div className="mt-4" />
       <hr />
       <p className="p-2 text-center break-words text-[12px] font-bold uppercase ">
-        {data?.schoolName}
+        {teacherInfo?.schoolName}
       </p>
     </div>
   );

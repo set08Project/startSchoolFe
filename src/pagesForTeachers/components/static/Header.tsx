@@ -3,6 +3,8 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaPhotoFilm,
+  FaStore,
 } from "react-icons/fa6";
 import pic from "../../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,11 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import SmallPiece from "./SmallPiece";
 import {
   MdAccountCircle,
+  MdArticle,
+  MdBadge,
   MdClose,
   MdMenu,
   MdPeople,
   MdQueryStats,
   MdReport,
+  MdSchool,
+  MdSdCard,
+  MdSettings,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -150,19 +157,69 @@ const Header = () => {
                 to: "/",
               },
               {
-                title: "View Staffs",
+                title: "My Schedule",
                 icon: <MdPeople />,
-                to: "view-staff",
+                to: "my-schedule",
               },
               {
-                title: "View Students",
+                title: "My Class",
                 icon: <FaBarsProgress />,
-                to: "view-students",
+                to: "my-class",
+              },
+              {
+                title: "My Subjects",
+                icon: <MdSchool />,
+                to: "subjects",
+              },
+              {
+                title: "Student's Articles",
+                icon: <MdArticle />,
+                to: "view-articles",
+              },
+              {
+                title: "Lesson Note",
+                icon: <MdReport />,
+                to: "lesson-note",
               },
               {
                 title: "Reports",
                 icon: <MdReport />,
                 to: "report",
+              },
+              {
+                title: "Store",
+                icon: <FaStore />,
+                to: "store",
+              },
+              {
+                title: "Gallaries",
+                icon: <FaPhotoFilm />,
+                to: "gallary",
+              },
+              {
+                title: "Reports",
+                icon: <MdReport />,
+                to: "report-card",
+              },
+              {
+                title: "Report Card",
+                icon: <MdSdCard />,
+                to: "report-card",
+              },
+              {
+                title: "Reports",
+                icon: <MdReport />,
+                to: "week-report",
+              },
+              {
+                title: "Complain",
+                icon: <MdBadge />,
+                to: "complain",
+              },
+              {
+                title: "Settings",
+                icon: <MdSettings />,
+                to: "settings",
               },
             ]}
             but
