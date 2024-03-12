@@ -6,11 +6,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
+import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
 const PreviewTest = () => {
   const navigate = useNavigate();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
+
+  // const {} = useReadMyClassInfoData()
 
   const testQuestion = useSelector((state: any) => state.test);
   const dispatch = useDispatch();
@@ -21,7 +24,7 @@ const PreviewTest = () => {
     readClassInfo(subjectQuiz?.designated).then((res: any) => {
       setState(res.data);
     });
-  });
+  }, []);
 
   return (
     <div>
@@ -80,8 +83,10 @@ const PreviewTest = () => {
         className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
         onClick={() => {
           // setToggle(true);
+          console.log("clicked", state?._id!, subjectID!);
 
           createQuiz(state?._id!, subjectID!, testQuestion).then((res: any) => {
+            console.log(res);
             if (res.status === 201) {
               mutate(`api/view-subject-quiz/${subjectID}`);
 

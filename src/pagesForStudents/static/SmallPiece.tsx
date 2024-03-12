@@ -85,7 +85,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   };
 
   return (
-    <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1 ">
+    <div className="border w-[250px] bg-blue-50 shadow-sm  rounded-md p-1 overflow-y-auto  z-50">
       <div className="flex flex-col items-between  w-full">
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
@@ -105,12 +105,18 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
       {but && (
         <div className="w-full flex justify-center mt-3">
-          <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
-            <Button
-              name="upgrade"
-              className="text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[3px]"
-            />
-          </NavLink>
+          {/* <NavLink to="/upgrade" onClick={handleToggleMenuFalse}> */}
+          <Button
+            name={
+              <div>
+                Pay Fees
+                <br />
+                <p className="text-[12px]">(coming soon)</p>
+              </div>
+            }
+            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-9 leading-tight"
+          />
+          {/* </NavLink> */}
         </div>
       )}
 

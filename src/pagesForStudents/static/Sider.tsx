@@ -4,7 +4,9 @@ import {
   MdOutlineArticle,
   MdQueryStats,
   MdQuiz,
+  MdRadio,
   MdReport,
+  MdReportOff,
   MdSettings,
   MdStadium,
   MdSubject,
@@ -126,10 +128,16 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            name="Pay Fees"
-            className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
+            name={
+              <div>
+                Pay Fees
+                <br />
+                <p className="text-[12px]">(coming soon)</p>
+              </div>
+            }
+            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-9 leading-tight"
             onClick={() => {
-              handleDisplayStaff();
+              // handleDisplayStaff();
             }}
           />
 
@@ -210,7 +218,9 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          CBT
+          <span>
+            CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
+          </span>
           <MdQuiz />
         </NavLink>
 
@@ -302,7 +312,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Complain
-          <MdReport />
+          <MdRadio />
         </NavLink>
 
         <div className="flex-1" />
