@@ -3,17 +3,26 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaPhotoFilm,
+  FaTable,
 } from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
   MdAccountCircle,
+  MdAssignmentAdd,
+  MdClass,
   MdClose,
   MdMenu,
+  MdOutlineArticle,
   MdPeople,
   MdQueryStats,
+  MdQuiz,
+  MdRadio,
   MdReport,
+  MdSettings,
+  MdStadium,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -26,6 +35,7 @@ import SmallPiece from "./SmallPiece";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
+import { CgProfile } from "react-icons/cg";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -140,8 +150,8 @@ const Header = () => {
 
       {toggleMenu && (
         <div
-          className={`absolute md:hidden duration-300 transition-all ${
-            toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
+          className={`absolute md:hidden duration-300  transition-all overflow-y-auto  ${
+            toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
           <SmallPiece
@@ -149,22 +159,63 @@ const Header = () => {
               {
                 title: "Dashboard",
                 icon: <MdQueryStats />,
-                to: "/",
+                to: "/dashboard",
               },
               {
-                title: "View Staffs",
-                icon: <MdPeople />,
-                to: "view-staff",
+                title: "My ClassRoom",
+                icon: <MdStadium />,
+                to: "my-classroom",
               },
               {
-                title: "View Students",
-                icon: <FaBarsProgress />,
-                to: "view-students",
+                title: "My Subject",
+                icon: <FaTable />,
+                to: "your-subjects",
+              },
+              {
+                title: `CBT (For SSS 3 Only)`,
+                icon: <MdQuiz />,
+                to: "CBT",
+              },
+              {
+                title: "Lessons",
+                icon: <MdClass />,
+                to: "lesson",
+              },
+              {
+                title: "Profile",
+                icon: <CgProfile />,
+                to: "your-profile",
+              },
+              {
+                title: "Articles",
+                icon: <MdOutlineArticle />,
+                to: "articles",
+              },
+              {
+                title: "Assignments",
+                icon: <MdAssignmentAdd />,
+                to: "assignment",
+              },
+              {
+                title: "Gallaries",
+                icon: <FaPhotoFilm />,
+                to: "gallary",
               },
               {
                 title: "Reports",
                 icon: <MdReport />,
                 to: "report",
+              },
+              {
+                title: "complain",
+                icon: <MdRadio />,
+                to: "complain",
+              },
+
+              {
+                title: "Seetings",
+                icon: <MdSettings />,
+                to: "your-profile",
               },
             ]}
             but

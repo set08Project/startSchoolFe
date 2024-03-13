@@ -114,16 +114,21 @@ const PastQuestionScreen = () => {
       grade = "A";
     }
 
+    console.log(score, grade, sevenData?.data?.length);
+
+    console.log((score / 60) * 100);
+
     createPastQuestionHistory(studentInfo?._id, {
       subject,
       year,
       percent: percentage,
       score,
     }).then((res) => {
+      console.log(res);
       if (res.status === 201) {
         toast.success(`Remark: ${remark}`);
         setTimeout(() => {
-          navigate("/history/quiz");
+          // navigate("/history/quiz");
         }, 6000);
       } else {
         toast.error("Something went wrong");
@@ -218,7 +223,10 @@ const PastQuestionScreen = () => {
                   <Button
                     className="bg-blue-950 px-12 mt-14 py-4 "
                     name={"Submit"}
-                    onClick={handleSubmit}
+                    onClick={() => {
+                      console.log("done");
+                      handleSubmit();
+                    }}
                   />
                 </div>
               </div>
