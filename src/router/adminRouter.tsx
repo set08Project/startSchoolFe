@@ -1,33 +1,74 @@
 import { createBrowserRouter } from "react-router-dom";
-import PersonalSetting from "../pages/page/settings/PersonalSetting";
-import PersonalInfoScreen from "../pages/page/settings/PersonalInfoScreen";
-import ViewStoreItems from "../pages/page/store/ViewStoreItems";
-import SettingScreen from "../pages/page/settings/Setting";
-import StudentDetail from "../pages/page/student/StudentDetail";
-import StaffDetail from "../pages/page/staff/StaffDetail";
-import ViewStaffScreen from "../pages/page/staff/ViewStaffScreen";
-import ViewStudent from "../pages/page/student/ViewStudent";
-import ViewReport from "../pages/page/report/ViewReport";
-import HomeView from "../pages/home/HomeView";
-import HomeScreen from "../pages/home/HomeScreen";
-import Layout from "../components/layout/Layout";
-import MakeShift from "./MakeShift";
-import PrivateRouter from "./PrivateRouter";
+const PersonalSetting = React.lazy(
+  () => import("../pages/page/settings/PersonalSetting")
+);
+const PersonalInfoScreen = React.lazy(
+  () => import("../pages/page/settings/PersonalInfoScreen")
+);
+const SettingScreen = React.lazy(
+  () => import("../pages/page/settings/Setting")
+);
+const StudentDetail = React.lazy(
+  () => import("../pages/page/student/StudentDetail")
+);
+const StaffDetail = React.lazy(() => import("../pages/page/staff/StaffDetail"));
+const ViewStaffScreen = React.lazy(
+  () => import("../pages/page/staff/ViewStaffScreen")
+);
+const ViewStudent = React.lazy(
+  () => import("../pages/page/student/ViewStudent")
+);
+const ViewReport = React.lazy(() => import("../pages/page/report/ViewReport"));
+const HomeView = React.lazy(() => import("../pages/home/HomeView"));
+const HomeScreen = React.lazy(() => import("../pages/home/HomeScreen"));
+const Layout = React.lazy(() => import("../components/layout/Layout"));
+const MakeShift = React.lazy(() => import("./MakeShift"));
+const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import { ErrorBoundary } from "react-error-boundary";
-import LoadingScreen from "../components/static/LoadingScreen";
-import ThirdScreen from "../pages/home/start/ThirdStep";
-import SecondStep from "../pages/home/start/SecondStep";
-import ClassRoomScreen from "../pages/page/class/ClassRoomScreen";
-import ClassDetailScreen from "../pages/page/class/ClassDetailScreen";
-import ViewSubjects from "../pages/page/subject/ViewSubject";
-import AdminLessonNote from "../pages/page/less/LessonNote";
-import ViewTeacherNoteByAdmin from "../pages/page/less/ViewTeacherNote";
-import ViewSchoolSettings from "../pages/page/settings/ViewSchoolSettings";
-import SchoolTheme from "../pages/page/settings/SchoolTheme";
-import GallerySettings from "../pages/page/settings/GallerySettings";
-import GallaryScreen from "../pages/page/gallary/GallaryScreen";
-import ThemeScreen from "../pages/page/settings/ThemeScreen";
-import TestGallary from "../pages/page/gallary/TestGallary";
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
+const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
+const ClassRoomScreen = React.lazy(
+  () => import("../pages/page/class/ClassRoomScreen")
+);
+const ClassDetailScreen = React.lazy(
+  () => import("../pages/page/class/ClassDetailScreen")
+);
+const ViewSubjects = React.lazy(
+  () => import("../pages/page/subject/ViewSubject")
+);
+const AdminLessonNote = React.lazy(
+  () => import("../pages/page/less/LessonNote")
+);
+const ViewTeacherNoteByAdmin = React.lazy(
+  () => import("../pages/page/less/ViewTeacherNote")
+);
+const ViewSchoolSettings = React.lazy(
+  () => import("../pages/page/settings/ViewSchoolSettings")
+);
+const SchoolTheme = React.lazy(
+  () => import("../pages/page/settings/SchoolTheme")
+);
+const GallerySettings = React.lazy(
+  () => import("../pages/page/settings/GallerySettings")
+);
+const GallaryScreen = React.lazy(
+  () => import("../pages/page/gallary/GallaryScreen")
+);
+const ThemeScreen = React.lazy(
+  () => import("../pages/page/settings/ThemeScreen")
+);
+const TestGallary = React.lazy(
+  () => import("../pages/page/gallary/TestGallary")
+);
+
+import React from "react";
+
+const ViewStoreItems = React.lazy(
+  () => import("../pages/page/store/ViewStoreItems")
+);
 
 export const adminRouter = createBrowserRouter([
   {

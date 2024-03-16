@@ -1,27 +1,77 @@
 import { createBrowserRouter } from "react-router-dom";
-import TeacherDashboard from "../pagesForTeachers/TeacherDashboard";
-import LoadingScreen from "../components/static/LoadingScreen";
-import TeacherLayout from "../pagesForTeachers/components/layout/TeacherLayout";
-import Schedule from "../pagesForTeachers/pages/schedule/Schedule";
-import MyClass from "../pagesForTeachers/pages/class/MyClass";
-import Subjects from "../pagesForTeachers/pages/subject/Subjects";
-import LessonNote from "../pagesForTeachers/pages/lessonNote/LessonNote";
-import WeekReport from "../pagesForTeachers/pages/report/WeekReport";
-import ViewStoreItems from "../pagesForTeachers/pages/store/ViewStoreItems";
-import StudentDetail from "../pagesForTeachers/pages/class/StudentDetail";
-import QuizSetupScreen from "../pagesForTeachers/pages/quiz/QuizSetupScreen";
-import QuizTestScreen from "../pagesForTeachers/pages/quiz/QuizTestScreen";
-import CreateQuiz from "../pagesForTeachers/pages/quiz/CreateQuiz";
-import CreateLesson from "../pagesForTeachers/pages/lessonNote/CreateLessonNote";
-import AttendanceScreen from "../pagesForTeachers/pages/attendance/AttendanceScreen";
-import ViewTeacherNote from "../pagesForTeachers/pages/lessonNote/ViewTeacherNote";
-import Article from "../pagesForTeachers/pages/article/Article";
-import GallerySettings from "../pages/page/settings/GallerySettings";
-import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
-import ViewReport from "../pagesForTeachers/pages/complain/ViewReport";
-import ReportCard from "../pagesForTeachers/pages/ReportCard/ReportCard";
-import TableTag from "../pagesForTeachers/pages/ReportCard/TableTag";
-import CardReport from "../pagesForTeachers/pages/ReportCard/CardReport";
+
+const TeacherDashboard = React.lazy(
+  () => import("../pagesForTeachers/TeacherDashboard")
+);
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const TeacherLayout = React.lazy(
+  () => import("../pagesForTeachers/components/layout/TeacherLayout")
+);
+const Schedule = React.lazy(
+  () => import("../pagesForTeachers/pages/schedule/Schedule")
+);
+
+const MyClass = React.lazy(
+  () => import("../pagesForTeachers/pages/class/MyClass")
+);
+
+const Subjects = React.lazy(
+  () => import("../pagesForTeachers/pages/subject/Subjects")
+);
+
+const LessonNote = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/LessonNote")
+);
+
+const WeekReport = React.lazy(
+  () => import("../pagesForTeachers/pages/report/WeekReport")
+);
+
+const ViewStoreItems = React.lazy(
+  () => import("../pagesForTeachers/pages/store/ViewStoreItems")
+);
+
+const StudentDetail = React.lazy(
+  () => import("../pagesForTeachers/pages/class/StudentDetail")
+);
+
+const QuizSetupScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/QuizSetupScreen")
+);
+const QuizTestScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/QuizTestScreen")
+);
+const CreateQuiz = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/CreateQuiz")
+);
+const CreateLesson = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/CreateLessonNote")
+);
+const AttendanceScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/attendance/AttendanceScreen")
+);
+const ViewTeacherNote = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/ViewTeacherNote")
+);
+
+const Article = React.lazy(
+  () => import("../pagesForTeachers/pages/article/Article")
+);
+const GalleryScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/gallary/GallaryScreen")
+);
+const ViewReport = React.lazy(
+  () => import("../pagesForTeachers/pages/complain/ViewReport")
+);
+const TableTag = React.lazy(
+  () => import("../pagesForTeachers/pages/ReportCard/TableTag")
+);
+const CardReport = React.lazy(
+  () => import("../pagesForTeachers/pages/ReportCard/CardReport")
+);
+import React from "react";
 
 export const teacherRouter = createBrowserRouter([
   {
