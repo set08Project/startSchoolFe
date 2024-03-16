@@ -34,45 +34,38 @@ const AddSessionTerm = () => {
     }
   };
 
-  console.log(termID);
   const { sessionData } = useViewSingleSession(termID);
 
-  console.log(sessionData);
-
   const handleSubmit = () => {
-    createNewSessionTerm(dataID, { year: start, term: "1st Term" }).then(
-      (res) => {
-        if (res.status === 201) {
-          mutate(`api/view-school-session/${data?._id}`);
-          if (!document.startViewTransition) {
-            dispatch(displaySession(false));
-            // api/view-school-session/${schoolID}
-            toast.success("Session created");
-          } else {
-            document.startViewTransition(() => {
-              toast.error("Something went wrong");
-              dispatch(displaySession(false));
-            });
-          }
+    createNewSessionTerm(termID, { term: end }).then((res) => {
+      if (res.status === 201) {
+        console.log(res);
+        mutate(`api/view-present-school-session/${data?._id}`);
+        if (!document.startViewTransition) {
+          dispatch(displaySessionTerm(false));
+          toast.success("Term Session created");
         } else {
-          if (!document.startViewTransition) {
-            dispatch(displaySession(false));
-            mutate(`api/view-school-session/${data?._id}`);
-            toast.success("Session created");
-          } else {
-            document.startViewTransition(() => {
-              mutate(`api/view-school-session/${data?._id}`);
-              console.log(res?.response?.data?.message);
-              toast.success("Session created");
-              dispatch(displaySession(false));
-            });
-          }
+          document.startViewTransition(() => {
+            toast.error("Something went wrong");
+            dispatch(displaySessionTerm(false));
+          });
+        }
+      } else {
+        if (!document.startViewTransition) {
+          dispatch(displaySessionTerm(false));
+          mutate(`api/view-school-session/${data?._id}`);
+          toast.error(`${res?.response?.data?.message}`);
+        } else {
+          document.startViewTransition(() => {
+            mutate(`api/view-present-school-session/${data?._id}`);
+
+            toast.error(`${res?.response?.data?.message}`);
+            dispatch(displaySessionTerm(false));
+          });
         }
       }
-    );
-    console.log("Creating Term");
+    });
   };
-  //   onClick = { handleToggleMenuFalse };
   return (
     <div className="flex justify-center bg-blue-50   ">
       <Toaster position="top-center" reverseOrder={true} />
@@ -102,10 +95,8 @@ const AddSessionTerm = () => {
             <Input
               placeholder="Session Year: 2023/2024"
               className="mx-0 h-10 w-full"
-              value={start}
-              onChange={(e: any) => {
-                setStart(e.target.value);
-              }}
+              defaultValue={sessionData?.year}
+              value={sessionData?.year}
             />
           </div>
 
@@ -116,7 +107,7 @@ const AddSessionTerm = () => {
             <Input
               placeholder="1st Term"
               className="mx-0 h-10  w-full"
-              value={"1st Term"}
+              value={end}
               onChange={(e: any) => {
                 setEnd(e.target.value);
               }}
@@ -125,7 +116,7 @@ const AddSessionTerm = () => {
         </div>
 
         <div className="w-full flex justify-end transition-all duration-300">
-          {start !== "" ? (
+          {end !== "" ? (
             <Button
               name="Proceed"
               className="bg-blue-950  mx-0"

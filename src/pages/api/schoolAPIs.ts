@@ -719,7 +719,7 @@ export const createNewSessionTerm = async (sessionID: string, data: {}) => {
 export const viewPresentSession = async (sessionID: string) => {
   try {
     return await axios
-      .get(`${URL}/view-school-session/${sessionID}`)
+      .get(`${URL}/view-present-school-session/${sessionID}`)
       .then((res: any) => {
         return res?.data;
       });

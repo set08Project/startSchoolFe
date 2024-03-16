@@ -351,10 +351,10 @@ export const useComplain = (schoolID: string) => {
 
 export const useViewSingleSession = (sessionID: string) => {
   const { data: sessionData } = useSWR(
-    `api/view-present-session/${sessionID}`,
+    `api/view-present-school-session/${sessionID}`,
     () => {
       return viewPresentSession(sessionID!).then((res) => {
-        return res;
+        return res.data;
       });
     }
   );
