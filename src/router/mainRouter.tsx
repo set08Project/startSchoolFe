@@ -37,7 +37,11 @@ import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
 export const mainRouter = createBrowserRouter([
   {
     path: "/",
-    element: <LandingLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LandingLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -88,7 +92,11 @@ export const mainRouter = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <AuthLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <AuthLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -167,7 +175,11 @@ export const mainRouter = createBrowserRouter([
 
   {
     path: "*",
-    element: <LoadingScreen />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LoadingScreen />
+      </Suspense>
+    ),
   },
   {
     path: "/school/:schoolName",

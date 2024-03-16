@@ -81,7 +81,11 @@ export const adminRouter = createBrowserRouter([
     ),
     children: [
       {
-        element: <Layout />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Layout />
+          </Suspense>
+        ),
         children: [
           {
             element: (

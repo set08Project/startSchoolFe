@@ -76,7 +76,11 @@ const CardReport = React.lazy(
 export const teacherRouter = createBrowserRouter([
   {
     path: "/",
-    element: <TeacherLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <TeacherLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,

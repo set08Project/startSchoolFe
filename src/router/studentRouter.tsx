@@ -64,7 +64,11 @@ const QuizHistory = React.lazy(
 export const studentRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <Layout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
