@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
 
 const AuthLayout = React.lazy(() => import("../components/layout/AuthLayout"));
 const Register = React.lazy(() => import("../pages/page/auth/Register"));
@@ -32,7 +33,6 @@ const StartUsing = React.lazy(
 );
 
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
-import React from "react";
 
 export const mainRouter = createBrowserRouter([
   {

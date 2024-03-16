@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 const LoadingScreen = React.lazy(
@@ -12,8 +13,6 @@ import {
 } from "../pagesForTeachers/api/teachersAPI";
 
 import { useSelector } from "react-redux";
-
-import React from "react";
 
 const MakeShift = () => {
   const userStatus = useSelector((state: any) => state.userStatus);

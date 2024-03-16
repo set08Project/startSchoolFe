@@ -32,7 +32,7 @@ const AddSession = () => {
         mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
-          // api/view-school-session/${schoolID}
+
           toast.success("Session created");
         } else {
           document.startViewTransition(() => {
