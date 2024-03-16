@@ -1,3 +1,4 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const TeacherDashboard = React.lazy(
@@ -71,7 +72,6 @@ const TableTag = React.lazy(
 const CardReport = React.lazy(
   () => import("../pagesForTeachers/pages/ReportCard/CardReport")
 );
-import React from "react";
 
 export const teacherRouter = createBrowserRouter([
   {

@@ -1,3 +1,4 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const AuthLayout = React.lazy(() => import("../components/layout/AuthLayout"));
@@ -32,7 +33,6 @@ const StartUsing = React.lazy(
 );
 
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
-import React from "react";
 
 export const mainRouter = createBrowserRouter([
   {
