@@ -128,7 +128,7 @@ const PastQuestionScreen = () => {
       if (res.status === 201) {
         toast.success(`Remark: ${remark}`);
         setTimeout(() => {
-          // navigate("/history/quiz");
+          navigate("/history/quiz");
         }, 6000);
       } else {
         toast.error("Something went wrong");

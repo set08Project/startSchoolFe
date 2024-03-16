@@ -37,6 +37,8 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const dispatch = useDispatch();
   const { studentInfo } = useStudentInfo();
 
+  const toggle = useSelector((state: any) => state.toggle);
+
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
       dispatch(changeToggleMenuState(false));
@@ -144,10 +146,15 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            logout();
+            // logout();
+
             dispatch(logoutState());
-            // window.location.reload();
-            // navigate("/auth/login");
+            handleMenu();
+            const timer = setTimeout(() => {
+              navigate("/");
+              window.location.reload();
+              clearTimeout(timer);
+            }, 0);
           }}
         >
           <div>Log-out</div>

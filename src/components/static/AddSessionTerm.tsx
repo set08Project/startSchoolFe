@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { displaySession } from "../../global/reduxState";
+import { displaySession, displaySessionTerm } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
-import { createNewSession } from "../../pages/api/schoolAPIs";
-import { useSchoolCookie, useSchoolData } from "../../pages/hook/useSchoolAuth";
+import {
+  createNewSession,
+  createNewSessionTerm,
+} from "../../pages/api/schoolAPIs";
+import {
+  useSchoolCookie,
+  useSchoolData,
+  useViewSingleSession,
+} from "../../pages/hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
 
-const AddSession = () => {
+const AddSessionTerm = () => {
+  const termID = useSelector((state: any) => state.termID);
   const dispatch = useDispatch();
   const [start, setStart] = useState<string>("");
   const [end, setEnd] = useState<string>("");
@@ -18,42 +26,51 @@ const AddSession = () => {
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
-      dispatch(displaySession(false));
+      dispatch(displaySessionTerm(false));
     } else {
       document.startViewTransition(() => {
-        dispatch(displaySession(false));
+        dispatch(displaySessionTerm(false));
       });
     }
   };
 
+  console.log(termID);
+  const { sessionData } = useViewSingleSession(termID);
+
+  console.log(sessionData);
+
   const handleSubmit = () => {
-    createNewSession(dataID, { year: start, term: "1st Term" }).then((res) => {
-      if (res.status === 201) {
-        mutate(`api/view-school-session/${data?._id}`);
-        if (!document.startViewTransition) {
-          dispatch(displaySession(false));
-          // api/view-school-session/${schoolID}
-          toast.success("Session created");
-        } else {
-          document.startViewTransition(() => {
-            toast.error("Something went wrong");
-            dispatch(displaySession(false));
-          });
-        }
-      } else {
-        if (!document.startViewTransition) {
-          dispatch(displaySession(false));
+    createNewSessionTerm(dataID, { year: start, term: "1st Term" }).then(
+      (res) => {
+        if (res.status === 201) {
           mutate(`api/view-school-session/${data?._id}`);
-          toast.success("Session created");
+          if (!document.startViewTransition) {
+            dispatch(displaySession(false));
+            // api/view-school-session/${schoolID}
+            toast.success("Session created");
+          } else {
+            document.startViewTransition(() => {
+              toast.error("Something went wrong");
+              dispatch(displaySession(false));
+            });
+          }
         } else {
-          document.startViewTransition(() => {
+          if (!document.startViewTransition) {
+            dispatch(displaySession(false));
             mutate(`api/view-school-session/${data?._id}`);
             toast.success("Session created");
-            dispatch(displaySession(false));
-          });
+          } else {
+            document.startViewTransition(() => {
+              mutate(`api/view-school-session/${data?._id}`);
+              console.log(res?.response?.data?.message);
+              toast.success("Session created");
+              dispatch(displaySession(false));
+            });
+          }
         }
       }
-    });
+    );
+    console.log("Creating Term");
   };
   //   onClick = { handleToggleMenuFalse };
   return (
@@ -73,8 +90,8 @@ const AddSession = () => {
         <hr />
 
         <p className="mt-2 leading-tight text-[13px] font-medium">
-          Please note that each session you create, holds records of that
-          particular session.
+          Please note that each Term you create, holds records of that
+          particular Term.
         </p>
 
         <div className="mt-10 w-full gap-2 flex items-center">
@@ -100,10 +117,9 @@ const AddSession = () => {
               placeholder="1st Term"
               className="mx-0 h-10  w-full"
               value={"1st Term"}
-              // onChange={(e: any) => {
-              //   setEnd();
-              // }}
-              defaultValue={"1st Term"}
+              onChange={(e: any) => {
+                setEnd(e.target.value);
+              }}
             />
           </div>
         </div>
@@ -127,4 +143,4 @@ const AddSession = () => {
   );
 };
 
-export default AddSession;
+export default AddSessionTerm;

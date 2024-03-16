@@ -703,3 +703,39 @@ export const updateAvatar = async (schoolID: string, data: any) => {
     return error;
   }
 };
+
+export const createNewSessionTerm = async (sessionID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-school-term/${sessionID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewPresentSession = async (sessionID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-session/${sessionID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewPresentSessionTerm = async (termID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-session/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

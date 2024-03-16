@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
 import { FC, ReactNode, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoMdImages } from "react-icons/io";
 import {
   changeMenuState,
@@ -33,7 +33,7 @@ interface iProps {
 const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const { studentInfo } = useStudentInfo();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
       dispatch(changeToggleMenuState(false));
@@ -147,8 +147,14 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
             // logout();
+            console.log("Heer");
             dispatch(logoutState());
-            // window.location.reload();
+            handleMenu();
+            const timer = setTimeout(() => {
+              navigate("/");
+              window.location.reload();
+              clearTimeout(timer);
+            }, 0);
           }}
         >
           <div>Log-out</div>

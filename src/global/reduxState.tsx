@@ -31,10 +31,12 @@ const initialState = {
   showStudent: false,
   sessionToggle: false,
   sessionToggled: false,
+  sessionTermToggle: false,
   subjectToggled: false,
   classroomToggled: false,
   notice: false,
   event: false,
+  termID: "" || null,
 
   schoolInfo: {} || null,
   categoryData: data,
@@ -95,6 +97,10 @@ const reduxState = createSlice({
       state.sessionToggle = payload;
     },
 
+    displaySessionTerm: (state, { payload }) => {
+      state.sessionTermToggle = payload;
+    },
+
     displaySessioned: (state, { payload }) => {
       state.sessionToggled = payload;
     },
@@ -129,6 +135,10 @@ const reduxState = createSlice({
 
     addTestInstruction: (state, { payload }: any): any => {
       state.test[0].instruction = payload;
+    },
+
+    changeTermID: (state, { payload }: any): any => {
+      state.termID = payload;
     },
 
     addTestQuestion: (state, { payload }: any) => {
@@ -204,6 +214,8 @@ export const {
   displayNoticeEvent,
   displayUserStatus,
   displayImageToggle,
+  displaySessionTerm,
+  changeTermID,
 } = reduxState.actions;
 
 export default reduxState.reducer;
