@@ -203,7 +203,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Gallaries
+          Galleries
           <FaPhotoVideo />
         </NavLink>
 

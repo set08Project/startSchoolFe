@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import React from "react";
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";

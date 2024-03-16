@@ -63,7 +63,7 @@ const CreateQuiz = () => {
                   <label className="text-[12px]">Enter Instruction</label>
                   <textarea
                     placeholder="Enter Instructions"
-                    className="ml-0 w-full border text-[12px] h-[200px] rounded-md resize-none outline-none p-2"
+                    className="ml-0 w-full border bg-gray-100 text-[12px] h-[200px] rounded-md resize-none outline-none p-2"
                     value={instruction}
                     onChange={(e) => {
                       setInstruction(e.target.value);
