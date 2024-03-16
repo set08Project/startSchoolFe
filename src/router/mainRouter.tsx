@@ -1,23 +1,38 @@
 import { createBrowserRouter } from "react-router-dom";
-import AuthLayout from "../components/layout/AuthLayout";
-import Register from "../pages/page/auth/Register";
-import SignIn from "../pages/page/auth/SignIn";
-import RegisterCard from "../pages/page/auth/RegisterCard";
 
-import SecondStep from "../pages/home/start/SecondStep";
-import ThirdScreen from "../pages/home/start/ThirdStep";
-import LoadingScreen from "../components/static/LoadingScreen";
-import SwitchLogin from "../pages/page/auth/SwitchLogin";
-import StudentLogin from "../pages/page/auth/StudentLogin";
-import LandingLayout from "../LandingPage1/LandingLayout";
-import ABetter from "../LandingPage1/Homescreen/ABetter";
-import Contact from "../LandingPage1/Contact";
-import About from "../LandingPage1/About";
-import StartUsing from "../LandingPage1/Homescreen/StartUsing";
-import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
-import SchoolLandingPage from "../mainSchoolPage/Pages/SchoolLandingPage";
-import SchoolPageLayout from "../schoolPage/layout/SchoolPageLayout";
+const AuthLayout = React.lazy(() => import("../components/layout/AuthLayout"));
+const Register = React.lazy(() => import("../pages/page/auth/Register"));
+const SignIn = React.lazy(() => import("../pages/page/auth/SignIn"));
+
+const RegisterCard = React.lazy(
+  () => import("../pages/page/auth/RegisterCard")
+);
+const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
+const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const SwitchLogin = React.lazy(() => import("../pages/page/auth/SwitchLogin"));
+
+const StudentLogin = React.lazy(
+  () => import("../pages/page/auth/StudentLogin")
+);
+const LandingLayout = React.lazy(() => import("../LandingPage1/LandingLayout"));
+const ABetter = React.lazy(() => import("../LandingPage1/Homescreen/ABetter"));
+const Contact = React.lazy(() => import("../LandingPage1/Contact"));
+const About = React.lazy(() => import("../LandingPage1/About"));
+const SchoolLandingPage = React.lazy(
+  () => import("../mainSchoolPage/Pages/SchoolLandingPage")
+);
+const LandingScreen = React.lazy(
+  () => import("../LandingPage1/Homescreen/HomeScreen")
+);
+const StartUsing = React.lazy(
+  () => import("../LandingPage1/Homescreen/StartUsing")
+);
+
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
+import React from "react";
 
 export const mainRouter = createBrowserRouter([
   {
