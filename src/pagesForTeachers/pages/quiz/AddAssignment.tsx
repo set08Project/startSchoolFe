@@ -71,8 +71,11 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
           id="assign_subject_timetable"
           className="modal-toggle"
         />
-        <div className="modal rounded-md text-blue-950 text-left" role="dialog">
-          <div className="modal-box  rounded-md">
+        <div
+          className="modal  rounded-md text-blue-950 text-left"
+          role="dialog"
+        >
+          <div className="modal-box bg-white rounded-md">
             <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Add Assignment to Subject</p>
 
@@ -119,7 +122,7 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
 
                 {/* // readSubject */}
                 <textarea
-                  className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 outline-none"
+                  className="border w-full bg-gray-100 resize-none h-[200px] mb-5 rounded-md mt-2 p-2 outline-none"
                   value={period}
                   onChange={(e) => {
                     setPeriod(e.target.value);
@@ -143,13 +146,13 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
 
                   <div className="w-full">
                     <div className="w-full ml-2  mt-0">
-                      <label className="font-medium text-[12px] mb-0">
+                      <label className="font-medium  text-[12px] mb-0">
                         Assignment Deadline{" "}
                         <span className="text-red-500">*</span>
                       </label>
 
                       <DatePicker
-                        className="text-[12px] font-medium h-12 px-2 mt-2 border rounded-md w-[220px]  "
+                        className="text-[12px] bg-gray-100 font-medium h-12 px-2 mt-2 border rounded-md w-[220px]  "
                         placeholderText="add date here"
                         selected={startDateTime!}
                         onChange={(date: any) => setStartDateTime(date)}

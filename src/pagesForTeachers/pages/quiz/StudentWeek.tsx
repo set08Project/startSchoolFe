@@ -68,7 +68,7 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
   return (
     <div>
       {/* <Toaster position="top-center" reverseOrder={true} /> */}
-      <div className=" text-[13px] font-medium">
+      <div className=" text-[13px]   font-medium">
         <label
           htmlFor="assign_subject_timetable"
           className=" transition-all duration-300 cursor-pointer "
@@ -82,8 +82,11 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
           id="assign_subject_timetable"
           className="modal-toggle"
         />
-        <div className="modal rounded-md text-blue-950 text-left" role="dialog">
-          <div className="modal-box  rounded-md">
+        <div
+          className="modal rounded-md  text-blue-950 text-left"
+          role="dialog"
+        >
+          <div className="modal-box rounded-md">
             <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Add Assignment to Subject</p>
 
@@ -122,7 +125,7 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
 
                 {/* // readSubject */}
                 <textarea
-                  className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 outline-none"
+                  className="border w-full bg-gray-100 resize-none h-[200px] mb-5 rounded-md mt-2 p-2 outline-none"
                   value={period}
                   onChange={(e) => {
                     setPeriod(e.target.value);
@@ -137,7 +140,7 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
                     </label>
 
                     <select
-                      className="select select-bordered w-full mt-2"
+                      className="select select-bordered bg-gray-100 w-full mt-2"
                       value={subject}
                       onChange={(e) => {
                         setSubject(e.target.value);
