@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import React from "react";
+
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 const LoadingScreen = React.lazy(
