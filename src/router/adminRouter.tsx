@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+
 const PersonalSetting = React.lazy(
   () => import("../pages/page/settings/PersonalSetting")
 );
@@ -63,8 +65,6 @@ const ThemeScreen = React.lazy(
 const TestGallary = React.lazy(
   () => import("../pages/page/gallary/TestGallary")
 );
-
-import React from "react";
 
 const ViewStoreItems = React.lazy(
   () => import("../pages/page/store/ViewStoreItems")

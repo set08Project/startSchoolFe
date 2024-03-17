@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+
 const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")
 );
@@ -57,8 +59,6 @@ const PastQuestionYears = React.lazy(
 const QuizHistory = React.lazy(
   () => import("../pagesForStudents/pages/quiz/QuizHistory")
 );
-
-import React from "react";
 
 export const studentRouter = createBrowserRouter([
   {
