@@ -27,8 +27,9 @@ const AddSession = () => {
   };
 
   const handleSubmit = () => {
-    createNewSession(dataID, { year: start, term: "1st Term" }).then((res) => {
+    createNewSession(dataID, { year: start }).then((res) => {
       if (res.status === 201) {
+        console.log(res);
         mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));

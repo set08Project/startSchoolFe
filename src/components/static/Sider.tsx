@@ -61,10 +61,10 @@ const Sider = () => {
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}
-          <div className="break-words font-bold">
-            {data?.schoolName.length > 16 ? (
-              <Tooltip tip={data?.schoolName}>
-                <p>{data?.schoolName.substring(0, 16)}...</p>
+          <div className="break-words font-bold text-[16px]">
+            {data?.schoolName.length > 15 ? (
+              <Tooltip side={true} tip={data?.schoolName}>
+                <p>{data?.schoolName.substring(0, 15)}...</p>
               </Tooltip>
             ) : (
               data?.schoolName
