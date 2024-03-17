@@ -1,11 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FC } from "react";
-import { displaySession, displaySessioned } from "../../global/reduxState";
+import {
+  changeTermID,
+  displaySession,
+  displaySessionTerm,
+  displaySessioned,
+} from "../../global/reduxState";
 import { FaCheckDouble } from "react-icons/fa6";
 import {
   useSchoolData,
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
+import Tooltip from "./Tooltip";
 
 const Session: FC = () => {
   // const { data } = useSchoolData();
@@ -24,24 +30,6 @@ const Session: FC = () => {
     }
   };
 
-  // const [state, setState] = useState<string>("");
-
-  // const changeImage = (e: any) => {
-  //   const file = e.target.files[0];
-
-  //   const formData: any = new FormData();
-  //   formData.append("avatar", file);
-  //   setState(file);
-  //   console.log(state);
-
-  //   if (state) {
-  //     const timer = setTimeout(() => {
-  //       clearTimeout(timer);
-  //     }, 1000);
-  //   }
-  // };
-
-  const arrayData = Array.from({ length: 0 });
   const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(data?._id);
   return (
@@ -61,16 +49,31 @@ const Session: FC = () => {
                     onClick={() => {
                       if (!document.startViewTransition) {
                         dispatch(displaySessioned(false));
+                        dispatch(displaySessionTerm(true));
+                        dispatch(changeTermID(props?._id));
                       } else {
                         document.startViewTransition(() => {
                           dispatch(displaySessioned(false));
+                          dispatch(displaySessionTerm(true));
+                          dispatch(changeTermID(props?._id));
                         });
                       }
                     }}
                   >
-                    <div className="text-[12px] w-full py-2 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
-                      <div>Session: {props?.year}</div>
-                      <div className="text-[17px]"></div>
+                    <div className="text-[12px] w-full py- font-medium  duration-300 transition-all hover:bg-blue-950 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
+                      <Tooltip tip={"Add New Term"}>
+                        {" "}
+                        <div
+                          className="w-full flex pl-2 mt-7 mb-2"
+                          onClick={() => {
+                            console.log("Let's do this: ", props._id);
+                          }}
+                        >
+                          Session: {props?.year}
+                        </div>
+                      </Tooltip>
+
+                      {/* <div className="text-[17px]"></div> */}
                     </div>
                   </div>
                 )}

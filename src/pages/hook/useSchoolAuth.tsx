@@ -18,6 +18,7 @@ import {
   updateClassroomTeacher,
   viewComplains,
   viewGallary,
+  viewPresentSession,
   viewSchoolByName,
   viewSchoolSession,
   viewSchoolSessionTerm,
@@ -346,4 +347,16 @@ export const useComplain = (schoolID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useViewSingleSession = (sessionID: string) => {
+  const { data: sessionData } = useSWR(
+    `api/view-present-school-session/${sessionID}`,
+    () => {
+      return viewPresentSession(sessionID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { sessionData };
 };

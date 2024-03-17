@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import React from "react";
 
@@ -82,19 +83,35 @@ export const adminRouter = createBrowserRouter([
     ),
     children: [
       {
-        element: <Layout />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Layout />
+          </Suspense>
+        ),
         children: [
           {
-            element: <HomeScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <HomeScreen />
+              </Suspense>
+            ),
             children: [
               {
                 index: true,
-                element: <HomeView />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <HomeView />
+                  </Suspense>
+                ),
               },
               {
                 index: true,
                 path: "dashboard",
-                element: <HomeView />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <HomeView />
+                  </Suspense>
+                ),
               },
             ],
           },
@@ -102,112 +119,195 @@ export const adminRouter = createBrowserRouter([
           {
             index: true,
             path: "test",
-            element: <TestGallary />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {" "}
+                <TestGallary />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "lesson-note",
-            element: <AdminLessonNote />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AdminLessonNote />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "/lesson-note/:noteID",
-            element: <ViewTeacherNoteByAdmin />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewTeacherNoteByAdmin />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "subjects",
-            element: <ViewSubjects />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewSubjects />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "report",
-            element: <ViewReport />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewReport />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "view-students",
-            element: <ViewStudent />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewStudent />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "view-staff",
-            element: <ViewStaffScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewStaffScreen />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "class-room",
-            element: <ClassRoomScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ClassRoomScreen />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "class-room/class-details/:classID",
-            element: <ClassDetailScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ClassDetailScreen />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "view-staff/staff-details/:staffID",
-            element: <StaffDetail />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {" "}
+                <StaffDetail />
+              </Suspense>
+            ),
           },
           {
             index: true,
             path: "view-students/student-details/:studentID",
-            element: <StudentDetail />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <StudentDetail />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "settings",
-            element: <SettingScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SettingScreen />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "store",
-            element: <ViewStoreItems />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewStoreItems />
+              </Suspense>
+            ),
           },
 
           {
             index: true,
             path: "gallary",
-            element: <GallaryScreen />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <GallaryScreen />
+              </Suspense>
+            ),
           },
 
           {
             path: "my-personal-info",
-            element: <PersonalSetting />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {" "}
+                <PersonalSetting />
+              </Suspense>
+            ),
             children: [
               {
                 index: true,
                 path: "info",
-                element: <PersonalInfoScreen />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <PersonalInfoScreen />
+                  </Suspense>
+                ),
               },
 
               {
                 index: true,
                 path: "theme-settings",
-                element: <SchoolTheme />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <SchoolTheme />
+                  </Suspense>
+                ),
               },
               {
                 index: true,
                 path: "theme-setting",
-                element: <ThemeScreen />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <ThemeScreen />
+                  </Suspense>
+                ),
               },
             ],
           },
 
           {
             path: "school-info",
-            element: <ViewSchoolSettings />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewSchoolSettings />
+              </Suspense>
+            ),
             children: [
               {
                 index: true,
                 path: "view-school-settings",
-                element: <ViewSchoolSettings />,
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <ViewSchoolSettings />
+                  </Suspense>
+                ),
               },
             ],
           },
@@ -215,7 +315,11 @@ export const adminRouter = createBrowserRouter([
           {
             index: true,
             path: "view-gallery",
-            element: <GallerySettings />,
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <GallerySettings />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -224,12 +328,20 @@ export const adminRouter = createBrowserRouter([
 
   {
     path: "/step-two-data",
-    element: <ThirdScreen />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <ThirdScreen />
+      </Suspense>
+    ),
   },
 
   {
     path: "/step-third-data",
-    element: <SecondStep />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <SecondStep />
+      </Suspense>
+    ),
   },
 
   {

@@ -1,5 +1,8 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import React from "react";
+=======
+import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 
 const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")
@@ -63,88 +66,180 @@ const QuizHistory = React.lazy(
 export const studentRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <Layout />
+      </Suspense>
+    ),
     children: [
-      { index: true, element: <StudentDashboard /> },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentDashboard />{" "}
+          </Suspense>
+        ),
+      },
       {
         path: "/dashboard",
-        element: <StudentDashboard />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentDashboard />
+          </Suspense>
+        ),
       },
       {
         path: "/time-table",
-        element: <TimeTable />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <TimeTable />
+          </Suspense>
+        ),
       },
       {
         path: "/your-profile",
-        element: <StudentProfile />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentProfile />
+          </Suspense>
+        ),
       },
       {
         path: "/my-classroom",
-        element: <MyClassRoomScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MyClassRoomScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/lesson",
-        element: <ClassLessonNote />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ClassLessonNote />
+          </Suspense>
+        ),
       },
       {
         path: "/lesson/:noteID",
-        element: <ViewClassNoteDetail />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <ViewClassNoteDetail />
+          </Suspense>
+        ),
       },
       {
         path: "/gallary",
-        element: <StudentGalleryScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentGalleryScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/articles",
-        element: <Article />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Article />
+          </Suspense>
+        ),
       },
       {
         path: "/articles/:view",
-        element: <Article />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Article />
+          </Suspense>
+        ),
       },
       {
         path: "/create-article",
-        element: <CreateArticle />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateArticle />
+          </Suspense>
+        ),
       },
       {
         path: "/your-subjects",
-        element: <MyClassroom />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MyClassroom />
+          </Suspense>
+        ),
       },
       {
         path: "subjects/:subjectID",
-        element: <QuizSetupScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <QuizSetupScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/quiz/details/:quizID",
-        element: <QuizTestScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <QuizTestScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/assignment",
-        element: <Assignment />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Assignment />
+          </Suspense>
+        ),
       },
       {
         path: "history/quiz",
-        element: <QuizHistory />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <QuizHistory />
+          </Suspense>
+        ),
       },
       {
         path: "/CBT",
-        element: <PassQuestionQuiz />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <PassQuestionQuiz />
+          </Suspense>
+        ),
       },
       {
         path: "/CBT/:subject/:year",
-        element: <PastQuestionScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <PastQuestionScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/CBT/:subject",
-        element: <PastQuestionYears />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <PastQuestionYears />
+          </Suspense>
+        ),
       },
       {
         path: "/report",
-        element: <ReportScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ReportScreen />
+          </Suspense>
+        ),
       },
       {
         path: "/complain",
-        element: <ViewReport />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ViewReport />
+          </Suspense>
+        ),
       },
     ],
   },

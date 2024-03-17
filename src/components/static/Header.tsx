@@ -35,6 +35,7 @@ import {
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaPhotoVideo } from "react-icons/fa";
+import AddSessionTerm from "./AddSessionTerm";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const Header = () => {
   const toggleSession = useSelector((state: any) => state.sessionToggled);
 
   const session = useSelector((state: any) => state?.sessionToggle);
+  const sessionTerm = useSelector((state: any) => state?.sessionTermToggle);
 
   const [sess, setSess] = useState<boolean>(false);
 
@@ -158,6 +160,12 @@ const Header = () => {
       {session && (
         <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">
           <AddSession />
+        </div>
+      )}
+
+      {sessionTerm && (
+        <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">
+          <AddSessionTerm />
         </div>
       )}
 
