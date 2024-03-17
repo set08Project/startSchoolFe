@@ -590,6 +590,20 @@ export const viewSchoolSession = async (schoolID: string) => {
   }
 };
 
+export const viewSchoolSessionTerm = async (sessionID: any) => {
+  try {
+    return await axios
+      .get(`${URL}/view-present-school-session/${sessionID}`)
+      .then((res: any) => {
+        console.log(sessionID);
+
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const verifyPayment1st = async (schoolID: string, studentID: string) => {
   try {
     return await axios

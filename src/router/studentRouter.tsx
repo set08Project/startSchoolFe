@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+=======
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 
 const StudentDashboard = React.lazy(

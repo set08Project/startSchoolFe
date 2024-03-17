@@ -18,12 +18,18 @@ import {
   useSchoolCookie,
   useSchoolData,
   useSchoolSessionData,
+  useSchoolTeacherDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useEffect } from "react";
+import {
+  viewSchoolSession,
+  viewSchoolSessionTerm,
+} from "../../pages/api/schoolAPIs";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -32,6 +38,7 @@ const Sider = () => {
 
   const { data } = useSchoolData();
   const { dataID } = useSchoolCookie();
+
   const { schoolInfo, loading }: any = useSchoolSessionData(dataID);
 
   const handleToggleMenuFalse = () => {
@@ -43,6 +50,8 @@ const Sider = () => {
       });
     }
   };
+
+  console.log("schoolInfo", schoolInfo);
 
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
@@ -76,6 +85,7 @@ const Sider = () => {
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: {loading ? "" : schoolInfo[0]?.year}
           </p>
+          {/* <p>Term: {schoolInfo?.term[0]?.term}</p> */}
         </div>
       </div>
 

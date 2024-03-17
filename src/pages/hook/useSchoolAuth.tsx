@@ -21,6 +21,7 @@ import {
   viewPresentSession,
   viewSchoolByName,
   viewSchoolSession,
+  viewSchoolSessionTerm,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewStore,
@@ -300,7 +301,6 @@ export const useGallary = (schoolID: string) => {
 
   return { gallary };
 };
-
 export const useSchoolSessionData = (schoolID: string) => {
   const { data: schoolInfo, isLoading: loading } = useSWR(
     `api/view-school-session/${schoolID}`,
