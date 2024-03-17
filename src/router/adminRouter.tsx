@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+
 const PersonalSetting = React.lazy(
   () => import("../pages/page/settings/PersonalSetting")
 );

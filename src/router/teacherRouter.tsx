@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import React from "react";
 
 const TeacherDashboard = React.lazy(
   () => import("../pagesForTeachers/TeacherDashboard")
