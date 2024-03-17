@@ -93,7 +93,7 @@ const AddSession = () => {
             />
           </div>
 
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="font-medium text-[12px]">
               Session Term <span className="text-red-500">*</span>
             </label>
@@ -106,7 +106,7 @@ const AddSession = () => {
               // }}
               defaultValue={"1st Term"}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full flex justify-end transition-all duration-300">

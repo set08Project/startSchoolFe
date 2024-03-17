@@ -10,6 +10,7 @@ import { FaStar } from "react-icons/fa6";
 import { useSchoolClassRM } from "../../hook/useSchoolAuth";
 import { FC } from "react";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
+import lodash from "lodash";
 
 interface iProps {
   props?: any;
@@ -52,6 +53,7 @@ const ClassRoomScreen = () => {
       });
     }
   };
+
   return (
     <div className="">
       {/* header */}
@@ -90,97 +92,99 @@ const ClassRoomScreen = () => {
         </div>
 
         <div className=" w-[1480px] overflow-hidden">
-          {schoolClassroom?.classRooms?.map((props: any, i: number) => (
-            <div>
+          {lodash
+            .sortBy(schoolClassroom?.classRooms, "className")
+            .map((props: any, i: number) => (
               <div>
-                <div
-                  key={props}
-                  className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
-                    i % 2 === 0 ? "bg-slate-50" : "bg-white"
-                  }`}
-                >
-                  <div className="w-[80px] border-r">{props.className}</div>
-
-                  <div className={`w-[100px] border-r`}>
-                    {props?.students?.length}
-                  </div>
-                  <div className={`w-[100px] border-r`}>
-                    {props?.classSubjects.length}
-                  </div>
-
-                  <div className="w-[270px] border-r flex justify-between pr-2 gap-4">
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        1st Term
-                      </label>
-                      <p className="mt-3 font-bold">
-                        ₦{parseInt(props.class1stFee).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        2nd Term
-                      </label>
-                      <p className="mt-3 font-bold">
-                        ₦{parseInt(props.class2ndFee).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        3rd Term
-                      </label>
-                      <p className="mt-3 font-bold">
-                        ₦{parseInt(props.class3rdFee).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-[20px] border-r">-</div>
-                  <div className="w-[270px] border-r flex justify-between pr-2 gap-4">
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        1st Term
-                      </label>
-                      <p className="mt-3 font-bold">90%</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        2nd Term
-                      </label>
-                      <p className="mt-3 font-bold text-red-500">0%</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <label className="text-[10px] font-medium">
-                        3rd Term
-                      </label>
-                      <p className="mt-3 font-bold text-red-500">0%</p>
-                    </div>
-                  </div>
-
-                  {/* name */}
-                  <div className="w-[220px]">
-                    {props.classTeacherName ? (
-                      <TeacherDetails props={props.teacherID} />
-                    ) : (
-                      <div>no teacher assigned yet</div>
-                    )}
-                  </div>
-
-                  <div className="w-[150px] border-r  ">90%</div>
-
-                  <Link
-                    to={`class-details/${props?._id}`}
-                    className="w-[180px] border-r"
+                <div>
+                  <div
+                    key={props}
+                    className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+                      i % 2 === 0 ? "bg-slate-50" : "bg-white"
+                    }`}
                   >
-                    <Button
-                      name="View class"
-                      className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                      onClick={() => {}}
-                    />
-                  </Link>
+                    <div className="w-[80px] border-r">{props.className}</div>
+
+                    <div className={`w-[100px] border-r`}>
+                      {props?.students?.length}
+                    </div>
+                    <div className={`w-[100px] border-r`}>
+                      {props?.classSubjects.length}
+                    </div>
+
+                    <div className="w-[270px] border-r flex justify-between pr-2 gap-4">
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          1st Term
+                        </label>
+                        <p className="mt-3 font-bold">
+                          ₦{parseInt(props.class1stFee).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          2nd Term
+                        </label>
+                        <p className="mt-3 font-bold">
+                          ₦{parseInt(props.class2ndFee).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          3rd Term
+                        </label>
+                        <p className="mt-3 font-bold">
+                          ₦{parseInt(props.class3rdFee).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="w-[20px] border-r">-</div>
+                    <div className="w-[270px] border-r flex justify-between pr-2 gap-4">
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          1st Term
+                        </label>
+                        <p className="mt-3 font-bold">90%</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          2nd Term
+                        </label>
+                        <p className="mt-3 font-bold text-red-500">0%</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-medium">
+                          3rd Term
+                        </label>
+                        <p className="mt-3 font-bold text-red-500">0%</p>
+                      </div>
+                    </div>
+
+                    {/* name */}
+                    <div className="w-[220px]">
+                      {props.classTeacherName ? (
+                        <TeacherDetails props={props.teacherID} />
+                      ) : (
+                        <div>no teacher assigned yet</div>
+                      )}
+                    </div>
+
+                    <div className="w-[150px] border-r  ">90%</div>
+
+                    <Link
+                      to={`class-details/${props?._id}`}
+                      className="w-[180px] border-r"
+                    >
+                      <Button
+                        name="View class"
+                        className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                        onClick={() => {}}
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

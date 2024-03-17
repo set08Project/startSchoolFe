@@ -51,8 +51,6 @@ const Sider = () => {
     }
   };
 
-  console.log("schoolInfo", schoolInfo);
-
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
@@ -85,7 +83,16 @@ const Sider = () => {
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: {loading ? "" : schoolInfo[0]?.year}
           </p>
-          {/* <p>Term: {schoolInfo?.term[0]?.term}</p> */}
+          <p className="text-[12px] font-bold">
+            Term:{" "}
+            {loading ? (
+              ""
+            ) : schoolInfo[0]?.presentTerm ? (
+              schoolInfo[0]?.presentTerm
+            ) : (
+              <span className="text-red-400 ml-1">Please create TERM</span>
+            )}
+          </p>
         </div>
       </div>
 

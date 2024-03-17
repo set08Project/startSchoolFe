@@ -40,7 +40,7 @@ const AddSessionTerm = () => {
     createNewSessionTerm(termID, { term: end }).then((res) => {
       if (res.status === 201) {
         console.log(res);
-        mutate(`api/view-present-school-session/${data?._id}`);
+        mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySessionTerm(false));
           toast.success("Term Session created");
@@ -57,9 +57,15 @@ const AddSessionTerm = () => {
           toast.error(`${res?.response?.data?.message}`);
         } else {
           document.startViewTransition(() => {
-            mutate(`api/view-present-school-session/${data?._id}`);
+            mutate(`api/view-school-session/${data?._id}`);
 
-            toast.error(`${res?.response?.data?.message}`);
+            toast.success(
+              `${
+                res?.status === 201
+                  ? res?.message
+                  : res?.response?.data?.message
+              }`
+            );
             dispatch(displaySessionTerm(false));
           });
         }

@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import React from "react";
 
 const TeacherDashboard = React.lazy(
   () => import("../pagesForTeachers/TeacherDashboard")
@@ -72,6 +71,9 @@ const TableTag = React.lazy(
 );
 const CardReport = React.lazy(
   () => import("../pagesForTeachers/pages/ReportCard/CardReport")
+);
+const SubjectGradeCard = React.lazy(
+  () => import("../pagesForTeachers/pages/subject/SubjectGradeCard")
 );
 
 export const teacherRouter = createBrowserRouter([
@@ -197,6 +199,14 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CardReport />
+          </Suspense>
+        ),
+      },
+      {
+        path: "test-exam-grade/:subjectID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SubjectGradeCard />
           </Suspense>
         ),
       },

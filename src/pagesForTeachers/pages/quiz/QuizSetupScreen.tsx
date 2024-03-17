@@ -40,19 +40,15 @@ const QuizSetupScreen = () => {
 
           <div className=" flex gap-2 ">
             <Link to={`/create-quiz/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-2 rounded-sm text-[12px] text-center">
+              <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-4 rounded-md text-[12px] text-center">
                 + Create Quiz
               </p>
             </Link>
-            <Link to={`/create-quiz/${subjectID}`}>
-              <p className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm text-center">
-                + Create Test
+            <Link to={`/test-exam-grade/${subjectID}`}>
+              <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-4 rounded-md text-center">
+                + Enter Test Records
               </p>
             </Link>
-
-            <div className="font-medium cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
-              <ClassModelAssignment props={subjectID} />
-            </div>
           </div>
         </div>
       </div>
