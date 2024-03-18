@@ -4,13 +4,22 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import moment from "moment";
 import { FC, useState } from "react";
-import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
+import {
+  useSchoolSessionData,
+  useStudentAttendance,
+} from "../../../pages/hook/useSchoolAuth";
 import {
   useClassStudent,
   useClassSubject,
+  useStudentGrade,
   useTeacherInfo,
 } from "../../hooks/useTeacher";
-import { readClassInfo, remark } from "../../api/teachersAPI";
+import {
+  readClassInfo,
+  remark,
+  reportCardRemark,
+  viewStudentGrade,
+} from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
@@ -20,21 +29,115 @@ import lodash from "lodash";
 interface iProps {
   props?: any;
   id?: string;
+  el?: any;
   data?: any;
   i?: number;
+  stateValue?: string;
+  teacherInfo?: any;
 }
 
-const SubjectScore: FC<iProps> = ({ props }) => {
+const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
+  const { gradeData } = useStudentGrade(props?._id);
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  // SS 1A session: 2024/2025(Second Term)
+
+  console.log(
+    "grade scored: ",
+    gradeData?.reportCard.find((el: any) => {
+      return (
+        el.classInfo ===
+        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+      );
+    })
+  );
+
+  // let result = gradeData?.reportCard
+  //   .find((el: any) => {
+  //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
+  //   })
+  //   ?.result?.find((data: any) => {
+  //     return data.subject === el?.subjectTitle;
+  //   });
+
+  let result = gradeData?.reportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+    );
+  });
+
   return (
-    <div className="w-[208px] border-r ">
-      <p className="pl-3 font-bold">{"props?.subjectTitle"}</p>
-      <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-        <p className="w-[30px] border-r">1st</p>
-        <p className="w-[30px] border-r">2nd</p>
-        <p className="w-[30px] border-r">3rd</p>
-        <p className="w-[30px] border-r">4th</p>
-        <p className="w-[35px] border-r">Exam</p>
-        <p className="w-[35px] ">Total</p>
+    <div className="w-[180px] border-r">
+      <Button
+        name="Add Comment"
+        className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+        onClick={() => {
+          if (stateValue !== "") {
+            reportCardRemark(teacherInfo?._id, props?._id, {
+              teacherComment: stateValue,
+            }).then((res: any) => {
+              console.log(res);
+              if (res.status === 201) {
+                mutate(`api/student-report-card/${props?._id}`);
+                toast.success("Report Card Report Noted");
+              } else {
+                toast.error(`${res?.response?.data?.message}`);
+              }
+            });
+          } else {
+            toast.error("Please give a REMARK");
+          }
+        }}
+      />
+    </div>
+  );
+};
+
+const SubjectScore: FC<iProps> = ({ props, el }) => {
+  const { gradeData } = useStudentGrade(props?._id);
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  // SS 1A session: 2024/2025(Second Term)
+
+  // console.log(
+  //   "grade scored: ",
+  // gradeData?.reportCard.find((el: any) => {
+  //   return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
+  // })
+  // );
+
+  console.log(
+    `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+  );
+
+  console.log(schoolInfo[0]?.presentTerm);
+
+  let result = gradeData?.reportCard
+    .find((el: any) => {
+      return (
+        el.classInfo ===
+        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+      );
+    })
+    ?.result?.find((data: any) => {
+      return data.subject === el?.subjectTitle;
+    });
+
+  return (
+    <div className="w-[260px] border-r-2 border-blue-950 ">
+      <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
+        <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
+        <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
+        <p className="w-[35px] font-bold border-r">
+          {result?.mark ? result?.mark : 0}
+        </p>
+        <p className="w-[35px] font-bold">
+          {result?.grade ? result?.grade : "Nill"}
+        </p>
       </div>
     </div>
   );
@@ -42,9 +145,24 @@ const SubjectScore: FC<iProps> = ({ props }) => {
 
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { teacherInfo } = useTeacherInfo();
-  const [state, setState] = useState<any>({});
-  const [stateValue, setStateValue] = useState("");
+  const { gradeData } = useStudentGrade(props?._id);
 
+  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
+  const { classStudents } = useClassStudent(state?._id!);
+
+  const { subjectData } = useClassSubject(state?._id);
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  let result = gradeData?.reportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+    );
+  });
+
+  const [stateValue, setStateValue] = useState(
+    `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
+  );
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -70,48 +188,25 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <AttendanceRatio props={props} />
       </div>
 
-      <div className="w-[1000px] border-r items-center flex">
-        <div className="flex ">
-          <SubjectScore />
+      <div
+        className={`w-[${
+          subjectData?.classSubjects.length * 260
+        }px]  border-r items-center flex`}
+      >
+        <div className="flex gap-4 ">
+          {lodash
+            .sortBy(subjectData?.classSubjects, "subjectTitle")
+            ?.map((el: any) => (
+              <SubjectScore props={props} el={el} />
+            ))}
         </div>
       </div>
-      {/* 
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          type="number"
-          placeholder="10"
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          type="number"
-          placeholder="10"
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          type="number"
-          placeholder="10"
-        />
-      </div>
-
-      <div className="w-[100px] border-r  ">
-        <input
-          className="w-[80px] h-8 outline-none border rounded-md px-2 "
-          type="number"
-          placeholder="70"
-        />
-      </div> */}
 
       <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder="Give a Remark"
+          placeholder={`${"Give a Remark"} `}
+          defaultValue={"Peter"}
           value={stateValue}
           onChange={(e) => {
             setStateValue(e.target.value);
@@ -121,20 +216,21 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name="Add Report"
+          name="Add Comment"
           className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
           onClick={() => {
             if (stateValue !== "") {
-              remark(teacherInfo?._id, props?._id, stateValue).then(
-                (res: any) => {
-                  if (res.status === 201) {
-                    mutate(``);
-                    toast.success("Report noted");
-                  } else {
-                    toast.error(`${res?.response?.data?.message}`);
-                  }
+              reportCardRemark(teacherInfo?._id, props?._id, {
+                teacherComment: stateValue,
+              }).then((res: any) => {
+                console.log(res);
+                if (res.status === 201) {
+                  mutate(`api/student-report-card/${props?._id}`);
+                  toast.success("Report Card Report Noted");
+                } else {
+                  toast.error(`${res?.response?.data?.message}`);
                 }
-              );
+              });
             } else {
               toast.error("Please give a REMARK");
             }
@@ -196,8 +292,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const SubjectMap: FC<iProps> = ({ props }) => {
   return (
-    <div className="w-[208px] border-r ">
-      <p className="pl-3 font-bold">{props?.subjectTitle}</p>
+    <div className="w-[260px] border-r ">
+      <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
       <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
         <p className="w-[30px] border-r">1st</p>
         <p className="w-[30px] border-r">2nd</p>
@@ -205,6 +301,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
         <p className="w-[30px] border-r">4th</p>
         <p className="w-[35px] border-r">Exam</p>
         <p className="w-[35px] ">Total</p>
+        <p className="w-[35px] ">Grade</p>
       </div>
     </div>
   );
@@ -212,25 +309,14 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 
 const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
-  const [stateValue, setStateValue] = useState("");
 
   const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
   const { classStudents } = useClassStudent(state?._id!);
-
   const { subjectData } = useClassSubject(state?._id);
-
   const [data, setData] = useState([]);
 
-  const handleInputChange = (id: any, newText: any) => {
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.id === id ? { ...item, text: newText } : item
-      )
-    );
-  };
-  // console.clear();
-
-  console.log(lodash.sortBy(subjectData?.classSubjects, "subjectTitle"));
+  console.clear();
+  console.log(subjectData?.classSubjects.length * 260);
 
   return (
     <div className="">
@@ -243,15 +329,24 @@ const CardReport = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[2480px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div
+          className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+          style={{
+            width: `${1000 + subjectData?.classSubjects.length * 260}px`,
+          }}
+        >
           <div className="w-[100px] border-r">Sequent</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-
-          <div className="w-[1000px] border-r">
-            <div>Subject Grade</div>
-            <div className="mt-4 flex gap-2">
-              <div className="flex ">
+          {/* 260px */}
+          <div
+            className={`w-[${
+              subjectData?.classSubjects.length * 260
+            }px] border-r`}
+          >
+            {/* <div>Subject Grade</div> */}
+            <div className=" flex ">
+              <div className="flex gap-4">
                 {lodash
                   .sortBy(subjectData?.classSubjects, "subjectTitle")
                   ?.map((props: any) => (
@@ -266,7 +361,12 @@ const CardReport = () => {
           <div className="w-[180px] border-r">Submit Report</div>
         </div>
 
-        <div className=" w-[2480px] overflow-hidden">
+        <div
+          className={` overflow-hidden`}
+          style={{
+            width: `${1000 + subjectData?.classSubjects.length * 260}px`,
+          }}
+        >
           {classStudents?.students?.length > 0 ? (
             <div>
               {classStudents?.students?.map((props: any, i: number) => (
