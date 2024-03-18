@@ -3,13 +3,19 @@ import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
-import { useClassStudent, useTeacherInfo } from "../../hooks/useTeacher";
+import {
+  useClassStudent,
+  useClassSubject,
+  useTeacherInfo,
+} from "../../hooks/useTeacher";
 import { readClassInfo, remark } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
+import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import lodash from "lodash";
 
 interface iProps {
   props?: any;
@@ -18,10 +24,27 @@ interface iProps {
   i?: number;
 }
 
+const SubjectScore: FC<iProps> = ({ props }) => {
+  return (
+    <div className="w-[208px] border-r ">
+      <p className="pl-3 font-bold">{"props?.subjectTitle"}</p>
+      <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+        <p className="w-[30px] border-r">1st</p>
+        <p className="w-[30px] border-r">2nd</p>
+        <p className="w-[30px] border-r">3rd</p>
+        <p className="w-[30px] border-r">4th</p>
+        <p className="w-[35px] border-r">Exam</p>
+        <p className="w-[35px] ">Total</p>
+      </div>
+    </div>
+  );
+};
+
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { teacherInfo } = useTeacherInfo();
   const [state, setState] = useState<any>({});
   const [stateValue, setStateValue] = useState("");
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -47,14 +70,12 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <AttendanceRatio props={props} />
       </div>
 
-      <div className="w-[100px] border-r items-center flex">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          type="number"
-          placeholder="10"
-        />
+      <div className="w-[1000px] border-r items-center flex">
+        <div className="flex ">
+          <SubjectScore />
+        </div>
       </div>
-
+      {/* 
       <div className="w-[100px] border-r">
         <input
           className="w-[70px] h-8 outline-none border rounded-md px-2 "
@@ -85,7 +106,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           type="number"
           placeholder="70"
         />
-      </div>
+      </div> */}
 
       <div className="w-[300px] border-r">
         <textarea
@@ -173,18 +194,30 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
   );
 };
 
+const SubjectMap: FC<iProps> = ({ props }) => {
+  return (
+    <div className="w-[208px] border-r ">
+      <p className="pl-3 font-bold">{props?.subjectTitle}</p>
+      <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+        <p className="w-[30px] border-r">1st</p>
+        <p className="w-[30px] border-r">2nd</p>
+        <p className="w-[30px] border-r">3rd</p>
+        <p className="w-[30px] border-r">4th</p>
+        <p className="w-[35px] border-r">Exam</p>
+        <p className="w-[35px] ">Total</p>
+      </div>
+    </div>
+  );
+};
+
 const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
-  const [state, setState] = useState<any>({});
   const [stateValue, setStateValue] = useState("");
 
-  useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
-
+  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
   const { classStudents } = useClassStudent(state?._id!);
+
+  const { subjectData } = useClassSubject(state?._id);
 
   const [data, setData] = useState([]);
 
@@ -195,6 +228,9 @@ const CardReport = () => {
       )
     );
   };
+  // console.clear();
+
+  console.log(lodash.sortBy(subjectData?.classSubjects, "subjectTitle"));
 
   return (
     <div className="">
@@ -207,36 +243,30 @@ const CardReport = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[1480px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[2480px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequent</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
-          <div className="w-[100px] border-r">
-            1st Test <br />
-            Score
+          <div className="w-[1000px] border-r">
+            <div>Subject Grade</div>
+            <div className="mt-4 flex gap-2">
+              <div className="flex ">
+                {lodash
+                  .sortBy(subjectData?.classSubjects, "subjectTitle")
+                  ?.map((props: any) => (
+                    <SubjectMap props={props} />
+                  ))}
+              </div>
+            </div>
           </div>
-          <div className="w-[100px] border-r">
-            2nd Test
-            <br /> Score
-          </div>
-          <div className="w-[100px] border-r">
-            3rd Test <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">
-            NoteBook
-            <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">Examination Score</div>
 
           <div className="w-[300px] border-r">Give Report/Remark</div>
 
           <div className="w-[180px] border-r">Submit Report</div>
         </div>
 
-        <div className=" w-[1480px] overflow-hidden">
+        <div className=" w-[2480px] overflow-hidden">
           {classStudents?.students?.length > 0 ? (
             <div>
               {classStudents?.students?.map((props: any, i: number) => (
