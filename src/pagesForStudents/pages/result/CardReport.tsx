@@ -238,7 +238,7 @@ const CardReportHistory = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Class Teacher Remark"} />
+      <LittleHeader name={"Student's Result History"} />
 
       <div className="mt-10" />
 
