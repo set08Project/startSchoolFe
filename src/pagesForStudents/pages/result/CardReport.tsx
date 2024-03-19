@@ -190,7 +190,11 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
       </div>
       <div className="w-[100px] border-r">{props?.points}</div>
       <div className="w-[100px] border-r text-[15px] leading-tight font-bold">
-        {props?.grade}
+        {props?.grade !== "Not Recorded Yet" ? (
+          props?.grade
+        ) : (
+          <span className="text-[12px] text-red-500">Not Recorded Yet</span>
+        )}
       </div>
 
       <div
@@ -234,7 +238,7 @@ const CardReportHistory = () => {
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
   return (
-    <div className="">
+    <div className="text-blue-950">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />

@@ -371,3 +371,15 @@ export const reportCardRemark = async (
     return error;
   }
 };
+
+export const viewClassAcademicHistory = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-class-result-history/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

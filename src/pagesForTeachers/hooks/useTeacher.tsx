@@ -10,6 +10,7 @@ import {
   readSubjectQuiz,
   readTeacherCookie,
   readTeacherSchedule,
+  viewClassAcademicHistory,
   viewComplains,
   viewStudentGrade,
   viewTeacherDetail,
@@ -229,4 +230,16 @@ export const useStudentGrade = (studentID: string) => {
     }
   );
   return { gradeData };
+};
+
+export const useClassAcademicHistory = (classID: string) => {
+  const { data: classAcademicHistory } = useSWR(
+    `api/view-class-result-history/${classID}`,
+    () => {
+      return viewClassAcademicHistory(classID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { classAcademicHistory };
 };
