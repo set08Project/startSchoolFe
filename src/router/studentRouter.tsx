@@ -7,6 +7,9 @@ const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")
 );
 
+const CardReportHistory = React.lazy(
+  () => import("../pagesForStudents/pages/result/CardReport")
+);
 const Assignment = React.lazy(() => import("../pagesForStudents/Assignment"));
 const Article = React.lazy(() => import("../pagesForStudents/Article"));
 const TimeTable = React.lazy(() => import("../pagesForStudents/TimeTable"));
@@ -84,6 +87,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <StudentDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/result",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CardReportHistory />
           </Suspense>
         ),
       },

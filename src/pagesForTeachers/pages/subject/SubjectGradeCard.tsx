@@ -196,22 +196,12 @@ const SubjectGradeCard = () => {
   const { subjectInfo } = useSujectInfo(subjectID);
 
   useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
+    readClassInfo(subjectInfo?.designated).then((res: any) => {
       setState(res.data);
     });
   }, []);
 
   const { classStudents } = useClassStudent(state?._id!);
-
-  const [data, setData] = useState([]);
-
-  const handleInputChange = (id: any, newText: any) => {
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.id === id ? { ...item, text: newText } : item
-      )
-    );
-  };
 
   return (
     <div className="">
