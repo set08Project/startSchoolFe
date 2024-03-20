@@ -151,12 +151,13 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
-            src={pix}
+            src={props?.avatar ? props?.avatar : pix}
           />
 
-          <div className="w-[180px] ">
+          <div className="w-[180px]">
             {" "}
-            {props?.studentFirstName} {props?.studentLastName}
+            {props?.studentFirstName}{" "}
+            <p className=" font-bold">{props?.studentLastName}</p>
           </div>
         </div>
       </div>

@@ -2,8 +2,7 @@ document.title = "View Students";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import moment from "moment";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -14,12 +13,7 @@ import {
   useStudentGrade,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import {
-  readClassInfo,
-  remark,
-  reportCardRemark,
-  viewStudentGrade,
-} from "../../../pagesForTeachers/api/teachersAPI";
+import { reportCardRemark } from "../../../pagesForTeachers/api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -42,16 +36,6 @@ interface iProps {
 const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
-
-  // SS 1A session: 2024/2025(Second Term)
-
-  // let result = gradeData?.reportCard
-  //   .find((el: any) => {
-  //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
-  //   })
-  //   ?.result?.find((data: any) => {
-  //     return data.subject === el?.subjectTitle;
-  //   });
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
