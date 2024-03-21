@@ -157,6 +157,39 @@ export const createStudentArticle = async (
   }
 };
 
+export const createPastQuestionHistory = async (
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-question-history/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getOneStudentHistory = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-question-history/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getOneArticle = async (articleID: string) => {
   try {
     return await axios
@@ -260,6 +293,18 @@ export const updateStudentAvatar = async (studentID: string, data: string) => {
     };
     return await axios
       .patch(`${URL}/upload-student-avatar/${studentID}`, data, config)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getStudentGrade = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/student-report-card/${studentID}`)
       .then((res: any) => {
         return res?.data;
       });

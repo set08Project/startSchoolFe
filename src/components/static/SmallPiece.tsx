@@ -107,8 +107,8 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div className="w-full flex justify-center mt-3">
           <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
             <Button
-              name="upgrade"
-              className="text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[3px]"
+              name="Add to Store"
+              className=" text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[5px] py-3"
             />
           </NavLink>
         </div>

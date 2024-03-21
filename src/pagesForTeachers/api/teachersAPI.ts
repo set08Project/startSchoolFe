@@ -327,3 +327,47 @@ export const updateTeacherAvatar = async (teacherID: string, data: string) => {
     return error;
   }
 };
+
+export const createGradeScore = async (
+  teacherID: string,
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewStudentGrade = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/student-report-card/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const reportCardRemark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

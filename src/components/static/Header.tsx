@@ -3,6 +3,9 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaNoteSticky,
+  FaSchool,
+  FaStore,
 } from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +18,8 @@ import {
   MdPeople,
   MdQueryStats,
   MdReport,
+  MdSchool,
+  MdSettings,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -29,6 +34,8 @@ import {
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FaPhotoVideo } from "react-icons/fa";
+import AddSessionTerm from "./AddSessionTerm";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,6 +45,7 @@ const Header = () => {
   const toggleSession = useSelector((state: any) => state.sessionToggled);
 
   const session = useSelector((state: any) => state?.sessionToggle);
+  const sessionTerm = useSelector((state: any) => state?.sessionTermToggle);
 
   const [sess, setSess] = useState<boolean>(false);
 
@@ -155,6 +163,12 @@ const Header = () => {
         </div>
       )}
 
+      {sessionTerm && (
+        <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">
+          <AddSessionTerm />
+        </div>
+      )}
+
       {toggleMenu && (
         <div
           className={`absolute md:hidden duration-300 transition-all ${
@@ -179,9 +193,39 @@ const Header = () => {
                 to: "view-students",
               },
               {
-                title: "Reports",
+                title: "View Classrooms",
+                icon: <FaSchool />,
+                to: "view-students",
+              },
+              {
+                title: "View Subjects",
+                icon: <MdSchool />,
+                to: "subjects",
+              },
+              {
+                title: "Complains",
                 icon: <MdReport />,
                 to: "report",
+              },
+              {
+                title: "Lesson Notes",
+                icon: <FaNoteSticky />,
+                to: "lesson-note",
+              },
+              {
+                title: "Gallaries",
+                icon: <FaPhotoVideo />,
+                to: "view-gallery",
+              },
+              {
+                title: "Store",
+                icon: <FaStore />,
+                to: "store",
+              },
+              {
+                title: "Settings",
+                icon: <MdSettings />,
+                to: "settings",
               },
             ]}
             but

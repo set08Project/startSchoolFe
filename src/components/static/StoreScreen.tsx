@@ -57,7 +57,7 @@ const StoreScreen = () => {
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="mt-5 text-[13px] font-medium text-blue-950 flex justify-start w-full">
+      <div className="mt-5 text-[13px] font-medium text-blue-950 flex justify-start w-full bg-blue-400">
         <label
           htmlFor="assign_subject_timetable"
           //   className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "

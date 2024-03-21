@@ -1,106 +1,205 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import AuthLayout from "../components/layout/AuthLayout";
-import Register from "../pages/page/auth/Register";
-import SignIn from "../pages/page/auth/SignIn";
-import RegisterCard from "../pages/page/auth/RegisterCard";
 
-import SecondStep from "../pages/home/start/SecondStep";
-import ThirdScreen from "../pages/home/start/ThirdStep";
-import LoadingScreen from "../components/static/LoadingScreen";
-import SwitchLogin from "../pages/page/auth/SwitchLogin";
-import StudentLogin from "../pages/page/auth/StudentLogin";
-import LandingLayout from "../LandingPage1/LandingLayout";
-import ABetter from "../LandingPage1/Homescreen/ABetter";
-import Contact from "../LandingPage1/Contact";
-import About from "../LandingPage1/About";
-import StartUsing from "../LandingPage1/Homescreen/StartUsing";
-import LandingScreen from "../LandingPage1/Homescreen/HomeScreen";
-import SchoolLandingPage from "../mainSchoolPage/Pages/SchoolLandingPage";
+const AuthLayout = React.lazy(() => import("../components/layout/AuthLayout"));
+const Register = React.lazy(() => import("../pages/page/auth/Register"));
+const SignIn = React.lazy(() => import("../pages/page/auth/SignIn"));
+
+const RegisterCard = React.lazy(
+  () => import("../pages/page/auth/RegisterCard")
+);
+const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
+const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const SwitchLogin = React.lazy(() => import("../pages/page/auth/SwitchLogin"));
+
+const StudentLogin = React.lazy(
+  () => import("../pages/page/auth/StudentLogin")
+);
+const LandingLayout = React.lazy(() => import("../LandingPage1/LandingLayout"));
+const ABetter = React.lazy(() => import("../LandingPage1/Homescreen/ABetter"));
+const Contact = React.lazy(() => import("../LandingPage1/Contact"));
+const About = React.lazy(() => import("../LandingPage1/About"));
+const SchoolLandingPage = React.lazy(
+  () => import("../mainSchoolPage/Pages/SchoolLandingPage")
+);
+const LandingScreen = React.lazy(
+  () => import("../LandingPage1/Homescreen/HomeScreen")
+);
+const StartUsing = React.lazy(
+  () => import("../LandingPage1/Homescreen/StartUsing")
+);
+
+import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
+import ResultHistory from "../pages/page/ResultHistory/Result";
 
 export const mainRouter = createBrowserRouter([
   {
     path: "/",
-    element: <LandingLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LandingLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
-        element: <LandingScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <LandingScreen />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "/features",
-        element: <ABetter />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <ABetter />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "/contact",
-        element: <Contact />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Contact />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <About />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "/service",
-        element: <StartUsing />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StartUsing />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "/auth",
-    element: <AuthLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <AuthLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
-        element: <Register />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Register />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "login",
-        element: <SignIn />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SignIn />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "switch-login",
-        element: <SwitchLogin />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SwitchLogin />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "student-login",
-        element: <StudentLogin />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentLogin />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "api/verify-user/:token",
-        element: <SignIn />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <SignIn />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "register-message",
-        element: <RegisterCard />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <RegisterCard />
+          </Suspense>
+        ),
       },
     ],
   },
 
   {
     path: "/step-two-data",
-    element: <ThirdScreen />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <ThirdScreen />
+      </Suspense>
+    ),
   },
 
   {
     path: "/step-third-data",
-    element: <SecondStep />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <SecondStep />
+      </Suspense>
+    ),
   },
 
   {
     path: "*",
-    element: <LoadingScreen />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LoadingScreen />
+      </Suspense>
+    ),
   },
   {
     path: "/school/:schoolName",
-    element: <SchoolLandingPage />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <SchoolLandingPage />
+      </Suspense>
+    ),
+    // element: <SchoolPageLayout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SchoolPageEntry />
+          </Suspense>
+        ),
+      },
+    ],
   },
 
   // {

@@ -18,8 +18,10 @@ import {
   updateClassroomTeacher,
   viewComplains,
   viewGallary,
+  viewPresentSession,
   viewSchoolByName,
   viewSchoolSession,
+  viewSchoolSessionTerm,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewStore,
@@ -299,7 +301,6 @@ export const useGallary = (schoolID: string) => {
 
   return { gallary };
 };
-
 export const useSchoolSessionData = (schoolID: string) => {
   const { data: schoolInfo, isLoading: loading } = useSWR(
     `api/view-school-session/${schoolID}`,
@@ -346,4 +347,16 @@ export const useComplain = (schoolID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useViewSingleSession = (sessionID: string) => {
+  const { data: sessionData } = useSWR(
+    `api/view-present-school-session/${sessionID}`,
+    () => {
+      return viewPresentSession(sessionID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { sessionData };
 };

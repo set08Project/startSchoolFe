@@ -31,19 +31,19 @@ const StudentLogin = () => {
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");
           setLoading(false);
+
+          setTimeout(() => {
+            {
+              !loading && navigate("/dashboard");
+              window.location.reload();
+            }
+          }, 2000);
         } else {
           setLoading(false);
           toast.error(`${res?.response?.data?.message}`);
         }
       })
-      .then(() => {
-        setTimeout(() => {
-          {
-            !loading && navigate("/");
-            window.location.reload();
-          }
-        }, 2000);
-      });
+      .then(() => {});
   };
 
   return (

@@ -65,6 +65,7 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
     return el?.studentFirstName === name2;
   });
   // api/view-class-attendance/${classID}
+  // api/view-all-class-students
   return (
     <div className="flex justify-between px-4">
       {}
@@ -80,12 +81,13 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
             markAttendanceAbsent(teacherInfo?._id, id!).then((res: any) => {
               if (res.status === 201) {
                 mutate(`api/view-all-class-students/${state?._id!}`);
+                // mutate(`api/view-class-attendance/${state?._id!}`);
               }
             });
           }}
         />
       </div>
-
+      {/* api/view-class-attendance/${classID} */}
       <div className="flex flex-col items-center">
         <label>Present</label>
         <input

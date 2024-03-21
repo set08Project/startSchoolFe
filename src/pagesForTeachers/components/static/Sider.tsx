@@ -93,6 +93,12 @@ const Sider = () => {
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
           </p>
+          <p className="break-words font-medium text-[12px] my-2 -mt-1">
+            Term:{" "}
+            <span className="text-[12px]">
+              {schoolInfo && schoolInfo[0]?.presentTerm}
+            </span>
+          </p>
           <div className="text-[12px] font-bold">
             {teacherInfo?.staffName?.length > 16
               ? `${teacherInfo?.staffName.substring(0, 16)}...`
@@ -227,12 +233,12 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Gallaries
+          Gallery
           <FaPhotoFilm />
         </NavLink>
 
         <NavLink
-          to="/reportcard"
+          to="/report-card"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
@@ -253,7 +259,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Weekly-Report
+          Weekly Report
           <MdReport />
         </NavLink>
 

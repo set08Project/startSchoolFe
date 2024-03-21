@@ -11,6 +11,7 @@ import {
   readTeacherCookie,
   readTeacherSchedule,
   viewComplains,
+  viewStudentGrade,
   viewTeacherDetail,
 } from "../api/teachersAPI";
 import {
@@ -155,8 +156,8 @@ export const useAttendance = (classID: string) => {
       return classAttendance(classID!).then((res: any) => {
         return res.data;
       });
-    },
-    { refreshInterval: 1000 }
+    }
+    // { refreshInterval: 1000 }
   );
   return { attendance };
 };
@@ -216,4 +217,16 @@ export const useComplain = (teacherID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useStudentGrade = (studentID: string) => {
+  const { data: gradeData } = useSWR(
+    `api/student-report-card/${studentID}`,
+    () => {
+      return viewStudentGrade(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { gradeData };
 };
