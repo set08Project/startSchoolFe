@@ -35,23 +35,36 @@ const StoreScreen = () => {
     formData.append("description", `${day}`);
     formData.append("avatar", image);
 
-    createStore(data?._id, formData)
-      .then((res: any) => {
-        if (res.status === 201) {
-          mutate(`api/view-store/${data?._id}`);
-          setLoading(false);
-          toast.success("Product Uploaded");
-        } else {
-          setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
-        }
-      })
-      .then(() => {
-        setPeriod(0);
-        setPix("");
-        setDay("");
-        setSubject("");
-      });
+    if (image !== "") {
+      createStore(data?._id, formData)
+        .then((res: any) => {
+          if (res.status === 201) {
+            mutate(`api/view-store/${data?._id}`);
+            setLoading(false);
+            toast.success("Product Uploaded");
+            setPeriod(0);
+            setPix("");
+            setDay("");
+            setSubject("");
+          } else {
+            setLoading(false);
+            toast.error(`${res?.response?.data?.message}`);
+            setPeriod(0);
+            setPix("");
+            setDay("");
+            setSubject("");
+          }
+        })
+        .then(() => {
+          setPeriod(0);
+          setPix("");
+          setDay("");
+          setSubject("");
+        });
+    } else {
+      setLoading(false);
+      toast.error("Image is not included");
+    }
   };
 
   return (
