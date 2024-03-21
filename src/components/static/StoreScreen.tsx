@@ -74,7 +74,7 @@ const StoreScreen = () => {
           className="modal-toggle"
         />
         <div className="modal rounded-md" role="dialog">
-          <div className="modal-box  rounded-md">
+          <div className="modal-box  rounded-md bg-white">
             <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Add New Items to Store</p>
 
