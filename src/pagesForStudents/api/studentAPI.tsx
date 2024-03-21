@@ -300,3 +300,15 @@ export const updateStudentAvatar = async (studentID: string, data: string) => {
     return error;
   }
 };
+
+export const getStudentGrade = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/student-report-card/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

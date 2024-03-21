@@ -18,12 +18,18 @@ import {
   useSchoolCookie,
   useSchoolData,
   useSchoolSessionData,
+  useSchoolTeacherDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useEffect } from "react";
+import {
+  viewSchoolSession,
+  viewSchoolSessionTerm,
+} from "../../pages/api/schoolAPIs";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -32,6 +38,7 @@ const Sider = () => {
 
   const { data } = useSchoolData();
   const { dataID } = useSchoolCookie();
+
   const { schoolInfo, loading }: any = useSchoolSessionData(dataID);
 
   const handleToggleMenuFalse = () => {
@@ -61,10 +68,10 @@ const Sider = () => {
         </div>
         <div className="ml-2">
           {/* TODO: Add tooltip */}
-          <div className="break-words font-bold">
-            {data?.schoolName.length > 16 ? (
-              <Tooltip tip={data?.schoolName}>
-                <p>{data?.schoolName.substring(0, 16)}...</p>
+          <div className="break-words font-bold text-[16px]">
+            {data?.schoolName.length > 15 ? (
+              <Tooltip side={true} tip={data?.schoolName}>
+                <p>{data?.schoolName.substring(0, 15)}...</p>
               </Tooltip>
             ) : (
               data?.schoolName
@@ -75,6 +82,16 @@ const Sider = () => {
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: {loading ? "" : schoolInfo[0]?.year}
+          </p>
+          <p className="text-[12px] font-bold">
+            Term:{" "}
+            {loading ? (
+              ""
+            ) : schoolInfo[0]?.presentTerm ? (
+              schoolInfo[0]?.presentTerm
+            ) : (
+              <span className="text-red-400 ml-1">Please create TERM</span>
+            )}
           </p>
         </div>
       </div>
@@ -203,7 +220,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Gallaries
+          Galleries
           <FaPhotoVideo />
         </NavLink>
 

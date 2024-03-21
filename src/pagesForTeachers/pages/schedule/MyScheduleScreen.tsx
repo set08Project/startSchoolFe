@@ -9,7 +9,9 @@ const MyScheduleScreen = () => {
   const { teacherSchedule: dataData } = useTeacherSchedule(teacherInfo?._id);
 
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
+  const data2 = lodash.groupBy(dataData?.schedule, "day");
 
+  document.title = "My Schedule";
   return (
     <div className="text-blue-950">
       <LittleHeader name="My Schedule " />
@@ -46,6 +48,10 @@ const MyScheduleScreen = () => {
                             className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] bg-white border mb-2"
                           >
                             <p className="font-medium">{props?.subject}</p>
+                            <p className="font-extralight text-[13px]">
+                              {props?.CR}
+                              {props?.day}
+                            </p>
                             <p className="font-extralight text-[13px]">
                               {props?.time}
                             </p>

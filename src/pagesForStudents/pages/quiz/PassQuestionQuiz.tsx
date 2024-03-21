@@ -33,7 +33,7 @@ const PassQuestionQuiz = () => {
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4">
               {data.map((el) => (
                 <Link
-                  to={el.toLowerCase()}
+                  to={el === "Civic Education" ? "civic" : el.toLowerCase()}
                   className="h-[100px] w-full border rounded-md flex justify-center items-center"
                 >
                   {el}

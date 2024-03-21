@@ -17,8 +17,6 @@ const AddSession = () => {
   const { data } = useSchoolData();
 
   const handleToggleMenuFalse = () => {
-    createNewSession(dataID, { year: start, term: end });
-
     if (!document.startViewTransition) {
       dispatch(displaySession(false));
     } else {
@@ -29,12 +27,13 @@ const AddSession = () => {
   };
 
   const handleSubmit = () => {
-    createNewSession(dataID, { year: start, term: end }).then((res) => {
+    createNewSession(dataID, { year: start }).then((res) => {
       if (res.status === 201) {
+        console.log(res);
         mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
-          // api/view-school-session/${schoolID}
+
           toast.success("Session created");
         } else {
           document.startViewTransition(() => {
@@ -50,7 +49,6 @@ const AddSession = () => {
         } else {
           document.startViewTransition(() => {
             mutate(`api/view-school-session/${data?._id}`);
-            console.log(res?.response?.data?.message);
             toast.success("Session created");
             dispatch(displaySession(false));
           });
@@ -95,23 +93,24 @@ const AddSession = () => {
             />
           </div>
 
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="font-medium text-[12px]">
               Session Term <span className="text-red-500">*</span>
             </label>
             <Input
-              placeholder="Session term: 1st Term"
+              placeholder="1st Term"
               className="mx-0 h-10  w-full"
-              value={end}
-              onChange={(e: any) => {
-                setEnd(e.target.value);
-              }}
+              value={"1st Term"}
+              // onChange={(e: any) => {
+              //   setEnd();
+              // }}
+              defaultValue={"1st Term"}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full flex justify-end transition-all duration-300">
-          {start !== "" && end !== "" ? (
+          {start !== "" ? (
             <Button
               name="Proceed"
               className="bg-blue-950  mx-0"

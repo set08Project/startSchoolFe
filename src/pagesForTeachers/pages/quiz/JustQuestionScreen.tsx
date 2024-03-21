@@ -39,7 +39,7 @@ const JustQuestionScreen = () => {
       <div>
         {/* <p>Enter Question</p> */}
         <textarea
-          className="border outline-none rounded-md w-full resize-none h-[200px] p-2 "
+          className="border outline-none bg-gray-100  rounded-md w-full resize-none h-[200px] p-2 "
           placeholder="Enter Question"
           value={quest}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -103,7 +103,7 @@ const JustQuestionScreen = () => {
       {quest !== "" ? (
         <Button
           name={"add to Preview"}
-          className="text-white  bg-blue-950 uppercase text-[12px]px-8 py-4"
+          className="text-white  bg-blue-950 uppercase text-[12px] px-8 py-4"
           onClick={() => {
             onHandleQuestionSet({ question: quest, answer, options });
             setQuest("");

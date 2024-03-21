@@ -1,134 +1,319 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import TeacherDashboard from "../pagesForTeachers/TeacherDashboard";
-import LoadingScreen from "../components/static/LoadingScreen";
-import TeacherLayout from "../pagesForTeachers/components/layout/TeacherLayout";
-import Schedule from "../pagesForTeachers/pages/schedule/Schedule";
-import MyClass from "../pagesForTeachers/pages/class/MyClass";
-import Subjects from "../pagesForTeachers/pages/subject/Subjects";
-import LessonNote from "../pagesForTeachers/pages/lessonNote/LessonNote";
-import WeekReport from "../pagesForTeachers/pages/report/WeekReport";
-import ViewStoreItems from "../pagesForTeachers/pages/store/ViewStoreItems";
-import StudentDetail from "../pagesForTeachers/pages/class/StudentDetail";
-import QuizSetupScreen from "../pagesForTeachers/pages/quiz/QuizSetupScreen";
-import QuizTestScreen from "../pagesForTeachers/pages/quiz/QuizTestScreen";
-import CreateQuiz from "../pagesForTeachers/pages/quiz/CreateQuiz";
-import CreateLesson from "../pagesForTeachers/pages/lessonNote/CreateLessonNote";
-import AttendanceScreen from "../pagesForTeachers/pages/attendance/AttendanceScreen";
-import ViewTeacherNote from "../pagesForTeachers/pages/lessonNote/ViewTeacherNote";
-import Article from "../pagesForTeachers/pages/article/Article";
-import GallerySettings from "../pages/page/settings/GallerySettings";
-import GalleryScreen from "../pagesForTeachers/pages/gallary/GallaryScreen";
-import ViewReport from "../pagesForTeachers/pages/complain/ViewReport";
-import ReportCard from "../pagesForTeachers/pages/ReportCard/ReportCard";
-import TableTag from "../pagesForTeachers/pages/ReportCard/TableTag";
-import CardReport from "../pagesForTeachers/pages/ReportCard/CardReport";
+
+const ResultTermDetail = React.lazy(
+  () => import("../pagesForTeachers/pages/class/ResultTermDetails")
+);
+
+const ResultHistryTrack = React.lazy(
+  () => import("../pagesForTeachers/pages/class/ResultHistoryTrack")
+);
+const TeacherDashboard = React.lazy(
+  () => import("../pagesForTeachers/TeacherDashboard")
+);
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const TeacherLayout = React.lazy(
+  () => import("../pagesForTeachers/components/layout/TeacherLayout")
+);
+const Schedule = React.lazy(
+  () => import("../pagesForTeachers/pages/schedule/Schedule")
+);
+
+const MyClass = React.lazy(
+  () => import("../pagesForTeachers/pages/class/MyClass")
+);
+
+const Subjects = React.lazy(
+  () => import("../pagesForTeachers/pages/subject/Subjects")
+);
+
+const LessonNote = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/LessonNote")
+);
+
+const WeekReport = React.lazy(
+  () => import("../pagesForTeachers/pages/report/WeekReport")
+);
+
+const ViewStoreItems = React.lazy(
+  () => import("../pagesForTeachers/pages/store/ViewStoreItems")
+);
+
+const StudentDetail = React.lazy(
+  () => import("../pagesForTeachers/pages/class/StudentDetail")
+);
+
+const QuizSetupScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/QuizSetupScreen")
+);
+const QuizTestScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/QuizTestScreen")
+);
+const CreateQuiz = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/CreateQuiz")
+);
+const CreateLesson = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/CreateLessonNote")
+);
+const AttendanceScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/attendance/AttendanceScreen")
+);
+const ViewTeacherNote = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/ViewTeacherNote")
+);
+
+const Article = React.lazy(
+  () => import("../pagesForTeachers/pages/article/Article")
+);
+const GalleryScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/gallary/GallaryScreen")
+);
+const ViewReport = React.lazy(
+  () => import("../pagesForTeachers/pages/complain/ViewReport")
+);
+const TableTag = React.lazy(
+  () => import("../pagesForTeachers/pages/ReportCard/TableTag")
+);
+const CardReport = React.lazy(
+  () => import("../pagesForTeachers/pages/ReportCard/CardReport")
+);
+const SubjectGradeCard = React.lazy(
+  () => import("../pagesForTeachers/pages/subject/SubjectGradeCard")
+);
 
 export const teacherRouter = createBrowserRouter([
   {
     path: "/",
-    element: <TeacherLayout />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <TeacherLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
-        element: <TeacherDashboard />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <TeacherDashboard />
+          </Suspense>
+        ),
       },
       {
         index: true,
         path: "complain",
-        element: <ViewReport />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ViewReport />
+          </Suspense>
+        ),
       },
       {
         path: "/dashboard",
         index: true,
-        element: <TeacherDashboard />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <TeacherDashboard />
+          </Suspense>
+        ),
       },
       {
         path: "my-schedule",
-        element: <Schedule />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Schedule />
+          </Suspense>
+        ),
       },
       {
         path: "my-class",
-        element: <MyClass />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MyClass />
+          </Suspense>
+        ),
       },
       {
         path: "my-class/student-details/:studentID",
-        element: <StudentDetail />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-class/result-history",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ResultHistryTrack />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-class/result-history/:session/:term",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ResultTermDetail />
+          </Suspense>
+        ),
       },
       {
         path: "subjects",
-        element: <Subjects />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Subjects />
+          </Suspense>
+        ),
       },
       {
         path: "subjects/:subjectID",
-        element: <QuizSetupScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <QuizSetupScreen />
+          </Suspense>
+        ),
       },
       {
         path: "attendance",
-        element: <AttendanceScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <AttendanceScreen />
+          </Suspense>
+        ),
       },
       {
         path: "quiz/details/:quizID",
-        element: <QuizTestScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <QuizTestScreen />
+          </Suspense>
+        ),
       },
 
       {
         path: "create-quiz/:subjectID",
-        element: <CreateQuiz />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateQuiz />
+          </Suspense>
+        ),
       },
       {
         path: "lesson-note",
-        element: <LessonNote />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <LessonNote />
+          </Suspense>
+        ),
       },
       {
         path: "table-tag",
-        element: <TableTag />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <TableTag />
+          </Suspense>
+        ),
       },
       {
         path: "report-card",
-        element: <CardReport />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CardReport />
+          </Suspense>
+        ),
+      },
+      {
+        path: "test-exam-grade/:subjectID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SubjectGradeCard />
+          </Suspense>
+        ),
       },
       {
         path: "view-articles/:view",
-        element: <Article />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Article />
+          </Suspense>
+        ),
       },
 
       {
         path: "view-articles",
-        element: <Article />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Article />
+          </Suspense>
+        ),
       },
       {
         path: "lesson-note/:noteID",
-        element: <ViewTeacherNote />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ViewTeacherNote />
+          </Suspense>
+        ),
       },
 
       {
         path: "create-notes",
-        element: <CreateLesson />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateLesson />
+          </Suspense>
+        ),
       },
 
       {
         path: "store",
-        element: <ViewStoreItems />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <ViewStoreItems />
+          </Suspense>
+        ),
       },
 
       {
         path: "exams",
-        element: <QuizSetupScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <QuizSetupScreen />
+          </Suspense>
+        ),
       },
 
       {
         path: "Gallary",
-        element: <GalleryScreen />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <GalleryScreen />
+          </Suspense>
+        ),
       },
 
       {
         path: "week-report",
-        element: <WeekReport />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <WeekReport />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "*",
-    element: <LoadingScreen />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LoadingScreen />
+      </Suspense>
+    ),
   },
 ]);

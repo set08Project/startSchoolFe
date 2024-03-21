@@ -1,8 +1,13 @@
+import React from "react";
 import { useEffect, useState } from "react";
+
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
-import LoadingScreen from "../components/static/LoadingScreen";
-import FirstScreen from "../pages/home/start/FirstScreen";
+const LoadingScreen = React.lazy(
+  () => import("../components/static/LoadingScreen")
+);
+const FirstScreen = React.lazy(() => import("../pages/home/start/FirstScreen"));
+
 import {
   readTeacherCookie,
   viewTeacherDetail,

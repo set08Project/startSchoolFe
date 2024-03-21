@@ -590,6 +590,20 @@ export const viewSchoolSession = async (schoolID: string) => {
   }
 };
 
+export const viewSchoolSessionTerm = async (sessionID: any) => {
+  try {
+    return await axios
+      .get(`${URL}/view-present-school-session/${sessionID}`)
+      .then((res: any) => {
+        console.log(sessionID);
+
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const verifyPayment1st = async (schoolID: string, studentID: string) => {
   try {
     return await axios
@@ -700,6 +714,42 @@ export const updateAvatar = async (schoolID: string, data: any) => {
         return res?.data;
       });
   } catch (error) {
+    return error;
+  }
+};
+
+export const createNewSessionTerm = async (sessionID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-school-term/${sessionID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewPresentSession = async (sessionID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-present-school-session/${sessionID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewPresentSessionTerm = async (termID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-session/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
     return error;
   }
 };

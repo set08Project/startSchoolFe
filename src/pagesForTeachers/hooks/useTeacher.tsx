@@ -10,7 +10,9 @@ import {
   readSubjectQuiz,
   readTeacherCookie,
   readTeacherSchedule,
+  viewClassAcademicHistory,
   viewComplains,
+  viewStudentGrade,
   viewTeacherDetail,
 } from "../api/teachersAPI";
 import {
@@ -216,4 +218,28 @@ export const useComplain = (teacherID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useStudentGrade = (studentID: string) => {
+  const { data: gradeData } = useSWR(
+    `api/student-report-card/${studentID}`,
+    () => {
+      return viewStudentGrade(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { gradeData };
+};
+
+export const useClassAcademicHistory = (classID: string) => {
+  const { data: classAcademicHistory } = useSWR(
+    `api/view-class-result-history/${classID}`,
+    () => {
+      return viewClassAcademicHistory(classID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { classAcademicHistory };
 };

@@ -4,7 +4,9 @@ import {
   MdOutlineArticle,
   MdQueryStats,
   MdQuiz,
+  MdRadio,
   MdReport,
+  MdReportOff,
   MdSettings,
   MdStadium,
   MdSubject,
@@ -20,7 +22,7 @@ import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
-import { FaPhotoFilm, FaTable } from "react-icons/fa6";
+import { FaCertificate, FaPhotoFilm, FaTable } from "react-icons/fa6";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -96,6 +98,9 @@ const Sider = () => {
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
           </p>
+          <p className="break-words font-bold  text-slate-400  text-[12px] mt-1">
+            Term: <span>{schoolInfo && schoolInfo[0]?.presentTerm}</span>
+          </p>
           <div className="text-[12px] font-bold">
             {(
               studentInfo?.studentFirstName +
@@ -126,10 +131,16 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            name="Pay Fees"
-            className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
+            name={
+              <div>
+                Pay Fees
+                <br />
+                <p className="text-[12px]">(coming soon)</p>
+              </div>
+            }
+            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-9 leading-tight"
             onClick={() => {
-              handleDisplayStaff();
+              // handleDisplayStaff();
             }}
           />
 
@@ -210,7 +221,9 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          CBT
+          <span>
+            CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
+          </span>
           <MdQuiz />
         </NavLink>
 
@@ -302,7 +315,20 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Complain
-          <MdReport />
+          <MdRadio />
+        </NavLink>
+
+        <NavLink
+          to="/result"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Result Histoty
+          <FaCertificate />
         </NavLink>
 
         <div className="flex-1" />
