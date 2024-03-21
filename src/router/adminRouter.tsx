@@ -27,6 +27,14 @@ const Layout = React.lazy(() => import("../components/layout/Layout"));
 const MakeShift = React.lazy(() => import("./MakeShift"));
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import { ErrorBoundary } from "react-error-boundary";
+
+const StudentResult = React.lazy(
+  () => import("../pages/page/ResultHistory/StudentResult")
+);
+const ReadClassStudentResult = React.lazy(
+  () => import("../pages/page/ResultHistory/ReadClassStudentResult")
+);
+const Result = React.lazy(() => import("../pages/page/ResultHistory/Result"));
 const LoadingScreen = React.lazy(
   () => import("../components/static/LoadingScreen")
 );
@@ -132,6 +140,16 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <AdminLessonNote />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "result-history",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <Result />
               </Suspense>
             ),
           },
@@ -249,6 +267,26 @@ export const adminRouter = createBrowserRouter([
                 <GallaryScreen />
               </Suspense>
             ),
+          },
+
+          {
+            index: true,
+            path: "student-result",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <StudentResult />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "class-students",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ReadClassStudentResult />
+              </Suspense>
+            )
           },
 
           {

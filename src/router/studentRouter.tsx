@@ -2,6 +2,9 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
+const CardReportHistory = React.lazy(
+  () => import("../pagesForTeachers/pages/Result/CardReport")
+);
 
 const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")

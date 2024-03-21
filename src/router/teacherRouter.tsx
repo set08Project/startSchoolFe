@@ -1,5 +1,9 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+const CardReport = React.lazy(
+  () => import("../pagesForTeachers/pages/Result/CardReport")
+);
+
 
 const ResultTermDetail = React.lazy(
   () => import("../pagesForTeachers/pages/class/ResultTermDetails")
