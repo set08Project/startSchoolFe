@@ -4,6 +4,14 @@ const CardReport = React.lazy(
   () => import("../pagesForTeachers/pages/Result/CardReport")
 );
 
+
+const ResultTermDetail = React.lazy(
+  () => import("../pagesForTeachers/pages/class/ResultTermDetails")
+);
+
+const ResultHistryTrack = React.lazy(
+  () => import("../pagesForTeachers/pages/class/ResultHistoryTrack")
+);
 const TeacherDashboard = React.lazy(
   () => import("../pagesForTeachers/TeacherDashboard")
 );
@@ -72,6 +80,9 @@ const ViewReport = React.lazy(
 const TableTag = React.lazy(
   () => import("../pagesForTeachers/pages/ReportCard/TableTag")
 );
+const CardReport = React.lazy(
+  () => import("../pagesForTeachers/pages/ReportCard/CardReport")
+);
 const SubjectGradeCard = React.lazy(
   () => import("../pagesForTeachers/pages/subject/SubjectGradeCard")
 );
@@ -132,6 +143,22 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <StudentDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-class/result-history",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ResultHistryTrack />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-class/result-history/:session/:term",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ResultTermDetail />
           </Suspense>
         ),
       },

@@ -27,6 +27,7 @@ const Layout = React.lazy(() => import("../components/layout/Layout"));
 const MakeShift = React.lazy(() => import("./MakeShift"));
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import { ErrorBoundary } from "react-error-boundary";
+
 const StudentResult = React.lazy(
   () => import("../pages/page/ResultHistory/StudentResult")
 );
@@ -285,7 +286,7 @@ export const adminRouter = createBrowserRouter([
               <Suspense fallback={<LoadingScreen />}>
                 <ReadClassStudentResult />
               </Suspense>
-            ),
+            )
           },
 
           {

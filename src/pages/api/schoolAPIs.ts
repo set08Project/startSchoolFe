@@ -753,3 +753,15 @@ export const viewPresentSessionTerm = async (termID: string) => {
     return error;
   }
 };
+
+export const createSessionTermHistory = async (termID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-session/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

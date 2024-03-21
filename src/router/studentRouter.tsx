@@ -9,6 +9,10 @@ const CardReportHistory = React.lazy(
 const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")
 );
+
+const CardReportHistory = React.lazy(
+  () => import("../pagesForStudents/pages/result/CardReport")
+);
 const Assignment = React.lazy(() => import("../pagesForStudents/Assignment"));
 const Article = React.lazy(() => import("../pagesForStudents/Article"));
 const TimeTable = React.lazy(() => import("../pagesForStudents/TimeTable"));
