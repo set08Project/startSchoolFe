@@ -312,3 +312,15 @@ export const getStudentGrade = async (studentID: string) => {
     return error;
   }
 };
+
+export const getOneHistory = async (historyID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/get-one-history/${historyID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

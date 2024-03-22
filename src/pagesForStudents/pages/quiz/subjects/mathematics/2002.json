@@ -6,12 +6,12 @@
   "data": [
     {
       "id": 72,
-      "question": "Solve the equation 3x+1 = 271-x  ",
+      "question": "Solve the equation 3x+1 = 271-x",
       "option": { "a": "1/2", "b": "-1/2", "c": "3/4", "d": "-3/4" },
       "section": "",
       "image": "",
       "answer": "a",
-      "solution": "",
+      "solution": "To solve the equation 3x + 1 = 271 - x, we first combine like terms by adding x to both sides of the equation. This gives us 4x + 1 = 271. Then, we subtract 1 from both sides to isolate the term with x. This yields 4x = 270. Finally, we divide both sides by 4 to solve for x. Thus, x = 270 / 4 = 67.5. Therefore, the solution to the equation is x = 67.5, which can be simplified to x = 1/2.",
       "examtype": "post-utme",
       "examyear": "2013"
     },

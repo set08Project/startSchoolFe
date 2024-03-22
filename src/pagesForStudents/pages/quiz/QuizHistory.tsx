@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import {
   usePastQuestionHistory,
@@ -33,7 +34,11 @@ const QuizHistory = () => {
             {pastQuestionData?.map((el: any, i: number) => (
               <tr>
                 <th>{i + 1}</th>
-                <td>{el.subject.toLocaleUpperCase()}</td>
+                <td>
+                  <Link to={`/${el.subject}/${el?.year}/${el._id}`}>
+                    {el.subject.toLocaleUpperCase()}
+                  </Link>
+                </td>
                 <td>{el.year}</td>
                 <td>{el.percent}%</td>
                 <td>{el.score}/60</td>
