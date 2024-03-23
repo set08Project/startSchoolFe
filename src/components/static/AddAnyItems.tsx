@@ -115,7 +115,7 @@ const AddAnyItem: FC<iProps> = ({
               </label>
 
               <select
-                className="select select-bordered w-full max-w-xs mt-2"
+                className="select bg-gray-100 select-bordered w-full max-w-xs mt-2"
                 onChange={(e) => {
                   setEnd(e.target.value);
                 }}
@@ -147,7 +147,7 @@ const AddAnyItem: FC<iProps> = ({
               </label>
 
               <DatePicker
-                className="text-[12px] font-medium h-10  px-2 mt-3 border rounded-md w-[200px] "
+                className="text-[12px] bg-gray-100 font-medium h-10  px-2 mt-3 border rounded-md w-[200px] "
                 placeholderText="add date here"
                 selected={startDateTime!}
                 onChange={startDateTimeFn}
@@ -205,7 +205,7 @@ const AddAnyItem: FC<iProps> = ({
         {date && (
           <div>
             <textarea
-              className="textarea border-blue-950 rounded-md w-[95%] resize-none h-[170px] text-[12px] font-normal placeholder:opacity-55"
+              className="textarea bg-gray-100 border-blue-950 rounded-md w-[95%] resize-none h-[170px] text-[12px] font-normal placeholder:opacity-55"
               placeholder="Event Details of this Announcement "
               value={announce}
               onChange={(e: any) => {

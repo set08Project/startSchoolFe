@@ -109,7 +109,7 @@ const AddStudent = () => {
               <span className="font-bold text-[10px]">Choose a Genders</span>
             </label>
             <select
-              className="ml-0 select select-bordered w-full "
+              className="ml-0 bg-gray-100 select select-bordered w-full "
               value={gender}
               onChange={(e: any) => {
                 setGender(e.target.value);
@@ -134,10 +134,10 @@ const AddStudent = () => {
             />
           </div>
           <div className="mt-1">
-            <label className="text-[14px]">Student Assined Class</label>
+            <label className="text-[14px]">Student Assigned Class</label>
 
             <select
-              className="select select-bordered w-full mt-2"
+              className="select bg-gray-100 select-bordered w-full mt-2"
               onChange={(e) => {
                 setAssignedClass(e.target.value);
               }}

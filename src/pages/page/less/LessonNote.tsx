@@ -5,10 +5,33 @@ import { MdAutoAwesome, MdCheck, MdClose } from "react-icons/md";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useNotes, useSchoolData } from "../../hook/useSchoolAuth";
 import { FiLoader } from "react-icons/fi";
+import Button from "../../../pagesForTeachers/components/reUse/Button";
+import { useState } from "react";
+import { adminlessonNoteReply } from "../../../pagesForTeachers/api/teachersAPI";
+import { Toaster } from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const AdminLessonNote = () => {
   const { data } = useSchoolData();
   const { notes } = useNotes(data?._id);
+
+  const [response, setResponse] = useState("");
+  const [day, setDay] = useState("");
+
+  console.log(data);
+  const handleSubmit = (el: any) => {
+    adminlessonNoteReply(data?._id, el, {
+      responseDetail: response,
+      deadline: day,
+    }).then((res) => {
+      console.log("yes", res);
+      Swal.fire({
+        title: "Success!",
+        text: "Response sent successfully.",
+        icon: "success",
+      });
+    });
+  };
 
   return (
     <div>
@@ -77,8 +100,9 @@ const AdminLessonNote = () => {
                         <NavLink
                           key={props?._id}
                           to={`/lesson-note/${props?._id}`}
+                          className="w-[85%]"
                         >
-                          <div className="w-full h-full py-[15px] px-[40px] flex justify-center items-start flex-col ">
+                          <div className="w-full h-full py-[20px] flex justify-center items-start flex-col ">
                             <div className="w-full  py-[10px] flex items-center justify-between">
                               <div className="flex items-center text-[21px] gap-1">
                                 <FaBook />
@@ -135,9 +159,96 @@ const AdminLessonNote = () => {
                             htmlFor="send_response"
                             className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                           >
-                            Send Teacher Response
+                            Send Response to Teacher
                             <FaReply />
                           </label>
+                        </div>
+
+                        {/* Administrator Response Toggle */}
+                        <input
+                          type="checkbox"
+                          id="send_response"
+                          className="modal-toggle"
+                        />
+                        <div
+                          className="modal rounded-md text-blue-950 text-left"
+                          role="dialog"
+                        >
+                          <div className="modal-box bg-white  rounded-md">
+                            <div className="flex items-center justify-between my-4 ">
+                              <p className="font-bold">
+                                Give a Lesson Note Feedback to your Teacher
+                              </p>
+
+                              <label
+                                htmlFor="send_response"
+                                className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+                              >
+                                <MdClose />
+                              </label>
+                            </div>
+                            <hr />
+                            <div className="mt-2 leading-tight text-[13px] font-medium">
+                              Send your thoughts, reviews on the lesson note
+                              back to your teacher so that updates will be made,
+                              hereby ensuring a top class lesson note
+                              <br />
+                            </div>
+                            <div className="mt-10 w-full gap-2 flex flex-col items-center">
+                              <div className="w-full">
+                                <label className="font-medium text-[12px]">
+                                  Response Detail{" "}
+                                  <span className="text-red-500">*</span>
+                                </label>
+
+                                {/* // readSubject */}
+                                <textarea
+                                  className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 bg-gray-100 outline-none"
+                                  value={response}
+                                  onChange={(e) => setResponse(e.target.value)}
+                                  // value={period}
+                                  // onChange={(e) => {
+                                  //   setPeriod(e.target.value);
+                                  // }}
+                                  placeholder="Response Detail"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-2  items-start">
+                              <label htmlFor="">
+                                What is the deadline for the lesson note update
+                                to be done?
+                              </label>
+                              <select
+                                name="days"
+                                id="days"
+                                className="border p-2 rounded-md bg-gray-100 text-blue-950 w-[40%]"
+                                value={day}
+                                onChange={(e) => setDay(e.target.value)}
+                              >
+                                <option value="1 day">1 day</option>
+                                <option value="2 days">2 days</option>
+                                <option value="3 days">3 days</option>
+                                <option value="4 days">4 days</option>
+                                <option value="5 days">5 days</option>
+                                <option value="6 days">6 days</option>
+                                <option value="7 days">1 week</option>
+                              </select>
+                            </div>
+                            <div className="mt-[10px] flex justify-end items-center">
+                              {response.length > 1 ? (
+                                <Button
+                                  name="Send"
+                                  onClick={() => handleSubmit(props?._id)}
+                                  className="bg-blue-950"
+                                />
+                              ) : (
+                                <button className="btn bg-blue-950 text-white hover:bg-blue-950 cursor-not-allowed">
+                                  Send
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -150,58 +261,6 @@ const AdminLessonNote = () => {
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Administrator Response Toggle */}
-        <input type="checkbox" id="send_response" className="modal-toggle" />
-        <div className="modal rounded-md text-blue-950 text-left" role="dialog">
-          <div className="modal-box bg-white  rounded-md">
-            <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">
-                Give a Lesson Note Feedback to your Teacher
-              </p>
-
-              <label
-                htmlFor="send_response"
-                className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
-              >
-                <MdClose />
-              </label>
-            </div>
-            <hr />
-            <div className="mt-2 leading-tight text-[13px] font-medium">
-              Is there anything that seriously disturb you... Please keep it no
-              more, make the complain and let's start addressing it now!!
-              <br />
-              <br />
-              <div className="flex gap-2  items-center">
-                <p>
-                  {" "}
-                  Importance: <span className="font-medium">Hi</span>
-                </p>
-                <div className="flex items-center font-bold">
-                  <span>selected</span>
-                  <MdCheck className="text-green-500 text-[25px] mb-1 " />
-                </div>
-              </div>
-            </div>
-            <div className="mt-10 w-full gap-2 flex flex-col items-center">
-              <div className="w-full">
-                <label className="font-medium text-[12px]">
-                  Complains Detail <span className="text-red-500">*</span>
-                </label>
-
-                {/* // readSubject */}
-                <textarea
-                  className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 bg-gray-100 outline-none"
-                  // value={period}
-                  // onChange={(e) => {
-                  //   setPeriod(e.target.value);
-                  // }}
-                  placeholder="Complains Detail"
-                />
               </div>
             </div>
           </div>
