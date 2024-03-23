@@ -765,3 +765,15 @@ export const createSessionTermHistory = async (termID: string) => {
     return error;
   }
 };
+
+export const viewSessionTermHistory = async (termID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-term/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
