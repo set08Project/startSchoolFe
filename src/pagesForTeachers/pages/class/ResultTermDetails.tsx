@@ -192,6 +192,8 @@ const ResultTermDetail = () => {
     );
   });
 
+  console.log("subject:: ", readStudent);
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
