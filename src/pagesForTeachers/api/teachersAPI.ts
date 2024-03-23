@@ -249,6 +249,22 @@ export const createTeacherLessonNote = async (
   }
 };
 
+export const adminlessonNoteReply = async (
+  schoolID: string,
+  lessonNotedID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/reply-lesson-note/${schoolID}/${lessonNotedID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const lessonNote = async (lessonID: string) => {
   try {
     return await axios
