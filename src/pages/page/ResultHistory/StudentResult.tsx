@@ -1,4 +1,3 @@
-document.title = "View Students";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
@@ -7,6 +6,7 @@ import { FC, useState } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
+  useViewSessionTerm,
 } from "../../../pages/hook/useSchoolAuth";
 import {
   useClassStudent,
@@ -27,6 +27,7 @@ import {
   useStudentInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
+import { useParams } from "react-router-dom";
 
 interface iProps {
   props?: any;
@@ -226,6 +227,11 @@ const AttendanceRatio: FC<iProps> = ({ mainData }) => {
 };
 
 const StudentResult = () => {
+  const { termID } = useParams();
+  const { sessionTermData } = useViewSessionTerm(termID);
+
+  document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
+
   const { studentInfo } = useStudentInfo();
 
   const { state } = useReadMyClassInfoData(studentInfo?.classAssigned);
@@ -238,7 +244,9 @@ const StudentResult = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Student's Result History"} />
+      <LittleHeader
+        name={`${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm} Student's Result History`}
+      />
 
       <div className="mt-10" />
 
