@@ -33,6 +33,7 @@ const StartUsing = React.lazy(
 );
 
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
+import ResultHistory from "../pages/page/ResultHistory/Result";
 
 export const mainRouter = createBrowserRouter([
   {

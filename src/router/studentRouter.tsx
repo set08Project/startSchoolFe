@@ -2,6 +2,10 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
+import Correction from "../pagesForStudents/pages/quiz/Correction";
+const CardReportHistory = React.lazy(
+  () => import("../pagesForTeachers/pages/Result/CardReport")
+);
 
 const StudentDashboard = React.lazy(
   () => import("../pagesForStudents/StudentDashboard")
@@ -84,6 +88,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <StudentDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/result",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CardReportHistory />
           </Suspense>
         ),
       },
@@ -193,7 +205,7 @@ export const studentRouter = createBrowserRouter([
         ),
       },
       {
-        path: "history/quiz",
+        path: "history/cbt",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <QuizHistory />
@@ -221,6 +233,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <PastQuestionYears />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/:subject/:year/:cbtID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Correction />
           </Suspense>
         ),
       },

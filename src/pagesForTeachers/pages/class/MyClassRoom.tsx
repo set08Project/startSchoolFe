@@ -1,7 +1,7 @@
 document.title = "class room Detail's Page";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { MdCheck, MdClose, MdDelete } from "react-icons/md";
+import { MdCheck, MdClose, MdDelete, MdHistory } from "react-icons/md";
 import { FC, useEffect, useState } from "react";
 
 import {
@@ -13,6 +13,7 @@ import TimeTableScreen from "./TimeTableScreen";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: string;
@@ -93,9 +94,6 @@ const StaffDetail: FC<iProps> = ({ props }) => {
 
 const MyClassRoomScreen = () => {
   const { teacherInfo } = useTeacherInfo();
-
-  const [teacher, setTeacher] = useState<string>("");
-
   const [classInfo, setClassInfo] = useState<any>();
 
   useEffect(() => {
@@ -109,18 +107,26 @@ const MyClassRoomScreen = () => {
       <LittleHeader name="My ClassRoom Details" />
       <div>Class: {teacherInfo?.classesAssigned}</div>
 
-      <div className="w-full text-blue-950 h-[90px] rounded-lg border flex justify-between overflow-hidden ">
+      <div className="w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between overflow-hidden ">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            {classInfo?.classStudents?.length}{" "}
+            {classInfo?.students?.length}{" "}
             <span className="text-[20px]">Students</span>
           </div>
         </div>
-        <div className=" px-4 py-1 rounded-lg text-center flex items-end flex-col">
+        <div className=" px-4 py-1 rounded-lg text-end flex items-end flex-col">
           <div className="flex-1" />
-          <div className="mr-0 ">Next Recommended action:</div>
-          <p className="font-medium">Add Teacher to supervise this class</p>
+          <div className="mr-0 text-[13px] font-medium leading-tight">
+            View Result History:
+          </div>
+          <Link className="font-medium" to="result-history">
+            <Button
+              name="View"
+              className="bg-orange-500 rounded-[5px] text-white m-0 text-[12px] py-2"
+              icon={<MdHistory size={15} />}
+            />
+          </Link>
         </div>
       </div>
       <div className="my-6 border-t" />

@@ -1,3 +1,4 @@
+
 import {
   MdAssignmentAdd,
   MdClass,
@@ -22,7 +23,7 @@ import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
-import { FaPhotoFilm, FaTable } from "react-icons/fa6";
+import { FaCertificate, FaPhotoFilm, FaTable } from "react-icons/fa6";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -97,6 +98,9 @@ const Sider = () => {
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
+          </p>
+          <p className="break-words font-bold  text-slate-400  text-[12px] mt-1">
+            Term: <span>{schoolInfo && schoolInfo[0]?.presentTerm}</span>
           </p>
           <div className="text-[12px] font-bold">
             {(
@@ -315,6 +319,19 @@ const Sider = () => {
           <MdRadio />
         </NavLink>
 
+        <NavLink
+          to="/result"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Result Histoty
+          <FaCertificate />
+        </NavLink>
+
         <div className="flex-1" />
 
         <NavLink
@@ -335,3 +352,4 @@ const Sider = () => {
 };
 
 export default Sider;
+
