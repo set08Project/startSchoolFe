@@ -43,3 +43,22 @@
   transition: transform 0.3s ease-in-out;
   transform: scale(1.05);
 }
+
+.navhover1 {
+  position: relative;
+}
+
+.navhover2 ::after {
+  content: "";
+  height: 3px;
+  width: 0;
+  background: whitesmoke;
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  transition: 0.5s;
+}
+
+.navhover3 :hover:after {
+  width: 100%;
+}

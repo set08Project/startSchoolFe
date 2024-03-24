@@ -1,15 +1,29 @@
 import React from "react";
 import logo from "../../public/favW.png";
+import logomajor from "../assets/mainLogoW.png";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="footer items-center p-4 bg-blue-950 text-neutral-content">
+    <footer className="footer items-center p-[20px] bg-black text-neutral-content">
+      <div className="flex justify-center items-center">
+        <div className="p-[20px] flex justify-center items-center flex-col gap-3">
+          <img
+            src={logomajor}
+            alt=""
+            className="w-[150px] h-[100px] object-contain"
+          />
+          <div className="text-center">Innovating Education, Just for you!</div>
+        </div>
+      </div>
       <aside className="items-center grid-flow-col">
         <Link to="/">
           <img className="h-5" src={logo} />
         </Link>
-        <p>Copyright © 2024 - All right reserved</p>
+        <p>
+          Copyright © 2024 &nbsp; <span className="font-bold">NEXT</span> &nbsp;
+          - All rights reserved
+        </p>
       </aside>
       <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
         <a>
