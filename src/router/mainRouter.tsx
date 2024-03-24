@@ -19,7 +19,7 @@ const StudentLogin = React.lazy(
   () => import("../pages/page/auth/StudentLogin")
 );
 const LandingLayout = React.lazy(() => import("../LandingPage1/LandingLayout"));
-const ABetter = React.lazy(() => import("../LandingPage1/Homescreen/ABetter"));
+const feature = React.lazy(() => import("../LandingPage1/Feature"));
 const Contact = React.lazy(() => import("../LandingPage1/Contact"));
 const About = React.lazy(() => import("../LandingPage1/About"));
 const SchoolLandingPage = React.lazy(
@@ -34,6 +34,7 @@ const StartUsing = React.lazy(
 
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
 import ResultHistory from "../pages/page/ResultHistory/Result";
+import Feature from "../LandingPage1/Feature";
 
 export const mainRouter = createBrowserRouter([
   {
@@ -58,7 +59,7 @@ export const mainRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             {" "}
-            <ABetter />
+            <Feature />
           </Suspense>
         ),
       },
