@@ -59,13 +59,12 @@ const AddSessionTerm = () => {
           document.startViewTransition(() => {
             mutate(`api/view-school-session/${data?._id}`);
 
-            toast.success(
-              `${
-                res?.status === 201
-                  ? res?.message
-                  : res?.response?.data?.message
-              }`
-            );
+            toast.success("Term Createed Successfully");
+            // `${
+            //   res?.status === 201
+            //     ? res?.message
+            //     : res?.response?.data?.message
+            // }`
             dispatch(displaySessionTerm(false));
           });
         }
