@@ -44,7 +44,7 @@ const ViewReportScreen = () => {
 
   return (
     <div>
-      <LittleHeader name={`${studentInfo?.studentFirstName}'s weekly Report`} />
+      <LittleHeader name={`${studentInfo?.studentFirstName}'s Weekly Report`} />
       <div className="grid lg:grid-cols-5 grid-cols-1 w-full h-full gap-6">
         <div className=" lg:col-span-3 col-span-1 min-h-[300px] rounded-lg border-slate-300 border pb-4">
           <p className="m-4 text-blue-950 font-semibold text-[22px]">

@@ -70,8 +70,8 @@ const StudentSchoolDetail: FC<iPersonal> = ({}) => {
           ) : (
             <div className="opacity-40 text-[14px]">
               Knowledege is our strength! Glory of the Lord, the sun is shining
-              on the path evryday. We have a sherpherd, loving and tender. He
-              radince pasture, greatness of childreb. We have him who care for
+              on the path everyday. We have a shepherd, loving and tender. He
+              radiates pasture, greatness of children. We have him who care for
               his children.
             </div>
           )}

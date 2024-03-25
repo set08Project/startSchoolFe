@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 const ReportCard = () => {
   return (
     <div>
-      <LittleHeader name="Make A Students Report Card" />
+      <LittleHeader name="Make A Student's Report Card" />
       <div className="w-full flex justify-center pt-10">
         <Toaster position="top-center" reverseOrder={true} />
 
