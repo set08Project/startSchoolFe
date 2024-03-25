@@ -16,6 +16,9 @@ const TimeTable = React.lazy(() => import("../pagesForStudents/TimeTable"));
 const StudentProfile = React.lazy(
   () => import("../pagesForStudents/StudentProfile")
 );
+const StudentSettings = React.lazy(
+  () => import("../pagesForStudents/StudentSettings")
+);
 
 const Layout = React.lazy(() => import("../pagesForStudents/layout/Layout"));
 const MyClassroom = React.lazy(
@@ -111,6 +114,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <StudentProfile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/your-settings",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StudentSettings />
           </Suspense>
         ),
       },

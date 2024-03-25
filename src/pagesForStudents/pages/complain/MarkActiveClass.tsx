@@ -58,7 +58,7 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
         <div className="modal rounded-md text-blue-950 text-left" role="dialog">
           <div className="modal-box  rounded-md">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Mark an ongoing classes!</p>
+              <p className="font-bold">Mark an ongoing class!</p>
 
               <label
                 htmlFor="mark_complains"
@@ -69,8 +69,9 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
             </div>
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
-              ive us insight of who is in your class at moment of every peroid,
-              this help us you give a quantitative and quality Education...!
+              Have an insight of who is in your class at the moment of every
+              period, this helps us you give a quantitative and quality
+              Education...!
               <br />
               <br />
               <div className="flex gap-2  items-center">
