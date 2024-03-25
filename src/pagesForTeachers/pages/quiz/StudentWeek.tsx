@@ -86,7 +86,7 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
           className="modal rounded-md  text-blue-950 text-left"
           role="dialog"
         >
-          <div className="modal-box rounded-md">
+          <div className="modal-box rounded-md bg-white">
             <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Add Assignment to Subject</p>
 
