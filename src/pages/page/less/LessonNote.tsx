@@ -18,7 +18,7 @@ const AdminLessonNote = () => {
   const [response, setResponse] = useState("");
   const [day, setDay] = useState("");
 
-  console.log(data);
+  console.log("data", data);
   const handleSubmit = (el: any) => {
     adminlessonNoteReply(data?._id, el, {
       responseDetail: response,

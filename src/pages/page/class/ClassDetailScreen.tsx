@@ -232,7 +232,7 @@ const ClassDetailScreen = () => {
               className="modal-toggle"
             />
             <div className="modal rounded-md" role="dialog">
-              <div className="modal-box  rounded-md">
+              <div className="modal-box  rounded-md bg-white">
                 <p className="flex items-center justify-between my-4 ">
                   <p className="font-bold">Assigning Teacher to this class</p>
 
@@ -268,7 +268,7 @@ const ClassDetailScreen = () => {
                       Subject Teacher <span className="text-red-500">*</span>
                     </label>
                     <select
-                      className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
+                      className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3 bg-white"
                       value={teacher}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setTeacher(e.target.value);
