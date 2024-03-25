@@ -10,6 +10,11 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import moment from "moment";
 import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
+import {
+  useStudentCookie,
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../hooks/useStudentHook";
 
 interface iProps {
   props?: any;
@@ -67,6 +72,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 };
 
 const ReadingClassStudents: FC<iProps> = ({ props }) => {
+  const { dataID } = useStudentCookie();
+
   const { classStudents } = useClassStudent(props);
 
   return (
@@ -119,8 +126,9 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <label>1st Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950 text-white "
-                              // checked
+                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950  "
+                              checked={props?.feesPaid1st}
+                              // checked={false}
                             />
                           </div>
                           <div className="flex flex-col items-center">
@@ -128,7 +136,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <input
                               type="checkbox"
                               className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                              // checked
+                              checked={props?.feesPaid2nd}
                             />
                           </div>
                           <div className="flex flex-col items-center">
@@ -136,7 +144,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <input
                               type="checkbox"
                               className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                              // checked
+                              checked={props?.feesPaid3rd}
                             />
                           </div>
                         </div>
