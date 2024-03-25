@@ -80,7 +80,7 @@ const ViewSubjects = () => {
 
       <div className="mb-28" />
 
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
+      <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
         <div className="text-[gray] w-[700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[200px] border-r">Subject Name</div>
 
@@ -136,8 +136,8 @@ const ViewSubjects = () => {
                         id="assign_class_subject"
                         className="modal-toggle"
                       />
-                      <div className="modal rounded-md" role="dialog">
-                        <div className="modal-box  rounded-md">
+                      <div className="modal  rounded-md" role="dialog">
+                        <div className="modal-box bg-white rounded-md">
                           <p className="flex items-center justify-between my-4 ">
                             <p className="font-bold">Add New Subject</p>
 
@@ -174,7 +174,7 @@ const ViewSubjects = () => {
                                 <span className="text-red-500">*</span>
                               </label>
                               <select
-                                className="select select-info mt-1 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
+                                className="select bg-gray-100 select-info mt-1 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
                                 value={subjectTeacher}
                                 onChange={(
                                   e: React.ChangeEvent<HTMLSelectElement>

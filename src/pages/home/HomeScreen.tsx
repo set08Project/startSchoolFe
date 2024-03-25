@@ -181,7 +181,7 @@ const HomeScreen = () => {
           <Outlet />
         </div>
 
-        <div className="bg-white order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
+        <div className="bg-white order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] md:sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
           <div className="bg-white py-5 col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 -mt-5 ">
             <p className="font-medium text-[14px] mb-5">
               {/* <GeneralDataScreen /> */}

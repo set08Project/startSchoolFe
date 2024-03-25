@@ -24,6 +24,7 @@ import {
   viewSchoolSessionTerm,
   viewSchoolSubjects,
   viewSchoolTeacher,
+  viewSessionTermHistory,
   viewStore,
 } from "../api/schoolAPIs";
 import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
@@ -359,4 +360,16 @@ export const useViewSingleSession = (sessionID: string) => {
     }
   );
   return { sessionData };
+};
+
+export const useViewSessionTerm = (termID: string) => {
+  const { data: sessionTermData } = useSWR(
+    `api/view-school-session/${termID}`,
+    () => {
+      return viewSessionTermHistory(termID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { sessionTermData };
 };

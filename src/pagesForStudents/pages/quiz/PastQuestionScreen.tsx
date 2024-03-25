@@ -114,22 +114,18 @@ const PastQuestionScreen = () => {
       grade = "A";
     }
 
-    console.log(score, grade, sevenData?.data?.length);
-
-    console.log((score / 60) * 100);
-
     createPastQuestionHistory(studentInfo?._id, {
       subject,
       year,
       percent: percentage,
       score,
+      chosenAnswers: state,
     }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         toast.success(`Remark: ${remark}`);
         setTimeout(() => {
-          navigate("/history/quiz");
-        }, 6000);
+          navigate(`/${subject}/${year}/${res?.data?._id}`);
+        }, 2000);
       } else {
         toast.error("Something went wrong");
       }
@@ -137,6 +133,8 @@ const PastQuestionScreen = () => {
 
     clearInterval(intervalId);
   };
+
+  console.log(state);
 
   return (
     <div>
@@ -162,7 +160,7 @@ const PastQuestionScreen = () => {
                       <i className="text-blue-950">
                         {props?.section && (
                           <>
-                            "Instruction:"
+                            Instruction:
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: props?.section,
@@ -224,7 +222,6 @@ const PastQuestionScreen = () => {
                     className="bg-blue-950 px-12 mt-14 py-4 "
                     name={"Submit"}
                     onClick={() => {
-                      console.log("done");
                       handleSubmit();
                     }}
                   />

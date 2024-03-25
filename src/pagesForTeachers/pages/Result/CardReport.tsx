@@ -2,7 +2,8 @@ document.title = "View Students";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC } from "react";
+import moment from "moment";
+import { FC, useState } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -13,7 +14,12 @@ import {
   useStudentGrade,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import { reportCardRemark } from "../../../pagesForTeachers/api/teachersAPI";
+import {
+  readClassInfo,
+  remark,
+  reportCardRemark,
+  viewStudentGrade,
+} from "../../../pagesForTeachers/api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -36,6 +42,16 @@ interface iProps {
 const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  // SS 1A session: 2024/2025(Second Term)
+
+  // let result = gradeData?.reportCard
+  //   .find((el: any) => {
+  //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
+  //   })
+  //   ?.result?.find((data: any) => {
+  //     return data.subject === el?.subjectTitle;
+  //   });
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
@@ -174,11 +190,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
       </div>
       <div className="w-[100px] border-r">{props?.points}</div>
       <div className="w-[100px] border-r text-[15px] leading-tight font-bold">
-        {props?.grade !== "Not Recorded Yet" ? (
-          props?.grade
-        ) : (
-          <span className="text-[12px] text-red-500">Not Recorded Yet</span>
-        )}
+        {props?.grade}
       </div>
 
       <div
@@ -218,10 +230,11 @@ const CardReportHistory = () => {
 
   const { state } = useReadMyClassInfoData(studentInfo?.classAssigned);
   const { subjectData } = useClassSubject(state?._id);
+
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
   return (
-    <div className="text-blue-950">
+    <div className="">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
@@ -232,12 +245,12 @@ const CardReportHistory = () => {
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
         <div
-          className={` text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+          className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
             width: `${1000 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
-          <div className="w-[100px] border-r">Sequence </div>
+          <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[100px] border-r">Class Performance</div>

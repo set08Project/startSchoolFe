@@ -1,5 +1,8 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+const CardReport = React.lazy(
+  () => import("../pagesForTeachers/pages/Result/CardReport")
+);
 
 const ResultTermDetail = React.lazy(
   () => import("../pagesForTeachers/pages/class/ResultTermDetails")
@@ -76,9 +79,7 @@ const ViewReport = React.lazy(
 const TableTag = React.lazy(
   () => import("../pagesForTeachers/pages/ReportCard/TableTag")
 );
-const CardReport = React.lazy(
-  () => import("../pagesForTeachers/pages/ReportCard/CardReport")
-);
+
 const SubjectGradeCard = React.lazy(
   () => import("../pagesForTeachers/pages/subject/SubjectGradeCard")
 );

@@ -26,6 +26,12 @@ const PassQuestionQuiz = () => {
     <div>
       <LittleHeader name="Subject Selection" />
 
+      <div className="w-full flex justify-end mb-5">
+        <Link to="/history/cbt" className="text-blue-950 underline ">
+          CBT History
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1  gap-4">
         <div className="min-h-[200px] p-[50px] grid grid-cols-1 border rounded-md">
           <div className=" flex justify-center items-center flex-col">

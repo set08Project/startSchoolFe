@@ -105,7 +105,7 @@ const AddStaff = () => {
               <span className="font-bold text-[10px]">Choose a Genders</span>
             </label>
             <select
-              className="ml-0 select select-bordered w-full "
+              className="ml-0 select bg-gray-100 select-bordered w-full "
               value={gender}
               onChange={(e: any) => {
                 setGender(e.target.value);
