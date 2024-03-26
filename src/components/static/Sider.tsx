@@ -4,6 +4,7 @@ import {
   MdReport,
   MdSchool,
   MdSettings,
+  MdSignalCellularAlt,
 } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import {
@@ -221,7 +222,7 @@ const Sider = () => {
           onClick={handleToggleMenuFalse}
         >
           Result History
-          <FaNoteSticky />
+          <MdSignalCellularAlt />
         </NavLink>
 
         <NavLink
