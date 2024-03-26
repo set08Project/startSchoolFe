@@ -1,13 +1,12 @@
-document.title = "View Students";
 // import moment from "moment"
 import { useDispatch, useSelector } from "react-redux";
 import pix from "../../../assets/pix.jpg";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { displayClass } from "../../../global/reduxState";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
-import { useSchoolClassRM } from "../../hook/useSchoolAuth";
+import { useSchoolClassRM, useViewSessionTerm } from "../../hook/useSchoolAuth";
 import { FC } from "react";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import lodash from "lodash";
@@ -38,28 +37,23 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
 };
 
 const Result = () => {
+  const { session, term, termID } = useParams();
+
   const dispatch = useDispatch();
   const data = Array.from({ length: 0 });
   const { schoolClassroom } = useSchoolClassRM();
 
   const classroom = useSelector((state: any) => state.classroomToggled);
+  const { sessionTermData } = useViewSessionTerm(termID);
 
-  const handleDisplayClassroom = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayClass(!classroom));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayClass(!classroom));
-      });
-    }
-  };
+  document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
 
   return (
     <div className="">
       {/* header */}
       <div className="mb-0" />
       <LittleHeader
-        name={"View Class Rooms and Manage student class Results "}
+        name={`Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`}
       />
 
       <div className="mt-10" />
@@ -82,9 +76,9 @@ const Result = () => {
 
         <div className=" w-[1480px] overflow-hidden">
           {lodash
-            .sortBy(schoolClassroom?.classRooms, "className")
+            .sortBy(sessionTermData?.data?.classResult, "className")
             .map((props: any, i: number) => (
-              <div>
+              <div key={props._id}>
                 <div>
                   <div
                     key={props}
@@ -112,7 +106,10 @@ const Result = () => {
 
                     <div className="w-[150px] border-r pl-4">90%</div>
 
-                    <Link to={`/student-result`} className="w-[220px] border-r">
+                    <Link
+                      to={`student-result/${props._id}`}
+                      className="w-[220px] border-r"
+                    >
                       <Button
                         name="View Student Results"
                         className="py-3 w-[86%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"

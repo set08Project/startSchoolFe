@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
 import logo from "../../assets/mainLogoW.png";
@@ -8,7 +8,20 @@ import BtnProps from "../Props/BtnProps";
 import ThemeButton from "./ThemeButton";
 
 const Header = () => {
+  document.title = "Welcome";
   const [drop, setDrop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setDrop(false);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div>
@@ -22,31 +35,37 @@ const Header = () => {
                 className="hidden md:block  h-[40px] object-contain"
               />
               <img
-                src={logo2}
+                src={logo}
                 alt=""
                 className=" block md:hidden h-[30px] object-contain"
               />
             </div>
             <div className="hidden items-center text-[18px] gap-[30px] text-white md:flex">
-              <NavLink to="/" className=" cursor-pointer">
-                Home
+              <NavLink
+                to="/"
+                className=" cursor-pointer navhover1 navhover2 navhover3"
+              >
+                <div>Home</div>
               </NavLink>
-              <NavLink to="/features" className=" cursor-pointer">
-                Features
+              <NavLink
+                to="/features"
+                className=" cursor-pointer navhover1 navhover2 navhover3"
+              >
+                <div>Features</div>
               </NavLink>
 
               <NavLink
                 to=""
-                className="flex gap-1 cursor-pointer transition-all duration-500"
+                className="flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3"
               >
-                Service
+                <div>About Us</div>
                 {/* <FaAngleDown className="mt-[6px]" /> */}
                 {/* {toggleFunction2 ? <FaAngleDown /> : <FaAngleUp />} */}
               </NavLink>
             </div>
             <Link
               to="/auth"
-              className=" w-[150px] text-[12px] md:text-[15px] font-medium"
+              className="mr-5 bg-red-200 text-[12px] md:text-[15px] font-medium"
             >
               <button className=" py-2 px-6 bg-white rounded-sm">
                 Get Started
@@ -54,74 +73,55 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* <div className="flex justify-center items-center gap-3">
+          <div className="flex justify-center items-center gap-3">
             <div
               className="text-[18px] font-bold cursor-pointer relative md:hidden"
-              // onClick={() => {
-              //   setDrop(!drop);
-              // }}
+              onClick={() => {
+                setDrop(!drop);
+              }}
             >
               {drop ? (
                 <FaTimes
-                  className="text-[30px] text-white"
-                  // onClick={() => {
-                  //   setDrop(true);
-                  // }}
+                  className="text-[30px] text-white mr-2"
+                  onClick={() => {
+                    setDrop(true);
+                  }}
                 />
               ) : (
                 <AiOutlineMenu
                   onClick={() => {
                     setDrop(false);
                   }}
-                  className="text-[30px] text-white"
+                  className="text-[30px] text-white mr-2"
                 />
               )}
             </div>
             {drop ? (
-              <div className="md:hidden w-full h-[calc(100vh-70px)] bg-white text-black absolute top-[70px] right-[0] flex justify-center items-center">
-                <nav className=" w-full h-full text-blue-950 border-gray-200 dark:bg-gray-900 dark:border-gray-700 mt-4 font-semibold">
-                  <div className=" w-full md:block md:w-auto">
-                    <NavLink
-                      to="/"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "block py-2 px-3 text-white bg-blue-950 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-                          : "block py-2 px-3"
-                      }
-                    >
-                      Home
-                    </NavLink>
+              <div className="md:hidden w-[100%] h-[calc(120px-70px)] bg-blue-950 text-black absolute top-[70px] right-0 flex justify-center items-center py-[10px]">
+                <div className="flex items-center text-[18px] gap-[30px] text-white md:hidden">
+                  <NavLink
+                    to="/"
+                    className=" cursor-pointer navhover1 navhover2 navhover3"
+                  >
+                    <div>Home</div>
+                  </NavLink>
+                  <NavLink
+                    to="/features"
+                    className=" cursor-pointer navhover1 navhover2 navhover3"
+                  >
+                    <div>Features</div>
+                  </NavLink>
 
-                    <NavLink
-                      to="/features"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "block py-2 px-3 text-white bg-blue-950 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-                          : "block py-2 px-3"
-                      }
-                    >
-                      Featurs
-                    </NavLink>
-
-                    <NavLink
-                      to=""
-                      className={({ isActive }) =>
-                        isActive
-                          ? "block py-2 px-3 text-white bg-blue-950 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-                          : "block py-2 px-3"
-                      }
-                    >
-                      Services
-                    </NavLink>
-
-                    <div className=" w-[90%] mt-4 px-24">
-                      <BtnProps text="Get Started" />
-                    </div>
-                  </div>
-                </nav>
+                  <NavLink
+                    to=""
+                    className="flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3"
+                  >
+                    <div>About Us</div>
+                  </NavLink>
+                </div>
               </div>
             ) : null}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
