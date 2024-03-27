@@ -92,9 +92,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     );
   });
 
-  //   console.log(gradeData);
-  //
-  //   console.log(":::", lodash.sortBy(subjectData?.classSubjects, "subjectTitle"));
+  //   console.log(result?.result);
+
+  //   console.log(":::", lodash.sortBy(result?.result, "subjectTitle"));
 
   return (
     <div
@@ -190,9 +190,8 @@ const ResultDetailClass = () => {
     return el._id === ID;
   });
 
-  const { subjectData } = useClassSubject(state?._id);
-
   const { classAcademicHistory } = useClassAcademicHistory(getResult._id);
+  const { subjectData } = useClassSubject(classAcademicHistory?._id);
 
   let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
   const dataX = Object.values(data).flat();
@@ -205,8 +204,6 @@ const ResultDetailClass = () => {
       el.session === session.replace("-", "/")
     );
   });
-
-  console.log("subjectTitle", readStudent);
 
   return (
     <div className="">

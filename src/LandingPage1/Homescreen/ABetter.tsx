@@ -1,5 +1,7 @@
 import pix from "../../assets/Dash2.png";
 
+import { UnLazyImage } from "@unlazy/react";
+
 const ABetter = () => {
   return (
     <div className="pt-20 w-full flex justify-center items-center">
@@ -56,10 +58,14 @@ const ABetter = () => {
             </div>
           </div>
           <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-            <img
-              className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[60rem] "
+            <UnLazyImage
+              // blurhash="LKO2:N%2Tw=w]~RBVZRi};RPxuwH"
+              // srcSet="image-320w.jpg 320w, image-640w.jpg 640w"
+
+              thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
               src={pix}
-              alt=""
+              autoSizes
+              className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[60rem] "
             />
           </div>
           <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">

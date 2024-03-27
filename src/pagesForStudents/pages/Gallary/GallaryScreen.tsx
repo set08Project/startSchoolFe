@@ -73,9 +73,7 @@ const StudentGalleryScreen = () => {
                     className="w-full h-[300px] rounded-md flex object-cover "
                   />
                 ))}
-
                 {/* <img src={props?.avatar} /> */}
-
                 {/* <PhotoAlbum
                   layout="rows"
                   photos={photos}
@@ -88,7 +86,6 @@ const StudentGalleryScreen = () => {
                   close={() => setOpen(false)}
                   slides={images}
                 /> */}
-
                 {/* <Lightbox
                   index={index}
                   advancedSlides={slides}
