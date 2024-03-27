@@ -16,6 +16,7 @@ import {
   studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
+  verifyPayment1st,
   viewComplains,
   viewGallary,
   viewPresentSession,

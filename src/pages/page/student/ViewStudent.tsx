@@ -5,7 +5,7 @@ import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {
   useSchoolData,
@@ -13,7 +13,17 @@ import {
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import moment from "moment";
-import { FC } from "react";
+import { FC, useState } from "react";
+import {
+  verifyPayment1st,
+  verifyPayment2nd,
+  verifyPayment3rd,
+} from "../../api/schoolAPIs";
+import toast from "react-hot-toast";
+import {
+  useStudentCookie,
+  useStudentInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: any;
@@ -72,10 +82,50 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
+  const { studentInfo } = useStudentInfo();
 
   // const {} = use
   const { data: UI } = useSchoolData();
   const { students } = useSchoolStudents(UI?._id);
+  const [viewstudent1stfees, setViewStudent1stFees] = useState(false);
+  const [viewstudent2ndfees, setViewStudent2ndFees] = useState(false);
+  const [viewstudent3rdfees, setViewStudent3rdFees] = useState(false);
+
+  const handleToggleCheckbox1st = (studentID: any) => {
+    setViewStudent1stFees(!viewstudent1stfees);
+
+    verifyPayment1st(UI?._id, studentID!).then((res: any) => {
+      if (res.status === 200) {
+        toast.success("1st term SchoolFees has been Approved");
+      } else {
+        toast.error("Fail to approve this 1st term SchoolFees");
+      }
+    });
+  };
+
+  const handleToggleCheckbox2nd = (studentID: any) => {
+    setViewStudent2ndFees(!viewstudent2ndfees);
+
+    verifyPayment2nd(UI?._id, studentID!).then((res: any) => {
+      if (res.status === 200) {
+        toast.success("2nd term SchoolFees has been Approved");
+      } else {
+        toast.error("Fail to approve this 2nd term SchoolFees");
+      }
+    });
+  };
+
+  const handleToggleCheckbox3rd = (studentID: any) => {
+    setViewStudent3rdFees(!viewstudent3rdfees);
+
+    verifyPayment3rd(UI?._id, studentID!).then((res: any) => {
+      if (res.status === 200) {
+        toast.success("3rd term SchoolFees has been Approved");
+      } else {
+        toast.error("Fail to approve this 3rd term SchoolFees");
+      }
+    });
+  };
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -152,7 +202,8 @@ const ViewStudent = () => {
                           <input
                             type="checkbox"
                             className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
-                            // checked
+                            onChange={() => handleToggleCheckbox1st(props?._id)}
+                            checked={viewstudent1stfees[0]}
                           />
                         </div>
                         <div className="flex flex-col items-center">
@@ -160,7 +211,8 @@ const ViewStudent = () => {
                           <input
                             type="checkbox"
                             className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                            // checked
+                            onChange={() => handleToggleCheckbox2nd(props?._id)}
+                            checked={viewstudent2ndfees[0]}
                           />
                         </div>
                         <div className="flex flex-col items-center">
@@ -168,7 +220,8 @@ const ViewStudent = () => {
                           <input
                             type="checkbox"
                             className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                            // checked
+                            onChange={() => handleToggleCheckbox3rd(props?._id)}
+                            checked={viewstudent3rdfees[0]}
                           />
                         </div>
                       </div>

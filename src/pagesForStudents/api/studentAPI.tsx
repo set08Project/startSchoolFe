@@ -3,7 +3,7 @@ import axios from "axios";
 const URL: string = "http://localhost:2244/api";
 // const URL: string = "https://startschoolbe.onrender.com/api";
 
-export const viewStduentDetail: any = async (studentID: string) => {
+export const viewStduentDetail: any = async (studentID: any) => {
   try {
     return await axios
       .get(`${URL}/read-student-info/${studentID}`)
