@@ -15,9 +15,7 @@ const Header = () => {
     const handleScroll = () => {
       setDrop(false);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -25,7 +23,7 @@ const Header = () => {
 
   return (
     <div>
-      <div className="h-[70px] w-full flex justify-center items-center shadow-md fixed top-0 z-10 bg-blue-950">
+      <div className="h-[70px] w-full flex justify-center items-center shadow-md fixed top-0 z-50 bg-blue-950">
         <div className="h-[90%] w-[99%] flex justify-between items-center">
           <div className="w-full flex  justify-between items-center ">
             <div className=" ml-3">
@@ -65,9 +63,10 @@ const Header = () => {
             </div>
             <Link
               to="/auth"
-              className="mr-5 bg-red-200 text-[12px] md:text-[15px] font-medium"
+              className="mr-5  text-[12px] md:text-[15px] font-medium"
+              style={{ zIndex: "20px" }}
             >
-              <button className=" py-2 px-6 bg-white rounded-sm">
+              <button className=" py-2 px-6 bg-white rounded-md">
                 Get Started
               </button>
             </Link>
@@ -96,31 +95,40 @@ const Header = () => {
                 />
               )}
             </div>
-            {drop ? (
-              <div className="md:hidden w-[100%] h-[calc(120px-70px)] bg-blue-950 text-black absolute top-[70px] right-0 flex justify-center items-center py-[10px]">
-                <div className="flex items-center text-[18px] gap-[30px] text-white md:hidden">
-                  <NavLink
-                    to="/"
-                    className=" cursor-pointer navhover1 navhover2 navhover3"
-                  >
-                    <div>Home</div>
-                  </NavLink>
-                  <NavLink
-                    to="/features"
-                    className=" cursor-pointer navhover1 navhover2 navhover3"
-                  >
-                    <div>Features</div>
-                  </NavLink>
 
-                  <NavLink
-                    to=""
-                    className="flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3"
-                  >
-                    <div>About Us</div>
-                  </NavLink>
-                </div>
+            <div
+              className={`md:hidden w-[100%] h-[calc(120px-70px)] text-black absolute bg-blue-950  flex justify-center -z-20 items-center py-[10px] transition-all duration-300 ${
+                drop ? "top-[70px] right-0" : "-top-[100px] right-0"
+              }`}
+            >
+              <div
+                className={`flex pb-3 items-center text-[18px] gap-[30px] ${
+                  drop ? "text-white" : "text-blue-950"
+                } md:hidden`}
+              >
+                <NavLink
+                  to="/"
+                  className=" cursor-pointer navhover1 navhover2 navhover3"
+                >
+                  <div>Home</div>
+                </NavLink>
+                <NavLink
+                  to="/features"
+                  className=" cursor-pointer navhover1 navhover2 navhover3"
+                >
+                  <div>Features</div>
+                </NavLink>
+
+                <NavLink
+                  to=""
+                  className={`flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3 ${
+                    drop ? "text-white" : "text-blue-950"
+                  }`}
+                >
+                  <div>About Us</div>
+                </NavLink>
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
       </div>
