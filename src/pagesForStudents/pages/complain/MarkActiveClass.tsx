@@ -55,8 +55,11 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
         <div className="" />
         {/* Put this part before </body> tag */}
         <input type="checkbox" id="mark_complains" className="modal-toggle" />
-        <div className="modal rounded-md text-blue-950 text-left" role="dialog">
-          <div className="modal-box  rounded-md">
+        <div
+          className="modal bgw rounded-md text-blue-950 text-left"
+          role="dialog"
+        >
+          <div className="modal-box bg-gray-100 rounded-md">
             <div className="flex items-center justify-between my-4 ">
               <p className="font-bold">Mark an ongoing classes!</p>
 

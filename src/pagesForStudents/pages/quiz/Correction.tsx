@@ -135,9 +135,11 @@ const Correction = () => {
           </div>
 
           <div className="mt-10">
-            <h5 className="text-[16px]  font-bold">60 of 60 Attempted</h5>
+            <h5 className="text-[16px]  font-bold">
+              {getNumberOfQuestions()} of {getNumberOfQuestions()} Attempted
+            </h5>
 
-            <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-9 2xl:grid-cols-11 gap-4 mt-4 justify-center text-center">
+            <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 2xl:grid-cols-11 gap-4 mt-4 justify-center text-center">
               {correctAnswer.map((el: any, i: number) => (
                 <div
                   onClick={() => setState(i)}

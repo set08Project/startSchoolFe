@@ -324,3 +324,19 @@ export const getOneHistory = async (historyID: string) => {
     return error;
   }
 };
+
+export const updateStudentParentEmail = async (
+  schoolID: string,
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

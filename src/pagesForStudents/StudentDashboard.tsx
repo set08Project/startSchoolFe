@@ -7,6 +7,8 @@ import pix from "./../assets/pix.jpg";
 import ClassModelAssignment from "../pagesForTeachers/pages/quiz/AddAssignment";
 import MakeComplains from "./pages/complain/MarkCOmplains";
 import MakeActiveClass from "./pages/complain/MarkActiveClass";
+import AddAnyItem from "./static/AddAnyItems";
+import UpdateEmail from "./UpdateEmail";
 // import StudentPerformance from "./pages/Chart/PerformingStudent";
 // import Calendar from "./pages/Chart/Calendar";
 
@@ -118,6 +120,8 @@ const StudentDashboard = () => {
             </div>
           </div>
         </div> */}
+
+        <UpdateEmail />
       </div>
     </div>
   );
