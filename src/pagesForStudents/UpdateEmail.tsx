@@ -49,7 +49,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
         <div className="" />
         <input
           type="checkbox"
-          checked={studentInfo?.parentEmail ? true : true}
+          checked={studentInfo?.parentEmail ? false : true}
           id="update_email"
           className="modal-toggle"
         />
