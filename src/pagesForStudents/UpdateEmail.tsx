@@ -49,14 +49,14 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
         <div className="" />
         <input
           type="checkbox"
-          checked={studentInfo?.parentEmail ? false : true}
+          checked={studentInfo?.parentEmail ? true : true}
           id="update_email"
           className="modal-toggle"
         />
         <div className="modal bgw text-blue-950 text-left">
           <div className="modal-box bg-gray-100 rounded-md">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Mark an ongoing classes!</p>
+              <p className="font-bold">Input Parent's Email</p>
 
               <label
                 htmlFor="update_email"
@@ -67,19 +67,18 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
             </div>
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
-              ive us insight of who is in your class at moment of every peroid,
-              this help us you give a quantitative and quality Education...!
+              Provide the email address of the parent or guardian associated
+              with this student.
               <br />
               <br />
               <div className="flex gap-2  items-center">
                 <p>
-                  {" "}
                   Parent's Email:{" "}
                   <span className="font-medium">{parentEmail}</span>
                 </p>
-                {parentEmail.length > 12 && (
+                {parentEmail.length > 0 && (
                   <div className="flex items-center font-bold">
-                    <span>selected</span>
+                    <span>Email provided</span>
                     <MdCheck className="text-green-500 text-[25px] mb-1 " />
                   </div>
                 )}
@@ -90,7 +89,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                 <div className="flex w-full gap-2 mb-10">
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
-                      Subject Presently Having{" "}
+                      Parent's Email Address{" "}
                       <span className="text-red-500">*</span>
                     </label>
 
