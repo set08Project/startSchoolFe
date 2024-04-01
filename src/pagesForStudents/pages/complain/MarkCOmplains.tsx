@@ -51,7 +51,7 @@ const MakeComplains: FC<iProps> = ({ props }) => {
           htmlFor="mark_complains"
           className=" transition-all duration-300 cursor-pointer "
         >
-          + Mark Complains
+          + Make Complains
         </label>
         <div className="" />
         {/* Put this part before </body> tag */}
@@ -72,7 +72,7 @@ const MakeComplains: FC<iProps> = ({ props }) => {
             </div>
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
-              Is there anything that seriously disturb you... Please keep it no
+              Is there anything that seriously disturbs you... Please keep it no
               more, make the complain and let's start addressing it now!!
               <br />
               <br />

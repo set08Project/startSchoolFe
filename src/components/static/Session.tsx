@@ -35,7 +35,7 @@ const Session: FC = () => {
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm min-h-42 rounded-md p-1 ">
       <p className="text-[14px] mt-2 font-bold ml-2">
-        Academic Sessions created
+        Academic Session created
       </p>
       <div className="flex flex-col items-between  w-full">
         {schoolInfo?.length > 0 ? (
@@ -84,7 +84,7 @@ const Session: FC = () => {
           <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
             <FaCheckDouble size={13} />
             <p className="mt-3 text-[12px] font-medium">
-              session hasn't been decleared
+              Session hasn't been declared
             </p>
           </div>
         )}
