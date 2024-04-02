@@ -61,7 +61,7 @@ const AddSession = () => {
   return (
     <div className="flex justify-center bg-blue-50   ">
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="w-[500px] min-h-[300px] border rounded-md bg-white shadow-lg p-4">
+      <div className="w-[300px] sm:w[400px] md:w-[500px] min-h-[300px] border rounded-md bg-white shadow-lg p-4">
         <p className="flex items-center justify-between my-4 ">
           <p className="font-bold">Add New Session</p>
 

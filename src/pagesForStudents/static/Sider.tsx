@@ -327,7 +327,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Result Histoty
+          Result History
           <FaCertificate />
         </NavLink>
 
