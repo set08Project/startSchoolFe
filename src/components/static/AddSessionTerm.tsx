@@ -59,7 +59,7 @@ const AddSessionTerm = () => {
           document.startViewTransition(() => {
             mutate(`api/view-school-session/${data?._id}`);
 
-            toast.success("Term Createed Successfully");
+            toast.success("Term Created Successfully");
             // `${
             //   res?.status === 201
             //     ? res?.message
