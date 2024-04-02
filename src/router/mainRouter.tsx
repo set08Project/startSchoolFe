@@ -8,11 +8,17 @@ const SignIn = React.lazy(() => import("../pages/page/auth/SignIn"));
 const RegisterCard = React.lazy(
   () => import("../pages/page/auth/RegisterCard")
 );
+import LoadingScreen from "../components/static/LoadingScreen";
+
+// import SecondStep from "../pages/home/start/SecondStep";
+// import ThirdScreen from "../pages/home/start/ThirdStep";
+
 const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
 const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
-const LoadingScreen = React.lazy(
-  () => import("../components/static/LoadingScreen")
-);
+
+// const LoadingScreen = React.lazy(
+// () => import("../components/static/LoadingScreen")
+// );
 const SwitchLogin = React.lazy(() => import("../pages/page/auth/SwitchLogin"));
 
 const StudentLogin = React.lazy(
@@ -92,6 +98,7 @@ export const mainRouter = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/auth",
     element: (
@@ -202,9 +209,4 @@ export const mainRouter = createBrowserRouter([
       },
     ],
   },
-
-  // {
-  //   path: "/loading",
-  //   element: <LoadingScreen />,
-  // },
 ]);

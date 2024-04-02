@@ -1,12 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { useEffect, useState } from "react";
 
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
-const LoadingScreen = React.lazy(
-  () => import("../components/static/LoadingScreen")
-);
+
 const FirstScreen = React.lazy(() => import("../pages/home/start/FirstScreen"));
+// import FirstScreen from "../pages/home/start/FirstScreen";
 
 import {
   readTeacherCookie,
@@ -14,6 +13,7 @@ import {
 } from "../pagesForTeachers/api/teachersAPI";
 
 import { useSelector } from "react-redux";
+import LoadingScreen from "../components/static/LoadingScreen";
 
 const MakeShift = () => {
   const userStatus = useSelector((state: any) => state.userStatus);
@@ -59,9 +59,9 @@ const MakeShift = () => {
               <Outlet />
             </div>
           ) : (
-            <div>
+            <Suspense fallback={<LoadingScreen />}>
               <FirstScreen />
-            </div>
+            </Suspense>
           )}
         </div>
       )}

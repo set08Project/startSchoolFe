@@ -195,7 +195,7 @@ const Header = () => {
               {
                 title: "View Classrooms",
                 icon: <FaSchool />,
-                to: "view-students",
+                to: "class-room",
               },
               {
                 title: "View Subjects",

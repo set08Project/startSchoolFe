@@ -1,4 +1,3 @@
-
 import {
   MdAssignmentAdd,
   MdClass,
@@ -289,7 +288,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Gallary
+          Gallery
           <FaPhotoFilm />
         </NavLink>
 
@@ -328,14 +327,14 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Result Histoty
+          Result History
           <FaCertificate />
         </NavLink>
 
         <div className="flex-1" />
 
         <NavLink
-          to="/your-profile"
+          to="/your-settings"
           className={({ isActive }) =>
             isActive
               ? "mt-10 duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
@@ -352,4 +351,3 @@ const Sider = () => {
 };
 
 export default Sider;
-
