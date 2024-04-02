@@ -134,8 +134,6 @@ const PastQuestionScreen = () => {
     clearInterval(intervalId);
   };
 
-  console.log(state);
-
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />

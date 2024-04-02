@@ -15,7 +15,7 @@ const StudentRatio: FC<iProps> = ({ props }) => {
   });
 
   let ratio = (
-    arrayData?.length / studentAttendance?.attendance.length
+    arrayData?.length / studentAttendance?.attendance?.length
   ).toFixed(2);
 
   return <span>{ratio}</span>;
