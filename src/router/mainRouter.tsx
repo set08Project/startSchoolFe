@@ -8,13 +8,13 @@ const SignIn = React.lazy(() => import("../pages/page/auth/SignIn"));
 const RegisterCard = React.lazy(
   () => import("../pages/page/auth/RegisterCard")
 );
-
-import SecondStep from "../pages/home/start/SecondStep";
-import ThirdScreen from "../pages/home/start/ThirdStep";
 import LoadingScreen from "../components/static/LoadingScreen";
 
-// const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
-// const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
+// import SecondStep from "../pages/home/start/SecondStep";
+// import ThirdScreen from "../pages/home/start/ThirdStep";
+
+const SecondStep = React.lazy(() => import("../pages/home/start/SecondStep"));
+const ThirdScreen = React.lazy(() => import("../pages/home/start/ThirdStep"));
 
 // const LoadingScreen = React.lazy(
 // () => import("../components/static/LoadingScreen")

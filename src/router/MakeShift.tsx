@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { getSchoolCookie, readSchool } from "../pages/api/schoolAPIs";
 import { Outlet } from "react-router-dom";
 
-// const FirstScreen = React.lazy(() => import("../pages/home/start/FirstScreen"));
-import FirstScreen from "../pages/home/start/FirstScreen";
+const FirstScreen = React.lazy(() => import("../pages/home/start/FirstScreen"));
+// import FirstScreen from "../pages/home/start/FirstScreen";
 
 import {
   readTeacherCookie,

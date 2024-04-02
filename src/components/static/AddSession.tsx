@@ -28,6 +28,7 @@ const AddSession = () => {
 
   const handleSubmit = () => {
     createNewSession(dataID, { year: start }).then((res) => {
+      console.log(res);
       if (res.status === 201) {
         console.log(res);
         mutate(`api/view-school-session/${data?._id}`);

@@ -25,6 +25,7 @@ const HomeView = React.lazy(() => import("../pages/home/HomeView"));
 const HomeScreen = React.lazy(() => import("../pages/home/HomeScreen"));
 const Layout = React.lazy(() => import("../components/layout/Layout"));
 const MakeShift = React.lazy(() => import("./MakeShift"));
+
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import { ErrorBoundary } from "react-error-boundary";
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
@@ -84,11 +85,11 @@ export const adminRouter = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ErrorBoundary fallback={<LoadingScreen />}>
+      <Suspense fallback={<LoadingScreen />}>
         <PrivateRouter>
           <MakeShift />
         </PrivateRouter>
-      </ErrorBoundary>
+      </Suspense>
     ),
     children: [
       {
