@@ -41,7 +41,7 @@ const Session: FC = () => {
         {schoolInfo?.length > 0 ? (
           <div>
             {schoolInfo?.map((props: any, i: number) => (
-              <div>
+              <div key={props._id}>
                 {i < 3 && (
                   <div
                     key={`${i + props}`}
