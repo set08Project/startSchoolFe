@@ -20,27 +20,55 @@ import {
   useSchoolData,
   useSchoolSessionData,
   useSchoolTeacherDetail,
+  useViewTermDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
+  makePayment,
   viewSchoolSession,
   viewSchoolSessionTerm,
 } from "../../pages/api/schoolAPIs";
+import Button from "../reUse/Button";
+import { LoaderIcon } from "react-hot-toast";
 
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleText = useSelector((state: any) => state.toggleText);
   const toggleImage = useSelector((state: any) => state.imageToggle);
+  const user = useSelector((state: any) => state.user);
+
+  const [roll, setRoll] = useState<Boolean>(false);
 
   const { data } = useSchoolData();
-  const { dataID } = useSchoolCookie();
 
-  const { schoolInfo, loading }: any = useSchoolSessionData(dataID);
+  const { schoolInfo, loading }: any = useSchoolSessionData(user.id);
+
+  let refID = schoolInfo;
+
+  let obj: any = {};
+
+  if (refID?.length > 0) {
+    for (let i = 0; i < refID.length; i++) {
+      obj = refID[0];
+    }
+  }
+
+  let termID: string = "";
+
+  if (obj !== null) {
+    for (let i = 0; i < obj?.term?.reverse().length; i++) {
+      termID = obj?.term[0];
+    }
+  }
+
+  const { termData } = useViewTermDetail(termID);
+
+  console.log("reverse: ", termID);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -94,6 +122,30 @@ const Sider = () => {
               <span className="text-red-400 ml-1">Please create TERM</span>
             )}
           </p>
+
+          <div>
+            {!termData?.plan && termData?.payRef === "" && (
+              <Button
+                name={roll ? `Processing...` : "Renew Plan"}
+                icon={roll ? "" : ""}
+                className="text-[14px] uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
+                onClick={() => {
+                  setRoll(true);
+                  makePayment(user?.id, data?.email)
+                    .then((res: any) => {
+                      if (res?.data?.status === 201) {
+                        location.replace(
+                          res?.data?.data?.data?.authorization_url
+                        );
+                      }
+                    })
+                    .then(() => {
+                      setRoll(false);
+                    });
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
 

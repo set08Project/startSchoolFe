@@ -26,6 +26,10 @@ const HomeScreen = React.lazy(() => import("../pages/home/HomeScreen"));
 const Layout = React.lazy(() => import("../components/layout/Layout"));
 const MakeShift = React.lazy(() => import("./MakeShift"));
 
+const SuccessPage = React.lazy(
+  () => import("../pages/page/payment/SuccessPage")
+);
+
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import { ErrorBoundary } from "react-error-boundary";
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
@@ -93,11 +97,20 @@ export const adminRouter = createBrowserRouter([
     ),
     children: [
       {
+        path: "successful-payment",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SuccessPage />
+          </Suspense>
+        ),
+      },
+      {
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <Layout />
           </Suspense>
         ),
+
         children: [
           {
             element: (

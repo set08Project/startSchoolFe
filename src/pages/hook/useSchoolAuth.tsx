@@ -27,6 +27,7 @@ import {
   viewSchoolTeacher,
   viewSessionTermHistory,
   viewStore,
+  viewTermDetail,
 } from "../api/schoolAPIs";
 import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
@@ -373,4 +374,16 @@ export const useViewSessionTerm = (termID: string) => {
     }
   );
   return { sessionTermData };
+};
+
+export const useViewTermDetail = (termID: string) => {
+  const { data: termData } = useSWR(
+    `api/view-school-term-detail/${termID}`,
+    () => {
+      return viewTermDetail(termID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { termData };
 };

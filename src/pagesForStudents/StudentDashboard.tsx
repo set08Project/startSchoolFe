@@ -9,17 +9,47 @@ import MakeComplains from "./pages/complain/MarkCOmplains";
 import MakeActiveClass from "./pages/complain/MarkActiveClass";
 import AddAnyItem from "./static/AddAnyItems";
 import UpdateEmail from "./UpdateEmail";
+import { useEffect, useState } from "react";
+import {
+  useSchoolSessionData,
+  useViewTermDetail,
+} from "../pages/hook/useSchoolAuth";
+import BlockPaymentScreen from "./BlockPaymentScreen";
 // import StudentPerformance from "./pages/Chart/PerformingStudent";
 // import Calendar from "./pages/Chart/Calendar";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
-
   const { studentInfo } = useStudentInfo();
-
   document.title = `${studentInfo?.studentFirstName}'s Record and Stats`;
 
+  const { schoolInfo, loading }: any = useSchoolSessionData(
+    studentInfo?.schoolIDs
+  );
+
+  let refID = schoolInfo;
+
+  let obj: any = {};
+
+  if (refID?.length > 0) {
+    for (let i = 0; i < refID.length; i++) {
+      obj = refID[0];
+    }
+  }
+
+  let termID: string = "";
+
+  if (obj !== null) {
+    for (let i = 0; i < obj?.term?.reverse().length; i++) {
+      termID = obj?.term[0];
+    }
+  }
+
+  const { termData } = useViewTermDetail(termID);
+
   const { state } = useReadMyClassInfo();
+
+  console.log(termData);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -110,18 +140,8 @@ const StudentDashboard = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
-          Appointment
-
-          <div className=" rounded-md w-full  p-4">
-            <div className="mb-4 text-medium capitalize">
-              Top 5 Most Active studio
-            </div>
-          </div>
-        </div> */}
-
-        <UpdateEmail />
+        {!studentInfo?.parentEmail && <UpdateEmail />}
+        {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
       </div>
     </div>
   );

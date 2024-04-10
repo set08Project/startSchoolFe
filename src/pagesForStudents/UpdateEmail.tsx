@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -10,12 +10,14 @@ import { updateStudentParentEmail } from "./api/studentAPI";
 import Input from "../components/reUse/Input";
 import Button from "../components/reUse/Button";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useNavigate } from "react-router-dom";
 
 interface iProps {
   props?: any;
 }
 
 const UpdateEmail: FC<iProps> = ({ props }) => {
+  const navigate = useNavigate();
   const [stated, setStated] = useState<boolean>(false);
   const [parentEmail, setParentEmail] = useState<string>("");
 
@@ -27,20 +29,25 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
   const onCreateAssignment = () => {
     setStated(true);
 
-    updateStudentParentEmail(studentInfo?.schoolIDs, studentInfo?._id, {
-      parentEmail,
-    }).then((res: any) => {
+    updateStudentParentEmail(
+      studentInfo?.schoolIDs,
+      studentInfo?._id,
+      parentEmail
+    ).then((res: any) => {
       if (res?.status === 200) {
         toast.success("Parent's email added/updated successfully");
 
         setTimeout(() => {
           setStated(false);
-        }, 3000);
+          setViewState(true);
+        }, 1000);
       } else if (res?.status === 404 || !res?.status) {
         toast.error("Couldn't update parent's email");
       }
     });
   };
+
+  const [viewState, setViewState] = useState<Boolean>(false);
 
   return (
     <div>
@@ -52,6 +59,10 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
           checked={studentInfo?.parentEmail ? false : true}
           id="update_email"
           className="modal-toggle"
+          value={parentEmail}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setParentEmail(e.target.value);
+          }}
         />
         <div className="modal bgw text-blue-950 text-left">
           <div className="modal-box bg-gray-100 rounded-md">
@@ -110,9 +121,15 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                 <label
                   htmlFor="update_email"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md flex items-center gap-2 cursor-pointer "
-                  onClick={onCreateAssignment}
+                  onClick={
+                    !viewState
+                      ? onCreateAssignment
+                      : () => {
+                          navigate("/");
+                        }
+                  }
                 >
-                  <div>Proceed</div>
+                  {viewState ? "View Dashboard" : <div>Proceed</div>}
                   {stated && <ClipLoader size={20} color="white" />}
                 </label>
               ) : (

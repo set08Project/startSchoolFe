@@ -10,12 +10,41 @@ import { useReadMyClassInfoData } from "../pagesForStudents/hooks/useStudentHook
 
 import pix from "./../assets/pix.jpg";
 import MakeComplains from "./pages/quiz/MarkCOmplains";
+import {
+  useSchoolSessionData,
+  useViewTermDetail,
+} from "../pages/hook/useSchoolAuth";
+import BlockPaymentScreen from "../pagesForStudents/BlockPaymentScreen";
 const TeacherDashboard = () => {
   const { teacherInfo } = useTeacherInfo();
   document.title = `${teacherInfo?.staffName}'s Record and Stats`;
 
   const readData = Array.from({ length: 2 });
   const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
+
+  const { schoolInfo, loading }: any = useSchoolSessionData(
+    teacherInfo?.schoolIDs
+  );
+
+  let refID = schoolInfo;
+
+  let obj: any = {};
+
+  if (refID?.length > 0) {
+    for (let i = 0; i < refID.length; i++) {
+      obj = refID[0];
+    }
+  }
+
+  let termID: string = "";
+
+  if (obj !== null) {
+    for (let i = 0; i < obj?.term?.reverse().length; i++) {
+      termID = obj?.term[0];
+    }
+  }
+
+  const { termData } = useViewTermDetail(termID);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -105,6 +134,7 @@ const TeacherDashboard = () => {
             </div>
           </div>
         </div>
+        {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
 
         {/* <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
           Appointment

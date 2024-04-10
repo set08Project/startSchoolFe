@@ -5,6 +5,64 @@ const URL2: string = "http://localhost:2244";
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
 
+export const makePayment = async (schoolID: string, email: string) => {
+  try {
+    return await axios
+      .post(`${URL}/make-payment/${schoolID}`, { email })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const createReceipt = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/payment-receipt/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const verifyPay = async (ref: string) => {
+  try {
+    return await axios.get(`${URL}/verify-payment/${ref}`).then((res: any) => {
+      return res?.data?.data;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewTermDetail = async (termID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-term-detail/${termID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updatePayInfo = async (termID: string, data: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/school-term-payment-updated/${termID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const getStarted = async () => {
   try {
     return await axios.get(`${URL2}`).then((res: any) => {

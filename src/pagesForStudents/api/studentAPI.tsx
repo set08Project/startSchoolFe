@@ -328,11 +328,13 @@ export const getOneHistory = async (historyID: string) => {
 export const updateStudentParentEmail = async (
   schoolID: string,
   studentID: string,
-  data: {}
+  parentEmail: string
 ) => {
   try {
     return await axios
-      .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, data)
+      .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, {
+        parentEmail,
+      })
       .then((res: any) => {
         return res?.data;
       });
