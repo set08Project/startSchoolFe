@@ -68,8 +68,6 @@ const Sider = () => {
 
   const { termData } = useViewTermDetail(termID);
 
-  console.log("reverse: ", termID);
-
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
       dispatch(changeMenuState(false));

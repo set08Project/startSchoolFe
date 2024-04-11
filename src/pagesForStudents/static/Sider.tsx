@@ -22,7 +22,7 @@ import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
-import { FaCertificate, FaPhotoFilm, FaTable } from "react-icons/fa6";
+import { FaCertificate, FaPhotoFilm, FaStore, FaTable } from "react-icons/fa6";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -329,6 +329,19 @@ const Sider = () => {
         >
           Result History
           <FaCertificate />
+        </NavLink>
+
+        <NavLink
+          to="/store"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Store
+          <FaStore />
         </NavLink>
 
         <div className="flex-1" />

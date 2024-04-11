@@ -43,6 +43,18 @@ export const readClassInfo = async (className: string) => {
   }
 };
 
+export const readOneClassInfo = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-one-classroom-info/${classID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const performanceTest = async (
   studentID: string,
   quizID: string,
@@ -335,6 +347,18 @@ export const updateStudentParentEmail = async (
       .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, {
         parentEmail,
       })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const purchasedEndPoint = async (studentID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/purchase/${studentID}`, data)
       .then((res: any) => {
         return res?.data;
       });

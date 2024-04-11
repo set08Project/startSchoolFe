@@ -835,3 +835,52 @@ export const viewSessionTermHistory = async (termID: string) => {
     return error;
   }
 };
+
+export const updateAccount = async (data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/update-payment-info`, data)
+      .then((res: any) => {
+        console.log(data);
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateAccountInfo = async (schoolID: string, bankDetails: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-account-info/${schoolID}`, bankDetails)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const storePayment = async (data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/make-store-payment/`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const verifyPayment = async (refID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/verify-payment/${refID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

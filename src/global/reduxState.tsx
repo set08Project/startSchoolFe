@@ -19,6 +19,7 @@ const initialState = {
   testTry: { instruction: {}, question: [] },
   user: "" || null,
   userStatus: "" || null,
+  payRef: "" || null,
   toggle: false,
   delayToggled: false,
   toggleMenu: false,
@@ -152,6 +153,7 @@ const reduxState = createSlice({
 
     addToCart: (state, { payload }: any) => {
       const check = state.cart.findIndex((el) => el.id === payload.id);
+      console.log(check);
       if (check >= 0) {
         state.cart[check].QTY += 1;
       } else {
@@ -160,6 +162,7 @@ const reduxState = createSlice({
           QTY: 1,
         };
         state.cart.push(addValue);
+        state.cart;
       }
     },
 
@@ -178,16 +181,26 @@ const reduxState = createSlice({
       state.cart = state.cart.filter((fl) => fl.id !== payload.id);
     },
 
+    emptyCart: (state) => {
+      state.cart = [];
+    },
+
     displayEmptyTest: (state) => {
       state.test = [{ instruction: {} }, { question: [] }];
 
       // state.test[1].question = [];
       // state.test[0].instruction = {};
     },
+
+    paymentRef: (state, { payload }) => {
+      state.payRef = payload;
+    },
   },
 });
 
 export const {
+  emptyCart,
+  paymentRef,
   addToCart,
   removeFromCart,
   changeCartPick,

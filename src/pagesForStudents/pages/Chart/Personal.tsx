@@ -7,6 +7,7 @@ import lodash from "lodash";
 import {
   useClassTimeTableViewer,
   useReadMyClassInfoData,
+  useReadOneClassInfo,
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import { readClassInfo } from "../../api/studentAPI";
@@ -25,7 +26,8 @@ const day = [
 const Personal: FC = () => {
   const { studentInfo } = useStudentInfo();
 
-  const { state } = useReadMyClassInfoData(studentInfo?.classAssigned);
+  const { oneClass: state } = useReadOneClassInfo(studentInfo?.presentClassID);
+
   const { viewTimeTable } = useClassTimeTableViewer(state?._id);
 
   const data = Object.values(lodash.groupBy(viewTimeTable, "day"));

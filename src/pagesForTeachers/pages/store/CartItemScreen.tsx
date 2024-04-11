@@ -6,6 +6,7 @@ import Button from "../../../components/reUse/Button";
 const CartItemScreen = () => {
   const dispatch = useDispatch();
   const cartToggle = useSelector((state: any) => state.cartToggle);
+  const cart = useSelector((state: any) => state.cart);
 
   const changeView = () => {
     if (!document.startViewTransition) {
@@ -70,24 +71,25 @@ const CartItemScreen = () => {
             <div className="flex items-center w-full gap-2 border-b border-neutral py-5 ">
               <MdClose />
               <div className="w-[120px] h-[120px] border rounded-sm bg-red-500 ml-2" />
-
-              <div className="w-[45%] ">
-                <p className="font-bold text-[18px]">Title</p>
-                <p className="leading-tight text-neutral-900">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.{" "}
-                </p>
-              </div>
-              <div className="w-[15%] flex flex-col justify-center h-full items-center gap-3">
-                <p className="bg-blue-950 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer">
-                  <MdExpandLess />
-                </p>
-                <p className="font-bold">4</p>
-                <p className="bg-orange-600 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer rotate-180">
-                  <MdExpandLess />
-                </p>
-              </div>
-              <div className="w-[13%] flex justify-end font-bold text-[20px]">
-                ₦200
+              <div>
+                <div className="w-[45%] ">
+                  <p className="font-bold text-[18px]">Title</p>
+                  <p className="leading-tight text-neutral-900">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.{" "}
+                  </p>
+                </div>
+                <div className="w-[15%] flex flex-col justify-center h-full items-center gap-3">
+                  <p className="bg-blue-950 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer">
+                    <MdExpandLess />
+                  </p>
+                  <p className="font-bold">4</p>
+                  <p className="bg-orange-600 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer rotate-180">
+                    <MdExpandLess />
+                  </p>
+                </div>
+                <div className="w-[13%] flex justify-end font-bold text-[20px]">
+                  ₦200
+                </div>
               </div>
             </div>
           </div>

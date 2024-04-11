@@ -7,6 +7,7 @@ import {
   getSchoolArticle,
   lessonNotes,
   readClassInfo,
+  readOneClassInfo,
   readStudentCookie,
   viewClassTimetable,
   viewComplains,
@@ -123,6 +124,19 @@ export const useReadMyClassInfoData = (classAssigned: string) => {
   }, []);
 
   return { state };
+};
+
+export const useReadOneClassInfo = (classID: string) => {
+  const { data: oneClass } = useSWR(
+    `api/view-one-classroom-info/${classID}`,
+    () => {
+      return readOneClassInfo(classID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { oneClass };
 };
 
 export const useOneArticle = (studentID: string) => {

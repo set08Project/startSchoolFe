@@ -1,25 +1,9 @@
-import { FC, useEffect, useState } from "react";
-import { MdCheck, MdClose } from "react-icons/md";
+import { FC } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { mutate } from "swr";
-import { useReadMyClassInfoData, useStudentInfo } from "./hooks/useStudentHook";
-import {
-  useClassSubject,
-  useTeacherInfo,
-} from "../pagesForTeachers/hooks/useTeacher";
-import { updateStudentParentEmail } from "./api/studentAPI";
-import Input from "../components/reUse/Input";
-import Button from "../components/reUse/Button";
-import ClipLoader from "react-spinners/ClipLoader";
-import { useNavigate } from "react-router-dom";
-import { FaFire } from "react-icons/fa6";
+
 import { FaHandPaper } from "react-icons/fa";
-import {
-  useSchoolSessionData,
-  useViewTermDetail,
-} from "../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;

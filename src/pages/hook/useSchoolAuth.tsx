@@ -42,8 +42,10 @@ export const useSchoolRegister = (reader: any) => {
 };
 
 export const useSchool = (schoolID: string) => {
-  const { data } = useSWR(`api/view-school${schoolID}`, () => {
-    readSchool(schoolID);
+  const { data } = useSWR(`api/view-school/${schoolID}`, () => {
+    return readSchool(schoolID).then((res) => {
+      return res.data;
+    });
   });
 
   return { data };
@@ -315,30 +317,6 @@ export const useSchoolSessionData = (schoolID: string) => {
   );
   return { schoolInfo, loading };
 };
-
-let liveQueries = new Set();
-
-export function trackLiveQueries(useSWRNext: any) {
-  return (key: any, fetcher: any, config: any) => {
-    const swr = useSWRNext(key, fetcher, config);
-
-    useEffect(() => {
-      liveQueries.add(key);
-
-      return () => {
-        liveQueries.delete(key);
-      };
-    }, [key]);
-
-    return swr;
-  };
-}
-
-export async function revalidateLiveQueries() {
-  let promises = [...liveQueries.values()].map((key: any) => mutate(key));
-
-  return Promise.all(promises);
-}
 
 export const useComplain = (schoolID: string) => {
   const { data: complainData } = useSWR(
