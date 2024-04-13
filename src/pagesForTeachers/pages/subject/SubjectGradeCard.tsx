@@ -92,8 +92,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.mark}/{result?.score} -{" "}
-        <span className="font-bold text-[14px]">{result?.grade}</span>
+        {result?.points} /{result?.score} -{" "}
+        <span className="font-bold text-[12px]">{result?.grade}</span>
       </div>
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
@@ -176,14 +176,24 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance.filter(
-          (el: any) => el.present === true
-        ).length /
-          mainStudentAttendance?.data?.attendance.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <p>0%</p>
+      )}
     </div>
   );
 };

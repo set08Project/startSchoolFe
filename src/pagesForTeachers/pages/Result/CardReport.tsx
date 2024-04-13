@@ -214,10 +214,10 @@ const AttendanceRatio: FC<iProps> = ({ mainData }) => {
   return (
     <div>
       {(
-        (mainStudentAttendance?.data?.attendance.filter(
+        (mainStudentAttendance?.data?.attendance?.filter(
           (el: any) => el.present === true
         ).length /
-          mainStudentAttendance?.data?.attendance.length) *
+          mainStudentAttendance?.data?.attendance?.length) *
         100
       ).toFixed(2)}
       %

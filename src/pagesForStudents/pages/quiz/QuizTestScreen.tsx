@@ -16,8 +16,6 @@ const QuizTestScreen = () => {
   const [start, setStart] = useState<boolean>(false);
   const { studentInfo } = useStudentInfo();
 
-  // console.log(quizData?.quiz[1].question);
-
   const handleStateChange = (questionValue: any, optionValue: any) => {
     setState((el: any) => ({
       ...el,
@@ -72,6 +70,7 @@ const QuizTestScreen = () => {
       studentGrade: grade,
       remark,
     }).then((res) => {
+      console.log(res);
       if (res.status === 201) {
         toast.success("Quiz summitted successfully");
         setTimeout(() => {

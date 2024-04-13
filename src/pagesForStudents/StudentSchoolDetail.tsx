@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react";
-import { useStudentInfo } from "./hooks/useStudentHook";
+import { useReadOneClassInfo, useStudentInfo } from "./hooks/useStudentHook";
 import { useSchoolStudents } from "../pages/hook/useSchoolAuth";
-import { readClassInfo } from "../pagesForTeachers/api/teachersAPI";
+import { FC } from "react";
 
 interface iPersonal {
   change?: boolean;
@@ -11,13 +10,7 @@ const StudentSchoolDetail: FC<iPersonal> = ({}) => {
   const { studentInfo } = useStudentInfo();
   const { students } = useSchoolStudents(studentInfo?.schoolIDs);
 
-  const [state, setState] = useState<any>({});
-
-  useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
-      setState(res);
-    });
-  }, []);
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
   return (
     <div className="overflow-hidden w-full">
@@ -31,7 +24,7 @@ const StudentSchoolDetail: FC<iPersonal> = ({}) => {
         <div className="mb-8 w-full">
           <a className="text-[14px] text-gray-400 ">Class teacher</a>
           <div className="md:w-[87%] w-[80%] border-b border-b-gray-400 pl-5 mt-[10px]">
-            {state?.data?.classTeacherName}
+            {oneClass?.classTeacherName}
           </div>
         </div>
         <div className="mb-8">

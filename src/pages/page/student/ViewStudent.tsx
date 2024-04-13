@@ -68,14 +68,24 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance?.filter(
-          (el: any) => el.present === true
-        )?.length /
-          mainStudentAttendance?.data?.attendance?.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      )?.length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            )?.length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <p>0%</p>
+      )}
     </div>
   );
 };
@@ -201,27 +211,45 @@ const ViewStudent = () => {
                           <label>1st Term</label>
                           <input
                             type="checkbox"
-                            className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
+                            className={`
+                            toggle toggle-sm mt-2  ${
+                              props?.feesPaid1st
+                                ? "bg-blue-950 border-blue-950"
+                                : "bg-neutral-500 border-neutral-500"
+                            }
+                            `}
                             onChange={() => handleToggleCheckbox1st(props?._id)}
-                            checked={viewstudent1stfees[0]}
+                            checked={props?.feesPaid1st}
                           />
                         </div>
                         <div className="flex flex-col items-center">
                           <label>2nd Term</label>
                           <input
                             type="checkbox"
-                            className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                            className={`
+                            toggle toggle-sm mt-2  ${
+                              props?.feesPaid2nd
+                                ? "bg-blue-950 border-blue-950"
+                                : "bg-neutral-500 border-neutral-500"
+                            }
+                            `}
                             onChange={() => handleToggleCheckbox2nd(props?._id)}
-                            checked={viewstudent2ndfees[0]}
+                            checked={props?.feesPaid2nd}
                           />
                         </div>
                         <div className="flex flex-col items-center">
                           <label>3rd Term</label>
                           <input
                             type="checkbox"
-                            className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                            className={`
+                            toggle toggle-sm mt-2  ${
+                              props?.feesPaid3rd
+                                ? "bg-blue-950 border-blue-950"
+                                : "bg-neutral-500 border-neutral-500"
+                            }
+                            `}
                             onChange={() => handleToggleCheckbox3rd(props?._id)}
-                            checked={viewstudent3rdfees[0]}
+                            checked={props?.feesPaid4rd}
                           />
                         </div>
                       </div>
@@ -249,7 +277,9 @@ const ViewStudent = () => {
                           : "Not yet Added"}
                       </div>
                       <div className="w-[200px] border-r  ">
-                        {props?.perfomance ? props?.perfomance : "0"}
+                        {props?.totalPerformance
+                          ? props?.totalPerformance
+                          : "0"}
                       </div>
 
                       <div className="w-[80px] border-r">3 of 5</div>

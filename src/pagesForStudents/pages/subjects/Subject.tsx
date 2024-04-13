@@ -49,8 +49,6 @@ const MyClassroom: FC = () => {
     });
   }, []);
 
-  //   console.log(state);
-
   return (
     <div className="w-full">
       <LittleHeader name="Class Teacher Subject" />
@@ -58,8 +56,7 @@ const MyClassroom: FC = () => {
         <div className="avatar">
           <div className="mask mask-squircle w-12 h-12">
             <img
-              src={pix}
-              {...(studentInfo?.avatar ? studentInfo?.avatar : pix)}
+              src={studentInfo?.avatar ? studentInfo?.avatar : pix}
               alt="Avatar"
             />
           </div>
@@ -72,7 +69,7 @@ const MyClassroom: FC = () => {
         </div>
       </div>
       <div>
-        <div className="font-bold">Student class Subjects</div>
+        <div className="font-bold mt-5">Student class Subjects</div>
         <div className="text-[12px] opacity-50">Subject teacher taking</div>
       </div>
 

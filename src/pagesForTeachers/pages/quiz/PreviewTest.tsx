@@ -26,6 +26,8 @@ const PreviewTest = () => {
     });
   }, []);
 
+  console.log(state);
+
   return (
     <div>
       <p>Preview Test Entries</p>

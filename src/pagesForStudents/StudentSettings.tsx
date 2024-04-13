@@ -4,8 +4,45 @@ import StudentsPersonal from "./StudentsPersonal";
 import StudentSchoolDetail from "./StudentSchoolDetail";
 import { useState } from "react";
 import LittleHeader from "../components/layout/LittleHeader";
+import { useStudentInfo } from "./hooks/useStudentHook";
+import { displayImageToggle } from "../global/reduxState";
+import { useDispatch } from "react-redux";
+import { updateStudentAvatar } from "./api/studentAPI";
+import { mutate } from "swr";
+import toast from "react-hot-toast";
+
 const StudentSettings = () => {
+  const dispatch = useDispatch();
+  const { studentInfo } = useStudentInfo();
   const [change, setChange] = useState(false);
+
+  const [state, setState] = useState<string>("");
+
+  const changeImage = (e: any) => {
+    console.log("updated...");
+    const file = e.target.files[0];
+
+    const formData: any = new FormData();
+    formData.append("avatar", file);
+    setState(file);
+
+    if (state) {
+      dispatch(displayImageToggle(true));
+      const timer = setTimeout(() => {
+        updateStudentAvatar(studentInfo?._id, formData).then((res) => {
+          if (res.status === 201) {
+            mutate(`api/view-student-info/${studentInfo?._id}`);
+            toast.success("Image has been updated");
+            dispatch(displayImageToggle(false));
+          } else {
+            toast.error(`${res?.response?.data?.message}`);
+            dispatch(displayImageToggle(false));
+          }
+        });
+        clearTimeout(timer);
+      }, 50);
+    }
+  };
 
   return (
     <div className="text-blue-950">
@@ -14,11 +51,20 @@ const StudentSettings = () => {
         <div className="h-[100%] w-[80%] relative flex ">
           <div className="w-[155px] col-span-3 h-[155px] rounded-full border-4 bg-blue-950 border-white absolute top-[70px] ">
             <img
-              src={dummy}
-              style={{ objectFit: "cover", borderRadius: "100%" }}
+              src={studentInfo?.avatar ? studentInfo?.avatar : dummy}
+              className="w-full h-full rounded-full object-cover"
+              // style={{ objectFit: "cover", borderRadius: "100%" }}
             />
             <div className="w-[40px] h-[40px] bg-black bottom-4 rounded-full cursor-pointer absolute flex justify-center items-center right-0">
-              <FaPen style={{ color: "white" }} />
+              <label htmlFor="pix" className="cursor-pointer">
+                <FaPen style={{ color: "white" }} />
+              </label>
+              <input
+                id="pix"
+                type="file"
+                onChange={changeImage}
+                className="hidden"
+              />
             </div>
           </div>
           <div className="w-[100%] h-[80%] flex justify-end items-end"></div>

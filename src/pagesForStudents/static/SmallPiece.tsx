@@ -59,7 +59,6 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
-    console.log("updated...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();
@@ -125,7 +124,6 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           htmlFor="id"
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            // dispatch(logoutState());
             handleMenu();
           }}
         >
@@ -146,8 +144,6 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
         <div
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
-            // logout();
-            console.log("Heer");
             dispatch(logoutState());
             handleMenu();
             const timer = setTimeout(() => {
