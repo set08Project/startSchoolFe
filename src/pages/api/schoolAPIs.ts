@@ -841,7 +841,18 @@ export const updateAccount = async (data: {}) => {
     return await axios
       .post(`${URL}/update-payment-info`, data)
       .then((res: any) => {
-        console.log(data);
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateSchoolFeeAccountInfo = async (data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/update-schoolfee-payment-info`, data)
+      .then((res: any) => {
         return res;
       });
   } catch (error: any) {
@@ -877,6 +888,56 @@ export const verifyPayment = async (refID: string) => {
   try {
     return await axios
       .get(`${URL}/verify-payment/${refID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const purchasedStoreInfo = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-purchase/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updatePurchasedStore = async (purchaseID: string) => {
+  try {
+    return await axios
+      .post(`${URL}/update-school-purchase/${purchaseID}`, { delievered: true })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const readSchoolFee = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-school-schoolfee-detail/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateSchoolFee = async (schoolFeeID: string) => {
+  try {
+    return await axios
+      .post(`${URL}/update-school-school-fee/${schoolFeeID}`, {
+        confirm: true,
+      })
       .then((res: any) => {
         return res;
       });

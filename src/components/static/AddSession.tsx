@@ -28,9 +28,7 @@ const AddSession = () => {
 
   const handleSubmit = () => {
     createNewSession(dataID, { year: start }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
-        console.log(res);
         mutate(`api/view-school-session/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
@@ -57,7 +55,7 @@ const AddSession = () => {
       }
     });
   };
-  //   onClick = { handleToggleMenuFalse };
+
   return (
     <div className="flex justify-center bg-blue-50   ">
       <Toaster position="top-center" reverseOrder={true} />

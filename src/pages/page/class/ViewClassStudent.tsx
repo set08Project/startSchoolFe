@@ -10,6 +10,7 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
 import moment from "moment";
+import { useStudentAttendance } from "../../hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
@@ -48,23 +49,66 @@ const Remark: FC<iProps> = ({ id, data }) => {
     </div>
   );
 };
+
+const AttendanceRatio: FC<iProps> = ({ props }) => {
+  const { mainStudentAttendance } = useStudentAttendance(props);
+
+  return (
+    <div>
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <div>0%</div>
+      )}
+    </div>
+  );
+};
+
+const Performance: FC<iProps> = ({ props }) => {
+  const { mainStudentAttendance } = useStudentAttendance(props);
+
+  return (
+    <div>
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <div>0%</div>
+      )}
+    </div>
+  );
+};
+
 const ViewClassStudent: FC<iProps> = () => {
   const { classID } = useParams();
   const dispatch = useDispatch();
 
   const { classStudents } = useClassStudent(classID!);
-
-  const handleDisplayStaff = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayStudent(true));
-      dispatch(displayDelay(true));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayDelay(true));
-        dispatch(displayStudent(true));
-      });
-    }
-  };
 
   return (
     <div>
@@ -106,30 +150,46 @@ const ViewClassStudent: FC<iProps> = () => {
                           {moment(props.createdAt).format("ll")}
                         </div>
                         <Remark data={props} id={classStudents?._id} />
-                        <div className="w-[100px] border-r">2:100</div>
+
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props?._id} />
+                        </div>
+
                         <div className="w-[220px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950"
-                              // checked
+                              className={`toggle toggle-sm mt-2 ${
+                                props?.feesPaid1st
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              } `}
+                              checked={props?.feesPaid1st}
                             />
                           </div>
                           <div className="flex flex-col items-center">
                             <label>2nd Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                              // checked
+                              className={`toggle toggle-sm mt-2 ${
+                                props?.feesPaid2nd
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              } `}
+                              checked={props?.feesPaid2nd}
                             />
                           </div>
                           <div className="flex flex-col items-center">
                             <label>3rd Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
-                              // checked
+                              className={`toggle toggle-sm mt-2 ${
+                                props?.feesPaid3rd
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              } `}
+                              checked={props?.feesPaid3rd}
                             />
                           </div>
                         </div>
@@ -155,7 +215,7 @@ const ViewClassStudent: FC<iProps> = () => {
                             : "no Address yet"}
                         </div>
                         <div className="w-[200px] border-r  ">
-                          {Math.ceil(Math.random() * 100)}%
+                          {props?.performance ? props?.performance : 0}%
                         </div>
                         <div className="w-[80px] border-r">
                           {Math.ceil(Math.random() * (5 - 1)) + 1} of 5

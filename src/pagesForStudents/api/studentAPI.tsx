@@ -355,6 +355,18 @@ export const updateStudentParentEmail = async (
   }
 };
 
+export const viewPurchasedEndPoint = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-purchase/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const purchasedEndPoint = async (studentID: string, data: {}) => {
   try {
     return await axios
@@ -363,6 +375,42 @@ export const purchasedEndPoint = async (studentID: string, data: {}) => {
         return res?.data;
       });
   } catch (error) {
+    return error;
+  }
+};
+
+export const schoolPaymentEndPoint = async (studentID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/pay-student-schoolfee/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const schoolFeePayment = async (data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/make-schoolfee-payment/`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const studentSchoolFeePayment = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-schoolfee-detail/${studentID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
     return error;
   }
 };

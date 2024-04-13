@@ -1,37 +1,21 @@
 import { useState } from "react";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
-import { updateAccount, updateAccountInfo } from "../../api/schoolAPIs";
+import {
+  updateAccount,
+  updateAccountInfo,
+  updateSchoolFeeAccountInfo,
+} from "../../api/schoolAPIs";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaLongArrowAltDown } from "react-icons/fa";
 
 const ThemeScreen = () => {
   const { data } = useSchoolData();
-  const [accountName, setAccountName] = useState<string>("");
+
+  const [accountName, setAccountName] = useState<string>(``);
   const [accountNumber, setAccountNumber] = useState<string>("");
   const [bankAccount, setBankAccount] = useState<string>("");
-
-  const dataInput = [
-    {
-      id: 1,
-      place: "Account Name",
-      detail: "Please Fill in your School's Account Name",
-      value: accountName,
-      onChangeValue: (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAccountName(e.target.value);
-      },
-    },
-    {
-      id: 2,
-      place: "Bank Account",
-      detail: "Please Fill in your School's Bank Account",
-      value: accountName,
-      onChangeValue: (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAccountName(e.target.value);
-      },
-    },
-  ];
 
   const bankCode = [
     {
@@ -142,6 +126,8 @@ const ThemeScreen = () => {
 
   const [toggle, setToggle] = useState<Boolean>(false);
 
+  console.log(data?.bankDetails);
+
   return (
     <div className=" sm:w-[350%]  rounded-lg border  h-[550px] text-blue-950">
       <p className="text-[13px] p-4 font-medium ">
@@ -164,7 +150,12 @@ const ThemeScreen = () => {
         </label>
         <Input
           placeholder={"Account Name"}
-          value={accountName}
+          defaultValue={data?.bankDetails?.accountName}
+          value={
+            data?.bankDetails?.accountName
+              ? data?.bankDetails?.accountName
+              : accountName
+          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setAccountName(e.target.value);
           }}
@@ -177,7 +168,12 @@ const ThemeScreen = () => {
         </label>
         <Input
           placeholder={"Account Number"}
-          value={accountNumber}
+          defaultValue={data?.bankDetails?.accountNumber}
+          value={
+            data?.bankDetails?.accountNumber
+              ? data?.bankDetails?.accountNumber
+              : accountNumber
+          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setAccountNumber(e.target.value);
           }}
@@ -193,7 +189,7 @@ const ThemeScreen = () => {
           }}
         >
           <option disabled selected>
-            Select Your Bank
+            {data?.bankDetails?.bankName}
           </option>
           {bankCode?.map((el, i) => (
             <option key={i} className="py-3" value={el.bank}>
@@ -205,8 +201,16 @@ const ThemeScreen = () => {
         <Button
           name={toggle ? "Processing" : "Update Account Detail"}
           className="bg-blue-950 mt-10 ml-0 py-4"
-          onClick={() => {
+          onClick={async () => {
             setToggle(true);
+
+            const result = await updateSchoolFeeAccountInfo({
+              accountName,
+              accountNumber,
+              accountBankCode: getChoosen?.code,
+            });
+
+            console.log("viewing Result: ", result);
 
             updateAccount({
               accountName,
@@ -219,6 +223,8 @@ const ThemeScreen = () => {
                   accountName,
                   accountNumber,
                   accountPaymentCode: res?.data?.data?.data?.subaccount_code,
+                  schoolFeeAccountPaymentCode:
+                    result?.data?.data?.data?.subaccount_code,
                 },
               }).then((res) => {
                 setToggle(false);

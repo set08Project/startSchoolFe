@@ -5,7 +5,10 @@ import pix from "../../../assets/pix.jpg";
 
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { useStudentInfo } from "../../hooks/useStudentHook";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+} from "../../hooks/useStudentHook";
 import { useSujectInfo } from "../../../pagesForTeachers/hooks/useTeacher";
 import { readClassInfo } from "../../api/studentAPI";
 
@@ -37,8 +40,11 @@ const SubjectRecord: FC<iProp> = ({ ass, props, quiz, teach, test }) => {
 const MyClassroom: FC = () => {
   const { studentInfo } = useStudentInfo();
   const [state, setState] = useState<any>([]);
+
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+
   useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+    readClassInfo(oneClass?.className).then((res: any) => {
       setState(res?.data);
     });
   }, []);

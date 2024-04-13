@@ -1,7 +1,11 @@
 import pix from "../../../assets/pix.jpg";
 import { FaCheckDouble } from "react-icons/fa6";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useAssignment, useStudentInfo } from "../../hooks/useStudentHook";
+import {
+  useAssignment,
+  useReadOneClassInfo,
+  useStudentInfo,
+} from "../../hooks/useStudentHook";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../api/studentAPI";
 
@@ -9,10 +13,12 @@ const AssignmentScreen = () => {
   const { studentInfo } = useStudentInfo();
   // const { subjectQuiz } = useSujectQuiz(subjectID!);
 
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+
   const [state, setState] = useState<any>({});
 
   useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+    readClassInfo(oneClass?.className).then((res: any) => {
       setState(res.data);
     });
   }, []);

@@ -2,51 +2,29 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import pix from "../../../assets/pix.jpg";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FC, useEffect } from "react";
+
 import {
-  useComplain,
-  usePurchasedStore,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
-import { verifyPayment } from "../../../pages/api/schoolAPIs";
+  updatePurchasedStore,
+  verifyPayment,
+} from "../../../pages/api/schoolAPIs";
 import { useDispatch, useSelector } from "react-redux";
-import { purchasedEndPoint } from "../../api/studentAPI";
 import moment from "moment";
 import { displayCart, emptyCart, paymentRef } from "../../../global/reduxState";
 import { mutate } from "swr";
+import {
+  usePurchasedStoreInfo,
+  useSchool,
+  useSchoolData,
+} from "../../hook/useSchoolAuth";
 
-const PurchaseHistory = () => {
+const PurchaseHistoryScreen = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 7 });
-  const { studentInfo } = useStudentInfo();
-  const { complainData } = useComplain(studentInfo?._id);
-  const ref = useSelector((state: any) => state.payRef);
+  //   const data = Array.from({ length: 7 });
+
   const cart = useSelector((state: any) => state.cart);
 
-  const { purchasedStore } = usePurchasedStore(studentInfo?._id);
-
-  useEffect(() => {
-    if (ref !== "") {
-      verifyPayment(ref).then((res) => {
-        if (res?.data?.data?.data?.gateway_response === "Successful") {
-          if (cart.length > 0) {
-            purchasedEndPoint(studentInfo?._id, {
-              date: moment(res?.data?.data?.data?.createdAt).format("lll"),
-              cart,
-              reference: res?.data?.data?.data?.reference,
-              amount: res?.data?.data?.data?.amount / 100,
-              id: res?.data?.data?.data?.id,
-              delievered: false,
-            }).then(() => {
-              mutate(`api/view-purchase/${studentInfo?._id}`);
-              dispatch(paymentRef(null));
-              dispatch(emptyCart());
-              dispatch(displayCart(false));
-            });
-          }
-        }
-      });
-    }
-  }, []);
+  const { data } = useSchoolData();
+  const { schoolPurchased: purchasedStore } = usePurchasedStoreInfo(data?._id);
 
   return (
     <div>
@@ -60,7 +38,7 @@ const PurchaseHistory = () => {
         className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
         style={{ color: "var(--secondary)" }}
       >
-        <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[180px] border-r">Date Purchased</div>
 
           <div className="w-[250px] border-r">Items Purchased</div>
@@ -69,11 +47,14 @@ const PurchaseHistory = () => {
           <div className="w-[150px] border-r">Paid Receipt</div>
 
           <div className="w-[80px] border-r">delievered</div>
+          <div className="w-[10px] border-r" />
+          <div className="w-[150px] border-r">Name</div>
+          <div className="w-[80px] border-r">Class</div>
         </div>
 
         {/* Here */}
         {purchasedStore?.length > 0 ? (
-          <div className=" w-[900px] overflow-hidden ">
+          <div className=" w-[1100px] overflow-hidden ">
             {purchasedStore?.map((props: any, i: number) => (
               <div>
                 <div>
@@ -124,8 +105,32 @@ const PurchaseHistory = () => {
                           checked={props?.delievered}
                           type="checkbox"
                           className="checkbox checkbox-error"
+                          onClick={() => {
+                            updatePurchasedStore(props?._id).then((res) => {
+                              if (res.status === 201) {
+                                mutate(`api/view-school-purchase/${data?._id}`);
+                                // location.reload();
+                                useEffect(() => {}, [props.delievered]);
+                              }
+                            });
+                          }}
                         />
                       </label>
+                    </div>
+
+                    <div className="w-[10px] border-r ml-1" />
+
+                    <div className="w-[150px] border-r ml-1">
+                      <div>
+                        <div className="font-bold">{props?.studentName}</div>
+                        <div className="text-[12px] opacity-50 ">
+                          {props?.studentClass ? "student" : "Teacher"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-[80px] border-r ml-1">
+                      {props?.studentClass}
                     </div>
                   </div>
                 </div>
@@ -145,4 +150,4 @@ const PurchaseHistory = () => {
   );
 };
 
-export default PurchaseHistory;
+export default PurchaseHistoryScreen;

@@ -1,6 +1,10 @@
 import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "./pages/Chart/Personal";
-import { useReadMyClassInfo, useStudentInfo } from "./hooks/useStudentHook";
+import {
+  useReadMyClassInfo,
+  useReadOneClassInfo,
+  useStudentInfo,
+} from "./hooks/useStudentHook";
 import StudentPerformance from "./pages/Chart/PerformingStudent";
 import Calendar from "./pages/Chart/Calendar";
 import pix from "./../assets/pix.jpg";
@@ -15,6 +19,7 @@ import {
   useViewTermDetail,
 } from "../pages/hook/useSchoolAuth";
 import BlockPaymentScreen from "./BlockPaymentScreen";
+import PerformanceRecord from "./pages/screens/PerformanceRecord";
 // import StudentPerformance from "./pages/Chart/PerformingStudent";
 // import Calendar from "./pages/Chart/Calendar";
 
@@ -45,11 +50,11 @@ const StudentDashboard = () => {
     }
   }
 
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+  // const {} = useReadOneClassInfo(oneClass?._id)
+
   const { termData } = useViewTermDetail(termID);
-
   const { state } = useReadMyClassInfo();
-
-  console.log(termData);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -63,9 +68,7 @@ const StudentDashboard = () => {
 
           <div className="flex-1 mt-10" />
           <div className="text-[13px] font-medium mt-4">
-            <div className="flex items-center gap-4">
-              <div className="border-r pr-4 "></div>
-            </div>
+            <div className="flex items-center gap-4"></div>
           </div>
         </div>
 
@@ -86,26 +89,30 @@ const StudentDashboard = () => {
                     Student of the Week for class {studentInfo?.classAssigned}
                   </p>
 
-                  <div className="w-[260px]  rounded-t-md min-h-[320px] border">
-                    <img
-                      className="w-full h-[300px] object-cover rounded-t-md"
-                      src={
-                        state?.weekStudent?.student?.avatar
-                          ? state?.weekStudent?.student?.avatar
-                          : pix
-                      }
-                    />
-                    <p className="flex px-2 justify-start my-2 text-[15px]">
-                      Name:{" "}
-                      <span className="font-bold ml-2">
-                        {state?.weekStudent?.student?.studentFirstName}{" "}
-                        {state?.weekStudent?.student?.studentLastName}
-                      </span>
-                    </p>
-                    <p className="text-left px-2 pb-2">
-                      {state?.weekStudent?.remark}
-                    </p>
-                  </div>
+                  {oneClass?.weekStudent ? (
+                    <div className="w-[260px]  rounded-t-md min-h-[320px] border">
+                      <img
+                        className="w-full h-[300px] object-cover rounded-t-md"
+                        src={
+                          oneClass?.weekStudent?.student?.avatar
+                            ? oneClass?.weekStudent?.student?.avatar
+                            : pix
+                        }
+                      />
+                      <p className="flex px-2 justify-start my-2 text-[15px]">
+                        Name:{" "}
+                        <span className="font-bold ml-2">
+                          {oneClass?.weekStudent?.student?.studentFirstName}{" "}
+                          {oneClass?.weekStudent?.student?.studentLastName}
+                        </span>
+                      </p>
+                      <p className="text-left px-2 pb-2">
+                        {oneClass?.weekStudent?.remark}
+                      </p>
+                    </div>
+                  ) : (
+                    "No record yet"
+                  )}
                 </div>
               </div>
             </div>
@@ -139,7 +146,13 @@ const StudentDashboard = () => {
               <Calendar />
             </div>
           </div>
+          <div className="mb-5">
+            <hr />
+          </div>
+          <p>Last Week General Performance</p>
+          <PerformanceRecord />
         </div>
+
         {!studentInfo?.parentEmail && <UpdateEmail />}
         {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
       </div>

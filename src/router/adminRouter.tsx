@@ -35,6 +35,14 @@ import { ErrorBoundary } from "react-error-boundary";
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
 import ResultDetailClass from "../pages/page/ResultHistory/ResultDetailClass";
 
+const SchoolFeesHistoryScreen = React.lazy(
+  () => import("../pages/page/payment/SchoolPaymentScreen")
+);
+
+const PurchaseHistoryScreen = React.lazy(
+  () => import("../pages/page/store/PurchasedStores")
+);
+
 const StudentResult = React.lazy(
   () => import("../pages/page/ResultHistory/StudentResult")
 );
@@ -104,6 +112,7 @@ export const adminRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+
       {
         element: (
           <Suspense fallback={<LoadingScreen />}>
@@ -139,6 +148,16 @@ export const adminRouter = createBrowserRouter([
             ],
           },
 
+          {
+            index: true,
+            path: "school-fees-history",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {" "}
+                <SchoolFeesHistoryScreen />
+              </Suspense>
+            ),
+          },
           {
             index: true,
             path: "test",
@@ -204,6 +223,15 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <StudentResult />
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "purchase-history",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <PurchaseHistoryScreen />
               </Suspense>
             ),
           },

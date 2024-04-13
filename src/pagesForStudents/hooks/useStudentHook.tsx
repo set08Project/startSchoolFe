@@ -9,8 +9,10 @@ import {
   readClassInfo,
   readOneClassInfo,
   readStudentCookie,
+  studentSchoolFeePayment,
   viewClassTimetable,
   viewComplains,
+  viewPurchasedEndPoint,
   viewStduentDetail,
   viewStudentAttendance,
 } from "../api/studentAPI";
@@ -197,4 +199,28 @@ export const useClassTimeTableViewer = (classID: string) => {
     }
   );
   return { viewTimeTable };
+};
+
+export const usePurchasedStore = (studentID: string) => {
+  const { data: purchasedStore } = useSWR(
+    `api/view-purchase/${studentID}`,
+    () => {
+      return viewPurchasedEndPoint(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { purchasedStore };
+};
+
+export const useStudentSchoolFee = (studentID: string) => {
+  const { data: studentFees } = useSWR(
+    `api/view-student-schoolfee-detail/${studentID}`,
+    () => {
+      return studentSchoolFeePayment(studentID!).then((res) => {
+        return res?.data?.data;
+      });
+    }
+  );
+  return { studentFees };
 };

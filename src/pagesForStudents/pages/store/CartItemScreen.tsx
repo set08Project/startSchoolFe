@@ -83,7 +83,7 @@ const CartItemScreen = () => {
 
             <p className="font-medium my-1 flex justify-between items-center">
               <p>Total</p>
-              <p className="font-bold">₦ {(cost + 500).toLocaleString()}</p>
+              <p className="font-bold">₦{(cost + 500).toLocaleString()}</p>
             </p>
 
             <div className="w-full flex justify-center mt-10">

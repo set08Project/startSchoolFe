@@ -2,6 +2,7 @@ import moment from "moment";
 import lodash from "lodash";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import {
+  useReadOneClassInfo,
   useStudentAttendant,
   useStudentInfo,
 } from "../../hooks/useStudentHook";
@@ -14,8 +15,10 @@ const ViewReportScreen = () => {
 
   const [state, setState] = useState<any>({});
 
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+
   useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
+    readClassInfo(oneClass?.className).then((res: any) => {
       setState(res.data);
     });
   }, []);

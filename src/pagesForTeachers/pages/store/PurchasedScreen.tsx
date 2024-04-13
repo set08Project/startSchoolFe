@@ -2,34 +2,31 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import pix from "../../../assets/pix.jpg";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FC, useEffect } from "react";
-import {
-  useComplain,
-  usePurchasedStore,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
+
 import { verifyPayment } from "../../../pages/api/schoolAPIs";
 import { useDispatch, useSelector } from "react-redux";
-import { purchasedEndPoint } from "../../api/studentAPI";
 import moment from "moment";
 import { displayCart, emptyCart, paymentRef } from "../../../global/reduxState";
 import { mutate } from "swr";
+import { createPurchases } from "../../api/teachersAPI";
+import { usePurchasedData, useTeacherInfo } from "../../hooks/useTeacher";
 
-const PurchaseHistory = () => {
+const PurchaseHistoryTeacher = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 7 });
-  const { studentInfo } = useStudentInfo();
-  const { complainData } = useComplain(studentInfo?._id);
+
+  const { teacherInfo } = useTeacherInfo();
+
   const ref = useSelector((state: any) => state.payRef);
   const cart = useSelector((state: any) => state.cart);
 
-  const { purchasedStore } = usePurchasedStore(studentInfo?._id);
+  const { purchasedData: purchasedStore } = usePurchasedData(teacherInfo?._id);
 
   useEffect(() => {
     if (ref !== "") {
       verifyPayment(ref).then((res) => {
         if (res?.data?.data?.data?.gateway_response === "Successful") {
           if (cart.length > 0) {
-            purchasedEndPoint(studentInfo?._id, {
+            createPurchases(teacherInfo?._id, {
               date: moment(res?.data?.data?.data?.createdAt).format("lll"),
               cart,
               reference: res?.data?.data?.data?.reference,
@@ -37,7 +34,7 @@ const PurchaseHistory = () => {
               id: res?.data?.data?.data?.id,
               delievered: false,
             }).then(() => {
-              mutate(`api/view-purchase/${studentInfo?._id}`);
+              mutate(`api/view-teacher-purchase/${teacherInfo?._id}`);
               dispatch(paymentRef(null));
               dispatch(emptyCart());
               dispatch(displayCart(false));
@@ -50,7 +47,7 @@ const PurchaseHistory = () => {
 
   return (
     <div>
-      <LittleHeader name={"Purchase History"} />
+      <LittleHeader name={"Purchase History "} />
 
       <div className="mb-28" />
 
@@ -145,4 +142,4 @@ const PurchaseHistory = () => {
   );
 };
 
-export default PurchaseHistory;
+export default PurchaseHistoryTeacher;

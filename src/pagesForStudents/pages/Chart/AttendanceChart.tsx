@@ -1,14 +1,17 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useEffect, useState } from "react";
 import {
+  useReadMyClassInfo,
   useReadOneClassInfo,
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-const Chart = () => {
+const AttendanceChart = () => {
   const { studentInfo } = useStudentInfo();
+
   const { oneClass: state } = useReadOneClassInfo(studentInfo?.presentClassID);
 
   const { classStudents } = useClassStudent(state?._id);
@@ -25,10 +28,10 @@ const Chart = () => {
   }
 
   const data = {
-    labels: [`Male: ${male}, Female: ${female}`],
+    labels: [`Present: ${male}, Absent: ${female}`],
     datasets: [
       {
-        label: "My Class Male Chart vs. Female Chart",
+        label: "My Class Attendace Chart",
         data: [male, female],
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
@@ -38,7 +41,7 @@ const Chart = () => {
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center mt-10">
       <div className="w-full ">
         <Doughnut data={data} />
       </div>
@@ -46,4 +49,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default AttendanceChart;

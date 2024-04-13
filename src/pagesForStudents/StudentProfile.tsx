@@ -15,7 +15,7 @@ const StudentProfile = () => {
           <div className="flex">
             <div className="w-[100px] rounded-[50%] bg-slate-500 h-[100px] m-4">
               <img
-                src={pix}
+                src={studentInfo?.avatar ? studentInfo?.avatar : pix}
                 alt="My picture"
                 className=" object-cover rounded-[50%] w-full h-full"
               />
@@ -31,7 +31,7 @@ const StudentProfile = () => {
             </div>
           </div>
           <Link
-            className="w-[100px] h-[45px] flex justify-center text-[20px] font-semibold text-blue-950 cursor-pointer items-end underline"
+            className="w-[100px] h-[45px] flex justify-center  items-center  font-semibold text-blue-950 cursor-pointer  border m-4 text-[18px] rounded-md"
             to={"/your-settings"}
           >
             Edit
@@ -43,7 +43,7 @@ const StudentProfile = () => {
               Personal Information
             </p>
             <Link
-              className="w-[80px] h-[40px] border-slate-300 border flex justify-center text-[20px] font-semibold text-blue-950 cursor-pointer items-center mr-8 mt-2"
+              className="w-[100px] h-[45px] border-slate-300 border flex justify-center  font-semibold text-blue-950 cursor-pointer items-center  m-4 text-[18px] rounded-md"
               to={"/your-settings"}
             >
               Edit
@@ -58,7 +58,7 @@ const StudentProfile = () => {
               <h1 className="font-semibold pt-5 text-slate-400">
                 E-mail Address
               </h1>
-              <p className="pt-2">danieleromonsele01@gmail.com</p>
+              <p className="pt-2">{studentInfo?.email}</p>
               <h1 className=" font-semibold pt-5 text-slate-400">Bio</h1>
               <p className="pt-2">Student</p>
             </div>
@@ -66,7 +66,11 @@ const StudentProfile = () => {
               <h1 className=" font-semibold text-slate-400">Last Name</h1>
               <p className="pt-2">{studentInfo?.studentLastName}</p>
               <h1 className=" font-semibold pt-5 text-slate-400">Phone</h1>
-              <p className="pt-2">08033776651</p>
+              <p className="pt-2">
+                {studentInfo?.contact
+                  ? studentInfo?.contact
+                  : "No Phono contact yet"}
+              </p>
             </div>
           </div>
         </div>

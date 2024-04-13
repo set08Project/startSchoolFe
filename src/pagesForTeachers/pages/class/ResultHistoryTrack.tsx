@@ -9,10 +9,7 @@ import {
   useTeacherInfo,
 } from "../../hooks/useTeacher";
 import LittleHeader from "../../components/layout/LittleHeader";
-import {
-  useReadMyClassInfo,
-  useReadMyClassInfoData,
-} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
 
 document.title = "Viewing class History";
@@ -64,7 +61,6 @@ const ResultHistryTrack: FC = () => {
 
   let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
 
-  console.log(lodash.groupBy(Object.values(data).flat(), "className"));
   return (
     <div className="">
       <LittleHeader name="Viewing class Academic History" />

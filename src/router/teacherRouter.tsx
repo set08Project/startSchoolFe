@@ -1,7 +1,12 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+
 const CardReport = React.lazy(
   () => import("../pagesForTeachers/pages/Result/CardReport")
+);
+// purchased-record
+const PurchaseHistoryTeacher = React.lazy(
+  () => import("../pagesForTeachers/pages/store/PurchasedScreen")
 );
 
 const ResultTermDetail = React.lazy(
@@ -243,6 +248,14 @@ export const teacherRouter = createBrowserRouter([
         ),
       },
 
+      {
+        path: "purchase-history",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <PurchaseHistoryTeacher />
+          </Suspense>
+        ),
+      },
       {
         path: "view-articles",
         element: (

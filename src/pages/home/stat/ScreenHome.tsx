@@ -5,6 +5,9 @@ import Personal from "../../page/stats/Personal";
 import StudentPerformance from "./StudentPerformance";
 import TopRatedTeacher from "./TopRatedTeacher";
 import MostActiveScreen from "../../page/stats/MostActiveStudio";
+import PurchaseHistoryScreen from "../../page/store/PurchasedStores";
+import RecentPurcentScreen from "../screens/RecentPurchases";
+import { Link } from "react-router-dom";
 
 const ScreenHome = () => {
   document.title = "School's Record and Stats";
@@ -84,22 +87,13 @@ const ScreenHome = () => {
           </div>
 
           <div>
-            {readData?.length > 0 ? (
-              <div className="flex justify-center flex-col gap-3 w-full items-center ">
-                {/* from complain */}
-                <p>Top 5 Performancing Students</p>
-                <div className=" overflow-hidden">
-                  <StudentPerformance />
-                </div>
+            <div className="flex justify-center flex-col gap-3 w-full items-center ">
+              {/* from complain */}
+              <p>Top 5 Performancing Students</p>
+              <div className=" overflow-hidden">
+                <StudentPerformance />
               </div>
-            ) : (
-              <div className="flex flex-col w-full items-center">
-                <MdPlaylistAddCheck size={30} />
-                <p className="font-medium text-[13px]">
-                  No complains Record yet:{" "}
-                </p>
-              </div>
-            )}
+            </div>
           </div>
 
           <div className="flex-1" />
@@ -135,6 +129,23 @@ const ScreenHome = () => {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3 mt-5 ">
+        {/* Appointment */}
+
+        <div className=" rounded-md w-full  p-4">
+          <div className="mb-4 text-medium capitalize">
+            Top 5 Recent Purchases{" "}
+            <span className="font-bold ml-5">
+              <Link to="/purchase-history">View All </Link>
+            </span>
+          </div>
+
+          <div>
+            <RecentPurcentScreen />{" "}
           </div>
         </div>
       </div>

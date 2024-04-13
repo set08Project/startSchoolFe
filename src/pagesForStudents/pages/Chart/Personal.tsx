@@ -12,6 +12,10 @@ import {
 } from "../../hooks/useStudentHook";
 import { readClassInfo } from "../../api/studentAPI";
 import { useClassTimeTable } from "../../../pagesForTeachers/hooks/useTeacher";
+import OtherScreen from "../screens/OtherScreen";
+import PickUpItem from "../screens/PickUpItem";
+import RecentSchoolFeesHistoryScreen from "../screens/RecentSchoolFeeRecord";
+import AttendanceChart from "./AttendanceChart";
 
 const day = [
   "Sunday",
@@ -62,6 +66,13 @@ const Personal: FC = () => {
               <span className="mb-1 font-medium text-[15px] -ml-2">
                 Subjects
               </span>
+            </div>
+          </div>
+
+          <div className="border rounded-md min-h-[130px] p-2 pb-0 col-span-3 w-[97.5%]">
+            <div className="flex items-end gap-2 ">
+              <h1 className="text-[60px] md:text-[70px] font-medium mb-0 leading-none"></h1>{" "}
+              <PickUpItem />
             </div>
           </div>
         </div>
@@ -115,16 +126,31 @@ const Personal: FC = () => {
         </div>
       </div>
 
+      <RecentSchoolFeesHistoryScreen />
+
       <div className="border-t my-5" />
       <div className="w-full">
-        <p>Chart</p>
+        <p className="mb-10">Chart</p>
 
-        <Chart />
+        <div className="flex flex-wrap justify-center">
+          <div className="">
+            <Chart />
+          </div>
+          <div className="">
+            <AttendanceChart />
+          </div>
+        </div>
 
         <p className="text-[12px]">Male vs Female</p>
+      </div>
+
+      <div className="mt-10">
+        <OtherScreen />
       </div>
     </div>
   );
 };
 
 export default Personal;
+
+// sm:w-[180px] w-[100px]

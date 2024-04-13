@@ -17,15 +17,22 @@ import {
   changeMenuState,
   displayDelay,
   displayStaffComp,
+  paymentRef,
 } from "../../global/reduxState";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
 import { FaCertificate, FaPhotoFilm, FaStore, FaTable } from "react-icons/fa6";
-import { useStudentInfo } from "../hooks/useStudentHook";
+import {
+  useReadMyClassInfo,
+  useReadOneClassInfo,
+  useStudentInfo,
+} from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
+import { schoolFeePayment } from "../api/studentAPI";
+import { useState } from "react";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -35,6 +42,10 @@ const Sider = () => {
   const showing = useSelector((state: any) => state.showStaffComp);
   const { studentInfo } = useStudentInfo();
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
+
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+
+  // console.log(schoolInfo[0]?.presentTerm);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -65,6 +76,10 @@ const Sider = () => {
       });
     }
   };
+
+  let termRead: string = oneClass?.presentTerm!;
+
+  const [payment, setPayment] = useState<boolean>(false);
 
   return (
     <div className="overflow-y-auto w-full border-r bg-white text-blue-900 flex flex-col ">
@@ -124,8 +139,8 @@ const Sider = () => {
       {/* top box */}
       <div className="mt-10 px-2  center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
-          Encourage Parents to Purchase Learning Materials for thier child by
-          having more items in your Library Store{" "}
+          Never stress yourself anymore with the quest of wanting to pay your
+          child's schoolfees. You can do it here at your convience!{" "}
         </div>
         <div className="flex w-full justify-center">
           {/* <NavLink to="upgrade"> */}
@@ -133,14 +148,38 @@ const Sider = () => {
           <Button
             name={
               <div>
-                Pay Fees
+                Pay School Fees
                 <br />
-                <p className="text-[12px]">(coming soon)</p>
+                <p className="text-[12px]">
+                  ({payment ? "Processing Request" : "Make Payment Now"})
+                </p>
               </div>
             }
-            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-9 leading-tight"
+            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2  px-5 leading-tight"
             onClick={() => {
               // handleDisplayStaff();
+              setPayment(true);
+
+              schoolFeePayment({
+                email: studentInfo?.parentEmail,
+                amount:
+                  termRead === "1st Term"
+                    ? oneClass?.class1stFee
+                    : termRead === "2nd Term"
+                    ? oneClass?.class2ndFee
+                    : termRead === "3rd Term"
+                    ? oneClass?.class3rdFee
+                    : null,
+
+                subAccountCode:
+                  schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
+              }).then((res) => {
+                if (res.status === 200) {
+                  // dispatch(paymentRef(res?.data?.data?.data?.reference));
+                  location.replace(res?.data?.data?.data?.authorization_url);
+                  setPayment(false);
+                }
+              });
             }}
           />
 

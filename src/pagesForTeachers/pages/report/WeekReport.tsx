@@ -126,14 +126,24 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance.filter(
-          (el: any) => el.present === true
-        ).length /
-          mainStudentAttendance?.data?.attendance.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <div>0%</div>
+      )}
     </div>
   );
 };
@@ -153,7 +163,7 @@ const WeekReport = () => {
 
   const [data, setData] = useState([]);
 
-  const handleInputChange = (id, newText) => {
+  const handleInputChange = (id: any, newText: any) => {
     setData((prevData) =>
       prevData.map((item) =>
         item.id === id ? { ...item, text: newText } : item
@@ -198,20 +208,6 @@ const WeekReport = () => {
           )}
         </div>
       </div>
-
-      {/* <div>
-        {data?.map((item: any) => (
-          <input
-            key={item.id}
-            className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-            placeholder="Enter text"
-            value={item}
-            onChange={(e) => {
-              handleInputChange(item._id, e.target.value);
-            }}
-          />
-        ))}
-      </div> */}
     </div>
   );
 };

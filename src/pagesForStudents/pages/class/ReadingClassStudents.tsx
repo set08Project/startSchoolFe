@@ -10,11 +10,6 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import moment from "moment";
 import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
-import {
-  useStudentCookie,
-  useStudentInfo,
-  useStudentInfoData,
-} from "../../hooks/useStudentHook";
 
 interface iProps {
   props?: any;
@@ -59,21 +54,29 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance.filter(
-          (el: any) => el.present === true
-        ).length /
-          mainStudentAttendance?.data?.attendance.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        "No Record Yet"
+      )}
     </div>
   );
 };
 
 const ReadingClassStudents: FC<iProps> = ({ props }) => {
-  const { dataID } = useStudentCookie();
-
   const { classStudents } = useClassStudent(props);
 
   return (
@@ -126,7 +129,13 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <label>1st Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-blue-950 border-blue-950  "
+                              className={`
+                              toggle toggle-sm mt-2  ${
+                                props?.feesPaid1st
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              }
+                              `}
                               checked={props?.feesPaid1st}
                               // checked={false}
                             />
@@ -135,7 +144,13 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <label>2nd Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                              className={`
+                              toggle toggle-sm mt-2  ${
+                                props?.feesPaid2nd
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              }
+                              `}
                               checked={props?.feesPaid2nd}
                             />
                           </div>
@@ -143,7 +158,13 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                             <label>3rd Term</label>
                             <input
                               type="checkbox"
-                              className="toggle toggle-sm mt-2  bg-neutral-500 border-neutral-500"
+                              className={`
+                              toggle toggle-sm mt-2  ${
+                                props?.feesPaid3rd
+                                  ? "bg-blue-950 border-blue-950"
+                                  : "bg-neutral-500 border-neutral-500"
+                              }
+                              `}
                               checked={props?.feesPaid3rd}
                             />
                           </div>

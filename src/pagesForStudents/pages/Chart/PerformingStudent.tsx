@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import pix from "../../../assets/pix.jpg";
 import { readClassInfo } from "../../api/studentAPI";
-import { useStudentInfo } from "../../hooks/useStudentHook";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+} from "../../hooks/useStudentHook";
 import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 
 const StudentPerformance = () => {
@@ -9,9 +12,10 @@ const StudentPerformance = () => {
   //   const { perform } = useTopSchoolStudent(data?._id);
 
   const [state, setState] = useState<any>({});
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
   useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res) => {
+    readClassInfo(oneClass?.className).then((res) => {
       setState(res.data);
     });
   }, []);

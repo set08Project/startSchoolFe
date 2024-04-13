@@ -10,8 +10,10 @@ import {
   getSchoolEvent,
   getSchoolStudentDetail,
   getSchoolStudents,
+  purchasedStoreInfo,
   readNoted,
   readSchool,
+  readSchoolFee,
   registerSchool,
   studentAttendance,
   topSchoolStudent,
@@ -364,4 +366,28 @@ export const useViewTermDetail = (termID: string) => {
     }
   );
   return { termData };
+};
+
+export const usePurchasedStoreInfo = (schoolID: string) => {
+  const { data: schoolPurchased } = useSWR(
+    `api/view-school-purchase/${schoolID}`,
+    () => {
+      return purchasedStoreInfo(schoolID!).then((res) => {
+        return res?.data?.data;
+      });
+    }
+  );
+  return { schoolPurchased };
+};
+
+export const useSchoolSchoolFees = (schoolID: string) => {
+  const { data: schoolFeeRecord } = useSWR(
+    `api/view-school-schoolfee-detail/${schoolID}`,
+    () => {
+      return readSchoolFee(schoolID!).then((res) => {
+        return res?.data?.data;
+      });
+    }
+  );
+  return { schoolFeeRecord };
 };

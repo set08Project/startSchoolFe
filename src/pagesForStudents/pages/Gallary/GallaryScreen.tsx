@@ -8,6 +8,7 @@ document.title = "School's Gallery";
 import { mutate } from "swr";
 import { useGallary } from "../../../pages/hook/useSchoolAuth";
 import { useStudentInfo } from "../../hooks/useStudentHook";
+import { FaPhotoFilm } from "react-icons/fa6";
 
 const StudentGalleryScreen = () => {
   const { studentInfo } = useStudentInfo();
@@ -94,7 +95,10 @@ const StudentGalleryScreen = () => {
                 /> */}
               </div>
             ) : (
-              <div>no image</div>
+              <div className="w-full justify-center flex items-center flex-col">
+                <p>No moment captured yet</p>
+                <FaPhotoFilm />
+              </div>
             )}
             {/* {gallary?.data?.length > 0 ? (
               <div className="w-full gap-4 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3  ">

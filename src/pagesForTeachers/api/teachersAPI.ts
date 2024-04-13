@@ -400,3 +400,27 @@ export const viewClassAcademicHistory = async (classID: string) => {
     return error;
   }
 };
+
+export const createPurchases = async (staffID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/teacher-purchase/${staffID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewPurchases = async (staffID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-teacher-purchase/${staffID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

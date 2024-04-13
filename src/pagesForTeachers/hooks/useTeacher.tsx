@@ -12,6 +12,7 @@ import {
   readTeacherSchedule,
   viewClassAcademicHistory,
   viewComplains,
+  viewPurchases,
   viewStudentGrade,
   viewTeacherDetail,
 } from "../api/teachersAPI";
@@ -242,4 +243,16 @@ export const useClassAcademicHistory = (classID: string) => {
     }
   );
   return { classAcademicHistory };
+};
+
+export const usePurchasedData = (staffID: string) => {
+  const { data: purchasedData } = useSWR(
+    `api/view-teacher-purchase/${staffID}`,
+    () => {
+      return viewPurchases(staffID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { purchasedData };
 };

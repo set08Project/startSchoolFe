@@ -39,7 +39,6 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
 
 const ClassRoomScreen = () => {
   const dispatch = useDispatch();
-  const data = Array.from({ length: 0 });
   const { schoolClassroom } = useSchoolClassRM();
 
   const classroom = useSelector((state: any) => state.classroomToggled);

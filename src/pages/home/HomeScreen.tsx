@@ -1,5 +1,5 @@
 document.title = "Welcome Back Dashboard";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Button from "../../components/reUse/Button";
 import LittleHeader from "../../components/static/LittleHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -217,6 +217,13 @@ const HomeScreen = () => {
                 className="bg-orange-600 hover:bg-orange-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
                 onClick={handleDisplayStudent}
               />
+
+              <Link to="/school-fees-history">
+                <Button
+                  name="View School Fees Payments"
+                  className="bg-black hover:bg-neutral-800 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                />
+              </Link>
             </div>
           </div>
 
