@@ -14,6 +14,7 @@ import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
 import { Link } from "react-router-dom";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: string;
@@ -95,12 +96,15 @@ const StaffDetail: FC<iProps> = ({ props }) => {
 const MyClassRoomScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const [classInfo, setClassInfo] = useState<any>();
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
+    readClassInfo(oneClass?.className).then((res: any) => {
       setClassInfo(res?.data);
     });
   }, []);
+
+  console.log("hmmm: ", oneClass);
 
   return (
     <div className="text-blue-950">
@@ -136,19 +140,19 @@ const MyClassRoomScreen = () => {
             <p className="text-[12px]">
               <p className="font-normal">First Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class1stFee.toLocaleString()}
+                ₦{oneClass?.class1stFee.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Second Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class2ndFee.toLocaleString()}
+                ₦{oneClass?.class2ndFee.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
               <p className="font-normal">Third Term</p>
               <p className="font-bold">
-                ₦{classInfo?.class3rdFee.toLocaleString()}
+                ₦{oneClass?.class3rdFee.toLocaleString()}
               </p>
             </p>
           </div>
@@ -161,19 +165,19 @@ const MyClassRoomScreen = () => {
         {/* + Assign class Teacher{ */}
         <div className="mt-8" />
         <div className="text-[12px]"> class Teacher Assigned</div>
-        <StaffDetail props={classInfo?._id} />
+        <StaffDetail props={oneClass?._id} />
       </div>
       <div className="my-6 border-t" />
 
       {/* SUbjects */}
 
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Class Subject for {classInfo?.className} </p>
+        <p>Class Subject for {oneClass?.className} </p>
         <p className="text-[13px] font-bold">
           Below are all the subject this CLASS offers!
         </p>
 
-        <ClassSubjectScreen props={classInfo?._id} />
+        <ClassSubjectScreen props={oneClass?._id} />
       </div>
 
       {/* Top Students */}
@@ -202,7 +206,7 @@ const MyClassRoomScreen = () => {
         </p>
         <div className="flex gap-4 mt-5">
           <div className="overflow-x-auto">
-            <ReadingClassStudents props={classInfo?._id} />
+            <ReadingClassStudents props={oneClass?._id} />
           </div>
         </div>
       </div>
@@ -217,7 +221,7 @@ const MyClassRoomScreen = () => {
         </div>
         <div className="flex gap-4 mt-5">
           {" "}
-          <TimeTableScreen props={classInfo?._id} />{" "}
+          <TimeTableScreen props={oneClass?._id} />{" "}
         </div>
       </div>
 

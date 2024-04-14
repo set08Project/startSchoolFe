@@ -1,11 +1,7 @@
 import { useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { MdCheck, MdClose } from "react-icons/md";
-import {
-  revalidateLiveQueries,
-  useClassSubjects,
-  useSchoolData,
-} from "../../hook/useSchoolAuth";
+import { useClassSubjects, useSchoolData } from "../../hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { createTimeTable } from "../../api/schoolAPIs";

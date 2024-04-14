@@ -1,3 +1,5 @@
+// document.title = "View Students";
+
 document.title = "View Students";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
@@ -190,7 +192,11 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
       </div>
       <div className="w-[100px] border-r">{props?.points}</div>
       <div className="w-[100px] border-r text-[15px] leading-tight font-bold">
-        {props?.grade}
+        {props?.grade !== "Not Recorded Yet" ? (
+          props?.grade
+        ) : (
+          <span className="text-[12px] text-red-500">Not Recorded Yet</span>
+        )}
       </div>
 
       <div
@@ -234,7 +240,7 @@ const CardReportHistory = () => {
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
   return (
-    <div className="">
+    <div className="text-blue-950">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
@@ -250,7 +256,7 @@ const CardReportHistory = () => {
             width: `${1000 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
-          <div className="w-[100px] border-r">Sequence</div>
+          <div className="w-[100px] border-r">Sequence </div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[100px] border-r">Class Performance</div>

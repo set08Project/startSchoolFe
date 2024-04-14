@@ -1,34 +1,37 @@
-document.title = "View  Result History";
+document.title = "View Students Grades";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import moment from "moment";
 import { FC, useState } from "react";
 import {
+  useSchoolData,
   useSchoolSessionData,
   useStudentAttendance,
-  useViewSessionTerm,
 } from "../../../pages/hook/useSchoolAuth";
 // import {
-//   useClassAcademicHistory,
 //   useClassStudent,
 //   useClassSubject,
 //   useStudentGrade,
 //   useTeacherInfo,
 // } from "../../hooks/useTeacher";
-
+// import {
+//   readClassInfo,
+//   remark,
+//   reportCardRemark,
+//   viewStudentGrade,
+// } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
-import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
-import lodash from "lodash";
-import { useParams } from "react-router-dom";
-import { el } from "date-fns/locale";
 import {
-  useClassAcademicHistory,
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import lodash from "lodash";
+import {
   useClassStudent,
   useClassSubject,
   useStudentGrade,
-  useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 
 interface iProps {
@@ -40,6 +43,53 @@ interface iProps {
   stateValue?: string;
   teacherInfo?: any;
 }
+
+// const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
+//   const { gradeData } = useStudentGrade(props?._id);
+//   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+//   // SS 1A session: 2024/2025(Second Term)
+
+//   // let result = gradeData?.reportCard
+//   //   .find((el: any) => {
+//   //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
+//   //   })
+//   //   ?.result?.find((data: any) => {
+//   //     return data.subject === el?.subjectTitle;
+//   //   });
+
+//   let result = gradeData?.reportCard.find((el: any) => {
+//     return (
+//       el.classInfo ===
+//       `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+//     );
+//   });
+
+//   return (
+//     <div className="w-[180px] border-r">
+//       <Button
+//         name="Add Comment"
+//         className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+//         onClick={() => {
+//           if (stateValue !== "") {
+//             reportCardRemark(teacherInfo?._id, props?._id, {
+//               teacherComment: stateValue,
+//             }).then((res: any) => {
+//               if (res.status === 201) {
+//                 mutate(`api/student-report-card/${props?._id}`);
+//                 toast.success("Report Card Report Noted");
+//               } else {
+//                 toast.error(`${res?.response?.data?.message}`);
+//               }
+//             });
+//           } else {
+//             toast.error("Please give a REMARK");
+//           }
+//         }}
+//       />
+//     </div>
+//   );
+// };
 
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
@@ -76,9 +126,11 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 };
 
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
+  const { data } = useSchoolData();
   const { gradeData } = useStudentGrade(props?._id);
 
-  const { state } = useReadMyClassInfoData(props?.classAssigned);
+  const { state } = useReadMyClassInfoData("JSS 1A");
+  const { classStudents } = useClassStudent(state?._id!);
 
   const { subjectData } = useClassSubject(state?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
@@ -92,6 +144,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     );
   });
 
+  const [stateValue, setStateValue] = useState(
+    `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
+  );
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -104,7 +159,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
-            src={props?.avatar ? props?.avatar : pix}
+            src={pix}
           />
 
           <div className="w-[180px] ">
@@ -116,10 +171,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
       </div>
-
-      <div className="w-[100px] border-r">{result?.points}</div>
-
-      <div className="w-[100px] border-r">{result?.grade}</div>
 
       <div
         className={`w-[${
@@ -134,6 +185,77 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             ))}
         </div>
       </div>
+
+      <div className="w-[100px] border-r">{result?.points}</div>
+
+      <div className="w-[100px] border-r">{result?.grade}</div>
+
+      <div className="w-[300px] border-r">
+        <textarea
+          className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
+          placeholder={`${"Give a Remark"} `}
+          defaultValue={"Peter"}
+          value={stateValue}
+          onChange={(e) => {
+            setStateValue(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="w-[180px] border-r">
+        <Button
+          name="Add Comment"
+          className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+          //   onClick={() => {
+          //     if (stateValue !== "") {
+          //       reportCardRemark(teacherInfo?._id, props?._id, {
+          //         teacherComment: stateValue,
+          //       }).then((res: any) => {
+          //         if (res.status === 201) {
+          //           mutate(`api/student-report-card/${props?._id}`);
+          //           toast.success("Report Card Report Noted");
+          //         } else {
+          //           toast.error(`${res?.response?.data?.message}`);
+          //         }
+          //       });
+          //     } else {
+          //       toast.error("Please give a REMARK");
+          //     }
+          //   }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const Remark: FC<iProps> = ({ id, data }) => {
+  const { mainStudentAttendance } = useStudentAttendance(id!);
+
+  let name2 = data?.studentFirstName;
+
+  let result = mainStudentAttendance?.data?.attendance?.find((el: any) => {
+    return el?.studentFirstName === name2;
+  });
+
+  let timer = Date.now();
+
+  return (
+    <div
+      className={`w-[100px] border-r 
+      ${
+        result?.present
+          ? "text-green-600"
+          : result?.absent
+          ? "text-red-600"
+          : null
+      }`}
+    >
+      {moment(result?.createdAt).format("ll") === moment(timer).format("ll") &&
+      result?.present
+        ? "Present"
+        : result?.absent
+        ? "Absent"
+        : null}
     </div>
   );
 };
@@ -143,20 +265,29 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance.filter(
-          (el: any) => el.present === true
-        ).length /
-          mainStudentAttendance?.data?.attendance.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <p>0%</p>
+      )}
     </div>
   );
 };
 
 const SubjectMap: FC<iProps> = ({ props }) => {
-  console.log("show studty: ", props);
   return (
     <div className="w-[260px] border-r ">
       <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
@@ -173,42 +304,22 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   );
 };
 
-const ResultDetailClass = () => {
+const ReportCardApproved = () => {
   const { teacherInfo } = useTeacherInfo();
-  const { termID, ID, term, session } = useParams();
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { sessionTermData } = useViewSessionTerm(termID);
-  document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
+  const { state } = useReadMyClassInfoData(oneClass?.className);
 
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
-
-  const getResult = sessionTermData?.data?.classResult?.find((el: any) => {
-    return el._id === ID;
-  });
-
-  const { classAcademicHistory } = useClassAcademicHistory(getResult._id);
-  const { subjectData } = useClassSubject(classAcademicHistory?._id);
-
-  let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
-  const dataX = Object.values(data).flat();
-
-  const { gradeData } = useStudentGrade("studentID");
-
-  const readStudent = dataX.find((el: any) => {
-    return (
-      el.term === term.replace("-", " ") &&
-      el.session === session.replace("-", "/")
-    );
-  });
+  const { classStudents } = useClassStudent(oneClass?._id!);
+  const { subjectData } = useClassSubject(oneClass?._id);
+  const [data, setData] = useState([]);
 
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader
-        name={`Viewing ${getResult?.className} ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`}
-      />
+      <LittleHeader name={"Class Teacher Remark"} />
 
       <div className="mt-10" />
 
@@ -217,15 +328,12 @@ const ResultDetailClass = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${800 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-
-          <div className="w-[100px] border-r">Total Points</div>
-          <div className="w-[100px] border-r">Grade</div>
           {/* 260px */}
           <div
             className={`w-[${
@@ -238,22 +346,28 @@ const ResultDetailClass = () => {
                 {lodash
                   .sortBy(subjectData?.classSubjects, "subjectTitle")
                   ?.map((props: any) => (
-                    <SubjectMap key={props} props={props} />
+                    <SubjectMap props={props} />
                   ))}
               </div>
             </div>
           </div>
+
+          <div className="w-[100px] border-r">Total Points</div>
+          <div className="w-[100px] border-r">Grade</div>
+          <div className="w-[300px] border-r">Give Report/Remark</div>
+
+          <div className="w-[180px] border-r">Submit Report</div>
         </div>
 
         <div
-          className={` overflow-hidden w-[2000px] `}
+          className={` overflow-hidden`}
           style={{
-            width: `${800 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
-          {readStudent?.resultHistory?.length > 0 ? (
+          {classStudents?.students?.length > 0 ? (
             <div>
-              {readStudent?.resultHistory?.map((props: any, i: number) => (
+              {classStudents?.students?.map((props: any, i: number) => (
                 <div key={props}>
                   <MainStudentRow props={props} i={i} />
                 </div>
@@ -268,4 +382,4 @@ const ResultDetailClass = () => {
   );
 };
 
-export default ResultDetailClass;
+export default ReportCardApproved;

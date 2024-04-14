@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Chart from "./Chart";
 import GetAnnouncement from "./GetAnnouncement";
 import { useTeacherInfo, useTeacherSchedule } from "../hooks/useTeacher";
-import { readClassInfo } from "../api/teachersAPI";
 import moment from "moment";
 import lodash from "lodash";
 import { FaStar } from "react-icons/fa6";
+import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
 
 const day = [
   "Sunday",
@@ -21,12 +21,7 @@ const Personal: FC = () => {
   const { teacherInfo } = useTeacherInfo();
 
   const [state, setState] = useState<any>({});
-
-  useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res) => {
-      setState(res.data);
-    });
-  }, []);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   const { teacherSchedule: dataData } = useTeacherSchedule(teacherInfo?._id);
 
@@ -51,7 +46,7 @@ const Personal: FC = () => {
             <div className="mt-5" />
             <div className="flex items-end gap-2 ">
               <h1 className="text-[60px] md:text-[70px] font-medium mb-0 leading-none">
-                {state?.students?.length}
+                {oneClass?.students?.length}
               </h1>{" "}
               <span className="mb-1 font-medium text-[15px] -ml-2">
                 students
@@ -64,7 +59,7 @@ const Personal: FC = () => {
             <div className="mt-5" />
             <div className="flex items-end gap-2 ">
               <h1 className="text-[60px] md:text-[70px] font-medium mb-0 leading-none">
-                {state?.classSubjects?.length}
+                {oneClass?.classSubjects?.length}
               </h1>{" "}
               <span className="mb-1 font-medium text-[15px] -ml-2">
                 Subjects

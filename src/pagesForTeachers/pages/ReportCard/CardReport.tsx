@@ -1,4 +1,4 @@
-document.title = "View Students";
+document.title = "View Students Grades";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
@@ -23,7 +23,10 @@ import {
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
-import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
 
 interface iProps {
@@ -151,13 +154,12 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
-            src={props?.avatar ? props?.avatar : pix}
+            src={pix}
           />
 
-          <div className="w-[180px]">
+          <div className="w-[180px] ">
             {" "}
-            {props?.studentFirstName}{" "}
-            <p className=" font-bold">{props?.studentLastName}</p>
+            {props?.studentFirstName} {props?.studentLastName}
           </div>
         </div>
       </div>
@@ -258,14 +260,24 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
-        (mainStudentAttendance?.data?.attendance.filter(
-          (el: any) => el.present === true
-        ).length /
-          mainStudentAttendance?.data?.attendance.length) *
-        100
-      ).toFixed(2)}
-      %
+      {(mainStudentAttendance?.data?.attendance?.filter(
+        (el: any) => el.present === true
+      ).length /
+        mainStudentAttendance?.data?.attendance?.length) *
+      100 ? (
+        <div>
+          {(
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
+          %
+        </div>
+      ) : (
+        <p>0%</p>
+      )}
     </div>
   );
 };
@@ -289,11 +301,12 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 
 const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
+  const { state } = useReadMyClassInfoData(oneClass?.className);
 
-  const { classStudents } = useClassStudent(state?._id!);
-  const { subjectData } = useClassSubject(state?._id);
+  const { classStudents } = useClassStudent(oneClass?._id!);
+  const { subjectData } = useClassSubject(oneClass?._id);
   const [data, setData] = useState([]);
 
   return (

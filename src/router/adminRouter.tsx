@@ -31,9 +31,19 @@ const SuccessPage = React.lazy(
 );
 
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
-import { ErrorBoundary } from "react-error-boundary";
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
-import ResultDetailClass from "../pages/page/ResultHistory/ResultDetailClass";
+
+const ClassReportCardReady = React.lazy(
+  () => import("../pages/page/ResultHistory/ClassReportReady")
+);
+
+const ReportCardApproved = React.lazy(
+  () => import("../pages/page/ResultHistory/ReportCard")
+);
+
+const ResultDetailClass = React.lazy(
+  () => import("../pages/page/ResultHistory/ResultDetailClass")
+);
 
 const SchoolFeesHistoryScreen = React.lazy(
   () => import("../pages/page/payment/SchoolPaymentScreen")
@@ -179,24 +189,24 @@ export const adminRouter = createBrowserRouter([
             ),
           },
 
-          // {
-          //   index: true,
-          //   path: "result-history/:session/:term",
-          //   element: (
-          //     <Suspense fallback={<LoadingScreen />}>
-          //       <Result />
-          //     </Suspense>
-          //   ),
-          // },
-          // {
-          //   index: true,
-          //   path: "result-history/:termID/student-result/:ID",
-          //   element: (
-          //     <Suspense fallback={<LoadingScreen />}>
-          //       <StudentResult />
-          //     </Suspense>
-          //   ),
-          // },
+          {
+            index: true,
+            path: "result-history/:session/:term",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <Result />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "result-history/:termID/student-result/:ID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <StudentResult />
+              </Suspense>
+            ),
+          },
           {
             index: true,
             path: "result-history/:termID/:session/:term",
@@ -219,6 +229,15 @@ export const adminRouter = createBrowserRouter([
           // *****
           {
             index: true,
+            path: "class-result-approve",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ReportCardApproved />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
             path: "student-result/",
             element: (
               <Suspense fallback={<LoadingScreen />}>
@@ -232,6 +251,16 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <PurchaseHistoryScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "class-report-card-ready",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ClassReportCardReady />
               </Suspense>
             ),
           },

@@ -2,20 +2,15 @@ import { useEffect, useState } from "react";
 import pix from "../../assets/pix.jpg";
 import { useClassStudent, useTeacherInfo } from "../hooks/useTeacher";
 import { readClassInfo } from "../api/teachersAPI";
+import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
 
 const StudentPerformance = () => {
   const { teacherInfo } = useTeacherInfo();
   //   const { perform } = useTopSchoolStudent(data?._id);
 
-  const [state, setState] = useState<any>({});
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res) => {
-      setState(res.data);
-    });
-  }, []);
-
-  const { classStudents } = useClassStudent(state?._id);
+  const { classStudents } = useClassStudent(oneClass?._id);
 
   return (
     <div className="">

@@ -7,12 +7,15 @@ import { FaCheckDouble } from "react-icons/fa6";
 import ClassModelAssignment from "./AddAssignment";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../api/teachersAPI";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
 
   const [state, setState] = useState<any>({});
+
+  // const {} = useReadOneClassInfo(teacher)
 
   useEffect(() => {
     readClassInfo(subjectQuiz?.designated).then((res: any) => {

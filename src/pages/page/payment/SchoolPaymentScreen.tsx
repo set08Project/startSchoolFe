@@ -12,7 +12,8 @@ const SchoolFeesHistoryScreen = () => {
   const { data } = useSchoolData();
 
   const { schoolFeeRecord } = useSchoolSchoolFees(data?._id);
-  const [state, setState] = useState<string>("uii");
+
+  const [stateArray, setStateArray] = useState<string[]>([]);
 
   return (
     <div>
@@ -86,15 +87,10 @@ const SchoolFeesHistoryScreen = () => {
                     <div
                       className="w-[150px] border-r pl-1 "
                       onClick={() => {
-                        setState(props?._id);
-                        console.log("Read: ", state);
+                        stateArray.push(props?._id);
                       }}
                     >
-                      <div
-                      // onClick={() => {
-                      //   setState(props?._id);
-                      // }}
-                      >
+                      <div>
                         <label
                           htmlFor="my_modal_6"
                           className={`btn text-[12px] font-medium text-white 
@@ -123,15 +119,23 @@ const SchoolFeesHistoryScreen = () => {
                             </h3>
                             <p className="py-4">
                               Are you sure you want to confirm this payment?
-                              {props?._id}
+                              <br />
+                              {stateArray[0]}
                             </p>
                             <div className="modal-action">
                               <label
                                 htmlFor="my_modal_6"
                                 className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
                                 onClick={() => {
-                                  updateSchoolFee(props?._id).then((res) => {
+                                  updateSchoolFee(stateArray[0]).then((res) => {
                                     console.log(res);
+                                    setStateArray([]);
+                                    let x = setTimeout(() => {
+                                      setStateArray([]);
+                                      console.log("view: ", stateArray);
+
+                                      clearTimeout(x);
+                                    }, 10);
                                   });
                                 }}
                               >
@@ -141,9 +145,13 @@ const SchoolFeesHistoryScreen = () => {
                                 htmlFor="my_modal_6"
                                 className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
                                 onClick={() => {
-                                  if (state !== "") {
-                                    setState("");
-                                  }
+                                  setStateArray([]);
+                                  let x = setTimeout(() => {
+                                    setStateArray([]);
+                                    console.log("view: ", stateArray);
+
+                                    clearTimeout(x);
+                                  }, 10);
                                 }}
                               >
                                 No

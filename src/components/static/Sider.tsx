@@ -156,25 +156,10 @@ const Sider = () => {
           having more items in your Library Store{" "}
         </div>
         <div className="flex w-full justify-center">
-          {/* <NavLink to="upgrade"> */}
-
-          {/* <Button
-            name="Add to Store"
-            className="bg-black text-white border-none font-medium py-4 px-9 leading-tight"
-            onClick={() => {
-              handleDisplayStaff();
-            }}
-          /> */}
-
           <StoreScreen />
-
-          {/* </NavLink> */}
         </div>
       </div>
 
-      {/* Nav Links */}
-
-      {/* Settings */}
       <div className="mt-10 px-2 flex flex-col h-[90%]">
         <NavLink
           to="/dashboard"
@@ -263,19 +248,6 @@ const Sider = () => {
         </NavLink>
 
         <NavLink
-          to="/result-history"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Result History
-          <MdSignalCellularAlt />
-        </NavLink>
-
-        <NavLink
           to="/view-gallery"
           className={({ isActive }) =>
             isActive
@@ -299,6 +271,30 @@ const Sider = () => {
         >
           Store
           <FaStore />
+        </NavLink>
+        <NavLink
+          to="/result-history"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Result History
+          <MdSignalCellularAlt />
+        </NavLink>
+        <NavLink
+          to="/result-history/:session/:term"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Operation History
+          <MdSignalCellularAlt />
         </NavLink>
 
         <div className="flex-1" />

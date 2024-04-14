@@ -1,8 +1,8 @@
-document.title = "View Students";
+document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -13,10 +13,11 @@ import {
   useSujectInfo,
   useTeacherInfo,
 } from "../../hooks/useTeacher";
-import { createGradeScore, readClassInfo } from "../../api/teachersAPI";
+import { createGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: any;
@@ -200,18 +201,13 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const SubjectGradeCard = () => {
   const { teacherInfo } = useTeacherInfo();
-  const [state, setState] = useState<any>({});
-  const [stateValue, setStateValue] = useState("");
   const { subjectID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  useEffect(() => {
-    readClassInfo(subjectInfo?.designated).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
+  const { classStudents } = useClassStudent(oneClass?._id!);
 
-  const { classStudents } = useClassStudent(state?._id!);
+  console.log("students: ", classStudents?.students);
 
   return (
     <div className="">

@@ -75,6 +75,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 const ReadingClassStudents: FC<iProps> = ({ props }) => {
   const { classStudents } = useClassStudent(props);
 
+  console.log(props);
+
   return (
     <div>
       <div className="mt-4">

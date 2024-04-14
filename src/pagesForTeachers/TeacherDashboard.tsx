@@ -6,7 +6,10 @@ import StudentPerformance from "./Chart/PerformingStudent";
 import ClassModelAssignment from "./pages/quiz/AddAssignment";
 import { useTeacherInfo } from "./hooks/useTeacher";
 import StudentOfTheWeek from "./pages/quiz/StudentWeek";
-import { useReadMyClassInfoData } from "../pagesForStudents/hooks/useStudentHook";
+import {
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../pagesForStudents/hooks/useStudentHook";
 
 import pix from "./../assets/pix.jpg";
 import MakeComplains from "./pages/quiz/MarkCOmplains";
@@ -19,8 +22,9 @@ const TeacherDashboard = () => {
   const { teacherInfo } = useTeacherInfo();
   document.title = `${teacherInfo?.staffName}'s Record and Stats`;
 
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+
   const readData = Array.from({ length: 2 });
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
 
   const { schoolInfo, loading }: any = useSchoolSessionData(
     teacherInfo?.schoolIDs
@@ -80,27 +84,30 @@ const TeacherDashboard = () => {
                 <p className="font-bold text-left pb-3 text-[15px] ">
                   Student of the Week for class {teacherInfo?.classesAssigned}
                 </p>
-
-                <div className="w-[260px]  rounded-t-md min-h-[320px] border">
-                  <img
-                    className="w-full h-[300px] object-cover rounded-t-md"
-                    src={
-                      state?.weekStudent?.student?.avatar
-                        ? state?.weekStudent?.student?.avatar
-                        : pix
-                    }
-                  />
-                  <p className="flex px-2 justify-start my-2 text-[15px]">
-                    Name:{" "}
-                    <span className="font-bold ml-2">
-                      {state?.weekStudent?.student?.studentFirstName}{" "}
-                      {state?.weekStudent?.student?.studentLastName}
-                    </span>
-                  </p>
-                  <p className="text-left px-2 pb-2">
-                    {state?.weekStudent?.remark}
-                  </p>
-                </div>
+                {oneClass?.weekStudent ? (
+                  <div className="w-[260px]  rounded-t-md min-h-[320px] border">
+                    <img
+                      className="w-full h-[300px] object-cover rounded-t-md"
+                      src={
+                        oneClass?.weekStudent?.student?.avatar
+                          ? oneClass?.weekStudent?.student?.avatar
+                          : pix
+                      }
+                    />
+                    <p className="flex px-2 justify-start my-2 text-[15px]">
+                      Name:{" "}
+                      <span className="font-bold ml-2">
+                        {oneClass?.weekStudent?.student?.studentFirstName}{" "}
+                        {oneClass?.weekStudent?.student?.studentLastName}
+                      </span>
+                    </p>
+                    <p className="text-left px-2 pb-2">
+                      {oneClass?.weekStudent?.remark}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="my-10">No Record Yet</p>
+                )}
               </div>
             </div>
             {readData?.length > 0 ? (

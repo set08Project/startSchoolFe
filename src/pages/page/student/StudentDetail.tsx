@@ -164,10 +164,10 @@ const StudentDetail = () => {
           Attendance Heatmap:{" "}
           <span className="font-medium">
             {(
-              (mainStudentAttendance?.data?.attendance.filter(
+              (mainStudentAttendance?.data?.attendance?.filter(
                 (el: any) => el.present === true
               ).length /
-                mainStudentAttendance?.data?.attendance.length) *
+                mainStudentAttendance?.data?.attendance?.length) *
               100
             ).toFixed(2)}
             %
@@ -178,7 +178,7 @@ const StudentDetail = () => {
           <div className="w-3 h-3 border bg-white" /> */}
 
           <div className="flex flex-wrap gap-1 w-full">
-            {mainStudentAttendance?.data?.attendance.map((props: any) => (
+            {mainStudentAttendance?.data?.attendance?.map((props: any) => (
               <div
                 className="tooltip"
                 data-tip={`${props.present ? "present" : "absent"}`}

@@ -9,6 +9,7 @@ import { useClassStudent, useTeacherInfo } from "../../hooks/useTeacher";
 import { readClassInfo, remark } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: any;
@@ -21,6 +22,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { teacherInfo } = useTeacherInfo();
   const [state, setState] = useState<any>({});
   const [stateValue, setStateValue] = useState("");
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -150,26 +152,9 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const WeekReport = () => {
   const { teacherInfo } = useTeacherInfo();
-  const [state, setState] = useState<any>({});
-  const [stateValue, setStateValue] = useState("");
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
-
-  const { classStudents } = useClassStudent(state?._id!);
-
-  const [data, setData] = useState([]);
-
-  const handleInputChange = (id: any, newText: any) => {
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.id === id ? { ...item, text: newText } : item
-      )
-    );
-  };
+  const { classStudents } = useClassStudent(oneClass?._id!);
 
   return (
     <div className="">

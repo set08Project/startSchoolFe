@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const CardReport = React.lazy(
-  () => import("../pagesForTeachers/pages/Result/CardReport")
+  () => import("../pagesForTeachers/pages/ReportCard/CardReport")
 );
 // purchased-record
 const PurchaseHistoryTeacher = React.lazy(
