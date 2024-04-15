@@ -1,20 +1,18 @@
-document.title = "view subjects";
+document.title = "view class info for result approval";
 
 import LittleHeader from "../../../components/static/LittleHeader";
 import pix from "../../../assets/pix.jpg";
 import {
-  useSchoolCookie,
-  useSchoolSubject,
+  useSchoolClassRM,
   useSchoolTeacher,
   useSchoolTeacherDetail,
 } from "../../hook/useSchoolAuth";
-import Button from "../../../components/reUse/Button";
 import { useState, FC } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
-import { updateSchoolSubjectTeacher } from "../../api/schoolAPIs";
-import { mutate } from "swr";
+
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: any;
@@ -48,29 +46,9 @@ const TeacherInfo: FC<iProps> = ({ props }) => {
 };
 
 const ClassReportCardReady = () => {
-  const { schoolSubject } = useSchoolSubject();
   const [subjectTeacher, setSubjectTeacher] = useState("");
-  const { dataID } = useSchoolCookie();
-
   const { schoolTeacher } = useSchoolTeacher();
-
-  const onTeacherSubject = (subjectID: string) => {
-    updateSchoolSubjectTeacher(dataID, subjectID, subjectTeacher).then(
-      (res) => {
-        if (res.status === 201) {
-          mutate(`api/view-school-subject/${dataID}`);
-          toast.success("Teacher Assigned Successfully");
-        } else {
-          toast.error(`${res.response.data.message}`);
-        }
-      }
-    );
-  };
-
-  const [state, setState] = useState("");
-
-  //   console.log(schoolSubject?.subjects);
-  //   console.log(schoolSubject);
+  const { schoolClassroom } = useSchoolClassRM();
 
   return (
     <div>
@@ -85,12 +63,12 @@ const ClassReportCardReady = () => {
           <div className="w-[200px] border-r">Class</div>
 
           <div className="w-[200px] border-r">Teacher Info</div>
-          <div className="w-[100px] border-r">Class</div>
+          <div className="w-[100px] border-r">Number of Students</div>
           <div className="w-[200px] border-r">view/Approve</div>
         </div>
 
         <div className=" w-[700px] overflow-hidden ">
-          {schoolSubject?.subjects?.map((props: any, i: number) => (
+          {schoolClassroom?.classRooms?.map((props: any, i: number) => (
             <div>
               <div>
                 <div
@@ -99,12 +77,10 @@ const ClassReportCardReady = () => {
                     i % 2 === 0 ? "bg-slate-50" : "bg-white"
                   }`}
                 >
-                  <div className="w-[200px] border-r">
-                    {props?.subjectTitle}
-                  </div>
+                  <div className="w-[200px] border-r">{props?.className}</div>
 
                   <div className={`w-[200px] border-r `}>
-                    {props?.subjectTeacherName ? (
+                    {props?.classTeacherName ? (
                       <div>
                         <TeacherInfo props={props?.teacherID} />
                       </div>
@@ -113,22 +89,18 @@ const ClassReportCardReady = () => {
                     )}
                   </div>
 
-                  <div className="w-[100px] border-r">{props?.designated}</div>
+                  <div className="w-[100px] border-r">
+                    {props?.students?.length}
+                  </div>
 
                   <div className="w-[200px] border-r">
                     <div className="mt-5 text-[13px] font-medium">
-                      <label
-                        htmlFor="assign_class_subject"
-                        className=" my-3 bg-blue-950 text-white py-2 px-4 rounded-md text-[12px] transition-all duration-300 hover:text-white cursor-pointer "
-                        onClick={() => {
-                          console.log("props: ", props._id);
-                          setState(props._id);
-
-                          console.log(state);
-                        }}
+                      <Link
+                        to={`/class-result-approve/${props?._id}`}
+                        className=" my-3 py-4 bg-blue-950 text-white px-4 rounded-md text-[12px] transition-all duration-300 hover:text-white cursor-pointer "
                       >
-                        + Assign Teacher
-                      </label>
+                        View/Approve Result
+                      </Link>
                       <div className="mt-5" />
                       {/* Put this part before </body> tag */}
                       <input
@@ -195,27 +167,6 @@ const ClassReportCardReady = () => {
                                 )}
                               </select>
                             </div>
-                          </div>
-
-                          <div className="w-full flex justify-end transition-all duration-300">
-                            {subjectTeacher !== "" ? (
-                              <label
-                                htmlFor="assign_class_subject"
-                                className="
-                                bg-blue-950 text-white px-6 py-2 rounded-md cursor-pointer
-                                "
-                                onClick={() => {
-                                  onTeacherSubject(state);
-                                }}
-                              >
-                                Proceed
-                              </label>
-                            ) : (
-                              <Button
-                                name="Can't Proceed"
-                                className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
-                              />
-                            )}
                           </div>
                         </div>
 

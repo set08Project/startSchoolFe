@@ -142,6 +142,19 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
+
+  console.log(
+    `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
+      schoolInfo![0]!?.presentTerm
+    })`
+  );
+
+  console.log(
+    gradeData?.reportCard.find((el: any) => {
+      return el.classInfo;
+    })
+  );
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -307,7 +320,8 @@ const CardReport = () => {
 
   const { classStudents } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
-  const [data, setData] = useState([]);
+
+  console.log(classStudents?.students);
 
   return (
     <div className="">

@@ -33,6 +33,7 @@ import {
   useClassSubject,
   useStudentGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { useParams } from "react-router-dom";
 
 interface iProps {
   props?: any;
@@ -190,6 +191,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[100px] border-r">{result?.grade}</div>
 
+      <div className="w-[300px] border-r">Class Teacher's Comment</div>
+
       <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
@@ -223,6 +226,10 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           //     }
           //   }}
         />
+      </div>
+
+      <div className="w-[180px] border-r">
+        <p className="w-[35px] ">Approve</p>
       </div>
     </div>
   );
@@ -305,8 +312,9 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 };
 
 const ReportCardApproved = () => {
-  const { teacherInfo } = useTeacherInfo();
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+  const { classID } = useParams();
+
+  const { oneClass } = useReadOneClassInfo(classID);
 
   const { state } = useReadMyClassInfoData(oneClass?.className);
 
@@ -328,7 +336,7 @@ const ReportCardApproved = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1700 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
@@ -354,15 +362,19 @@ const ReportCardApproved = () => {
 
           <div className="w-[100px] border-r">Total Points</div>
           <div className="w-[100px] border-r">Grade</div>
+          <div className="w-[300px] border-r">Class Teacher's Comment</div>
           <div className="w-[300px] border-r">Give Report/Remark</div>
 
           <div className="w-[180px] border-r">Submit Report</div>
+          <div className="w-[180px] border-r">
+            <p className="w-[35px] ">Approve</p>
+          </div>
         </div>
 
         <div
           className={` overflow-hidden`}
           style={{
-            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1700 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           {classStudents?.students?.length > 0 ? (

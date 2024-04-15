@@ -229,7 +229,7 @@ export const adminRouter = createBrowserRouter([
           // *****
           {
             index: true,
-            path: "class-result-approve",
+            path: "class-result-approve/:classID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ReportCardApproved />
