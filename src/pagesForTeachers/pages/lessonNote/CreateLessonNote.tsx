@@ -1,7 +1,5 @@
 import { useState } from "react";
-import "react-quill/dist/quill.snow.css";
 import { inputData } from "./InputData";
-import ReactQuill from "react-quill";
 import lodash from "lodash";
 import LittleHeader from "../../components/layout/LittleHeader";
 import InputWithLabel from "./InputWithLabel";
@@ -10,8 +8,13 @@ import { useTeacherInfo } from "../../hooks/useTeacher";
 import TextArea from "./TextArea";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import Editor from "./NoteCreated";
 
-document.title = "Lesson Note";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
+
+document.title = "Create Lesson Note ";
 
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"],
@@ -96,9 +99,14 @@ const CreateLesson = () => {
     });
   };
 
+  // const [editorState, setEditorState] = useState(() =>
+  //   EditorState.createEmpty()
+  // );
+
   return (
     <div>
-      <LittleHeader name={document.title} />
+      <p>Started</p>
+      <LittleHeader name={`${document.title} `} />
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 text-blue-950 mt-10">
         {inputData.map((el, i: number) => (
           <InputWithLabel
@@ -116,7 +124,6 @@ const CreateLesson = () => {
           />
         ))}
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {[
           { placeholder: "Previous Knowledge", name: "previousKnowledge" },
@@ -137,16 +144,17 @@ const CreateLesson = () => {
           />
         ))}
       </div>
-      <div className="w-full my-4 ">
-        <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={setValue}
-          className="h-[300px]"
-          modules={modules}
-          placeholder="Content"
+      <p className="text-[12px] mt-3">Lesson Note</p>
+      <div className="w-full my-1  min-h-[300px] border">
+        <CKEditor
+          editor={ClassicEditor}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setValue(data);
+          }}
         />
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16">
         {[
           { placeholder: "Evaluation", name: "evaluation" },
@@ -179,7 +187,7 @@ const CreateLesson = () => {
             <span>Processing...</span>
           </div>
         ) : (
-          "Submit"
+          "Submit "
         )}
       </button>
     </div>

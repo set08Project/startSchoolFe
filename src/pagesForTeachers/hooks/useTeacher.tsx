@@ -15,6 +15,7 @@ import {
   viewPurchases,
   viewStudentGrade,
   viewTeacherDetail,
+  viewTeacherLessonNote,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -255,4 +256,16 @@ export const usePurchasedData = (staffID: string) => {
     }
   );
   return { purchasedData };
+};
+
+export const useTeacherNote = (staffID: string) => {
+  const { data: teacherNote } = useSWR(
+    `api/view-teacher-lesson-note/${staffID}`,
+    () => {
+      return viewTeacherLessonNote(staffID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { teacherNote };
 };

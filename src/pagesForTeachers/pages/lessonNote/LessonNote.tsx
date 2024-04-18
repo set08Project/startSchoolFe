@@ -14,7 +14,7 @@ const LessonNote = () => {
     teacherInfo?._id
   );
 
-  document.title = "Teacher's Lession Notes";
+  document.title = "Teacher's Lesson Notes";
 
   return (
     <div>

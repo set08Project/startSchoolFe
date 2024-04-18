@@ -8,6 +8,45 @@ import { displayDelay, displayStaffComp } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
 import { useSchoolTeacher } from "../../hook/useSchoolAuth";
 import moment from "moment";
+import { useTeacherNote } from "../../../pagesForTeachers/hooks/useTeacher";
+import { FC } from "react";
+
+interface iProps {
+  props: string;
+}
+
+const TeacherRating: FC<iProps> = ({ props }) => {
+  const { teacherNote } = useTeacherNote(props);
+
+  let ratingData = teacherNote?.lessonNotes
+    ?.map((el: any) => {
+      return el?.rateData;
+    })
+    .flat()
+    .map((el: any) => {
+      return parseInt(el?.rate);
+    });
+
+  return (
+    <div>
+      {parseFloat(
+        (
+          ratingData?.reduce((a: number, b: number) => {
+            return a + b;
+          }, 0) / ratingData?.length
+        ).toFixed(2)
+      )
+        ? parseFloat(
+            (
+              ratingData?.reduce((a: number, b: number) => {
+                return a + b;
+              }, 0) / ratingData?.length
+            ).toFixed(2)
+          )
+        : 0}
+    </div>
+  );
+};
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
@@ -68,7 +107,7 @@ const ViewStaffScreen = () => {
             <div key={props}>
               <div>
                 <div
-                  className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+                  className={`w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden ${
                     i % 2 === 0 ? "bg-slate-50" : "bg-white"
                   }`}
                 >
@@ -144,7 +183,9 @@ const ViewStaffScreen = () => {
                       : "Not Yet Assigned"}
                   </div>
 
-                  <div className="w-[80px] border-r">{props?.staffRating}</div>
+                  <div className="w-[80px] border-r">
+                    <TeacherRating props={props?._id} />
+                  </div>
 
                   <Link
                     to={`staff-details/${props?._id}`}

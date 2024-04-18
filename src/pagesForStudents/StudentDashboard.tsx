@@ -20,6 +20,7 @@ import {
 } from "../pages/hook/useSchoolAuth";
 import BlockPaymentScreen from "./BlockPaymentScreen";
 import PerformanceRecord from "./pages/screens/PerformanceRecord";
+import { Link } from "react-router-dom";
 // import StudentPerformance from "./pages/Chart/PerformingStudent";
 // import Calendar from "./pages/Chart/Calendar";
 
@@ -51,10 +52,7 @@ const StudentDashboard = () => {
   }
 
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
-  // const {} = useReadOneClassInfo(oneClass?._id)
-
   const { termData } = useViewTermDetail(termID);
-  const { state } = useReadMyClassInfo();
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -63,6 +61,14 @@ const StudentDashboard = () => {
           <div className="mb-4 text-medium capitalize font-semibold flex gap-2">
             <div> My Class:</div>
             <div className="font-bold">{studentInfo?.classAssigned}</div>
+          </div>
+          <p className={`capitalize font-medium text-red-500`}>ready now</p>
+          <div className="flex ">
+            <Link to={`/print-result`}>
+              <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
+                view this term's report card
+              </div>
+            </Link>
           </div>
           <Personal />
 

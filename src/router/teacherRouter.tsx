@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+const ReportCardPrint = React.lazy(
+  () => import("../pagesForTeachers/pages/CardTemplate/ReportCardPrint")
+);
 const CardReport = React.lazy(
   () => import("../pagesForTeachers/pages/ReportCard/CardReport")
 );
@@ -129,6 +132,14 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <Schedule />
+          </Suspense>
+        ),
+      },
+      {
+        path: "generate-report-card",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ReportCardPrint />
           </Suspense>
         ),
       },

@@ -4,35 +4,15 @@ import { useStudentInfo } from "../../hooks/useStudentHook";
 import { createStudentArticle } from "../../api/studentAPI";
 import { useNavigate } from "react-router-dom";
 
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
+
 const CreateArticle = () => {
   const [area, setArea] = useState<string>("");
   const [value, setValue] = useState<string>("");
   const [iValue, setIValue] = useState<string>("");
   const navigate = useNavigate();
-
-  const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"],
-    ["blockquote", "code-block"],
-    ["link", "image", "video", "formula"],
-
-    [{ header: 1 }, { header: 2 }],
-    [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-    [{ script: "sub" }, { script: "super" }],
-    [{ indent: "-1" }, { indent: "+1" }],
-    [{ direction: "rtl" }],
-
-    [{ size: ["small", false, "large", "huge"] }],
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }],
-    [{ align: [] }],
-
-    ["clean"],
-  ];
-
-  const modules = {
-    toolbar: toolbarOptions,
-  };
 
   const { studentInfo } = useStudentInfo();
 
@@ -65,15 +45,17 @@ const CreateArticle = () => {
             className=" capitalize bg-white border-b rounded-none outline-none w-full px-4 h-full text-blue-950"
           />
         </div>
-        <div className=" mt-10 mb-20 h-[500px]">
-          <ReactQuill
-            theme="snow"
-            value={value}
-            onChange={setValue}
-            className="h-full text-blue-950"
-            modules={modules}
-            placeholder="Content"
-          />
+        <div className=" mt-10 mb-20 min-h-[500px]">
+          <p className="text-[12px] mt-3">Article</p>
+          <div className="w-full my-1  min-h-[300px] border">
+            <CKEditor
+              editor={ClassicEditor}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setValue(data);
+              }}
+            />
+          </div>
         </div>
         <div className=" w-full">
           <button

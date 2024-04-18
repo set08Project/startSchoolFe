@@ -424,3 +424,15 @@ export const viewPurchases = async (staffID: string) => {
     return error;
   }
 };
+
+export const viewTeacherLessonNote = async (staffID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-teacher-lesson-note/${staffID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

@@ -9,18 +9,7 @@ import {
   useSchoolSessionData,
   useStudentAttendance,
 } from "../../../pages/hook/useSchoolAuth";
-// import {
-//   useClassStudent,
-//   useClassSubject,
-//   useStudentGrade,
-//   useTeacherInfo,
-// } from "../../hooks/useTeacher";
-// import {
-//   readClassInfo,
-//   remark,
-//   reportCardRemark,
-//   viewStudentGrade,
-// } from "../../api/teachersAPI";
+
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -34,6 +23,7 @@ import {
   useStudentGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useParams } from "react-router-dom";
+import { adminReport } from "../../api/schoolAPIs";
 
 interface iProps {
   props?: any;
@@ -96,6 +86,15 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
+  const { state } = useReadMyClassInfoData("JSS 1A");
+  const { subjectData } = useClassSubject(state?._id);
+
+  // console.log(
+  //   subjectData?.map((el: any) => {
+  //     return el.subjectTitle;
+  //   })
+  // );
+
   let result = gradeData?.reportCard
     .find((el: any) => {
       return (
@@ -109,6 +108,22 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
+      <div>
+        <div className="w-[260px] ">
+          <p className="pl-1 font-bold text-[12px]">
+            {result?.subject ? result?.subject : "Have't Entered"}
+          </p>
+          <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+            <p className="w-[30px] border-r">1st</p>
+            <p className="w-[30px] border-r">2nd</p>
+            <p className="w-[30px] border-r">3rd</p>
+            <p className="w-[30px] border-r">4th</p>
+            <p className="w-[35px] border-r">Exam</p>
+            <p className="w-[35px] ">Total</p>
+            <p className="w-[35px] ">Grade</p>
+          </div>
+        </div>
+      </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
         <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
         <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
@@ -127,13 +142,14 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 };
 
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
+  const { classID } = useParams();
   const { data } = useSchoolData();
   const { gradeData } = useStudentGrade(props?._id);
+  const { oneClass } = useReadOneClassInfo(classID!);
 
-  const { state } = useReadMyClassInfoData("JSS 1A");
-  const { classStudents } = useClassStudent(state?._id!);
+  const { subjectData } = useClassSubject(oneClass?._id);
+  const { classStudents } = useClassStudent(oneClass?._id!);
 
-  const { subjectData } = useClassSubject(state?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   let result = gradeData?.reportCard.find((el: any) => {
@@ -150,7 +166,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   );
   return (
     <div
-      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
@@ -191,13 +207,19 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[100px] border-r">{result?.grade}</div>
 
-      <div className="w-[300px] border-r">Class Teacher's Comment</div>
+      <div className="w-[300px] border-r">
+        {result?.classTeacherComment
+          ? result?.classTeacherComment
+          : "No Comment Yet"}
+      </div>
 
       <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder={`${"Give a Remark"} `}
-          defaultValue={"Peter"}
+          placeholder={`${
+            result?.adminComment ? result?.adminComment : "Give a Remark"
+          } `}
+          defaultValue={result?.adminComment ? result?.adminComment : ""}
           value={stateValue}
           onChange={(e) => {
             setStateValue(e.target.value);
@@ -207,24 +229,29 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name="Add Comment"
-          className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-          //   onClick={() => {
-          //     if (stateValue !== "") {
-          //       reportCardRemark(teacherInfo?._id, props?._id, {
-          //         teacherComment: stateValue,
-          //       }).then((res: any) => {
-          //         if (res.status === 201) {
-          //           mutate(`api/student-report-card/${props?._id}`);
-          //           toast.success("Report Card Report Noted");
-          //         } else {
-          //           toast.error(`${res?.response?.data?.message}`);
-          //         }
-          //       });
-          //     } else {
-          //       toast.error("Please give a REMARK");
-          //     }
-          //   }}
+          name={result?.adminComment ? "Update Comment" : "Add Comment"}
+          className={`pl-4 py-3 w-[85%]  text-white ${
+            result?.adminComment
+              ? "bg-black hover:bg-neutral-800 "
+              : "bg-red-500 hover:bg-red-600 "
+          } transition-all duration-300`}
+          onClick={() => {
+            if (stateValue !== "") {
+              adminReport(data?._id, props?._id, stateValue).then(
+                (res: any) => {
+                  console.log(res);
+                  if (res.status === 201) {
+                    mutate(`api/student-report-card/${props?._id}`);
+                    toast.success("Report Card Report Noted");
+                  } else {
+                    toast.error(`${res?.response?.data?.message}`);
+                  }
+                }
+              );
+            } else {
+              toast.error("Please give a REMARK");
+            }
+          }}
         />
       </div>
 
@@ -297,16 +324,17 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 const SubjectMap: FC<iProps> = ({ props }) => {
   return (
     <div className="w-[260px] border-r ">
-      <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
-      <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+      <p>Subject Offered</p>
+      {/* <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p> */}
+      {/* <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
         <p className="w-[30px] border-r">1st</p>
         <p className="w-[30px] border-r">2nd</p>
         <p className="w-[30px] border-r">3rd</p>
         <p className="w-[30px] border-r">4th</p>
         <p className="w-[35px] border-r">Exam</p>
         <p className="w-[35px] ">Total</p>
-        <p className="w-[35px] ">Grade</p>
-      </div>
+        <p className="w-[35px] ">Grade</p> */}
+      {/* </div> */}
     </div>
   );
 };
@@ -327,7 +355,7 @@ const ReportCardApproved = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Class Teacher Remark"} />
+      <LittleHeader name={"Admin's Remark and Approval"} />
 
       <div className="mt-10" />
 

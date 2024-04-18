@@ -29,10 +29,11 @@ import {
   useReadOneClassInfo,
   useStudentInfo,
 } from "../hooks/useStudentHook";
-import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { schoolFeePayment } from "../api/studentAPI";
 import { useState } from "react";
+import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
+import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,9 @@ const Sider = () => {
   const showing = useSelector((state: any) => state.showStaffComp);
   const { studentInfo } = useStudentInfo();
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
+  const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs);
+
+  console.log(schoolInfo);
 
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
@@ -111,10 +115,14 @@ const Sider = () => {
             ID: {studentInfo?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
+            Session:{" "}
+            <span>
+              {schoolAnnouncement && schoolAnnouncement?.presentSession}
+            </span>
           </p>
           <p className="break-words font-bold  text-slate-400  text-[12px] mt-1">
-            Term: <span>{schoolInfo && schoolInfo[0]?.presentTerm}</span>
+            Term:{" "}
+            <span>{schoolAnnouncement && schoolAnnouncement.presentTerm}</span>
           </p>
           <div className="text-[12px] font-bold">
             {(

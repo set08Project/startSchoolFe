@@ -945,3 +945,21 @@ export const updateSchoolFee = async (schoolFeeID: string) => {
     return error;
   }
 };
+
+export const adminReport = async (
+  schoolID: string,
+  studentID: string,
+  adminComment: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/admin-report-card/${schoolID}/${studentID}`, {
+        adminComment,
+      })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

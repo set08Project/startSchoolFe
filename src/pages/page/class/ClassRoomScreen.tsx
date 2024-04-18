@@ -143,19 +143,103 @@ const ClassRoomScreen = () => {
                         <label className="text-[10px] font-medium">
                           1st Term
                         </label>
-                        <p className="mt-3 font-bold">90%</p>
+                        <p
+                          className={`mt-3 font-bold *:
+                         ${
+                           (props?.schoolFeesHistory?.length /
+                             props?.students?.length) *
+                             100 >=
+                           70
+                             ? "text-blue-950"
+                             : "text-red-500"
+                         } 
+                        `}
+                        >
+                          {parseFloat(
+                            (
+                              (props?.schoolFeesHistory?.length /
+                                props?.students?.length) *
+                              100
+                            ).toFixed(2)
+                          )
+                            ? parseFloat(
+                                (
+                                  (props?.schoolFeesHistory?.length /
+                                    props?.students?.length) *
+                                  100
+                                ).toFixed(2)
+                              )
+                            : 0}
+                          %
+                        </p>
                       </div>
                       <div className="flex flex-col items-center">
                         <label className="text-[10px] font-medium">
                           2nd Term
                         </label>
-                        <p className="mt-3 font-bold text-red-500">0%</p>
+                        <p
+                          className={`mt-3 font-bold *:
+                         ${
+                           (props?.schoolFeesHistory?.length /
+                             props?.students?.length) *
+                             100 >=
+                           70
+                             ? "text-blue-950"
+                             : "text-red-500"
+                         } 
+                        `}
+                        >
+                          {parseFloat(
+                            (
+                              (props?.schoolFeesHistory2?.length /
+                                props?.students?.length) *
+                              100
+                            ).toFixed(2)
+                          )
+                            ? parseFloat(
+                                (
+                                  (props?.schoolFeesHistory2?.length /
+                                    props?.students?.length) *
+                                  100
+                                ).toFixed(2)
+                              )
+                            : 0}
+                          %
+                        </p>
                       </div>
                       <div className="flex flex-col items-center">
                         <label className="text-[10px] font-medium">
                           3rd Term
                         </label>
-                        <p className="mt-3 font-bold text-red-500">0%</p>
+                        <p
+                          className={`mt-3 font-bold *:
+                         ${
+                           (props?.schoolFeesHistory3?.length /
+                             props?.students?.length) *
+                             100 >=
+                           70
+                             ? "text-blue-950"
+                             : "text-red-500"
+                         } 
+                        `}
+                        >
+                          {parseFloat(
+                            (
+                              (props?.schoolFeesHistory3?.length /
+                                props?.students?.length) *
+                              100
+                            ).toFixed(2)
+                          )
+                            ? parseFloat(
+                                (
+                                  (props?.schoolFeesHistory?.length /
+                                    props?.students?.length) *
+                                  100
+                                ).toFixed(2)
+                              )
+                            : 0}
+                          %
+                        </p>
                       </div>
                     </div>
 

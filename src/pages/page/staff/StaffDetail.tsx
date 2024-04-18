@@ -16,6 +16,8 @@ const StaffDetail = () => {
   const [show, setShow] = useState<boolean>(false);
   const [salary, setSalary] = useState<string>("");
 
+  console.log("hummmm", teacherDetail);
+
   return (
     <div>
       <LittleHeader name="Staff Details" back />

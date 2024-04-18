@@ -4,12 +4,15 @@ import { MdAutoAwesome } from "react-icons/md";
 import {
   useClassLessonNote,
   useReadMyClassInfo,
+  useReadOneClassInfo,
+  useStudentInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import LittleHeader from "../../../components/layout/LittleHeader";
 
 const ClassLessonNote = () => {
-  const { state } = useReadMyClassInfo();
-  const { classLessonNote } = useClassLessonNote(state?._id);
+  const { studentInfo } = useStudentInfo();
+
+  const { classLessonNote } = useClassLessonNote(studentInfo?.presentClassID);
 
   const readNote = classLessonNote?.lessonNotes.filter(
     (item: any) => item?.adminSignation === true
@@ -17,7 +20,7 @@ const ClassLessonNote = () => {
 
   return (
     <div>
-      <LittleHeader name="Teacher's Lession Notes" />
+      <LittleHeader name="Teacher's Lesson Notes" />
       <div className="min-h-[82vh] text-blue-950">
         <div>
           <div className="flex float-end"></div>

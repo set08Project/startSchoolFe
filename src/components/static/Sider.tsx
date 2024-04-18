@@ -108,14 +108,14 @@ const Sider = () => {
             ID: {data?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: {loading ? "" : schoolInfo[0]?.year}
+            Session: {loading ? "" : data?.presentSession}
           </p>
           <p className="text-[12px] font-bold">
             Term:{" "}
             {loading ? (
               ""
-            ) : schoolInfo[0]?.presentTerm ? (
-              schoolInfo[0]?.presentTerm
+            ) : data.presentTerm ? (
+              data.presentTerm
             ) : (
               <span className="text-red-400 ml-1">Please create TERM</span>
             )}

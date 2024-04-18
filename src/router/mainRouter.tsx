@@ -190,6 +190,7 @@ export const mainRouter = createBrowserRouter([
       </Suspense>
     ),
   },
+
   {
     path: "/school/:schoolName",
     element: (

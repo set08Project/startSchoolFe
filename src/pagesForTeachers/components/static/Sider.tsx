@@ -18,7 +18,7 @@ import {
 } from "../../../global/reduxState";
 import pix from "../../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
-import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useSchoolAnnouncement, useTeacherInfo } from "../../hooks/useTeacher";
 import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -28,6 +28,7 @@ const Sider = () => {
   const showing = useSelector((state: any) => state.showStaffComp);
   const { teacherInfo } = useTeacherInfo();
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -91,12 +92,15 @@ const Sider = () => {
             ID: {teacherInfo?.enrollmentID}
           </p>
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
-            Session: <span>{schoolInfo && schoolInfo[0]?.year}</span>
+            Session:{" "}
+            <span>
+              {schoolAnnouncement && schoolAnnouncement?.presentSession}
+            </span>
           </p>
           <p className="break-words font-medium text-[12px] my-2 -mt-1">
             Term:{" "}
             <span className="text-[12px]">
-              {schoolInfo && schoolInfo[0]?.presentTerm}
+              {schoolAnnouncement && schoolAnnouncement?.presentTerm}
             </span>
           </p>
           <div className="text-[12px] font-bold">

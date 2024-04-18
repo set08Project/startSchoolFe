@@ -103,6 +103,21 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
+      <div className="w-[260px] border-">
+        <p className="pl-1 font-bold text-[15px]  ">
+          {result?.subject ? result?.subject : "Have't Entered"}
+        </p>
+
+        <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+          <p className="w-[30px] border-r">1st</p>
+          <p className="w-[30px] border-r">2nd</p>
+          <p className="w-[30px] border-r">3rd</p>
+          <p className="w-[30px] border-r">4th</p>
+          <p className="w-[35px] border-r">Exam</p>
+          <p className="w-[35px] ">Total</p>
+          <p className="w-[35px] ">Grade</p>
+        </div>
+      </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
         <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
         <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
@@ -123,11 +138,9 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { teacherInfo } = useTeacherInfo();
   const { gradeData } = useStudentGrade(props?._id);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
-  const { classStudents } = useClassStudent(state?._id!);
-
-  const { subjectData } = useClassSubject(state?._id);
+  const { subjectData } = useClassSubject(oneClass?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   let result = gradeData?.reportCard.find((el: any) => {
@@ -143,21 +156,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
-  console.log(
-    `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-      schoolInfo![0]!?.presentTerm
-    })`
-  );
-
-  console.log(
-    gradeData?.reportCard.find((el: any) => {
-      return el.classInfo;
-    })
-  );
-
   return (
     <div
-      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
@@ -201,8 +202,14 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder={`${"Give a Remark"} `}
-          defaultValue={"Peter"}
+          placeholder={`${
+            result?.classTeacherComment
+              ? result?.classTeacherComment
+              : "Give a Remark"
+          } `}
+          defaultValue={
+            result?.classTeacherComment ? result?.classTeacherComment : ""
+          }
           value={stateValue}
           onChange={(e) => {
             setStateValue(e.target.value);
@@ -212,14 +219,20 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name="Add Comment"
-          className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+          name={result?.classTeacherComment ? "Update Comment" : "Add Comment"}
+          className={`pl-4 py-3 w-[85%]  text-white ${
+            result?.classTeacherComment
+              ? "bg-black hover:bg-neutral-800 "
+              : "bg-red-500 hover:bg-red-600 "
+          } transition-all duration-300`}
           onClick={() => {
             if (stateValue !== "") {
               reportCardRemark(teacherInfo?._id, props?._id, {
                 teacherComment: stateValue,
               }).then((res: any) => {
                 if (res.status === 201) {
+                  console.log(res);
+
                   mutate(`api/student-report-card/${props?._id}`);
                   toast.success("Report Card Report Noted");
                 } else {
@@ -296,20 +309,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 };
 
 const SubjectMap: FC<iProps> = ({ props }) => {
-  return (
-    <div className="w-[260px] border-r ">
-      <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
-      <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-        <p className="w-[30px] border-r">1st</p>
-        <p className="w-[30px] border-r">2nd</p>
-        <p className="w-[30px] border-r">3rd</p>
-        <p className="w-[30px] border-r">4th</p>
-        <p className="w-[35px] border-r">Exam</p>
-        <p className="w-[35px] ">Total</p>
-        <p className="w-[35px] ">Grade</p>
-      </div>
-    </div>
-  );
+  return <div className="w-[260px] border-r ">subject Offered</div>;
 };
 
 const CardReport = () => {
@@ -320,8 +320,6 @@ const CardReport = () => {
 
   const { classStudents } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
-
-  console.log(classStudents?.students);
 
   return (
     <div className="">

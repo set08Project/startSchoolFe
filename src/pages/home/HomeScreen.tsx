@@ -213,10 +213,17 @@ const HomeScreen = () => {
               />
 
               <Button
-                name="Quick Chat"
+                name="Quick Chat (coming soon)"
                 className="bg-orange-600 hover:bg-orange-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
                 onClick={handleDisplayStudent}
               />
+
+              <Link to="/class-report-card-ready">
+                <Button
+                  name="Prepare Result Card"
+                  className="bg-neutral-700 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                />
+              </Link>
 
               <Link to="/school-fees-history">
                 <Button

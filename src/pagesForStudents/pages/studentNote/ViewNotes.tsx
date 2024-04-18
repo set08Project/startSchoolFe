@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useLessonNote } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
@@ -7,6 +7,7 @@ import { rateNote } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 
 const ViewClassNoteDetail = () => {
+  const navigate = useNavigate();
   const { noteID } = useParams();
   const { studentInfo } = useStudentInfo();
   const { lessonNoteData } = useLessonNote(noteID!);
@@ -129,7 +130,11 @@ const ViewClassNoteDetail = () => {
               name={"Rate Now"}
               className="bg-blue-950 text-white"
               onClick={() => {
-                rateNote(studentInfo?._id, noteID!, state).then((res) => {});
+                rateNote(studentInfo?._id, noteID!, state)
+                  .then((res) => {})
+                  .then(() => {
+                    navigate("/lesson");
+                  });
               }}
             />
           )}

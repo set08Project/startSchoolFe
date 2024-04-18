@@ -14,7 +14,11 @@ import {
   readClassInfo,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
-import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import toast, { Toaster } from "react-hot-toast";
 
 interface iProps {
   props?: string;
@@ -53,19 +57,18 @@ const Remark: FC<iProps> = ({ props, data }) => {
   );
 };
 
-const Attendance: FC<iProps> = ({ id, props, data }) => {
+const Attendance: FC<iProps> = ({ id, data }) => {
   const { teacherInfo } = useTeacherInfo();
-  const { state } = useReadMyClassInfoData(teacherInfo.classesAssigned);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   let name2 = data?.studentFirstName;
 
-  const { attendance } = useAttendance(props!);
+  const { attendance } = useAttendance(teacherInfo?.presentClassID!);
 
   let result = attendance?.attendance?.find((el: any) => {
     return el?.studentFirstName === name2;
   });
-  // api/view-class-attendance/${classID}
-  // api/view-all-class-students
+
   return (
     <div className="flex justify-between px-4">
       {}
@@ -79,15 +82,15 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           checked={result?.absent}
           onChange={() => {
             markAttendanceAbsent(teacherInfo?._id, id!).then((res: any) => {
+              toast.success("student has been marked Absent for Today");
               if (res.status === 201) {
-                mutate(`api/view-all-class-students/${state?._id!}`);
-                // mutate(`api/view-class-attendance/${state?._id!}`);
+                mutate(`api/view-all-class-students/${oneClass?._id!}`);
               }
             });
           }}
         />
       </div>
-      {/* api/view-class-attendance/${classID} */}
+
       <div className="flex flex-col items-center">
         <label>Present</label>
         <input
@@ -98,8 +101,9 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
           checked={result?.present}
           onChange={() => {
             markAttendancePresent(teacherInfo?._id, id!).then((res: any) => {
+              toast.success("student has been marked Present for Today");
               if (res.status === 201) {
-                mutate(`api/view-all-class-students/${state?._id!}`);
+                mutate(`api/view-all-class-students/${oneClass?._id!}`);
               }
             });
           }}
@@ -111,18 +115,14 @@ const Attendance: FC<iProps> = ({ id, props, data }) => {
 
 const AttendanceScreen = () => {
   const { teacherInfo } = useTeacherInfo();
-  const [classInfo, setClassInfo] = useState<any>();
 
-  useEffect(() => {
-    readClassInfo(teacherInfo?.classesAssigned).then((res: any) => {
-      setClassInfo(res?.data);
-    });
-  }, []);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { classStudents } = useClassStudent(classInfo?._id);
+  const { classStudents } = useClassStudent(oneClass?._id);
 
   return (
     <div className="">
+      <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
       <LittleHeader name={"Record Students Attendance"} />
@@ -167,14 +167,14 @@ const AttendanceScreen = () => {
                       </div>
 
                       <Remark
-                        props={classInfo?._id}
+                        props={oneClass?._id}
                         data={props}
                         id={props?._id}
                       />
 
                       <div className="w-[200px] border-r">
                         <Attendance
-                          props={classInfo?._id}
+                          props={oneClass?._id}
                           id={props?._id}
                           data={props}
                         />

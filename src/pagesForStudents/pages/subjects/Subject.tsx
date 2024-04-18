@@ -10,7 +10,8 @@ import {
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import { useSujectInfo } from "../../../pagesForTeachers/hooks/useTeacher";
-import { readClassInfo } from "../../api/studentAPI";
+import { readClassInfo, readOneClassInfo } from "../../api/studentAPI";
+import { useClassSubjects } from "../../../pages/hook/useSchoolAuth";
 
 document.title = "view teacher subject";
 
@@ -39,15 +40,12 @@ const SubjectRecord: FC<iProp> = ({ ass, props, quiz, teach, test }) => {
 
 const MyClassroom: FC = () => {
   const { studentInfo } = useStudentInfo();
-  const [state, setState] = useState<any>([]);
 
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+  const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
 
-  useEffect(() => {
-    readClassInfo(oneClass?.className).then((res: any) => {
-      setState(res?.data);
-    });
-  }, []);
+
+  console.log("read: ", readSubject);
 
   return (
     <div className="w-full">
@@ -70,7 +68,7 @@ const MyClassroom: FC = () => {
       </div>
       <div>
         <div className="font-bold mt-5">Student class Subjects</div>
-        <div className="text-[12px] opacity-50">Subject teacher taking</div>
+        <div className="text-[12px] opacity-50">Subject teacher takes</div>
       </div>
 
       <div className=" w-[95%] overflow-x-auto">
@@ -86,7 +84,7 @@ const MyClassroom: FC = () => {
             <div className="w-[200px] border-r">View Details</div>
           </div>
 
-          {state?.classSubjects?.map((props: any, i: number) => {
+          {readSubject?.map((props: any, i: number) => {
             return (
               <div
                 key={props.id}

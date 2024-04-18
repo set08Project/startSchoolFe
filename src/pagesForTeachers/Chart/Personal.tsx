@@ -1,7 +1,11 @@
 import { FC, useState } from "react";
 import Chart from "./Chart";
 import GetAnnouncement from "./GetAnnouncement";
-import { useTeacherInfo, useTeacherSchedule } from "../hooks/useTeacher";
+import {
+  useTeacherInfo,
+  useTeacherNote,
+  useTeacherSchedule,
+} from "../hooks/useTeacher";
 import moment from "moment";
 import lodash from "lodash";
 import { FaStar } from "react-icons/fa6";
@@ -27,6 +31,23 @@ const Personal: FC = () => {
 
   const data = Object.values(lodash.groupBy(dataData?.schedule, "day"));
 
+  const { teacherNote } = useTeacherNote(teacherInfo?._id);
+
+  let ratingData = teacherNote?.lessonNotes
+    ?.map((el: any) => {
+      return el?.rateData;
+    })
+    .flat()
+    .map((el: any) => {
+      return parseInt(el?.rate);
+    });
+
+  let rating: any = (
+    ratingData?.reduce((a: number, b: number) => {
+      return a + b;
+    }, 0) / ratingData?.length
+  ).toFixed(2);
+
   return (
     <div>
       <div className="mb-2 text-blue-950">
@@ -34,7 +55,8 @@ const Personal: FC = () => {
           Performance Rating:{" "}
           {teacherInfo?.staffRating ? (
             <p className="text-[20px] text-blue-900">
-              {`\u2605`.repeat(teacherInfo?.staffRating)}
+              {`\u2605`.repeat(rating)}{" "}
+              <span className="text-[12px] font-bold">({rating})</span>
             </p>
           ) : (
             <p className="text-[12px]">No Rating Yet</p>
