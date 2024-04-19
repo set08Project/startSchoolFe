@@ -1,16 +1,13 @@
 import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "./pages/Chart/Personal";
-import {
-  useReadOneClassInfo,
-  useStudentInfo,
-  useViewPerformance,
-} from "./hooks/useStudentHook";
+import { useReadOneClassInfo, useStudentInfo } from "./hooks/useStudentHook";
 import StudentPerformance from "./pages/Chart/PerformingStudent";
 import Calendar from "./pages/Chart/Calendar";
 import pix from "./../assets/pix.jpg";
 import MakeActiveClass from "./pages/complain/MarkActiveClass";
 import UpdateEmail from "./UpdateEmail";
 import {
+  useSchoolDataByName,
   useSchoolSessionData,
   useViewTermDetail,
 } from "../pages/hook/useSchoolAuth";
@@ -19,6 +16,7 @@ import PerformanceRecord from "./pages/screens/PerformanceRecord";
 import { Link } from "react-router-dom";
 
 import MakeComplains from "./pages/report/MarkCOmplains";
+import { useStudentGrade } from "../pagesForTeachers/hooks/useTeacher";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
@@ -49,6 +47,16 @@ const StudentDashboard = () => {
 
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
   const { termData } = useViewTermDetail(termID);
+  const { gradeData } = useStudentGrade(studentInfo?._id);
+
+  const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
+
+  let resultData = gradeData?.reportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
+    );
+  });
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -58,13 +66,25 @@ const StudentDashboard = () => {
             <div> My Class:</div>
             <div className="font-bold">{studentInfo?.classAssigned}</div>
           </div>
-          <p className={`capitalize font-medium text-red-500`}>ready now</p>
+          <p
+            className={`capitalize font-medium ${
+              resultData?.approve ? "text-red-500" : "text-blue-950"
+            }`}
+          >
+            {resultData?.approve ? "ready now" : "not yet Ready"}
+          </p>
           <div className="flex ">
-            <Link to={`/print-result`}>
+            {resultData?.approve ? (
+              <Link to={`/print-result`}>
+                <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
+                  view this term's report card
+                </div>
+              </Link>
+            ) : (
               <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
-                view this term's report card
+                Term's report card(Not Ready)
               </div>
-            </Link>
+            )}
           </div>
 
           <div className="mt-5">
