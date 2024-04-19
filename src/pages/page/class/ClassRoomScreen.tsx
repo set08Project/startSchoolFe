@@ -7,9 +7,12 @@ import { displayClass } from "../../../global/reduxState";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
-import { useSchoolClassRM } from "../../hook/useSchoolAuth";
+import { useSchoolClassRM, useSchoolData } from "../../hook/useSchoolAuth";
 import { FC } from "react";
-import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useClassStudent,
+  useTeacherDetail,
+} from "../../../pagesForTeachers/hooks/useTeacher";
 import lodash from "lodash";
 
 interface iProps {
@@ -35,6 +38,21 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
       </div>
     </div>
   );
+};
+
+const ClassStudents: FC<iProps> = ({ props }) => {
+  const { classStudents } = useClassStudent(props);
+
+  const pref = classStudents?.students?.map((props: any) => {
+    return props.totalPerformance === undefined ? 0 : props.totalPerformance;
+  });
+
+  const rate =
+    pref?.reduce((a: number, b: number) => {
+      return a + b;
+    }, 0) / pref.length;
+
+  return <div className="">{rate ? rate : 0}%</div>;
 };
 
 const ClassRoomScreen = () => {
@@ -252,7 +270,9 @@ const ClassRoomScreen = () => {
                       )}
                     </div>
 
-                    <div className="w-[150px] border-r  ">90%</div>
+                    <div className="w-[150px] border-r  ">
+                      <ClassStudents props={props?._id} />
+                    </div>
 
                     <Link
                       to={`class-details/${props?._id}`}

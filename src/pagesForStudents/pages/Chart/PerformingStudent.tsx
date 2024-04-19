@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import pix from "../../../assets/pix.jpg";
-import { readClassInfo } from "../../api/studentAPI";
 import {
   useReadOneClassInfo,
   useStudentInfo,
@@ -9,18 +7,8 @@ import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 
 const StudentPerformance = () => {
   const { studentInfo } = useStudentInfo();
-  //   const { perform } = useTopSchoolStudent(data?._id);
-
-  const [state, setState] = useState<any>({});
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
-
-  useEffect(() => {
-    readClassInfo(oneClass?.className).then((res) => {
-      setState(res.data);
-    });
-  }, []);
-
-  const { classStudents } = useClassStudent(state?._id);
+  const { classStudents } = useClassStudent(oneClass?._id);
 
   return (
     <div className="">
@@ -30,7 +18,7 @@ const StudentPerformance = () => {
             {i < 3 && (
               <div>
                 <img
-                  src={pix}
+                  src={props?.avatar ? props?.avatar : pix}
                   alt="Pizza"
                   className="w-[280px] h-[82%] object-cover "
                 />

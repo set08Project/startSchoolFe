@@ -18,13 +18,11 @@ const AdminLessonNote = () => {
   const [response, setResponse] = useState("");
   const [day, setDay] = useState("");
 
-  console.log("data", data);
   const handleSubmit = (el: any) => {
     adminlessonNoteReply(data?._id, el, {
       responseDetail: response,
       deadline: day,
     }).then((res) => {
-      console.log("yes", res);
       Swal.fire({
         title: "Success!",
         text: "Response sent successfully.",
@@ -45,57 +43,9 @@ const AdminLessonNote = () => {
               <div>
                 {notes?.data?.lessonNotes?.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-3 ">
-                    {/* {notes?.data?.lessonNotes?.map((props: any) => (
-                      <NavLink
-                        key={props?._id}
-                        to={`/lesson-note/${props?._id}`}
-                      >
-                        <div
-                          className={`min-h-[200px] shadow-sm border flex justify-center items-center flex-col rounded-md `}
-                        >
-                          <div className="card-body text-gray-500 px-2 ">
-                            <div className="h-14 w-full flex justify-center items text-[30px]">
-                              <FaBook />
-                            </div>
-                            <div className="flex flex-col text-center">
-                              <h2 className="font-medium">
-                                {props?.topic ? (
-                                  props?.topic
-                                ) : (
-                                  <div className="opacity-50">No Topic</div>
-                                )}
-                              </h2>
-                              <p className="pt-5 text-left text-[12px] ">
-                                {props?.summary ? (
-                                  props?.summary
-                                ) : (
-                                  <div className="opacity-50">No summary</div>
-                                )}
-                              </p>
-
-                              <div className="text-[12px] w-full flex justify-start  mt-10 font-medium">
-                                <p>{props?.classes}</p>
-                                <p>{props?.subject}</p>
-                                <p
-                                  className={`${
-                                    props?.adminSignation
-                                      ? "text-green-500 font-bold"
-                                      : "text-red-500 font-bold"
-                                  }`}
-                                >
-                                  {props?.adminSignation
-                                    ? "Approved"
-                                    : "Not-Approved"}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </NavLink>
-                    ))} */}
                     {notes?.data?.lessonNotes?.map((props: any) => (
                       <div
-                        className={`min-h-[200px] bxs border flex justify-between items-center flex-col rounded-lg `}
+                        className={`min-h-[200px] border flex justify-between items-center flex-col rounded-md  `}
                       >
                         <NavLink
                           key={props?._id}
@@ -125,9 +75,12 @@ const AdminLessonNote = () => {
                                   )}
                                 </h1>
                               </div>
-                              <div className="flex items-center gap-5">
+                              <div className="mt-4">
+                                <hr />
+                              </div>
+                              <div className="flex items-center gap-5 my-2">
                                 <h1 className="font-medium">Notes:</h1>
-                                <p className="pt-5 text-[15px] flex justify-start items-center ">
+                                <p className="pt-5 text-[15px] flex justify-start items-center text-slate-500">
                                   {props?.summary ? (
                                     props?.summary.substring(0, 500)
                                   ) : (
@@ -136,7 +89,7 @@ const AdminLessonNote = () => {
                                   ...
                                 </p>
                               </div>
-                              <div className="w-full my-[10px] flex items-center gap-5">
+                              <div className="w-full my-[10px] flex items-center gap-5 mt-10">
                                 <h1 className="font-medium">Status:</h1>
                                 <p
                                   className={`${

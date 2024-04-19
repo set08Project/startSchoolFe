@@ -7,8 +7,6 @@ import {
   updateSchoolFeeAccountInfo,
 } from "../../api/schoolAPIs";
 import { useSchoolData } from "../../hook/useSchoolAuth";
-import ClipLoader from "react-spinners/ClipLoader";
-import { FaLongArrowAltDown } from "react-icons/fa";
 
 const ThemeScreen = () => {
   const { data } = useSchoolData();
@@ -125,8 +123,6 @@ const ThemeScreen = () => {
   });
 
   const [toggle, setToggle] = useState<Boolean>(false);
-
-  console.log(data?.bankDetails);
 
   return (
     <div className=" sm:w-[350%]  rounded-lg border  h-[550px] text-blue-950">

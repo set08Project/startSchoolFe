@@ -44,9 +44,6 @@ const MyClassroom: FC = () => {
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
   const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
 
-
-  console.log("read: ", readSubject);
-
   return (
     <div className="w-full">
       <LittleHeader name="Class Teacher Subject" />

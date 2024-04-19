@@ -3,8 +3,6 @@ import { FaBook } from "react-icons/fa6";
 import { MdAutoAwesome } from "react-icons/md";
 import {
   useClassLessonNote,
-  useReadMyClassInfo,
-  useReadOneClassInfo,
   useStudentInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import LittleHeader from "../../../components/layout/LittleHeader";

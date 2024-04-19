@@ -1,19 +1,15 @@
 import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "./pages/Chart/Personal";
 import {
-  useReadMyClassInfo,
   useReadOneClassInfo,
   useStudentInfo,
+  useViewPerformance,
 } from "./hooks/useStudentHook";
 import StudentPerformance from "./pages/Chart/PerformingStudent";
 import Calendar from "./pages/Chart/Calendar";
 import pix from "./../assets/pix.jpg";
-import ClassModelAssignment from "../pagesForTeachers/pages/quiz/AddAssignment";
-import MakeComplains from "./pages/complain/MarkCOmplains";
 import MakeActiveClass from "./pages/complain/MarkActiveClass";
-import AddAnyItem from "./static/AddAnyItems";
 import UpdateEmail from "./UpdateEmail";
-import { useEffect, useState } from "react";
 import {
   useSchoolSessionData,
   useViewTermDetail,
@@ -21,8 +17,8 @@ import {
 import BlockPaymentScreen from "./BlockPaymentScreen";
 import PerformanceRecord from "./pages/screens/PerformanceRecord";
 import { Link } from "react-router-dom";
-// import StudentPerformance from "./pages/Chart/PerformingStudent";
-// import Calendar from "./pages/Chart/Calendar";
+
+import MakeComplains from "./pages/report/MarkCOmplains";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
@@ -70,6 +66,16 @@ const StudentDashboard = () => {
               </div>
             </Link>
           </div>
+
+          <div className="mt-5">
+            <div className="font-semibold text-[13px]">Your Performance</div>
+            <p className="text-[20px] text-blue-900">
+              {`\u2605`.repeat(Math.round(studentInfo?.totalPerformance / 20))}{" "}
+              <span className="text-[12px] font-bold">
+                ({(studentInfo?.totalPerformance / 20).toFixed(2)})
+              </span>
+            </p>
+          </div>
           <Personal />
 
           <div className="flex-1 mt-10" />
@@ -83,10 +89,10 @@ const StudentDashboard = () => {
             <div>
               <div className="  gap-2 mb-10">
                 <div className="flex gap-2 pb-10">
-                  <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-2 rounded-sm  text-center">
+                  <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">
                     <MakeActiveClass />
                   </div>
-                  <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-2 rounded-sm  text-center">
+                  <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4  rounded-md  text-center">
                     <MakeComplains />
                   </div>
                 </div>

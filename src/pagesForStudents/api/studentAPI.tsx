@@ -55,6 +55,18 @@ export const readOneClassInfo = async (classID: string) => {
   }
 };
 
+export const viewPerformanceTest = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-quiz-performance/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const performanceTest = async (
   studentID: string,
   quizID: string,

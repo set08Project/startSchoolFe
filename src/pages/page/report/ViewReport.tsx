@@ -72,8 +72,6 @@ const ViewReport = () => {
   const { data } = useSchoolData();
   const { complainData } = useComplain(data?._id);
 
-  console.log(complainData);
-
   return (
     <div>
       <LittleHeader name={"Report and Complains"} />

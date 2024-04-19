@@ -272,7 +272,7 @@ const Sider = () => {
           Store
           <FaStore />
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to="/result-history"
           className={({ isActive }) =>
             isActive
@@ -283,7 +283,7 @@ const Sider = () => {
         >
           Result History
           <MdSignalCellularAlt />
-        </NavLink>
+        </NavLink> */}
         <NavLink
           to="/result-history/:session/:term"
           className={({ isActive }) =>

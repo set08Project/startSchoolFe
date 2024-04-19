@@ -6,10 +6,8 @@ import {
   MdQuiz,
   MdRadio,
   MdReport,
-  MdReportOff,
   MdSettings,
   MdStadium,
-  MdSubject,
 } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,18 +15,13 @@ import {
   changeMenuState,
   displayDelay,
   displayStaffComp,
-  paymentRef,
 } from "../../global/reduxState";
 import pix from "../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import Button from "../../components/reUse/Button";
 import { CgProfile } from "react-icons/cg";
 import { FaCertificate, FaPhotoFilm, FaStore, FaTable } from "react-icons/fa6";
-import {
-  useReadMyClassInfo,
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../hooks/useStudentHook";
+import { useReadOneClassInfo, useStudentInfo } from "../hooks/useStudentHook";
 import ClipLoader from "react-spinners/ClipLoader";
 import { schoolFeePayment } from "../api/studentAPI";
 import { useState } from "react";
@@ -45,11 +38,7 @@ const Sider = () => {
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
   const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs);
 
-  console.log(schoolInfo);
-
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
-
-  // console.log(schoolInfo[0]?.presentTerm);
 
   const handleToggleMenuFalse = () => {
     if (!document.startViewTransition) {
@@ -57,26 +46,6 @@ const Sider = () => {
     } else {
       document.startViewTransition(() => {
         dispatch(changeMenuState(false));
-      });
-    }
-  };
-
-  const handleDisplayStaff = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayStaffComp(!showing));
-      dispatch(displayDelay(showing));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayDelay(!showing));
-
-        if (showing === true) {
-          const timer = setTimeout(() => {
-            clearTimeout(timer);
-            dispatch(displayStaffComp(!showing));
-          }, 500);
-        } else {
-          dispatch(displayStaffComp(!showing));
-        }
       });
     }
   };

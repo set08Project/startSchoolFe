@@ -72,10 +72,10 @@ const TeacherDashboard = () => {
           <div>
             <div>
               <div className=" flex gap-2  mb-10">
-                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-2 rounded-sm  text-center">
+                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-4 rounded-md text-center">
                   <StudentOfTheWeek />
                 </div>
-                <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-2 rounded-sm  text-center">
+                <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4 rounded-md  text-center">
                   <MakeComplains />
                 </div>
               </div>

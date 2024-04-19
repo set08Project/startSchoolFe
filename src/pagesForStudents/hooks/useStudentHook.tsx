@@ -12,6 +12,7 @@ import {
   studentSchoolFeePayment,
   viewClassTimetable,
   viewComplains,
+  viewPerformanceTest,
   viewPurchasedEndPoint,
   viewStduentDetail,
   viewStudentAttendance,
@@ -223,4 +224,16 @@ export const useStudentSchoolFee = (studentID: string) => {
     }
   );
   return { studentFees };
+};
+
+export const useViewPerformance = (studentID: string) => {
+  const { data: performanceTest } = useSWR(
+    `api/view-student-quiz-performance/${studentID}`,
+    () => {
+      return viewPerformanceTest(studentID!).then((res) => {
+        return res?.data;
+      });
+    }
+  );
+  return { performanceTest };
 };
