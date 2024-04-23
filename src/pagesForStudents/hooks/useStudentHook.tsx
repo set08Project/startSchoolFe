@@ -9,6 +9,7 @@ import {
   readClassInfo,
   readOneClassInfo,
   readStudentCookie,
+  studentRemake,
   studentSchoolFeePayment,
   viewClassTimetable,
   viewComplains,
@@ -236,4 +237,13 @@ export const useViewPerformance = (studentID: string) => {
     }
   );
   return { performanceTest };
+};
+
+export const useViewRemark = (studentID: string) => {
+  const { data: remarks } = useSWR(`api/view-remark/${studentID}`, () => {
+    return studentRemake(studentID!).then((res) => {
+      return res?.data;
+    });
+  });
+  return { remarks };
 };

@@ -1,4 +1,3 @@
-
 import LittleHeader from "../components/layout/LittleHeader";
 import { Link, useParams } from "react-router-dom";
 import { useSchoolArticle, useStudentInfo } from "./hooks/useStudentHook";
@@ -32,15 +31,15 @@ const Article = () => {
             {allArticle &&
               allArticle?.map((el: any) => (
                 <Link to={`${el?._id}`}>
-                  <div className="card bg-white border text-zinc-600 cursor-pointer hover:shadow-xl transition-all duration-300">
+                  <div className="card rounded-md bg-white border text-zinc-600 cursor-pointer hover:shadow-xl transition-all duration-300">
                     <div className="card-body">
                       <h2 className="card-title flex justify-between">
                         <div className="text-nowrap overflow-ellipsis overflow-hidden whitespace-nowrap">
-                          {el?.title}
+                          {el?.desc}
                         </div>
                       </h2>
-                      <p className="">{el?.desc}</p>
-                      <div className="text-[15px]">
+                      <p className="text-[13px]">{el?.title}</p>
+                      <div className="text-[12px] font-semibold">
                         {moment(el?.createdAt).fromNow()}
                       </div>
                     </div>

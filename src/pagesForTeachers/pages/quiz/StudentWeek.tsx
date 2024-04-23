@@ -21,6 +21,7 @@ import { mutate } from "swr";
 import {
   useReadMyClassInfo,
   useReadMyClassInfoData,
+  useReadOneClassInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import { useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
 
@@ -33,14 +34,10 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
 
-  const { subjectInfo } = useSujectInfo(props!);
-
   const { teacherInfo } = useTeacherInfo();
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
+  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { classStudents } = useClassStudent(state?._id);
-
-  const [startDateTime, setStartDateTime] = useState<any>(new Date());
+  const { classStudents } = useClassStudent(oneClass?._id);
 
   // api/view-subject-assignment/${subjectID}
 
@@ -50,6 +47,7 @@ const StudentOfTheWeek: FC<iProps> = ({ props }) => {
       studentName: subject,
     })
       .then((res) => {
+        console.log(period, subject);
         console.log(res);
         if (res?.status === 201) {
           //   mutate(`api/view-subject-assignment/${subjectInfo?._id}`);

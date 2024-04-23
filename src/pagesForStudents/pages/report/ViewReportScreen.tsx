@@ -5,24 +5,15 @@ import {
   useReadOneClassInfo,
   useStudentAttendant,
   useStudentInfo,
+  useViewRemark,
 } from "../../hooks/useStudentHook";
-import { useEffect, useState } from "react";
 import { readClassInfo } from "../../api/studentAPI";
 
 const ViewReportScreen = () => {
   const { studentInfo } = useStudentInfo();
   const { studentAttendance } = useStudentAttendant(studentInfo?._id);
 
-  const [state, setState] = useState<any>({});
-
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
-
-  useEffect(() => {
-    readClassInfo(oneClass?.className).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
-
   let record: number = 0;
   let recordQuiz: any = [];
   let recordAssignment: any = [];
@@ -33,16 +24,23 @@ const ViewReportScreen = () => {
     }
   }
 
-  for (let i = 0; i < state?.classSubjects?.length; i++) {
-    let x = state?.classSubjects[i]?.quiz?.length;
+  for (let i = 0; i < oneClass?.classSubjects?.length; i++) {
+    let x = oneClass?.classSubjects[i]?.quiz?.length;
 
     recordQuiz.push(x);
   }
 
-  for (let i = 0; i < state?.classSubjects?.length; i++) {
-    let x = state?.assignment.length;
+  for (let i = 0; i < oneClass?.classSubjects?.length; i++) {
+    let x = oneClass?.assignment.length;
 
     recordAssignment.push(x);
+  }
+
+  const { remarks } = useViewRemark(studentInfo?._id);
+
+  let remk: any = {};
+  for (let i = 0; i < remarks?.data.length; i++) {
+    remk = remarks?.data[0];
   }
 
   return (
@@ -73,7 +71,7 @@ const ViewReportScreen = () => {
               </div>
               <div className="p-4 text-slate-500">Weekly</div>
               <div className="p-4 text-slate-500">
-                {state?.classTeacherName}
+                {oneClass?.classTeacherName}
               </div>
             </div>
           </div>
@@ -95,7 +93,7 @@ const ViewReportScreen = () => {
               </div>
               <div className="p-4 text-slate-500">
                 {studentInfo?.assignmentResolve?.length}/
-                {state?.assignment?.length}
+                {oneClass?.assignment?.length}
               </div>
               {}
 
@@ -154,7 +152,7 @@ const ViewReportScreen = () => {
                     : studentInfo?.totalPerformance >= 81 &&
                       studentInfo?.totalPerformance <= 100
                     ? "A"
-                    : null}
+                    : "Nill"}
                 </div>
                 <div className="text-slate-400">Grade</div>
               </div>
@@ -163,7 +161,7 @@ const ViewReportScreen = () => {
         </div>
         <div className="lg:col-span-5 h-[200px] rounded-lg border border-slate-300">
           <p className="m-4 text-blue-950 font-semibold">Remarks: </p>
-          <p>{studentInfo?.remark[0]}</p>
+          <p className="px-4">{remk?.remark}</p>
         </div>
       </div>
     </div>

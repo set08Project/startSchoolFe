@@ -6,10 +6,10 @@ import toast from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
 import { mutate } from "swr";
 import {
-  useReadMyClassInfoData,
+  useReadOneClassInfo,
   useStudentInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
-import { makeComplains, updateTeacherActiveness } from "../../api/studentAPI";
+import { updateTeacherActiveness } from "../../api/studentAPI";
 import { useClassSubject } from "../../../pagesForTeachers/hooks/useTeacher";
 
 interface iProps {
@@ -21,14 +21,13 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
   const [period, setPeriod] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
-  const { state } = useReadMyClassInfoData(studentInfo?.classAssigned);
-  const { subjectData } = useClassSubject(state?._id);
+  const { subjectData } = useClassSubject(oneClass?._id);
 
   const onCreateAssignment = () => {
     updateTeacherActiveness(studentInfo?._id, subject)
       .then((res) => {
-        console.log(res);
         if (res?.status === 201) {
           mutate(`api/view-school-teacher/${studentInfo?.schoolIDs}`);
           toast.success("Added Successfully...!");

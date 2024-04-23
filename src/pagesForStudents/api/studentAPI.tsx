@@ -426,3 +426,15 @@ export const studentSchoolFeePayment = async (studentID: string) => {
     return error;
   }
 };
+
+export const studentRemake = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-remark/${studentID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
