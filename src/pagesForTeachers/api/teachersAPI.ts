@@ -134,7 +134,6 @@ export const createQuiz = async (
         quiz: data,
       })
       .then((res: any) => {
-        console.log(classID);
         return res?.data;
       });
   } catch (error) {

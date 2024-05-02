@@ -3,6 +3,7 @@ import pix from "../../../assets/pix.jpg";
 import { useStudentAttendant } from "../../../pagesForStudents/hooks/useStudentHook";
 import { useSchoolData, useTopSchoolStudent } from "../../hook/useSchoolAuth";
 import { UnLazyImage } from "@unlazy/react";
+import lodash from "lodash";
 
 interface iProps {
   props?: any;
@@ -14,21 +15,25 @@ const StudentRatio: FC<iProps> = ({ props }) => {
     return el.present === true;
   });
 
-  let ratio = (
-    arrayData?.length / studentAttendance?.attendance?.length
-  ).toFixed(2);
+  let ratio = arrayData?.length / studentAttendance?.attendance?.length;
 
-  return <span>{ratio}</span>;
+  return <span>{ratio * 100}%</span>;
 };
 
 const StudentPerformance = () => {
   const { data } = useSchoolData();
   const { perform } = useTopSchoolStudent(data?._id);
 
+  const rate = lodash.sortBy(perform?.data, [
+    (el: any) => {
+      return el.totalPerformance;
+    },
+  ]);
+
   return (
     <div className="">
       <div className="carousel carousel-center h-[400px] rounded-box *:bg-slate-100 gap-2">
-        {perform?.data?.map((props: any, i: number) => (
+        {rate?.map((props: any, i: number) => (
           <div key={props?._id} className="carousel-item">
             {i < 5 && (
               <div>
@@ -56,12 +61,14 @@ const StudentPerformance = () => {
                     <p>
                       Grade Ratio:{" "}
                       <span className="capitalize font-bold">
-                        {props?.totalPerformance}
+                        {props?.totalPerformance / 5
+                          ? parseFloat((props?.totalPerformance / 5).toFixed(2))
+                          : 0}
                       </span>
                     </p>
                     &middot;
                     <p>
-                      Att. Ratio:{" "}
+                      Attendance Rate:{" "}
                       <span className="mr- capitalize font-bold">
                         <StudentRatio props={props?._id} />
                       </span>

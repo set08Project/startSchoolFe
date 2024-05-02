@@ -29,6 +29,7 @@ const AddStaff = () => {
 
   const createNewStaff = () => {
     setLoading(true);
+
     createSchoolTeacher(data?._id, {
       staffName: name,
       staffAddress: location,

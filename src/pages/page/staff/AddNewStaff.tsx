@@ -14,8 +14,6 @@ const AddNewStaff = () => {
       setShow(toggled);
       clearTimeout(timing);
     }, 60);
-
-    console.log(toggled);
   }, [show, toggled]);
 
   return (

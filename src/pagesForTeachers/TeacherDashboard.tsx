@@ -3,17 +3,14 @@ import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "./Chart/Personal";
 import Calendar from "./Chart/Calendar";
 import StudentPerformance from "./Chart/PerformingStudent";
-import ClassModelAssignment from "./pages/quiz/AddAssignment";
 import { useTeacherInfo } from "./hooks/useTeacher";
 import StudentOfTheWeek from "./pages/quiz/StudentWeek";
-import {
-  useReadMyClassInfoData,
-  useReadOneClassInfo,
-} from "../pagesForStudents/hooks/useStudentHook";
+import { useReadOneClassInfo } from "../pagesForStudents/hooks/useStudentHook";
 
 import pix from "./../assets/pix.jpg";
 import MakeComplains from "./pages/quiz/MarkCOmplains";
 import {
+  useSchool,
   useSchoolSessionData,
   useViewTermDetail,
 } from "../pages/hook/useSchoolAuth";
@@ -24,7 +21,9 @@ const TeacherDashboard = () => {
 
   const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const readData = Array.from({ length: 2 });
+  // const readData = Array.from({ length: 2 });
+
+  const { data } = useSchool(teacherInfo?.schoolIDs);
 
   const { schoolInfo, loading }: any = useSchoolSessionData(
     teacherInfo?.schoolIDs
@@ -110,7 +109,7 @@ const TeacherDashboard = () => {
                 )}
               </div>
             </div>
-            {readData?.length > 0 ? (
+            {oneClass?.students?.length > 0 ? (
               <div className="flex justify-center flex-col gap-3 w-full items-center ">
                 {/* from complain */}
                 <div className="w-full">
@@ -141,7 +140,13 @@ const TeacherDashboard = () => {
             </div>
           </div>
         </div>
-        {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+        {/* {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />} */}
+
+        {data?.freeMode ? null : (
+          <div>
+            {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+          </div>
+        )}
 
         {/* <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
           Appointment

@@ -63,7 +63,7 @@ const Input: FC<iInputProps> = ({
       </label>
       {show && (
         <div className="absolute top-1/3 right-3 cursor-pointer bg-transparent mx-1">
-          {!view ? (
+          {view ? (
             <MdVisibility
               onClick={() => {
                 setView(!view);

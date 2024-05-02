@@ -1,12 +1,11 @@
 import { useState } from "react";
-import ReactQuill from "react-quill";
-import { useStudentInfo } from "../../hooks/useStudentHook";
-import { createStudentArticle } from "../../api/studentAPI";
 import { useNavigate } from "react-router-dom";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
+import { useSchool, useSchoolData } from "../../hook/useSchoolAuth";
+import { createStudentArticle } from "../../../pagesForStudents/api/studentAPI";
 
 const CreateArticle = () => {
   const [area, setArea] = useState<string>("");
@@ -17,7 +16,7 @@ const CreateArticle = () => {
   const [image, setImage] = useState<string>("");
   const [pix, setPix] = useState<string>("");
 
-  const { studentInfo } = useStudentInfo();
+  const { data: studentInfo } = useSchoolData();
 
   const onImage = (e: any) => {
     const file = e.target.files[0];
@@ -33,13 +32,11 @@ const CreateArticle = () => {
     formData.append("desc", area);
     formData.append("avatar", pix);
 
-    createStudentArticle(
-      studentInfo?.schoolIDs,
-      studentInfo?._id,
-      formData
-    ).then((res) => {
-      navigate(`/articles/${res?.data?._id}`);
-    });
+    createStudentArticle(studentInfo?._id, studentInfo?._id, formData).then(
+      (res) => {
+        navigate(`/articles/${res?.data?._id}`);
+      }
+    );
   };
 
   return (

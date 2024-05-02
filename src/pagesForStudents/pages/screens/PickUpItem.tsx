@@ -11,8 +11,6 @@ const PickUpItem = () => {
     item = purchasedStore[0];
   }
 
-  console.log(Object.values(item).length !== 0 ? "yes" : "no");
-
   return (
     <div>
       {Object.values(item).length !== 0 ? (

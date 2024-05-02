@@ -5,15 +5,10 @@ import { adminRouter } from "./adminRouter";
 import { mainRouter } from "./mainRouter";
 import { teacherRouter } from "./teacherRouter";
 import { studentRouter } from "./studentRouter";
-import {
-  readTeacherCookie,
-  viewTeacherDetail,
-} from "../pagesForTeachers/api/teachersAPI";
+import { viewTeacherDetail } from "../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
-import {
-  readStudentCookie,
-  viewStduentDetail,
-} from "../pagesForStudents/api/studentAPI";
+import { viewStduentDetail } from "../pagesForStudents/api/studentAPI";
+import ScrollToTop from "../components/static/ScrollToTop";
 
 const RouterScreen = () => {
   const userStatus = useSelector((state: any) => state.userStatus);

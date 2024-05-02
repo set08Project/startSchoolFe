@@ -28,9 +28,9 @@ const AddSession = () => {
 
   const handleSubmit = () => {
     createNewSession(dataID, { year: start }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         mutate(`api/view-school-session/${data?._id}`);
+        mutate(`api/view-school/${data?._id}`);
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
 
@@ -45,10 +45,12 @@ const AddSession = () => {
         if (!document.startViewTransition) {
           dispatch(displaySession(false));
           mutate(`api/view-school-session/${data?._id}`);
+          mutate(`api/view-school/${data?._id}`);
           toast.success("Session created");
         } else {
           document.startViewTransition(() => {
             mutate(`api/view-school-session/${data?._id}`);
+            mutate(`api/view-school/${data?._id}`);
             toast.success("Session created");
             dispatch(displaySession(false));
           });

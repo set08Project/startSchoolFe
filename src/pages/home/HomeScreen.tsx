@@ -11,7 +11,7 @@ import {
   displaySubject,
 } from "../../global/reduxState";
 import AddAnyItem from "../../components/static/AddAnyItems";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createSchoolAnnouncement,
   createSchoolEvent,
@@ -40,6 +40,13 @@ const HomeScreen = () => {
   const [title, setTitle] = useState<string>("");
   const [details, setDetails] = useState<string>("");
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const handleDisplayStudent = () => {
     if (!document.startViewTransition) {
       dispatch(displayStudent(true));
@@ -53,16 +60,7 @@ const HomeScreen = () => {
         }, 100);
       });
     }
-  };
-
-  const handleDisplaySubject = () => {
-    if (!document.startViewTransition) {
-      dispatch(displaySubject(!showIV));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displaySubject(!showIV));
-      });
-    }
+    goToTop();
   };
 
   const handleDisplaySubjectOff = () => {
@@ -73,6 +71,7 @@ const HomeScreen = () => {
         dispatch(displaySubject(false));
       });
     }
+    goToTop();
   };
 
   const handleCreateSubject = () => {
@@ -92,6 +91,8 @@ const HomeScreen = () => {
           console.log(res);
         }
       });
+
+      goToTop();
     } catch (error) {
       return error;
     }
@@ -118,6 +119,7 @@ const HomeScreen = () => {
           console.log(res);
         }
       });
+      goToTop();
     } catch (error) {
       return error;
     }
@@ -144,6 +146,7 @@ const HomeScreen = () => {
           console.log(res);
         }
       });
+      goToTop();
     } catch (error) {
       return error;
     }
@@ -157,6 +160,7 @@ const HomeScreen = () => {
         dispatch(displayNoticeEvent(!event));
       });
     }
+    goToTop();
   };
 
   const handleDisplayNotice = () => {
@@ -167,6 +171,18 @@ const HomeScreen = () => {
         dispatch(displayNotice(!notice));
       });
     }
+    goToTop();
+  };
+
+  const handleDisplaySubject = () => {
+    if (!document.startViewTransition) {
+      dispatch(displaySubject(!showIV));
+    } else {
+      document.startViewTransition(() => {
+        dispatch(displaySubject(!showIV));
+      });
+    }
+    goToTop();
   };
 
   return (

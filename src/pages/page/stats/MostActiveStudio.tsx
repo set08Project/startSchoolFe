@@ -1,16 +1,19 @@
 import { FC } from "react";
 import pix from "../../../assets/pix.jpg";
 import { useSchoolData, useSchoolStudents } from "../../hook/useSchoolAuth";
-import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 
 interface iProps {
   props?: any;
 }
 
 const GetClassTeacher: FC<iProps> = ({ props }) => {
-  const { state } = useReadMyClassInfoData(props);
+  const { oneClass } = useReadOneClassInfo(props);
 
-  return <div>{state?.classTeacherName}</div>;
+  return <div>{oneClass?.classTeacherName}</div>;
 };
 
 const MostActiveScreen = () => {
@@ -74,8 +77,7 @@ const MostActiveScreen = () => {
                           </div>
 
                           <div className="w-[200px] border-r">
-                            <GetClassTeacher props={props?.classAssigned} />
-                            {/* {props?.designated} */}
+                            <GetClassTeacher props={props?.presentClassID} />
                           </div>
                         </div>
                       </div>

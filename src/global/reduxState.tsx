@@ -36,6 +36,7 @@ const initialState = {
   subjectToggled: false,
   classroomToggled: false,
   notice: false,
+  starting: false,
   event: false,
   termID: "" || null,
 
@@ -80,6 +81,10 @@ const reduxState = createSlice({
 
     changeToggleMenuState: (state, { payload }) => {
       state.toggleMenu = payload;
+    },
+
+    changeStarting: (state, { payload }) => {
+      state.starting = payload;
     },
 
     displayStaffComp: (state, { payload }) => {
@@ -200,6 +205,7 @@ const reduxState = createSlice({
 
 export const {
   emptyCart,
+  changeStarting,
   paymentRef,
   addToCart,
   removeFromCart,

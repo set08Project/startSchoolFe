@@ -41,9 +41,7 @@ const SwitchLogin = () => {
           toast.error(`${res?.response?.data?.message}`);
         }
       })
-      .then(() => {
-        
-      });
+      .then(() => {});
   };
 
   return (
@@ -92,7 +90,7 @@ const SwitchLogin = () => {
 
         <div>
           <Button
-            name={loading ? "Loading..." : "Login"}
+            name={loading ? "Loading..." : "Teacher Login"}
             className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
             type="submit"
             onClick={handleSubmit}

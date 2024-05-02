@@ -44,13 +44,13 @@ const ClassStudents: FC<iProps> = ({ props }) => {
   const { classStudents } = useClassStudent(props);
 
   const pref = classStudents?.students?.map((props: any) => {
-    return props.totalPerformance === undefined ? 0 : props.totalPerformance;
+    return props?.totalPerformance === undefined ? 0 : props?.totalPerformance;
   });
 
   const rate =
     pref?.reduce((a: number, b: number) => {
       return a + b;
-    }, 0) / pref.length;
+    }, 0) / pref?.length;
 
   return <div className="">{rate ? rate : 0}%</div>;
 };
@@ -59,7 +59,7 @@ const ClassRoomScreen = () => {
   const dispatch = useDispatch();
   const { schoolClassroom } = useSchoolClassRM();
 
-  const classroom = useSelector((state: any) => state.classroomToggled);
+  const classroom = useSelector((state: any) => state?.classroomToggled);
 
   const handleDisplayClassroom = () => {
     if (!document.startViewTransition) {
@@ -120,13 +120,13 @@ const ClassRoomScreen = () => {
                       i % 2 === 0 ? "bg-slate-50" : "bg-white"
                     }`}
                   >
-                    <div className="w-[80px] border-r">{props.className}</div>
+                    <div className="w-[80px] border-r">{props?.className}</div>
 
                     <div className={`w-[100px] border-r`}>
                       {props?.students?.length}
                     </div>
                     <div className={`w-[100px] border-r`}>
-                      {props?.classSubjects.length}
+                      {props?.classSubjects?.length}
                     </div>
 
                     <div className="w-[270px] border-r flex justify-between pr-2 gap-4">
@@ -135,7 +135,7 @@ const ClassRoomScreen = () => {
                           1st Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props.class1stFee).toLocaleString()}
+                          ₦{parseInt(props?.class1stFee).toLocaleString()}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
@@ -143,7 +143,7 @@ const ClassRoomScreen = () => {
                           2nd Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props.class2ndFee).toLocaleString()}
+                          ₦{parseInt(props?.class2ndFee).toLocaleString()}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
@@ -151,7 +151,7 @@ const ClassRoomScreen = () => {
                           3rd Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props.class3rdFee).toLocaleString()}
+                          ₦{parseInt(props?.class3rdFee).toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -263,8 +263,8 @@ const ClassRoomScreen = () => {
 
                     {/* name */}
                     <div className="w-[220px]">
-                      {props.classTeacherName ? (
-                        <TeacherDetails props={props.teacherID} />
+                      {props?.classTeacherName ? (
+                        <TeacherDetails props={props?.teacherID} />
                       ) : (
                         <div>no teacher assigned yet</div>
                       )}

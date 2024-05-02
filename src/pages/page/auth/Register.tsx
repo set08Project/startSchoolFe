@@ -13,6 +13,7 @@ const Register = () => {
 
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [check, setCheck] = useState<boolean>(false);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -65,8 +66,23 @@ const Register = () => {
             setEmail(e.target.value);
           }}
         />
+        {/* <div className="mx-4 flex items-center gap-3">
+          <input
+            checked={check}
+            type="checkbox"
+            onClick={() => {
+              setCheck(!check);
+            }}
+          />
+
+          <label className="text-[12px] leading-tight">
+            By checking on the box, you've gone through our Privacy and Data
+            Protection Policy!{" "}
+          </label>
+        </div> */}
 
         <div>
+          {/* {check ? ( */}
           <Button
             name="Register"
             className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
@@ -74,6 +90,11 @@ const Register = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
             // onClick={handleSubmit}
           />
+          {/* ) : (
+            <div className="w-[97%] flex items-center justify-center m-2 rounded-md bg-gray-400 text-white h-14  transition-all duration-300">
+              Register
+            </div>
+          )} */}
         </div>
         <div className="mt-10 mb-0 ml-2 text-[13px] font-medium ">
           Sign up with social network

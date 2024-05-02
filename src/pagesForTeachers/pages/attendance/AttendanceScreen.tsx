@@ -7,18 +7,15 @@ import {
   useClassStudent,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   markAttendanceAbsent,
   markAttendancePresent,
-  readClassInfo,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
-import {
-  useReadMyClassInfoData,
-  useReadOneClassInfo,
-} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
+import { UnLazyImage } from "@unlazy/react";
 
 interface iProps {
   props?: string;
@@ -83,9 +80,9 @@ const Attendance: FC<iProps> = ({ id, data }) => {
           onChange={() => {
             markAttendanceAbsent(teacherInfo?._id, id!).then((res: any) => {
               toast.success("student has been marked Absent for Today");
-              if (res.status === 201) {
-                mutate(`api/view-all-class-students/${oneClass?._id!}`);
-              }
+
+              mutate(`api/view-all-class-students/${oneClass?._id!}`);
+              mutate(`api/view-class-attendance/${oneClass?._id!}`);
             });
           }}
         />
@@ -95,16 +92,16 @@ const Attendance: FC<iProps> = ({ id, data }) => {
         <label>Present</label>
         <input
           type="checkbox"
-          className={`toggle toggle-sm mt-2   border-neutral-500 ${
+          className={`toggle toggle-sm mt-2 border-neutral-500 ${
             result?.present && "text-green-500"
           } ${result?.present && "bg-green-500"}`}
           checked={result?.present}
           onChange={() => {
             markAttendancePresent(teacherInfo?._id, id!).then((res: any) => {
               toast.success("student has been marked Present for Today");
-              if (res.status === 201) {
-                mutate(`api/view-all-class-students/${oneClass?._id!}`);
-              }
+
+              mutate(`api/view-all-class-students/${oneClass?._id!}`);
+              mutate(`api/view-class-attendance/${oneClass?._id!}`);
             });
           }}
         />
@@ -183,9 +180,12 @@ const AttendanceScreen = () => {
                       {/* name */}
                       <div className="w-[250px] flex  border-r">
                         <div className="flex gap-2">
-                          <img
-                            className="w-14 h-14 rounded-2xl border object-cover"
-                            src={pix}
+                          <UnLazyImage
+                            alt={"image"}
+                            thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
+                            src={props?.avatar ? props.avatar : pix}
+                            autoSizes
+                            className="w-14 h-14 rounded-2xl border object-cover "
                           />
                           <div>
                             {props?.studentFirstName} {props?.studentLastName}

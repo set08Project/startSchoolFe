@@ -10,6 +10,7 @@ import moment from "moment";
 import lodash from "lodash";
 import { FaStar } from "react-icons/fa6";
 import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
+import MainArticleHolderScreen from "../pages/article/ARticlaHolderScreen";
 
 const day = [
   "Sunday",
@@ -140,6 +141,10 @@ const Personal: FC = () => {
 
         <p className="text-[12px]">Male vs Female</p>
       </div>
+
+      <main className="mt-5 ">
+        <MainArticleHolderScreen />
+      </main>
     </div>
   );
 };

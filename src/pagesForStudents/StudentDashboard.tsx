@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 
 import MakeComplains from "./pages/report/MarkCOmplains";
 import { useStudentGrade } from "../pagesForTeachers/hooks/useTeacher";
+import ArticleHolderScreen from "./pages/screens/ArticleHolderScreen";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
@@ -57,6 +58,8 @@ const StudentDashboard = () => {
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
     );
   });
+
+  console.log("reading: ", schl?.freeMode);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -181,12 +184,31 @@ const StudentDashboard = () => {
           <div className="mb-5">
             <hr />
           </div>
-          <p>Last Week General Performance</p>
+          <p>Last Week Performance</p>
           <PerformanceRecord />
+
+          <div className="my-10">
+            <hr />
+          </div>
+
+          <div className="mt-2 text-blue-950">
+            <div className="flex gap-3 text-[15px] ">
+              <p>Most Recent Article</p>
+              <Link to="/articles">
+                <p className="font-bold">View More</p>
+              </Link>
+            </div>
+            <ArticleHolderScreen />
+          </div>
         </div>
 
         {!studentInfo?.parentEmail && <UpdateEmail />}
-        {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+
+        {schl?.freeMode ? null : (
+          <div>
+            {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -66,7 +66,7 @@ const RecentSchoolFeesHistoryScreen = () => {
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
                       <img
-                        src={item?.avatar ? item?.avatar : pix}
+                        src={studentInfo?.avatar ? studentInfo?.avatar : pix}
                         alt="Avatar"
                       />
                     </div>
@@ -93,7 +93,6 @@ const RecentSchoolFeesHistoryScreen = () => {
               className="w-[150px] border-r pl-1 "
               onClick={() => {
                 setState(item?._id);
-                console.log("Read: ", state);
               }}
             >
               <div
@@ -134,9 +133,7 @@ const RecentSchoolFeesHistoryScreen = () => {
                         htmlFor="my_modal_6"
                         className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
                         onClick={() => {
-                          updateSchoolFee(item?._id).then((res) => {
-                            console.log(res);
-                          });
+                          updateSchoolFee(item?._id).then((res) => {});
                         }}
                       >
                         Yes
@@ -167,9 +164,7 @@ const RecentSchoolFeesHistoryScreen = () => {
                   item?.confirm ? "checkbox-success" : "checkbox-error"
                 }`}
                 onClick={() => {
-                  updateSchoolFee(item?._id).then((res) => {
-                    console.log(res);
-                  });
+                  updateSchoolFee(item?._id).then((res) => {});
                 }}
               />
             </div>

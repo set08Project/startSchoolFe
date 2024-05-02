@@ -8,6 +8,8 @@ import MostActiveScreen from "../../page/stats/MostActiveStudio";
 import PurchaseHistoryScreen from "../../page/store/PurchasedStores";
 import RecentPurcentScreen from "../screens/RecentPurchases";
 import { Link } from "react-router-dom";
+import ArticleHolderScreen from "../../../pagesForStudents/pages/screens/ArticleHolderScreen";
+import MainArticleHolderScreen from "../screens/ARticlaHolderScreen";
 
 const ScreenHome = () => {
   document.title = "School's Record and Stats";
@@ -96,7 +98,26 @@ const ScreenHome = () => {
             </div>
           </div>
 
-          <div className="flex-1" />
+          <div className="my-10">
+            <hr />
+          </div>
+
+          <div className="mt-2 text-blue-950">
+            <div className="flex gap-3 text-[15px] ">
+              <p>Most Recent Article</p>
+              <Link to="/articles">
+                <p className="font-bold">View More</p>
+              </Link>
+            </div>
+            <MainArticleHolderScreen />
+          </div>
+          {/* </div> */}
+
+          {/* <div className="flex-1" /> */}
+
+          <div className="my-10">
+            <hr />
+          </div>
           <div className="border-b my-5" />
 
           <div className="flex flex-col items-center w-full justify-center">

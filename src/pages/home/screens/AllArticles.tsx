@@ -1,28 +1,25 @@
-document.title = "Articles";
-import LittleHeader from "../../../components/static/LittleHeader";
-import articleDummy from "../../../assets/dummy-article-img.jpg";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import ViewArticleScreen from "./ViewArticleScreen";
+import { Link, useParams } from "react-router-dom";
+
 import moment from "moment";
-import { MdDelete, MdVisibility } from "react-icons/md";
+import articleDummy from "../../../assets/dummy-article-img.jpg";
+import { useSchoolData } from "../../hook/useSchoolAuth";
 import { useSchoolArticle } from "../../../pagesForStudents/hooks/useStudentHook";
-import { useTeacherInfo } from "../../hooks/useTeacher";
-import { deleteArticle } from "../../../pages/api/schoolAPIs";
+import ViewArticleScreen from "../../page/article/ViewArticleScreen";
+import LittleHeader from "../../../components/layout/LittleHeader";
 import { IoCreateOutline } from "react-icons/io5";
+import { MdVisibility } from "react-icons/md";
 import { PiHandsClapping } from "react-icons/pi";
 import { UnLazyImage } from "@unlazy/react";
+document.title = "School's Article Page";
 
-const Article = () => {
-  const navigate = useNavigate();
+const AllArticle = () => {
   const { view } = useParams();
-  const { teacherInfo } = useTeacherInfo();
+  const { data } = useSchoolData();
 
-  const { allArticle } = useSchoolArticle(teacherInfo?.schoolIDs!);
-
+  const { allArticle } = useSchoolArticle(data?._id);
   const timer = () => {
     return Math.floor(Math.random() * (6 - 2) + 2);
   };
-
   return (
     <div>
       {view ? (
@@ -95,4 +92,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default AllArticle;

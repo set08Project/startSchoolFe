@@ -14,12 +14,10 @@ import {
   FaStore,
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMenuState } from "../../global/reduxState";
+import { changeMenuState, changeStarting } from "../../global/reduxState";
 import {
-  useSchoolCookie,
   useSchoolData,
   useSchoolSessionData,
-  useSchoolTeacherDetail,
   useViewTermDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
@@ -28,19 +26,15 @@ import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useEffect, useState } from "react";
-import {
-  makePayment,
-  viewSchoolSession,
-  viewSchoolSessionTerm,
-} from "../../pages/api/schoolAPIs";
+import { makePayment } from "../../pages/api/schoolAPIs";
 import Button from "../reUse/Button";
-import { LoaderIcon } from "react-hot-toast";
 
 const Sider = () => {
   const dispatch = useDispatch();
-  const toggleText = useSelector((state: any) => state.toggleText);
   const toggleImage = useSelector((state: any) => state.imageToggle);
+  const starting = useSelector((state: any) => state.starting);
   const user = useSelector((state: any) => state.user);
+  const [start, setStart] = useState<string>("");
 
   const [roll, setRoll] = useState<Boolean>(false);
 
@@ -78,6 +72,23 @@ const Sider = () => {
     }
   };
 
+  useEffect(() => {
+    if (schoolInfo?.length === 1 || schoolInfo?.length === 0) {
+      let term = [];
+      for (let i = 0; i < schoolInfo?.length; i++) {
+        term = schoolInfo[i].term;
+      }
+
+      if (term?.length === 1) {
+        dispatch(changeStarting(true));
+      } else {
+        dispatch(changeStarting(false));
+      }
+    } else {
+      dispatch(changeStarting(false));
+    }
+  }, []);
+
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
       <div className="w-full flex px-2 mt-6 ">
@@ -111,39 +122,50 @@ const Sider = () => {
             Session: {loading ? "" : data?.presentSession}
           </p>
           <p className="text-[12px] font-bold">
-            Term:{" "}
+            Term: {/* *************here***************** */}
             {loading ? (
               ""
-            ) : data.presentTerm ? (
-              data.presentTerm
+            ) : data?.presentTerm ? (
+              data?.presentTerm
             ) : (
               <span className="text-red-400 ml-1">Please create TERM</span>
             )}
           </p>
 
-          <div>
-            {!termData?.plan && termData?.payRef === "" && (
-              <Button
-                name={roll ? `Processing...` : "Renew Plan"}
-                icon={roll ? "" : ""}
-                className="text-[14px] uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
-                onClick={() => {
-                  setRoll(true);
-                  makePayment(user?.id, data?.email)
-                    .then((res: any) => {
-                      if (res?.data?.status === 201) {
-                        location.replace(
-                          res?.data?.data?.data?.authorization_url
-                        );
-                      }
-                    })
-                    .then(() => {
-                      setRoll(false);
-                    });
-                }}
-              />
-            )}
-          </div>
+          {data?.freeMode ? (
+            <div className="mt-3 px-1 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
+              <div className="mb-2 text-[12px] text-left font-medium w-[125px]">
+                You are seeing this, because you are on your First Free Term
+                Mode.
+                <br />
+                <p className="mt-1 font-bold">Thank you for coming on board!</p>
+              </div>
+            </div>
+          ) : (
+            <div>
+              {!termData?.plan && termData?.payRef === "" && (
+                <Button
+                  name={roll ? `Processing...` : "Renew Plan"}
+                  icon={roll ? "" : ""}
+                  className="text-[14px] uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
+                  onClick={() => {
+                    setRoll(true);
+                    makePayment(user?.id, data?.email)
+                      .then((res: any) => {
+                        if (res?.data?.status === 201) {
+                          location.replace(
+                            res?.data?.data?.data?.authorization_url
+                          );
+                        }
+                      })
+                      .then(() => {
+                        setRoll(false);
+                      });
+                  }}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>
 

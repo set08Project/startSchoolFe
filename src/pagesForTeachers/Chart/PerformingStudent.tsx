@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
 import pix from "../../assets/pix.jpg";
 import { useClassStudent, useTeacherInfo } from "../hooks/useTeacher";
-import { readClassInfo } from "../api/teachersAPI";
 import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
+import { UnLazyImage } from "@unlazy/react";
 
 const StudentPerformance = () => {
   const { teacherInfo } = useTeacherInfo();
-  //   const { perform } = useTopSchoolStudent(data?._id);
 
   const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
@@ -19,9 +17,11 @@ const StudentPerformance = () => {
           <div key={props?._id} className="carousel-item">
             {i < 5 && (
               <div>
-                <img
-                  src={pix}
-                  alt="Pizza"
+                <UnLazyImage
+                  alt={"image"}
+                  thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
+                  src={props?.avatar ? props.avatar : pix}
+                  autoSizes
                   className="w-[280px] h-[82%] object-cover "
                 />
                 <div className="p-2 text-[12px]">

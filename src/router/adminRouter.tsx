@@ -33,6 +33,9 @@ const SuccessPage = React.lazy(
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
 
+const AllArticle = React.lazy(
+  () => import("../pages/home/screens/AllArticles")
+);
 const ClassReportCardReady = React.lazy(
   () => import("../pages/page/ResultHistory/ClassReportReady")
 );
@@ -322,6 +325,23 @@ export const adminRouter = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: "/articles",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AllArticle />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/articles/:view",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AllArticle />
+              </Suspense>
+            ),
+          },
+
           {
             index: true,
             path: "class-room",

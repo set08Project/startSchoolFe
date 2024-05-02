@@ -7,6 +7,18 @@ const TopRatedTeacher = () => {
 
   let rate = lodash.orderBy(schoolTeacher?.staff, "staffRating");
 
+  const rate1 = lodash.sortBy(schoolTeacher?.staff, [
+    (el: any) => {
+      return el.staffRating;
+    },
+  ]);
+
+  // console.log(
+  //   schoolTeacher?.staff.sort((a, b) => {
+  //     return b.staffRating + a.staffRating;
+  //   })
+  // );
+
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">
       {rate?.map((props: any, i: number) => (

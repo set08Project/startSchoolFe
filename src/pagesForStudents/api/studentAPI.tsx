@@ -438,3 +438,27 @@ export const studentRemake = async (studentID: string) => {
     return error;
   }
 };
+
+export const likeArticle = async (articleID: string, readerID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/like-article/${articleID}/${readerID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewArticle = async (articleID: string, readerID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/view-article/${articleID}/${readerID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
