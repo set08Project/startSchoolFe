@@ -307,7 +307,7 @@ const Sider = () => {
           <MdSignalCellularAlt />
         </NavLink> */}
         <NavLink
-          to="/result-history/:session/:term"
+          to="/result-history/"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "

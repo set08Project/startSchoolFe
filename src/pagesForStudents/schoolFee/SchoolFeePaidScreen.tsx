@@ -30,6 +30,8 @@ const SchoolFeePaidScreen = () => {
                 amount: res?.data?.amount,
                 reference: res?.data?.reference,
                 purchasedID: res?.data.id,
+              }).then((res) => {
+                console.log("student: ", res);
               });
             }
           })

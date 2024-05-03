@@ -15,6 +15,8 @@ const SchoolFeesHistoryScreen = () => {
 
   const [stateArray, setStateArray] = useState<string[]>([]);
 
+  console.log(schoolFeeRecord);
+
   return (
     <div>
       <LittleHeader name={"School Fees History"} />
@@ -75,7 +77,7 @@ const SchoolFeesHistoryScreen = () => {
                     </div>
 
                     <div className="w-[130px] border-r ml-1">
-                      ₦{(props?.amount).toLocaleString()}
+                      ₦{props?.amount?.toLocaleString()}
                     </div>
 
                     {/* name */}

@@ -41,12 +41,15 @@ const Result = () => {
 
   const dispatch = useDispatch();
   const data = Array.from({ length: 0 });
+
   const { schoolClassroom } = useSchoolClassRM();
 
   const classroom = useSelector((state: any) => state.classroomToggled);
   const { sessionTermData } = useViewSessionTerm(termID);
 
   document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
+
+  console.log(sessionTermData);
 
   return (
     <div className="">

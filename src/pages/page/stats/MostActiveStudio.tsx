@@ -29,7 +29,7 @@ const MostActiveScreen = () => {
           <div className="text-[gray] w-[700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
             <div className="w-[200px] border-r">Gender</div>
 
-            <div className="w-[200px] border-r">Teacher Info</div>
+            <div className="w-[200px] border-r">Student's Info</div>
             <div className="w-[100px] border-r">Class</div>
             <div className="w-[200px] border-r">Assign Teacher</div>
           </div>

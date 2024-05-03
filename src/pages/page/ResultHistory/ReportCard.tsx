@@ -23,7 +23,10 @@ import {
   useStudentGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useParams } from "react-router-dom";
-import { adminReport } from "../../api/schoolAPIs";
+import { adminReport, approveMainReport } from "../../api/schoolAPIs";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 interface iProps {
   props?: any;
@@ -176,7 +179,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
-            src={pix}
+            src={props?.avatar ? props?.avatar : pix}
           />
 
           <div className="w-[180px] ">
@@ -350,13 +353,14 @@ const ReportCardApproved = () => {
   const { subjectData } = useClassSubject(oneClass?._id);
   const [data, setData] = useState([]);
 
+  const [text, setText] = useState("");
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
       <LittleHeader name={"Admin's Remark and Approval"} />
-
       <div className="mt-10" />
 
       <div className="flex w-full justify-end"></div>
@@ -417,6 +421,44 @@ const ReportCardApproved = () => {
             <div>No student yet</div>
           )}
         </div>
+      </div>
+
+      <div className="mt-5">
+        <p className="text-blue-800 mt-0 font-[500] text-[30px] capitalize">
+          General Class Remark
+        </p>
+
+        <p className="mt-5 mb-2">
+          Please Give a general class remark to approve this result
+        </p>
+
+        <div className="w-full h-[300px] border rounded-md resize-none p-2">
+          <CKEditor
+            editor={ClassicEditor}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setText(data);
+            }}
+          />
+        </div>
+        {text ? (
+          <button
+            className="btn btn-wide bg-blue-950 text-white mt-3 hover:bg-blue-900"
+            onClick={() => {
+              approveMainReport(classID, text).then((res) => {
+                if (res.status === 200) {
+                  toast.success("Result will be Published in a minute time");
+                }
+              });
+            }}
+          >
+            Result Approved
+          </button>
+        ) : (
+          <button className="btn btn-wide bg-blue-950 text-white mt-3 hover:bg-blue-900">
+            Input Remark and Result Approved
+          </button>
+        )}
       </div>
     </div>
   );

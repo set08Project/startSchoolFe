@@ -121,37 +121,6 @@ const RecentSchoolFeesHistoryScreen = () => {
                   id="my_modal_6"
                   className="modal-toggle"
                 />
-                <div className="modal" role="dialog">
-                  <div className="modal-box">
-                    <h3 className="font-bold text-lg">Confirm this payment</h3>
-                    <p className="py-4">
-                      Are you sure you want to confirm this payment?
-                      {item?._id}
-                    </p>
-                    <div className="modal-action">
-                      <label
-                        htmlFor="my_modal_6"
-                        className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                        onClick={() => {
-                          updateSchoolFee(item?._id).then((res) => {});
-                        }}
-                      >
-                        Yes
-                      </label>
-                      <label
-                        htmlFor="my_modal_6"
-                        className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                        onClick={() => {
-                          if (state !== "") {
-                            setState("");
-                          }
-                        }}
-                      >
-                        No
-                      </label>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 

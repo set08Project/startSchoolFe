@@ -21,6 +21,8 @@ const PurchaseHistoryTeacher = () => {
 
   const { purchasedData: purchasedStore } = usePurchasedData(teacherInfo?._id);
 
+  console.log();
+
   useEffect(() => {
     if (ref !== "") {
       verifyPayment(ref).then((res) => {
@@ -48,11 +50,9 @@ const PurchaseHistoryTeacher = () => {
   return (
     <div>
       <LittleHeader name={"Purchase History "} />
-
       <div className="mb-28" />
 
       <div className="mb-28" />
-
       <div
         className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
         style={{ color: "var(--secondary)" }}

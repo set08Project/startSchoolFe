@@ -144,10 +144,10 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
   return (
     <div>
       {(
-        (mainStudentAttendance?.data?.attendance.filter(
+        (mainStudentAttendance?.data?.attendance?.filter(
           (el: any) => el.present === true
         ).length /
-          mainStudentAttendance?.data?.attendance.length) *
+          mainStudentAttendance?.data?.attendance?.length) *
         100
       ).toFixed(2)}
       %
@@ -156,7 +156,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 };
 
 const SubjectMap: FC<iProps> = ({ props }) => {
-  console.log("show studty: ", props);
+  // console.log("show studty: ", props);
+
   return (
     <div className="w-[260px] border-r ">
       <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
@@ -186,7 +187,7 @@ const ResultDetailClass = () => {
     return el._id === ID;
   });
 
-  const { classAcademicHistory } = useClassAcademicHistory(getResult._id);
+  const { classAcademicHistory } = useClassAcademicHistory(getResult?._id);
   const { subjectData } = useClassSubject(classAcademicHistory?._id);
 
   let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
@@ -200,6 +201,22 @@ const ResultDetailClass = () => {
       el.session === session.replace("-", "/")
     );
   });
+
+  console.log(
+    "read: ",
+    dataX.map((el) => {
+      return el.term === term.replace("-", " ");
+    })
+  );
+
+  console.log(
+    "read: ",
+    dataX.map((el) => {
+      return el.session === session.replace("-", "/");
+    })
+  );
+
+  console.log("read: ", dataX);
 
   return (
     <div className="">
@@ -229,7 +246,7 @@ const ResultDetailClass = () => {
           {/* 260px */}
           <div
             className={`w-[${
-              subjectData?.classSubjects.length * 260
+              subjectData?.classSubjects?.length * 260
             }px] border-r`}
           >
             {/* <div>Subject Grade</div> */}

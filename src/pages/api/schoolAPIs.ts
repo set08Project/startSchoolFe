@@ -963,3 +963,17 @@ export const adminReport = async (
     return error;
   }
 };
+
+export const approveMainReport = async (classID: string, data: string) => {
+  try {
+    return await axios
+      .post(`${URL}/create-history-session/${classID}/`, {
+        text: data,
+      })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

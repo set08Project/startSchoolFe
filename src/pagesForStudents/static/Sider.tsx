@@ -151,6 +151,8 @@ const Sider = () => {
                 subAccountCode:
                   schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
               }).then((res) => {
+                console.log(res);
+                console.log(oneClass?.class1stFee);
                 if (res.status === 200) {
                   // dispatch(paymentRef(res?.data?.data?.data?.reference));
                   location.replace(res?.data?.data?.data?.authorization_url);
