@@ -15,8 +15,13 @@ const AdminLessonNote = () => {
   const { data } = useSchoolData();
   const { notes } = useNotes(data?._id);
 
+  const [id, setID] = useState<string>("");
+  const [obj, setObj] = useState<any>({});
+
   const [response, setResponse] = useState("");
   const [day, setDay] = useState("");
+
+  console.log("view: ", obj.responseDetail);
 
   const handleSubmit = (el: any) => {
     adminlessonNoteReply(data?._id, el, {
@@ -111,6 +116,11 @@ const AdminLessonNote = () => {
                           <label
                             htmlFor="send_response"
                             className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                            onClick={() => {
+                              console.log(props?._id);
+                              setID(props?._id);
+                              setObj(props);
+                            }}
                           >
                             Send Response to Teacher
                             <FaReply />
@@ -142,6 +152,10 @@ const AdminLessonNote = () => {
                             </div>
                             <hr />
                             <div className="mt-2 leading-tight text-[13px] font-medium">
+                              {obj?.responseDetail}
+                              {obj?.deadline}
+                              <br />
+                              <br />
                               Send your thoughts, reviews on the lesson note
                               back to your teacher so that updates will be made,
                               hereby ensuring a top class lesson note
@@ -158,12 +172,17 @@ const AdminLessonNote = () => {
                                 <textarea
                                   className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 bg-gray-100 outline-none"
                                   value={response}
+                                  defaultValue={`${obj?.responseDetail}`}
                                   onChange={(e) => setResponse(e.target.value)}
                                   // value={period}
                                   // onChange={(e) => {
                                   //   setPeriod(e.target.value);
                                   // }}
-                                  placeholder="Response Detail"
+                                  placeholder={
+                                    obj?.responseDetail
+                                      ? obj?.responseDetail
+                                      : `Response Detail`
+                                  }
                                 />
                               </div>
                             </div>
@@ -179,6 +198,9 @@ const AdminLessonNote = () => {
                                 value={day}
                                 onChange={(e) => setDay(e.target.value)}
                               >
+                                <option disabled selected>
+                                  {obj?.deadLine}
+                                </option>
                                 <option value="1 day">1 day</option>
                                 <option value="2 days">2 days</option>
                                 <option value="3 days">3 days</option>
@@ -192,7 +214,7 @@ const AdminLessonNote = () => {
                               {response.length > 1 ? (
                                 <Button
                                   name="Send"
-                                  onClick={() => handleSubmit(props?._id)}
+                                  onClick={() => handleSubmit(id)}
                                   className="bg-blue-950"
                                 />
                               ) : (

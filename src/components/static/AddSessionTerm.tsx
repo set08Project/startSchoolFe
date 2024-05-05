@@ -107,18 +107,35 @@ const AddSessionTerm = () => {
             />
           </div>
 
-          <div className="w-full">
+          <div className="w-full -mt-5">
             <label className="font-medium text-[12px]">
               Session Term <span className="text-red-500">*</span>
             </label>
-            <Input
+            {/* <Input
               placeholder="1st Term"
               className="mx-0 h-10  w-full"
               value={end}
               onChange={(e: any) => {
                 setEnd(e.target.value);
               }}
-            />
+               value={end}
+              onChange={(e) => {
+                setEnd(e.target.value);
+              }}
+            /> */}
+
+            <select
+              className="select select-info bg-white border-[#3B82F6] select-bordered w-full mt-2"
+              value={end}
+              onChange={(e) => {
+                setEnd(e.target.value);
+              }}
+            >
+              <option selected>Choose Term</option>
+              <option value={"1st Term"}>1st Term</option>
+              <option value={"2nd Term"}>2nd Term</option>
+              <option value={"3rd Term"}>3rd Term</option>
+            </select>
           </div>
         </div>
 

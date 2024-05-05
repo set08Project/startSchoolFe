@@ -1,23 +1,26 @@
 import { FC, InputHTMLAttributes } from "react";
-import Input from "../../components/reUse/Input";
+import MainInput from "./MainInput";
 
 interface iInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   value?: string;
   placeholder?: string;
+  // defaultValue?: string;
 }
 
 const InputWithLabel: FC<iInputLabel> = ({
   label,
   placeholder,
   value,
+  // defaultValue,
   ...props
 }) => {
   return (
     <div>
       <div className="text-[12px] ">
         {label}
-        <Input
+        <MainInput
+          // defaultValue={defaultValue}
           placeholder={placeholder}
           className="w-auto ml-0"
           value={value}

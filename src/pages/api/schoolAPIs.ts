@@ -2,8 +2,12 @@ import axios from "axios";
 
 const URL: string = "http://localhost:2244/api";
 const URL2: string = "http://localhost:2244";
+
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
+
+// const URL: string = "https://startschool.onrender.com/api";
+// const URL2: string = "https://startschool.onrender.com";
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {

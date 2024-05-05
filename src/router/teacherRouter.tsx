@@ -1,6 +1,10 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+const EditLessonNote = React.lazy(
+  () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
+);
+
 const ReportCardPrint = React.lazy(
   () => import("../pagesForTeachers/pages/CardTemplate/ReportCardPrint")
 );
@@ -280,6 +284,14 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ViewTeacherNote />
+          </Suspense>
+        ),
+      },
+      {
+        path: "edit-lesson-note/:noteID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <EditLessonNote />
           </Suspense>
         ),
       },

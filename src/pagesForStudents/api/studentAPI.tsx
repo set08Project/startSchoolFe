@@ -2,6 +2,7 @@ import axios from "axios";
 
 const URL: string = "http://localhost:2244/api";
 // const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = "https://startschool.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {

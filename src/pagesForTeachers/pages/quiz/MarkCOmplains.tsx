@@ -132,13 +132,7 @@ const MakeComplains: FC<iProps> = ({ props }) => {
                         setSubject(e.target.value);
                       }}
                     >
-                      <option
-                        selected
-                        disabled
-                        defaultValue={"Choose Importance"}
-                      >
-                        Choose Importance
-                      </option>
+                      <option selected>Choose Importance</option>
                       <option value={"Urgently Urgent"}>Urgently Urgent</option>
                       <option value={"Very Urgent"}>Very Urgent</option>
                       <option value={"Urgent"}>Urgent</option>

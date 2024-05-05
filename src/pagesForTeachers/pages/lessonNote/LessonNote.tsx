@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaBook, FaDisplay, FaEye, FaReply } from "react-icons/fa6";
 import { MdAutoAwesome, MdCheck, MdClose } from "react-icons/md";
 import { useLessonNote } from "../../../pagesForStudents/hooks/useStudentHook";
@@ -6,6 +6,8 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import Button from "../../components/reUse/Button";
 import { FiLoader } from "react-icons/fi";
+import { useState } from "react";
+import { IoCreateOutline } from "react-icons/io5";
 
 const LessonNote = () => {
   const { teacherInfo } = useTeacherInfo();
@@ -14,6 +16,10 @@ const LessonNote = () => {
     teacherInfo?._id
   );
 
+  const [id, setID] = useState<string>("");
+  const [obj, setObj] = useState<any>({});
+
+  console.log(obj);
   document.title = "Teacher's Lesson Notes";
 
   return (
@@ -21,15 +27,27 @@ const LessonNote = () => {
       <LittleHeader name="Teacher's Lesson Notes" />
       <div className="min-h-[82vh] text-blue-950">
         <div>
-          <div className="flex float-end">
+          {/* <div className="flex float-end">
             <NavLink to="/create-notes">
               <Button
                 name="Add Note"
                 className="py-4 px-4 bg-black text-white"
               />
             </NavLink>
+          </div> */}
+
+          <div className="w-full flex justify-end">
+            <Link to="/create-notes">
+              <div className="flex items-center gap-1">
+                <IoCreateOutline size={25} />
+                <p className="text-[12px] font-bold text-blue-950">
+                  Create New Lesson Note
+                </p>
+              </div>
+            </Link>
           </div>
-          <div className="py-9 w-full mt-24 p-3 border-b-2">
+
+          <div className="py-9 w-full mt-4 p-3 border-b-2">
             <p className="font-bold mb-7">Lesson Note</p>
 
             <div className="">
@@ -38,7 +56,7 @@ const LessonNote = () => {
                   <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
                     {lessonNote?.lessonNotes?.map((props: any) => (
                       <div
-                        className={`min-h-[200px] bxs border flex justify-between items-center flex-col rounded-lg `}
+                        className={`min-h-[200px] hover:bxs transition-all duration-300 hover:scale-[1.005] border flex justify-between items-center flex-col rounded-sm `}
                       >
                         <NavLink
                           key={props?._id}
@@ -79,7 +97,7 @@ const LessonNote = () => {
                                   ...
                                 </p>
                               </div>
-                              <div className="w-full my-[10px] flex items-center gap-5">
+                              <div className="w-full mt-[32px] flex items-center gap-5">
                                 <h1 className="font-medium">Status:</h1>
                                 <p
                                   className={`${
@@ -88,9 +106,11 @@ const LessonNote = () => {
                                       : "text-red-500 font-bold"
                                   }`}
                                 >
-                                  {props?.adminSignation
-                                    ? "Approved ✅"
-                                    : "Not-Approved ❌"}
+                                  <p className="text-[12px]">
+                                    {props?.adminSignation
+                                      ? "Approved ✅"
+                                      : "Not-Approved ❌"}
+                                  </p>
                                 </p>
                               </div>
                             </div>
@@ -103,6 +123,10 @@ const LessonNote = () => {
                               <label
                                 htmlFor="view_response"
                                 className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                onClick={() => {
+                                  setID(props?._id);
+                                  setObj(props);
+                                }}
                               >
                                 View Administrator's Response
                                 <FaEye />
@@ -156,7 +180,8 @@ const LessonNote = () => {
                 </label>
 
                 {/* // readSubject */}
-                <h1>{props?.responseDetail}</h1>
+                <h1>{obj?.responseDetail}</h1>
+                <br />
               </div>
               <div className="w-full">
                 <label className="font-medium text-[12px]">
@@ -164,7 +189,16 @@ const LessonNote = () => {
                   <span className="text-red-500">*</span>
                 </label>
 
-                <h1>{props?.deadline}</h1>
+                <h1 className="font-bold">{obj?.deadline}</h1>
+
+                <br />
+                <Link to={`/edit-lesson-note/${id}`}>
+                  <button className="btn btn-neutral">
+                    Rework on The Lesson Note
+                  </button>
+                </Link>
+
+                <p></p>
               </div>
             </div>
           </div>

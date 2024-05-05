@@ -2,6 +2,7 @@ import axios from "axios";
 
 const URL: string = "http://localhost:2244/api";
 // const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = "https://startschool.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -428,6 +429,22 @@ export const viewTeacherLessonNote = async (staffID: string) => {
   try {
     return await axios
       .get(`${URL}/view-teacher-lesson-note/${staffID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const editTeacherLessonNote = async (
+  staffID: string,
+  lessonNodeID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-lesson-note/${staffID}/${lessonNodeID}`, data)
       .then((res: any) => {
         return res?.data;
       });
