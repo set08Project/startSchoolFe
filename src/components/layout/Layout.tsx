@@ -15,6 +15,8 @@ import {
   useSchoolData,
 } from "../../pages/hook/useSchoolAuth";
 import { mutate } from "swr";
+import BlockPaymentScreen from "../../pagesForStudents/BlockPaymentScreen";
+import AddSession from "../static/AddSession";
 
 const Layout: FC = () => {
   const { data } = useSchoolData();

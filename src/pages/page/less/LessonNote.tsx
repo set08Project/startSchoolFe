@@ -1,6 +1,6 @@
-document.title = "Teacher's Lession Notes";
+document.title = "Teacher's Lesson Notes";
 import { NavLink } from "react-router-dom";
-import { FaBook, FaReply } from "react-icons/fa6";
+import { FaBook, FaReply, FaThumbsUp } from "react-icons/fa6";
 import { MdAutoAwesome, MdCheck, MdClose } from "react-icons/md";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useNotes, useSchoolData } from "../../hook/useSchoolAuth";
@@ -97,7 +97,7 @@ const AdminLessonNote = () => {
                               <div className="w-full my-[10px] flex items-center gap-5 mt-10">
                                 <h1 className="font-medium">Status:</h1>
                                 <p
-                                  className={`${
+                                  className={`text-[12px] ${
                                     props?.adminSignation
                                       ? "text-green-500 font-bold"
                                       : "text-red-500 font-bold"
@@ -112,20 +112,36 @@ const AdminLessonNote = () => {
                           </div>
                         </NavLink>
 
-                        <div className="w-full mb-[25px] flex justify-center items-center">
-                          <label
-                            htmlFor="send_response"
-                            className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                            onClick={() => {
-                              console.log(props?._id);
-                              setID(props?._id);
-                              setObj(props);
-                            }}
-                          >
-                            Send Response to Teacher
-                            <FaReply />
-                          </label>
-                        </div>
+                        {props?.adminSignation ? (
+                          <div>
+                            <div className="w-full mb-[25px] flex justify-center items-center">
+                              <label
+                                // htmlFor="send_response"
+                                className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                              >
+                                Lesson Note has been Approved
+                                <FaThumbsUp className="mb-1" />
+                              </label>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="w-full mb-[25px] flex justify-center items-center">
+                              <label
+                                htmlFor="send_response"
+                                className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                onClick={() => {
+                                  console.log(props?._id);
+                                  setID(props?._id);
+                                  setObj(props);
+                                }}
+                              >
+                                Send Response to Teacher
+                                <FaReply />
+                              </label>
+                            </div>{" "}
+                          </div>
+                        )}
 
                         {/* Administrator Response Toggle */}
                         <input

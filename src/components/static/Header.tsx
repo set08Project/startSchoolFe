@@ -162,6 +162,11 @@ const Header = () => {
           <AddSession />
         </div>
       )}
+      {data?.session?.length === 0 && (
+        <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">
+          <AddSession />
+        </div>
+      )}
 
       {sessionTerm && (
         <div className=" absolute top-0 right-0 w-full md:w-[calc(100%-250px)] backdrop-blur-md  flex items-center justify-center h-screen">

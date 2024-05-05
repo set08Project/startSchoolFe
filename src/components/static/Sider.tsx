@@ -147,7 +147,7 @@ const Sider = () => {
                 <Button
                   name={roll ? `Processing...` : "Renew Plan"}
                   icon={roll ? "" : ""}
-                  className="text-[14px] uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
+                  className="text-[14px] w-full uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
                   onClick={() => {
                     setRoll(true);
                     makePayment(user?.id, data?.email)

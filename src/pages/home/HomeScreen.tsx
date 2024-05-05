@@ -11,7 +11,7 @@ import {
   displaySubject,
 } from "../../global/reduxState";
 import AddAnyItem from "../../components/static/AddAnyItems";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   createSchoolAnnouncement,
   createSchoolEvent,

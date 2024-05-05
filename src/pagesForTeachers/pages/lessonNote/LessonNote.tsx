@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { FaBook, FaDisplay, FaEye, FaReply } from "react-icons/fa6";
+import { FaBook, FaDisplay, FaEye, FaReply, FaThumbsUp } from "react-icons/fa6";
 import { MdAutoAwesome, MdCheck, MdClose } from "react-icons/md";
 import { useLessonNote } from "../../../pagesForStudents/hooks/useStudentHook";
 import LittleHeader from "../../../components/layout/LittleHeader";
@@ -117,28 +117,42 @@ const LessonNote = () => {
                           </div>
                         </NavLink>
 
-                        <div className="w-[90%] mb-[25px] flex justify-center items-center">
-                          {props?.messageSent ? (
-                            <div className="w-full flex justify-center items-center">
+                        {props?.adminSignation ? (
+                          <div>
+                            <div className="w-full mb-[25px] flex justify-center items-center">
                               <label
-                                htmlFor="view_response"
-                                className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                                onClick={() => {
-                                  setID(props?._id);
-                                  setObj(props);
-                                }}
+                                // htmlFor="send_response"
+                                className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                               >
-                                View Administrator's Response
-                                <FaEye />
+                                Lesson Note has been Approved
+                                <FaThumbsUp className="mb-1" />
                               </label>
                             </div>
-                          ) : (
-                            <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
-                              <div>Awaiting Administrator's Response</div>
-                              <FiLoader />
-                            </div>
-                          )}
-                        </div>
+                          </div>
+                        ) : (
+                          <div className="w-[90%] mb-[25px] flex justify-center items-center">
+                            {props?.messageSent ? (
+                              <div className="w-full flex justify-center items-center">
+                                <label
+                                  htmlFor="view_response"
+                                  className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                  onClick={() => {
+                                    setID(props?._id);
+                                    setObj(props);
+                                  }}
+                                >
+                                  View Administrator's Response
+                                  <FaEye />
+                                </label>
+                              </div>
+                            ) : (
+                              <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
+                                <div>Awaiting Administrator's Response</div>
+                                <FiLoader />
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

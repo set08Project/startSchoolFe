@@ -14,8 +14,6 @@ const ViewTeacherNoteByAdmin = () => {
   const { noteID } = useParams();
   const { lessonNoteData } = useLessonNote(noteID!);
 
-  console.log(lessonNoteData);
-
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />

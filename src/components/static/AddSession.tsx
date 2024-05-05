@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { displaySession } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
@@ -8,11 +8,12 @@ import { createNewSession } from "../../pages/api/schoolAPIs";
 import { useSchoolCookie, useSchoolData } from "../../pages/hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const AddSession = () => {
   const dispatch = useDispatch();
   const [start, setStart] = useState<string>("");
-  const [end, setEnd] = useState<string>("");
+  const [startToggle, setStartToggle] = useState<boolean>(false);
   const { dataID } = useSchoolCookie();
   const { data } = useSchoolData();
 
@@ -27,36 +28,42 @@ const AddSession = () => {
   };
 
   const handleSubmit = () => {
-    createNewSession(dataID, { year: start }).then((res) => {
-      if (res.status === 201) {
-        mutate(`api/view-school-session/${data?._id}`);
-        mutate(`api/view-school/${data?._id}`);
-        if (!document.startViewTransition) {
-          dispatch(displaySession(false));
-
-          toast.success("Session created");
-        } else {
-          document.startViewTransition(() => {
-            toast.error("Something went wrong");
-            dispatch(displaySession(false));
-          });
-        }
-      } else {
-        if (!document.startViewTransition) {
-          dispatch(displaySession(false));
+    setStartToggle(true);
+    createNewSession(dataID, { year: start })
+      .then((res) => {
+        if (res.status === 201) {
           mutate(`api/view-school-session/${data?._id}`);
           mutate(`api/view-school/${data?._id}`);
-          toast.success("Session created");
+          if (!document.startViewTransition) {
+            dispatch(displaySession(false));
+
+            toast.success("Session created");
+          } else {
+            document.startViewTransition(() => {
+              toast.error("Something went wrong");
+              dispatch(displaySession(false));
+            });
+          }
         } else {
-          document.startViewTransition(() => {
+          if (!document.startViewTransition) {
+            dispatch(displaySession(false));
             mutate(`api/view-school-session/${data?._id}`);
             mutate(`api/view-school/${data?._id}`);
             toast.success("Session created");
-            dispatch(displaySession(false));
-          });
+          } else {
+            document.startViewTransition(() => {
+              mutate(`api/view-school-session/${data?._id}`);
+              mutate(`api/view-school/${data?._id}`);
+              toast.success("Session created");
+              dispatch(displaySession(false));
+            });
+          }
         }
-      }
-    });
+      })
+      .then(() => {
+        setStart("");
+        setStartToggle(false);
+      });
   };
 
   return (
@@ -94,30 +101,31 @@ const AddSession = () => {
               }}
             />
           </div>
-
-          {/* <div className="w-full">
-            <label className="font-medium text-[12px]">
-              Session Term <span className="text-red-500">*</span>
-            </label>
-            <Input
-              placeholder="1st Term"
-              className="mx-0 h-10  w-full"
-              value={"1st Term"}
-              // onChange={(e: any) => {
-              //   setEnd();
-              // }}
-              defaultValue={"1st Term"}
-            />
-          </div> */}
         </div>
 
         <div className="w-full flex justify-end transition-all duration-300">
           {start !== "" ? (
-            <Button
-              name="Proceed"
-              className="bg-blue-950  mx-0"
-              onClick={handleSubmit}
-            />
+            <div>
+              {startToggle ? (
+                <div>
+                  <Button
+                    icon={
+                      <ClipLoader size={20} color="white" className="mb-0" />
+                    }
+                    name={"creating Session"}
+                    className="bg-blue-950 py-0 mx-0"
+                  />
+                </div>
+              ) : (
+                <Button
+                  name={"Proceed"}
+                  className="bg-blue-950  mx-0"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                />
+              )}
+            </div>
           ) : (
             <Button
               name="Can't Proceed"

@@ -15,11 +15,12 @@ import {
 } from "../../pages/hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const AddSessionTerm = () => {
   const termID = useSelector((state: any) => state.termID);
   const dispatch = useDispatch();
-  const [start, setStart] = useState<string>("");
+  const [start, setStart] = useState<boolean>(false);
   const [end, setEnd] = useState<string>("");
   const { dataID } = useSchoolCookie();
   const { data } = useSchoolData();
@@ -37,41 +38,48 @@ const AddSessionTerm = () => {
   const { sessionData } = useViewSingleSession(termID);
 
   const handleSubmit = () => {
-    createNewSessionTerm(termID, { term: end }).then((res) => {
-      if (res.status === 201) {
-        // mutate(`api/view-school-session/${data?._id}`);
-        mutate(`api/view-school-term-detail/${termID}`);
-        if (!document.startViewTransition) {
-          dispatch(displaySessionTerm(false));
-          toast.success("Term Session created");
-        } else {
-          document.startViewTransition(() => {
-            toast.error("Something went wrong");
-            dispatch(displaySessionTerm(false));
-          });
-        }
-      } else {
-        if (!document.startViewTransition) {
-          dispatch(displaySessionTerm(false));
+    setStart(true);
+    createNewSessionTerm(termID, { term: end })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
           mutate(`api/view-school-term-detail/${termID}`);
-          toast.error(`${res?.response?.data?.message}`);
-        } else {
-          document.startViewTransition(() => {
-            // mutate(`api/view-school-term-detail/${termID}`);
+          if (!document.startViewTransition) {
+            dispatch(displaySessionTerm(false));
             mutate(`api/view-school-session/${data?._id}`);
             mutate(`api/view-school/${data?._id}`);
-
-            toast.success("Term Created Successfully");
-            // `${
-            //   res?.status === 201
-            //     ? res?.message
-            //     : res?.response?.data?.message
-            // }`
+            toast.success("Term Session created");
+          } else {
+            document.startViewTransition(() => {
+              mutate(`api/view-school-session/${data?._id}`);
+              mutate(`api/view-school/${data?._id}`);
+              toast.success("Term Session created");
+              dispatch(displaySessionTerm(false));
+            });
+          }
+        } else {
+          setEnd("");
+          setStart(false);
+          if (!document.startViewTransition) {
             dispatch(displaySessionTerm(false));
-          });
+            mutate(`api/view-school-term-detail/${termID}`);
+            toast.error(`${res?.response?.data?.message}`);
+          } else {
+            document.startViewTransition(() => {
+              mutate(`api/view-school-session/${data?._id}`);
+              mutate(`api/view-school/${data?._id}`);
+
+              toast.error(`${res?.response?.data?.message}`);
+
+              dispatch(displaySessionTerm(false));
+            });
+          }
         }
-      }
-    });
+      })
+      .then(() => {
+        setEnd("");
+        setStart(false);
+      });
   };
   return (
     <div className="flex justify-center bg-blue-50   ">
@@ -111,18 +119,6 @@ const AddSessionTerm = () => {
             <label className="font-medium text-[12px]">
               Session Term <span className="text-red-500">*</span>
             </label>
-            {/* <Input
-              placeholder="1st Term"
-              className="mx-0 h-10  w-full"
-              value={end}
-              onChange={(e: any) => {
-                setEnd(e.target.value);
-              }}
-               value={end}
-              onChange={(e) => {
-                setEnd(e.target.value);
-              }}
-            /> */}
 
             <select
               className="select select-info bg-white border-[#3B82F6] select-bordered w-full mt-2"
@@ -141,11 +137,27 @@ const AddSessionTerm = () => {
 
         <div className="w-full flex justify-end transition-all duration-300">
           {end !== "" ? (
-            <Button
-              name="Proceed"
-              className="bg-blue-950  mx-0"
-              onClick={handleSubmit}
-            />
+            <div>
+              {start ? (
+                <div>
+                  <Button
+                    icon={
+                      <ClipLoader size={20} color="white" className="mb-0" />
+                    }
+                    name={"creating Term"}
+                    className="bg-blue-950 py-0 mx-0"
+                  />
+                </div>
+              ) : (
+                <Button
+                  name={"Proceed"}
+                  className="bg-blue-950  mx-0"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                />
+              )}
+            </div>
           ) : (
             <Button
               name="Can't Proceed"
