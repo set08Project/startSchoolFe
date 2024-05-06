@@ -33,7 +33,7 @@ const MainArticleHolderScreen = () => {
                 <div>
                   {i < 2 && (
                     <div className="my-2">
-                      <Link className="" to={`/articles/${el?._id}`}>
+                      <Link className="" to={`/view-articles/${el?._id}`}>
                         <UnLazyImage
                           alt={"cover image"}
                           thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"

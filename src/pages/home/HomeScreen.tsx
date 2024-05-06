@@ -189,7 +189,7 @@ const HomeScreen = () => {
     <div>
       <LittleHeader name={"Dashboard"} />
       <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
-        <div className="mt-24 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
+        <div className="mt-44 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
           <div className="w-full min-h-[130px] bg-blue-950 rounded-lg mt-1 text-white p-3">
             <p className="text-[20px] mb-2">Announcement/Event</p>
             <Announcement />

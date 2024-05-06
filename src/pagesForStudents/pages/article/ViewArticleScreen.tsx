@@ -47,7 +47,9 @@ const ViewArticleScreen = () => {
 
   return (
     <div>
-      <LittleHeader name={document.title} />
+      <LittleHeader
+        name={`viewing ${oneArticle?.student?.split(" ")[0]} Article`}
+      />
 
       <div className="w-full flex justify-center">
         <div className="space-y-4 md:w-[95%]">
@@ -73,7 +75,6 @@ const ViewArticleScreen = () => {
               </div>
             </div>
           </div>
-
           <div
             className="w-full text-black  mt-20"
             dangerouslySetInnerHTML={{ __html: oneArticle?.content }}
@@ -82,11 +83,9 @@ const ViewArticleScreen = () => {
           <br />
           <br />
           <br />
-
           <div className="mt-32">
             <hr />
           </div>
-
           <div className="flex items-center gap-2">
             {/* <MdFavoriteBorder  /> */}
             <div
@@ -114,23 +113,22 @@ const ViewArticleScreen = () => {
           <div className="mt-g32">
             <hr />
           </div>
-
           <div>
             <p className="text-[12px] font-semibold mb-5 underline">
-              More from Khushi_developer
+              More from {oneArticle?.student}
             </p>
 
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-4">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4 ">
               {myArticale?.map((props: any) => (
                 <Link
                   to={`/articles/${props?._id}`}
                   key={props._id}
-                  className="m-2 sm:w-[300px]"
+                  className="m-2 w-full lg:w-[300px]"
                 >
                   <img
                     alt="image"
                     src={props?.coverImage}
-                    className="w-full  rounded-t-md sm:w-[300px] sm:h-[200px] object-cover border"
+                    className="w-full  rounded-t-md lg:w-[300px] lg:h-[200px] object-cover border"
                   />
                   <div className="p-2 border-r border-l border-b">
                     <div className="flex mt-2 gap-2 mb-3">
@@ -151,7 +149,12 @@ const ViewArticleScreen = () => {
                     <p className="font-semibold leading-tight mb-4">
                       {props?.desc}
                     </p>
-                    <p className="text-[14px] mb-5">{props?.title}</p>
+                    <p className="text-[14px] mb-5">
+                      {" "}
+                      {props?.title?.length > 60
+                        ? `${props?.title?.slice(0, 60)}...`
+                        : props?.title}
+                    </p>
                     <p className="flex items-center gap-1">
                       <PiHandsClapping />
                       <span className="font-semibold text-[12px]">

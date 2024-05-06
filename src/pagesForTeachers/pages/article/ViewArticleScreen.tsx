@@ -119,13 +119,13 @@ const ViewArticleScreen = () => {
 
           <div>
             <p className="text-[12px] font-semibold mb-5 underline">
-              More from Khushi_developer
+              More from {oneArticle?.student}
             </p>
 
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-4">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4 ">
               {myArticale?.map((props: any) => (
                 <Link
-                  to={`/articles/${props?._id}`}
+                  to={`/view-articles/${props?._id}`}
                   key={props._id}
                   className="m-2 sm:w-[300px]"
                 >
@@ -153,7 +153,11 @@ const ViewArticleScreen = () => {
                     <p className="font-semibold leading-tight mb-4">
                       {props?.desc}
                     </p>
-                    <p className="text-[14px] mb-5">{props?.title}</p>
+                    <p className="text-[14px] mb-5">
+                      {props?.title?.length > 60
+                        ? `${props?.title?.slice(0, 60)}...`
+                        : props?.title}
+                    </p>
                     <div className="flex gap-3">
                       <p className="flex items-center gap-1">
                         <PiHandsClapping />

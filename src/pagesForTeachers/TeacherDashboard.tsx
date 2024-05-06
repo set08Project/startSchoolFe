@@ -1,9 +1,9 @@
-import { MdPlaylistAddCheck } from "react-icons/md";
+import { MdOutlineHotelClass, MdPlaylistAddCheck } from "react-icons/md";
 
 import Personal from "./Chart/Personal";
 import Calendar from "./Chart/Calendar";
 import StudentPerformance from "./Chart/PerformingStudent";
-import { useTeacherInfo } from "./hooks/useTeacher";
+import { useClassStudent, useTeacherInfo } from "./hooks/useTeacher";
 import StudentOfTheWeek from "./pages/quiz/StudentWeek";
 import { useReadOneClassInfo } from "../pagesForStudents/hooks/useStudentHook";
 
@@ -15,13 +15,17 @@ import {
   useViewTermDetail,
 } from "../pages/hook/useSchoolAuth";
 import BlockPaymentScreen from "../pagesForStudents/BlockPaymentScreen";
+import Button from "../components/reUse/Button";
+import { assignClassMonitor } from "./api/teachersAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { viewMonitor } from "../global/reduxState";
+
 const TeacherDashboard = () => {
   const { teacherInfo } = useTeacherInfo();
   document.title = `${teacherInfo?.staffName}'s Record and Stats`;
-
+  const dispatch = useDispatch();
+  const monitorII = useSelector((state: any) => state.monitorView);
   const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
-
-  // const readData = Array.from({ length: 2 });
 
   const { data } = useSchool(teacherInfo?.schoolIDs);
 
@@ -49,13 +53,29 @@ const TeacherDashboard = () => {
 
   const { termData } = useViewTermDetail(termID);
 
+  const { classStudents } = useClassStudent(oneClass?._id);
+  const monitor = classStudents?.students?.find((el: any) => {
+    return el?.monitor === true;
+  });
+
   return (
     <div className="text-blue-950 flex flex-col h-full">
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
-          <div className="mb-4 text-medium capitalize font-semibold flex gap-4">
-            <div> My Class: </div>
-            <div className="font-bold">{teacherInfo?.classesAssigned}</div>
+          <div className="flex justify-between items-center mb-6 text-blue-950 ">
+            <div className="mb-4 text-medium capitalize font-semibold flex gap-4">
+              <div> My Class: </div>
+              <div className="font-bold">{teacherInfo?.classesAssigned}</div>
+            </div>
+
+            <Button
+              icon={<MdOutlineHotelClass />}
+              name="Assign Monitor"
+              className="mx-0 text-blue-950 text-[12px] font-medium"
+              onClick={() => {
+                dispatch(viewMonitor(true));
+              }}
+            />
           </div>
           <Personal />
 
@@ -147,16 +167,6 @@ const TeacherDashboard = () => {
             {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
           </div>
         )}
-
-        {/* <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
-          Appointment
-
-          <div className=" rounded-md w-full  p-4">
-            <div className="mb-4 text-medium capitalize">
-              Top 5 Most Active studio
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

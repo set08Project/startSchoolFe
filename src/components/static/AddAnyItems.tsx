@@ -100,8 +100,8 @@ const AddAnyItem: FC<iProps> = ({
             </label>
             <Input
               placeholder={placeStart}
-              className="mx-0 h-12 w-full"
-              value={start}
+              className="mx-0 h-12 w-full uppercase"
+              value={start.toUpperCase()}
               onChange={(e: any) => {
                 setStart!(e.target.value);
               }}
@@ -162,7 +162,7 @@ const AddAnyItem: FC<iProps> = ({
           <div className="flex gap-2">
             <div className="w-full">
               <label className="font-medium text-[12px]">
-                First Term Fee <span className="text-red-500">*</span>
+                1st Term Fee <span className="text-red-500">*</span>
               </label>
               <Input
                 placeholder="50000"
@@ -175,7 +175,7 @@ const AddAnyItem: FC<iProps> = ({
             </div>
             <div className="w-full">
               <label className="font-medium text-[12px]">
-                Second Term Fee <span className="text-red-500">*</span>
+                2nd Term Fee <span className="text-red-500">*</span>
               </label>
               <Input
                 placeholder="50000"
@@ -188,7 +188,7 @@ const AddAnyItem: FC<iProps> = ({
             </div>
             <div className="w-full">
               <label className="font-medium text-[12px]">
-                Third Term Fee <span className="text-red-500">*</span>
+                3rd Term Fee <span className="text-red-500">*</span>
               </label>
               <Input
                 placeholder="50000"

@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import Chart from "./Chart";
 import GetAnnouncement from "./GetAnnouncement";
 import {
+  useClassStudent,
   useTeacherInfo,
   useTeacherNote,
   useTeacherSchedule,
@@ -49,20 +50,41 @@ const Personal: FC = () => {
     }, 0) / ratingData?.length
   ).toFixed(2);
 
+  const { classStudents } = useClassStudent(oneClass?._id);
+
+  const monitor = classStudents?.students?.find((el: any) => {
+    return el?.monitor === true;
+  });
+
   return (
     <div>
       <div className="mb-2 text-blue-950">
-        <p className="font-medium">
-          Performance Rating:{" "}
-          {teacherInfo?.staffRating ? (
-            <p className="text-[20px] text-blue-900">
-              {`\u2605`.repeat(rating)}{" "}
-              <span className="text-[12px] font-bold">({rating})</span>
-            </p>
-          ) : (
-            <p className="text-[12px]">No Rating Yet</p>
-          )}
-        </p>
+        <div className="flex gap-5 items-center mb-10">
+          <p className="font-medium">
+            Performance Rating:{" "}
+            {teacherInfo?.staffRating ? (
+              <p className="text-[20px] text-blue-900">
+                {`\u2605`.repeat(rating)}{" "}
+                <span className="text-[12px] font-bold">({rating})</span>
+              </p>
+            ) : (
+              <p className="text-[12px]">No Rating Yet</p>
+            )}
+          </p>
+          <p className="font-medium">
+            Class Monitor:{" "}
+            {monitor?.monitor ? (
+              <p className="text-[20px] text-blue-900">
+                {/* {`\u2605`.repeat(1)}{" "} */}
+                <span className="text-[12px] font-bold  leading-tight">
+                  {monitor?.studentFirstName} {monitor?.studentLastName}
+                </span>
+              </p>
+            ) : (
+              <p className="text-[12px]">Haven't Assigned Yet</p>
+            )}
+          </p>
+        </div>
         <div className="grid grid-cols-2 gap-3 mt-2">
           <div className="border rounded-md min-h-[130px] p-2 pb-0 ">
             <p className="font-medium leading-tight">Number of Students:</p>

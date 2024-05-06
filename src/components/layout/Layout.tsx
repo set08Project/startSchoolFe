@@ -130,7 +130,7 @@ const Layout: FC = () => {
                   fee
                   titleCall="Creating new classroom"
                   offFn={handleDisplaySubjectOff}
-                  text="Place the name this would be generally called accross the life-span of the school's existance!"
+                  text="Place the name this would be generally called across the life-span of the school's existance!"
                   placeStart="JSS 1A"
                   placeEnd="JSS 1A"
                   startTitle="Enter Class Name"

@@ -41,16 +41,29 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
       });
   };
 
+  console.log("fetch: ", studentInfo?.monitor);
+
   return (
     <div>
       {/* <Toaster position="top-center" reverseOrder={true} /> */}
       <div className=" text-[13px] font-medium">
-        <label
-          htmlFor="mark_complains"
-          className=" transition-all duration-300 cursor-pointer "
-        >
-          + Mark Active Class
-        </label>
+        {studentInfo?.monitor ? (
+          <label
+            htmlFor="mark_complains"
+            className=" transition-all duration-300 cursor-pointer "
+          >
+            <p>+ Mark Active(on-going) Class</p>
+            <p className="text-[10px] mt-1">(only class prefect can do this)</p>
+          </label>
+        ) : (
+          <label
+            // htmlFor="mark_complains"
+            className=" transition-all duration-300 cursor-pointer "
+          >
+            <p>+ Mark Active Class</p>
+            <p className="text-[10px]">(only class prefect can do this)</p>
+          </label>
+        )}
         <div className="" />
         {/* Put this part before </body> tag */}
         <input type="checkbox" id="mark_complains" className="modal-toggle" />

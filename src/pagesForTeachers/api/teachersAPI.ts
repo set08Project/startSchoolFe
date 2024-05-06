@@ -452,3 +452,18 @@ export const editTeacherLessonNote = async (
     return error;
   }
 };
+
+export const assignClassMonitor = async (
+  staffID: string,
+  studentID: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/assign-class-monitor/${staffID}/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};

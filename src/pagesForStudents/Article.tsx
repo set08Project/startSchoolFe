@@ -69,7 +69,11 @@ const Article = () => {
                       <p className="mt-[-10px] text-[10px] font-medium">
                         Writen by {el?.student}
                       </p>
-                      <p className="text-[13px] leading-tight">{el?.title}</p>
+                      <p className="text-[13px] leading-tight">
+                        {el?.title?.length > 60
+                          ? `${el?.title?.slice(0, 60)}...`
+                          : el?.title}
+                      </p>
                       <div className="flex justify-between gap-4 items-center h-4">
                         <div className="text-[11px] font-medium capitalize ">
                           {moment(el?.createdAt).fromNow()}

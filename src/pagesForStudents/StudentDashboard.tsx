@@ -65,10 +65,20 @@ const StudentDashboard = () => {
     <div className="text-blue-950 flex flex-col h-full">
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
-          <div className="mb-4 text-medium capitalize font-semibold flex gap-2">
-            <div> My Class:</div>
-            <div className="font-bold">{studentInfo?.classAssigned}</div>
+          <div className="flex items-center justify-between mb-1">
+            <div className="mb-4 text-medium capitalize font-semibold flex gap-2">
+              <div> My Class:</div>
+              <div className="font-bold">{studentInfo?.classAssigned}</div>
+            </div>
+
+            {/* <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">
+              <MakeActiveClass />
+            </div> */}
           </div>
+          <div className=" gap-6 font-medium cursor-pointer text-[12px] mb-10 bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">
+            <MakeActiveClass />
+          </div>
+
           <p
             className={`capitalize font-medium ${
               resultData?.approve ? "text-red-500" : "text-blue-950"
@@ -112,9 +122,6 @@ const StudentDashboard = () => {
             <div>
               <div className="  gap-2 mb-10">
                 <div className="flex gap-2 pb-10">
-                  <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">
-                    <MakeActiveClass />
-                  </div>
                   <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4  rounded-md  text-center">
                     <MakeComplains />
                   </div>

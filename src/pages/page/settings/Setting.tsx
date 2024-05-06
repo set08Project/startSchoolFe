@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { RiPagesLine } from "react-icons/ri";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import LittleHeader from "../../../components/layout/LittleHeader";
+import Button from "../../../components/reUse/Button";
+import { MdClose, MdFeedback } from "react-icons/md";
 
 const SettingScreen: FC = () => {
   document.title = "School's Profile settings";
@@ -34,7 +36,7 @@ const SettingScreen: FC = () => {
   ];
 
   return (
-    <div className=" min-h-[82vh] text-blue-950">
+    <div className=" min-h-[88vh] text-blue-950 flex flex-col ">
       <LittleHeader name={document.title} />
       <div className="w-full m-auto py-8 my-4 flex gap-24 max-lg:block max-md:pt-1">
         {/* profile Account Detail */}
@@ -79,6 +81,46 @@ const SettingScreen: FC = () => {
       </div>
 
       <div className="flex-1 " />
+
+      <div className="flex justify-end gap-4">
+        {/* <Button
+          icon={}
+          name={"Give us Feedback"}
+          className=""
+        /> */}
+        <label
+          htmlFor="feedback"
+          className="px-6 py-2 border-blue-950 border rounded-md m-2 overflow-hidden flex items-center justify-center text-blue-950 gap-2"
+        >
+          <MdFeedback size={30} />
+          <div>Give us Feedback</div>
+        </label>
+      </div>
+
+      {/* Put this part before </body> tag */}
+      <input type="checkbox" id="feedback" className="modal-toggle" />
+      <div className="modal" role="dialog">
+        <div className="modal-box">
+          <div className="flex justify-between items-center ">
+            <h3 className="text-lg font-medium leading-tight">
+              We will Love to know how we can serve you better!
+            </h3>
+            <label
+              htmlFor="feedback"
+              className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-slate-200 transition-all duration-300 bg-slate-100"
+            >
+              <MdClose />
+            </label>
+          </div>
+          <p className="py-4 leading-tight text-[12px]">
+            Tell us what we should add in our next update and complains you
+            have... so we can improve on this software!
+          </p>
+        </div>
+        <label className="modal-backdrop" htmlFor="feedback">
+          Close
+        </label>
+      </div>
     </div>
   );
 };

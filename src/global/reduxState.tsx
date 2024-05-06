@@ -29,6 +29,7 @@ const initialState = {
   imageToggle: false,
   cart: [],
 
+  monitorView: false,
   showStudent: false,
   sessionToggle: false,
   sessionToggled: false,
@@ -200,11 +201,16 @@ const reduxState = createSlice({
     paymentRef: (state, { payload }) => {
       state.payRef = payload;
     },
+
+    viewMonitor: (state, { payload }) => {
+      state.monitorView = payload;
+    },
   },
 });
 
 export const {
   emptyCart,
+  viewMonitor,
   changeStarting,
   paymentRef,
   addToCart,

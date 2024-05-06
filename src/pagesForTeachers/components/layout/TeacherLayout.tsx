@@ -7,16 +7,20 @@ import { FC, useState } from "react";
 import AddAnyItem from "../static/AddAnyItems";
 import toast from "react-hot-toast";
 import { useSchoolData } from "../../../pages/hook/useSchoolAuth";
-import { displayClass } from "../../../global/reduxState";
+import { displayClass, viewMonitor } from "../../../global/reduxState";
 import { createSchoolClassroom } from "../../../pages/api/schoolAPIs";
 import AddNewStaff from "../../../pages/page/staff/AddNewStaff";
 import AddNewStudent from "../../../pages/page/student/AddNewStudent";
+import { assignClassMonitor } from "../../api/teachersAPI";
+import { useTeacherInfo } from "../../hooks/useTeacher";
+import MonitorScreen from "../static/MonitorScreen";
 
 const TeacherLayout: FC = () => {
   const { data } = useSchoolData();
   const show = useSelector((state: any) => state.showStaffComp);
   const showII = useSelector((state: any) => state.showStudent);
 
+  const monitor = useSelector((state: any) => state.monitorView);
   const classroom = useSelector((state: any) => state.classroomToggled);
   const dispatch = useDispatch();
 
@@ -26,6 +30,8 @@ const TeacherLayout: FC = () => {
   const [num3, setNumb3] = useState<number>(0);
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { teacherInfo } = useTeacherInfo();
 
   const handleDisplaySubjectOff = () => {
     if (!document.startViewTransition) {
@@ -54,7 +60,24 @@ const TeacherLayout: FC = () => {
         } else {
           setLoading(false);
           toast.error(`${res.response.data.message}`);
-          console.log(res);
+        }
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handleMonitor = () => {
+    try {
+      setLoading(true);
+      assignClassMonitor(teacherInfo?._id, "").then((res: any) => {
+        if (res.status === 201) {
+          setLoading(false);
+          dispatch(viewMonitor(false));
+          toast.success(`Monitor Assigned Successfully`);
+        } else {
+          setLoading(false);
+          dispatch(viewMonitor(false));
         }
       });
     } catch (error) {
@@ -106,6 +129,21 @@ const TeacherLayout: FC = () => {
                 }}
               >
                 <AddNewStudent />
+              </div>
+            )}
+
+            {monitor && (
+              //   <div className="relative  ">
+              <div
+                className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
+                style={{
+                  background: "rgba(73, 154, 255, 0.2)",
+                  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(73, 154, 255, 0.3)",
+                }}
+              >
+                <MonitorScreen />
               </div>
             )}
 
