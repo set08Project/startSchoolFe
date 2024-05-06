@@ -981,3 +981,33 @@ export const approveMainReport = async (classID: string, data: string) => {
     return error;
   }
 };
+
+export const deletSubject = async (schoolID: string, subjectID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-subject/${schoolID}/${subjectID}/`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const removeTeacherSubject = async (
+  schoolID: string,
+  teacherID: string,
+  subjectID: string
+) => {
+  try {
+    return await axios
+      .patch(
+        `${URL}/remove-teacher-subject/${schoolID}/${teacherID}/${subjectID}/`
+      )
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

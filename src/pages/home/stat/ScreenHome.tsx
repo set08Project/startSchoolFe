@@ -74,7 +74,7 @@ const ScreenHome = () => {
               </div>
               <div className="w-[60%] text-blue-950">
                 {state ? (
-                  <div>Subscription ends Monday Feb, 26 2024</div>
+                  <div>Subscription ends at the beginning of Next Term</div>
                 ) : (
                   <div>****************</div>
                 )}

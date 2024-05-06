@@ -21,7 +21,7 @@ const SettingScreen: FC = () => {
     {
       icon: <RiPagesLine size={45} />,
 
-      title: "Professional Info",
+      title: "School's Account Settings",
       detail: "Provide personal details and how we can reach you.",
       url: "/my-personal-info/theme-setting",
       size: 35,

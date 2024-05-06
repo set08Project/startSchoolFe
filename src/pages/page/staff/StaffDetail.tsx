@@ -8,6 +8,11 @@ import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import Input from "../../../components/reUse/Input";
 import { useState } from "react";
 import { updaetTeacherSalary } from "../../../pagesForTeachers/api/teachersAPI";
+import { mutate } from "swr";
+import { MdDelete } from "react-icons/md";
+import { deletSubject, removeTeacherSubject } from "../../api/schoolAPIs";
+import toast from "react-hot-toast";
+import { useSchool } from "../../hook/useSchoolAuth";
 
 const StaffDetail = () => {
   const { staffID } = useParams();
@@ -15,8 +20,6 @@ const StaffDetail = () => {
 
   const [show, setShow] = useState<boolean>(false);
   const [salary, setSalary] = useState<string>("");
-
-  console.log("hummmm", teacherDetail);
 
   return (
     <div>
@@ -67,7 +70,9 @@ const StaffDetail = () => {
               className="bg-blue-950"
               onClick={() => {
                 setShow(!show);
-                updaetTeacherSalary(teacherDetail?._id, { salary });
+                updaetTeacherSalary(teacherDetail?._id, { salary }).then(() => {
+                  mutate(`api/view-teacher-detail/${teacherDetail?._id}`);
+                });
               }}
             />
           </div>
@@ -78,12 +83,15 @@ const StaffDetail = () => {
       {/* Every thing subject handled performance */}
 
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Detail data for Staff Name</p>
+        <p>
+          Detail data for{" "}
+          <span className="font-semibold">{teacherDetail?.staffName}</span>
+        </p>
         <p className="text-[13px]">
-          Class Handled:{" "}
+          Class Teacher of:{" "}
           <span className="font-bold">
-            {teacherDetail?.classAssigned
-              ? teacherDetail?.classAssigned
+            {teacherDetail?.classesAssigned
+              ? teacherDetail?.classesAssigned
               : "Not Yet"}
           </span>
         </p>
@@ -91,31 +99,53 @@ const StaffDetail = () => {
         <div className="mt-5 text-[13px] font-medium">Subjects Handle</div>
 
         <div className="mt-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          {teacherDetail?.subjectAssigned.map((props: any) => (
-            <div className="bg-white border flex flex-col w-full rounded-2xl min-h-[200px] px-4 pt-4">
-              <div className="mt-3 flex  justify-between items-center font-bold">
-                <p className="break-words w-full">{props?.title}</p>
-                <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                  <BsThreeDotsVertical className="hover:text-blue-900" />
+          {teacherDetail?.subjectAssigned.map((props: any) => {
+            console.log(props);
+            return (
+              <div
+                className="bg-white border flex flex-col w-full rounded-2xl min-h-[200px] px-4 pt-4"
+                key={props?._id}
+              >
+                <div className="mt-3 flex  justify-between items-center font-bold">
+                  <p className="break-words w-full">{props?.title}</p>
+                  <div
+                    className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center"
+                    onClick={() => {
+                      removeTeacherSubject(
+                        teacherDetail?.schoolIDs,
+                        teacherDetail?._id,
+                        props?.id
+                      ).then((res: any) => {
+                        console.log(res);
+                        if (res.status === 201) {
+                          mutate(
+                            `api/view-teacher-detail/${teacherDetail?._id}`
+                          );
+                          toast.success("subject deleted successfully");
+                        } else {
+                          toast.error("something went wrong");
+                        }
+                      });
+                    }}
+                  >
+                    <MdDelete className="hover:text-blue-900" />
+                  </div>
+                </div>
+                <div className="flex">
+                  <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4">
+                    compulsory
+                  </p>
+                </div>
+                <div className="flex-1" />
+                <p className="text-[13px] font-medium">Classes Tought</p>
+                <div className="flex mb-4 gap-2 flex-wrap justify-center sm:justify-start">
+                  <div className="bg-blue-950 text-white rounded-full px-6 font-medium py-2 text-[12px] border">
+                    {props?.classMeant}
+                  </div>
                 </div>
               </div>
-              <div className="flex">
-                <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4">
-                  compulsory
-                </p>
-              </div>
-              <div className="flex-1" />
-              <p className="text-[13px] font-medium">Classes Tought</p>
-              <div className="flex mb-4 gap-2 flex-wrap justify-center sm:justify-start">
-                <div className="bg-blue-950 text-white rounded-full px-6 font-medium py-2 text-[12px] border">
-                  JSS 2A
-                </div>
-                <div className="bg-blue-950 text-white rounded-full px-6 font-medium py-2 text-[12px] border">
-                  JSS 2A
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

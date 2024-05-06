@@ -4,6 +4,8 @@ import Button from "../../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import BeatLoader from "react-spinners/ClipLoader";
 import { useSchoolData } from "../../hook/useSchoolAuth";
+import { changeSchoolName } from "../../api/schoolAPIs";
+import { mutate } from "swr";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
@@ -13,6 +15,7 @@ const PersonalInfoScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
+  const [toggle3, setToggle3] = useState<boolean>(false);
 
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -50,6 +53,18 @@ const PersonalInfoScreen = () => {
     } else {
       document.startViewTransition(() => {
         setToggle2(!toggle2);
+        setToggle(false);
+      });
+    }
+  };
+
+  const onToggle3 = () => {
+    if (!document.startViewTransition) {
+      setToggle3(!toggle3);
+      setToggle(false);
+    } else {
+      document.startViewTransition(() => {
+        setToggle3(!toggle3);
         setToggle(false);
       });
     }
@@ -236,6 +251,102 @@ const PersonalInfoScreen = () => {
           <div
             className="text-[12px] underline font-[500] hover:cursor-pointer "
             onClick={onToggle2}
+          >
+            Change
+          </div>
+        </div>
+      </div>
+
+      {/* forms */}
+      <div>
+        <div className="flex w-full justify-between h-[100px] relative mt-10 ">
+          {" "}
+          <div>
+            <div>Change School Name</div>
+
+            {toggle3 ? (
+              <div
+                className="absolute top-8 z-10 
+                h-[200px] w-[100%] sm:w-[120%] md:w-[90%] bg-blue-500 py-4
+                "
+                style={{
+                  background: "rgba(252, 254, 255, 0.25)",
+                  backdropFilter: " blur( 4px )",
+                }}
+              >
+                <div className="z-20">
+                  <div className="flex w-full">
+                    <Input
+                      className="flex-1 mr-1 placeholder:text-gray-400 "
+                      value={phone}
+                      defaultValue={data?.schoolName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setPhone(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      name={`${loading ? " Loading" : "save school name"}`}
+                      icon={
+                        loading ? (
+                          <BeatLoader
+                            color={"color"}
+                            size={18}
+                            className="mb-[0.12rem]"
+                          />
+                        ) : (
+                          <MdSave />
+                        )
+                      }
+                      className={` bg-blue-950 transition-all duration-300 ${
+                        loading && "h-12"
+                      }`}
+                      onClick={() => {
+                        setLoading(true);
+                        changeSchoolName(data?._id, { schoolName: phone }).then(
+                          () => {
+                            setLoading(false);
+                            onToggle3();
+                            mutate(`api/view-school/${data?._id}`);
+                          }
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
+                You can always update your school name here:{" "}
+                <span className="font-medium">{data?.schoolName}</span>
+              </div>
+            )}
+
+            <div>
+              <div className="font-[400] mt-3">
+                {/* {toggle3 ? (
+                  <div>{data?.schoolName}</div>
+                ) : (
+                  <div>
+                    {data?.schoolName ? (
+                      <div></div>
+                    ) : (
+                      <div>
+                        school Name:{" "}
+                        <strong className="font-medium">
+                          {data?.schoolName}
+                        </strong>
+                      </div>
+                    )}
+                  </div>
+                )} */}
+              </div>
+            </div>
+          </div>
+          <div
+            className="text-[12px] underline font-[500] hover:cursor-pointer "
+            onClick={onToggle3}
           >
             Change
           </div>
