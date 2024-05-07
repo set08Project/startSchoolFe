@@ -1,34 +1,22 @@
 document.title = "View  Result History";
 import pix from "../../../assets/pix.jpg";
-import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import moment from "moment";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
   useViewSessionTerm,
 } from "../../../pages/hook/useSchoolAuth";
-// import {
-//   useClassAcademicHistory,
-//   useClassStudent,
-//   useClassSubject,
-//   useStudentGrade,
-//   useTeacherInfo,
-// } from "../../hooks/useTeacher";
 
-import { mutate } from "swr";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import {
   useReadMyClassInfoData,
   useReadOneClassInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
 import { useParams } from "react-router-dom";
-import { el } from "date-fns/locale";
 import {
   useClassAcademicHistory,
-  useClassStudent,
   useClassSubject,
   useStudentGrade,
   useTeacherInfo,
@@ -47,11 +35,10 @@ interface iProps {
 
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
-  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
   const { session, term } = useParams();
 
   let result = gradeData?.reportCard
-    .find((el: any) => {
+    ?.find((el: any) => {
       return (
         el.classInfo ===
         `${props?.classAssigned} session: ${session.replace(
@@ -63,22 +50,6 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     ?.result?.find((data: any) => {
       return data.subject === el?.subjectTitle;
     });
-
-  let readData = gradeData?.reportCard.find((el: any) => {
-    return (
-      el?.classInfo ===
-      `${props?.classAssigned} session: ${session?.replace(
-        "-",
-        "/"
-      )}(${term?.replace("-", " ")})`
-    );
-  }).result;
-
-  let subject = el?.subjectTitle;
-
-  let final = readData.find((data: any) => {
-    return data?.subject === "Biology";
-  });
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
@@ -105,7 +76,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
   const { oneClass } = useReadOneClassInfo(props?.presentClassID);
 
   const { subjectData } = useClassSubject(oneClass?._id);
-  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   const { session, term } = useParams();
 
@@ -208,9 +178,6 @@ const ResultDetailClass = () => {
 
   const { sessionTermData } = useViewSessionTerm(termID);
   document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
-
-  const { state } = useReadMyClassInfoData(teacherInfo?.classesAssigned);
-
   const getResult = sessionTermData?.data?.classResult?.find((el: any) => {
     return el._id === ID;
   });
@@ -220,8 +187,6 @@ const ResultDetailClass = () => {
 
   let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
   const dataX = Object.values(data).flat();
-
-  const { gradeData } = useStudentGrade("studentID");
 
   const readStudent = dataX.find((el: any) => {
     return (
