@@ -1,13 +1,17 @@
 import axios from "axios";
 
-const URL: string = "http://localhost:2244/api";
-const URL2: string = "http://localhost:2244";
+// const URL: string = "http://localhost:2244/api";
+// const URL2: string = "http://localhost:2244";
 
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
 
 // const URL: string = "https://startschool.onrender.com/api";
 // const URL2: string = "https://startschool.onrender.com";
+
+const URL2: string = import.meta.env.VITE_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_PROCUTION_URL;
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {
@@ -1004,6 +1008,18 @@ export const removeTeacherSubject = async (
       .patch(
         `${URL}/remove-teacher-subject/${schoolID}/${teacherID}/${subjectID}/`
       )
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const changeStudentClass = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/change-student-class/${studentID}`, data)
       .then((res: any) => {
         return res;
       });

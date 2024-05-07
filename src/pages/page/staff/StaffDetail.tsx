@@ -21,6 +21,8 @@ const StaffDetail = () => {
   const [show, setShow] = useState<boolean>(false);
   const [salary, setSalary] = useState<string>("");
 
+  console.log(teacherDetail);
+
   return (
     <div>
       <LittleHeader name="Staff Details" back />
@@ -100,7 +102,6 @@ const StaffDetail = () => {
 
         <div className="mt-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {teacherDetail?.subjectAssigned.map((props: any) => {
-            console.log(props);
             return (
               <div
                 className="bg-white border flex flex-col w-full rounded-2xl min-h-[200px] px-4 pt-4"
@@ -116,7 +117,6 @@ const StaffDetail = () => {
                         teacherDetail?._id,
                         props?.id
                       ).then((res: any) => {
-                        console.log(res);
                         if (res.status === 201) {
                           mutate(
                             `api/view-teacher-detail/${teacherDetail?._id}`
@@ -156,16 +156,23 @@ const StaffDetail = () => {
 
         <p className="text-[13px] flex items-center font-medium">
           General Ratings:{" "}
-          <span className="font-bold flex items-center gap-1">
-            <FaStar className="ml-1 mb-1" />
-            5.0
+          <span className="font-bold flex items-center mx-2 gap-1">
+            {teacherDetail?.rating
+              ? `${(<FaStar className="ml-1 mb-1" />)} \u2605`.repeat(
+                  teacherDetail?.rating
+                )
+              : "not rated yet"}{" "}
+            <span className="text-[12px] font-bold">{/* ({}) */}</span>
           </span>
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
           <div className="border rounded-md px-4 py-2 bg-blue-50">
             <div className=" text-[16px] font-medium border-b pb-2">
-              Lectures Held: <span className="font-bold">12</span>
+              Lectures:{" "}
+              <span className="font-bold">
+                {teacherDetail?.lessonNotes?.length}
+              </span>
             </div>
             <div className="ml-5 text-[13px] font-medium mt-2">
               <span> </span> Mathematics: <span className="font-bold">12</span>
@@ -173,7 +180,22 @@ const StaffDetail = () => {
           </div>
           <div className="border rounded-md px-4 py-2 bg-blue-50">
             <div className=" text-[16px] font-medium border-b pb-2">
-              Test Held: <span className="font-bold">2</span>
+              Assignment:{" "}
+              <span className="font-bold">
+                {teacherDetail?.assignment?.length}
+              </span>
+            </div>
+            <div className="ml-5 text-[13px] font-medium mt-2">
+              <span> </span> Mathematics:{" "}
+              <span className="font-bold">
+                {teacherDetail?.assignment?.length}
+              </span>
+            </div>
+          </div>
+          <div className="border rounded-md px-4 py-2 bg-blue-50">
+            <div className=" text-[16px] font-medium border-b pb-2">
+              Quiz:{" "}
+              <span className="font-bold">{teacherDetail?.quiz?.length}</span>
             </div>
             <div className="ml-5 text-[13px] font-medium mt-2">
               <span> </span> Mathematics: <span className="font-bold">2</span>

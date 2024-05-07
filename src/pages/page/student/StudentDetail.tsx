@@ -5,16 +5,22 @@ import Button from "../../../components/reUse/Button";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import {
   useClassAttendance,
+  useSchoolClassRM,
   useSchoolStudentDetail,
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../../pagesForTeachers/api/teachersAPI";
+import { changeStudentClass } from "../../api/schoolAPIs";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
   const { mainStudentAttendance } = useStudentAttendance(studentID!);
+
+  const [show, setShow] = useState<boolean>(false);
+  const [salary, setSalary] = useState<string>("");
+  const [salaryID, setSalaryID] = useState<string>("");
 
   const attendanceData = Array.from({ length: 59 }, (i: number) => {
     const counted = Math.floor(Math.random() * 1000);
@@ -25,11 +31,17 @@ const StudentDetail = () => {
 
   const [classHolder, setClassHolder] = useState([]);
 
+  const { schoolClassroom } = useSchoolClassRM();
+
   useEffect(() => {
     readClassInfo(studentDetails?.data?.classAssigned).then((res: any) => {
       setClassHolder(res?.data?.classSubjects);
     });
   }, []);
+
+  const URL = import.meta.env.VITE_SOME_KEY;
+
+  console.log(URL);
 
   return (
     <div>
@@ -40,17 +52,83 @@ const StudentDetail = () => {
         {studentDetails?.data?.studentFirstName}
       </div>
 
-      <div className="w-full text-blue-950 h-[90px] rounded-lg border flex justify-between overflow-hidden ">
+      <div className=" flex-wrap w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between relative">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Performance Ratio</div>
           <div className="text-[35px] font-bold">
             "A" <span className="text-[20px]">Student</span>
           </div>
         </div>
-        <div className=" px-4 py-1 rounded-lg text-center flex flex-col">
-          <div className="mr-0">change class</div>
-          <Button name="Up Grade" className="bg-blue-950 mx-0 ml-0 py-5  " />
+        <div className="mt-8 md:mt-0 px-4 py-2 rounded-lg items-end">
+          <div>Change Student's Class</div>
+          <Button
+            name="Change Class"
+            className="bg-blue-950 mx-0 ml-3 "
+            onClick={() => {
+              setShow(!show);
+            }}
+          />
         </div>
+
+        {show && (
+          <div className="absolute top-[5.5rem] px-2 right-3 backdrop-blur-sm border rounded-md">
+            <p className="text-[12px] py-4 px-3">
+              By carring out this action... the class of <br />
+              <span className="font-bold">
+                {studentDetails?.data?.studentLastName}{" "}
+                {studentDetails?.data?.studentFirstName}
+              </span>{" "}
+              will be change
+            </p>
+            {/* <Input
+              placeholder="Enter new Salary"
+              className="bg-white rounded-md"
+              value={salary}
+              onChange={(e) => {
+                setSalary(e.target.value);
+              }}
+            /> */}
+            <select
+              className="select select-bordered w-[300px] mb-2"
+              value={salary}
+              onChange={(e) => {
+                setSalary(e.target.value);
+              }}
+            >
+              <option selected>
+                change{" "}
+                <span className="font-bold">
+                  {studentDetails?.data?.studentFirstName}'s'
+                </span>{" "}
+                class?
+              </option>
+              {schoolClassroom?.classRooms?.map((el: any) => {
+                return (
+                  <option key={el?._id} value={el?._id}>
+                    {el?.className}
+                  </option>
+                );
+              })}
+            </select>
+            <Button
+              name="Change Class"
+              className="bg-blue-950 mx-0"
+              onClick={() => {
+                setShow(!show);
+                changeStudentClass(studentID, { classID: salary }).then(
+                  (res) => {
+                    console.log(res);
+                  }
+                );
+
+                console.log(salary, salaryID);
+                // updaetTeacherSalary(teacherDetail?._id, { salary }).then(() => {
+                //   mutate(`api/view-teacher-detail/${teacherDetail?._id}`);
+                // });
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <div className="my-6 border-t" />

@@ -19,7 +19,10 @@ import {
 import pix from "../../../assets/pix.jpg";
 import Tooltip from "./Tooltip";
 import { useSchoolAnnouncement, useTeacherInfo } from "../../hooks/useTeacher";
-import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+import {
+  useSchoolData,
+  useSchoolSessionData,
+} from "../../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const Sider = () => {
@@ -28,6 +31,7 @@ const Sider = () => {
   const showing = useSelector((state: any) => state.showStaffComp);
   const { teacherInfo } = useTeacherInfo();
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
 
   const handleToggleMenuFalse = () => {
@@ -81,11 +85,11 @@ const Sider = () => {
           {/* TODO: Add tooltip */}
           <p className="break-words font-bold">
             {teacherInfo?.schoolName.length > 16 ? (
-              <Tooltip tip={teacherInfo?.schoolName}>
-                <p>{teacherInfo?.schoolName.substring(0, 16)}...</p>
+              <Tooltip tip={schoolAnnouncement?.schoolName}>
+                <p>{schoolAnnouncement?.schoolName.substring(0, 16)}...</p>
               </Tooltip>
             ) : (
-              teacherInfo?.schoolName
+              schoolAnnouncement?.schoolName
             )}
           </p>
           <p className="break-words font-medium text-slate-400 text-[14px] mt-2">

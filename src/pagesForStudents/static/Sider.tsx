@@ -72,12 +72,12 @@ const Sider = () => {
         <div className="ml-2">
           {/* TODO: Add tooltip */}
           <p className="font-bold text-left flex justify-start w-full">
-            {studentInfo?.schoolName.length > 14 ? (
-              <Tooltip tip={studentInfo?.schoolName}>
-                <p>{studentInfo?.schoolName.substring(0, 14)}...</p>
+            {schoolAnnouncement?.schoolName.length > 14 ? (
+              <Tooltip tip={schoolAnnouncement?.schoolName}>
+                <p>{schoolAnnouncement?.schoolName.substring(0, 14)}...</p>
               </Tooltip>
             ) : (
-              studentInfo?.schoolName
+              schoolAnnouncement?.schoolName
             )}
           </p>
           <p className="break-words font-medium text-slate-400 text-[14px] mt-2">

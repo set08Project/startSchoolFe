@@ -72,10 +72,10 @@ const Personal: FC = () => {
             )}
           </p>
           <p className="font-medium">
-            Class Monitor:{" "}
+            {/* Class Monitor:{" "} */}
             {monitor?.monitor ? (
               <p className="text-[20px] text-blue-900">
-                {/* {`\u2605`.repeat(1)}{" "} */}
+                {`\u2605`.repeat(1)}{" "}
                 <span className="text-[12px] font-bold  leading-tight">
                   {monitor?.studentFirstName} {monitor?.studentLastName}
                 </span>

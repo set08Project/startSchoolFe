@@ -13,7 +13,11 @@ import { useState, FC } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
-import { updateSchoolSubjectTeacher } from "../../api/schoolAPIs";
+import {
+  deletSubject,
+  removeTeacherSubject,
+  updateSchoolSubjectTeacher,
+} from "../../api/schoolAPIs";
 import { mutate } from "swr";
 
 interface iProps {
@@ -81,15 +85,16 @@ const ViewSubjects = () => {
       <div className="mb-28" />
 
       <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[200px] border-r">Subject Name</div>
 
           <div className="w-[200px] border-r">Teacher Info</div>
           <div className="w-[100px] border-r">Class</div>
           <div className="w-[200px] border-r">Assign Teacher</div>
+          <div className="w-[200px] border-r">Remove Subject</div>
         </div>
 
-        <div className=" w-[700px] overflow-hidden ">
+        <div className=" w-[900px] overflow-hidden ">
           {schoolSubject?.subjects?.map((props: any, i: number) => (
             <div>
               <div>
@@ -123,8 +128,6 @@ const ViewSubjects = () => {
                         onClick={() => {
                           console.log("props: ", props._id);
                           setState(props._id);
-
-                          console.log(state);
                         }}
                       >
                         + Assign Teacher
@@ -229,6 +232,46 @@ const ViewSubjects = () => {
                     </div>
                   </div>
                   {/* name */}
+
+                  <label
+                    className="w-[200px] my-3 bg-red-500 text-white py-2 px-4 flex justify-center items-center rounded-md text-[12px] transition-all duration-300 cursor-pointer "
+                    onClick={() => {
+                      {
+                        !!props?.teacherID
+                          ? removeTeacherSubject(
+                              dataID,
+                              props?.teacherID,
+                              props?._id
+                            ).then((res: any) => {
+                              if (res.status === 201) {
+                                mutate(
+                                  `api/view-teacher-detail/${props?.teacherID}`
+                                );
+                                deletSubject(dataID, props?._id).then(
+                                  (res: any) => {
+                                    console.log(res);
+                                    mutate(`api/view-school-subject/${dataID}`);
+                                    toast.success(
+                                      "subject Remove from Archieve"
+                                    );
+                                  }
+                                );
+                              } else {
+                                toast.error("something went wrong");
+                              }
+                            })
+                          : deletSubject(dataID, props?._id).then(
+                              (res: any) => {
+                                console.log(res);
+                                mutate(`api/view-school-subject/${dataID}`);
+                                toast.success("subject Remove from Archieve");
+                              }
+                            );
+                      }
+                    }}
+                  >
+                    - Remove This Subject
+                  </label>
                 </div>
               </div>
             </div>
