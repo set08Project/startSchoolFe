@@ -19,7 +19,10 @@ import {
 
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
-import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useReadMyClassInfoData,
+  useReadOneClassInfo,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
 import { useParams } from "react-router-dom";
 import { el } from "date-fns/locale";
@@ -39,22 +42,43 @@ interface iProps {
   i?: number;
   stateValue?: string;
   teacherInfo?: any;
+  getClass?: any;
 }
 
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+  const { session, term } = useParams();
 
   let result = gradeData?.reportCard
     .find((el: any) => {
       return (
         el.classInfo ===
-        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+        `${props?.classAssigned} session: ${session.replace(
+          "-",
+          "/"
+        )}(${term.replace("-", " ")})`
       );
     })
     ?.result?.find((data: any) => {
       return data.subject === el?.subjectTitle;
     });
+
+  let readData = gradeData?.reportCard.find((el: any) => {
+    return (
+      el?.classInfo ===
+      `${props?.classAssigned} session: ${session?.replace(
+        "-",
+        "/"
+      )}(${term?.replace("-", " ")})`
+    );
+  }).result;
+
+  let subject = el?.subjectTitle;
+
+  let final = readData.find((data: any) => {
+    return data?.subject === "Biology";
+  });
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
@@ -75,20 +99,23 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
   const { gradeData } = useStudentGrade(props?._id);
 
-  const { state } = useReadMyClassInfoData(props?.classAssigned);
+  const { oneClass } = useReadOneClassInfo(props?.presentClassID);
 
-  const { subjectData } = useClassSubject(state?._id);
+  const { subjectData } = useClassSubject(oneClass?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  const { session, term } = useParams();
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-        schoolInfo![0]!?.presentTerm
-      })`
+      `${getClass} session: ${session.replace("-", "/")}(${term.replace(
+        "-",
+        " "
+      )})`
     );
   });
 
@@ -134,6 +161,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             ))}
         </div>
       </div>
+      <div className="w-2 border-r"></div>
+      <div className="w-[300px] border-r">{result?.classTeacherComment}</div>
+      <div className="w-[300px] border-r">{result?.adminComment}</div>
     </div>
   );
 };
@@ -156,8 +186,6 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 };
 
 const SubjectMap: FC<iProps> = ({ props }) => {
-  // console.log("show studty: ", props);
-
   return (
     <div className="w-[260px] border-r ">
       <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
@@ -202,22 +230,6 @@ const ResultDetailClass = () => {
     );
   });
 
-  console.log(
-    "read: ",
-    dataX.map((el) => {
-      return el.term === term.replace("-", " ");
-    })
-  );
-
-  console.log(
-    "read: ",
-    dataX.map((el) => {
-      return el.session === session.replace("-", "/");
-    })
-  );
-
-  console.log("read: ", dataX);
-
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -234,7 +246,7 @@ const ResultDetailClass = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${800 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1402 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
@@ -260,21 +272,32 @@ const ResultDetailClass = () => {
               </div>
             </div>
           </div>
+          <div className="w-2 "></div>
+          <div className="w-[300px] border-r">Class Teacher's Comment</div>
+          <div className="w-[300px] border-r">
+            Principal's Teacher's Comment
+          </div>
         </div>
 
         <div
           className={` overflow-hidden w-[2000px] `}
           style={{
-            width: `${800 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1402 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           {readStudent?.resultHistory?.length > 0 ? (
             <div>
-              {readStudent?.resultHistory?.map((props: any, i: number) => (
-                <div key={props}>
-                  <MainStudentRow props={props} i={i} />
-                </div>
-              ))}
+              {readStudent?.resultHistory?.map((props: any, i: number) => {
+                return (
+                  <div key={props}>
+                    <MainStudentRow
+                      props={props}
+                      i={i}
+                      getClass={getResult?.className}
+                    />
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div>No student yet</div>

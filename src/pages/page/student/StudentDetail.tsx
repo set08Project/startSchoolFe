@@ -39,10 +39,6 @@ const StudentDetail = () => {
     });
   }, []);
 
-  const URL = import.meta.env.VITE_SOME_KEY;
-
-  console.log(URL);
-
   return (
     <div>
       <LittleHeader name="Student Details" back />
