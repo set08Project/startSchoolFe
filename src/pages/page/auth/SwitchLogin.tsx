@@ -10,6 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginTeacher } from "../../../pagesForTeachers/api/teachersAPI";
 import logo from "../../../assets/mainLogo.png";
+import PasswordInput from "../../../components/reUse/PasswordIput";
 
 const SwitchLogin = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const SwitchLogin = () => {
         </div>
         <div className="text-[14px] -mt-3 w-[70%] leading-tight">
           {" "}
-          Sign in as Teacher, Student or Parent to continue your Experience.
+          Sign in as Teacher to continue your Experience.
         </div>
       </div>
 
@@ -75,7 +76,7 @@ const SwitchLogin = () => {
             setState(e.target.value);
           }}
         />
-        <Input
+        <PasswordInput
           placeholder="Your Password"
           className="w-[97%]"
           show

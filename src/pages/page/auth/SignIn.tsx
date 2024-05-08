@@ -14,6 +14,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import logo from "../../../assets/mainLogo.png";
+import PasswordInput from "../../../components/reUse/PasswordIput";
 
 const SignIn = () => {
   const { token } = useParams();
@@ -97,7 +98,7 @@ const SignIn = () => {
             setState(e.target.value);
           }}
         />
-        <Input
+        <PasswordInput
           placeholder="School Enrollment ID"
           className="w-[97%]"
           show

@@ -61,7 +61,6 @@ const Layout: FC = () => {
         } else {
           setLoading(false);
           toast.error(`${res.response.data.message}`);
-          console.log(res);
         }
       });
     } catch (error) {

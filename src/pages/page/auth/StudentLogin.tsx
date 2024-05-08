@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { displayUserStatus, loginState } from "../../../global/reduxState";
 import { loginStudent } from "../../../pagesForStudents/api/studentAPI";
 import logo from "../../../assets/mainLogo.png";
+import PasswordInput from "../../../components/reUse/PasswordIput";
 
 const StudentLogin = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const StudentLogin = () => {
         </div>
         <div className="text-[14px] -mt-3 w-[70%] leading-tight">
           {" "}
-          Sign in as Teacher, Student or Parent to continue your Experience.
+          Sign in as Student or Parent to continue your Experience.
         </div>
       </div>
 
@@ -76,7 +77,7 @@ const StudentLogin = () => {
             setState(e.target.value);
           }}
         />
-        <Input
+        <PasswordInput
           placeholder="Your Password"
           className="w-[97%]"
           show
@@ -91,7 +92,7 @@ const StudentLogin = () => {
 
         <div>
           <Button
-            name={loading ? "Loading..." : "Login"}
+            name={loading ? "Loading..." : "Student/Parent Login"}
             className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
             type="submit"
             onClick={handleSubmit}
