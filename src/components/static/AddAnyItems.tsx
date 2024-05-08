@@ -36,6 +36,7 @@ interface iProps {
 
   setAnnounce?: React.Dispatch<React.SetStateAction<string>>;
   announce?: string;
+  upper?: boolean;
   date?: boolean;
   sub?: boolean;
   startDateTime?: any;
@@ -68,6 +69,7 @@ const AddAnyItem: FC<iProps> = ({
   setAnnounce,
   announce,
   sub,
+  upper,
 
   startDateTime,
   startDateTimeFn,
@@ -100,7 +102,9 @@ const AddAnyItem: FC<iProps> = ({
             </label>
             <Input
               placeholder={placeStart}
-              className="mx-0 h-12 w-full uppercase"
+              className={`mx-0 h-12 w-full ${
+                upper ? "uppercase" : "normal-case"
+              }`}
               value={start.toUpperCase()}
               onChange={(e: any) => {
                 setStart!(e.target.value);

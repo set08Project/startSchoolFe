@@ -34,6 +34,7 @@ const SubjectRecord: FC<iProp> = ({ props, quiz, test, ass }) => {
 const TeacherSubject: FC = () => {
   const { teacherInfo } = useTeacherInfo();
 
+  console.log(teacherInfo?.subjectAssigned);
   return (
     <div className="">
       <LittleHeader name="Class Teacher Subject" />
@@ -70,7 +71,10 @@ const TeacherSubject: FC = () => {
                   className="w-[1200px] flex items-center gap-9 text-[12px] font-medium  h-16 px-4 my-2 overflow-hidden"
                 >
                   <div className="w-[150px] border-r text-black">
-                    {props.title}
+                    {props.title}:
+                    <span className="text-[10px] ml-2">
+                      {props?.classMeant}
+                    </span>
                   </div>
                   <div className="w-[100px] border-r text-black font-bold">
                     <SubjectRecord props={props.id} quiz />

@@ -28,6 +28,7 @@ import {
   useReadOneClassInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface iProps {
   props?: any;
@@ -143,6 +144,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { subjectData } = useClassSubject(oneClass?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   let result = gradeData?.reportCard.find((el: any) => {
     return (
       el.classInfo ===
@@ -217,22 +220,37 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         />
       </div>
 
-      <div className="w-[180px] border-r">
+      <div className="w-[180px] border-r relative">
         <Button
-          name={result?.classTeacherComment ? "Update Comment" : "Add Comment"}
+          name={
+            result?.classTeacherComment
+              ? "Update Comment"
+              : loading
+              ? "Loading"
+              : "Add Comment"
+          }
+          icon={
+            loading && (
+              <ClipLoader
+                color="white"
+                size={20}
+                className="absolute left-7 top-5"
+              />
+            )
+          }
           className={`pl-4 py-3 w-[85%]  text-white ${
             result?.classTeacherComment
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
+            setLoading(true);
             if (stateValue !== "") {
               reportCardRemark(teacherInfo?._id, props?._id, {
                 teacherComment: stateValue,
               }).then((res: any) => {
+                setLoading(false);
                 if (res.status === 201) {
-                  console.log(res);
-
                   mutate(`api/student-report-card/${props?._id}`);
                   toast.success("Report Card Report Noted");
                 } else {

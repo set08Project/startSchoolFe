@@ -90,6 +90,18 @@ export const readClassInfoSubject = async (classID: string) => {
   }
 };
 
+export const viewSchoolClassroom = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-classrooms/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readClassInfoStudent = async (classID: string) => {
   try {
     return await axios

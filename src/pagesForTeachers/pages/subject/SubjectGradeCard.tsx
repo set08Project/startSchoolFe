@@ -4,8 +4,11 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { FC, useState } from "react";
 import {
+  useSchoolClassRM,
+  useSchoolClassRMDetail,
   useSchoolSessionData,
   useStudentAttendance,
+  useViewSchoolClassRM,
 } from "../../../pages/hook/useSchoolAuth";
 import {
   useClassStudent,
@@ -18,6 +21,7 @@ import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface iProps {
   props?: any;
@@ -31,6 +35,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { teacherInfo } = useTeacherInfo();
   const { subjectInfo } = useSujectInfo(subjectID);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
 
   const [test1, setTest1] = useState("");
@@ -40,6 +46,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [exam, setExam] = useState("");
 
   const makeGrade = () => {
+    setLoading(true);
     createGradeScore(teacherInfo?._id, props?._id, {
       subject: subjectInfo?.subjectTitle,
       test1: parseInt(test1),
@@ -48,7 +55,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       test4: parseInt(test4),
       exam: parseInt(exam),
     }).then((res) => {
-      console.log(res);
+      setLoading(false);
       if (res.status === 201) {
         mutate(`api/student-report-card/${props?._id}`);
         toast.success("Grade added");
@@ -161,9 +168,18 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         />
       </div>
 
-      <div className="w-[180px] border-r">
+      <div className="w-[180px] border-r relative">
         <Button
-          name="Add Score"
+          name={loading ? "Loading" : "Add Score"}
+          icon={
+            loading && (
+              <ClipLoader
+                color="white"
+                size={12}
+                className="py-0 my-0 absolute bottom-6 z-10 left-10"
+              />
+            )
+          }
           className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
           onClick={makeGrade}
         />
@@ -203,11 +219,18 @@ const SubjectGradeCard = () => {
   const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
+  const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
+  const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs);
+
+  const mainClass = viewClasses?.classRooms?.find((el: any) => {
+    return el?.classSubjects?.find((el: any) => {
+      return el === subjectID;
+    });
+  });
+
+  const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
-
-  console.log("students: ", classStudents?.students);
 
   return (
     <div className="">

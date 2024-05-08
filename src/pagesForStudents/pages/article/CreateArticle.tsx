@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
+import Button from "../../../components/reUse/Button";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CreateArticle = () => {
   const [area, setArea] = useState<string>("");
@@ -17,6 +19,7 @@ const CreateArticle = () => {
   const [image, setImage] = useState<string>("");
   const [pix, setPix] = useState<string>("");
 
+  const [loading, setLoading] = useState<boolean>(false);
   const { studentInfo } = useStudentInfo();
 
   const onImage = (e: any) => {
@@ -27,6 +30,7 @@ const CreateArticle = () => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("title", iValue);
     formData.append("content", value);
@@ -38,6 +42,8 @@ const CreateArticle = () => {
       studentInfo?._id,
       formData
     ).then((res) => {
+      setLoading(false);
+
       navigate(`/articles/${res?.data?._id}`);
     });
   };
@@ -95,12 +101,22 @@ const CreateArticle = () => {
           </div>
         </div>
         <div className=" w-full">
-          <button
+          <button>Submit</button>
+
+          <Button
             className="mt-10 lg:mt-0 py-2 px-4 rounded-md bg-blue-950 text-white"
+            name={loading ? "Loading" : "Publish This Article "}
+            icon={
+              loading && (
+                <ClipLoader
+                  color="white"
+                  size={20}
+                  className="absolute left-7 top-5"
+                />
+              )
+            }
             onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          />
         </div>
       </div>
     </div>

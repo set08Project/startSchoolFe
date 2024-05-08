@@ -31,7 +31,10 @@ import {
   viewStore,
   viewTermDetail,
 } from "../api/schoolAPIs";
-import { viewTeacherDetail } from "../../pagesForTeachers/api/teachersAPI";
+import {
+  viewSchoolClassroom,
+  viewTeacherDetail,
+} from "../../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -99,6 +102,20 @@ export const useSchoolClassRM = () => {
     // { refreshInterval: 2000 }
   );
   return { schoolClassroom, mutate };
+};
+
+export const useViewSchoolClassRM = (schoolID: string) => {
+  const { data: viewClasses } = useSWR(
+    `api/view-classrooms/`,
+    () => {
+      return viewSchoolClassroom(schoolID!).then((res) => {
+        return res.data;
+      });
+    }
+
+    // { refreshInterval: 2000 }
+  );
+  return { viewClasses };
 };
 
 export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {

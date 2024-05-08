@@ -127,6 +127,7 @@ const Layout: FC = () => {
                 }}
               >
                 <AddAnyItem
+                  upper
                   fee
                   titleCall="Creating new classroom"
                   offFn={handleDisplaySubjectOff}
