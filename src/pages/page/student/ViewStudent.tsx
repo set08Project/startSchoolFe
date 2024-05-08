@@ -7,6 +7,7 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link, useParams } from "react-router-dom";
 
+import crypto from "crypto";
 import {
   useSchoolData,
   useSchoolStudents,
@@ -24,6 +25,8 @@ import {
   useStudentCookie,
   useStudentInfo,
 } from "../../../pagesForStudents/hooks/useStudentHook";
+import { mutate } from "swr";
+import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 
 interface iProps {
   props?: any;
@@ -94,6 +97,19 @@ const ViewStudent = () => {
   const dispatch = useDispatch();
   const { studentInfo } = useStudentInfo();
 
+  const getValue = (length: number): string => {
+    const alphanumericChars: string =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result: string = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex: number = Math.floor(
+        Math.random() * alphanumericChars.length
+      );
+      result += alphanumericChars.charAt(randomIndex);
+    }
+    return result;
+  };
+
   // const {} = use
   const { data: UI } = useSchoolData();
   const { students } = useSchoolStudents(UI?._id);
@@ -101,14 +117,29 @@ const ViewStudent = () => {
   const [viewstudent2ndfees, setViewStudent2ndFees] = useState(false);
   const [viewstudent3rdfees, setViewStudent3rdFees] = useState(false);
 
+  const [ID, setID] = useState<string>("");
+
   const handleToggleCheckbox1st = (studentID: any) => {
     setViewStudent1stFees(!viewstudent1stfees);
+    console.log("started");
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
+      console.log("push");
       if (res.status === 200) {
-        toast.success("1st term SchoolFees has been Approved");
+        schoolPaymentEndPoint(studentID, {
+          date: moment(Date.now()).format("lll"),
+          amount: "2000",
+          purchasedID: getValue(10),
+          reference: getValue(10),
+        }).then((res) => {
+          console.log(res);
+          setID("");
+          toast.success("3rd term SchoolFees has been Approved");
+          mutate(`api/read-student/${UI?._id}`);
+        });
       } else {
         toast.error("Fail to approve this 1st term SchoolFees");
+        setID("");
       }
     });
   };
@@ -118,8 +149,11 @@ const ViewStudent = () => {
 
     verifyPayment2nd(UI?._id, studentID!).then((res: any) => {
       if (res.status === 200) {
+        setID("");
         toast.success("2nd term SchoolFees has been Approved");
+        mutate(`api/read-student/${UI?._id}`);
       } else {
+        setID("");
         toast.error("Fail to approve this 2nd term SchoolFees");
       }
     });
@@ -130,8 +164,18 @@ const ViewStudent = () => {
 
     verifyPayment3rd(UI?._id, studentID!).then((res: any) => {
       if (res.status === 200) {
-        toast.success("3rd term SchoolFees has been Approved");
+        schoolPaymentEndPoint(studentID, {
+          date: moment(Date.now()).format("lll"),
+          amount: "2000",
+          purchasedID: crypto.randomBytes(3).toString("hex"),
+          reference: crypto.randomBytes(3).toString("hex"),
+        }).then(() => {
+          setID("");
+          toast.success("3rd term SchoolFees has been Approved");
+          mutate(`api/read-student/${UI?._id}`);
+        });
       } else {
+        setID("");
         toast.error("Fail to approve this 3rd term SchoolFees");
       }
     });
@@ -206,40 +250,145 @@ const ViewStudent = () => {
                       <div className="w-[100px] border-r">
                         <AttendanceRatio props={props} />
                       </div>
+
                       <div className="w-[220px] border-r flex gap-4">
                         <div className="flex flex-col items-center">
                           <label>1st Term</label>
-                          <input
-                            type="checkbox"
-                            className={`
+
+                          <label htmlFor="my_modal_6 relative ">
+                            <label
+                              htmlFor="my_modal_6"
+                              // className={`btn text-[12px] font-medium text-white `}
+                            >
+                              <label
+                                htmlFor="my_modal_6"
+                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                onClick={() => {
+                                  setID(props?._id);
+                                }}
+                              />
+                              <input
+                                type="checkbox"
+                                className={`
+                                -z-20
                             toggle toggle-sm mt-2  ${
                               props?.feesPaid1st
                                 ? "bg-blue-950 border-blue-950"
                                 : "bg-neutral-500 border-neutral-500"
                             }
                             `}
-                            onChange={() => handleToggleCheckbox1st(props?._id)}
-                            checked={props?.feesPaid1st}
-                          />
+                                onChange={() => {}}
+                                checked={props?.feesPaid1st}
+                              />
+                            </label>
+
+                            {/* Put this part before </body> tag */}
+                            <input
+                              type="checkbox"
+                              id="my_modal_6"
+                              className="modal-toggle"
+                            />
+                            <div className="modal" role="dialog">
+                              <div className="modal-box">
+                                <h3 className="font-bold text-lg">
+                                  Confirm this payment
+                                </h3>
+                                <p className="py-4">
+                                  Are you sure you want to confirm this payment?
+                                  <br />
+                                </p>
+                                <div className="modal-action">
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                    onClick={() => {
+                                      handleToggleCheckbox1st(ID);
+                                    }}
+                                  >
+                                    Yes
+                                  </label>
+
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                    onClick={() => {}}
+                                  >
+                                    No
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </label>
                         </div>
+
                         <div className="flex flex-col items-center">
                           <label>2nd Term</label>
-                          <input
-                            type="checkbox"
-                            className={`
+
+                          <label htmlFor="my_modal_6 relative ">
+                            <label htmlFor="my_modal_6">
+                              <label
+                                htmlFor="my_modal_6"
+                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                onClick={() => {
+                                  setID(props?._id);
+                                }}
+                              />
+                              <input
+                                type="checkbox"
+                                className={`
+                                -z-20
                             toggle toggle-sm mt-2  ${
                               props?.feesPaid2nd
                                 ? "bg-blue-950 border-blue-950"
                                 : "bg-neutral-500 border-neutral-500"
                             }
                             `}
-                            onChange={() => handleToggleCheckbox2nd(props?._id)}
-                            checked={props?.feesPaid2nd}
-                          />
+                                onChange={() => {}}
+                                checked={props?.feesPaid2nd}
+                              />
+                            </label>
+
+                            {/* Put this part before </body> tag */}
+                            <input
+                              type="checkbox"
+                              id="my_modal_6"
+                              className="modal-toggle"
+                            />
+                            <div className="modal" role="dialog">
+                              <div className="modal-box">
+                                <h3 className="font-bold text-lg">
+                                  Confirm 2nd Term school-fees payment
+                                </h3>
+                                <p className="py-4">
+                                  Are you sure you want to confirm this payment?
+                                  <br />
+                                </p>
+                                <div className="modal-action">
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                    onClick={() => {
+                                      handleToggleCheckbox2nd(ID);
+                                    }}
+                                  >
+                                    Yes
+                                  </label>
+
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                    onClick={() => {}}
+                                  >
+                                    No
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </label>
                         </div>
                         <div className="flex flex-col items-center">
                           <label>3rd Term</label>
-                          <input
+                          {/* <input
                             type="checkbox"
                             className={`
                             toggle toggle-sm mt-2  ${
@@ -250,7 +399,69 @@ const ViewStudent = () => {
                             `}
                             onChange={() => handleToggleCheckbox3rd(props?._id)}
                             checked={props?.feesPaid4rd}
-                          />
+                          /> */}
+
+                          <label htmlFor="my_modal_6 relative ">
+                            <label htmlFor="my_modal_6">
+                              <label
+                                htmlFor="my_modal_6"
+                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                onClick={() => {
+                                  setID(props?._id);
+                                }}
+                              />
+                              <input
+                                type="checkbox"
+                                className={`
+                                -z-20
+                            toggle toggle-sm mt-2  ${
+                              props?.feesPaid3rd
+                                ? "bg-blue-950 border-blue-950"
+                                : "bg-neutral-500 border-neutral-500"
+                            }
+                            `}
+                                onChange={() => {}}
+                                checked={props?.feesPaid4rd}
+                              />
+                            </label>
+
+                            {/* Put this part before </body> tag */}
+                            <input
+                              type="checkbox"
+                              id="my_modal_6"
+                              className="modal-toggle"
+                            />
+                            <div className="modal" role="dialog">
+                              <div className="modal-box">
+                                <h3 className="font-bold text-lg">
+                                  Confirm 3rd Term school-fees payment
+                                </h3>
+                                <p className="py-4">
+                                  Are you sure you want to confirm this payment?
+                                  <br />
+                                </p>
+                                <div className="modal-action">
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                    onClick={() => {
+                                      handleToggleCheckbox3rd(ID);
+                                    }}
+                                  >
+                                    Yes
+                                  </label>
+
+                                  <label
+                                    htmlFor="my_modal_6"
+                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                    onClick={() => {}}
+                                  >
+                                    No
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </label>
                         </div>
                       </div>
 

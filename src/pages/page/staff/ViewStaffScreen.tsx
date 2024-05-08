@@ -151,9 +151,9 @@ const ViewStaffScreen = () => {
 
                   {/* check II */}
 
-                  <div className="w-[200px] border-r  ">
+                  <div className="w-[200px] border-r h-16 py-4 overflow-x-auto">
                     {props?.subjectAssigned?.length > 0 ? (
-                      <div>
+                      <div className="">
                         {props?.subjectAssigned?.map((props: any) => (
                           <div className="gap-2">
                             <p>
