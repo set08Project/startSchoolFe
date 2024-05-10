@@ -2,10 +2,8 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoCard } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
 import Button from "../../components/reUse/Button";
-import { useSelector } from "react-redux";
 import { verifyPay } from "../../pages/api/schoolAPIs";
 import { schoolPaymentEndPoint } from "../api/studentAPI";
-import { useStudentGrade } from "../../pagesForTeachers/hooks/useTeacher";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -21,23 +19,16 @@ const SchoolFeePaidScreen = () => {
     let x = setTimeout(() => {
       setState(search.split("reference=")[1]);
       if (search.split("reference=")[1] !== "" || null) {
-        verifyPay(search.split("reference=")[1])
-          .then((res) => {
-            console.log(res);
-            if (res.status) {
-              schoolPaymentEndPoint(studentInfo?._id, {
-                date: moment(res?.data?.createdAt).format("lll"),
-                amount: res?.data?.amount,
-                reference: res?.data?.reference,
-                purchasedID: res?.data.id,
-              }).then((res) => {
-                console.log("student: ", res);
-              });
-            }
-          })
-          .then((res) => {
-            console.log(res);
-          });
+        verifyPay(search.split("reference=")[1]).then((res) => {
+          if (res.status === true) {
+            schoolPaymentEndPoint(studentInfo?._id, {
+              date: moment(res?.data?.createdAt).format("lll"),
+              amount: res?.data?.amount / 100,
+              reference: res?.data?.reference,
+              purchasedID: res?.data.id,
+            });
+          }
+        });
       }
 
       clearTimeout(x);

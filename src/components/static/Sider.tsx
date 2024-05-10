@@ -145,8 +145,22 @@ const Sider = () => {
             <div>
               {!termData?.plan && termData?.payRef === "" && (
                 <Button
-                  name={roll ? `Processing...` : "Renew Plan"}
-                  icon={roll ? "" : ""}
+                  name={
+                    roll ? (
+                      <span className="ml-3">Processing...</span>
+                    ) : (
+                      "Renew Plan"
+                    )
+                  }
+                  icon={
+                    roll && (
+                      <ClipLoader
+                        size={10}
+                        color="white"
+                        className="absolute -mt-1 ml-1"
+                      />
+                    )
+                  }
                   className="text-[14px] w-full uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
                   onClick={() => {
                     setRoll(true);

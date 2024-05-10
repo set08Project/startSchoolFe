@@ -123,6 +123,15 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
+            icon={
+              payment && (
+                <ClipLoader
+                  color="white"
+                  size={10}
+                  className="absolute -mt-1 -ml-2"
+                />
+              )
+            }
             name={
               <div>
                 Pay School Fees
