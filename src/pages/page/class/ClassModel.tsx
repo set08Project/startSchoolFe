@@ -38,20 +38,14 @@ const ClassModel = () => {
       day,
       subject,
       time: period,
-    })
-      .then((res) => {
-        if (res?.status === 201) {
-          mutate(`api/view-time-table/${classID}`);
-          toast.success("Added Successfully...!");
-        } else {
-          toast.error(`${res?.response?.data?.message}`);
-        }
-      })
-      .then(() => {
-        setSubject("");
-        setDay("");
-        setPeriod("");
-      });
+    }).then((res) => {
+      if (res?.status === 201) {
+        mutate(`api/view-time-table/${classID}`);
+        toast.success("Added Successfully...!");
+      } else {
+        toast.error(`${res?.response?.data?.message}`);
+      }
+    });
   };
 
   return (
@@ -130,12 +124,7 @@ const ClassModel = () => {
                     setSubject(e.target.value);
                   }}
                 >
-                  <option
-                    value={"Subject"}
-                    disabled
-                    selected
-                    defaultValue={"Subject"}
-                  >
+                  <option disabled selected>
                     Choose Period
                   </option>
                   <option value={"Short Break"}>Short Break</option>

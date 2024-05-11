@@ -469,7 +469,7 @@ const ViewStudent = () => {
                       <div className="w-[150px] flex justify-center border-r">
                         <img
                           className="w-14 h-14 rounded-md border object-cover"
-                          src={pix}
+                          src={props?.avtar ? props?.avatar : pix}
                         />
                       </div>
                       <div className="w-[200px] border-r gap-2 font-bold">

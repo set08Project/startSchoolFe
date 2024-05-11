@@ -7,6 +7,8 @@ import {
   updateSchoolFeeAccountInfo,
 } from "../../api/schoolAPIs";
 import { useSchoolData } from "../../hook/useSchoolAuth";
+import toast, { Toaster } from "react-hot-toast";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ThemeScreen = () => {
   const { data } = useSchoolData();
@@ -126,6 +128,7 @@ const ThemeScreen = () => {
 
   return (
     <div className=" sm:w-[350%]  rounded-lg border  h-[550px] text-blue-950">
+      <Toaster position="top-center" />
       <p className="text-[13px] p-4 font-medium ">
         Please note that all online Payment, will be Paid to this Account detail
         provided below.
@@ -196,17 +199,26 @@ const ThemeScreen = () => {
 
         <Button
           name={toggle ? "Processing" : "Update Account Detail"}
+          icon={
+            toggle && (
+              <ClipLoader
+                size={15}
+                color="white"
+                className="absolute -ml-3 -mt-2"
+              />
+            )
+          }
           className="bg-blue-950 mt-10 ml-0 py-4"
           onClick={async () => {
             setToggle(true);
 
-            const result = await updateSchoolFeeAccountInfo({
+            const result: any = await updateSchoolFeeAccountInfo({
               accountName,
               accountNumber,
               accountBankCode: getChoosen?.code,
+            }).then(() => {
+              toast.success("Account details updated successfully");
             });
-
-            console.log("viewing Result: ", result);
 
             updateAccount({
               accountName,
@@ -223,6 +235,7 @@ const ThemeScreen = () => {
                     result?.data?.data?.data?.subaccount_code,
                 },
               }).then((res) => {
+                toast.success("Done");
                 setToggle(false);
               });
             });

@@ -3,15 +3,23 @@ import {
   addToCart,
   changeCartPick,
   displayCart,
+  paymentRef,
 } from "../../../global/reduxState";
 import { MdClose, MdExpandLess } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
 import { UnLazyImage } from "@unlazy/react";
+import { storePayment } from "../../api/schoolAPIs";
+import { useState } from "react";
+import { useSchool, useSchoolData } from "../../hook/useSchoolAuth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CartItemScreen = () => {
+  const { data } = useSchoolData();
   const dispatch = useDispatch();
-  const cart = useSelector((state: any) => state.cart);
-  const cartToggle = useSelector((state: any) => state.cartToggle);
+  const cart = useSelector((state: any) => state?.cart);
+  const cartToggle = useSelector((state: any) => state?.cartToggle);
+
+  const [loading, setToggle] = useState<boolean>(false);
 
   const changeView = () => {
     if (!document.startViewTransition) {
@@ -22,6 +30,25 @@ const CartItemScreen = () => {
       });
     }
   };
+
+  const mainCost = cart
+    ?.map((el: any) => {
+      return el?.cost * el?.QTY;
+    })
+    ?.reduce((a: number, b: number) => {
+      return a + b;
+    }, 0)
+    ?.toLocaleString();
+
+  const realCost = (
+    cart
+      ?.map((el: any) => {
+        return el.cost * el.QTY;
+      })
+      ?.reduce((a: number, b: number) => {
+        return a + b;
+      }, 0) + 500
+  )?.toLocaleString();
 
   return (
     <div className="flex w-full h-full flex-col items-center ">
@@ -51,17 +78,7 @@ const CartItemScreen = () => {
             <p className="font-bold">Cart Total </p>
             <p className="font-medium my-5 flex justify-between items-center">
               <p>SubTotal</p>
-              <p className="font-bold">
-                ₦
-                {cart
-                  .map((el: any) => {
-                    return el.cost * el.QTY;
-                  })
-                  .reduce((a: number, b: number) => {
-                    return a + b;
-                  })
-                  .toLocaleString()}
-              </p>
+              <p className="font-bold">₦{mainCost}</p>
             </p>
             <p className="font-medium my-5 flex justify-between items-center">
               <p>Extra Charges</p>
@@ -71,32 +88,55 @@ const CartItemScreen = () => {
 
             <p className="font-medium my-1 flex justify-between items-center">
               <p>Total</p>
-              <p className="font-bold">
-                ₦
-                {(
-                  cart
-                    .map((el: any) => {
-                      return el.cost * el.QTY;
-                    })
-                    .reduce((a: number, b: number) => {
-                      return a + b;
-                    }) + 500
-                ).toLocaleString()}
-              </p>
+              <p className="font-bold">₦{realCost}</p>
             </p>
 
             <div className="w-full flex justify-center mt-10">
               <Button
-                name="Process to Pay"
+                name={loading ? "loading" : "Process to Pay"}
+                icon={
+                  loading && (
+                    <ClipLoader size={15} color="white" className="absolute" />
+                  )
+                }
                 className="bg-blue-950 w-full mx-0 py-5"
+                onClick={() => {
+                  setToggle(true);
+
+                  storePayment({
+                    email: data?.email,
+                    amount:
+                      cart
+                        ?.map((el: any) => {
+                          return el?.cost * el?.QTY;
+                        })
+                        ?.reduce((a: number, b: number) => {
+                          return a + b;
+                        }, 0) + 500,
+                    subAccountCode: data?.bankDetails?.accountPaymentCode,
+                  }).then((res) => {
+                    console.log(res?.data?.data?.data?.reference);
+                    if (res) {
+                      dispatch(paymentRef(res?.data?.data?.data?.reference));
+                      location.replace(
+                        res?.data?.data?.data?.authorization_url
+                      );
+                    }
+                  });
+
+                  const x = setTimeout(() => {
+                    setToggle(false);
+                    clearTimeout(x);
+                  }, 4000);
+                }}
               />
             </div>
           </div>
 
-          <div className="col-span-2 h-[300px] pl-2 md:border-l border-neutral-500 w-full flex flex-col items-center ">
+          <div className="col-span-2 min-h-[50vh] pl-2 md:border-l border-neutral-500 w-full flex flex-col items-center ">
             {cart.length > 0 ? (
               <div className="w-full">
-                {cart.map((props: any) => (
+                {cart?.map((props: any) => (
                   <div
                     key={props?._id}
                     className="flex items-center w-full gap-2 border-b border-[gray] py-5 "
@@ -118,7 +158,7 @@ const CartItemScreen = () => {
                       </p>
 
                       <div className="flex mt-5 font-bold text-[20px]">
-                        ₦{(props?.cost * props?.QTY).toLocaleString()}
+                        ₦{(props?.cost * props?.QTY)?.toLocaleString()}
                       </div>
                     </div>
 
@@ -156,4 +196,3 @@ const CartItemScreen = () => {
 };
 
 export default CartItemScreen;
-// 73, 154, 255, 0.2;

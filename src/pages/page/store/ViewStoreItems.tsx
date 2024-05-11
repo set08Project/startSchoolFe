@@ -13,8 +13,6 @@ const ViewStoreItems = () => {
   const [toggle, setToggle] = useState(true);
   const cartToggle = useSelector((state: any) => state.cartToggle);
 
-  console.log(cartToggle);
-
   const changeView = () => {
     if (!document.startViewTransition) {
       setToggle(!toggle);

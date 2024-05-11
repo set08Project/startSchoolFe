@@ -4,8 +4,13 @@ import Button from "../../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import BeatLoader from "react-spinners/ClipLoader";
 import { useSchoolData } from "../../hook/useSchoolAuth";
-import { changeSchoolName } from "../../api/schoolAPIs";
+import {
+  changeSchoolName,
+  changeSchoolPersonalName,
+  changeSchoolPhone,
+} from "../../api/schoolAPIs";
 import { mutate } from "swr";
+import toast, { Toaster } from "react-hot-toast";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
@@ -17,10 +22,16 @@ const PersonalInfoScreen = () => {
   const [toggle2, setToggle2] = useState<boolean>(false);
   const [toggle3, setToggle3] = useState<boolean>(false);
 
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>(
+    `${data?.name ? data?.name : ""}`
+  );
+  const [lastName, setLastName] = useState<string>(
+    `${data?.name2 ? data?.name2 : ""}`
+  );
 
-  const [phone, setPhone] = useState<string>("");
+  const [phone, setPhone] = useState<string>(
+    `${data?.phone ? data?.phone : ""}`
+  );
 
   const onToggle = () => {
     if (!document.startViewTransition) {
@@ -69,8 +80,10 @@ const PersonalInfoScreen = () => {
       });
     }
   };
+
   return (
     <div className=" grid col-span-3 pr-0 h-[100px] text-blue-950 ">
+      <Toaster position="top-center" />
       {/* forms */}
       <div>
         <div className="flex w-[100%] justify-between h-[100px] relative ">
@@ -90,7 +103,8 @@ const PersonalInfoScreen = () => {
                   <div className="flex w-full">
                     <Input
                       className="flex-1 mr-1 placeholder:text-gray-400 "
-                      placeholder="Enter First Name"
+                      placeholder={data?.name ? "" : "Enter First Name"}
+                      defaultValue={data?.name}
                       value={firstName}
                       onChange={(e: any) => {
                         setFirstName(e.target.value);
@@ -98,7 +112,8 @@ const PersonalInfoScreen = () => {
                     />
                     <Input
                       className="flex-1 ml-1"
-                      placeholder="Enter Last Name "
+                      placeholder={data?.name2 ? "" : "Enter Last Name"}
+                      defaultValue={data?.name2}
                       value={lastName}
                       onChange={(e: any) => {
                         setLastName(e.target.value);
@@ -124,13 +139,31 @@ const PersonalInfoScreen = () => {
                       }`}
                       onClick={() => {
                         setLoading(true);
+                        changeSchoolPersonalName(data?._id, {
+                          name: firstName,
+                          name2: lastName,
+                        }).then((res) => {
+                          setLoading(false);
+                          setToggle(false);
+
+                          toast.success("Legal Name updated successfully");
+                          mutate(`api/view-school/${data?._id}`);
+                        });
                       }}
                     />
                   </div>
                 </div>
               </div>
             ) : (
-              <div>No First Name yet</div>
+              <div>
+                {data?.name || data?.name2 ? (
+                  <div>
+                    {data?.name} {data?.name2}
+                  </div>
+                ) : (
+                  <div>No Legal Name yet</div>
+                )}
+              </div>
             )}
           </div>
           <div
@@ -192,7 +225,10 @@ const PersonalInfoScreen = () => {
                   <div className="flex w-full">
                     <Input
                       className="flex-1 mr-1 placeholder:text-gray-400 "
-                      placeholder="Enter your contact mobile number "
+                      placeholder={
+                        data?.phone ? "" : "Enter your contact mobile number "
+                      }
+                      defaultValue={phone}
                       value={phone}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setPhone(e.target.value);
@@ -218,6 +254,11 @@ const PersonalInfoScreen = () => {
                       }`}
                       onClick={() => {
                         setLoading(true);
+                        changeSchoolPhone(data?._id, phone).then(() => {
+                          toast.success("Phone Number Updated successfully");
+                          setLoading(false);
+                          setToggle2(false);
+                        });
                       }}
                     />
                   </div>
@@ -236,10 +277,7 @@ const PersonalInfoScreen = () => {
                 ) : (
                   <div>
                     {data?.phone ? (
-                      <div>
-                        {data?.phone.substring(0, 2)}****@
-                        {data?.phone.split("@")[1]}
-                      </div>
+                      <div>{data?.phone}</div>
                     ) : (
                       <div>No phone contact yet</div>
                     )}

@@ -19,7 +19,6 @@ const LessonNote = () => {
   const [id, setID] = useState<string>("");
   const [obj, setObj] = useState<any>({});
 
-  console.log(obj);
   document.title = "Teacher's Lesson Notes";
 
   return (

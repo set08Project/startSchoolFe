@@ -326,7 +326,8 @@ const ClassDetailScreen = () => {
             htmlFor="assign_class_subject"
             className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
           >
-            + Add Subject
+            {/* Look into */}
+            {/* + Add Subject */}
           </label>
           <div className="mt-5" />
           {/* Put this part before </body> tag */}

@@ -44,8 +44,10 @@ const StoreScreen = () => {
             toast.success("Product Uploaded");
             setPeriod(0);
             setPix("");
+
             setDay("");
             setSubject("");
+            setImage("");
           } else {
             setLoading(false);
             toast.error(`${res?.response?.data?.message}`);
@@ -53,7 +55,12 @@ const StoreScreen = () => {
             setPix("");
             setDay("");
             setSubject("");
+            setImage("");
           }
+
+          setDay("");
+          setSubject("");
+          setImage("");
         })
         .then(() => {
           setPeriod(0);
@@ -166,6 +173,7 @@ const StoreScreen = () => {
                   className=" w-full mt-2 mb-8 ml-0"
                   placeholder="ProductTitle"
                   value={subject}
+                  defaultValue={subject}
                   onChange={(e: any) => {
                     setSubject(e.target.value);
                   }}
@@ -178,6 +186,7 @@ const StoreScreen = () => {
                     <Input
                       value={period}
                       type="number"
+                      defaultValue={period}
                       placeholder="Product Cost"
                       className="w-full mt-2 ml-0"
                       onChange={(e: any) => {
@@ -195,6 +204,7 @@ const StoreScreen = () => {
                       value={day}
                       placeholder="Product Description"
                       className="ml-0 w-full mt-2"
+                      defaultValue={day}
                       onChange={(e: any) => {
                         setDay(e.target.value);
                       }}
@@ -207,9 +217,11 @@ const StoreScreen = () => {
             <div className="w-full flex justify-end transition-all duration-300">
               {subject !== "" && period !== 0 && day !== "" ? (
                 <label
-                  // htmlFor="assign_subject_timetable"
+                  htmlFor="assign_subject_timetable"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer transition-all duration-300 "
-                  onClick={onHandleAdd}
+                  onClick={() => {
+                    onHandleAdd();
+                  }}
                 >
                   {loading ? (
                     <div>

@@ -12,7 +12,7 @@ const SettingScreen: FC = () => {
   const pathData = [
     {
       icon: <RiPagesLine size={45} />,
-      title: "Page Info",
+      title: "school's Info Settings",
       detail:
         "Provide basic info that would be used for your school's landing page.",
       url: "/my-personal-info/info",
@@ -28,7 +28,7 @@ const SettingScreen: FC = () => {
     },
     {
       icon: <HiMiniBuildingOffice2 size={45} />,
-      title: "School's Info",
+      title: "School's Page Settings",
       detail: "Provide studio details and how we can reach you.",
       url: "/my-personal-info/theme-settings",
       size: 35,

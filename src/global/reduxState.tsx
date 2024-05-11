@@ -158,9 +158,9 @@ const reduxState = createSlice({
     },
 
     addToCart: (state, { payload }: any) => {
-      const check = state.cart.findIndex((el) => el.id === payload.id);
-      console.log(check);
-      if (check >= 0) {
+      const check = state.cart.findIndex((el) => el._id === payload._id);
+
+      if (check > -1) {
         state.cart[check].QTY += 1;
       } else {
         const addValue = {
@@ -173,18 +173,18 @@ const reduxState = createSlice({
     },
 
     changeCartPick: (state, { payload }) => {
-      const check = state.cart.findIndex((el) => el.id === payload.id);
+      const check = state.cart.findIndex((el) => el._id === payload._id);
       let checkValue = state.cart[check].QTY;
 
       if (state.cart[check].QTY > 1) {
         state.cart[check].QTY -= 1;
       } else if (checkValue === 1) {
-        state.cart = state.cart.filter((fl) => fl.id !== payload.id);
+        state.cart = state.cart.filter((fl) => fl._id !== payload._id);
       }
     },
 
     removeFromCart: (state, { payload }) => {
-      state.cart = state.cart.filter((fl) => fl.id !== payload.id);
+      state.cart = state.cart.filter((fl) => fl._id !== payload._id);
     },
 
     emptyCart: (state) => {

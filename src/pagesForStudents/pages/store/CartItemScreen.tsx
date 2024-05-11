@@ -38,10 +38,10 @@ const CartItemScreen = () => {
   };
 
   const cost = cart
-    .map((el: any) => {
+    ?.map((el: any) => {
       return el.QTY * el.cost;
     })
-    .reduce((a: number, b: number) => {
+    ?.reduce((a: number, b: number) => {
       return a + b;
     }, 0);
 

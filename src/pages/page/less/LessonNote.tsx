@@ -21,8 +21,6 @@ const AdminLessonNote = () => {
   const [response, setResponse] = useState("");
   const [day, setDay] = useState("");
 
-  console.log("view: ", obj.responseDetail);
-
   const handleSubmit = (el: any) => {
     adminlessonNoteReply(data?._id, el, {
       responseDetail: response,
@@ -131,7 +129,6 @@ const AdminLessonNote = () => {
                                 htmlFor="send_response"
                                 className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                                 onClick={() => {
-                                  console.log(props?._id);
                                   setID(props?._id);
                                   setObj(props);
                                 }}

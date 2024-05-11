@@ -16,6 +16,8 @@ import Editor from "./NoteCreated";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
+import Input from "../../components/reUse/Input";
+import MainInput from "./MainInput";
 
 document.title = "update and Improve Lesson Note ";
 
@@ -87,69 +89,74 @@ const EditLessonNote = () => {
 
   let getRead = { ...lessonNoteData };
   let fetchRead = { ...lessonNoteData };
+  let readData = { ...lessonNoteData };
 
   const mainInputData = [
     {
       label: "This lesson is for what week?",
       placeholder: "Week 1",
       name: "week",
-      defaultValue: `${lessonNoteData?.week}`,
+      defaultValue: `${readData?.week}`,
     },
     {
       label: "Input the started date",
       placeholder: "10/02/2024",
       name: "createDate",
-      defaultValue: `${lessonNoteData?.createDate}`,
+      defaultValue: `${readData?.createDate}`,
     },
     {
       label: "This lesson is for what class?",
       placeholder: "JSS 1B",
       name: "classes",
-      defaultValue: `${lessonNoteData?.classes}`,
+      defaultValue: `${readData?.classes}`,
     },
     {
       label: "This lesson is for what subject?",
       placeholder: "Mathematics",
       name: "subject",
-      defaultValue: `${lessonNoteData?.subject}`,
+      defaultValue: `${readData?.subject}`,
     },
     {
       label: "This lesson is for what topic?",
       placeholder: "Probabilty",
       name: "topic",
-      defaultValue: `${lessonNoteData?.topic}`,
+      defaultValue: `${readData?.topic}`,
     },
     {
       label: "This lesson is for what sub-topic?",
       placeholder: "Sub-Topic",
       name: "subTopic",
-      defaultValue: `${lessonNoteData?.subTopic}`,
+      defaultValue: `${readData?.subTopic}`,
     },
     {
       label: "This lesson is for how many periods?",
       placeholder: "2 - 5",
       name: "period",
-      defaultValue: `${lessonNoteData?.period}`,
+      defaultValue: `${readData?.period}`,
     },
     {
       label: "How long will this lesson take?",
       placeholder: "40 minutes x no of periods",
       name: "duration",
-      defaultValue: `${lessonNoteData?.duration}`,
+      defaultValue: `${readData?.duration}`,
     },
     {
       label: "What are your teaching materials?",
       placeholder: "die, coins, or charts",
       name: "instructionalMaterial",
-      defaultValue: `${lessonNoteData?.instructionalMaterial}`,
+      defaultValue: `${readData?.instructionalMaterial}`,
     },
     {
       label: "What are your reference materials?",
       placeholder: "Integrated Mathematics",
       name: "referenceMaterial",
-      defaultValue: `${lessonNoteData?.referenceMaterial}`,
+      defaultValue: `${readData?.referenceMaterial}`,
     },
   ];
+
+  const show = mainInputData.map((el) => {
+    return el.defaultValue;
+  });
 
   return (
     <div>
@@ -157,21 +164,27 @@ const EditLessonNote = () => {
 
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 text-blue-950 mt-10">
         {mainInputData?.map((el, i: number) => {
+          let value = show[i];
           return (
-            <InputWithLabel
-              defaultValue={`${el.defaultValue!}`}
-              label={el.label}
-              placeholder={el.placeholder}
-              value={iValue[i] ? iValue[i].value : ""}
-              onChange={(e: any) => {
-                const newValue = e.target.value;
-                setiValue((prevValues: any) => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[i] = { label: el.name, value: newValue };
-                  return updatedValues;
-                });
-              }}
-            />
+            <div>
+              <div className="text-[12px] ">
+                <label>{el.label}</label>
+                <MainInput
+                  className="w-auto ml-0"
+                  placeholder={el.placeholder}
+                  defaultValue={value}
+                  value={iValue[i] ? iValue[i].value : value}
+                  onChange={(e: any) => {
+                    const newValue = e.target.value;
+                    setiValue((prevValues: any) => {
+                      const updatedValues = [...prevValues];
+                      updatedValues[i] = { label: el.name, value: newValue };
+                      return updatedValues;
+                    });
+                  }}
+                />
+              </div>
+            </div>
           );
         })}
       </div>
@@ -187,22 +200,27 @@ const EditLessonNote = () => {
             name: "specificObjectives",
             defaultValue: `${lessonNoteData?.specificObjectives}`,
           },
-        ].map((el, i: number) => (
-          <TextArea
-            defaultValue={el.defaultValue}
-            value={areaOne[i] ? areaOne[i].value : ""}
-            placeholder={el.placeholder}
-            label={el.placeholder}
-            onChange={(e: any) => {
-              const newValue = e.target.value;
-              setAreaOne((prevValues: any) => {
-                const updatedValues = [...prevValues];
-                updatedValues[i] = { label: el.name, value: newValue };
-                return updatedValues;
-              });
-            }}
-          />
-        ))}
+        ].map((el, i: number) => {
+          return (
+            <div>
+              <div>
+                <div className="mb-1 text-[12px]">{el.placeholder}</div>
+                <textarea
+                  className="w-full col-span-1 bg-white transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md py-1 px-2 text-[13px] h-[100px] resize-none mx-0 border"
+                  defaultValue={el.defaultValue}
+                  onChange={(e: any) => {
+                    const newValue = e.target.value;
+                    setAreaTwo((prevValues: any) => {
+                      const updatedValues = [...prevValues];
+                      updatedValues[i] = { label: el?.name, value: newValue };
+                      return updatedValues;
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
       <p className="text-[12px] mt-3">Lesson Note</p>
       <div className="w-full my-1  min-h-[300px] border">
@@ -240,22 +258,23 @@ const EditLessonNote = () => {
             defaultValue: `${fetchRead?.assignment}`,
           },
         ].map((el, i: number) => {
-          console.log(el.defaultValue);
+          let read = el?.defaultValue;
           return (
-            <TextArea
-              defaultValue={`${el?.defaultValue}`}
-              value={areaTwo[i] ? areaTwo[i].value : ""}
-              placeholder={el.placeholder}
-              label={el.placeholder}
-              onChange={(e: any) => {
-                const newValue = e.target.value;
-                setAreaTwo((prevValues: any) => {
-                  const updatedValues = [...prevValues];
-                  updatedValues[i] = { label: el.name, value: newValue };
-                  return updatedValues;
-                });
-              }}
-            />
+            <div>
+              <div className="mb-1 text-[12px]">{el.placeholder}</div>
+              <textarea
+                className="w-full col-span-1 bg-white transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md py-1 px-2 text-[13px] h-[100px] resize-none mx-0 border"
+                defaultValue={el.defaultValue}
+                onChange={(e: any) => {
+                  const newValue = e.target.value;
+                  setAreaTwo((prevValues: any) => {
+                    const updatedValues = [...prevValues];
+                    updatedValues[i] = { label: el?.name, value: newValue };
+                    return updatedValues;
+                  });
+                }}
+              />
+            </div>
           );
         })}
       </div>

@@ -21,7 +21,7 @@ const PurchaseHistoryScreen = () => {
   const dispatch = useDispatch();
   //   const data = Array.from({ length: 7 });
 
-  const cart = useSelector((state: any) => state.cart);
+  const cart = useSelector((state: any) => state?.cart);
 
   const { data } = useSchoolData();
   const { schoolPurchased: purchasedStore } = usePurchasedStoreInfo(data?._id);
@@ -79,9 +79,9 @@ const PurchaseHistoryScreen = () => {
                               </div>
                             </div>
                             <div>
-                              <div className="font-bold">{el.title}</div>
+                              <div className="font-bold">{el?.title}</div>
                               <div className="text-[12px] opacity-50 ">
-                                ₦{el.cost.toLocaleString()} * {el.QTY}
+                                ₦{el?.cost?.toLocaleString()} * {el?.QTY}
                               </div>
                             </div>
                           </div>
@@ -90,7 +90,7 @@ const PurchaseHistoryScreen = () => {
                     </div>
 
                     <div className="w-[100px] border-r ml-1">
-                      ₦{(props?.amount).toLocaleString()}
+                      ₦{props?.amount?.toLocaleString()}
                     </div>
 
                     {/* name */}
@@ -110,7 +110,7 @@ const PurchaseHistoryScreen = () => {
                               if (res.status === 201) {
                                 mutate(`api/view-school-purchase/${data?._id}`);
                                 // location.reload();
-                                useEffect(() => {}, [props.delievered]);
+                                useEffect(() => {}, [props?.delievered]);
                               }
                             });
                           }}

@@ -1037,3 +1037,27 @@ export const changeStudentClass = async (studentID: string, data: any) => {
     return error;
   }
 };
+
+export const changeSchoolPhone = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/change-school-phone/${schoolID}`, { phone: data })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const changeSchoolPersonalName = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/change-school-personal-name/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

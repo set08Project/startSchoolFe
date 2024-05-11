@@ -8,8 +8,8 @@ import { UnLazyImage } from "@unlazy/react";
 
 const StoreView = () => {
   const dispatch = useDispatch();
-  const cart = useSelector((state: any) => state.cart);
-  const cartToggle = useSelector((state: any) => state.cartToggle);
+  const cart = useSelector((state: any) => state?.cart);
+  const cartToggle = useSelector((state: any) => state?.cartToggle);
 
   const { data } = useSchoolData();
   const { store: storeData } = useStore(data?._id);
@@ -32,7 +32,7 @@ const StoreView = () => {
         <div className="mr-10 relative cursor-pointer" onClick={changeView}>
           <BsCart4 size={25} />
           <div className="absolute -top-1 flex justify-center items-center bg-red-500 text-white rounded-full w-4 h-4 text-[12px] font-medium -right-1">
-            {cart.length}
+            {cart?.length}
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@ const StoreView = () => {
                     </p>
                     <p className="flex justify-end font-bold">
                       {" "}
-                      ₦{props?.cost.toLocaleString()}
+                      ₦{props?.cost?.toLocaleString()}
                     </p>
                   </div>
                   <div className="card-actions justify-end">

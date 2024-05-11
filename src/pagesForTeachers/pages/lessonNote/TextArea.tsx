@@ -8,7 +8,7 @@ interface iTextArea extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 }
 
 const TextArea: FC<iTextArea> = ({
-  defaultValue,
+  // defaultValue,
   label,
   value,
   placeholder,
@@ -18,7 +18,7 @@ const TextArea: FC<iTextArea> = ({
     <div>
       <div className="mb-1 text-[12px]">{label}</div>
       <textarea
-        defaultValue={defaultValue}
+        // defaultValue={defaultValue}
         value={value}
         placeholder={placeholder}
         className="w-full col-span-1 bg-white border transition-all duration-300 focus:outline-1 focus:outline outline-blue-950 rounded-md py-1 px-2 text-[13px] h-[100px] resize-none"

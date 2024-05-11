@@ -36,7 +36,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
             <div className="w-[300px] h-6  border-r">01:20PM - 02:00PM </div>
           </div>
 
-          <div className="flex w-[2600px] gap-0 px-1 py-3 mt-2">
+          <div className="flex w-[2600px] gap-0  py-3 mt-2 ">
             <div className="w-[200px] h-6 border-r">
               {daysData?.map((props: string, i: number) => (
                 <div
@@ -51,7 +51,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
               ))}
             </div>
 
-            <div className="">
+            <div className="w-[calc(2600px-200px)] gap-1 px-1">
               {dataTime?.map((props: any, i: number) => (
                 <div
                   key={i}
@@ -62,7 +62,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
                   <div className="flex   ">
                     {props?.map((props: any, e: number) => (
                       <div key={e} className="flex">
-                        <div className="w-[220px] h-11 border-r px-4">
+                        <div className="w-[218px] h-11 border-r px-4">
                           {props.subject}
                         </div>
                       </div>
