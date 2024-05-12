@@ -78,7 +78,6 @@ const SuccessPage = () => {
           onClick={() => {
             if (search.split("reference=")[1] !== "" || null) {
               verifyPay(search.split("reference=")[1]).then((res) => {
-                console.log(res);
                 if (res.status) {
                   createReceipt(ID.id, {
                     costPaid: res?.data?.amount / 100,
@@ -87,9 +86,7 @@ const SuccessPage = () => {
                   updatePayInfo(termID, {
                     costPaid: res?.data?.amount / 100,
                     payRef: search.split("reference=")[1],
-                  }).then((res: any) => {
-                    console.log(res);
-                  });
+                  }).then((res: any) => {});
                 }
               });
             }

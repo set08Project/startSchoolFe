@@ -31,14 +31,11 @@ const SignIn = () => {
     const val = { email: state, enrollmentID: password };
 
     getSchoolCookie().then((res) => {
-      // console.log("show me: ", res);
     });
 
     loginSchool(val)
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
-          console.log(res);
           dispatch(loginState(res));
           dispatch(displayUserStatus(res.user));
           toast.success("login successful");

@@ -32,6 +32,8 @@ const SuccessPage = React.lazy(
 
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
+import SuccessfulPaymentScreen from "../pages/page/payment/PaymentSuccessfulScreen";
+import DownloadTest from "../pages/page/payment/DownloadTest";
 
 const AllArticle = React.lazy(
   () => import("../pages/home/screens/AllArticles")
@@ -118,10 +120,26 @@ export const adminRouter = createBrowserRouter([
     ),
     children: [
       {
-        path: "successful-payment",
+        path: "successful-payment-screen",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <SuccessPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "test-payment",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SuccessfulPaymentScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "successful-payment",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <DownloadTest />
           </Suspense>
         ),
       },

@@ -115,7 +115,6 @@ const CartItemScreen = () => {
                         }, 0) + 500,
                     subAccountCode: data?.bankDetails?.accountPaymentCode,
                   }).then((res) => {
-                    console.log(res?.data?.data?.data?.reference);
                     if (res) {
                       dispatch(paymentRef(res?.data?.data?.data?.reference));
                       location.replace(

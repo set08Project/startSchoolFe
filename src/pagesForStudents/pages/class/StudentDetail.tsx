@@ -11,8 +11,6 @@ const StudentDetail = () => {
     return { record: counted % 2 === 0 ? true : false, count: counted };
   });
 
-  console.log();
-
   return (
     <div>
       <LittleHeader name="Student Details" back />

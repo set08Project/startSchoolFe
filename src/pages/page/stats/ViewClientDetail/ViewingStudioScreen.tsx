@@ -12,7 +12,7 @@ interface iProp {
 }
 const GetSingleStudioData: FC<iProp> = ({ props }) => {
   // const { studio } = useSingleStudioBookings(props);
-  console.log(props);
+
   return (
     <div>
       <div>

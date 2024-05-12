@@ -20,7 +20,7 @@ const Register = () => {
     setLoading(true);
     if (email !== "") {
       registerSchool(email).then((res) => {
-        console.log(res);
+       
         if (res.status === 201) {
           setLoading(false);
           navigate("/auth/register-message");

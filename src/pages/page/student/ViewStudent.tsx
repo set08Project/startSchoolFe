@@ -121,10 +121,9 @@ const ViewStudent = () => {
 
   const handleToggleCheckbox1st = (studentID: any) => {
     setViewStudent1stFees(!viewstudent1stfees);
-    console.log("started");
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
-      console.log("push");
+   
       if (res.status === 200) {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
@@ -132,7 +131,6 @@ const ViewStudent = () => {
           purchasedID: getValue(10),
           reference: getValue(10),
         }).then((res) => {
-          console.log(res);
           setID("");
           toast.success("3rd term SchoolFees has been Approved");
           mutate(`api/read-student/${UI?._id}`);

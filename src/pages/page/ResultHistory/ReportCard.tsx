@@ -92,12 +92,6 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { state } = useReadMyClassInfoData("JSS 1A");
   const { subjectData } = useClassSubject(state?._id);
 
-  // console.log(
-  //   subjectData?.map((el: any) => {
-  //     return el.subjectTitle;
-  //   })
-  // );
-
   let result = gradeData?.reportCard
     .find((el: any) => {
       return (

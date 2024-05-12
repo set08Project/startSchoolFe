@@ -98,7 +98,6 @@ const CartItemScreen = () => {
                     amount: cost + 500,
                     subAccountCode: data?.bankDetails?.accountPaymentCode,
                   }).then((res) => {
-                    console.log(res?.data?.data?.data?.reference);
                     if (res) {
                       dispatch(paymentRef(res?.data?.data?.data?.reference));
                       location.replace(
@@ -108,11 +107,6 @@ const CartItemScreen = () => {
                   });
 
                   const x = setTimeout(() => {
-                    console.log(
-                      studentInfo?.parentEmail,
-                      cost + 500,
-                      data?.bankDetails?.accountPaymentCode
-                    );
                     setToggle(false);
                     clearTimeout(x);
                   }, 4000);

@@ -88,7 +88,6 @@ const HomeScreen = () => {
         } else {
           setLoading(false);
           toast.error(`${res?.response?.data?.message}`);
-          console.log(res);
         }
       });
 
@@ -116,7 +115,6 @@ const HomeScreen = () => {
         } else {
           setLoading(false);
           toast.error(`${res?.response?.data?.message}`);
-          console.log(res);
         }
       });
       goToTop();
@@ -143,7 +141,6 @@ const HomeScreen = () => {
         } else {
           setLoading(false);
           toast.error(`${res.response.data.message}`);
-          console.log(res);
         }
       });
       goToTop();

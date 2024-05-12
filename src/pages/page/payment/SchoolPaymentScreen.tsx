@@ -130,7 +130,6 @@ const SchoolFeesHistoryScreen = () => {
                                 className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
                                 onClick={() => {
                                   updateSchoolFee(stateArray[0]).then((res) => {
-                                    console.log(res);
                                     setStateArray([]);
                                     let x = setTimeout(() => {
                                       setStateArray([]);
@@ -173,9 +172,7 @@ const SchoolFeesHistoryScreen = () => {
                           props?.confirm ? "checkbox-success" : "checkbox-error"
                         }`}
                         onClick={() => {
-                          updateSchoolFee(props?._id).then((res) => {
-                            console.log(res);
-                          });
+                          updateSchoolFee(props?._id).then((res) => {});
                         }}
                       />
                     </div>

@@ -112,12 +112,8 @@ const StudentDetail = () => {
               onClick={() => {
                 setShow(!show);
                 changeStudentClass(studentID, { classID: salary }).then(
-                  (res) => {
-                    console.log(res);
-                  }
+                  (res) => {}
                 );
-
-                console.log(salary, salaryID);
                 // updaetTeacherSalary(teacherDetail?._id, { salary }).then(() => {
                 //   mutate(`api/view-teacher-detail/${teacherDetail?._id}`);
                 // });

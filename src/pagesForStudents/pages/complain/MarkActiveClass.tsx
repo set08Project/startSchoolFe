@@ -41,7 +41,6 @@ const MakeActiveClass: FC<iProps> = ({ props }) => {
       });
   };
 
-  console.log("fetch: ", studentInfo?.monitor);
 
   return (
     <div>

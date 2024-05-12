@@ -83,12 +83,7 @@ const AddStaff = () => {
           <div className="mt-10" />
 
           <div className="mt-1">
-            <label
-              className="text-[14px]"
-              onClick={() => {
-                console.log("started");
-              }}
-            >
+            <label className="text-[14px]" onClick={() => {}}>
               Staff Name
             </label>
             <Input

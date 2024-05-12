@@ -97,8 +97,6 @@ const ReportCardPrint = () => {
     },
   ];
 
-  console.log(grade);
-
   return (
     <div className="">
       <ReportCardTemplate

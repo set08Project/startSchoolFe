@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import Correction from "../pagesForStudents/pages/quiz/Correction";
 import SchoolFeePaidScreen from "../pagesForStudents/schoolFee/SchoolFeePaidScreen";
+import DownloadTest from "../pagesForStudents/schoolFee/DownloadTest";
 
 const ReportCardPrint = React.lazy(
   () => import("../pagesForStudents/pages/CardTemplate/ReportCardPrint")
@@ -327,10 +328,18 @@ export const studentRouter = createBrowserRouter([
   },
 
   {
-    path: "/school-fee-payment",
+    path: "/school-fee-payment1",
     element: (
       <Suspense fallback={<LoadingScreen />}>
         <SchoolFeePaidScreen />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/school-fee-payment",
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <DownloadTest />
       </Suspense>
     ),
   },

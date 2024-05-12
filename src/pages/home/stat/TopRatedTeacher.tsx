@@ -13,12 +13,6 @@ const TopRatedTeacher = () => {
     },
   ]);
 
-  // console.log(
-  //   schoolTeacher?.staff.sort((a, b) => {
-  //     return b.staffRating + a.staffRating;
-  //   })
-  // );
-
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">
       {rate?.map((props: any, i: number) => (

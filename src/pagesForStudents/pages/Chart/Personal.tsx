@@ -103,13 +103,7 @@ const Personal: FC = () => {
             >
               <div className="flex gap-4 mr-5">
                 {props?.map((props: any, e: number) => (
-                  <div
-                    key={e}
-                    className="flex"
-                    onClick={() => {
-                      console.log(props);
-                    }}
-                  >
+                  <div key={e} className="flex" onClick={() => {}}>
                     {props?.day === day[moment(Date.now()).day()] && (
                       <div className="flex gap-4">
                         <div className=" h-[170px] flex justify-center items-center rounded-lg flex-col w-[200px] text-blue-950 bg-white border">

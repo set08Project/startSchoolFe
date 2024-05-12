@@ -73,9 +73,6 @@ const ViewSubjects = () => {
 
   const [state, setState] = useState("");
 
-  //   console.log(schoolSubject?.subjects);
-  //   console.log(schoolSubject);
-
   return (
     <div>
       <LittleHeader name={"View Subject"} />
@@ -126,7 +123,6 @@ const ViewSubjects = () => {
                         htmlFor="assign_class_subject"
                         className=" my-3 bg-blue-950 text-white py-2 px-4 rounded-md text-[12px] transition-all duration-300 hover:text-white cursor-pointer "
                         onClick={() => {
-                          console.log("props: ", props._id);
                           setState(props._id);
                         }}
                       >
@@ -249,7 +245,6 @@ const ViewSubjects = () => {
                                 );
                                 deletSubject(dataID, props?._id).then(
                                   (res: any) => {
-                                    console.log(res);
                                     mutate(`api/view-school-subject/${dataID}`);
                                     toast.success(
                                       "subject Remove from Archieve"
@@ -262,7 +257,6 @@ const ViewSubjects = () => {
                             })
                           : deletSubject(dataID, props?._id).then(
                               (res: any) => {
-                                console.log(res);
                                 mutate(`api/view-school-subject/${dataID}`);
                                 toast.success("subject Remove from Archieve");
                               }

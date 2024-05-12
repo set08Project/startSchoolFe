@@ -42,7 +42,6 @@ const Article = () => {
                           onClick={() => {
                             deleteArticle(dataID, el?.student, el?._id).then(
                               (res) => {
-                                console.log(res);
                                 navigate("/view-articles");
                               }
                             );

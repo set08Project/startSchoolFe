@@ -59,8 +59,6 @@ const StudentDashboard = () => {
     );
   });
 
-  console.log("reading: ", schl?.freeMode);
-
   return (
     <div className="text-blue-950 flex flex-col h-full">
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">

@@ -29,7 +29,6 @@ const MakeComplains: FC<iProps> = ({ props }) => {
       importance: subject,
     })
       .then((res) => {
-        console.log(res);
         if (res?.status === 201) {
           mutate(`api/view-student-complain/${studentInfo?._id}`);
           toast.success("Added Successfully...!");
