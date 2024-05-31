@@ -47,9 +47,11 @@ const ReporterDetail: FC<iProps> = ({ props }) => {
                 ? teacherDetail?.staffName
                 : `${studentInfoData?.studentFirstName} ${studentInfoData?.studentLastName}`}
             </div>
-            <div className="text-[12px] opacity-50 ">
+            <div className="text-[10px] font-semibold opacity-50 flex flex-wrap gap-1 ">
               {teacherDetail?.classesAssigned
-                ? teacherDetail?.classesAssigned
+                ? teacherDetail?.classesAssigned?.map((el: any) => (
+                    <div className="pr-2 border-r-2">{el.className}</div>
+                  ))
                 : studentInfoData?.classAssigned}
             </div>
           </div>

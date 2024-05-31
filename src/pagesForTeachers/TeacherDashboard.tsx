@@ -19,13 +19,17 @@ import Button from "../components/reUse/Button";
 import { assignClassMonitor } from "./api/teachersAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { viewMonitor } from "../global/reduxState";
+import { useEffect, useState } from "react";
 
 const TeacherDashboard = () => {
   const { teacherInfo } = useTeacherInfo();
   document.title = `${teacherInfo?.staffName}'s Record and Stats`;
   const dispatch = useDispatch();
   const monitorII = useSelector((state: any) => state.monitorView);
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+
+  const [state, setState] = useState<string>(
+    teacherInfo?.classesAssigned[0].classID
+  );
 
   const { data } = useSchool(teacherInfo?.schoolIDs);
 
@@ -53,6 +57,7 @@ const TeacherDashboard = () => {
 
   const { termData } = useViewTermDetail(termID);
 
+  const { oneClass } = useReadOneClassInfo(state);
   const { classStudents } = useClassStudent(oneClass?._id);
   const monitor = classStudents?.students?.find((el: any) => {
     return el?.monitor === true;
@@ -63,9 +68,21 @@ const TeacherDashboard = () => {
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
           <div className="flex justify-between items-center mb-6 text-blue-950 ">
-            <div className="mb-4 text-medium capitalize font-semibold flex gap-4">
-              <div> My Class: </div>
-              <div className="font-bold">{teacherInfo?.classesAssigned}</div>
+            <div className="mb-4 text-medium capitalize font-semibold ">
+              <div className="text-[12px]"> My Present Class View: </div>
+              <div className="font-bold text-[20px] mt-1">
+                <select
+                  className="select select-bordered  w-full max-w-xs"
+                  value={state}
+                  onChange={(e: any) => {
+                    setState(e.target.value);
+                  }}
+                >
+                  {teacherInfo?.classesAssigned?.map((el: any) => (
+                    <option value={el?.classID}>{el?.className}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <Button
@@ -77,7 +94,7 @@ const TeacherDashboard = () => {
               }}
             />
           </div>
-          <Personal />
+          <Personal oneClass={oneClass} />
 
           <div className="flex-1 mt-10" />
           <div className="text-[13px] font-medium mt-4">
@@ -92,7 +109,7 @@ const TeacherDashboard = () => {
             <div>
               <div className=" flex gap-2  mb-10">
                 <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-4 rounded-md text-center">
-                  <StudentOfTheWeek />
+                  <StudentOfTheWeek oneClass={oneClass} />
                 </div>
                 <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4 rounded-md  text-center">
                   <MakeComplains />
@@ -101,7 +118,7 @@ const TeacherDashboard = () => {
 
               <div className="font-medium text-[12px] text-blue-950 px-6 py-2 rounded-sm  text-center w-full flex flex-col items-center overflow-hidden">
                 <p className="font-bold text-left pb-3 text-[15px] ">
-                  Student of the Week for class {teacherInfo?.classesAssigned}
+                  Student of the Week for class {oneClass?.className}
                 </p>
                 {oneClass?.weekStudent ? (
                   <div className="w-[260px]  rounded-t-md min-h-[320px] border">
@@ -139,7 +156,7 @@ const TeacherDashboard = () => {
                 </div>
 
                 <div className=" overflow-hidden">
-                  <StudentPerformance />
+                  <StudentPerformance oneClass={oneClass} />
                 </div>
               </div>
             ) : (

@@ -2,11 +2,16 @@ import pix from "../../assets/pix.jpg";
 import { useClassStudent, useTeacherInfo } from "../hooks/useTeacher";
 import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
 import { UnLazyImage } from "@unlazy/react";
+import { FC } from "react";
 
-const StudentPerformance = () => {
+interface iProps {
+  oneClass?: any;
+}
+
+const StudentPerformance: FC<iProps> = ({ oneClass }) => {
   const { teacherInfo } = useTeacherInfo();
 
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+  // const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   const { classStudents } = useClassStudent(oneClass?._id);
 

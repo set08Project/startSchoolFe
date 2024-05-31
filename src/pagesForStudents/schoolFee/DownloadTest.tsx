@@ -17,8 +17,6 @@ import { schoolPaymentEndPoint } from "../api/studentAPI";
 const DownloadTest: React.FC = () => {
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
-  // const { studentInfo } = useStudentInfo();
-  // ?trxref=41kgp40u70&reference=41kgp40u70
   const [object, setObject] = useState<any>({});
 
   const preprocessContent = () => {

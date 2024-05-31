@@ -170,8 +170,14 @@ const ViewStaffScreen = () => {
                   {/*good  */}
                   <div className="w-[200px] border-r  ">
                     {props?.classesAssigned ? (
-                      <div className="gap-2">
-                        <p>{props?.classesAssigned}</p>
+                      <div className="">
+                        <p className="flex flex-wrap">
+                          {props?.classesAssigned?.map((el: any) => (
+                            <div className=" m-1 px-2 text-[10px] font-semibold text-white bg-blue-950 py-1 border rounded-full">
+                              {el.className}
+                            </div>
+                          ))}
+                        </p>
                       </div>
                     ) : (
                       "Not Yet Assigned"
@@ -179,7 +185,9 @@ const ViewStaffScreen = () => {
                   </div>
                   <div className="w-[200px] border-r  ">
                     {props?.classAssigned
-                      ? props?.classAssigned
+                      ? props?.classAssigned?.map((el: any) => (
+                          <div>{el.className}</div>
+                        ))
                       : "Not Yet Assigned"}
                   </div>
 

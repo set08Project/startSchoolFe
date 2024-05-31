@@ -332,10 +332,12 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 
 const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { state } = useReadMyClassInfoData(oneClass?.className);
+  const [state, setState] = useState<string>(
+    teacherInfo?.classesAssigned[0].classID
+  );
 
+  const { oneClass } = useReadOneClassInfo(state);
   const { classStudents } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
 
@@ -346,7 +348,20 @@ const CardReport = () => {
       <div className="mb-0" />
       <LittleHeader name={"Class Teacher Remark"} />
 
-      <div className="mt-10" />
+      <div className="mt-10">
+        <div className="text-[12px] font-semibold">Report Record for</div>
+        <select
+          className="select select-bordered  w-full max-w-xs mb-10 mt-2"
+          value={state}
+          onChange={(e: any) => {
+            setState(e.target.value);
+          }}
+        >
+          {teacherInfo?.classesAssigned?.map((el: any) => (
+            <option value={el?.classID}>{el?.className}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">

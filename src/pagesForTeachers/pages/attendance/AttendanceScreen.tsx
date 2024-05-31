@@ -7,7 +7,7 @@ import {
   useClassStudent,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   markAttendanceAbsent,
   markAttendancePresent,
@@ -113,7 +113,13 @@ const Attendance: FC<iProps> = ({ id, data }) => {
 const AttendanceScreen = () => {
   const { teacherInfo } = useTeacherInfo();
 
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+  const [state, setState] = useState<string>(
+    teacherInfo?.classesAssigned[0].classID
+  );
+
+  const { oneClass } = useReadOneClassInfo(state);
+
+  // const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   const { classStudents } = useClassStudent(oneClass?._id);
 
@@ -124,7 +130,20 @@ const AttendanceScreen = () => {
       <div className="mb-0" />
       <LittleHeader name={"Record Students Attendance"} />
 
-      <div className="mt-10" />
+      <div className="my-10">
+        <div className="text-[12px] font-semibold">Attendanct Record for</div>
+        <select
+          className="select select-bordered  w-full max-w-xs mb-10 mt-2"
+          value={state}
+          onChange={(e: any) => {
+            setState(e.target.value);
+          }}
+        >
+          {teacherInfo?.classesAssigned?.map((el: any) => (
+            <option value={el?.classID}>{el?.className}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex w-full justify-end"></div>
       <div

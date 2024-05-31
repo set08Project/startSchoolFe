@@ -26,20 +26,22 @@ import {
 import { useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
 
 interface iProps {
-  props?: any;
+  oneClass?: any;
 }
 
-const StudentOfTheWeek: FC<iProps> = ({ props }) => {
+const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
   const [subject, setSubject] = useState<string>("");
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
 
   const { teacherInfo } = useTeacherInfo();
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+  // const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   const { classStudents } = useClassStudent(oneClass?._id);
 
   // api/view-subject-assignment/${subjectID}
+
+  console.log("coming from: ", oneClass?.className);
 
   const onCreateAssignment = () => {
     studentOfTheWeek(teacherInfo?._id, {

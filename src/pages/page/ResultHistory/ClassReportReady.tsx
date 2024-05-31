@@ -37,9 +37,12 @@ const TeacherInfo: FC<iProps> = ({ props }) => {
       </div>
       <div>
         <div className="font-bold">{schoolSubjectTeacherDetail?.staffName}</div>
-        <div className="text-[12px] opacity-50 ">
-          {schoolSubjectTeacherDetail?.classesAssigned} Teacher
+        <div className="text-[10px] opacity-50 flex flex-wrap gap-2 font-semibold">
+          {schoolSubjectTeacherDetail?.classesAssigned?.map((el: any) => (
+            <div>{el.className}</div>
+          ))}{" "}
         </div>
+        <p className="mt-1">Teacher</p>
       </div>
     </div>
   );

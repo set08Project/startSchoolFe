@@ -13,6 +13,7 @@ import { MdDelete } from "react-icons/md";
 import { deletSubject, removeTeacherSubject } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
 import { useSchool } from "../../hook/useSchoolAuth";
+import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 
 const StaffDetail = () => {
   const { staffID } = useParams();
@@ -20,6 +21,12 @@ const StaffDetail = () => {
 
   const [show, setShow] = useState<boolean>(false);
   const [salary, setSalary] = useState<string>("");
+
+  const [state, setState] = useState<string>(
+    teacherDetail?.classesAssigned[0].classID
+  );
+
+  const { oneClass } = useReadOneClassInfo(state);
 
   return (
     <div>
@@ -89,9 +96,11 @@ const StaffDetail = () => {
         </p>
         <p className="text-[13px]">
           Class Teacher of:{" "}
-          <span className="font-bold">
+          <span className="font-bold flex gap-4">
             {teacherDetail?.classesAssigned
-              ? teacherDetail?.classesAssigned
+              ? teacherDetail?.classesAssigned?.map((el: any) => (
+                  <div>{el.className}</div>
+                ))
               : "Not Yet"}
           </span>
         </p>

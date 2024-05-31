@@ -96,26 +96,41 @@ const StaffDetail: FC<iProps> = ({ props }) => {
 const MyClassRoomScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const [classInfo, setClassInfo] = useState<any>();
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  useEffect(() => {
-    readClassInfo(oneClass?.className).then((res: any) => {
-      setClassInfo(res?.data);
-    });
-  }, []);
+  const [state, setState] = useState<string>(
+    teacherInfo?.classesAssigned[0].classID
+  );
 
-  console.log("hmmm: ", oneClass);
+  const { oneClass } = useReadOneClassInfo(state);
+
+  // useEffect(() => {
+  //   readClassInfo(oneClass?.className).then((res: any) => {
+  //     setClassInfo(res?.data);
+  //   });
+  // }, []);
 
   return (
     <div className="text-blue-950">
       <LittleHeader name="My ClassRoom Details" />
-      <div>Class: {teacherInfo?.classesAssigned}</div>
+      <div>Class: {oneClass?.className}</div>
+
+      <select
+        className="select select-bordered  w-full max-w-xs mb-10 mt-2"
+        value={state}
+        onChange={(e: any) => {
+          setState(e.target.value);
+        }}
+      >
+        {teacherInfo?.classesAssigned?.map((el: any) => (
+          <option value={el?.classID}>{el?.className}</option>
+        ))}
+      </select>
 
       <div className="w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between overflow-hidden ">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">
-            {classInfo?.students?.length}{" "}
+            {oneClass?.students?.length}{" "}
             <span className="text-[20px]">Students</span>
           </div>
         </div>

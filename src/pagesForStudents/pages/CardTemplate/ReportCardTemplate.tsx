@@ -1,5 +1,9 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import pix from "../../../assets/logo.png";
+import { GrDownload } from "react-icons/gr";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import moment from "moment";
 
 interface iSchool {
   schoolName: string;
@@ -14,19 +18,66 @@ const ReportCardTemplate: FC<iSchool> = ({
   studentDetails,
   subjects,
 }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const preprocessContent = () => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    // Traverse the DOM and replace "oklch" color functions with a fallback color
+    const elementsWithUnsupportedColors = content.querySelectorAll("*");
+    elementsWithUnsupportedColors.forEach((element: any) => {
+      const computedStyles = window.getComputedStyle(element);
+      if (computedStyles.color.includes("oklch")) {
+        element.style.color = "#000000"; // Replace with a fallback color
+      }
+    });
+  };
+
+  useEffect(() => {
+    preprocessContent();
+  }, []);
+
+  const downloadPDF = () => {
+    const input = contentRef.current;
+
+    if (!input) {
+      console.error("Ref is not set");
+      return;
+    }
+
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf: any = new jsPDF();
+        pdf.addImage(imgData, "PNG", 30, 10);
+        pdf.save(`report-card-${moment(Date.now()).format("llll")}.pdf`);
+      })
+      .catch((error) => {
+        console.error("Error generating PDF:", error);
+      });
+  };
+
   return (
     <div className="text-[12px] mx-auto bg-white p-8 shadow-md rounded-lg flex justify-center items-center">
-      <div className="w-full min-h-[100vh] shadow lg:p-5">
-        <div className="h-[100px] w-full flex justify-center items-center gap-3 o">
-          <div className="h-[100px]  w-[100%]  border-b-gray-400 flex gap-3 p-3 px-4">
+      <div className="w-full min-h-[100vh] shadow lg:p-5" ref={contentRef}>
+        <div className="h-[100px] w-full flex justify-center items-center gap-3 ">
+          <div className="min-h-[100px]  w-[100%]  border-b-gray-400 flex gap-3 p-3 px-4">
             <div className="lg:w-[14%] w-[25%] lg:h-[100px] h-[70px] flex  ">
-              <img src={pix} alt="" className="h-[100%] object-contain mb-5" />
+              <img src={pix} alt="" className="h-[100%] object-contain mb-9" />
             </div>
-            <div className="w-[70%] h-[100px]  flex flex-col items-start">
+            <div className="w-[70%] h-[100px] flex flex-col items-start">
               <h1 className="font-bold text-[24px] text-center lg:text-[27px] ">
                 {schoolName}
               </h1>
               <p className="text-center text-[14px]">{schoolAddress}</p>
+              <div
+                className="py-3 px-6 bg-blue-950 text-white flex items-center gap-2 rounded-md cursor-pointer mt-2"
+                onClick={downloadPDF}
+              >
+                <div>Download Result</div>
+                <GrDownload className="mb-1" />
+              </div>
             </div>
           </div>
         </div>

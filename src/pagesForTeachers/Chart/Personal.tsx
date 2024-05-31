@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import Chart from "./Chart";
 import GetAnnouncement from "./GetAnnouncement";
 import {
@@ -9,8 +9,6 @@ import {
 } from "../hooks/useTeacher";
 import moment from "moment";
 import lodash from "lodash";
-import { FaStar } from "react-icons/fa6";
-import { useReadOneClassInfo } from "../../pagesForStudents/hooks/useStudentHook";
 import MainArticleHolderScreen from "../pages/article/ARticlaHolderScreen";
 
 const day = [
@@ -23,11 +21,12 @@ const day = [
   "Saturday",
 ];
 
-const Personal: FC = () => {
-  const { teacherInfo } = useTeacherInfo();
+interface iProps {
+  oneClass: any;
+}
 
-  const [state, setState] = useState<any>({});
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
+const Personal: FC<iProps> = ({ oneClass }) => {
+  const { teacherInfo } = useTeacherInfo();
 
   const { teacherSchedule: dataData } = useTeacherSchedule(teacherInfo?._id);
 
@@ -81,7 +80,7 @@ const Personal: FC = () => {
                 </span>
               </p>
             ) : (
-              <p className="text-[12px]">Haven't Assigned Yet</p>
+              <p className="text-[12px]">You haven't Assigned Monitor Yet</p>
             )}
           </p>
         </div>
