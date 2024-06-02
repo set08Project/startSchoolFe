@@ -98,7 +98,7 @@ const MyClassRoomScreen = () => {
   const [classInfo, setClassInfo] = useState<any>();
 
   const [state, setState] = useState<string>(
-    teacherInfo?.classesAssigned[0].classID
+    teacherInfo?.classesAssigned[0]?.classID
   );
 
   const { oneClass } = useReadOneClassInfo(state);
@@ -121,9 +121,15 @@ const MyClassRoomScreen = () => {
           setState(e.target.value);
         }}
       >
-        {teacherInfo?.classesAssigned?.map((el: any) => (
-          <option value={el?.classID}>{el?.className}</option>
-        ))}
+        {teacherInfo?.classesAssigned?.length > 0 ? (
+          teacherInfo?.classesAssigned?.map((el: any) => (
+            <option value={el?.classID}>{el?.className}</option>
+          ))
+        ) : (
+          <option value="No class Assigned yet" disabled>
+            No class Assigned yet
+          </option>
+        )}
       </select>
 
       <div className="w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between overflow-hidden ">

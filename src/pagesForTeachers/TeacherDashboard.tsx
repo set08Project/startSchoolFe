@@ -28,7 +28,7 @@ const TeacherDashboard = () => {
   const monitorII = useSelector((state: any) => state.monitorView);
 
   const [state, setState] = useState<string>(
-    teacherInfo?.classesAssigned[0].classID
+    teacherInfo?.classesAssigned[0]?.classID
   );
 
   const { data } = useSchool(teacherInfo?.schoolIDs);
@@ -42,7 +42,7 @@ const TeacherDashboard = () => {
   let obj: any = {};
 
   if (refID?.length > 0) {
-    for (let i = 0; i < refID.length; i++) {
+    for (let i = 0; i < refID?.length; i++) {
       obj = refID[0];
     }
   }
@@ -78,9 +78,19 @@ const TeacherDashboard = () => {
                     setState(e.target.value);
                   }}
                 >
-                  {teacherInfo?.classesAssigned?.map((el: any) => (
-                    <option value={el?.classID}>{el?.className}</option>
-                  ))}
+                  {teacherInfo?.classesAssigned?.length > 0 ? (
+                    teacherInfo?.classesAssigned?.map((el: any) => (
+                      <option value={el?.classID}>{el?.className}</option>
+                    ))
+                  ) : (
+                    <option
+                      value="No class Assigned yet"
+                      className="text-[10px] font-normal"
+                      disabled
+                    >
+                      No class Assigned yet
+                    </option>
+                  )}
                 </select>
               </div>
             </div>

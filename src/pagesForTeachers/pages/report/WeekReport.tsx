@@ -154,7 +154,7 @@ const WeekReport = () => {
   const { teacherInfo } = useTeacherInfo();
 
   const [state, setState] = useState<string>(
-    teacherInfo?.classesAssigned[0].classID
+    teacherInfo?.classesAssigned[0]?.classID
   );
 
   const { oneClass } = useReadOneClassInfo(state);
@@ -178,9 +178,15 @@ const WeekReport = () => {
             setState(e.target.value);
           }}
         >
-          {teacherInfo?.classesAssigned?.map((el: any) => (
-            <option value={el?.classID}>{el?.className}</option>
-          ))}
+          {teacherInfo?.classesAssigned?.length > 0 ? (
+            teacherInfo?.classesAssigned?.map((el: any) => (
+              <option value={el?.classID}>{el?.className}</option>
+            ))
+          ) : (
+            <option value="No class Assigned yet" disabled>
+              No class Assigned yet
+            </option>
+          )}
         </select>
       </div>
 

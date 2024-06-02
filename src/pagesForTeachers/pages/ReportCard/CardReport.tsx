@@ -334,7 +334,7 @@ const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
 
   const [state, setState] = useState<string>(
-    teacherInfo?.classesAssigned[0].classID
+    teacherInfo?.classesAssigned[0]?.classID
   );
 
   const { oneClass } = useReadOneClassInfo(state);
@@ -357,9 +357,19 @@ const CardReport = () => {
             setState(e.target.value);
           }}
         >
-          {teacherInfo?.classesAssigned?.map((el: any) => (
-            <option value={el?.classID}>{el?.className}</option>
-          ))}
+          {teacherInfo?.classesAssigned?.length > 0 ? (
+            teacherInfo?.classesAssigned?.map((el: any) => (
+              <option value={el?.classID}>{el?.className}</option>
+            ))
+          ) : (
+            <option
+              value="No class Assigned yet"
+              // disabled
+              className="text-black"
+            >
+              No class Assigned yet
+            </option>
+          )}
         </select>
       </div>
 
