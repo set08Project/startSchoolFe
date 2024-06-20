@@ -13,6 +13,8 @@ const TopRatedTeacher = () => {
     },
   ]);
 
+  console.log("show me: ", rate);
+
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">
       {rate?.map((props: any, i: number) => (
@@ -35,10 +37,14 @@ const TopRatedTeacher = () => {
                     {props.staffName}
                   </span>
                 </p>
-                <p>
+                <p className="flex flex-wrap">
                   Class:{" "}
-                  <span className="capitalize font-bold">
-                    {props?.classesAssigned}
+                  <span className="capitalize ml-2 flex items-center gap-2 font-bold text-[10px]">
+                    {props?.classesAssigned?.map((props: any) => (
+                      <div className="flex  items-center gap-2">
+                        {props?.className}
+                      </div>
+                    ))}
                   </span>
                 </p>
                 <div className="flex items-center text-[10px] gap-3 mt-4 leading-tight">

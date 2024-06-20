@@ -30,7 +30,7 @@ const ScreenHome = () => {
           <Personal />
 
           <div className="flex-1 mt-10" />
-          <div className="text-[13px] font-medium mt-4">
+          {/* <div className="text-[13px] font-medium mt-4">
             <div className="flex items-center gap-4">
               <div className="border-r pr-4 ">
                 {state ? (
@@ -80,7 +80,7 @@ const ScreenHome = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="min-w-[300px] overflow-hidden h-full flex flex-col rounded-md border p-4">
@@ -172,7 +172,7 @@ const ScreenHome = () => {
       </div>
 
       <div className="flex-1" />
-      <div className=" border bg-slate-50 mt-10 p-2 ">
+      {/* <div className=" border bg-slate-50 mt-10 p-2 ">
         {readData?.length! < 0 ? (
           <div className=" grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 gap-3">
             <div className="border rounded-md flex gap-2 w-full p-2 overflow-hidden">
@@ -195,7 +195,7 @@ const ScreenHome = () => {
             </p>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

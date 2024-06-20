@@ -254,6 +254,9 @@ export const createTeacherLessonNote = async (
   data: {}
 ) => {
   try {
+    console.log("reading...", teacherID);
+    console.log("school...", schoolID);
+
     return await axios
       .post(`${URL}/create-lesson-note/${schoolID}/${teacherID}`, data)
       .then((res: any) => {
