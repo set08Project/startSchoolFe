@@ -23,7 +23,7 @@ const StaffDetail = () => {
   const [salary, setSalary] = useState<string>("");
 
   const [state, setState] = useState<string>(
-    teacherDetail?.classesAssigned[0].classID
+    teacherDetail?.classesAssigned[0]?.classID
   );
 
   const { oneClass } = useReadOneClassInfo(state);

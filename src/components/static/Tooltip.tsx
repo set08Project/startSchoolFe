@@ -9,7 +9,7 @@ const Tooltip: FC<PropsWithChildren<iProps>> = ({ children, tip, side }) => {
   return (
     <div className="w-full ">
       <div
-        className={`tooltip ${side && "tooltip-bottom "} -mt-5 w-full `}
+        className={`tooltip ${side && "tooltip-bottom "} -mt-5 w-full  `}
         data-tip={tip}
       >
         {children}

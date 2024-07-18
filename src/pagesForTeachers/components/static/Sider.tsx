@@ -85,10 +85,10 @@ const Sider = () => {
           {/* TODO: Add tooltip */}
           <p className="break-words font-bold">
             {teacherInfo?.schoolName.length > 16 ? (
-              <Tooltip tip={schoolAnnouncement?.schoolName}>
-                <p>{schoolAnnouncement?.schoolName.substring(0, 16)}...</p>
-              </Tooltip>
+              <p>{schoolAnnouncement?.schoolName.substring(0, 16)}...</p>
             ) : (
+              // <Tooltip tip={schoolAnnouncement?.schoolName}>
+              // </Tooltip>
               schoolAnnouncement?.schoolName
             )}
           </p>

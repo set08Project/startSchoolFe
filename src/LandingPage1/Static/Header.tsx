@@ -26,40 +26,42 @@ const Header = () => {
       <div className="h-[70px] w-full flex justify-center items-center shadow-md fixed top-0 z-50 bg-blue-950">
         <div className="h-[90%] w-[99%] flex justify-between items-center">
           <div className="w-full flex  justify-between items-center ">
-            <div className=" ml-3">
-              <img
-                src={logo}
-                alt=""
-                className="hidden md:block  h-[40px] object-contain"
-              />
-              <img
-                src={logo}
-                alt=""
-                className=" block md:hidden h-[30px] object-contain"
-              />
-            </div>
-            <div className="hidden items-center text-[18px] gap-[30px] text-white md:flex">
-              <NavLink
-                to="/"
-                className=" cursor-pointer navhover1 navhover2 navhover3"
-              >
-                <div>Home</div>
-              </NavLink>
-              <NavLink
-                to="/features"
-                className=" cursor-pointer navhover1 navhover2 navhover3"
-              >
-                <div>Features</div>
-              </NavLink>
+            <div className="flex items-center gap-16">
+              <div className=" ml-3">
+                <img
+                  src={logo}
+                  alt=""
+                  className="hidden md:block  h-[40px] object-contain"
+                />
+                <img
+                  src={logo}
+                  alt=""
+                  className=" block md:hidden h-[30px] object-contain"
+                />
+              </div>
+              <div className="hidden uppercase font-bold  items-center text-[18px] gap-[30px] text-white md:flex">
+                <NavLink
+                  to="/"
+                  className=" cursor-pointer navhover1 navhover2 navhover3"
+                >
+                  <div>Home</div>
+                </NavLink>
+                <NavLink
+                  to="/features"
+                  className=" cursor-pointer navhover1 navhover2 navhover3"
+                >
+                  <div>Features</div>
+                </NavLink>
 
-              <NavLink
+                {/* <NavLink
                 to=""
                 className="flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3"
               >
                 <div>About Us</div>
-                {/* <FaAngleDown className="mt-[6px]" /> */}
-                {/* {toggleFunction2 ? <FaAngleDown /> : <FaAngleUp />} */}
-              </NavLink>
+                <FaAngleDown className="mt-[6px]" /> 
+                {toggleFunction2 ? <FaAngleDown /> : <FaAngleUp />
+              </NavLink> */}
+              </div>
             </div>
             <Link
               to="/auth"
