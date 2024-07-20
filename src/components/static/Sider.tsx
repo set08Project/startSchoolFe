@@ -218,7 +218,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          View Staffs
+          View Staff
           <MdPeople />
         </NavLink>
         <NavLink

@@ -96,6 +96,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
+  const [searchStudents, setSearchStudents] = useState("");
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -191,6 +192,16 @@ const ViewStudent = () => {
     }
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchStudents(e.target.value);
+  };
+
+  const filteredStudents = students?.data?.students?.filter((student: any) => {
+    const fullName =
+      `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+    return fullName.includes(searchStudents.toLowerCase());
+  });
+
   return (
     <div className="">
       {/* header */}
@@ -199,15 +210,21 @@ const ViewStudent = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-between items-center">
-        <Input placeholder="Search student name" className="ml-0" />
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Student Name"
+          className="ml-0"
+          value={searchStudents}
+          onChange={handleSearch}
+        />
+
         <Button
           name="Add a new Student"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
+      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
@@ -229,9 +246,9 @@ const ViewStudent = () => {
         </div>
 
         <div className=" w-[1920px] overflow-hidden">
-          {students?.data?.students?.length > 0 ? (
+          {filteredStudents?.length >= 0 ? (
             <div>
-              {students?.data?.students?.map((props: any, i: number) => (
+              {filteredStudents?.map((props: any, i: number) => (
                 <div>
                   <div>
                     <div

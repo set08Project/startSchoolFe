@@ -9,7 +9,8 @@ import { Link } from "react-router-dom";
 import { useSchoolTeacher } from "../../hook/useSchoolAuth";
 import moment from "moment";
 import { useTeacherNote } from "../../../pagesForTeachers/hooks/useTeacher";
-import { FC } from "react";
+import { FC, useState } from "react";
+import Input from "../../../components/reUse/Input";
 
 interface iProps {
   props: string;
@@ -50,6 +51,7 @@ const TeacherRating: FC<iProps> = ({ props }) => {
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
+  const [searchStaff, setStaffSearch] = useState("");
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -65,18 +67,34 @@ const ViewStaffScreen = () => {
 
   const { schoolTeacher } = useSchoolTeacher();
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStaffSearch(e.target.value);
+  };
+
+  const filteredTeacher = schoolTeacher?.staff.filter((staff: any) => {
+    const fullName = `${staff.staffName}`.toLowerCase();
+    return fullName.includes(searchStaff.toLowerCase());
+  });
+
   return (
     <div className="">
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"viewing all Staffs"} />
+      <LittleHeader name={"viewing all Staff"} />
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Staff Name"
+          className="ml-0"
+          value={searchStaff}
+          onChange={handleSearch}
+        />
+
         <Button
           name="Add a new Recruit"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
@@ -103,7 +121,7 @@ const ViewStaffScreen = () => {
         </div>
 
         <div className=" w-[2060px] overflow-hidden">
-          {schoolTeacher?.staff?.map((props: any, i: number) => (
+          {filteredTeacher?.map((props: any, i: number) => (
             <div key={props}>
               <div>
                 <div
