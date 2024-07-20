@@ -27,6 +27,7 @@ import {
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
+import Input from "../../../pagesForTeachers/components/reUse/Input";
 
 interface iProps {
   props?: any;
@@ -123,7 +124,6 @@ const ViewStudent = () => {
     setViewStudent1stFees(!viewstudent1stfees);
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
-   
       if (res.status === 200) {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
@@ -199,7 +199,8 @@ const ViewStudent = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between items-center">
+        <Input placeholder="Search student name" className="ml-0" />
         <Button
           name="Add a new Student"
           className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
@@ -253,23 +254,24 @@ const ViewStudent = () => {
                         <div className="flex flex-col items-center">
                           <label>1st Term</label>
 
-                          <label htmlFor="my_modal_6 relative ">
+                          <label htmlFor="my_modal_6 relative">
                             <label
                               htmlFor="my_modal_6"
                               // className={`btn text-[12px] font-medium text-white `}
                             >
-                              <label
+                              {/* First term toggle commented */}
+                              {/* <label
                                 htmlFor="my_modal_6"
-                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
-                                -z-20
-                            toggle toggle-sm mt-2  ${
+                                -z-20 
+                            toggle toggle-sm mt-2 ${
                               props?.feesPaid1st
                                 ? "bg-blue-950 border-blue-950"
                                 : "bg-neutral-500 border-neutral-500"
@@ -286,8 +288,9 @@ const ViewStudent = () => {
                               id="my_modal_6"
                               className="modal-toggle"
                             />
+                            {/* Payment Modal */}
                             <div className="modal" role="dialog">
-                              <div className="modal-box">
+                              <div className="modal-box bg-white">
                                 <h3 className="font-bold text-lg">
                                   Confirm this payment
                                 </h3>
@@ -317,20 +320,20 @@ const ViewStudent = () => {
                               </div>
                             </div>
                           </label>
-                        </div>
-
+                        </div>{" "}
                         <div className="flex flex-col items-center">
                           <label>2nd Term</label>
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* Second Term Toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
@@ -401,13 +404,14 @@ const ViewStudent = () => {
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* 3rd Term toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
