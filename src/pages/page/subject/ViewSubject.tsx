@@ -19,6 +19,7 @@ import {
   updateSchoolSubjectTeacher,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
+import Input from "../../../components/reUse/Input";
 
 interface iProps {
   props?: any;
@@ -59,6 +60,7 @@ const TeacherInfo: FC<iProps> = ({ props }) => {
 const ViewSubjects = () => {
   const { schoolSubject } = useSchoolSubject();
   const [subjectTeacher, setSubjectTeacher] = useState("");
+  const [searchSubject, setSearchSubject] = useState("");
   const { dataID } = useSchoolCookie();
 
   const { schoolTeacher } = useSchoolTeacher();
@@ -78,14 +80,29 @@ const ViewSubjects = () => {
 
   const [state, setState] = useState("");
 
+  const handleSubjectSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchSubject(e.target.value);
+  };
+
+  const subjectSearch = schoolSubject?.subjects?.filter((subject: any) => {
+    const subjectName = `${subject?.subjectTitle}`.toLowerCase();
+    return subjectName.includes(searchSubject.toLowerCase());
+  });
+
   return (
     <div>
       <LittleHeader name={"View Subject"} />
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="mb-28" />
+      <div className="mb-10" />
 
-      <div className="mb-28" />
-
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Subject Name"
+          className="ml-0"
+          value={searchSubject}
+          onChange={handleSubjectSearch}
+        />
+      </div>
       <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
         <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[200px] border-r">Subject Name</div>
@@ -97,7 +114,7 @@ const ViewSubjects = () => {
         </div>
 
         <div className=" w-[900px] overflow-hidden ">
-          {schoolSubject?.subjects?.map((props: any, i: number) => (
+          {subjectSearch?.map((props: any, i: number) => (
             <div>
               <div>
                 <div

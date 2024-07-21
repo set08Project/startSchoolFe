@@ -27,6 +27,7 @@ import {
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
+import Input from "../../../pagesForTeachers/components/reUse/Input";
 
 interface iProps {
   props?: any;
@@ -95,6 +96,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
+  const [searchStudents, setSearchStudents] = useState("");
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -123,7 +125,6 @@ const ViewStudent = () => {
     setViewStudent1stFees(!viewstudent1stfees);
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
-   
       if (res.status === 200) {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
@@ -191,6 +192,16 @@ const ViewStudent = () => {
     }
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchStudents(e.target.value);
+  };
+
+  const filteredStudents = students?.data?.students?.filter((student: any) => {
+    const fullName =
+      `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+    return fullName.includes(searchStudents.toLowerCase());
+  });
+
   return (
     <div className="">
       {/* header */}
@@ -199,14 +210,21 @@ const ViewStudent = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Student Name"
+          className="ml-0"
+          value={searchStudents}
+          onChange={handleSearch}
+        />
+
         <Button
           name="Add a new Student"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
+      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
@@ -228,9 +246,9 @@ const ViewStudent = () => {
         </div>
 
         <div className=" w-[1920px] overflow-hidden">
-          {students?.data?.students?.length > 0 ? (
+          {filteredStudents?.length >= 0 ? (
             <div>
-              {students?.data?.students?.map((props: any, i: number) => (
+              {filteredStudents?.map((props: any, i: number) => (
                 <div>
                   <div>
                     <div
@@ -253,23 +271,24 @@ const ViewStudent = () => {
                         <div className="flex flex-col items-center">
                           <label>1st Term</label>
 
-                          <label htmlFor="my_modal_6 relative ">
+                          <label htmlFor="my_modal_6 relative">
                             <label
                               htmlFor="my_modal_6"
                               // className={`btn text-[12px] font-medium text-white `}
                             >
-                              <label
+                              {/* First term toggle commented */}
+                              {/* <label
                                 htmlFor="my_modal_6"
-                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
-                                -z-20
-                            toggle toggle-sm mt-2  ${
+                                -z-20 
+                            toggle toggle-sm mt-2 ${
                               props?.feesPaid1st
                                 ? "bg-blue-950 border-blue-950"
                                 : "bg-neutral-500 border-neutral-500"
@@ -286,8 +305,9 @@ const ViewStudent = () => {
                               id="my_modal_6"
                               className="modal-toggle"
                             />
+                            {/* Payment Modal */}
                             <div className="modal" role="dialog">
-                              <div className="modal-box">
+                              <div className="modal-box bg-white">
                                 <h3 className="font-bold text-lg">
                                   Confirm this payment
                                 </h3>
@@ -317,20 +337,20 @@ const ViewStudent = () => {
                               </div>
                             </div>
                           </label>
-                        </div>
-
+                        </div>{" "}
                         <div className="flex flex-col items-center">
                           <label>2nd Term</label>
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* Second Term Toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
@@ -401,13 +421,14 @@ const ViewStudent = () => {
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* 3rd Term toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`

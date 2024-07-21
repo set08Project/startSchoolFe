@@ -39,7 +39,7 @@ const Header = () => {
                   className=" block md:hidden h-[30px] object-contain"
                 />
               </div>
-              <div className="hidden uppercase font-bold  items-center text-[18px] gap-[30px] text-white md:flex">
+              <div className="hidden uppercase font-medium  items-center text-[17px] gap-[30px] text-white md:flex">
                 <NavLink
                   to="/"
                   className=" cursor-pointer navhover1 navhover2 navhover3"
@@ -83,7 +83,7 @@ const Header = () => {
             >
               {drop ? (
                 <FaTimes
-                  className="text-[30px] text-white mr-2"
+                  className="text-[30px] text-white mr-2 transition-all duration-300"
                   onClick={() => {
                     setDrop(true);
                   }}
@@ -93,7 +93,7 @@ const Header = () => {
                   onClick={() => {
                     setDrop(false);
                   }}
-                  className="text-[30px] text-white mr-2"
+                  className="text-[30px] text-white mr-2 transition-all duration-300"
                 />
               )}
             </div>
@@ -119,15 +119,6 @@ const Header = () => {
                   className=" cursor-pointer navhover1 navhover2 navhover3"
                 >
                   <div>Features</div>
-                </NavLink>
-
-                <NavLink
-                  to=""
-                  className={`flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3 ${
-                    drop ? "text-white" : "text-blue-950"
-                  }`}
-                >
-                  <div>About Us</div>
                 </NavLink>
               </div>
             </div>
