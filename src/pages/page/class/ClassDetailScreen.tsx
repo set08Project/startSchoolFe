@@ -168,45 +168,55 @@ const ClassDetailScreen = () => {
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
       <div>Class: {classroom?.className}</div>
-      <div className="w-full text-blue-950 h-[90px] rounded-lg border flex justify-between overflow-hidden ">
+      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden ">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
-          <div>Total Number of Students</div>
-          <div className="text-[35px] font-medium">
+          <div className="md:text-[17px] text-[10px]">
+            Total Number of Students:
+          </div>
+          <div className="font-medium md:text-[27px] text-[14px] mt-[5px]">
             {classroom?.students?.length}{" "}
-            <span className="text-[20px]">Students</span>
+            <span className="md:text-[27px] text-[14px]">Students</span>
           </div>
         </div>
         <div className=" px-4 py-1 rounded-lg text-center flex items-end flex-col">
           <div className="flex-1" />
-          <div className="mr-0 ">Next Recommended action</div>
+          <div className="mr-0 md:text-[20px] text-[12px]">
+            Next Recommended action
+          </div>
           <p className="font-medium"></p>
         </div>
       </div>
       <div className="my-6 border-t" />
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4 ">
-        <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 flex justify-between items-center ">
-          <div className="flex gap-2 font-normal">
+        <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
+          <div className="flex gap-2 font-normal ml-[12px] md:ml-[0px] mb-[10px] md:mb-[0px]">
             <p className="text-[12px]">
-              <p className="font-normal">First Term</p>
+              <p className="font-normal md:text-[15px] text-[10px]">
+                First Term
+              </p>
               <p className="font-bold">
                 ₦{classroom?.class1stFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
-              <p className="font-normal">Second Term</p>
+              <p className="font-normal md:text-[15px] text-[10px]">
+                Second Term
+              </p>
               <p className="font-bold">
                 ₦{classroom?.class2ndFee?.toLocaleString()}
               </p>
             </p>
             <p className="text-[12px]">
-              <p className="font-normal">Third Term</p>
+              <p className="font-normal md:text-[15px] text-[10px]">
+                Third Term
+              </p>
               <p className="font-bold">
                 ₦{classroom?.class3rdFee?.toLocaleString()}
               </p>
             </p>
           </div>
           {/* <Button name="" className="text-blue-950 bg-white" /> */}
-          <button className="btn text-blue-950 bg-white hover:bg-blue-900 transition-all duration-300 px-8 uppercase ">
+          <button className="btn text-blue-950 bg-white hover:bg-blue-900 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]">
             update Class Fee
           </button>
         </div>

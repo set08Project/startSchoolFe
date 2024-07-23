@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import Button from "../../../components/reUse/Button";
+import { MdOutlineMarkChatRead } from "react-icons/md";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
 import {
@@ -66,7 +67,12 @@ const MakeComplains: FC<iProps> = ({ props }) => {
           htmlFor="mark_complains"
           className=" transition-all duration-300 cursor-pointer "
         >
-          + Mark Complains
+           <div className="flex">
+            <div className="text-[20px] mr-[10px]">
+              <MdOutlineMarkChatRead />
+            </div>
+            <div>Make Complains</div>
+          </div>
         </label>
         <div className="" />
         {/* Put this part before </body> tag */}
