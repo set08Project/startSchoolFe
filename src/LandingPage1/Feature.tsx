@@ -14,7 +14,7 @@ interface iCardProps {
 export const CardProps: FC<iCardProps> = ({ text, num, bgColor, module }) => {
   return (
     <div
-      className={`h-full m-2 p-[15px] full bxs rounded-md ${bgColor} transform transition-transform duration-500 hover:scale-105 hover:shadow-xl`}
+      className={`h-full m-2 p-[15px] border full rounded-md ${bgColor} transform transition-transform duration-500 hover:scale-105 hover:shadow-xl`}
     >
       <div className="w-full flex justify-start">
         <h1 className="text-[30px] py-1 px-3 text-blue-950 mb-2 rounded-[50%] bg-white flex justify-center items-center">
