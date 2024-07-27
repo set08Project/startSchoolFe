@@ -3,6 +3,7 @@ import pix from "../../../assets/pix.jpg";
 import { useComplain, useTeacherInfo } from "../../hooks/useTeacher";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FC } from "react";
+import moment from "moment";
 
 const ViewReport = () => {
   const data = Array.from({ length: 7 });
@@ -26,7 +27,6 @@ const ViewReport = () => {
 
           <div className="w-[200px] border-r">Name</div>
           <div className="w-[100px] border-r">Status</div>
-
           <div className="w-[400px] border-r">Complains</div>
           <div className="w-[100px] border-r">Urgency</div>
 
@@ -84,7 +84,7 @@ const ViewReport = () => {
 
                     {/* name */}
                     <div className="w-[400px] py-2 flex justify-start border-r font-normal">
-                      {props.title}
+                      {props?.title}
                     </div>
                     <div className="w-[100px] border-r">
                       {props?.importance}
