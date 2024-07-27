@@ -38,10 +38,9 @@ const ViewReport = () => {
         {complainData?.length > 0 ? (
           <div className=" w-[1090px] overflow-hidden ">
             {complainData?.map((props: any, i: number) => (
-              <div>
+              <div key={props._id}>
                 <div>
                   <div
-                    key={props}
                     className={`w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 my-2  overflow-hidden ${
                       i % 2 === 0 ? "bg-slate-50" : "bg-white"
                     }`}
@@ -68,14 +67,16 @@ const ViewReport = () => {
                             />
                           </div>
                         </div>
-                        <div>
-                          <div className="font-bold">
-                            {teacherInfo?.staffName}
+                        {teacherInfo?.classesAssigned?.map((props: any) => (
+                          <div key={props.classID}>
+                            <div className="font-bold">
+                              {teacherInfo?.staffName}
+                            </div>
+                            <div className="text-[12px] opacity-50 ">
+                              {props?.className} Teacher
+                            </div>
                           </div>
-                          <div className="text-[12px] opacity-50 ">
-                            {teacherInfo?.classesAssigned} Teacher
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
