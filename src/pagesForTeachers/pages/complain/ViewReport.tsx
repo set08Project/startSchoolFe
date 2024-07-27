@@ -3,6 +3,7 @@ import pix from "../../../assets/pix.jpg";
 import { useComplain, useTeacherInfo } from "../../hooks/useTeacher";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FC } from "react";
+import moment from "moment";
 
 const ViewReport = () => {
   const data = Array.from({ length: 7 });
@@ -26,7 +27,6 @@ const ViewReport = () => {
 
           <div className="w-[200px] border-r">Name</div>
           <div className="w-[100px] border-r">Status</div>
-
           <div className="w-[400px] border-r">Complains</div>
           <div className="w-[100px] border-r">Urgency</div>
 
@@ -38,10 +38,9 @@ const ViewReport = () => {
         {complainData?.length > 0 ? (
           <div className=" w-[1090px] overflow-hidden ">
             {complainData?.map((props: any, i: number) => (
-              <div>
+              <div key={props._id}>
                 <div>
                   <div
-                    key={props}
                     className={`w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 my-2  overflow-hidden ${
                       i % 2 === 0 ? "bg-slate-50" : "bg-white"
                     }`}
@@ -68,14 +67,16 @@ const ViewReport = () => {
                             />
                           </div>
                         </div>
-                        <div>
-                          <div className="font-bold">
-                            {teacherInfo?.staffName}
+                        {teacherInfo?.classesAssigned?.map((props: any) => (
+                          <div key={props.classID}>
+                            <div className="font-bold">
+                              {teacherInfo?.staffName}
+                            </div>
+                            <div className="text-[12px] opacity-50 ">
+                              {props?.className} Teacher
+                            </div>
                           </div>
-                          <div className="text-[12px] opacity-50 ">
-                            {teacherInfo?.classesAssigned} Teacher
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -83,7 +84,7 @@ const ViewReport = () => {
 
                     {/* name */}
                     <div className="w-[400px] py-2 flex justify-start border-r font-normal">
-                      {props.title}
+                      {props?.title}
                     </div>
                     <div className="w-[100px] border-r">
                       {props?.importance}
