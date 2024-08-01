@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 
 import crypto from "crypto";
 import {
+  useSchoolCookie,
   useSchoolData,
   useSchoolStudents,
   useStudentAttendance,
@@ -16,6 +17,8 @@ import {
 import moment from "moment";
 import { FC, useState } from "react";
 import {
+  deleteStudent,
+  readSchool,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
@@ -28,6 +31,9 @@ import {
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
+import { AiOutlineDelete } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface iProps {
   props?: any;
@@ -97,6 +103,8 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 const ViewStudent = () => {
   const dispatch = useDispatch();
   const [searchStudents, setSearchStudents] = useState("");
+  const [showButton, setShowButton] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -192,6 +200,30 @@ const ViewStudent = () => {
     }
   };
 
+  // Delete Student Function
+
+  // getting schoolID
+  const schoolID = useSchoolCookie().dataID;
+
+  const handeDeleteStudent = (studentID) => {
+    try {
+      setLoading(true);
+      setShowButton(true);
+      deleteStudent(schoolID, studentID).then((res) => {
+        if (res.status === 200) {
+          toast.success("Student Has Been Successfully Deleted");
+          setShowButton(false);
+        }
+      });
+    } catch (error) {
+      toast.error("Error In Deleting Student");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
@@ -239,7 +271,7 @@ const ViewStudent = () => {
           <div className="w-[150px] border-r">Parent Contact</div>
           <div className="w-[200px] border-r">Address </div>
 
-          <div className="w-[200px] border-r">Performance Ratio</div>
+          <div className="w-[200px] border-r">Performance Rating</div>
 
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">View Detail</div>
@@ -520,10 +552,81 @@ const ViewStudent = () => {
                       >
                         <Button
                           name="View Detail"
-                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
                           onClick={() => {}}
                         />
                       </Link>
+
+                      {/* Delete Toggle Modal And Fuctions Are Below */}
+                      <div className="w-[180px] border-r">
+                        <label
+                          htmlFor="my_modal_delete"
+                          className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                        >
+                          Delete Student
+                        </label>
+                      </div>
+                      <input
+                        type="checkbox"
+                        id="my_modal_delete"
+                        className="modal-toggle"
+                      />
+                      <div className="modal modal-middle">
+                        <div className="modal-box bg-white">
+                          <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                            Student Deletion Notice
+                          </h3>
+                          <div className="mb text-blue-950">
+                            <p className="mb-3 text-[14px]">
+                              You are about to permanently delete this student
+                              record from your database. This action is
+                              irreversible and cannot be undone, and will result
+                              in the complete removal of all associated data,
+                              including academic history, contact information,
+                              and every other student detail
+                            </p>
+                            <div className="flex items-center justify-center gap-3 font-semibold">
+                              <p>
+                                If <span className="text-red-500">YES</span>{" "}
+                                continue
+                              </p>
+                              <p>If NO cancel.</p>
+                            </div>
+                          </div>
+                          <div className="modal-action flex items-center">
+                            {loading ? (
+                              <Button
+                                name="Deleting Student.."
+                                className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                icon={<ClipLoader color="white" size={18} />}
+                              />
+                            ) : (
+                              showButton && (
+                                <Button
+                                  name="Delete Student"
+                                  className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                  onClick={() => handeDeleteStudent(props?._id)}
+                                />
+                              )
+                            )}
+                            {showButton ? (
+                              <label
+                                htmlFor="my_modal_delete"
+                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              >
+                                Cancel
+                              </label>
+                            ) : (
+                              <label
+                                htmlFor="my_modal_delete"
+                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              >
+                                Close
+                              </label>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

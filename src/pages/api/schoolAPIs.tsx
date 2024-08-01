@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 // working locally
 
@@ -1058,6 +1058,30 @@ export const changeSchoolPersonalName = async (schoolID: string, data: any) => {
         return res;
       });
   } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteStudent = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
+      .then((res: AxiosResponse<any, any>) => {
+        return res;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const deleteStaff = async (schoolID: string, staffID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-staff/${schoolID}/${staffID}`)
+      .then((res: AxiosResponse<any, any>) => {
+        return res;
+      });
+  } catch (error) {
     return error;
   }
 };
