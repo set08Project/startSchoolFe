@@ -207,8 +207,8 @@ const ViewStudent = () => {
 
   const handeDeleteStudent = (studentID) => {
     try {
-      setLoading(true);
       setShowButton(true);
+      setLoading(true);
       deleteStudent(schoolID, studentID).then((res) => {
         if (res.status === 200) {
           toast.success("Student Has Been Successfully Deleted");
@@ -275,6 +275,7 @@ const ViewStudent = () => {
 
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">View Detail</div>
+          <div className="w-[180px] border-r">Student Action</div>
         </div>
 
         <div className=" w-[1920px] overflow-hidden">
