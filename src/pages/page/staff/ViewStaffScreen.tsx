@@ -152,7 +152,7 @@ const ViewStaffScreen = () => {
 
         <div className=" w-[2060px] overflow-hidden">
           {filteredTeacher?.map((props: any, i: number) => (
-            <div key={props}>
+            <div key={props} className="transition-all duration-300">
               <div>
                 <div
                   className={`w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden ${
