@@ -128,9 +128,9 @@ const Feature = () => {
             <p>
               Our platform offers customizable features and flexible pricing
               options, ensuring that every school, regardless of its financial
-              status, can benefit from our cutting-edge solutions. Join us to
-              experience improved efficiency, enhanced communication, and
-              unparalleled educational support.
+              status, can benefit from our cutting-edge school management
+              solutions. Join us to experience improved efficiency, enhanced
+              communication, and unparalleled educational support.
             </p>
           </div>
           <div className="w-[85%] md:w-[80%] lg:w-[78%] pt-[30px] ">
