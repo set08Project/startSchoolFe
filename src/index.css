@@ -62,3 +62,7 @@
 .navhover3 :hover:after {
   width: 100%;
 }
+
+.ushaped {
+  transform: skewY(-3deg);
+}

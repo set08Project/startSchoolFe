@@ -6,10 +6,14 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStaffComp } from "../../../global/reduxState";
 import { Link } from "react-router-dom";
-import { useSchoolTeacher } from "../../hook/useSchoolAuth";
+import { useSchoolCookie, useSchoolTeacher } from "../../hook/useSchoolAuth";
 import moment from "moment";
 import { useTeacherNote } from "../../../pagesForTeachers/hooks/useTeacher";
-import { FC } from "react";
+import { FC, useState } from "react";
+import Input from "../../../components/reUse/Input";
+import ClipLoader from "react-spinners/ClipLoader";
+import toast from "react-hot-toast";
+import { deleteStaff } from "../../api/schoolAPIs";
 
 interface iProps {
   props: string;
@@ -50,6 +54,9 @@ const TeacherRating: FC<iProps> = ({ props }) => {
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
+  const [showButton, setShowButton] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [searchStaff, setStaffSearch] = useState("");
 
   const handleDisplayStaff = () => {
     if (!document.startViewTransition) {
@@ -63,20 +70,60 @@ const ViewStaffScreen = () => {
     }
   };
 
+  // Delete Staff Function
+
+  // getting schoolID
+  const schoolID = useSchoolCookie().dataID;
+
+  const handeDeleteStaff = (staffID) => {
+    try {
+      setLoading(true);
+      setShowButton(true);
+      deleteStaff(schoolID, staffID).then((res) => {
+        if (res.status === 200) {
+          console.log(res);
+          toast.success("Staff Has Been Successfully Deleted");
+          setShowButton(false);
+        }
+      });
+    } catch (error) {
+      toast.error("Error In Deleting Staff");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const { schoolTeacher } = useSchoolTeacher();
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStaffSearch(e.target.value);
+  };
+
+  const filteredTeacher = schoolTeacher?.staff.filter((staff: any) => {
+    const fullName = `${staff.staffName}`.toLowerCase();
+    return fullName.includes(searchStaff.toLowerCase());
+  });
 
   return (
     <div className="">
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"viewing all Staffs"} />
+      <LittleHeader name={"viewing all Staff"} />
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Staff Name"
+          className="ml-0"
+          value={searchStaff}
+          onChange={handleSearch}
+        />
+
         <Button
           name="Add a new Recruit"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
@@ -100,11 +147,12 @@ const ViewStaffScreen = () => {
           <div className="w-[200px] border-r">Class Teaches</div>
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">Action</div>
+          <div className="w-[180px] border-r">Staff Action</div>
         </div>
 
         <div className=" w-[2060px] overflow-hidden">
-          {schoolTeacher?.staff?.map((props: any, i: number) => (
-            <div key={props}>
+          {filteredTeacher?.map((props: any, i: number) => (
+            <div key={props} className="transition-all duration-300">
               <div>
                 <div
                   className={`w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden ${
@@ -201,10 +249,81 @@ const ViewStaffScreen = () => {
                   >
                     <Button
                       name="View Detail"
-                      className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                      className="py-3 w-[85%] hover:scale-105 bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
                       onClick={() => {}}
                     />
                   </Link>
+                  <div className="w-[180px] border-r">
+                    <label
+                      htmlFor="my_modal_delete"
+                      className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                    >
+                      Delete Staff
+                    </label>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="my_modal_delete"
+                    className="modal-toggle"
+                  />
+                  <div className="modal modal-middle">
+                    <div className="modal-box bg-white">
+                      <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                        Staff Deletion Notice
+                      </h3>
+                      <div className="mb text-blue-950">
+                        <p className="mb-3">
+                          You are about to permanently delete a staff record
+                          from your database. This action is irreversible and
+                          cannot be undone, and will result in the complete
+                          removal of all associated data, including employment
+                          history, contact information, and every other staff
+                          detail
+                        </p>
+                        <div className="flex items-center justify-center gap-3 font-semibold">
+                          <p>
+                            If <span className="text-red-500">YES</span>{" "}
+                            continue
+                          </p>
+                          <p>If NO cancel.</p>
+                        </div>
+                      </div>
+                      <div className="modal-action flex items-center">
+                        {loading ? (
+                          <Button
+                            name="Deleting Staff.."
+                            className="px-3 py-1  bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                            icon={
+                              loading && <ClipLoader color="white" size={18} />
+                            }
+                          />
+                        ) : (
+                          showButton && (
+                            <Button
+                              name="Delete Staff"
+                              className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                              onClick={() => handeDeleteStaff(props?._id)}
+                            />
+                          )
+                        )}
+                        {showButton ? (
+                          <label
+                            htmlFor="my_modal_delete"
+                            className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                          >
+                            Cancel
+                          </label>
+                        ) : (
+                          <label
+                            htmlFor="my_modal_delete"
+                            className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                          >
+                            Close
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

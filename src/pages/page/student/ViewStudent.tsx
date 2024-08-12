@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 
 import crypto from "crypto";
 import {
+  useSchoolCookie,
   useSchoolData,
   useSchoolStudents,
   useStudentAttendance,
@@ -16,6 +17,8 @@ import {
 import moment from "moment";
 import { FC, useState } from "react";
 import {
+  deleteStudent,
+  readSchool,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
@@ -27,6 +30,10 @@ import {
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
+import Input from "../../../pagesForTeachers/components/reUse/Input";
+import { AiOutlineDelete } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface iProps {
   props?: any;
@@ -95,6 +102,9 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const ViewStudent = () => {
   const dispatch = useDispatch();
+  const [searchStudents, setSearchStudents] = useState("");
+  const [showButton, setShowButton] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -123,7 +133,6 @@ const ViewStudent = () => {
     setViewStudent1stFees(!viewstudent1stfees);
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
-   
       if (res.status === 200) {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
@@ -191,6 +200,40 @@ const ViewStudent = () => {
     }
   };
 
+  // Delete Student Function
+
+  // getting schoolID
+  const schoolID = useSchoolCookie().dataID;
+
+  const handeDeleteStudent = (studentID) => {
+    try {
+      setShowButton(true);
+      setLoading(true);
+      deleteStudent(schoolID, studentID).then((res) => {
+        if (res.status === 200) {
+          toast.success("Student Has Been Successfully Deleted");
+          setShowButton(false);
+        }
+      });
+    } catch (error) {
+      toast.error("Error In Deleting Student");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Search Function
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchStudents(e.target.value);
+  };
+
+  const filteredStudents = students?.data?.students?.filter((student: any) => {
+    const fullName =
+      `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+    return fullName.includes(searchStudents.toLowerCase());
+  });
+
   return (
     <div className="">
       {/* header */}
@@ -199,14 +242,21 @@ const ViewStudent = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between items-start">
+        <Input
+          placeholder="Search Student Name"
+          className="ml-0"
+          value={searchStudents}
+          onChange={handleSearch}
+        />
+
         <Button
           name="Add a new Student"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
+      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
@@ -221,16 +271,17 @@ const ViewStudent = () => {
           <div className="w-[150px] border-r">Parent Contact</div>
           <div className="w-[200px] border-r">Address </div>
 
-          <div className="w-[200px] border-r">Performance Ratio</div>
+          <div className="w-[200px] border-r">Performance Rating</div>
 
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">View Detail</div>
+          <div className="w-[180px] border-r">Student Action</div>
         </div>
 
         <div className=" w-[1920px] overflow-hidden">
-          {students?.data?.students?.length > 0 ? (
+          {filteredStudents?.length >= 0 ? (
             <div>
-              {students?.data?.students?.map((props: any, i: number) => (
+              {filteredStudents?.map((props: any, i: number) => (
                 <div>
                   <div>
                     <div
@@ -253,23 +304,24 @@ const ViewStudent = () => {
                         <div className="flex flex-col items-center">
                           <label>1st Term</label>
 
-                          <label htmlFor="my_modal_6 relative ">
+                          <label htmlFor="my_modal_6 relative">
                             <label
                               htmlFor="my_modal_6"
                               // className={`btn text-[12px] font-medium text-white `}
                             >
-                              <label
+                              {/* First term toggle commented */}
+                              {/* <label
                                 htmlFor="my_modal_6"
-                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
+                                className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
-                                -z-20
-                            toggle toggle-sm mt-2  ${
+                                -z-20 
+                            toggle toggle-sm mt-2 ${
                               props?.feesPaid1st
                                 ? "bg-blue-950 border-blue-950"
                                 : "bg-neutral-500 border-neutral-500"
@@ -286,8 +338,9 @@ const ViewStudent = () => {
                               id="my_modal_6"
                               className="modal-toggle"
                             />
+                            {/* Payment Modal */}
                             <div className="modal" role="dialog">
-                              <div className="modal-box">
+                              <div className="modal-box bg-white">
                                 <h3 className="font-bold text-lg">
                                   Confirm this payment
                                 </h3>
@@ -317,20 +370,20 @@ const ViewStudent = () => {
                               </div>
                             </div>
                           </label>
-                        </div>
-
+                        </div>{" "}
                         <div className="flex flex-col items-center">
                           <label>2nd Term</label>
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* Second Term Toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
@@ -401,13 +454,14 @@ const ViewStudent = () => {
 
                           <label htmlFor="my_modal_6 relative ">
                             <label htmlFor="my_modal_6">
-                              <label
+                              {/* 3rd Term toggle Comment */}
+                              {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
-                              />
+                              /> */}
                               <input
                                 type="checkbox"
                                 className={`
@@ -499,10 +553,81 @@ const ViewStudent = () => {
                       >
                         <Button
                           name="View Detail"
-                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
                           onClick={() => {}}
                         />
                       </Link>
+
+                      {/* Delete Toggle Modal And Fuctions Are Below */}
+                      <div className="w-[180px] border-r">
+                        <label
+                          htmlFor="my_modal_delete"
+                          className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                        >
+                          Delete Student
+                        </label>
+                      </div>
+                      <input
+                        type="checkbox"
+                        id="my_modal_delete"
+                        className="modal-toggle"
+                      />
+                      <div className="modal modal-middle">
+                        <div className="modal-box bg-white">
+                          <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                            Student Deletion Notice
+                          </h3>
+                          <div className="mb text-blue-950">
+                            <p className="mb-3 text-[14px]">
+                              You are about to permanently delete this student
+                              record from your database. This action is
+                              irreversible and cannot be undone, and will result
+                              in the complete removal of all associated data,
+                              including academic history, contact information,
+                              and every other student detail
+                            </p>
+                            <div className="flex items-center justify-center gap-3 font-semibold">
+                              <p>
+                                If <span className="text-red-500">YES</span>{" "}
+                                continue
+                              </p>
+                              <p>If NO cancel.</p>
+                            </div>
+                          </div>
+                          <div className="modal-action flex items-center">
+                            {loading ? (
+                              <Button
+                                name="Deleting Student.."
+                                className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                icon={<ClipLoader color="white" size={18} />}
+                              />
+                            ) : (
+                              showButton && (
+                                <Button
+                                  name="Delete Student"
+                                  className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                  onClick={() => handeDeleteStudent(props?._id)}
+                                />
+                              )
+                            )}
+                            {showButton ? (
+                              <label
+                                htmlFor="my_modal_delete"
+                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              >
+                                Cancel
+                              </label>
+                            ) : (
+                              <label
+                                htmlFor="my_modal_delete"
+                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              >
+                                Close
+                              </label>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

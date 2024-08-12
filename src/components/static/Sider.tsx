@@ -218,7 +218,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          View Staffs
+          View Staff
           <MdPeople />
         </NavLink>
         <NavLink
@@ -292,7 +292,7 @@ const Sider = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Galleries
+          Gallery
           <FaPhotoVideo />
         </NavLink>
 

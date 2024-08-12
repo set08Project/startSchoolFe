@@ -173,7 +173,8 @@ export const useSchoolTeacher = () => {
       return viewSchoolTeacher(dataID!).then((res) => {
         return res.data;
       });
-    }
+    },
+    { refreshInterval: 3500 }
   );
   return { schoolTeacher };
 };
@@ -235,8 +236,8 @@ export const useSchoolStudents = (schoolID: string) => {
       return getSchoolStudents(schoolID!).then((res) => {
         return res;
       });
-    }
-    // { refreshInterval: 10000 }
+    },
+    { refreshInterval: 3500 }
   );
 
   return { students };

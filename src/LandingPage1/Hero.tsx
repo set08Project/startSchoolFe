@@ -28,6 +28,7 @@ const Hero = () => {
           /> 
         </div>
       </div> */}
+      <div></div>
 
       <div className="w-full flex justify-center items-center flex-col absolute top-[50%] left-[50%] doublet mt-10">
         <h1 className="text-[35px] lg:text-[50px] text-white md:text-[60px] font-bold text-center ">

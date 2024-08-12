@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import Button from "../../../components/reUse/Button";
+import { PiStudentFill } from "react-icons/pi";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
 import {
@@ -73,7 +74,12 @@ const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
           htmlFor="assign_subject_timetable"
           className=" transition-all duration-300 cursor-pointer "
         >
-          + Student of the Week
+          <div className="flex">
+            <div className="text-[20px] mr-[10px]">
+              <PiStudentFill />
+            </div>
+            <div>Student of the week</div>
+          </div>
         </label>
         <div className="" />
         {/* Put this part before </body> tag */}

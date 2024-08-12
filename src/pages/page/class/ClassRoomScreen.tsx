@@ -8,12 +8,13 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaStar } from "react-icons/fa6";
 import { useSchoolClassRM, useSchoolData } from "../../hook/useSchoolAuth";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   useClassStudent,
   useTeacherDetail,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import lodash from "lodash";
+import Input from "../../../components/reUse/Input";
 
 interface iProps {
   props?: any;
@@ -79,10 +80,10 @@ const ClassRoomScreen = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end items-start">
         <Button
           name="Add new ClassRoom"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-4 px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300 "
+          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayClassroom}
         />
       </div>

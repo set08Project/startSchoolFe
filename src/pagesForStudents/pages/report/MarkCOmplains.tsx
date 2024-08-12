@@ -3,6 +3,7 @@ import Button from "../../../components/reUse/Button";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
+import { MdOutlineMarkChatRead } from "react-icons/md";
 
 import { mutate } from "swr";
 import {
@@ -52,7 +53,12 @@ const MakeComplains: FC<iProps> = ({ props }) => {
           htmlFor="mark_my_complains"
           className=" transition-all duration-300 cursor-pointer "
         >
-          + Mark Complains
+          <div className="flex">
+            <div className="text-[20px] mr-[10px]">
+              <MdOutlineMarkChatRead />
+            </div>
+            <div>Make Complains</div>
+          </div>
         </label>
         <div className="" />
         {/* Put this part before </body> tag */}
