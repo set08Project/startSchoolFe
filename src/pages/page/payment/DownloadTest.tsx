@@ -3,7 +3,7 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { useSelector } from "react-redux";
 import { useSchoolData, useSchoolSessionData } from "../../hook/useSchoolAuth";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { createReceipt, updatePayInfo, verifyPay } from "../../api/schoolAPIs";
 import { GrDownload } from "react-icons/gr";
 import moment from "moment";
@@ -12,6 +12,8 @@ import { MdCheckCircleOutline, MdOutlinePayment } from "react-icons/md";
 const DownloadTest: React.FC = () => {
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const { termID: readTermID }: any = useParams();
 
   const ID = useSelector((state: any) => state.user);
   const { schoolInfo } = useSchoolSessionData(ID.id);
@@ -66,14 +68,14 @@ const DownloadTest: React.FC = () => {
             costPaid: res?.data?.amount / 100,
             paymentRef: search.split("reference=")[1],
           });
-          updatePayInfo(termID, {
+          updatePayInfo(readTermID, {
             costPaid: res?.data?.amount / 100,
             payRef: search.split("reference=")[1],
           });
         }
       });
     }
-  }, []);
+  }, [readTermID]);
 
   const downloadPDF = () => {
     const input = contentRef.current;
