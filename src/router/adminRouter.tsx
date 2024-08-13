@@ -136,7 +136,7 @@ export const adminRouter = createBrowserRouter([
         ),
       },
       {
-        path: ":termID/successful-payment",
+        path: ":token/successful-payment",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <DownloadTest />

@@ -8,12 +8,15 @@ import { createReceipt, updatePayInfo, verifyPay } from "../../api/schoolAPIs";
 import { GrDownload } from "react-icons/gr";
 import moment from "moment";
 import { MdCheckCircleOutline, MdOutlinePayment } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
 
 const DownloadTest: React.FC = () => {
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const { termID: readTermID }: any = useParams();
+  const { token }: any = useParams();
+
+  const { termID: readTermID }: any = jwtDecode(token);
 
   const ID = useSelector((state: any) => state.user);
   const { schoolInfo } = useSchoolSessionData(ID.id);
