@@ -704,6 +704,27 @@ export const viewSchoolSessionTerm = async (sessionID: any) => {
   }
 };
 
+export const updateTermFee = async (
+  schoolID: string,
+  classID: string,
+  data
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
+      .then((res: any) => {
+        // console.log(res);
+
+        return res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const verifyPayment1st = async (schoolID: string, studentID: string) => {
   try {
     return await axios
