@@ -16,26 +16,26 @@ const StoreView = () => {
 
   document.title = "View Store ";
 
-  const changeView = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayCart(!cartToggle));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayCart(!cartToggle));
-      });
-    }
-    // displayCart;
-  };
+  // const changeView = () => {
+  //   if (!document.startViewTransition) {
+  //     dispatch(displayCart(!cartToggle));
+  //   } else {
+  //     document.startViewTransition(() => {
+  //       dispatch(displayCart(!cartToggle));
+  //     });
+  //   }
+  //   // displayCart;
+  // };
   return (
     <div>
-      <div className="w-full flex justify-end mb-10">
+      {/* <div className="w-full flex justify-end mb-10">
         <div className="mr-10 relative cursor-pointer" onClick={changeView}>
           <BsCart4 size={25} />
           <div className="absolute -top-1 flex justify-center items-center bg-red-500 text-white rounded-full w-4 h-4 text-[12px] font-medium -right-1">
             {cart?.length}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {storeData?.data?.length > 0 ? (
         <div>
