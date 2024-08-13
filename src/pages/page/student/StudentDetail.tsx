@@ -39,11 +39,13 @@ const StudentDetail = () => {
     });
   }, []);
 
+  console.log(studentDetails?.data);
+
   return (
     <div>
       <LittleHeader name="Student Details" back />
 
-      <div>
+      <div className="font-semibold mb-3">
         {studentDetails?.data?.studentLastName}{" "}
         {studentDetails?.data?.studentFirstName}
       </div>
@@ -126,9 +128,12 @@ const StudentDetail = () => {
       <div className="my-6 border-t" />
       {/* class subject */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Present Class In JSS 1A </p>
+        <p>Present Class Details </p>
         <p className="text-[13px]">
-          Class Handled: <span className="font-bold">JSS A1</span>
+          Class Handled:{" "}
+          <span className="font-bold">
+            {studentDetails?.data?.classAssigned}{" "}
+          </span>
         </p>
 
         <div className="mt-5 text-[13px] font-medium">Subjects Offer</div>

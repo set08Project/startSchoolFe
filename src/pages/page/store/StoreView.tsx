@@ -16,31 +16,22 @@ const StoreView = () => {
 
   document.title = "View Store ";
 
-  const changeView = () => {
-    if (!document.startViewTransition) {
-      dispatch(displayCart(!cartToggle));
-    } else {
-      document.startViewTransition(() => {
-        dispatch(displayCart(!cartToggle));
-      });
-    }
-    // displayCart;
-  };
+  // const changeView = () => {
+  //   if (!document.startViewTransition) {
+  //     dispatch(displayCart(!cartToggle));
+  //   } else {
+  //     document.startViewTransition(() => {
+  //       dispatch(displayCart(!cartToggle));
+  //     });
+  //   }
+  //   // displayCart;
+  // };
   return (
     <div>
-      <div className="w-full flex justify-end mb-10">
-        <div className="mr-10 relative cursor-pointer" onClick={changeView}>
-          <BsCart4 size={25} />
-          <div className="absolute -top-1 flex justify-center items-center bg-red-500 text-white rounded-full w-4 h-4 text-[12px] font-medium -right-1">
-            {cart?.length}
-          </div>
-        </div>
-      </div>
-
       {storeData?.data?.length > 0 ? (
         <div>
           {" "}
-          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
             {storeData?.data?.map((props: any, i: number) => (
               <div
                 key={props?._id}
@@ -60,8 +51,8 @@ const StoreView = () => {
                 <div className="card-body pb-4 px-3">
                   <h2 className="card-title">{props?.title}</h2>
 
-                  <div className="flex justify-between items-center w-full ">
-                    <p className="text-[12px] font-medium">
+                  <div className="flex justify-between items-center w-full text-wrap">
+                    <p className="text-[12px] font-medium break-words overflow-hidden overflow-ellipsis">
                       {props?.description}
                     </p>
                     <p className="flex justify-end font-bold">

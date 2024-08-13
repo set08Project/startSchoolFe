@@ -1,12 +1,12 @@
 document.title = "View Students";
 // import moment from "moment"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link, useParams } from "react-router-dom";
-
+import { v4 as uuid } from "uuid";
 import crypto from "crypto";
 import {
   useSchoolCookie,
@@ -19,6 +19,7 @@ import { FC, useState } from "react";
 import {
   deleteStudent,
   readSchool,
+  updateSchoolFee,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
@@ -31,9 +32,8 @@ import {
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
-import { AiOutlineDelete } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 
 interface iProps {
   props?: any;
@@ -205,7 +205,7 @@ const ViewStudent = () => {
   // getting schoolID
   const schoolID = useSchoolCookie().dataID;
 
-  const handeDeleteStudent = (studentID) => {
+  const handeDeleteStudent = (studentID: any) => {
     try {
       setShowButton(true);
       setLoading(true);
@@ -228,11 +228,17 @@ const ViewStudent = () => {
     setSearchStudents(e.target.value);
   };
 
+  // const user = useSelector((el: any) => el.user);
+
   const filteredStudents = students?.data?.students?.filter((student: any) => {
     const fullName =
       `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
+
+  // console.log(classStudents);
+  console.log(filteredStudents);
+  console.log(filteredStudents?.presentClassID);
 
   return (
     <div className="">
@@ -281,45 +287,46 @@ const ViewStudent = () => {
         <div className=" w-[1920px] overflow-hidden">
           {filteredStudents?.length >= 0 ? (
             <div>
-              {filteredStudents?.map((props: any, i: number) => (
-                <div>
+              {filteredStudents?.map((props: any, i: number) => {
+                return (
                   <div>
-                    <div
-                      key={props}
-                      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
-                        i % 2 === 0 ? "bg-slate-50" : "bg-white"
-                      }`}
-                    >
-                      <div className="w-[130px] border-r">
-                        {moment(props?.createdAt).format("ll")}
-                      </div>
+                    <div>
+                      <div
+                        key={props}
+                        className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+                          i % 2 === 0 ? "bg-slate-50" : "bg-white"
+                        }`}
+                      >
+                        <div className="w-[130px] border-r">
+                          {moment(props?.createdAt).format("ll")}
+                        </div>
 
-                      <Remark data={props} id={props?._id} />
+                        <Remark data={props} id={props?._id} />
 
-                      <div className="w-[100px] border-r">
-                        <AttendanceRatio props={props} />
-                      </div>
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props} />
+                        </div>
 
-                      <div className="w-[220px] border-r flex gap-4">
-                        <div className="flex flex-col items-center">
-                          <label>1st Term</label>
+                        <div className="w-[220px] border-r flex gap-4">
+                          <div className="flex flex-col items-center">
+                            <label>1st Term</label>
 
-                          <label htmlFor="my_modal_6 relative">
-                            <label
-                              htmlFor="my_modal_6"
-                              // className={`btn text-[12px] font-medium text-white `}
-                            >
-                              {/* First term toggle commented */}
-                              {/* <label
+                            <label htmlFor="my_modal_6 relative">
+                              <label
+                                htmlFor="my_modal_6"
+                                // className={`btn text-[12px] font-medium text-white `}
+                              >
+                                {/* First term toggle commented */}
+                                {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
                               /> */}
-                              <input
-                                type="checkbox"
-                                className={`
+                                <input
+                                  type="checkbox"
+                                  className={`
                                 -z-20 
                             toggle toggle-sm mt-2 ${
                               props?.feesPaid1st
@@ -327,66 +334,82 @@ const ViewStudent = () => {
                                 : "bg-neutral-500 border-neutral-500"
                             }
                             `}
-                                onChange={() => {}}
-                                checked={props?.feesPaid1st}
+                                  checked={props?.feesPaid1st}
+                                  onClick={() => {
+                                    // verifyPayment1st(schoolID, props?._id);
+                                    // updateSchoolFee(props?._id).then((res) => {
+                                    //   console.log("Awesome: ", res);
+                                    // });
+
+                                    schoolPaymentEndPoint(props?._id, {
+                                      date: moment(Date.now()).format("lll"),
+                                      amount: props?.classTermFee,
+                                      reference: "paid in cash",
+                                      confirm: true,
+                                      purchasedID: uuid().slice(0, 7),
+                                    }).then((res) => {
+                                      console.log("Great: ", res);
+                                    });
+                                  }}
+                                />
+                              </label>
+
+                              {/* Put this part before </body> tag */}
+                              <input
+                                type="checkbox"
+                                id="my_modal_6"
+                                className="modal-toggle"
                               />
-                            </label>
+                              {/* Payment Modal */}
+                              <div className="modal" role="dialog">
+                                <div className="modal-box bg-white">
+                                  <h3 className="font-bold text-lg">
+                                    Confirm this payment
+                                  </h3>
+                                  <p className="py-4">
+                                    Are you sure you want to confirm this
+                                    payment?
+                                    <br />
+                                  </p>
+                                  <div className="modal-action">
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                      onClick={() => {
+                                        handleToggleCheckbox1st(ID);
+                                      }}
+                                    >
+                                      Yes
+                                    </label>
 
-                            {/* Put this part before </body> tag */}
-                            <input
-                              type="checkbox"
-                              id="my_modal_6"
-                              className="modal-toggle"
-                            />
-                            {/* Payment Modal */}
-                            <div className="modal" role="dialog">
-                              <div className="modal-box bg-white">
-                                <h3 className="font-bold text-lg">
-                                  Confirm this payment
-                                </h3>
-                                <p className="py-4">
-                                  Are you sure you want to confirm this payment?
-                                  <br />
-                                </p>
-                                <div className="modal-action">
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                    onClick={() => {
-                                      handleToggleCheckbox1st(ID);
-                                    }}
-                                  >
-                                    Yes
-                                  </label>
-
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                    onClick={() => {}}
-                                  >
-                                    No
-                                  </label>
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                      onClick={() => {}}
+                                    >
+                                      No
+                                    </label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </label>
-                        </div>{" "}
-                        <div className="flex flex-col items-center">
-                          <label>2nd Term</label>
+                            </label>
+                          </div>{" "}
+                          <div className="flex flex-col items-center">
+                            <label>2nd Term</label>
 
-                          <label htmlFor="my_modal_6 relative ">
-                            <label htmlFor="my_modal_6">
-                              {/* Second Term Toggle Comment */}
-                              {/* <label
+                            <label htmlFor="my_modal_6 relative ">
+                              <label htmlFor="my_modal_6">
+                                {/* Second Term Toggle Comment */}
+                                {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
                               /> */}
-                              <input
-                                type="checkbox"
-                                className={`
+                                <input
+                                  type="checkbox"
+                                  className={`
                                 -z-20
                             toggle toggle-sm mt-2  ${
                               props?.feesPaid2nd
@@ -394,52 +417,66 @@ const ViewStudent = () => {
                                 : "bg-neutral-500 border-neutral-500"
                             }
                             `}
-                                onChange={() => {}}
-                                checked={props?.feesPaid2nd}
+                                  onChange={() => {}}
+                                  checked={props?.feesPaid2nd}
+                                  onClick={() => {
+                                    // verifyPayment1st(schoolID, props?._id);
+                                    // updateSchoolFee(props?._id);
+                                    // schoolPaymentEndPoint(props?._id, {
+                                    //   date: moment(Date.now()).format("lll"),
+                                    //   amount: props?.classTermFee,
+                                    //   reference: "paid in cash",
+                                    //   confirm: true,
+                                    //   purchasedID: uuid().slice(0, 7),
+                                    // });
+
+                                    console.log(props?.classTermFee);
+                                  }}
+                                />
+                              </label>
+
+                              {/* Put this part before </body> tag */}
+                              <input
+                                type="checkbox"
+                                id="my_modal_6"
+                                className="modal-toggle"
                               />
-                            </label>
+                              <div className="modal" role="dialog">
+                                <div className="modal-box">
+                                  <h3 className="font-bold text-lg">
+                                    Confirm 2nd Term school-fees payment
+                                  </h3>
+                                  <p className="py-4">
+                                    Are you sure you want to confirm this
+                                    payment?
+                                    <br />
+                                  </p>
+                                  <div className="modal-action">
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                      onClick={() => {
+                                        handleToggleCheckbox2nd(ID);
+                                      }}
+                                    >
+                                      Yes
+                                    </label>
 
-                            {/* Put this part before </body> tag */}
-                            <input
-                              type="checkbox"
-                              id="my_modal_6"
-                              className="modal-toggle"
-                            />
-                            <div className="modal" role="dialog">
-                              <div className="modal-box">
-                                <h3 className="font-bold text-lg">
-                                  Confirm 2nd Term school-fees payment
-                                </h3>
-                                <p className="py-4">
-                                  Are you sure you want to confirm this payment?
-                                  <br />
-                                </p>
-                                <div className="modal-action">
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                    onClick={() => {
-                                      handleToggleCheckbox2nd(ID);
-                                    }}
-                                  >
-                                    Yes
-                                  </label>
-
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                    onClick={() => {}}
-                                  >
-                                    No
-                                  </label>
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                      onClick={() => {}}
+                                    >
+                                      No
+                                    </label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <label>3rd Term</label>
-                          {/* <input
+                            </label>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <label>3rd Term</label>
+                            {/* <input
                             type="checkbox"
                             className={`
                             toggle toggle-sm mt-2  ${
@@ -452,19 +489,19 @@ const ViewStudent = () => {
                             checked={props?.feesPaid4rd}
                           /> */}
 
-                          <label htmlFor="my_modal_6 relative ">
-                            <label htmlFor="my_modal_6">
-                              {/* 3rd Term toggle Comment */}
-                              {/* <label
+                            <label htmlFor="my_modal_6 relative ">
+                              <label htmlFor="my_modal_6">
+                                {/* 3rd Term toggle Comment */}
+                                {/* <label
                                 htmlFor="my_modal_6"
                                 className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
                                 onClick={() => {
                                   setID(props?._id);
                                 }}
                               /> */}
-                              <input
-                                type="checkbox"
-                                className={`
+                                <input
+                                  type="checkbox"
+                                  className={`
                                 -z-20
                             toggle toggle-sm mt-2  ${
                               props?.feesPaid3rd
@@ -472,166 +509,181 @@ const ViewStudent = () => {
                                 : "bg-neutral-500 border-neutral-500"
                             }
                             `}
-                                onChange={() => {}}
-                                checked={props?.feesPaid4rd}
+                                  onChange={() => {}}
+                                  checked={props?.feesPaid4rd}
+                                  onClick={() => {
+                                    // verifyPayment1st(schoolID, props?._id);
+                                    // updateSchoolFee(props?._id);
+                                    schoolPaymentEndPoint(props?._id, {
+                                      date: moment(Date.now()).format("lll"),
+                                      amount: props?.classTermFee,
+                                      reference: "paid in cash",
+                                      confirm: true,
+                                      purchasedID: uuid().slice(0, 7),
+                                    });
+                                  }}
+                                />
+                              </label>
+
+                              {/* Put this part before </body> tag */}
+                              <input
+                                type="checkbox"
+                                id="my_modal_6"
+                                className="modal-toggle"
                               />
-                            </label>
+                              <div className="modal" role="dialog">
+                                <div className="modal-box">
+                                  <h3 className="font-bold text-lg">
+                                    Confirm 3rd Term school-fees payment
+                                  </h3>
+                                  <p className="py-4">
+                                    Are you sure you want to confirm this
+                                    payment?
+                                    <br />
+                                  </p>
+                                  <div className="modal-action">
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
+                                      onClick={() => {
+                                        handleToggleCheckbox3rd(ID);
+                                      }}
+                                    >
+                                      Yes
+                                    </label>
 
-                            {/* Put this part before </body> tag */}
-                            <input
-                              type="checkbox"
-                              id="my_modal_6"
-                              className="modal-toggle"
-                            />
-                            <div className="modal" role="dialog">
-                              <div className="modal-box">
-                                <h3 className="font-bold text-lg">
-                                  Confirm 3rd Term school-fees payment
-                                </h3>
-                                <p className="py-4">
-                                  Are you sure you want to confirm this payment?
-                                  <br />
-                                </p>
-                                <div className="modal-action">
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                    onClick={() => {
-                                      handleToggleCheckbox3rd(ID);
-                                    }}
-                                  >
-                                    Yes
-                                  </label>
-
-                                  <label
-                                    htmlFor="my_modal_6"
-                                    className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                    onClick={() => {}}
-                                  >
-                                    No
-                                  </label>
+                                    <label
+                                      htmlFor="my_modal_6"
+                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
+                                      onClick={() => {}}
+                                    >
+                                      No
+                                    </label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            </label>
+                          </div>
+                        </div>
+
+                        {/* name */}
+                        <div className="w-[150px] flex justify-center border-r">
+                          <img
+                            className="w-14 h-14 rounded-md border object-cover"
+                            src={props?.avtar ? props?.avatar : pix}
+                          />
+                        </div>
+                        <div className="w-[200px] border-r gap-2 font-bold">
+                          {props?.studentFirstName} {props?.studentLastName}
+                        </div>
+
+                        <div className="w-[100px] border-r  ">
+                          {props?.classAssigned}
+                        </div>
+                        <div className="w-[150px] border-r  ">
+                          {props?.phone ? props?.phone : "Not yet Added"}
+                        </div>
+                        <div className="w-[200px] border-r  ">
+                          {props?.studentAddress
+                            ? props?.studentAddress
+                            : "Not yet Added"}
+                        </div>
+                        <div className="w-[200px] border-r  ">
+                          {props?.totalPerformance
+                            ? props?.totalPerformance
+                            : "0"}
+                        </div>
+
+                        <div className="w-[80px] border-r">3 of 5</div>
+
+                        <Link
+                          to={`student-details/${props?._id}`}
+                          className="w-[180px] border-r"
+                        >
+                          <Button
+                            name="View Detail"
+                            className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
+                            onClick={() => {}}
+                          />
+                        </Link>
+
+                        {/* Delete Toggle Modal And Fuctions Are Below */}
+                        <div className="w-[180px] border-r">
+                          <label
+                            htmlFor="my_modal_delete"
+                            className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                          >
+                            Delete Student
                           </label>
                         </div>
-                      </div>
-
-                      {/* name */}
-                      <div className="w-[150px] flex justify-center border-r">
-                        <img
-                          className="w-14 h-14 rounded-md border object-cover"
-                          src={props?.avtar ? props?.avatar : pix}
+                        <input
+                          type="checkbox"
+                          id="my_modal_delete"
+                          className="modal-toggle"
                         />
-                      </div>
-                      <div className="w-[200px] border-r gap-2 font-bold">
-                        {props?.studentFirstName} {props?.studentLastName}
-                      </div>
-
-                      <div className="w-[100px] border-r  ">
-                        {props?.classAssigned}
-                      </div>
-                      <div className="w-[150px] border-r  ">
-                        {props?.phone ? props?.phone : "Not yet Added"}
-                      </div>
-                      <div className="w-[200px] border-r  ">
-                        {props?.studentAddress
-                          ? props?.studentAddress
-                          : "Not yet Added"}
-                      </div>
-                      <div className="w-[200px] border-r  ">
-                        {props?.totalPerformance
-                          ? props?.totalPerformance
-                          : "0"}
-                      </div>
-
-                      <div className="w-[80px] border-r">3 of 5</div>
-
-                      <Link
-                        to={`student-details/${props?._id}`}
-                        className="w-[180px] border-r"
-                      >
-                        <Button
-                          name="View Detail"
-                          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
-                          onClick={() => {}}
-                        />
-                      </Link>
-
-                      {/* Delete Toggle Modal And Fuctions Are Below */}
-                      <div className="w-[180px] border-r">
-                        <label
-                          htmlFor="my_modal_delete"
-                          className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
-                        >
-                          Delete Student
-                        </label>
-                      </div>
-                      <input
-                        type="checkbox"
-                        id="my_modal_delete"
-                        className="modal-toggle"
-                      />
-                      <div className="modal modal-middle">
-                        <div className="modal-box bg-white">
-                          <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
-                            Student Deletion Notice
-                          </h3>
-                          <div className="mb text-blue-950">
-                            <p className="mb-3 text-[14px]">
-                              You are about to permanently delete this student
-                              record from your database. This action is
-                              irreversible and cannot be undone, and will result
-                              in the complete removal of all associated data,
-                              including academic history, contact information,
-                              and every other student detail
-                            </p>
-                            <div className="flex items-center justify-center gap-3 font-semibold">
-                              <p>
-                                If <span className="text-red-500">YES</span>{" "}
-                                continue
+                        <div className="modal modal-middle">
+                          <div className="modal-box bg-white">
+                            <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                              Student Deletion Notice
+                            </h3>
+                            <div className="mb text-blue-950">
+                              <p className="mb-3 text-[14px]">
+                                You are about to permanently delete this student
+                                record from your database. This action is
+                                irreversible and cannot be undone, and will
+                                result in the complete removal of all associated
+                                data, including academic history, contact
+                                information, and every other student detail
                               </p>
-                              <p>If NO cancel.</p>
+                              <div className="flex items-center justify-center gap-3 font-semibold">
+                                <p>
+                                  If <span className="text-red-500">YES</span>{" "}
+                                  continue
+                                </p>
+                                <p>If NO cancel.</p>
+                              </div>
                             </div>
-                          </div>
-                          <div className="modal-action flex items-center">
-                            {loading ? (
-                              <Button
-                                name="Deleting Student.."
-                                className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                                icon={<ClipLoader color="white" size={18} />}
-                              />
-                            ) : (
-                              showButton && (
+                            <div className="modal-action flex items-center">
+                              {loading ? (
                                 <Button
-                                  name="Delete Student"
-                                  className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                                  onClick={() => handeDeleteStudent(props?._id)}
+                                  name="Deleting Student.."
+                                  className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                  icon={<ClipLoader color="white" size={18} />}
                                 />
-                              )
-                            )}
-                            {showButton ? (
-                              <label
-                                htmlFor="my_modal_delete"
-                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                              >
-                                Cancel
-                              </label>
-                            ) : (
-                              <label
-                                htmlFor="my_modal_delete"
-                                className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                              >
-                                Close
-                              </label>
-                            )}
+                              ) : (
+                                showButton && (
+                                  <Button
+                                    name="Delete Student"
+                                    className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                    onClick={() =>
+                                      handeDeleteStudent(props?._id)
+                                    }
+                                  />
+                                )
+                              )}
+                              {showButton ? (
+                                <label
+                                  htmlFor="my_modal_delete"
+                                  className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                                >
+                                  Cancel
+                                </label>
+                              ) : (
+                                <label
+                                  htmlFor="my_modal_delete"
+                                  className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                                >
+                                  Close
+                                </label>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div>No student yet</div>

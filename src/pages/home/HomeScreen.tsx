@@ -47,6 +47,8 @@ const HomeScreen = () => {
     });
   };
 
+  console.log("schoolSubject:");
+
   const handleDisplayStudent = () => {
     if (!document.startViewTransition) {
       dispatch(displayStudent(true));
@@ -181,7 +183,6 @@ const HomeScreen = () => {
     }
     goToTop();
   };
-
   return (
     <div>
       <LittleHeader name={"Dashboard"} />
@@ -228,7 +229,6 @@ const HomeScreen = () => {
               <Button
                 name="Quick Chat (coming soon)"
                 className="bg-orange-600 hover:bg-orange-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
-                onClick={handleDisplayStudent}
               />
 
               <Link to="/class-report-card-ready">
