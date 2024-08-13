@@ -23,7 +23,7 @@ export const loginStudent = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-student/`,
-        data
+        data  
         // { withCredentials: true }
       )
       .then((res: any) => {
