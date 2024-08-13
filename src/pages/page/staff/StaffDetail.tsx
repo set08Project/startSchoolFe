@@ -79,6 +79,7 @@ const StaffDetail = () => {
                 setShow(!show);
                 updaetTeacherSalary(teacherDetail?._id, { salary }).then(() => {
                   mutate(`api/view-teacher-detail/${teacherDetail?._id}`);
+                  toast.success("Successfully Updated Staff Salary");
                 });
               }}
             />

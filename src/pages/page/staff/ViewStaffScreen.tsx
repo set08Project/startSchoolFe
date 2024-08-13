@@ -13,6 +13,7 @@ import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import toast from "react-hot-toast";
+
 import { deleteStaff } from "../../api/schoolAPIs";
 
 interface iProps {

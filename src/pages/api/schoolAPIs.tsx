@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 // working locally
 
@@ -22,6 +22,30 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = "https://startschool.onrender.com/api";
 // const URL2: string = "https://startschool.onrender.com";
+
+export const deleteStudent = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteStaff = async (schoolID: string, staffID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-staff/${schoolID}/${staffID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {
@@ -1079,30 +1103,6 @@ export const changeSchoolPersonalName = async (schoolID: string, data: any) => {
         return res;
       });
   } catch (error: any) {
-    return error;
-  }
-};
-
-export const deleteStudent = async (schoolID: string, studentID: string) => {
-  try {
-    return await axios
-      .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
-      .then((res: AxiosResponse<any, any>) => {
-        return res;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const deleteStaff = async (schoolID: string, staffID: string) => {
-  try {
-    return await axios
-      .delete(`${URL}/delete-staff/${schoolID}/${staffID}`)
-      .then((res: AxiosResponse<any, any>) => {
-        return res;
-      });
-  } catch (error) {
     return error;
   }
 };
