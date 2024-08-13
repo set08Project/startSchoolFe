@@ -21,7 +21,6 @@ import {
   useViewTermDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
-import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -32,9 +31,7 @@ import Button from "../reUse/Button";
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleImage = useSelector((state: any) => state.imageToggle);
-  const starting = useSelector((state: any) => state.starting);
   const user = useSelector((state: any) => state.user);
-  const [start, setStart] = useState<string>("");
 
   const [roll, setRoll] = useState<Boolean>(false);
 
@@ -72,9 +69,9 @@ const Sider = () => {
     }
   };
 
+  let term = [];
   useEffect(() => {
     if (schoolInfo?.length === 1 || schoolInfo?.length === 0) {
-      let term = [];
       for (let i = 0; i < schoolInfo?.length; i++) {
         term = schoolInfo[i].term;
       }
@@ -121,6 +118,7 @@ const Sider = () => {
           <p className="break-words font-medium text-slate-400  text-[14px] -mt-1">
             Session: {loading ? "" : data?.presentSession}
           </p>
+
           <p className="text-[12px] font-bold">
             Term: {/* *************here***************** */}
             {loading ? (
@@ -131,6 +129,8 @@ const Sider = () => {
               <span className="text-red-400 ml-1">Please create TERM</span>
             )}
           </p>
+
+          {/* PICK */}
 
           {data?.freeMode ? (
             <div className="mt-3 px-1 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
