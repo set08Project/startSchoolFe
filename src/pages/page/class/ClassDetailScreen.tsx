@@ -20,7 +20,9 @@ import {
 } from "../../hook/useSchoolAuth";
 import {
   createSchoolSubject,
+  updateTermFee,
   updateClassroomTeacher,
+  verifyPayment1st,
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import ClassModel from "./ClassModel";
@@ -30,6 +32,11 @@ import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScre
 
 interface iProps {
   props?: string;
+}
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
 }
 
 const ClassSubjectScreen: FC = () => {
@@ -81,6 +88,21 @@ const ClassSubjectScreen: FC = () => {
   );
 };
 
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white text-[12px] p-4 rounded-lg w-full max-w-sm h-[450px] flex items-center justify-around  flex-col">
+        <button onClick={onClose} className="absolute top-2 right-2">
+          X
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 const StaffDetail: FC<iProps> = ({ props }) => {
   const { teacherDetail } = useTeacherDetail(props!);
 
@@ -113,6 +135,33 @@ const ClassDetailScreen = () => {
   const { classroom } = useSchoolClassRMDetail(classID!);
   const dispatch = useDispatch();
   const [subject, setSubject] = useState<string>("");
+  const [isFeeModalOpen, setFeeModalOpen] = useState<boolean>(false);
+  const [firstTermFee, setFirstTermFee] = useState<string>("");
+  const [secondTermFee, setSecondTermFee] = useState<string>("");
+  const [thirdTermFee, setThirdTermFee] = useState<string>("");
+
+  // console.log(firstTermFee);
+  // console.log(secondTermFee);
+  // console.log(thirdTermFee);
+
+  const openFeeModal = () => setFeeModalOpen(true);
+  const closeFeeModal = () => setFeeModalOpen(false);
+
+  const handleUpdateFee = () => {
+    updateTermFee(dataID!, classID!, {
+      class1stFee: firstTermFee,
+      class2ndFee: secondTermFee,
+      class3rdFee: thirdTermFee,
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success("class fee updated");
+      } else {
+        toast.error(`${res?.response?.data?.messgae}`);
+      }
+    });
+    // console.log(`Fee updated to: ${feeAmount}`);
+    closeFeeModal();
+  };
 
   const { schoolTeacher } = useSchoolTeacher();
 
@@ -160,6 +209,22 @@ const ClassDetailScreen = () => {
       }
     });
   };
+
+  // const updateStudent1stFee = () => {
+  //   verifyPayment1st(dataID!, studentID!, {
+  //     classTeacherName: teacher,
+  //   }).then((res) => {
+  //     if (res.status === 201) {
+  //       mutate(`api/view-classrooms/${classID}`);
+
+  //       toast.success("class teacher updated");
+  //       handleToggleMenuFalse();
+  //     } else {
+  //       toast.error(`${res?.response?.data?.messgae}`);
+  //       handleToggleMenuFalse();
+  //     }
+  //   });
+  // };
 
   const { mainAttendance } = useClassAttendance(classID!);
 
@@ -216,10 +281,54 @@ const ClassDetailScreen = () => {
             </p>
           </div>
           {/* <Button name="" className="text-blue-950 bg-white" /> */}
-          <button className="btn text-blue-950 bg-white hover:bg-blue-900 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]">
-            update Class Fee
+          <button
+            className="btn text-blue-950 bg-white hover:bg-blue-50 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]"
+            onClick={openFeeModal}
+          >
+            Update Class Fee
           </button>
+          <Modal isOpen={isFeeModalOpen} onClose={closeFeeModal}>
+            <h2 className="text-lg text-left font-bold mb-4 text-blue-950">
+              Update Class Fee
+            </h2>
+            <Input
+              type="text"
+              value={firstTermFee}
+              onChange={(e) => setFirstTermFee(e.target.value)}
+              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              placeholder="Enter 1st fee"
+            />
+            <Input
+              type="text"
+              value={secondTermFee}
+              onChange={(e) => setSecondTermFee(e.target.value)}
+              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              placeholder="Enter 2nd fee"
+            />
+            <Input
+              type="text"
+              value={thirdTermFee}
+              onChange={(e) => setThirdTermFee(e.target.value)}
+              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              placeholder="Enter 3rd fee"
+            />
+            <div className="flex gap-9">
+              <button
+                onClick={handleUpdateFee}
+                className="bg-green-500 text-white p-2 rounded text-[17px]"
+              >
+                Update Fee
+              </button>
+              {/* <button
+                onClick={closeFeeModal}
+                className="bg-red-400 text-white p-2 rounded ml-2"
+              >
+                Cancel
+              </button> */}
+            </div>
+          </Modal>
         </div>
+
         <p>Manage Class Teacher: </p>
         <p className="text-[13px] flex items-center font-bold">
           Class teacher is responsible for day to day activities of the class{" "}
