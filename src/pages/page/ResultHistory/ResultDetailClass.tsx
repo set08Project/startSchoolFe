@@ -21,6 +21,7 @@ import {
   useStudentGrade,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { FaCheckDouble } from "react-icons/fa6";
 
 interface iProps {
   props?: any;
@@ -89,6 +90,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
     );
   });
 
+  console.log("PAID: ", term);
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -110,11 +113,33 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
           </div>
         </div>
       </div>
+      <div className="uppercase">
+        {term === "1st-Term" ? (
+          props?.feesPaid1st ? (
+            <div className="w-[100px] border-r">Paid</div>
+          ) : (
+            <div className="w-[100px] border-r text-red-500 uppercase">
+              Unpaid
+            </div>
+          )
+        ) : term === "2nd-Term" ? (
+          props?.feesPaid2nd ? (
+            <div className="w-[100px] border-r">Paid</div>
+          ) : (
+            <div className="w-[100px] border-r text-red-500">UnPaid</div>
+          )
+        ) : term === "3rd-Term" ? (
+          props?.feesPaid3rd ? (
+            <div className="w-[100px] border-r">Paid</div>
+          ) : (
+            <div className="w-[100px] border-r text-red-500">UnPaid</div>
+          )
+        ) : null}
+      </div>
+
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
       </div>
-
-      <div className="w-[100px] border-r">{result?.points}</div>
 
       <div className="w-[100px] border-r">{result?.grade}</div>
 
@@ -143,13 +168,21 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
   return (
     <div>
-      {(
+      {isNaN(
         (mainStudentAttendance?.data?.attendance?.filter(
           (el: any) => el.present === true
         ).length /
           mainStudentAttendance?.data?.attendance?.length) *
-        100
-      ).toFixed(2)}
+          100
+      )
+        ? 0
+        : (
+            (mainStudentAttendance?.data?.attendance?.filter(
+              (el: any) => el.present === true
+            ).length /
+              mainStudentAttendance?.data?.attendance?.length) *
+            100
+          ).toFixed(2)}
       %
     </div>
   );
@@ -211,23 +244,27 @@ const ResultDetailClass = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${1402 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1372 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
+          <div className="w-[100px] border-r">
+            SchoolFee <br />
+            Info
+          </div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
           <div className="w-[100px] border-r">Total Points</div>
-          <div className="w-[100px] border-r">Grade</div>
+          {/* <div className="w-[100px] border-r">Grade</div> */}
           {/* 260px */}
           <div
             className={`w-[${
               subjectData?.classSubjects?.length * 260
             }px] border-r`}
           >
-            {/* <div>Subject Grade</div> */}
-            <div className=" flex ">
+            <div className=" flex flex-col">
+              <div className="mb-2 font-bold text-blue-950">Grades</div>
               <div className="flex gap-4">
                 {lodash
                   .sortBy(subjectData?.classSubjects, "subjectTitle")
@@ -247,7 +284,7 @@ const ResultDetailClass = () => {
         <div
           className={` overflow-hidden w-[2000px] `}
           style={{
-            width: `${1402 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1372 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           {readStudent?.resultHistory?.length > 0 ? (
@@ -265,7 +302,10 @@ const ResultDetailClass = () => {
               })}
             </div>
           ) : (
-            <div>No student yet</div>
+            <div className="flex items-center justify-center flex-col w-[20%] font-semibold">
+              <FaCheckDouble className="my-2" />
+              <p>No student Data Captured yet</p>
+            </div>
           )}
         </div>
       </div>
