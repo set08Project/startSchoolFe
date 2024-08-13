@@ -135,7 +135,7 @@ const StudentDetail = () => {
 
         {classHolder?.length > 0 ? (
           <div>
-            <div className="mt-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div className="mt-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
               {classHolder?.map((props: any) => (
                 <div className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
                   <div className="mt-3 flex justify-between items-center font-bold">
