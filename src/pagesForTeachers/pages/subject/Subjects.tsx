@@ -49,7 +49,7 @@ const TeacherSubject: FC = () => {
       </div>
       <div>
         <div className="font-bold">Teacher subjects</div>
-        <div className="text-[12px] opacity-50 ">Subject teacher taken</div>
+        <div className="text-[12px] opacity-50 ">Subject teacher handles</div>
       </div>
 
       <div className=" w-full">
