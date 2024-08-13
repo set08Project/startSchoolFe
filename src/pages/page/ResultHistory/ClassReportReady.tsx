@@ -62,15 +62,21 @@ const ClassReportCardReady = () => {
       <div className="mb-28" />
 
       <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1250px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[200px] border-r">Class</div>
 
           <div className="w-[200px] border-r">Teacher Info</div>
+
+          <div className="w-[150px] border-r">Class Academic Performance</div>
+
+          <div className="w-[150px] border-r">SchoolFee Paid</div>
+          <div className="w-[150px] border-r ">SchoolFee UnPaid</div>
           <div className="w-[100px] border-r">Number of Students</div>
-          <div className="w-[200px] border-r">view/Approve</div>
+
+          <div className="w-[300px] border-r">view/Approve</div>
         </div>
 
-        <div className=" w-[700px] overflow-hidden ">
+        <div className=" w-[1250px] overflow-hidden ">
           {schoolClassroom?.classRooms?.map((props: any, i: number) => (
             <div>
               <div>
@@ -92,11 +98,62 @@ const ClassReportCardReady = () => {
                     )}
                   </div>
 
+                  <div className="w-[150px] border-r pl-4">
+                    {props?.classPerformance}%
+                  </div>
+                  <div className="w-[150px] border-r pl-4">
+                    {schoolClassroom?.presentTerm === "1st Term"
+                      ? Math.floor(
+                          (props?.schoolFeesHistory?.length /
+                            props?.students?.length) *
+                            100
+                        )
+                      : schoolClassroom?.presentTerm === "2nd Term"
+                      ? Math.floor(
+                          (props?.schoolFeesHistory2?.length /
+                            props?.students?.length) *
+                            100
+                        )
+                      : schoolClassroom?.presentTerm === "3rd Term"
+                      ? Math.floor(
+                          (props?.schoolFeesHistory3?.length /
+                            props?.students?.length) *
+                            100
+                        )
+                      : null}
+                    %
+                  </div>
+                  <div className="w-[150px] border-r pl-4 text-red-500">
+                    {schoolClassroom?.presentTerm === "1st Term"
+                      ? Math.floor(
+                          ((props?.students?.length -
+                            props?.schoolFeesHistory?.length) /
+                            props?.students?.length) *
+                            100
+                        )
+                      : schoolClassroom?.presentTerm === "2nd Term"
+                      ? Math.floor(
+                          ((props?.students?.length -
+                            props?.schoolFeesHistory?.length) /
+                            props?.students?.length) *
+                            100
+                        )
+                      : schoolClassroom?.presentTerm === "3rd Term"
+                      ? Math.floor(
+                          ((props?.students?.length -
+                            props?.schoolFeesHistory?.length) /
+                            props?.students?.length) *
+                            100
+                        )
+                      : null}
+                    %
+                  </div>
+
                   <div className="w-[100px] border-r">
                     {props?.students?.length}
                   </div>
 
-                  <div className="w-[200px] border-r">
+                  <div className="w-[300px] border-r">
                     <div className="mt-5 text-[13px] font-medium">
                       <Link
                         to={`/class-result-approve/${props?._id}`}
