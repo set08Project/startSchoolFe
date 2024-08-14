@@ -3,8 +3,8 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
 //
-const URL: string = "https://startschoolbe.onrender.com/api";
-// const URL: string = "https://startschool.onrender.com/api";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+const URL: string = "https://startschool.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
