@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import pix from "../../../assets/pix.jpg";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FC } from "react";
 import { FaCheckDouble } from "react-icons/fa6";
 import {
@@ -10,7 +10,15 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
 import moment from "moment";
-import { useStudentAttendance } from "../../hook/useSchoolAuth";
+import { useSchool, useStudentAttendance } from "../../hook/useSchoolAuth";
+import {
+  updateSchoolFee,
+  verifyPayment1st,
+  verifyPayment2nd,
+  verifyPayment3rd,
+} from "../../api/schoolAPIs";
+import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
+import crypto from "crypto";
 
 interface iProps {
   props?: any;
@@ -104,10 +112,9 @@ const Performance: FC<iProps> = ({ props }) => {
   );
 };
 
-const ViewClassStudent: FC<iProps> = () => {
+const ViewClassStudent: FC = () => {
   const { classID } = useParams();
-  const dispatch = useDispatch();
-
+  const user = useSelector((el: any) => el.user);
   const { classStudents } = useClassStudent(classID!);
 
   return (
@@ -166,6 +173,23 @@ const ViewClassStudent: FC<iProps> = () => {
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid1st}
+                              onClick={() => {
+                                // verifyPayment1st(user?.id, props?._id);
+                                // // updateSchoolFee(props?._id);
+
+                                // schoolPaymentEndPoint(props?._id, {
+                                //   date: moment(Date.now()).format("lll"),
+                                //   amount: 20000,
+                                //   reference: "paid in cash",
+                                //   confirm: true,
+                                //   purchasedID: crypto
+                                //     ?.randomBytes(3)
+                                //     .toString("hex"),
+                                // }).then((res) => {
+                                //   console.log("done: ", res);
+                                // });
+                                console.log("done: ");
+                              }}
                             />
                           </div>
                           <div className="flex flex-col items-center">
@@ -178,6 +202,9 @@ const ViewClassStudent: FC<iProps> = () => {
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid2nd}
+                              onClick={() => {
+                                verifyPayment2nd(user?.id, props?._id);
+                              }}
                             />
                           </div>
                           <div className="flex flex-col items-center">
@@ -190,6 +217,9 @@ const ViewClassStudent: FC<iProps> = () => {
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid3rd}
+                              onClick={() => {
+                                verifyPayment3rd(user?.id, props?._id);
+                              }}
                             />
                           </div>
                         </div>
@@ -221,7 +251,7 @@ const ViewClassStudent: FC<iProps> = () => {
                           {Math.ceil(Math.random() * (5 - 1)) + 1} of 5
                         </div>
                         <Link
-                          to={`student-details/:studentID`}
+                          to={`/view-students/student-details/${props?._id}`}
                           className="w-[180px] border-r"
                         >
                           <Button
@@ -236,7 +266,7 @@ const ViewClassStudent: FC<iProps> = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex ">
+              <div className="flex">
                 <div className="flex flex-col items-center w-[30%] justify-center px-4 py-1 mt-3">
                   <FaCheckDouble size={13} />
                   <p className="mt-3 text-[12px] font-medium">
