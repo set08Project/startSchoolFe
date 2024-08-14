@@ -2,8 +2,8 @@ import axios from "axios";
 
 // working locally
 
-// const URL2: string = import.meta.env.VITE_URL;
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL2: string = import.meta.env.VITE_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
@@ -698,27 +698,6 @@ export const viewSchoolSessionTerm = async (sessionID: any) => {
         console.log(sessionID);
 
         return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const updateTermFee = async (
-  schoolID: string,
-  classID: string,
-  data
-) => {
-  try {
-    return await axios
-      .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
-      .then((res: any) => {
-        // console.log(res);
-
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   } catch (error) {
     return error;
