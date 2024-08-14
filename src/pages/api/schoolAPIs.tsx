@@ -677,6 +677,19 @@ export const viewGallary = async (schoolID: string) => {
     return error;
   }
 };
+export const deleteGallary = async (schoolID: string, gallaryID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
+      .then((res: any) => {
+        console.log(res?.data);
+
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
 
 export const viewSchoolSession = async (schoolID: string) => {
   try {

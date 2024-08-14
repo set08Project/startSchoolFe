@@ -140,9 +140,8 @@ const ClassDetailScreen = () => {
   const [secondTermFee, setSecondTermFee] = useState<string>("");
   const [thirdTermFee, setThirdTermFee] = useState<string>("");
 
-  // console.log(firstTermFee);
-  // console.log(secondTermFee);
-  // console.log(thirdTermFee);
+  const isFormFilled =
+    firstTermFee !== "" && secondTermFee !== "" && thirdTermFee !== "";
 
   const openFeeModal = () => setFeeModalOpen(true);
   const closeFeeModal = () => setFeeModalOpen(false);
@@ -295,36 +294,33 @@ const ClassDetailScreen = () => {
               type="text"
               value={firstTermFee}
               onChange={(e) => setFirstTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 1st fee"
             />
             <Input
               type="text"
               value={secondTermFee}
               onChange={(e) => setSecondTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 2nd fee"
             />
             <Input
               type="text"
               value={thirdTermFee}
               onChange={(e) => setThirdTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 3rd fee"
             />
             <div className="flex gap-9">
               <button
                 onClick={handleUpdateFee}
-                className="bg-green-500 text-white p-2 rounded text-[17px]"
+                className={`bg-green-500 text-white p-2 rounded text-[17px] ${
+                  !isFormFilled ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={!isFormFilled}
               >
                 Update Fee
               </button>
-              {/* <button
-                onClick={closeFeeModal}
-                className="bg-red-400 text-white p-2 rounded ml-2"
-              >
-                Cancel
-              </button> */}
             </div>
           </Modal>
         </div>
