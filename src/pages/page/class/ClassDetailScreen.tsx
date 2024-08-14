@@ -93,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white text-[12px] p-4 rounded-lg w-full max-w-sm h-[450px] flex items-center justify-around  flex-col">
+      <div className="bg-white text-[12px] p-4 rounded-lg lg:w-full w-[88%] max-w-sm h-[450px] flex items-center justify-around  flex-col">
         <button onClick={onClose} className="absolute top-2 right-2">
           X
         </button>
