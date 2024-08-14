@@ -21,7 +21,6 @@ import {
   useViewTermDetail,
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
-import Tooltip from "./Tooltip";
 import StoreScreen from "./StoreScreen";
 import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -34,9 +33,7 @@ import SecondaryAdminScreen from "./SecondaryAdminScreen";
 const Sider = () => {
   const dispatch = useDispatch();
   const toggleImage = useSelector((state: any) => state.imageToggle);
-  const starting = useSelector((state: any) => state.starting);
   const user = useSelector((state: any) => state.user);
-  const [start, setStart] = useState<string>("");
 
   const [roll, setRoll] = useState<Boolean>(false);
 

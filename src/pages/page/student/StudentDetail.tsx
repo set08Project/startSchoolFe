@@ -16,6 +16,8 @@ import { changeStudentClass } from "../../api/schoolAPIs";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
+  console.log(studentID);
+
   const { mainStudentAttendance } = useStudentAttendance(studentID!);
 
   const [show, setShow] = useState<boolean>(false);
@@ -39,11 +41,13 @@ const StudentDetail = () => {
     });
   }, []);
 
+  console.log(studentDetails?.data);
+
   return (
     <div>
       <LittleHeader name="Student Details" back />
 
-      <div>
+      <div className="font-semibold mb-3">
         {studentDetails?.data?.studentLastName}{" "}
         {studentDetails?.data?.studentFirstName}
       </div>
@@ -126,16 +130,19 @@ const StudentDetail = () => {
       <div className="my-6 border-t" />
       {/* class subject */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Present Class In JSS 1A </p>
+        <p>Present Class Details </p>
         <p className="text-[13px]">
-          Class Handled: <span className="font-bold">JSS A1</span>
+          Class Handled:{" "}
+          <span className="font-bold">
+            {studentDetails?.data?.classAssigned}{" "}
+          </span>
         </p>
 
         <div className="mt-5 text-[13px] font-medium">Subjects Offer</div>
 
         {classHolder?.length > 0 ? (
           <div>
-            <div className="mt-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div className="mt-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
               {classHolder?.map((props: any) => (
                 <div className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
                   <div className="mt-3 flex justify-between items-center font-bold">

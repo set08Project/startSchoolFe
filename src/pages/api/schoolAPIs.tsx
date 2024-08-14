@@ -2,8 +2,8 @@ import axios from "axios";
 
 // working locally
 
-const URL2: string = import.meta.env.VITE_URL;
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
@@ -20,8 +20,8 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
 
-// const URL: string = "https://startschool.onrender.com/api";
-// const URL2: string = "https://startschool.onrender.com";
+const URL: string = "https://startschool.onrender.com/api";
+const URL2: string = "https://startschool.onrender.com";
 
 export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
@@ -677,6 +677,19 @@ export const viewGallary = async (schoolID: string) => {
     return error;
   }
 };
+export const deleteGallary = async (schoolID: string, gallaryID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
+      .then((res: any) => {
+        console.log(res?.data);
+
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
 
 export const viewSchoolSession = async (schoolID: string) => {
   try {
@@ -698,27 +711,6 @@ export const viewSchoolSessionTerm = async (sessionID: any) => {
         console.log(sessionID);
 
         return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const updateTermFee = async (
-  schoolID: string,
-  classID: string,
-  data
-) => {
-  try {
-    return await axios
-      .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
-      .then((res: any) => {
-        // console.log(res);
-
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   } catch (error) {
     return error;
