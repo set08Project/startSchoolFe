@@ -441,6 +441,7 @@ const ReportCardApproved = () => {
             onClick={() => {
               approveMainReport(classID, text).then((res) => {
                 if (res.status === 200) {
+                  console.log(res)
                   toast.success("Result will be Published in a minute time");
                 }
               });
