@@ -652,12 +652,18 @@ const ViewStudent = () => {
                                   contact information, and every other student
                                   detail
                                 </p>
-                                <div className="flex items-center justify-center gap-3 font-semibold">
+                                <div className="flex items-center justify-center gap-3 font-semibold  text-[15px]">
                                   <p>
-                                    If <span className="text-red-500">YES</span>{" "}
-                                    continue
+                                    If{" "}
+                                    <span className="text-red-500 text-[20px]">
+                                      YES
+                                    </span>{" "}
+                                    continue,
                                   </p>
-                                  <p>If NO cancel.</p>
+                                  <p className="">
+                                    If <span className="text-[20px]">NO</span>{" "}
+                                    cancel.
+                                  </p>
                                 </div>
                               </div>
 
