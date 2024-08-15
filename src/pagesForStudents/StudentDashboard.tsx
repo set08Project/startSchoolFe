@@ -50,10 +50,13 @@ const StudentDashboard = () => {
   const { termData } = useViewTermDetail(termID);
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
+  console.log(gradeData);
+
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
   let resultData = gradeData?.reportCard.find((el: any) => {
-    console.log("resultData", resultData)
+    console.log("resultData", resultData);
+
     return (
       el.classInfo ===
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
