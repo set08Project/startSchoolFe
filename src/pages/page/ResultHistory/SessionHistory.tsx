@@ -13,6 +13,7 @@ import {
   useSchoolData,
   useSchoolSessionData,
   useViewSessionTerm,
+  useViewTermDetail,
 } from "../../hook/useSchoolAuth";
 import { FC } from "react";
 
@@ -22,6 +23,7 @@ interface iProps {
 
 const SessionTerm: FC<iProps> = ({ props }) => {
   const { sessionTermData } = useViewSessionTerm(props);
+  const { termData } = useViewTermDetail(props);
 
   return (
     <Link
@@ -42,6 +44,81 @@ const SessionTerm: FC<iProps> = ({ props }) => {
 
 const Holder: FC<iProps> = ({ props }) => {
   return <div className=" ">View Details</div>;
+};
+
+const PropsData: FC<iProps> = ({ props }) => {
+  const { termData } = useViewTermDetail(props);
+  const { sessionTermData } = useViewSessionTerm(props);
+
+  console.log();
+
+  return (
+    <div className="flex  text-[10px] font-extrabold mt-3 italic gap-5 text-blue-900 ">
+      <p className="text-[12px] font-bold ">
+        {termData?.classResult?.length > 0 &&
+          termData?.classResult
+            .map((el: any) => {
+              return el?.students?.length;
+            })
+            ?.reduce((a: number, b: number) => {
+              return a + b;
+            })}
+      </p>
+    </div>
+  );
+};
+
+const Fee: FC<iProps> = ({ props }) => {
+  const { sessionTermData } = useViewSessionTerm(props);
+  const { termData } = useViewTermDetail(props);
+
+  return (
+    <div className="w-12">
+      {termData?.classResult.length > 0 ? (
+        <div>
+          <p className="text-[10px] uppercase">Paid</p>
+          <p className="text-[12px] font-bold text-green-500">
+            {(sessionTermData?.data?.classResult
+              .map((el: any) => {
+                return el?.schoolFeesHistory?.length;
+              })
+              ?.reduce((a: number, b: number) => {
+                return a + b;
+              }) /
+              sessionTermData?.data?.classResult
+                .map((el: any) => {
+                  return el.students.length;
+                })
+                ?.reduce((a: number, b: number) => {
+                  return a + b;
+                })) *
+              100}
+            %
+          </p>
+
+          <p className="text-[10px] mt-2 uppercase">unPaid</p>
+          <p className="text-[12px] font-bold text-red-500">
+            {(sessionTermData?.data?.classResult
+              .map((el: any) => {
+                return el.students.length - el?.schoolFeesHistory?.length;
+              })
+              ?.reduce((a: number, b: number) => {
+                return a + b;
+              }) /
+              sessionTermData?.data?.classResult
+                .map((el: any) => {
+                  return el.students.length;
+                })
+                ?.reduce((a: number, b: number) => {
+                  return a + b;
+                })) *
+              100}
+            %
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
 };
 
 const SessionHistory = () => {
@@ -77,13 +154,23 @@ const SessionHistory = () => {
             <div className="w-[150px] border-r">Session</div>
             <div className="w-[150px] border-r">Number of Terms</div>
             <div className="w-[150px] border-r">Number of Tearcher</div>
-            <div className="w-[150px] border-r">Number of Students</div>
-            <div className="w-[150px] border-r">Number of SchoolFee Stat</div>
-            {/* {schoolInfo?.map((props: any) => ( */}
-            <Holder
-            //    key={props._id} props={props}
-            />
-            {/* ))} */}
+            <div className="w-[150px] border-r flex flex-col">
+              <p>Number of Student</p>
+              <div className="flex  text-[10px] font-extrabold mt-3 italic gap-5 text-blue-900">
+                <p className="w-12">1st Term</p>
+                <p className="w-12">2nd Term</p>
+                <p className="w-12">3rd Term</p>
+              </div>
+            </div>
+            <div className="w-[220px] border-r flex flex-col">
+              <p>Number of SchoolFee Stat</p>
+              <div className="flex  text-[10px] font-extrabold mt-3 italic gap-5 text-blue-900">
+                <p className="w-12">1st Term</p>
+                <p className="w-12">2nd Term</p>
+                <p className="w-12">3rd Term</p>
+              </div>
+            </div>
+            <Holder />
           </div>
 
           <div>
@@ -93,7 +180,7 @@ const SessionHistory = () => {
             >
               {schoolInfo?.map((props: any) => (
                 <div
-                  className="w-[1200px] flex items-center gap-9 text-[12px] font-medium  h-16 px-4 my-2 overflow-hidden"
+                  className="w-[1200px] flex items-center gap-9 text-[12px] font-medium  h-22 px-4 my-2 overflow-hidden"
                   style={{
                     width: `${1200 + props?.term?.length * 170}px`,
                   }}
@@ -104,14 +191,18 @@ const SessionHistory = () => {
                   <div className="w-[150px] border-r text-black">
                     {props?.term.length}
                   </div>
-                  <div className="w-[150px] border-r text-black">
-                    {props?.numberOfTeachers}
+                  <div className="w-[150px] border-r text-black flex">
+                    {props?.totalTeachers}
                   </div>
                   <div className="w-[150px] border-r text-black">
-                    {props?.totalStudents}
+                    {props?.term?.map((props: any) => (
+                      <PropsData props={props} />
+                    ))}
                   </div>
-                  <div className="w-[150px] border-r text-black">
-                    {props?.numberOfSubjects}
+                  <div className="w-[220px] gap-5 border-r text-black flex">
+                    {props?.term?.map((props: any) => (
+                      <Fee props={props} />
+                    ))}
                   </div>
 
                   {props?.term?.map((props: any) => (
