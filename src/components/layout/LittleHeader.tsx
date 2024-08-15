@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { LiaGreaterThanSolid } from "react-icons/lia";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface iProps {
   name?: string;

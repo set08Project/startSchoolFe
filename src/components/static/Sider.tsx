@@ -9,6 +9,7 @@ import {
 import { NavLink } from "react-router-dom";
 import {
   FaBarsProgress,
+  FaMoneyBillTransfer,
   FaNoteSticky,
   FaSchool,
   FaStore,
@@ -259,6 +260,30 @@ const Sider = () => {
           <MdSchool />
         </NavLink>
         <NavLink
+          to="/lesson-note"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Lesson Notes
+          <FaNoteSticky />
+        </NavLink>
+        <NavLink
+          to="/expenditures"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Expenditures
+          <FaMoneyBillTransfer />
+        </NavLink>
+        <NavLink
           to="/report"
           className={({ isActive }) =>
             isActive
@@ -269,18 +294,6 @@ const Sider = () => {
         >
           Complains
           <MdReport />
-        </NavLink>
-        <NavLink
-          to="/lesson-note"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Lesson Note
-          <FaNoteSticky />
         </NavLink>
 
         <NavLink
