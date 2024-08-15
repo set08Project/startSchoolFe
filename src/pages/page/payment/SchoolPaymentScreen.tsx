@@ -6,6 +6,7 @@ import { useState } from "react";
 import { updateSchoolFee } from "../../../pages/api/schoolAPIs";
 import { useDispatch } from "react-redux";
 import { useSchoolData, useSchoolSchoolFees } from "../../hook/useSchoolAuth";
+import { mutate } from "swr";
 
 const SchoolFeesHistoryScreen = () => {
   const dispatch = useDispatch();
@@ -14,8 +15,6 @@ const SchoolFeesHistoryScreen = () => {
   const { schoolFeeRecord } = useSchoolSchoolFees(data?._id);
 
   const [stateArray, setStateArray] = useState<string[]>([]);
-
-  console.log(schoolFeeRecord);
 
   return (
     <div>
@@ -82,7 +81,7 @@ const SchoolFeesHistoryScreen = () => {
 
                     {/* name */}
 
-                    <div className="w-[145px] border-r ml-1">
+                    <div className="w-[145px] border-r ml-1 uppercase font-bold">
                       {props?.reference}
                     </div>
 
@@ -129,15 +128,20 @@ const SchoolFeesHistoryScreen = () => {
                                 htmlFor="my_modal_6"
                                 className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
                                 onClick={() => {
-                                  updateSchoolFee(stateArray[0]).then((res) => {
-                                    setStateArray([]);
-                                    let x = setTimeout(() => {
+                                  updateSchoolFee(stateArray[0])
+                                    .then((res) => {
                                       setStateArray([]);
-                                      console.log("view: ", stateArray);
+                                      let x = setTimeout(() => {
+                                        setStateArray([]);
 
-                                      clearTimeout(x);
-                                    }, 10);
-                                  });
+                                        clearTimeout(x);
+                                      }, 10);
+                                    })
+                                    .then(() => {
+                                      mutate(
+                                        `api/update-school-school-fee-comfirm/${stateArray[0]}`
+                                      );
+                                    });
                                 }}
                               >
                                 Yes

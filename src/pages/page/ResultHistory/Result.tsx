@@ -49,8 +49,6 @@ const Result = () => {
 
   document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
 
-  console.log(sessionTermData);
-
   return (
     <div className="">
       {/* header */}
@@ -119,13 +117,13 @@ const Result = () => {
                     )}
 
                     <div className="w-[150px] border-r pl-4 text-green-600 text-bold">
-                      {schoolClassroom?.presentTerm === "1st Term"
+                      {sessionTermData?.data?.presentTerm === "1st Term"
                         ? Math.floor(
                             (props?.schoolFeesHistory?.length /
                               props?.students?.length) *
                               100
                           )
-                        : schoolClassroom?.presentTerm === "2nd Term"
+                        : sessionTermData?.data?.presentTerm === "2nd Term"
                         ? isNaN(
                             Math.floor(
                               (props?.schoolFeesHistory2?.length /
@@ -139,7 +137,7 @@ const Result = () => {
                                 props?.students?.length) *
                                 100
                             )
-                        : schoolClassroom?.presentTerm === "3rd Term"
+                        : sessionTermData?.data?.presentTerm === "3rd Term"
                         ? isNaN(
                             Math.floor(
                               (props?.schoolFeesHistory3?.length /
