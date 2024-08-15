@@ -1,9 +1,13 @@
 import axios from "axios";
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
 //
-const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+
+// const URL: string = "https://startschool.onrender.com/api";
+// const URL: string = "https://startschool.onrender.com/api";
+
 // const URL: string = "https://startschool.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
@@ -23,7 +27,7 @@ export const loginStudent = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-student/`,
-        data  
+        data
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -414,6 +418,27 @@ export const schoolFeePayment = async (data: {}) => {
         return res;
       });
   } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateTermFee = async (
+  schoolID: string,
+  classID: string,
+  data
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
+      .then((res: any) => {
+        // console.log(res);
+
+        return res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
     return error;
   }
 };

@@ -236,10 +236,6 @@ const ViewStudent = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
-  // console.log(classStudents);
-  console.log(filteredStudents);
-  console.log(filteredStudents?.presentClassID);
-
   return (
     <div className="">
       {/* header */}
@@ -336,11 +332,6 @@ const ViewStudent = () => {
                             `}
                                   checked={props?.feesPaid1st}
                                   onClick={() => {
-                                    // verifyPayment1st(schoolID, props?._id);
-                                    // updateSchoolFee(props?._id).then((res) => {
-                                    //   console.log("Awesome: ", res);
-                                    // });
-
                                     schoolPaymentEndPoint(props?._id, {
                                       date: moment(Date.now()).format("lll"),
                                       amount: props?.classTermFee,
@@ -348,7 +339,15 @@ const ViewStudent = () => {
                                       confirm: true,
                                       purchasedID: uuid().slice(0, 7),
                                     }).then((res) => {
-                                      console.log("Great: ", res);
+                                      if (res.status === 201) {
+                                        toast.success(
+                                          "SchoolFee has been registered paid but not confirmed yet"
+                                        );
+                                      } else {
+                                        toast.error(
+                                          `Has been paid but not confirmed yet`
+                                        );
+                                      }
                                     });
                                   }}
                                 />
@@ -420,17 +419,23 @@ const ViewStudent = () => {
                                   onChange={() => {}}
                                   checked={props?.feesPaid2nd}
                                   onClick={() => {
-                                    // verifyPayment1st(schoolID, props?._id);
-                                    // updateSchoolFee(props?._id);
-                                    // schoolPaymentEndPoint(props?._id, {
-                                    //   date: moment(Date.now()).format("lll"),
-                                    //   amount: props?.classTermFee,
-                                    //   reference: "paid in cash",
-                                    //   confirm: true,
-                                    //   purchasedID: uuid().slice(0, 7),
-                                    // });
-
-                                    console.log(props?.classTermFee);
+                                    schoolPaymentEndPoint(props?._id, {
+                                      date: moment(Date.now()).format("lll"),
+                                      amount: props?.classTermFee,
+                                      reference: "paid in cash",
+                                      confirm: true,
+                                      purchasedID: uuid().slice(0, 7),
+                                    }).then((res) => {
+                                      if (res.status === 201) {
+                                        toast.success(
+                                          "SchoolFee has been registered paid but not confirmed yet"
+                                        );
+                                      } else {
+                                        toast.error(
+                                          `Has been paid but not confirmed yet`
+                                        );
+                                      }
+                                    });
                                   }}
                                 />
                               </label>
@@ -512,14 +517,22 @@ const ViewStudent = () => {
                                   onChange={() => {}}
                                   checked={props?.feesPaid4rd}
                                   onClick={() => {
-                                    // verifyPayment1st(schoolID, props?._id);
-                                    // updateSchoolFee(props?._id);
                                     schoolPaymentEndPoint(props?._id, {
                                       date: moment(Date.now()).format("lll"),
                                       amount: props?.classTermFee,
                                       reference: "paid in cash",
                                       confirm: true,
                                       purchasedID: uuid().slice(0, 7),
+                                    }).then((res) => {
+                                      if (res.status === 201) {
+                                        toast.success(
+                                          "SchoolFee has been registered paid but not confirmed yet"
+                                        );
+                                      } else {
+                                        toast.error(
+                                          `Has been paid but not confirmed yet`
+                                        );
+                                      }
                                     });
                                   }}
                                 />

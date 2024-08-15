@@ -677,6 +677,19 @@ export const viewGallary = async (schoolID: string) => {
     return error;
   }
 };
+export const deleteGallary = async (schoolID: string, gallaryID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
+      .then((res: any) => {
+        console.log(res?.data);
+
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
 
 export const viewSchoolSession = async (schoolID: string) => {
   try {
@@ -698,27 +711,6 @@ export const viewSchoolSessionTerm = async (sessionID: any) => {
         console.log(sessionID);
 
         return res?.data;
-      });
-  } catch (error) {
-    return error;
-  }
-};
-
-export const updateTermFee = async (
-  schoolID: string,
-  classID: string,
-  data
-) => {
-  try {
-    return await axios
-      .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
-      .then((res: any) => {
-        // console.log(res);
-
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
       });
   } catch (error) {
     return error;
