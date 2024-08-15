@@ -25,20 +25,8 @@ const CartItemScreen = () => {
   const carts = useSelector((state: any) =>
     state?.cart?.find((p: any) => p?._id === _id)
   );
-  console.log(cart?._id);
 
   const cartToggle = useSelector((state: any) => state?.cartToggle);
-
-  const [loading, setToggle] = useState<boolean>(false);
-
-  const handleremoveCart = () => {
-    if (cart && cart[0]?._id) {
-      dispatch(removeFromCart({ _id }));
-      console.log("delete cart");
-    } else {
-      console.log("not delete");
-    }
-  };
 
   const changeView = () => {
     if (!document.startViewTransition) {
@@ -73,7 +61,7 @@ const CartItemScreen = () => {
     <div className="flex w-full h-full flex-col items-center ">
       <div className="flex w-full  justify-between  ">
         <div className=" flex items-center justify-between px-3 w-full">
-          <div className="text-red-600">
+          <div className="text-red-600 text-[12px]">
             Using this store requires ₦500 charges for payment
           </div>
           <div>
@@ -99,14 +87,14 @@ const CartItemScreen = () => {
                   key={props?._id}
                 >
                   <div className=" col-span-4">
-                    <div className=" flex gap-3">
+                    <div className=" flex gap-5">
                       <div className=" w-[30%]">
                         <UnLazyImage
                           alt={props?.title}
                           thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
                           src={props?.avatar}
                           autoSizes
-                          className="w-[120px] h-[120px] border rounded-lg ml-2"
+                          className="w-[140px] object-cover h-[120px] border rounded-lg ml-2"
                         />
                       </div>
                       <div className=" w-[70%] text-wrap">
@@ -116,26 +104,32 @@ const CartItemScreen = () => {
                         </p>
                       </div>
                     </div>
-                    <div
-                      className=" flex ml-2 mt-2"
-                      onClick={() => {
-                        handleremoveCart();
-                      }}
-                    >
-                      <div>
-                        <MdDelete size={20} />
+                    <div className="flex">
+                      <div
+                        className="gap-3 flex ml-2 mt-4 cursor-pointer p-2 hover:bg-slate-100 transition-all duration-300 rounded-md text-red-600 items-center"
+                        onClick={() => {
+                          dispatch(removeFromCart(props));
+                        }}
+                      >
+                        <div>
+                          <MdDelete size={20} />
+                        </div>
+                        <p className="mr-2 text-[12px] mt-1 font-semibold ">
+                          Remove Item
+                        </p>
                       </div>
-                      <p>Remove</p>
                     </div>
                   </div>
                   <div className=" col-span-1 flex flex-col justify-center items-end gap-y-2">
-                    <div>₦ {props?.cost}</div>
-                    <div>no discount</div>
+                    <div className="font-semibold">
+                      ₦{props?.cost.toLocaleString()}
+                    </div>
+                    <div className="capitalize text-[12px]">no discount</div>
                     <div className=" flex items-center">
                       <div>
                         <Button
                           name={<FiMinus size={15} className=" mr-1" />}
-                          className=" bg-blue-950 px-1 py-1"
+                          className=" bg-red-600 px-1 py-2"
                           onClick={() => {
                             dispatch(changeCartPick(props));
                           }}
@@ -145,7 +139,7 @@ const CartItemScreen = () => {
                       <div>
                         <Button
                           name={<IoAddSharp size={15} className=" mr-1" />}
-                          className=" bg-blue-950 px-1 py-1"
+                          className=" bg-blue-950 px-1 py-2"
                           onClick={() => {
                             dispatch(addToCart(props));
                           }}
@@ -161,22 +155,24 @@ const CartItemScreen = () => {
           )}
           <div className="col-span-2">
             {cart.length > 0 ? (
-              <div className=" h-[210px] rounded-md shadow-md ">
+              <div className=" min-h-[210px] rounded-md shadow-md ">
                 <div className=" p-3">
                   <div className=" py-2">CART SUMMARY</div>
                   <div className=" flex border-y py-3 justify-between">
                     <p>Subtotal</p>
 
-                    <p>₦ {mainCost}</p>
+                    <p className="font-semibold">
+                      ₦{mainCost.toLocaleString()}
+                    </p>
                   </div>
                   <div className=" flex border-y py-3 justify-between">
                     <p>service Charge</p>
 
                     <p>₦500</p>
                   </div>
-                  <div className=" flex justify-center items-center">
+                  <div className="hover:scale-[102%]  transition-all duration-300 mt-6 flex justify-center items-center">
                     <Button
-                      name={`Checkout ₦ ${realCost}`}
+                      name={`Checkout ₦${realCost.toLocaleString()}`}
                       className=" bg-blue-950"
                     />
                   </div>
