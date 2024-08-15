@@ -52,10 +52,9 @@ const StudentDashboard = () => {
 
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
-  let resultData = gradeData?.reportCard.find((el: any) => {
-    console.log("resultData", resultData)
+  let resultData = gradeData?.reportCard?.find((el: any) => {
     return (
-      el.classInfo ===
+      el?.classInfo ===
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
     );
   });

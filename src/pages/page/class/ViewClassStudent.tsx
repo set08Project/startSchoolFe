@@ -176,7 +176,6 @@ const ViewClassStudent: FC = () => {
                               onClick={() => {
                                 // verifyPayment1st(user?.id, props?._id);
                                 // // updateSchoolFee(props?._id);
-
                                 // schoolPaymentEndPoint(props?._id, {
                                 //   date: moment(Date.now()).format("lll"),
                                 //   amount: 20000,
@@ -188,7 +187,6 @@ const ViewClassStudent: FC = () => {
                                 // }).then((res) => {
                                 //   console.log("done: ", res);
                                 // });
-                                console.log("done: ");
                               }}
                             />
                           </div>
