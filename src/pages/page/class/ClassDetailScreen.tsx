@@ -20,7 +20,7 @@ import {
 } from "../../hook/useSchoolAuth";
 import {
   createSchoolSubject,
-  updateTermFee,
+  // updateTermFee,
   updateClassroomTeacher,
   verifyPayment1st,
 } from "../../api/schoolAPIs";
@@ -148,17 +148,17 @@ const ClassDetailScreen = () => {
   const closeFeeModal = () => setFeeModalOpen(false);
 
   const handleUpdateFee = () => {
-    updateTermFee(dataID!, classID!, {
-      class1stFee: firstTermFee,
-      class2ndFee: secondTermFee,
-      class3rdFee: thirdTermFee,
-    }).then((res) => {
-      if (res.status === 201) {
-        toast.success("class fee updated");
-      } else {
-        toast.error(`${res?.response?.data?.messgae}`);
-      }
-    });
+    // updateTermFee(dataID!, classID!, {
+    //   class1stFee: firstTermFee,
+    //   class2ndFee: secondTermFee,
+    //   class3rdFee: thirdTermFee,
+    // }).then((res) => {
+    //   if (res.status === 201) {
+    //     toast.success("class fee updated");
+    //   } else {
+    //     toast.error(`${res?.response?.data?.messgae}`);
+    //   }
+    // });
     // console.log(`Fee updated to: ${feeAmount}`);
     closeFeeModal();
   };
@@ -314,7 +314,7 @@ const ClassDetailScreen = () => {
             />
             <div className="flex gap-9">
               <button
-                onClick={handleUpdateFee}
+                // onClick={handleUpdateFee}
                 className="bg-green-500 text-white p-2 rounded text-[17px]"
               >
                 Update Fee

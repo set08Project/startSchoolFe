@@ -78,7 +78,7 @@ const SessionHistory = () => {
             <div className="w-[150px] border-r">Number of Terms</div>
             <div className="w-[150px] border-r">Number of Tearcher</div>
             <div className="w-[150px] border-r">Number of Students</div>
-            <div className="w-[150px] border-r">Number of Students2</div>
+            <div className="w-[150px] border-r">Number of SchoolFee Stat</div>
             {/* {schoolInfo?.map((props: any) => ( */}
             <Holder
             //    key={props._id} props={props}
