@@ -29,6 +29,7 @@ import ClassModel from "./ClassModel";
 import ViewClassStudent from "./ViewClassStudent";
 import { mutate } from "swr";
 import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
+// import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
 interface iProps {
   props?: string;
@@ -93,7 +94,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white text-[12px] p-4 rounded-lg w-full max-w-sm h-[450px] flex items-center justify-around  flex-col">
+      <div className="bg-white text-[12px] p-4 rounded-lg lg:w-full w-[88%] max-w-sm h-[450px] flex items-center justify-around  flex-col">
         <button onClick={onClose} className="absolute top-2 right-2">
           X
         </button>
@@ -140,9 +141,8 @@ const ClassDetailScreen = () => {
   const [secondTermFee, setSecondTermFee] = useState<string>("");
   const [thirdTermFee, setThirdTermFee] = useState<string>("");
 
-  // console.log(firstTermFee);
-  // console.log(secondTermFee);
-  // console.log(thirdTermFee);
+  const isFormFilled =
+    firstTermFee !== "" && secondTermFee !== "" && thirdTermFee !== "";
 
   const openFeeModal = () => setFeeModalOpen(true);
   const closeFeeModal = () => setFeeModalOpen(false);
@@ -295,36 +295,30 @@ const ClassDetailScreen = () => {
               type="text"
               value={firstTermFee}
               onChange={(e) => setFirstTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 1st fee"
             />
             <Input
               type="text"
               value={secondTermFee}
               onChange={(e) => setSecondTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 2nd fee"
             />
             <Input
               type="text"
               value={thirdTermFee}
               onChange={(e) => setThirdTermFee(e.target.value)}
-              className=" outline-none p-2 w-full mb-4 text-gray-600"
+              className="outline-none p-2 w-full mb-4 text-gray-600"
               placeholder="Enter 3rd fee"
             />
             <div className="flex gap-9">
               <button
-                // onClick={handleUpdateFee}
+                onClick={handleUpdateFee}
                 className="bg-green-500 text-white p-2 rounded text-[17px]"
               >
                 Update Fee
               </button>
-              {/* <button
-                onClick={closeFeeModal}
-                className="bg-red-400 text-white p-2 rounded ml-2"
-              >
-                Cancel
-              </button> */}
             </div>
           </Modal>
         </div>
