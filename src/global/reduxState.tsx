@@ -184,7 +184,7 @@ const reduxState = createSlice({
     },
 
     removeFromCart: (state, { payload }) => {
-      state.cart = state.cart.filter((fl) => fl._id !== payload._id);
+      state.cart = state.cart.filter((el) => el._id !== payload._id);
     },
 
     emptyCart: (state) => {
