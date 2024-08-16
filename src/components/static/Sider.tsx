@@ -271,7 +271,7 @@ const Sider = () => {
           Lesson Notes
           <FaNoteSticky />
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to="/expenditures"
           className={({ isActive }) =>
             isActive
@@ -282,7 +282,7 @@ const Sider = () => {
         >
           Expenditures
           <FaMoneyBillTransfer />
-        </NavLink>
+        </NavLink> */}
         <NavLink
           to="/report"
           className={({ isActive }) =>
