@@ -22,6 +22,7 @@
     "@types/react-scroll": "^1.8.10",
     "@types/react-slick": "^0.23.13",
     "@types/redux-persist": "^4.3.1",
+    "@types/uuid": "^10.0.0",
     "axios": "^1.6.5",
     "chart.js": "^4.4.1",
     "date-fns": "^3.3.1",
@@ -53,6 +54,7 @@
     "swr": "^2.2.4",
     "tailwind-merge": "^2.2.0",
     "typewriter-effect": "^2.21.0",
+    "uuid": "^10.0.0",
     "yarn": "^1.22.21",
     "yet-another-react-lightbox": "^3.17.0"
   },
@@ -73,7 +75,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
     "unlazy": "^0.11.1",
-    "vite": "^5.0.8",
+    "vite": "^5.4.0",
     "vite-plugin-pwa": "^0.19.7"
   }
 }

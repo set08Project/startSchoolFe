@@ -34,6 +34,8 @@ const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
 import SuccessfulPaymentScreen from "../pages/page/payment/PaymentSuccessfulScreen";
 import DownloadTest from "../pages/page/payment/DownloadTest";
+import Expenditure from "../pages/page/expenditure/expenditure";
+import AllExpenditures from "../pages/page/expenditure/AllExpenditures";
 
 const AllArticle = React.lazy(
   () => import("../pages/home/screens/AllArticles")
@@ -136,7 +138,7 @@ export const adminRouter = createBrowserRouter([
         ),
       },
       {
-        path: "successful-payment",
+        path: ":token/successful-payment",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <DownloadTest />
@@ -206,6 +208,25 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <AdminLessonNote />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "expenditures",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <Expenditure />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "/view-all-expenditures",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AllExpenditures />
               </Suspense>
             ),
           },

@@ -49,8 +49,6 @@ const Result = () => {
 
   document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
 
-  console.log(sessionTermData);
-
   return (
     <div className="">
       {/* header */}
@@ -73,6 +71,8 @@ const Result = () => {
           <div className="w-[220px] border-r">class teacher Info</div>
 
           <div className="w-[150px] border-r">Class Academic Performance</div>
+          <div className="w-[150px] border-r">SchoolFee Paid</div>
+          <div className="w-[150px] border-r">SchoolFee UnPaid</div>
 
           <div className="w-[220px] border-r">view Results</div>
         </div>
@@ -106,8 +106,79 @@ const Result = () => {
                         <div>no teacher assigned yet</div>
                       )}
                     </div>
+                    {props?.classPerformance < 40 ? (
+                      <div className="w-[150px] border-r pl-4 text-red-500 font-semibold">
+                        {props?.classPerformance}%
+                      </div>
+                    ) : (
+                      <div className="w-[150px] border-r pl-4">
+                        {props?.classPerformance}%
+                      </div>
+                    )}
 
-                    <div className="w-[150px] border-r pl-4">90%</div>
+                    <div className="w-[150px] border-r pl-4 text-green-600 text-bold">
+                      {sessionTermData?.data?.presentTerm === "1st Term"
+                        ? Math.floor(
+                            (props?.schoolFeesHistory?.length /
+                              props?.students?.length) *
+                              100
+                          )
+                        : sessionTermData?.data?.presentTerm === "2nd Term"
+                        ? isNaN(
+                            Math.floor(
+                              (props?.schoolFeesHistory2?.length /
+                                props?.students?.length) *
+                                100
+                            )
+                          )
+                          ? 0
+                          : Math.floor(
+                              (props?.schoolFeesHistory2?.length /
+                                props?.students?.length) *
+                                100
+                            )
+                        : sessionTermData?.data?.presentTerm === "3rd Term"
+                        ? isNaN(
+                            Math.floor(
+                              (props?.schoolFeesHistory3?.length /
+                                props?.students?.length) *
+                                100
+                            )
+                          )
+                          ? 0
+                          : Math.floor(
+                              (props?.schoolFeesHistory3?.length /
+                                props?.students?.length) *
+                                100
+                            )
+                        : null}
+                      %
+                    </div>
+                    <div className="w-[150px] border-r pl-4 text-red-500 font-semibold">
+                      {schoolClassroom?.presentTerm === "1st Term"
+                        ? Math.floor(
+                            ((props?.students?.length -
+                              props?.schoolFeesHistory?.length) /
+                              props?.students?.length) *
+                              100
+                          )
+                        : schoolClassroom?.presentTerm === "2nd Term"
+                        ? Math.floor(
+                            ((props?.students?.length -
+                              props?.schoolFeesHistory?.length) /
+                              props?.students?.length) *
+                              100
+                          )
+                        : schoolClassroom?.presentTerm === "3rd Term"
+                        ? Math.floor(
+                            ((props?.students?.length -
+                              props?.schoolFeesHistory?.length) /
+                              props?.students?.length) *
+                              100
+                          )
+                        : null}
+                      %
+                    </div>
 
                     <Link
                       to={`student-result/${props._id}`}

@@ -14,47 +14,54 @@ import { createReceipt, updatePayInfo, verifyPay } from "../../api/schoolAPIs";
 import { useSelector } from "react-redux";
 
 const SuccessPage = () => {
+  const { termID: readTermID }: any = useParams();
   const ID = useSelector((state: any) => state.user);
   const { schoolInfo } = useSchoolSessionData(ID.id);
   const { search } = useLocation();
 
+  console.log("read ID: ", readTermID);
+  console.log("read RefID: ", search.split("reference=")[1]);
+
   let refID = schoolInfo;
 
-  let obj: any = {};
+  // let obj: any = {};
 
-  if (refID?.length > 0) {
-    for (let i = 0; i < refID.length; i++) {
-      obj = refID[0];
-    }
-  }
+  // if (refID?.length > 0) {
+  //   for (let i = 0; i < refID.length; i++) {
+  //     obj = refID[0];
+  //   }
+  // }
 
-  let termID: string = "";
+  // let termID: string = "";
 
-  if (obj !== null) {
-    for (let i = 0; i < obj?.term?.reverse().length; i++) {
-      termID = obj?.term[0];
-    }
-  }
+  // if (obj !== null) {
+  //   for (let i = 0; i < obj?.term?.reverse().length; i++) {
+  //     termID = obj?.term[0];
+  //   }
+  // }
 
-  useEffect(() => {
-    if (search.split("reference=")[1] !== "" || null) {
-      verifyPay(search.split("reference=")[1]).then((res) => {
-        console.log(res);
-        if (res.status) {
-          createReceipt(ID.id, {
-            costPaid: res?.data?.amount / 100,
-            paymentRef: search.split("reference=")[1],
-          });
-          updatePayInfo(termID, {
-            costPaid: res?.data?.amount / 100,
-            payRef: search.split("reference=")[1],
-          }).then((res: any) => {
-            console.log(res);
-          });
-        }
-      });
-    }
-  }, []);
+  // console.log(termID);
+  console.log(refID);
+
+  // useEffect(() => {
+  //   if (search.split("reference=")[1] !== "" || null) {
+  //     verifyPay(search.split("reference=")[1]).then((res) => {
+  //       console.log(res);
+  //       if (res.status) {
+  //         createReceipt(ID.id, {
+  //           costPaid: res?.data?.amount / 100,
+  //           paymentRef: search.split("reference=")[1],
+  //         });
+  //         updatePayInfo(readTermID, {
+  //           costPaid: res?.data?.amount / 100,
+  //           payRef: search.split("reference=")[1],
+  //         }).then((res: any) => {
+  //           console.log(res);
+  //         });
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen">
@@ -71,7 +78,7 @@ const SuccessPage = () => {
         to return to your dashboard
       </p>
 
-      <Link to="/dashboard" className="mt-10">
+      {/* <Link to="/dashboard" className="mt-10">
         <Button
           name="Dashboard"
           className="bg-blue-950"
@@ -92,7 +99,7 @@ const SuccessPage = () => {
             }
           }}
         />
-      </Link>
+      </Link> */}
     </div>
   );
 };

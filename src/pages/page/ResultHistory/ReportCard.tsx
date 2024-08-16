@@ -27,6 +27,7 @@ import { adminReport, approveMainReport } from "../../api/schoolAPIs";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
   props?: any;
@@ -348,6 +349,7 @@ const ReportCardApproved = () => {
   const [data, setData] = useState([]);
 
   const [text, setText] = useState("");
+  const [resultToggle, setResultToggle] = useState<boolean>(false);
 
   return (
     <div className="">
@@ -437,19 +439,32 @@ const ReportCardApproved = () => {
         </div>
         {text ? (
           <button
-            className="btn btn-wide bg-blue-950 text-white mt-3 hover:bg-blue-900"
+            className={`btn btn-wide ${
+              resultToggle ? "bg-neutral-800" : "bg-blue-950"
+            } text-white mt-3 hover:bg-blue-900`}
             onClick={() => {
-              approveMainReport(classID, text).then((res) => {
-                if (res.status === 200) {
-                  toast.success("Result will be Published in a minute time");
-                }
-              });
+              setResultToggle(true);
+              approveMainReport(classID, text)
+                .then((res) => {
+                  if (res.status === 200) {
+                    toast.success("Result will be Published in a minute time");
+                  }
+                })
+                .finally(() => {
+                  setResultToggle(false);
+                });
             }}
           >
-            Result Approved
+            {resultToggle ? (
+              <p>
+                <FaSpinner className="animate-spin text-[20px]" />
+              </p>
+            ) : (
+              "Result Approved"
+            )}
           </button>
         ) : (
-          <button className="btn btn-wide bg-blue-950 text-white mt-3 hover:bg-blue-900">
+          <button className="btn  bg-blue-950 text-white mt-8 hover:bg-blue-900 h-[55px] uppercase">
             Input Remark and Result Approved
           </button>
         )}
