@@ -45,7 +45,7 @@ const MyClassroom: FC = () => {
   const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <LittleHeader name="Class Teacher Subject" />
       <div className="flex gap-2">
         <div className="avatar">
