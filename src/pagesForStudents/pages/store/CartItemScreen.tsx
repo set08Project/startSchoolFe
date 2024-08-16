@@ -10,12 +10,7 @@ import { MdClose, MdExpandLess } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
 import { storePayment } from "../../../pages/api/schoolAPIs";
 import { useStudentInfo } from "../../hooks/useStudentHook";
-import {
-  useGallary,
-  useSchool,
-  useSchoolData,
-  useSchoolSessionData,
-} from "../../../pages/hook/useSchoolAuth";
+import { useGallary, useSchool } from "../../../pages/hook/useSchoolAuth";
 import { useState } from "react";
 
 const CartItemScreen = () => {
@@ -119,7 +114,8 @@ const CartItemScreen = () => {
               <div className="flex items-center w-full gap-2 border-b border-neutral py-5 ">
                 <MdClose
                   onClick={() => {
-                    dispatch(removeFromCart(props));
+                    // dispatch(removeFromCart(props));
+                    console.log("first");
                   }}
                 />
                 <img
@@ -165,4 +161,5 @@ const CartItemScreen = () => {
 };
 
 export default CartItemScreen;
+
 // 73, 154, 255, 0.2;  purchasedEndPoint

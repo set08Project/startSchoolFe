@@ -89,10 +89,9 @@ const SchoolFeesHistoryScreenStudent = () => {
 
                     <div
                       className="w-[150px] border-r pl-1 "
-                      onClick={() => {
-                        setState(props?._id);
-                        console.log("Read: ", state);
-                      }}
+                      // onClick={() => {
+                      //   setState(props?._id);
+                      // }}
                     >
                       <div
                       // onClick={() => {
@@ -123,24 +122,28 @@ const SchoolFeesHistoryScreenStudent = () => {
                         <div className="modal" role="dialog">
                           <div className="modal-box">
                             <h3 className="font-bold text-lg">
-                              Confirm this payment
+                              SchoolFees Confirmation Report
                             </h3>
-                            <p className="py-4">
-                              Are you sure you want to confirm this payment?
-                              {props?._id}
-                            </p>
+                            {props?.confirm ? (
+                              <p className="py-4">
+                                it's obvious that you've made your schoolfees
+                                payment and the school's Admin has confirm your
+                                payment...
+                                <br />
+                                <br />
+                                BRAVO!!!
+                              </p>
+                            ) : (
+                              <p className="py-4">
+                                it's obvious that you've made your schoolfees
+                                payment but the school's Admin is yet to confirm
+                                the payment...
+                                <br />
+                                <br />
+                                This confirmation will be done real soon!
+                              </p>
+                            )}
                             <div className="modal-action">
-                              <label
-                                htmlFor="my_modal_6"
-                                className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                onClick={() => {
-                                  updateSchoolFee(props?._id).then((res) => {
-                                    console.log(res);
-                                  });
-                                }}
-                              >
-                                Yes
-                              </label>
                               <label
                                 htmlFor="my_modal_6"
                                 className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
@@ -150,7 +153,7 @@ const SchoolFeesHistoryScreenStudent = () => {
                                   }
                                 }}
                               >
-                                No
+                                {props?.confirm ? "BRAVO" : "OKAY"}
                               </label>
                             </div>
                           </div>

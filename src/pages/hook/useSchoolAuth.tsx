@@ -326,6 +326,7 @@ export const useGallary = (schoolID: string) => {
 
   return { gallary };
 };
+
 export const useSchoolSessionData = (schoolID: string) => {
   const { data: schoolInfo, isLoading: loading } = useSWR(
     `api/view-school-session/${schoolID}`,
@@ -400,7 +401,7 @@ export const usePurchasedStoreInfo = (schoolID: string) => {
 
 export const useSchoolSchoolFees = (schoolID: string) => {
   const { data: schoolFeeRecord } = useSWR(
-    `api/view-school-schoolfee-detail/${schoolID}`,
+    `api/update-school-school-fee-comfirm/${schoolID}`,
     () => {
       return readSchoolFee(schoolID!).then((res) => {
         return res?.data?.data;
