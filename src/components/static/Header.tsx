@@ -3,6 +3,7 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaMessage,
   FaNoteSticky,
   FaSchool,
   FaStore,
@@ -20,6 +21,7 @@ import {
   MdReport,
   MdSchool,
   MdSettings,
+  MdStayCurrentPortrait,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -30,12 +32,14 @@ import { useState } from "react";
 import Session from "./Session";
 import AddSession from "./AddSession";
 import {
+  useComplain,
   useSchoolData,
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FaPhotoVideo } from "react-icons/fa";
+import { FaCompressAlt, FaPhotoVideo } from "react-icons/fa";
 import AddSessionTerm from "./AddSessionTerm";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -63,6 +67,15 @@ const Header = () => {
 
   const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(data?._id);
+  const { complainData } = useComplain(data?._id);
+
+  const complainMessage = complainData
+    ?.map((el: any) => {
+      return el.resolve && el.seen;
+    })
+    ?.filter((el: boolean) => {
+      return el === false;
+    })?.length;
 
   return (
     <div
@@ -70,7 +83,15 @@ const Header = () => {
       onClick={() => {}}
     >
       {/* <div>  */}
-      <div className="flex items-center  justify-end w-[90%]">
+      <div className="flex items-center gap-2 justify-end w-[90%]">
+        <Link to="/report" className="relative">
+          <FaMessage />
+          {complainMessage > 0 && (
+            <span className="-top-2 left-2 text-[11px] mt-1 bg-red-500 text-white font-bold w-4 h-4 rounded-full absolute flex justify-center items-center">
+              {complainMessage >= 10 ? `10+` : complainMessage}
+            </span>
+          )}
+        </Link>
         <div
           className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
           onClick={() => {
