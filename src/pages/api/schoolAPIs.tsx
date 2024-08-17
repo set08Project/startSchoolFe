@@ -2,11 +2,16 @@ import axios from "axios";
 
 // working locally
 
+
 // const URL2: string = import.meta.env.VITE_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
+
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+
 
 // working locally
 
@@ -20,11 +25,12 @@ import axios from "axios";
 
 // working remotely 1
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
-// const URL2: string = "https://startschoolbe.onrender.com";
+const URL: string = "https://startschoolbe.onrender.com/api";
+const URL2: string = "https://startschoolbe.onrender.com";
 
-const URL: string = "https://startschool.onrender.com/api";
-const URL2: string = "https://startschool.onrender.com";
+
+// const URL: string = "https://startschool.onrender.com/api";
+// const URL2: string = "https://startschool.onrender.com";
 
 export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
@@ -49,6 +55,9 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
     return error;
   }
 };
+// const URL: string = "https://startschool.onrender.com/api";
+// const URL2: string = "https://startschool.onrender.com";
+// const URL2: string = "http://localhost:2244/api";
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {
