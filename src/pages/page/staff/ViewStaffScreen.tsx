@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useSchoolCookie, useSchoolTeacher } from "../../hook/useSchoolAuth";
 import moment from "moment";
 import { useTeacherNote } from "../../../pagesForTeachers/hooks/useTeacher";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import toast from "react-hot-toast";
@@ -55,7 +55,7 @@ const TeacherRating: FC<iProps> = ({ props }) => {
 
 const ViewStaffScreen = () => {
   const dispatch = useDispatch();
-  const [showButton, setShowButton] = useState(true);
+  const [showButton, setShowButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchStaff, setStaffSearch] = useState("");
 
@@ -84,7 +84,6 @@ const ViewStaffScreen = () => {
         if (res.status === 200) {
           console.log(res);
           toast.success("Staff Has Been Successfully Deleted");
-          setShowButton(false);
         }
       });
     } catch (error) {
@@ -92,6 +91,7 @@ const ViewStaffScreen = () => {
       console.log(error);
     } finally {
       setLoading(false);
+      setShowButton(false);
     }
   };
 
@@ -105,6 +105,10 @@ const ViewStaffScreen = () => {
     const fullName = `${staff.staffName}`.toLowerCase();
     return fullName.includes(searchStaff.toLowerCase());
   });
+
+  const [valueStored, setValueStored] = useState<Array<string>>([]);
+
+  useEffect(() => {}, [valueStored]);
 
   return (
     <div className="">
@@ -254,74 +258,96 @@ const ViewStaffScreen = () => {
                       onClick={() => {}}
                     />
                   </Link>
-                  <div className="w-[180px] border-r">
-                    <label
-                      htmlFor="my_modal_delete"
-                      className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
-                    >
-                      Delete Staff
-                    </label>
-                  </div>
-                  <input
-                    type="checkbox"
-                    id="my_modal_delete"
-                    className="modal-toggle"
-                  />
-                  <div className="modal modal-middle">
-                    <div className="modal-box bg-white">
-                      <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
-                        Staff Deletion Notice
-                      </h3>
-                      <div className="mb text-blue-950">
-                        <p className="mb-3">
-                          You are about to permanently delete a staff record
-                          from your database. This action is irreversible and
-                          cannot be undone, and will result in the complete
-                          removal of all associated data, including employment
-                          history, contact information, and every other staff
-                          detail
-                        </p>
-                        <div className="flex items-center justify-center gap-3 font-semibold">
-                          <p>
-                            If <span className="text-red-500">YES</span>{" "}
-                            continue
+
+                  <div
+                    className="w-[180px] border-r"
+                    onClick={() => {
+                      valueStored.push(props?._id);
+                    }}
+                  >
+                    <div>
+                      <label
+                        htmlFor="my_modal_delete"
+                        className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                      >
+                        Delete Staff
+                      </label>
+                    </div>
+                    <input
+                      type="checkbox"
+                      id="my_modal_delete"
+                      className="modal-toggle"
+                    />
+                    <div className="modal modal-middle">
+                      <div className="modal-box bg-white">
+                        <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                          Staff Deletion Notice
+                        </h3>
+                        <div className="mb text-blue-950">
+                          <p className="mb-3">
+                            You are about to permanently delete a staff record
+                            from your database. This action is irreversible and
+                            cannot be undone, and will result in the complete
+                            removal of all associated data, including employment
+                            history, contact information, and every other staff
+                            detail
                           </p>
-                          <p>If NO cancel.</p>
+                          <div className="flex items-center justify-center gap-3 font-semibold  text-[15px]">
+                            <p>
+                              If{" "}
+                              <span className="text-red-500 text-[20px]">
+                                YES
+                              </span>{" "}
+                              continue,
+                            </p>
+                            <p className="">
+                              If <span className="text-[20px]">NO</span> cancel.
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="modal-action flex items-center">
-                        {loading ? (
-                          <Button
-                            name="Deleting Staff.."
-                            className="px-3 py-1  bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                            icon={
-                              loading && <ClipLoader color="white" size={18} />
-                            }
-                          />
-                        ) : (
-                          showButton && (
+                        <div className="modal-action flex items-center">
+                          {loading ? (
                             <Button
-                              name="Delete Staff"
-                              className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                              onClick={() => handeDeleteStaff(props?._id)}
+                              name="Deleting Staff.."
+                              className="px-3 py-1  bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                              icon={
+                                loading && (
+                                  <ClipLoader color="white" size={18} />
+                                )
+                              }
                             />
-                          )
-                        )}
-                        {showButton ? (
-                          <label
-                            htmlFor="my_modal_delete"
-                            className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                          >
-                            Cancel
-                          </label>
-                        ) : (
-                          <label
-                            htmlFor="my_modal_delete"
-                            className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                          >
-                            Close
-                          </label>
-                        )}
+                          ) : (
+                            showButton && (
+                              <Button
+                                name="Delete Staff"
+                                className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                onClick={() => handeDeleteStaff(valueStored[1])}
+                              />
+                            )
+                          )}
+                          {showButton ? (
+                            <label
+                              htmlFor="my_modal_delete"
+                              className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              onClick={() => {
+                                setValueStored([]);
+                              }}
+                            >
+                              Cancel
+                            </label>
+                          ) : (
+                            <label
+                              htmlFor="my_modal_delete"
+                              className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                              onClick={() => {
+                                setValueStored([]);
+                                setShowButton(true);
+                              }}
+                            >
+                              Close
+                            </label>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
