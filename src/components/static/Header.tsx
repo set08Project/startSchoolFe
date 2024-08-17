@@ -15,6 +15,8 @@ import SmallPiece from "./SmallPiece";
 import {
   MdAccountCircle,
   MdClose,
+  MdDataArray,
+  MdDataExploration,
   MdMenu,
   MdPeople,
   MdQueryStats,
@@ -93,7 +95,7 @@ const Header = () => {
           )}
         </Link>
         <div
-          className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
+          className="mx-2 md:mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-2 md:px-4 h-[35px] py-2 rounded-sm z-30"
           onClick={() => {
             setSess(!sess);
             dispatch(displaySessioned(!toggleSession));
@@ -101,7 +103,7 @@ const Header = () => {
         >
           {" "}
           <FaCalendar />
-          <span className="text-[12px] mx-1">
+          <span className="text-[12px] ml-2">
             Session: <span>{schoolInfo && schoolInfo[0]?.year} </span>
           </span>
           <div className="transition-all duration-300 ">
@@ -114,7 +116,7 @@ const Header = () => {
         </div>
 
         <div
-          className="flex items-center px-2 py-1 border rounded-full gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
+          className="flex items-center px-2 py-1 border rounded-full gap-1 md:gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
           onClick={() => {
             setSess(false);
 
@@ -122,7 +124,7 @@ const Header = () => {
             dispatch(changeToggleMenuState(false));
           }}
         >
-          <div className="w-8 h-8 rounded-full border flex justify-center items-center">
+          <div className="w-8 h-8  rounded-full border flex justify-center items-center">
             {toggleImage ? (
               <ClipLoader color="#172554" size={13} />
             ) : (
@@ -247,6 +249,11 @@ const Header = () => {
                 title: "Store",
                 icon: <FaStore />,
                 to: "store",
+              },
+              {
+                title: "History",
+                icon: <MdDataExploration />,
+                to: "result-history",
               },
               {
                 title: "Settings",
