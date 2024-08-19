@@ -28,6 +28,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useEffect, useState } from "react";
 import { makePayment } from "../../pages/api/schoolAPIs";
 import Button from "../reUse/Button";
+import PrimaryAdminScreen from "./PrimaryAdminScreen";
+import SecondaryAdminScreen from "./SecondaryAdminScreen";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -86,6 +88,7 @@ const Sider = () => {
       dispatch(changeStarting(false));
     }
   }, []);
+  console.log("first", data?.schoolTags[0].val);
 
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
@@ -196,6 +199,14 @@ const Sider = () => {
           <StoreScreen />
         </div>
       </div>
+
+
+      <div>
+        {data?.schoolTags[0].val === "Secondary School." ? (
+          <SecondaryAdminScreen />
+        ) : (
+          <PrimaryAdminScreen />
+        )}
 
       <div className="mt-10 px-2 flex flex-col h-[90%]">
         <NavLink
@@ -360,6 +371,7 @@ const Sider = () => {
           Settings
           <MdSettings />
         </NavLink>
+
       </div>
     </div>
   );

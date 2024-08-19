@@ -26,7 +26,6 @@ const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    // e.preventDefault();
     setLoading(true);
     const val = { email: state, enrollmentID: password };
 
