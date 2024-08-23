@@ -24,9 +24,15 @@ import { FaCertificate, FaPhotoFilm, FaStore, FaTable } from "react-icons/fa6";
 import { useReadOneClassInfo, useStudentInfo } from "../hooks/useStudentHook";
 import ClipLoader from "react-spinners/ClipLoader";
 import { schoolFeePayment } from "../api/studentAPI";
-import { useState } from "react";
-import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
+import { useEffect, useState } from "react";
+import {
+  useSchoolData,
+  useSchoolSessionData,
+} from "../../pages/hook/useSchoolAuth";
 import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
+import { readSchool } from "../../pages/api/schoolAPIs";
+import SecondaryStudentScreen from "./SecondaryStudentScreen";
+import PrimaryStudentScreen from "./PrimaryStudentScreen";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -37,6 +43,8 @@ const Sider = () => {
   const { studentInfo } = useStudentInfo();
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
   const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs);
+  const { data } = useSchoolData();
+  const user = useSelector((state: any) => state.user);
 
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
@@ -49,6 +57,24 @@ const Sider = () => {
       });
     }
   };
+
+  const [schoolData, setSchoolData] = useState(null);
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      if (studentInfo?.schoolIDs) {
+        try {
+          const data = await readSchool(studentInfo?.schoolIDs);
+
+          setSchoolData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchSchoolData();
+  }, [studentInfo?.schoolIDs]);
 
   let termRead: string = oneClass?.presentTerm!;
 
@@ -187,204 +213,12 @@ const Sider = () => {
       </div>
 
       {/* Settings */}
-      <div className="mt-8 px-2 flex text-[15px] flex-col h-[90%]">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Dashboard
-          <MdQueryStats />
-        </NavLink>
-        <NavLink
-          to="/my-classroom"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          My ClassRoom
-          <MdStadium />
-        </NavLink>
-
-        <NavLink
-          to="/your-subjects"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          My Subjects
-          <FaTable />
-        </NavLink>
-
-        {/* <NavLink
-          to="/lesson"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Practice Quiz
-          <MdQuiz />
-        </NavLink> */}
-
-        <NavLink
-          to="/CBT"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          <span>
-            CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
-          </span>
-          <MdQuiz />
-        </NavLink>
-
-        <NavLink
-          to="/lesson"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Lessons
-          <MdClass />
-        </NavLink>
-
-        <NavLink
-          to="/your-profile"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Profile
-          <CgProfile />
-        </NavLink>
-
-        <NavLink
-          to="/articles"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Article
-          <MdOutlineArticle />
-        </NavLink>
-
-        <NavLink
-          to="/assignment"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Assignments
-          <MdAssignmentAdd />
-        </NavLink>
-
-        <NavLink
-          to="/gallary"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Gallery
-          <FaPhotoFilm />
-        </NavLink>
-
-        <NavLink
-          to="/report"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Report
-          <MdReport />
-        </NavLink>
-
-        <NavLink
-          to="/complain"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Complain
-          <MdRadio />
-        </NavLink>
-
-        <NavLink
-          to="/result"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Result History
-          <FaCertificate />
-        </NavLink>
-
-        <NavLink
-          to="/store"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Store
-          <FaStore />
-        </NavLink>
-
-        <div className="flex-1" />
-
-        <NavLink
-          to="/your-settings"
-          className={({ isActive }) =>
-            isActive
-              ? "mt-10 duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
-              : "mt-10 duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Settings
-          <MdSettings />
-        </NavLink>
+      <div>
+        {schoolData?.data.schoolTags[0].val === "Secondary School." ? (
+          <SecondaryStudentScreen />
+        ) : (
+          <PrimaryStudentScreen />
+        )}
       </div>
     </div>
   );

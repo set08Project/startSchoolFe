@@ -52,9 +52,9 @@ const StudentDashboard = () => {
 
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
-  let resultData = gradeData?.reportCard.find((el: any) => {
+  let resultData = gradeData?.reportCard?.find((el: any) => {
     return (
-      el.classInfo ===
+      el?.classInfo ===
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
     );
   });
@@ -115,7 +115,7 @@ const StudentDashboard = () => {
           </div>
         </div>
 
-        <div className="min-w-[300px] overflow-hidden min-h-[300px] flex flex-col rounded-md border p-4 col-span-2">
+        <div className="min-w-[300px] overflow-hidden min-h-[3030px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
             <div>
               <div className="  gap-2 mb-10">
