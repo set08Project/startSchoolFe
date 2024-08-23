@@ -20,7 +20,6 @@ import {
 } from "../../hook/useSchoolAuth";
 import {
   createSchoolSubject,
-  // updateTermFee,
   updateClassroomTeacher,
   verifyPayment1st,
 } from "../../api/schoolAPIs";
@@ -29,7 +28,7 @@ import ClassModel from "./ClassModel";
 import ViewClassStudent from "./ViewClassStudent";
 import { mutate } from "swr";
 import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
-// import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
+import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
 interface iProps {
   props?: string;
@@ -148,17 +147,17 @@ const ClassDetailScreen = () => {
   const closeFeeModal = () => setFeeModalOpen(false);
 
   const handleUpdateFee = () => {
-    // updateTermFee(dataID!, classID!, {
-    //   class1stFee: firstTermFee,
-    //   class2ndFee: secondTermFee,
-    //   class3rdFee: thirdTermFee,
-    // }).then((res) => {
-    //   if (res.status === 201) {
-    //     toast.success("class fee updated");
-    //   } else {
-    //     toast.error(`${res?.response?.data?.messgae}`);
-    //   }
-    // });
+    updateTermFee(dataID!, classID!, {
+      class1stFee: firstTermFee,
+      class2ndFee: secondTermFee,
+      class3rdFee: thirdTermFee,
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success("class fee updated");
+      } else {
+        toast.error(`${res?.response?.data?.messgae}`);
+      }
+    });
     // console.log(`Fee updated to: ${feeAmount}`);
     closeFeeModal();
   };
