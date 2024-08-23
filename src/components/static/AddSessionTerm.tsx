@@ -82,9 +82,9 @@ const AddSessionTerm = () => {
       });
   };
   return (
-    <div className="flex justify-center bg-blue-50   ">
+    <div className="flex justify-center bg-blue-50">
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="w-[500px] min-h-[300px] border rounded-md bg-white shadow-lg p-4">
+      <div className="w-[320px] md:w-[500px] min-h-[300px] border rounded-md bg-[white] shadow-lg p-4">
         <p className="flex items-center justify-between my-4 ">
           <p className="font-bold">Add New Session</p>
 
@@ -97,31 +97,31 @@ const AddSessionTerm = () => {
         </p>
         <hr />
 
-        <p className="mt-2 leading-tight text-[13px] font-medium">
+        <p className="mt-2 leading-tight md:text-[13px] font-medium text-[11px]">
           Please note that each Term you create, holds records of that
           particular Term.
         </p>
 
         <div className="mt-10 w-full gap-2 flex items-center">
-          <div className="w-full">
-            <label className="font-medium text-[12px]">
+          <div className="w-full mt-1">
+            <label className="font-medium md:text-[12px] text-[10px]">
               Session Year <span className="text-red-500">*</span>
             </label>
             <Input
               placeholder="Session Year: 2023/2024"
-              className="mx-0 h-10 w-full"
+              className="mx-0 h-12 md:h-10 md:w-full w-[120px] text-[11px] md:text-[16px]"
               defaultValue={sessionData?.year}
               value={sessionData?.year}
             />
           </div>
 
           <div className="w-full -mt-5">
-            <label className="font-medium text-[12px]">
+            <label className="font-medium md:text-[12px] text-[10px]">
               Session Term <span className="text-red-500">*</span>
             </label>
 
             <select
-              className="select select-info bg-white border-[#3B82F6] select-bordered w-full mt-2"
+              className="select select-info bg-white border-[#3B82F6] select-bordered md:w-full mt-2 text-[9px] md:text-[13px]"
               value={end}
               onChange={(e) => {
                 setEnd(e.target.value);
