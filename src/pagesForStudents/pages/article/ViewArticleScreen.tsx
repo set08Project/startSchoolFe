@@ -76,7 +76,7 @@ const ViewArticleScreen = () => {
             </div>
           </div>
           <div
-            className="w-full text-black  mt-20"
+            className="w-full text-black grid grid-cols-1  mt-20"
             dangerouslySetInnerHTML={{ __html: oneArticle?.content }}
           />
           <br />

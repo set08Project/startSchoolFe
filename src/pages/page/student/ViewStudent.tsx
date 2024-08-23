@@ -15,7 +15,7 @@ import {
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import moment from "moment";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   deleteStudent,
   readSchool,
@@ -236,6 +236,9 @@ const ViewStudent = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
+  const [valueStored, setValueStored] = useState<Array<string>>([]);
+
+  useEffect(() => {}, [valueStored]);
   return (
     <div className="">
       {/* header */}
@@ -254,7 +257,7 @@ const ViewStudent = () => {
 
         <Button
           name="Add a new Student"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+          className="uppercase py- text-[12px] font-medium bg-blue-950 py-4 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
@@ -296,13 +299,10 @@ const ViewStudent = () => {
                         <div className="w-[130px] border-r">
                           {moment(props?.createdAt).format("ll")}
                         </div>
-
                         <Remark data={props} id={props?._id} />
-
                         <div className="w-[100px] border-r">
                           <AttendanceRatio props={props} />
                         </div>
-
                         <div className="w-[220px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
@@ -578,7 +578,6 @@ const ViewStudent = () => {
                             </label>
                           </div>
                         </div>
-
                         {/* name */}
                         <div className="w-[150px] flex justify-center border-r">
                           <img
@@ -589,7 +588,6 @@ const ViewStudent = () => {
                         <div className="w-[200px] border-r gap-2 font-bold">
                           {props?.studentFirstName} {props?.studentLastName}
                         </div>
-
                         <div className="w-[100px] border-r  ">
                           {props?.classAssigned}
                         </div>
@@ -606,9 +604,7 @@ const ViewStudent = () => {
                             ? props?.totalPerformance
                             : "0"}
                         </div>
-
                         <div className="w-[80px] border-r">3 of 5</div>
-
                         <Link
                           to={`student-details/${props?._id}`}
                           className="w-[180px] border-r"
@@ -621,79 +617,105 @@ const ViewStudent = () => {
                         </Link>
 
                         {/* Delete Toggle Modal And Fuctions Are Below */}
-                        <div className="w-[180px] border-r">
-                          <label
-                            htmlFor="my_modal_delete"
-                            className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
-                          >
-                            Delete Student
-                          </label>
-                        </div>
-                        <input
-                          type="checkbox"
-                          id="my_modal_delete"
-                          className="modal-toggle"
-                        />
-                        <div className="modal modal-middle">
-                          <div className="modal-box bg-white">
-                            <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
-                              Student Deletion Notice
-                            </h3>
-                            <div className="mb text-blue-950">
-                              <p className="mb-3 text-[14px]">
-                                You are about to permanently delete this student
-                                record from your database. This action is
-                                irreversible and cannot be undone, and will
-                                result in the complete removal of all associated
-                                data, including academic history, contact
-                                information, and every other student detail
-                              </p>
-                              <div className="flex items-center justify-center gap-3 font-semibold">
-                                <p>
-                                  If <span className="text-red-500">YES</span>{" "}
-                                  continue
+                        <div
+                          className="w-[180px] border-r"
+                          onClick={() => {
+                            valueStored.push(props?._id);
+                          }}
+                        >
+                          <div>
+                            <label
+                              htmlFor="my_modal_delete"
+                              className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+                            >
+                              Delete Student
+                            </label>
+                          </div>
+                          <input
+                            type="checkbox"
+                            id="my_modal_delete"
+                            className="modal-toggle"
+                            name="props_data"
+                          />
+                          <div className="modal modal-middle">
+                            <div className="modal-box bg-white">
+                              <h3 className="font-bold mb-3 text-lg text-center text-blue-950">
+                                Student Deletion Notice
+                              </h3>
+                              <div className="mb text-blue-950">
+                                <p className="mb-3 text-[14px]">
+                                  You are about to permanently delete this
+                                  student record from your database. This action
+                                  is irreversible and cannot be undone, and will
+                                  result in the complete removal of all
+                                  associated data, including academic history,
+                                  contact information, and every other student
+                                  detail
                                 </p>
-                                <p>If NO cancel.</p>
+                                <div className="flex items-center justify-center gap-3 font-semibold  text-[15px]">
+                                  <p>
+                                    If{" "}
+                                    <span className="text-red-500 text-[20px]">
+                                      YES
+                                    </span>{" "}
+                                    continue,
+                                  </p>
+                                  <p className="">
+                                    If <span className="text-[20px]">NO</span>{" "}
+                                    cancel.
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                            <div className="modal-action flex items-center">
-                              {loading ? (
-                                <Button
-                                  name="Deleting Student.."
-                                  className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                                  icon={<ClipLoader color="white" size={18} />}
-                                />
-                              ) : (
-                                showButton && (
+
+                              <div className="modal-action flex items-center">
+                                {loading ? (
                                   <Button
-                                    name="Delete Student"
-                                    className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
-                                    onClick={() =>
-                                      handeDeleteStudent(props?._id)
+                                    name="Deleting Student.."
+                                    className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                    icon={
+                                      <ClipLoader color="white" size={18} />
                                     }
                                   />
-                                )
-                              )}
-                              {showButton ? (
-                                <label
-                                  htmlFor="my_modal_delete"
-                                  className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                                >
-                                  Cancel
-                                </label>
-                              ) : (
-                                <label
-                                  htmlFor="my_modal_delete"
-                                  className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
-                                >
-                                  Close
-                                </label>
-                              )}
+                                ) : (
+                                  showButton && (
+                                    <Button
+                                      name="Delete Student"
+                                      className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                      onClick={() => {
+                                        handeDeleteStudent(valueStored[1]);
+                                      }}
+                                    />
+                                  )
+                                )}
+                                {showButton ? (
+                                  <label
+                                    htmlFor="my_modal_delete"
+                                    className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                                    onClick={() => {
+                                      setValueStored([]);
+                                    }}
+                                  >
+                                    Cancel
+                                  </label>
+                                ) : (
+                                  <label
+                                    htmlFor="my_modal_delete"
+                                    className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
+                                    onClick={() => {
+                                      setValueStored([]);
+                                      setShowButton(true);
+                                    }}
+                                  >
+                                    Close
+                                  </label>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div className="text-end text-[12px] font-bold"></div>
                   </div>
                 );
               })}

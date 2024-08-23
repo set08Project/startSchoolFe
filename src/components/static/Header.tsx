@@ -3,6 +3,7 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaMessage,
   FaNoteSticky,
   FaSchool,
   FaStore,
@@ -14,12 +15,15 @@ import SmallPiece from "./SmallPiece";
 import {
   MdAccountCircle,
   MdClose,
+  MdDataArray,
+  MdDataExploration,
   MdMenu,
   MdPeople,
   MdQueryStats,
   MdReport,
   MdSchool,
   MdSettings,
+  MdStayCurrentPortrait,
 } from "react-icons/md";
 import {
   changeMenuState,
@@ -30,12 +34,14 @@ import { useState } from "react";
 import Session from "./Session";
 import AddSession from "./AddSession";
 import {
+  useComplain,
   useSchoolData,
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FaPhotoVideo } from "react-icons/fa";
+import { FaCompressAlt, FaPhotoVideo } from "react-icons/fa";
 import AddSessionTerm from "./AddSessionTerm";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -63,6 +69,15 @@ const Header = () => {
 
   const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(data?._id);
+  const { complainData } = useComplain(data?._id);
+
+  const complainMessage = complainData
+    ?.map((el: any) => {
+      return el.resolve && el.seen;
+    })
+    ?.filter((el: boolean) => {
+      return el === false;
+    })?.length;
 
   return (
     <div
@@ -70,9 +85,17 @@ const Header = () => {
       onClick={() => {}}
     >
       {/* <div>  */}
-      <div className="flex items-center  justify-end w-[90%]">
+      <div className="flex items-center gap-2 justify-end w-[90%]">
+        <Link to="/report" className="relative">
+          <FaMessage />
+          {complainMessage > 0 && (
+            <span className="-top-2 left-2 text-[11px] mt-1 bg-red-500 text-white font-bold w-4 h-4 rounded-full absolute flex justify-center items-center">
+              {complainMessage >= 10 ? `10+` : complainMessage}
+            </span>
+          )}
+        </Link>
         <div
-          className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30"
+          className="mx-2 md:mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-2 md:px-4 h-[35px] py-2 rounded-sm z-30"
           onClick={() => {
             setSess(!sess);
             dispatch(displaySessioned(!toggleSession));
@@ -80,7 +103,7 @@ const Header = () => {
         >
           {" "}
           <FaCalendar />
-          <span className="text-[12px] mx-1">
+          <span className="text-[12px] ml-2">
             Session: <span>{schoolInfo && schoolInfo[0]?.year} </span>
           </span>
           <div className="transition-all duration-300 ">
@@ -93,7 +116,7 @@ const Header = () => {
         </div>
 
         <div
-          className="flex items-center px-2 py-1 border rounded-full gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
+          className="flex items-center px-2 py-1 border rounded-full gap-1 md:gap-3 duration-300 transition-all cursor-pointer z-10 bg-white shadow-sm"
           onClick={() => {
             setSess(false);
 
@@ -101,7 +124,7 @@ const Header = () => {
             dispatch(changeToggleMenuState(false));
           }}
         >
-          <div className="w-8 h-8 rounded-full border flex justify-center items-center">
+          <div className="w-8 h-8  rounded-full border flex justify-center items-center">
             {toggleImage ? (
               <ClipLoader color="#172554" size={13} />
             ) : (
@@ -226,6 +249,11 @@ const Header = () => {
                 title: "Store",
                 icon: <FaStore />,
                 to: "store",
+              },
+              {
+                title: "History",
+                icon: <MdDataExploration />,
+                to: "result-history",
               },
               {
                 title: "Settings",
