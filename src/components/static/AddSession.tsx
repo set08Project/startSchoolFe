@@ -4,7 +4,10 @@ import { displaySession } from "../../global/reduxState";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
-import { createNewSession } from "../../pages/api/schoolAPIs";
+import {
+  createNewSession,
+  createNewSessionTerm,
+} from "../../pages/api/schoolAPIs";
 import { useSchoolCookie, useSchoolData } from "../../pages/hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
@@ -36,8 +39,12 @@ const AddSession = () => {
           mutate(`api/view-school/${data?._id}`);
           if (!document.startViewTransition) {
             dispatch(displaySession(false));
-
-            toast.success("Session created");
+            createNewSessionTerm(res?.data?._id, { term: "1st Term" }).then(
+              () => {
+                toast.success("Term and Session created");
+                toast.success("Session created");
+              }
+            );
           } else {
             document.startViewTransition(() => {
               toast.error("Something went wrong");
@@ -49,12 +56,27 @@ const AddSession = () => {
             dispatch(displaySession(false));
             mutate(`api/view-school-session/${data?._id}`);
             mutate(`api/view-school/${data?._id}`);
-            toast.success("Session created");
+            console.log("read: ", res?.data?._id);
+            createNewSessionTerm(res?.data?._id, { term: "1st Term" }).then(
+              () => {
+                mutate(`api/view-school-session/${res?.data?._id}`);
+                mutate(`api/view-school/${res?.data?._id}`);
+                toast.success("Term and Session created");
+                toast.success("Session created");
+              }
+            );
           } else {
             document.startViewTransition(() => {
               mutate(`api/view-school-session/${data?._id}`);
               mutate(`api/view-school/${data?._id}`);
-              toast.success("Session created");
+              console.log("read and Display: ", res);
+              createNewSessionTerm(res?.data?._id, { term: "1st Term" }).then(
+                () => {
+                  mutate(`api/view-school-session/${res?.data?._id}`);
+                  mutate(`api/view-school/${res?.data?._id}`);
+                  toast.success("Session of First Term created");
+                }
+              );
               dispatch(displaySession(false));
             });
           }

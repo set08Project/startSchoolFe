@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { LiaGreaterThanSolid } from "react-icons/lia";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface iProps {
   name?: string;
@@ -13,8 +13,10 @@ const LittleHeader: FC<iProps> = ({ name, back }) => {
     <div>
       {" "}
       <div className="flex items-center text-blue-950 ">
-        Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
-        <div className="capitalize">{name}</div>
+        <Link to="/dashboard" className="flex items-center">
+          Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
+        </Link>
+        <div className="capitalize text-[17px] font-[500]">{name}</div>
         {back && (
           <div className="flex items-center">
             <LiaGreaterThanSolid size={13} className="mx-4 " />

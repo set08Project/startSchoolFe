@@ -30,6 +30,8 @@ import { mutate } from "swr";
 import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
 import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
+// import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
+
 interface iProps {
   props?: string;
 }

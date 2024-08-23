@@ -7,11 +7,11 @@ interface iProps {
 }
 
 let data = [
-  { val: "Nursery School", state: false, id: 1 },
-  { val: "Primary School", state: true, id: 2 },
+  // { val: "Nursery School", state: false, id: 1 },
+  { val: "Nur/Primary School", state: true, id: 2 },
   { val: "Secondary School.", state: false, id: 3 },
-  { val: "Tertiary School.", state: false, id: 4 },
-  { val: "Kindergarten Schhol.", state: false, id: 5 },
+  // { val: "Tertiary School.", state: false, id: 4 },
+  // { val: "Kindergarten Schhol.", state: false, id: 5 },
 ];
 
 const initialState = {
@@ -73,7 +73,12 @@ const reduxState = createSlice({
       let findData: any = state.categoryData.find((el: any) => {
         return el.id === payload.id;
       });
-      findData.state = !findData.state;
+      if (findData && !findData.state) {
+        state.categoryData.forEach((el: any) => {
+          el.state = false;
+        });
+        findData.state = true;
+      }
     },
 
     changeMenuState: (state, { payload }) => {

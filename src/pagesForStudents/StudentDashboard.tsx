@@ -117,7 +117,7 @@ const StudentDashboard = () => {
           </div>
         </div>
 
-        <div className="min-w-[300px] overflow-hidden min-h-[300px] flex flex-col rounded-md border p-4 col-span-2">
+        <div className="min-w-[300px] overflow-hidden min-h-[3030px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
             <div>
               <div className="  gap-2 mb-10">
