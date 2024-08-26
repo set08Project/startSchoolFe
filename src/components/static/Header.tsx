@@ -203,66 +203,129 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <SmallPiece
-            name={[
-              {
-                title: "Dashboard",
-                icon: <MdQueryStats />,
-                to: "/",
-              },
-              {
-                title: "View Staffs",
-                icon: <MdPeople />,
-                to: "view-staff",
-              },
-              {
-                title: "View Students",
-                icon: <FaBarsProgress />,
-                to: "view-students",
-              },
-              {
-                title: "View Classrooms",
-                icon: <FaSchool />,
-                to: "class-room",
-              },
-              {
-                title: "View Subjects",
-                icon: <MdSchool />,
-                to: "subjects",
-              },
-              {
-                title: "Complains",
-                icon: <MdReport />,
-                to: "report",
-              },
-              {
-                title: "Lesson Notes",
-                icon: <FaNoteSticky />,
-                to: "lesson-note",
-              },
-              {
-                title: "Gallaries",
-                icon: <FaPhotoVideo />,
-                to: "view-gallery",
-              },
-              {
-                title: "Store",
-                icon: <FaStore />,
-                to: "store",
-              },
-              {
-                title: "History",
-                icon: <MdDataExploration />,
-                to: "result-history",
-              },
-              {
-                title: "Settings",
-                icon: <MdSettings />,
-                to: "settings",
-              },
-            ]}
-            but
-          />
+          {data?.schoolTags[0].val === "Secondary School." ? (
+            <SmallPiece
+              name={[
+                {
+                  title: "Dashboard",
+                  icon: <MdQueryStats />,
+                  to: "/",
+                },
+                {
+                  title: "View Staffs",
+                  icon: <MdPeople />,
+                  to: "view-staff",
+                },
+                {
+                  title: "View Students",
+                  icon: <FaBarsProgress />,
+                  to: "view-students",
+                },
+                {
+                  title: "View Classrooms",
+                  icon: <FaSchool />,
+                  to: "class-room",
+                },
+                {
+                  title: "View Subjects",
+                  icon: <MdSchool />,
+                  to: "subjects",
+                },
+                {
+                  title: "Complains",
+                  icon: <MdReport />,
+                  to: "report",
+                },
+                {
+                  title: "Lesson Notes",
+                  icon: <FaNoteSticky />,
+                  to: "lesson-note",
+                },
+                {
+                  title: "Gallaries",
+                  icon: <FaPhotoVideo />,
+                  to: "view-gallery",
+                },
+                {
+                  title: "Store",
+                  icon: <FaStore />,
+                  to: "store",
+                },
+                {
+                  title: "History",
+                  icon: <MdDataExploration />,
+                  to: "result-history",
+                },
+                {
+                  title: "Settings",
+                  icon: <MdSettings />,
+                  to: "settings",
+                },
+              ]}
+              but
+            />
+          ) : (
+            <SmallPiece
+              name={[
+                {
+                  title: "Dashboard",
+                  icon: <MdQueryStats />,
+                  to: "/",
+                },
+                {
+                  title: "View Staffs",
+                  icon: <MdPeople />,
+                  to: "view-staff",
+                },
+                {
+                  title: "View Students",
+                  icon: <FaBarsProgress />,
+                  to: "view-students",
+                },
+                {
+                  title: "View Classrooms",
+                  icon: <FaSchool />,
+                  to: "class-room",
+                },
+                {
+                  title: "View Subjects",
+                  icon: <MdSchool />,
+                  to: "subjects",
+                },
+                {
+                  title: "Complains",
+                  icon: <MdReport />,
+                  to: "report",
+                },
+                {
+                  title: "Lesson Notes",
+                  icon: <FaNoteSticky />,
+                  to: "lesson-note",
+                },
+                {
+                  title: "Gallaries",
+                  icon: <FaPhotoVideo />,
+                  to: "view-gallery",
+                },
+                {
+                  title: "Store",
+                  icon: <FaStore />,
+                  to: "store",
+                },
+                {
+                  title: "History",
+                  icon: <MdDataExploration />,
+                  to: "result-history",
+                },
+                {
+                  title: "Settings",
+                  icon: <MdSettings />,
+                  to: "settings",
+                },
+              ]}
+              but
+            />
+          )}
         </div>
       )}
     </div>

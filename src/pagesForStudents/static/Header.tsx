@@ -29,13 +29,14 @@ import {
   changeToggleMenuState,
   displaySessioned,
 } from "../../global/reduxState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Session from "./Session";
 import SmallPiece from "./SmallPiece";
 import { useStudentInfo } from "../hooks/useStudentHook";
 import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { CgProfile } from "react-icons/cg";
+import { readSchool } from "../../pages/api/schoolAPIs";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -60,7 +61,22 @@ const Header = () => {
       });
     }
   };
+  const [schoolData, setSchoolData] = useState(null);
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      if (studentInfo?.schoolIDs) {
+        try {
+          const data = await readSchool(studentInfo?.schoolIDs);
 
+          setSchoolData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchSchoolData();
+  }, [studentInfo?.schoolIDs]);
   return (
     <div
       className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
@@ -154,72 +170,135 @@ const Header = () => {
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
-          <SmallPiece
-            name={[
-              {
-                title: "Dashboard",
-                icon: <MdQueryStats />,
-                to: "/dashboard",
-              },
-              {
-                title: "My ClassRoom",
-                icon: <MdStadium />,
-                to: "my-classroom",
-              },
-              {
-                title: "My Subject",
-                icon: <FaTable />,
-                to: "your-subjects",
-              },
-              {
-                title: `CBT (For SSS 3 Only)`,
-                icon: <MdQuiz />,
-                to: "CBT",
-              },
-              {
-                title: "Lessons",
-                icon: <MdClass />,
-                to: "lesson",
-              },
-              {
-                title: "Profile",
-                icon: <CgProfile />,
-                to: "your-profile",
-              },
-              {
-                title: "Articles",
-                icon: <MdOutlineArticle />,
-                to: "articles",
-              },
-              {
-                title: "Assignments",
-                icon: <MdAssignmentAdd />,
-                to: "assignment",
-              },
-              {
-                title: "Gallaries",
-                icon: <FaPhotoFilm />,
-                to: "gallary",
-              },
-              {
-                title: "Reports",
-                icon: <MdReport />,
-                to: "report",
-              },
-              {
-                title: "complain",
-                icon: <MdRadio />,
-                to: "complain",
-              },
+          {schoolData?.data.schoolTags[0] === "Secondary School." ? (
+            <div>
+              <SmallPiece
+                name={[
+                  {
+                    title: "Dashboard",
+                    icon: <MdQueryStats />,
+                    to: "/dashboard",
+                  },
+                  {
+                    title: "My ClassRoom",
+                    icon: <MdStadium />,
+                    to: "my-classroom",
+                  },
+                  {
+                    title: "My Subject",
+                    icon: <FaTable />,
+                    to: "your-subjects",
+                  },
+                  {
+                    title: `CBT (For SSS 3 Only)`,
+                    icon: <MdQuiz />,
+                    to: "CBT",
+                  },
+                  {
+                    title: "Lessons",
+                    icon: <MdClass />,
+                    to: "lesson",
+                  },
+                  {
+                    title: "Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
+                    title: "Articles",
+                    icon: <MdOutlineArticle />,
+                    to: "articles",
+                  },
+                  {
+                    title: "Assignments",
+                    icon: <MdAssignmentAdd />,
+                    to: "assignment",
+                  },
+                  {
+                    title: "Gallaries",
+                    icon: <FaPhotoFilm />,
+                    to: "gallary",
+                  },
+                  {
+                    title: "Reports",
+                    icon: <MdReport />,
+                    to: "report",
+                  },
+                  {
+                    title: "complain",
+                    icon: <MdRadio />,
+                    to: "complain",
+                  },
 
-              {
-                title: "Seetings",
-                icon: <MdSettings />,
-                to: "your-profile",
-              },
-            ]}
-            but
-          />
+                  {
+                    title: "Seetings",
+                    icon: <MdSettings />,
+                    to: "your-profile",
+                  },
+                ]}
+                but
+              />
+            </div>
+          ) : (
+            <div>
+              <SmallPiece
+                name={[
+                  {
+                    title: "Dashboard",
+                    icon: <MdQueryStats />,
+                    to: "/dashboard",
+                  },
+                  {
+                    title: "My ClassRoom",
+                    icon: <MdStadium />,
+                    to: "my-classroom",
+                  },
+                  {
+                    title: "My Subject",
+                    icon: <FaTable />,
+                    to: "your-subjects",
+                  },
+                  {
+                    title: "Lessons",
+                    icon: <MdClass />,
+                    to: "lesson",
+                  },
+                  {
+                    title: "Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
+                    title: "Assignments",
+                    icon: <MdAssignmentAdd />,
+                    to: "assignment",
+                  },
+                  {
+                    title: "Gallaries",
+                    icon: <FaPhotoFilm />,
+                    to: "gallary",
+                  },
+                  {
+                    title: "Reports",
+                    icon: <MdReport />,
+                    to: "report",
+                  },
+                  {
+                    title: "complain",
+                    icon: <MdRadio />,
+                    to: "complain",
+                  },
+
+                  {
+                    title: "Seetings",
+                    icon: <MdSettings />,
+                    to: "your-profile",
+                  },
+                ]}
+                but
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
