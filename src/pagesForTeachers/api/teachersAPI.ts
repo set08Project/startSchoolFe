@@ -1,6 +1,5 @@
 import axios from "axios";
 
-<<<<<<< HEAD
 const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
@@ -8,12 +7,11 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe.onrender.com/api";
 
 // const URL: string = "https://startschool.onrender.com/api";
-=======
+
 // const URL: string =
 //   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_URL;
 
-const URL: string = "https://startschoolbe.onrender.com/api";
->>>>>>> 34ef735e2fd712e8b5fcc558a494490b63a84f1e
+// const URL: string = "https://startschoolbe.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {

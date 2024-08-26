@@ -20,10 +20,9 @@ const Register = () => {
     setLoading(true);
     if (email !== "") {
       registerSchool(email).then((res) => {
-       
         if (res.status === 201) {
           setLoading(false);
-          navigate("/auth/register-message");
+          navigate("/auth/enquiry-form");
         } else {
           setLoading(false);
           toast.error(
