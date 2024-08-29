@@ -18,6 +18,7 @@ const initialState = {
   test: [{ instruction: {} }, { question: [] }],
   testTry: { instruction: {}, question: [] },
   user: "" || null,
+  getEmail: "" || null,
   userStatus: "" || null,
   payRef: "" || null,
   toggle: false,
@@ -50,6 +51,9 @@ const reduxState = createSlice({
   name: "schoolProject",
   initialState,
   reducers: {
+    getEntryEmail: (state: any, { payload }) => {
+      state.getEmail = payload;
+    },
     loginState: (state: any, { payload }) => {
       state.user = payload;
     },
@@ -214,6 +218,7 @@ const reduxState = createSlice({
 });
 
 export const {
+  getEntryEmail,
   emptyCart,
   viewMonitor,
   changeStarting,

@@ -13,8 +13,6 @@ const TopRatedTeacher = () => {
     },
   ]);
 
-  console.log("show me: ", rate);
-
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">
       {rate?.map((props: any, i: number) => (

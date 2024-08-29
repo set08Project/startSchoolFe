@@ -34,8 +34,12 @@ const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
 import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
 import SuccessfulPaymentScreen from "../pages/page/payment/PaymentSuccessfulScreen";
 import DownloadTest from "../pages/page/payment/DownloadTest";
-import Expenditure from "../pages/page/expenditure/expenditure";
+
 import AllExpenditures from "../pages/page/expenditure/AllExpenditures";
+
+const Expenditure = React.lazy(
+  () => import("../pages/page/expenditure/expenditure")
+);
 
 const AllArticle = React.lazy(
   () => import("../pages/home/screens/AllArticles")
