@@ -6,6 +6,9 @@ import pic1 from "../../../assets/pix2.png";
 import pic2 from "../../../assets/pix3.png";
 import pic3 from "../../../assets/pix4.png";
 import { useSelector } from "react-redux";
+import { updateRegisterationStatus } from "../../api/schoolAPIs";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const pix = [pic, pic1, pic2, pic3];
 
@@ -16,7 +19,8 @@ const EnquiryForm = () => {
 
   const [schoolName, setSchoolName] = useState<string>("");
   const [schoolLocation, setSchoolLocation] = useState<string>("");
-  const [schoolCategory, setSchoolCategory] = useState<string>("");
+  const [schoolCategory, setSchoolCategory] =
+    useState<string>("Nursery/Primary");
   const [schoolOrganization, setSchoolOrganization] = useState<string>("");
 
   const [schoolOrganizationToggle, setSchoolOrganizationToggle] =
@@ -33,6 +37,7 @@ const EnquiryForm = () => {
   };
 
   const [count, setCount] = useState<number>(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let timer: NodeJS.Timer | null | any = null;
@@ -138,8 +143,8 @@ const EnquiryForm = () => {
                   <option disabled selected>
                     Choose School Category?
                   </option>
-                  <option>Nursery/Primary</option>
-                  <option>Secondary</option>
+                  <option value={"Nursery/Primary"}>Nursery/Primary</option>
+                  <option value={"Secondary"}>Secondary</option>
                 </select>
               </div>
               <div className="ml-4 mt-3 h-[20%] w-full flex flex-col gap-5">
@@ -203,13 +208,19 @@ const EnquiryForm = () => {
                 <button
                   className="py-2 px-8 mt-4 rounded-md bg-blue-950 text-white font-bold"
                   onClick={() => {
-                    console.log(
+                    updateRegisterationStatus({
+                      email: schoolEmail,
                       schoolPhoneNumber,
                       schoolName,
                       schoolCategory,
                       schoolLocation,
-                      schoolOrganization
-                    );
+                      schoolOrganization,
+                    }).then((res) => {
+                      if (res?.data?.status === 201) {
+                        toast.success("School registration successful!");
+                        navigate("/auth/register-message");
+                      }
+                    });
                   }}
                 >
                   submit
