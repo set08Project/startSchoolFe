@@ -11,8 +11,10 @@ const RegisterCard = () => {
         {/* <div className="mb-5 w-20 h-20 rounded-full border flex justify-center items-center font-bold text-blue-600 text-[30px]">
           HMO
         </div> */}
-        <div className="text-[26px] font-bold mb-3">Account Verification</div>
-        <div className=" -mt-4">A mail has been sent to you...</div>
+        <div className="text-[26px] font-bold mb-3">
+          Account Verification in Process
+        </div>
+        <div className=" -mt-4">A mail will be sent to you very soon...</div>
         <br />
         <div className="w-[97%] border-b " />
         <br />

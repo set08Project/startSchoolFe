@@ -3,13 +3,61 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../pagesForTeachers/components/reUse/Button";
 import { Link } from "react-router-dom";
+import {
+  useTermBudget,
+  useTermExpenses,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useSchoolData } from "../../hook/useSchoolAuth";
+import moment from "moment";
+import { createExpense, setTermBudet } from "../../api/schoolAPIs";
+import { mutate } from "swr";
+import toast, { Toaster } from "react-hot-toast";
 
 const expenditure = () => {
   const [budget, setBudget] = useState<number>();
+
+  const [amount, setAmount] = useState<string>();
+  const [item, setItem] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [paymentCategory, setPaymentCategory] = useState<string>();
+  const [paymentMode, setPaymentMode] = useState<string>();
+
+  const { data } = useSchoolData();
+  const { termlyExpense } = useTermExpenses(data?._id);
+  const { termBudget } = useTermBudget(data?._id);
+
+  const addBudget = async () => {
+    await setTermBudet(data?._id, budget).then((res) => {
+      toast.success("budget created successfully");
+      mutate(`api/view-term-budget/${data?._id}`);
+    });
+  };
+
+  const addExpenseEntry = async () => {
+    await createExpense(data?._id, {
+      item,
+      description,
+      paymentCategory,
+      amount: parseInt(amount),
+      paymentMode,
+    }).then(() => {
+      toast.success("Expense created successfully");
+      mutate(`api/view-expense/${data?._id}`);
+    });
+  };
+
+  const expenseData = termlyExpense?.data?.expense
+    ?.map((el: any) => {
+      return el?.amount ? el?.amount : 0;
+    })
+    .reduce((a: number, b: number) => {
+      return a + b;
+    }, 0);
+
   return (
     <div>
       <LittleHeader name={"Expenditures"} />
-
+      <Toaster position="top-center" reverseOrder={true} />
       <div className="flex w-full justify-between items-start mb-5">
         <div className="modal-action">
           <label
@@ -31,6 +79,7 @@ const expenditure = () => {
             <label
               htmlFor="my_modal_expenses"
               className="btn text-white py-4 px-6 bg-red-500 border hover:bg-red-600 scale-105"
+              onClick={addBudget}
             >
               Budget Set
             </label>
@@ -49,12 +98,12 @@ const expenditure = () => {
       <div className="w-full mb-[50px] min-h-[150px] grid grid-cols-1 lg:grid-cols-2 gap-3 transition-all duration-300">
         <div className=" border rounded-md grid grid-cols-2">
           <div className="h-full p-2">
-            <div className="font-medium mb-5">EXPENDITURE DASHBOARD</div>
+            <div className="font-semibold mb-5">EXPENDITURE DASHBOARD</div>
             <h4 className="mb-1 font-medium">Main Budget :</h4>
             <h1 className="mb-2 font-bold text-[25px] text-blue-950">
-              ₦200,000.00
+              ₦{termBudget?.data?.toLocaleString()}
             </h1>
-            <div className="flex items-center gap-[10px] text-blue-950">
+            <div className="flex items-center gap-[10px] text-blue-950 text-[12px]">
               <div>Currency: </div>
               <div>Naira (₦)</div>
             </div>
@@ -62,15 +111,36 @@ const expenditure = () => {
           <div className="h-full p-2 flex items-center justify-center">
             <div className="w-full p-2 h-full rounded-l-[inherit] border md:rounded-md md:h-[90%]">
               <h4 className="mb-3 font-medium">Total Expenses :</h4>
-              <h1 className="font-bold text-[25px] text-blue-950">₦125,000</h1>
+              <h1
+                className={`font-bold text-[25px] ${
+                  expenseData > termBudget?.data
+                    ? "text-red-500"
+                    : "text-green-500"
+                } text-blue-950`}
+              >
+                ₦{expenseData?.toLocaleString()}
+              </h1>
+
+              {expenseData < termBudget?.data ? (
+                <p className="text-[12px] font-semibold">
+                  Still within <strong>BUDGET</strong>
+                </p>
+              ) : (
+                <p className="text-[12px] font-semibold">
+                  Out of <strong>BUDGET</strong> by{" "}
+                  <span className="text-red-500">
+                    ₦{((termBudget?.data - expenseData) * -1).toLocaleString()}
+                  </span>
+                </p>
+              )}
             </div>
           </div>
         </div>
-        <div className="border h-full rounded-md">Chart</div>
+        <div className="border h-full rounded-md p-2 text-[12px]">Chart</div>
       </div>
       <div>
         <div className="flex w-full justify-between items-start">
-          <Input placeholder="Search Staff Name" className="ml-0" />
+          <Input placeholder="Search for expense ITEM" className="ml-1" />
 
           <div className="modal-action ml-6">
             <label
@@ -97,9 +167,9 @@ const expenditure = () => {
                   <input
                     className="h-[45px] text-[12px] px-2 w-full border rounded-md mb-2 "
                     placeholder="set termly budget in Naira eg: 203000"
-                    value={budget}
+                    value={item}
                     onChange={(e: any) => {
-                      setBudget(e.target.value);
+                      setItem(e.target.value);
                     }}
                   />
                 </div>
@@ -108,9 +178,9 @@ const expenditure = () => {
                   <textarea
                     className="min-h-[100px] resize-none text-[12px] px-2 w-full border rounded-md mb-2 "
                     placeholder="Description"
-                    value={budget}
+                    value={description}
                     onChange={(e: any) => {
-                      setBudget(e.target.value);
+                      setDescription(e.target.value);
                     }}
                   />
                 </div>
@@ -120,19 +190,31 @@ const expenditure = () => {
                     <input
                       className="h-[45px]  text-[12px] px-2 w-full border rounded-md mb-2 "
                       placeholder="Amount"
-                      value={budget}
+                      value={amount}
                       onChange={(e: any) => {
-                        setBudget(e.target.value);
+                        setAmount(e.target.value);
                       }}
                     />
-                    <select className="select select-bordered w-full max-w-xs">
+                    <select
+                      className="select select-bordered w-full max-w-xs"
+                      value={paymentMode}
+                      onChange={(e) => {
+                        setPaymentMode(e.target.value);
+                      }}
+                    >
                       <option disabled selected>
                         Choose Payment Method
                       </option>
                       <option value="Cash">Cash</option>
                       <option value="Transfer">Transfer</option>
                     </select>
-                    <select className="select select-bordered w-full max-w-xs">
+                    <select
+                      className="select select-bordered w-full max-w-xs"
+                      value={paymentCategory}
+                      onChange={(e) => {
+                        setPaymentCategory(e.target.value);
+                      }}
+                    >
                       <option disabled selected>
                         Payment Category
                       </option>
@@ -156,6 +238,7 @@ const expenditure = () => {
                 <label
                   htmlFor="my_modal_expenses_modal"
                   className="btn text-white py-4 px-6 bg-green-500 border hover:bg-green-600 scale-105 w-[200px]"
+                  onClick={addExpenseEntry}
                 >
                   Approve
                 </label>
@@ -176,7 +259,7 @@ const expenditure = () => {
             </div>
           </Link>
         </div>
-        <div className="text-[gray] w-[1000px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Date</div>
           <div className="w-[120px] border-r">Amount</div>
           <div className="w-[200px] border-r">Item</div>
@@ -186,34 +269,38 @@ const expenditure = () => {
           <div className="w-[120px] border-r">Category</div>
         </div>
 
-        <div className=" w-[1000px] overflow-hidden">
+        <div className=" w-[1100px] overflow-hidden">
           <div className="transition-all duration-300">
-            <div>
-              <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
-                {/* start */}
+            {termlyExpense?.data?.expense?.map((props: any) => (
+              <div key={props?._id}>
+                <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
+                  {/* start */}
 
-                <div className="w-[130px] border-r">Hello</div>
+                  <div className="w-[130px] border-r">
+                    {moment(props?.createdAt).format("ll")}
+                  </div>
 
-                <div
-                  className="w-[120px] border-r 
+                  <div
+                    className="w-[120px] border-r 
                      text-red-600"
-                >
-                  ₦5,500
-                </div>
+                  >
+                    ₦{props?.amount?.toLocaleString()}
+                  </div>
 
-                <div className="w-[200px] border-r">Batch of Sports wears</div>
-                {/* name */}
-                <div className="w-[120px] flex justify-center border-r">
-                  Cash
-                </div>
-                <div className="w-[300px] border-r">
-                  Bought the batch of sports wears from dealer
-                </div>
+                  <div className="w-[200px] border-r">{props?.item}</div>
+                  {/* name */}
+                  <div className="w-[120px] flex justify-center border-r">
+                    {props?.paymentMode}
+                  </div>
+                  <div className="w-[300px] border-r">{props?.description}</div>
 
-                {/* check */}
-                <div className="w-[120px] border-r  ">Clothes</div>
+                  {/* check */}
+                  <div className="w-[120px] border-r  ">
+                    {props?.paymentCategory}
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

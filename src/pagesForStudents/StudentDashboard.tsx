@@ -50,6 +50,8 @@ const StudentDashboard = () => {
   const { termData } = useViewTermDetail(termID);
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
+  console.log(gradeData);
+
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
   let resultData = gradeData?.reportCard?.find((el: any) => {
@@ -218,5 +220,4 @@ const StudentDashboard = () => {
     </div>
   );
 };
-
 export default StudentDashboard;

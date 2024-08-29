@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+// import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
+const URL: string = "https://startschoolbe.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -253,9 +253,6 @@ export const createTeacherLessonNote = async (
   data: {}
 ) => {
   try {
-    console.log("reading...", teacherID);
-    console.log("school...", schoolID);
-
     return await axios
       .post(`${URL}/create-lesson-note/${schoolID}/${teacherID}`, data)
       .then((res: any) => {

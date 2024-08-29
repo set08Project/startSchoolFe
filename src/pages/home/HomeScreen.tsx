@@ -47,8 +47,6 @@ const HomeScreen = () => {
     });
   };
 
-  console.log("schoolSubject:");
-
   const handleDisplayStudent = () => {
     if (!document.startViewTransition) {
       dispatch(displayStudent(true));

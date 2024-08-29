@@ -88,7 +88,6 @@ const Sider = () => {
       dispatch(changeStarting(false));
     }
   }, []);
-  console.log("first", data?.schoolTags[0].val);
 
   return (
     <div className="overflow-y-auto min-h-[100vh] w-full border-r bg-white text-blue-900 flex flex-col ">
@@ -201,7 +200,7 @@ const Sider = () => {
       </div>
 
       <div>
-        {data?.schoolTags[0].val === "Secondary School." ? (
+        {data?.categoryType === "Secondary" ? (
           <SecondaryAdminScreen />
         ) : (
           <PrimaryAdminScreen />

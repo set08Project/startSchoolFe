@@ -29,8 +29,7 @@ const SignIn = () => {
     setLoading(true);
     const val = { email: state, enrollmentID: password };
 
-    getSchoolCookie().then((res) => {
-    });
+    getSchoolCookie().then((res) => {});
 
     loginSchool(val)
       .then((res) => {

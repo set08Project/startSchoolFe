@@ -1,13 +1,85 @@
 import axios from "axios";
 
-const URL2: string =
-  import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
+// const URL2: string =
+//   import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
-// const URL2: string = "https://startschoolbe.onrender.com";
+const URL: string = "https://startschoolbe.onrender.com/api";
+const URL2: string = "https://startschoolbe.onrender.com";
+
+export const setTermBudet = async (schoolID: string, budget: number) => {
+  try {
+    return await axios
+      .patch(`${URL}/set-budget/${schoolID}`, { budget })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewTermlyBudget = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-term-budget/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewTermlyExpense = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-expense/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const createExpense = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-expense/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateRegisterationStatus = async (data: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/school-request-registration`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const approveRegisterationStatus = async () => {
+  try {
+    return await axios
+      .patch(`${URL}/approved-school-registration`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
@@ -668,8 +740,6 @@ export const deleteGallary = async (schoolID: string, gallaryID: string) => {
     return await axios
       .get(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
       .then((res: any) => {
-        console.log(res?.data);
-
         return res?.data;
       });
   } catch (error) {
@@ -694,8 +764,6 @@ export const viewSchoolSessionTerm = async (sessionID: any) => {
     return await axios
       .get(`${URL}/view-present-school-session/${sessionID}`)
       .then((res: any) => {
-        console.log(sessionID);
-
         return res?.data;
       });
   } catch (error) {
@@ -711,7 +779,7 @@ export const verifyPayment1st = async (schoolID: string, studentID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -726,7 +794,7 @@ export const verifyPayment2nd = async (schoolID: string, studentID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -741,7 +809,7 @@ export const verifyPayment3rd = async (schoolID: string, studentID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
