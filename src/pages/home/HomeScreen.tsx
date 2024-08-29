@@ -47,8 +47,6 @@ const HomeScreen = () => {
     });
   };
 
-  console.log("schoolSubject:");
-
   const handleDisplayStudent = () => {
     if (!document.startViewTransition) {
       dispatch(displayStudent(true));
@@ -242,6 +240,14 @@ const HomeScreen = () => {
                 <Button
                   name="View School Fees Payments"
                   className="bg-black hover:bg-neutral-800 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                />
+              </Link>
+
+              <Link to="/expenditures">
+                <Button
+                  name="Expenditures"
+                  className="bg-green-600 hover:bg-green-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                  onClick={handleDisplayNotice}
                 />
               </Link>
             </div>

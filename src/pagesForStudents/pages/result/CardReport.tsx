@@ -48,7 +48,7 @@ const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
     <div className="w-[180px] border-r">
       <Button
         name="Add Comment"
-        className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+        className="pl-4 py-3 w-[85%] bg-white text-white  hover:bg-neutral-800 transition-all duration-300"
         onClick={() => {
           if (stateValue !== "") {
             reportCardRemark(teacherInfo?._id, props?._id, {
