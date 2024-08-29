@@ -7,9 +7,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { registerSchool } from "../../api/schoolAPIs";
 import logo from "../../../assets/mainLogo.png";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { getEntryEmail } from "../../../global/reduxState";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,6 +24,7 @@ const Register = () => {
     if (email !== "") {
       registerSchool(email).then((res) => {
         if (res.status === 201) {
+          dispatch(getEntryEmail(email));
           setLoading(false);
           navigate("/auth/enquiry-form");
         } else {

@@ -22,10 +22,10 @@ const PhoneNumberInput = ({ onChange }) => {
   };
 
   return (
-    <div className="w-full lg:w-[50%] max-w-md mx-auto ml-10">
+    <div className="w-[70%] ">
       <label
         htmlFor="phone-input"
-        className="block text-sm font-medium text-gray-700 mb-2"
+        className="block text-sm font-medium text-gray-700 mb-2 outline-none"
       >
         Phone Number
       </label>
@@ -35,7 +35,7 @@ const PhoneNumberInput = ({ onChange }) => {
         defaultCountry="NG"
         value={value}
         onChange={handlePhoneChange}
-        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className="w-full p-3 outline-none border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
         placeholder="Enter your phone number"
       />
     </div>

@@ -140,7 +140,7 @@ const expenditure = () => {
       </div>
       <div>
         <div className="flex w-full justify-between items-start">
-          <Input placeholder="Search Staff Name" className="ml-0" />
+          <Input placeholder="Search for expense ITEM" className="ml-1" />
 
           <div className="modal-action ml-6">
             <label
