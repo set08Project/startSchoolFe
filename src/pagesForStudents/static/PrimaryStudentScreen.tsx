@@ -33,7 +33,7 @@ import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
 import { readSchool } from "../../pages/api/schoolAPIs";
 
 const PrimaryStudentScreen = () => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const showing = useSelector((state: any) => state.showStaffComp);
   const handleToggleMenuFalse = () => {
@@ -102,21 +102,6 @@ const PrimaryStudentScreen = () => {
         </NavLink> */}
 
         <NavLink
-          to="/CBT"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          <span>
-            CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
-          </span>
-          <MdQuiz />
-        </NavLink>
-
-        <NavLink
           to="/lesson"
           className={({ isActive }) =>
             isActive
@@ -140,19 +125,6 @@ const PrimaryStudentScreen = () => {
         >
           Profile
           <CgProfile />
-        </NavLink>
-
-        <NavLink
-          to="/articles"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Article
-          <MdOutlineArticle />
         </NavLink>
 
         <NavLink
