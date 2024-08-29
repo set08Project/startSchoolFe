@@ -9,6 +9,54 @@ const URL: string =
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
 
+export const setTermBudet = async (schoolID: string, budget: number) => {
+  try {
+    return await axios
+      .patch(`${URL}/set-budget/${schoolID}`, { budget })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewTermlyBudget = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-term-budget/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewTermlyExpense = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-expense/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const createExpense = async (schoolID: string, data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/create-expense/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
     return await axios

@@ -20,6 +20,10 @@ import {
 } from "../api/studentAPI";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import {
+  viewTermlyBudget,
+  viewTermlyExpense,
+} from "../../pages/api/schoolAPIs";
 
 export const useStudentCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -29,6 +33,27 @@ export const useStudentCookie = () => {
     });
   });
   return { dataID: user?.id };
+};
+
+export const useTermBudget = (schoolID: string) => {
+  const { data: termBudget } = useSWR(
+    `api/view-term-budget/${schoolID}`,
+    () => {
+      return viewTermlyBudget(schoolID!).then((res: any) => {
+        return res.data;
+      });
+    }
+  );
+  return { termBudget };
+};
+
+export const useTermExpenses = (schoolID: string) => {
+  const { data: termlyExpense } = useSWR(`api/view-expense/${schoolID}`, () => {
+    return viewTermlyExpense(schoolID!).then((res: any) => {
+      return res.data;
+    });
+  });
+  return { termlyExpense };
 };
 
 export const useStudentInfo = () => {
