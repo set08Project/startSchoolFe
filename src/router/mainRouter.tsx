@@ -41,6 +41,7 @@ const StartUsing = React.lazy(
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
 import ResultHistory from "../pages/page/ResultHistory/Result";
 import Feature from "../LandingPage1/Feature";
+const EnquiryForm = React.lazy(() => import("../pages/page/auth/EnquiryForm"));
 
 export const mainRouter = createBrowserRouter([
   {
@@ -158,6 +159,15 @@ export const mainRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <RegisterCard />
+          </Suspense>
+        ),
+      },
+      {
+        index: true,
+        path: "enquiry-form",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <EnquiryForm />
           </Suspense>
         ),
       },

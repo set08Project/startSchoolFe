@@ -59,20 +59,27 @@ const ReportCardTemplate: FC<iSchool> = ({
   };
 
   return (
-    <div className="text-[12px] mx-auto bg-white p-8 shadow-md rounded-lg flex justify-center items-center">
-      <div className="w-full min-h-[100vh] shadow lg:p-5" ref={contentRef}>
-        <div className="h-[100px] w-full flex justify-center items-center gap-3 ">
-          <div className="min-h-[100px]  w-[100%]  border-b-gray-400 flex gap-3 p-3 px-4">
-            <div className="lg:w-[14%] w-[25%] lg:h-[100px] h-[70px] flex  ">
-              <img src={pix} alt="" className="h-[100%] object-contain mb-9" />
+    <div className="text-[12px] w-full min-h-screen overflow-x-auto mx-auto md:p-8 p-3 shadow-md rounded-lg flex justify-center items-center ">
+      <div
+        className="bg-gray-200 w-full min-h-[100vh] shadow lg:p-5"
+        ref={contentRef}
+      >
+        <div className="h-auto md:h-[100px] w-full flex justify-center items-center gap-3 p-4">
+          <div className="min-h-[100px] w-full border-b border-gray-400 flex flex-col md:flex-row gap-3 p-3 px-4">
+            <div className="flex-shrink-0 w-full md:w-[25%] flex justify-center items-center">
+              <img
+                src={pix}
+                alt=""
+                className="w-full h-auto max-w-[100px] md:max-w-[150px] object-cover"
+              />
             </div>
-            <div className="w-[70%] h-[100px] flex flex-col items-start">
-              <h1 className="font-bold text-[24px] text-center lg:text-[27px] ">
+            <div className="flex-1 flex flex-col justify-center items-start text-left">
+              <h1 className="font-bold text-[16px] md:text-[20px] lg:text-[27px] break-words">
                 {schoolName}
               </h1>
-              <p className="text-center text-[14px]">{schoolAddress}</p>
+              <p className="text-[12px] md:text-[14px] mt-1">{schoolAddress}</p>
               <div
-                className="py-3 px-6 bg-blue-950 text-white flex items-center gap-2 rounded-md cursor-pointer mt-2"
+                className="py-2 px-4 bg-blue-950 text-white flex items-center gap-2 rounded-md cursor-pointer mt-2"
                 onClick={downloadPDF}
               >
                 <div>Download Result</div>
@@ -87,7 +94,7 @@ const ReportCardTemplate: FC<iSchool> = ({
         </div>
 
         <div className="p-4 flex justify-center items-center">
-          <div className="w-[90%] grid grid-cols-3 gap-9">
+          <div className="w-[90%] grid grid-cols-2 md:grid-cols-3 gap-9">
             <div>
               <p className="font-semibold">Name:</p>
               <p>{studentDetails.name}</p>
@@ -114,6 +121,7 @@ const ReportCardTemplate: FC<iSchool> = ({
             </div>
           </div>
         </div>
+
         <div
           className="w-full flex justify-center items-center mt-7 p-4 flex-col 
         "
@@ -229,41 +237,40 @@ const ReportCardTemplate: FC<iSchool> = ({
               </tbody>
             </table>
           </div>
-          <table className="w-[100%] border-collapse border border-gray-300 overflow-y-auto">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 w-[170px] py-3 pl-5 text-left">
-                  Total mark
-                </th>
-                <th className="border border-gray-300 text-center w-30 py-3 px-3 text-[13px] lg:text-[18px]">
-                  {`${subjects?.result
-                    ?.map((el: any) => {
-                      return el.points;
-                    })
-                    .reduce((a: number, b: number) => {
-                      return a + b;
-                    }, 0)}/${subjects?.result
-                    ?.map((el: any) => {
-                      return el.score;
-                    })
-                    .reduce((a: number, b: number) => {
-                      return a + b;
-                    }, 0)}`}
-                </th>
-                <th className="border border-gray-300 w-[146px] py-3 text-left pl-6">
-                  {subjects?.grade}
-                </th>
-              </tr>
-              <tr>
-                <th className="border border-gray-300 text-left pl-5 w-30 py-3 ">
-                  Total percentage
-                </th>
-                <th className="border-gray-300 w-50 py-3 text-center pl-6">
-                  {subjects?.points}%
-                </th>
-              </tr>
-            </thead>
-          </table>
+          <div className="overflow-x-auto lg:w-full">
+            <table className="min-w-full border-collapse border border-gray-300">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="border border-gray-300 py-2 px-3 text-left text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
+                    Total Mark
+                  </th>
+                  <th className="border border-gray-300 py-2 px-3 text-center text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
+                    {`${subjects?.result
+                      ?.map((el: any) => el.points)
+                      .reduce(
+                        (a: number, b: number) => a + b,
+                        0
+                      )}/${subjects?.result
+                      ?.map((el: any) => el.score)
+                      .reduce((a: number, b: number) => a + b, 0)}`}
+                  </th>
+                  <th className="border border-gray-300 py-2 px-3 text-left text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
+                    {subjects?.grade}
+                  </th>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 py-2 px-3 text-left text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
+                    Total Percentage
+                  </th>
+                  <th className="border border-gray-300 py-2 px-3 text-center text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
+                    {subjects?.points}%
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{/* Optional: Add rows if necessary */}</tbody>
+            </table>
+          </div>
+
           {/* <table className="w-[100%] border-collapse border border-gray-300 bg-gray-400 overflow-y-auto">
             <thead>
               <tr>
@@ -302,7 +309,7 @@ const ReportCardTemplate: FC<iSchool> = ({
               </tr>
             </tbody>
           </table> */}
-          <div className="p-4 bg-gray-200 w-full min-h-[300px] text-center font-bold text-[20px]">
+          <div className="p-4 bg-gray-200 w-full min-h-[300px] text-center font-bold lg:text-[20px] text-[15px]">
             Students's Performance Chart
           </div>
 
@@ -323,35 +330,51 @@ const ReportCardTemplate: FC<iSchool> = ({
               {subjects?.classTeacherComment}
             </p>
           </div>
-          <div className="p-4 w-full h-[120px] bg-gray-100 mt-3 border shadow-sm">
-            <div className="w-full h-10 bg-gray-500">
-              <h1 className="font-bold text-white pl-6 pt-2">
+          <div className="p-4 w-full bg-gray-200 mt-3 border shadow-sm">
+            <div className="w-full h-10 bg-gray-500 flex items-center pl-4">
+              <h1 className="font-bold text-white text-[14px] lg:text-[20px]">
                 Grade's Boundaries
               </h1>
-              <div className="p-4">
-                <p className="text-[14px] font-medium pt-5 flex gap-3">
-                  {/* A :100-90, A: 90-80, B: 80-70, C: 70-60, D: 60-50, E: 50-40,
-                  F: 40-0 */}
-                  <p className="font-bold text-[17px]">
-                    A: <span className="font-medium text-[15px]">100-80</span>,
-                  </p>
-                  <p className="font-bold text-[17px]">
-                    B: <span className="font-medium text-[15px]">79-70</span>,
-                  </p>
-                  <p className="font-bold text-[17px]">
-                    C: <span className="font-medium text-[15px]">69-60</span>,
-                  </p>
-                  <p className="font-bold text-[17px]">
-                    D: <span className="font-medium text-[15px]">59-50</span>,
-                  </p>
-                  <p className="font-bold text-[17px]">
-                    E: <span className="font-medium text-[15px]">49-40</span>,
-                  </p>
-                  <p className="font-bold text-[17px]">
-                    F: <span className="font-medium text-[15px]">39-0</span>,
-                  </p>
-                </p>
-              </div>
+            </div>
+            <div className="p-4 w-full bg-gray-200">
+              <p className="text-[12px] lg:text-[14px] font-medium pt-2 flex flex-wrap gap-2 lg:gap-4 pl-3">
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  A:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    100-80
+                  </span>
+                </span>
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  B:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    79-70
+                  </span>
+                </span>
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  C:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    69-60
+                  </span>
+                </span>
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  D:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    59-50
+                  </span>
+                </span>
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  E:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    49-40
+                  </span>
+                </span>
+                <span className="font-bold text-[14px] lg:text-[17px]">
+                  F:{" "}
+                  <span className="font-medium text-[12px] lg:text-[15px]">
+                    39-0
+                  </span>
+                </span>
+              </p>
             </div>
           </div>
         </div>
