@@ -6,6 +6,8 @@ const URL2: string =
 const URL: string =
   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
 export const setTermBudet = async (schoolID: string, budget: number) => {
   try {
     return await axios
