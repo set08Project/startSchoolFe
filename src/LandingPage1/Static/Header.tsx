@@ -40,22 +40,16 @@ const Header = () => {
                 />
               </div>
               <div className="hidden uppercase font-medium  items-center text-[17px] gap-[30px] text-white md:flex">
-                <NavLink
-                  to="/"
-                  className=" cursor-pointer navhover1 navhover2 navhover3"
-                >
+                <NavLink to="/" className=" cursor-pointer navhover">
                   <div>Home</div>
                 </NavLink>
-                <NavLink
-                  to="/features"
-                  className=" cursor-pointer navhover1 navhover2 navhover3"
-                >
+                <NavLink to="/features" className=" cursor-pointer navhover">
                   <div>Features</div>
                 </NavLink>
 
                 {/* <NavLink
                 to=""
-                className="flex gap-1 cursor-pointer transition-all duration-500 navhover1 navhover2 navhover3"
+                className="flex gap-1 cursor-pointer transition-all duration-500 navhover"
               >
                 <div>About Us</div>
                 <FaAngleDown className="mt-[6px]" /> 
@@ -108,16 +102,10 @@ const Header = () => {
                   drop ? "text-white" : "text-blue-950"
                 } md:hidden`}
               >
-                <NavLink
-                  to="/"
-                  className=" cursor-pointer navhover1 navhover2 navhover3"
-                >
+                <NavLink to="/" className=" cursor-pointer navhover">
                   <div>Home</div>
                 </NavLink>
-                <NavLink
-                  to="/features"
-                  className=" cursor-pointer navhover1 navhover2 navhover3"
-                >
+                <NavLink to="/features" className=" cursor-pointer navhover">
                   <div>Features</div>
                 </NavLink>
               </div>

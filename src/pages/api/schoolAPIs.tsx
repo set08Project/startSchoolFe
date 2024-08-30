@@ -8,6 +8,7 @@ const URL: string =
 
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
+
 export const setTermBudet = async (schoolID: string, budget: number) => {
   try {
     return await axios
