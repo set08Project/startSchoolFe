@@ -70,7 +70,6 @@ const QuizTestScreen = () => {
       studentGrade: grade,
       remark,
     }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         toast.success("Quiz summitted successfully");
         setTimeout(() => {

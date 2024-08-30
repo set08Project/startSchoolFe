@@ -28,7 +28,6 @@ const Session: FC = () => {
     const formData: any = new FormData();
     formData.append("avatar", file);
     setState(file);
-    console.log(state);
 
     if (state) {
       const timer = setTimeout(() => {

@@ -112,12 +112,7 @@ const CartItemScreen = () => {
           {cart?.map((props: any) => (
             <div className="col-span-2 h-[300px] pl-2 md:border-l border-neutral-500 w-full flex flex-col items-center ">
               <div className="flex items-center w-full gap-2 border-b border-neutral py-5 ">
-                <MdClose
-                  onClick={() => {
-                    // dispatch(removeFromCart(props));
-                    console.log("first");
-                  }}
-                />
+                <MdClose onClick={() => {}} />
                 <img
                   className="w-[120px] h-[120px] border rounded-sm bg-red-500 ml-2 object-cover"
                   src={props.avatar}

@@ -66,7 +66,6 @@ const DownloadTest: React.FC = () => {
     const input = contentRef.current;
 
     if (!input) {
-      console.error("Ref is not set");
       return;
     }
 
@@ -78,7 +77,7 @@ const DownloadTest: React.FC = () => {
         pdf.save(`receipt-${moment(Date.now()).format("llll")}.pdf`);
       })
       .catch((error) => {
-        console.error("Error generating PDF:", error);
+        return error;
       });
   };
 

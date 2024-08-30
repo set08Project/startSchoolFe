@@ -155,7 +155,6 @@ const QuizScreen = () => {
             className="btn btn-neutral"
             onClick={() => {
               handleAddQusestion();
-              console.log(state);
             }}
           >
             Add More Question

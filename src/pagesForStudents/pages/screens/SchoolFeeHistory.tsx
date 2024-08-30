@@ -170,9 +170,7 @@ const SchoolFeesHistoryScreenStudent = () => {
                           props?.confirm ? "checkbox-success" : "checkbox-error"
                         }`}
                         onClick={() => {
-                          updateSchoolFee(props?._id).then((res) => {
-                            console.log(res);
-                          });
+                          updateSchoolFee(props?._id).then((res) => {});
                         }}
                       />
                     </div>
