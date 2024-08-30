@@ -33,7 +33,7 @@ const Input: FC<iInputProps> = ({
   return (
     <div
       className={twMerge(
-        `w-[300px] h-[50px]  border rounded-md m-2 relative transition-all duration-300 mb-6 ${
+        `w-[300px] h-[50px]  border rounded-md m-2 relative transition-all  duration-300 mb-6 ${
           state && "border-blue-500"
         } `,
         className
@@ -86,7 +86,7 @@ const Input: FC<iInputProps> = ({
         className={twMerge(
           `px-2 outline-none ${
             show ? "w-[75%]" : "w-full"
-          } h-full bg-transparent absolute -bottom-0 -ml-4 text-[13px]`,
+          } h-full bg-transparent absolute left-4 -bottom-0 -ml-4 text-[13px]`,
           className
         )}
         onFocus={() => {

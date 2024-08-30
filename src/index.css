@@ -44,20 +44,25 @@
   transform: scale(1.05);
 }
 
-.navhover1 {
+.navhover {
   position: relative;
 }
 
-.navhover2 ::after {
+.navhover::after {
   content: "";
-  height: 3px;
+  height: 2px;
   width: 0;
   background: whitesmoke;
   position: absolute;
   left: 0;
   bottom: -10px;
-  transition: 0.5s;
+  transition: 0.5s ease-in;
 }
+
+.navhover:hover::after {
+  width: 100%;
+}
+
 .phone-input-container {
   width: 100%;
   max-width: 400px;
