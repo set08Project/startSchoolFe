@@ -44,25 +44,77 @@
   transform: scale(1.05);
 }
 
-.navhover1 {
+.navhover {
   position: relative;
 }
 
-.navhover2 ::after {
+.navhover::after {
   content: "";
-  height: 3px;
+  height: 2px;
   width: 0;
   background: whitesmoke;
   position: absolute;
   left: 0;
   bottom: -10px;
-  transition: 0.5s;
+  transition: 0.5s ease-in;
 }
 
-.navhover3 :hover:after {
+.navhover:hover::after {
   width: 100%;
 }
 
-.ushaped {
-  transform: skewY(-3deg);
+.phone-input-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.phone-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.phone-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.phone-input-container .PhoneInputCountry {
+  margin-right: 8px;
+  border-right: 1px solid #ccc;
+}
+
+.phone-input-container .PhoneInputCountryIcon {
+  margin-right: 4px;
+}
+
+.phone-input-container .PhoneInputCountrySelect {
+  border: none;
+  background: transparent;
+  padding: 0 8px;
+  font-size: 16px;
+}
+
+.phone-input-container .PhoneInputCountrySelect:focus {
+  outline: none;
+}
+.phone-input input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.phone-input input {
+  border: none;
 }

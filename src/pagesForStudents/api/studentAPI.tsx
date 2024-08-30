@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
 //
 // const URL: string = "https://startschoolbe.onrender.com/api";
@@ -11,6 +11,13 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschool.onrender.com/api";
 // const URL: string = "https://startschool.onrender.com/api";
 // const url: string = "http://localhost:2244/api";
+
+const URL: string =
+  import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
+// const URL: string =
+// import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_URL;
+
+// const URL: string = "https://startschoolbe.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -183,7 +190,7 @@ export const createStudentArticle = async (
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -201,7 +208,7 @@ export const createPastQuestionHistory = async (
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -216,7 +223,7 @@ export const getOneStudentHistory = async (studentID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -231,7 +238,7 @@ export const getOneArticle = async (articleID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -246,7 +253,7 @@ export const getSchoolArticle = async (schoolID: string) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -261,7 +268,7 @@ export const updateProfile = async (studntID: string, data: {}) => {
         return res?.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
@@ -433,12 +440,12 @@ export const updateTermFee = async (
     return await axios
       .patch(`${URL}/update-term-fees/${schoolID}/${classID}`, data)
       .then((res: any) => {
-        // console.log(res);
+        // return res;
 
         return res;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   } catch (error) {
     return error;
