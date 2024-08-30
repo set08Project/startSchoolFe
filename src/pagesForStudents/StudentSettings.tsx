@@ -19,7 +19,6 @@ const StudentSettings = () => {
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
-    console.log("updated...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();

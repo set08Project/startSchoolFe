@@ -42,7 +42,6 @@ const ReportCardTemplate: FC<iSchool> = ({
     const input = contentRef.current;
 
     if (!input) {
-      console.error("Ref is not set");
       return;
     }
 
@@ -54,7 +53,7 @@ const ReportCardTemplate: FC<iSchool> = ({
         pdf.save(`report-card-${moment(Date.now()).format("llll")}.pdf`);
       })
       .catch((error) => {
-        console.error("Error generating PDF:", error);
+        return error;
       });
   };
 
