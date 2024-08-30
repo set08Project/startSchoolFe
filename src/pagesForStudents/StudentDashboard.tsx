@@ -50,8 +50,6 @@ const StudentDashboard = () => {
   const { termData } = useViewTermDetail(termID);
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
-  console.log(gradeData);
-
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
   let resultData = gradeData?.reportCard?.find((el: any) => {
@@ -105,7 +103,11 @@ const StudentDashboard = () => {
             <p className="text-[20px] text-blue-900">
               {`\u2605`.repeat(Math.round(studentInfo?.totalPerformance / 20))}{" "}
               <span className="text-[12px] font-bold">
-                ({(studentInfo?.totalPerformance / 20).toFixed(2)})
+                (
+                {(studentInfo?.totalPerformance / 20).toFixed(2) !== "NaN"
+                  ? (studentInfo?.totalPerformance / 20).toFixed(2)
+                  : "No Record Yet"}
+                )
               </span>
             </p>
           </div>
