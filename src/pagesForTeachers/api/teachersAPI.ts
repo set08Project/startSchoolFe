@@ -7,15 +7,15 @@ import axios from "axios";
 
 // const URL: string = "https://startschoolbe.onrender.com/api";
 
-// const URL: string = "https://startschool.onrender.com/api";
+const URL: string = "https://startschool.onrender.com/api";
 // const URL: string = "https://startschool.onrender.com/api";
 // const URL: string = "https://startschool.onrender.com/api";
 
 // const URL: string = "https://startschool.onrender.com/api";
 
 // const URL: string = "https://startschool.onrender.com/api";
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 // const URL: string =
 // import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
