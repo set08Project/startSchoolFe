@@ -4,7 +4,7 @@ import Input from "../../../components/reUse/Input";
 import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { registerSchool } from "../../api/schoolAPIs";
+import { googleAuth, registerSchool } from "../../api/schoolAPIs";
 import logo from "../../../assets/mainLogo.png";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -56,7 +56,7 @@ const Register = () => {
       </div>
 
       <form
-        className="rounded-md bg-white min-h-[300px] w-[80%] md:w-[500px] border p-4"
+        className="rounded-md bg-white min-h-[150px] w-[80%] md:w-[500px] border p-4"
         onSubmit={handleSubmit}
       >
         <Input
@@ -93,23 +93,24 @@ const Register = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
             // onClick={handleSubmit}
           />
-          {/* ) : (
-            <div className="w-[97%] flex items-center justify-center m-2 rounded-md bg-gray-400 text-white h-14  transition-all duration-300">
-              Register
-            </div>
-          )} */}
-        </div>
-        <div className="mt-10 mb-0 ml-2 text-[13px] font-medium ">
-          Sign up with social network
-        </div>
-        <div className="flex flex-col">
-          <Button
-            name="Continue with Google (coming soon)"
-            className="h-14 bg-red-900 hover:bg-red-600 opacity-50 hover:text-white  transition-all duration-300 font-medium text-[#ababab] leading-tight w-[97%]text-center text-[12px] sm:text-base "
-            icon={<FaGoogle />}
-          />
         </div>
       </form>
+      <div className="mt-10 mb-0 ml-2 text-[13px] font-medium ">
+        Sign up with social network
+      </div>
+      <div className="flex flex-col">
+        <Button
+          name="Continue with Google"
+          className="h-14 bg-red-500 hover:bg-red-600 hover:text-white  transition-all duration-300 font-medium text-[#e6e6e6] leading-tight w-[97%]text-center text-[12px] sm:text-base "
+          icon={<FaGoogle />}
+          onClick={() => {
+            const URL: string = "https://startschoolbe.onrender.com/api";
+
+            window.location.replace(`${URL}/auth/google`);
+          }}
+        />
+      </div>
+
       <div className="mt-5 text-[13px]">
         Already have an Account?{" "}
         <span className="font-bold text-blue-900">

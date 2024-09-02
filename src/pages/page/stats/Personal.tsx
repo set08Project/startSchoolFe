@@ -20,7 +20,11 @@ const Personal: FC = () => {
 
   let read1 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "1st Term";
+      return (
+        el.term === "1st Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el?.amount;
@@ -31,7 +35,11 @@ const Personal: FC = () => {
 
   let read2 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "2nd Term";
+      return (
+        el.term === "2nd Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el?.amount / 100;
@@ -42,7 +50,11 @@ const Personal: FC = () => {
 
   let read3 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "3rd Term";
+      return (
+        el.term === "3rd Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el?.amount / 100;
@@ -53,7 +65,11 @@ const Personal: FC = () => {
 
   let check = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "1st Term";
+      return (
+        el.term === "1st Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el.studentID;
@@ -61,7 +77,11 @@ const Personal: FC = () => {
 
   let check1 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "2nd Term";
+      return (
+        el.term === "2nd Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el.studentID;
@@ -69,13 +89,15 @@ const Personal: FC = () => {
 
   let check2 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "3rd Term";
+      return (
+        el.term === "3rd Term" &&
+        el?.sessionID === data?.presentSessionID &&
+        el?.termID === data?.presentTermID
+      );
     })
     .map((el: any) => {
       return el.studentID;
     });
-
-  console.log(schoolFeeRecord);
 
   return (
     <div>
