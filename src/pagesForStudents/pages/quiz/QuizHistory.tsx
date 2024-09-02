@@ -11,8 +11,6 @@ const QuizHistory = () => {
 
   const { pastQuestionData } = usePastQuestionHistory(studentInfo?._id);
 
-  console.log(pastQuestionData);
-
   return (
     <div>
       <LittleHeader name="Quiz History" />

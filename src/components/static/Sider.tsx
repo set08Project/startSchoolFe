@@ -200,7 +200,8 @@ const Sider = () => {
       </div>
 
       <div>
-        {data?.categoryType === "Secondary" ? (
+        {data?.categoryType === "Secondary" ||
+        data?.schoolTags[0]?.val === "Secondary School." ? (
           <SecondaryAdminScreen />
         ) : (
           <PrimaryAdminScreen />

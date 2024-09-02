@@ -31,7 +31,7 @@ const Correction = () => {
         );
         setSevenData(seven);
       } catch (error) {
-        console.error("Error loading JSON file:", error);
+        return error;
       }
     };
 

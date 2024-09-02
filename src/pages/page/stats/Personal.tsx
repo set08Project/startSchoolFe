@@ -15,12 +15,15 @@ const Personal: FC = () => {
   const { schoolFeeRecord } = useSchoolSchoolFees(data?._id);
   const { students } = useSchoolStudents(data?._id);
 
+  // to include later....!
+  // && el.session === data?.presentSession;
+
   let read1 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "1st Term" && el.session === data?.presentSession;
+      return el.term === "1st Term";
     })
     .map((el: any) => {
-      return el?.amount / 100;
+      return el?.amount;
     })
     .reduce((a: number, b: number) => {
       return a + b;
@@ -28,7 +31,7 @@ const Personal: FC = () => {
 
   let read2 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "2nd Term" && el.session === data?.presentSession;
+      return el.term === "2nd Term";
     })
     .map((el: any) => {
       return el?.amount / 100;
@@ -39,7 +42,7 @@ const Personal: FC = () => {
 
   let read3 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "3rd Term" && el.session === data?.presentSession;
+      return el.term === "3rd Term";
     })
     .map((el: any) => {
       return el?.amount / 100;
@@ -50,7 +53,7 @@ const Personal: FC = () => {
 
   let check = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "1st Term" && el.session === data?.presentSession;
+      return el.term === "1st Term";
     })
     .map((el: any) => {
       return el.studentID;
@@ -58,7 +61,7 @@ const Personal: FC = () => {
 
   let check1 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "2nd Term" && el.session === data?.presentSession;
+      return el.term === "2nd Term";
     })
     .map((el: any) => {
       return el.studentID;
@@ -66,11 +69,13 @@ const Personal: FC = () => {
 
   let check2 = schoolFeeRecord
     ?.filter((el: any) => {
-      return el.term === "3rd Term" && el.session === data?.presentSession;
+      return el.term === "3rd Term";
     })
     .map((el: any) => {
       return el.studentID;
     });
+
+  console.log(schoolFeeRecord);
 
   return (
     <div>
