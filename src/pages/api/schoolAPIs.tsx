@@ -1,15 +1,21 @@
 import axios from "axios";
 
+const URL2: string =
+  import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
 
-//const URL2: string =
-  //import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
+const URL: string =
+  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-//const URL: string =
-  // import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// working locally
 
+// const URL2: string = import.meta.env.VITE_PROCUTION_URL2;
+// const URL: string = import.meta.env.VITE_PROCUTION_URL;
 
- const URL: string = "https://startschoolbe.onrender.com/api";
- const URL2: string = "https://startschoolbe.onrender.com";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
+
+// const URL: string = "https://startschool.onrender.com/api";
+// const URL2: string = "https://startschool.onrender.com";
 
 export const googleAuth = async () => {
   try {

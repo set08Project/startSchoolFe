@@ -91,7 +91,7 @@ const ScreenHome = () => {
           <div>
             <div className="flex justify-center flex-col gap-3 w-full items-center ">
               {/* from complain */}
-              <p>Top 5 Performancing Students</p>
+              <p>Top 5 Performing Students</p>
               <div className=" overflow-hidden">
                 <StudentPerformance />
               </div>
