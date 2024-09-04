@@ -122,7 +122,7 @@ const CartItemScreen = () => {
                   </div>
                   <div className=" col-span-1 flex flex-col justify-center items-end gap-y-2">
                     <div className="font-semibold">
-                      ₦{props?.cost.toLocaleString()}
+                      ₦{props?.cost?.toLocaleString()}
                     </div>
                     <div className="capitalize text-[12px]">no discount</div>
                     <div className=" flex items-center">

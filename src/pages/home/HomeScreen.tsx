@@ -186,15 +186,15 @@ const HomeScreen = () => {
       <LittleHeader name={"Dashboard"} />
       <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
         <div className="mt-44 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
-          <div className="w-full min-h-[130px] bg-blue-950 rounded-lg mt-1 text-white p-3">
+          <div className="w-full min-h-[130px] bg-blue-950 rounded-lg text-white p-3 mt-8">
             <p className="text-[20px] mb-2">Announcement/Event</p>
             <Announcement />
           </div>
           <Outlet />
         </div>
 
-        <div className="bg-white order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] md:sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
-          <div className="bg-white py-5 col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 -mt-5 ">
+        <div className="order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] md:sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
+          <div className="py-0 col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 -mt-5">
             <p className="font-medium text-[14px] mb-5">
               {/* <GeneralDataScreen /> */}
               Quick Action

@@ -16,7 +16,9 @@ const LittleHeader: FC<iProps> = ({ name, back }) => {
         <Link to="/dashboard" className="flex items-center">
           Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
         </Link>
-        <div className="capitalize text-[17px] font-[500]">{name}</div>
+        <div className="capitalize lg:text-[17px] text-[12px] font-[500]">
+          {name}
+        </div>
         {back && (
           <div className="flex items-center">
             <LiaGreaterThanSolid size={13} className="mx-4 " />
@@ -31,7 +33,7 @@ const LittleHeader: FC<iProps> = ({ name, back }) => {
           </div>
         )}
       </div>
-      <div className="text-blue-800 mt-5 font-[500] text-[30px] mb-10 capitalize">
+      <div className="text-blue-800 mt-5 font-[500] lg:text-[30px] text-[17px] mb-10 capitalize">
         {name}
       </div>
     </div>
