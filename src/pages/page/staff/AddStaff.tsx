@@ -56,7 +56,7 @@ const AddStaff = () => {
   };
 
   return (
-    <div className="top-0 w-[100%] absolute h-full overflow-y-auto">
+    <div className="top-0 lg:w-[100%] w-[60%] right-0 absolute h-full overflow-x-auto">
       <div className="px-4 h-full top-0 mb-8  ">
         <div className="mt-20" />
         <div className="flex justify-between items-center">
@@ -79,7 +79,7 @@ const AddStaff = () => {
 
         <Toaster position="top-center" reverseOrder={true} />
 
-        <div className="border rounded-md w-full h-[80%] p-4 mt-4">
+        <div className="rounded-md w-full h-[80%] p-4 mt-4">
           <div className="mt-10" />
 
           <div className="mt-1">
