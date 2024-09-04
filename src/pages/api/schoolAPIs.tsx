@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 const URL2: string =
   import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
@@ -39,6 +39,7 @@ export const googleData = async () => {
   }
 };
 
+// Expenditures Api
 export const setTermBudet = async (schoolID: string, budget: number) => {
   try {
     return await axios
@@ -86,6 +87,46 @@ export const createExpense = async (schoolID: string, data: {}) => {
     return error;
   }
 };
+
+// School Fees Records Expenditures api starts here
+export const recordFeesPayment = async (
+  schoolID: string,
+  studentID: string,
+  feePaid: number,
+  feePaidDate: string
+) => {
+  try {
+    return await axios
+      .post(`${URL}/record-expense/${schoolID}/${studentID}`, {
+        feePaid,
+        feePaidDate,
+      })
+      .then((res: any) => {
+        console.log("api post res", res.data);
+        return res.data;
+      });
+  } catch (error: any) {
+    console.error();
+    console.log(error.message);
+    return error;
+  }
+};
+
+export const getRecords = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getall-fee-records/${schoolID}`)
+      .then((res) => {
+        console.log("api get res", res.data);
+        return res.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+// School Fees Records Expenditures api ends here
 
 export const updateRegisterationStatus = async (data: {}) => {
   try {
