@@ -1,15 +1,10 @@
 import axios from "axios";
 
-// working locally
+// const URL2: string =
+//   import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
 
-// const URL2: string = import.meta.env.VITE_URL;
-
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
-// const URL2: string = import.meta.env.VITE_URL;
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // working locally
 
@@ -17,7 +12,6 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
 
 // working remotely
-
 // const URL: string = import.meta.env.VITE_PROCUTION_URL;
 // const URL2: string = import.meta.env.VITE_PROCUTION_URL2;
 
@@ -29,8 +23,33 @@ import axios from "axios";
 const URL: string = "https://startschoolbe.onrender.com/api";
 const URL2: string = "https://startschoolbe.onrender.com";
 
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
+
 // const URL: string = "https://startschool.onrender.com/api";
 // const URL2: string = "https://startschool.onrender.com";
+
+export const googleAuth = async () => {
+  try {
+    return await axios.get(`${URL}/api/auth/google`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const googleData = async () => {
+  try {
+    return await axios
+      .get(`${URL}/auth/google-data`, { withCredentials: true })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const setTermBudet = async (schoolID: string, budget: number) => {
   try {
@@ -127,9 +146,6 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
     return error;
   }
 };
-// const URL: string = "https://startschool.onrender.com/api";
-// const URL2: string = "https://startschool.onrender.com";
-// const URL2: string = "http://localhost:2244/api";
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {
