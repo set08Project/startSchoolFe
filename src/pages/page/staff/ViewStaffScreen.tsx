@@ -221,7 +221,7 @@ const ViewStaffScreen = () => {
                   </div>
 
                   {/*good  */}
-                  <div className="w-[200px] border-r  ">
+                  <div className="w-[200px] border-r">
                     {props?.classesAssigned ? (
                       <div className="">
                         <p className="flex flex-wrap">
