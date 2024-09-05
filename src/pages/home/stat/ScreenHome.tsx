@@ -129,7 +129,7 @@ const ScreenHome = () => {
           </div>
         </div>
 
-        <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
+        <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3">
           {/* Appointment */}
 
           <div className=" rounded-md w-full  p-4">
@@ -157,7 +157,7 @@ const ScreenHome = () => {
       <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3 mt-5 ">
         {/* Appointment */}
 
-        <div className=" rounded-md w-full  p-4">
+        <div className=" rounded-md w-full p-4">
           <div className="mb-4 text-medium capitalize">
             Top 5 Recent Purchases{" "}
             <span className="font-bold ml-5">
