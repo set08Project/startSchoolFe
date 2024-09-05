@@ -23,7 +23,6 @@ const PrintReportCard: React.FC = () => {
     const input = contentRef.current;
 
     if (!input) {
-      console.error("Ref is not set");
       return;
     }
 
@@ -35,7 +34,7 @@ const PrintReportCard: React.FC = () => {
         pdf.save("download.pdf");
       })
       .catch((error) => {
-        console.error("Error generating PDF:", error);
+        return error;
       });
   };
 

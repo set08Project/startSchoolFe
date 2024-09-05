@@ -128,7 +128,7 @@ const ViewStaffScreen = () => {
 
         <Button
           name="Add a new Recruit"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+          className="lg:uppercase lg:text-[12px] text text-[10px] font-medium bg-blue-950 py-2 px-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
@@ -221,7 +221,7 @@ const ViewStaffScreen = () => {
                   </div>
 
                   {/*good  */}
-                  <div className="w-[200px] border-r  ">
+                  <div className="w-[200px] border-r">
                     {props?.classesAssigned ? (
                       <div className="">
                         <p className="flex flex-wrap">

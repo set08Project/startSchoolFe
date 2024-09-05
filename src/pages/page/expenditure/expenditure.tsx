@@ -56,7 +56,7 @@ const expenditure = () => {
 
   return (
     <div>
-      <LittleHeader name={"Expenditures"} />
+      {/* <LittleHeader name={"Expenditures"} /> */}
       <Toaster position="top-center" reverseOrder={true} />
       <div className="flex w-full justify-between items-start mb-5">
         <div className="modal-action">
@@ -91,6 +91,13 @@ const expenditure = () => {
                 setBudget(e.target.value);
               }}
             />
+
+            <label
+              htmlFor="my_modal_expenses"
+              className="btn text-white py-4 px-6 bg-blue-950 border hover: scale-105"
+            >
+              close
+            </label>
           </div>
         </div>
         {/* Modal */}
@@ -166,7 +173,7 @@ const expenditure = () => {
                   <label className="font-semibold">Items</label>
                   <input
                     className="h-[45px] text-[12px] px-2 w-full border rounded-md mb-2 "
-                    placeholder="set termly budget in Naira eg: 203000"
+                    placeholder="Name of Item"
                     value={item}
                     onChange={(e: any) => {
                       setItem(e.target.value);
@@ -174,7 +181,9 @@ const expenditure = () => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label className="font-semibold">Description</label>
+                  <label className="font-semibold">
+                    Description of the Item
+                  </label>
                   <textarea
                     className="min-h-[100px] resize-none text-[12px] px-2 w-full border rounded-md mb-2 "
                     placeholder="Description"
@@ -203,7 +212,7 @@ const expenditure = () => {
                       }}
                     >
                       <option disabled selected>
-                        Choose Payment Method
+                        Payment Method
                       </option>
                       <option value="Cash">Cash</option>
                       <option value="Transfer">Transfer</option>
@@ -216,7 +225,7 @@ const expenditure = () => {
                       }}
                     >
                       <option disabled selected>
-                        Payment Category
+                        Item Category
                       </option>
                       <option value="Cloths">Cloths</option>
                       <option value="Stationaries">Stationaries</option>

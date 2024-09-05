@@ -21,7 +21,7 @@ const MostActiveScreen = () => {
   const { students } = useSchoolStudents(data?._id);
 
   return (
-    <div className="py-6  rounded-md min-w-[300px] overflow-y-hidden ">
+    <div className="py-6  rounded-md min-w-[300px]">
       {/* header */}
 
       <div className=" w-[800px] overflow-hidden">

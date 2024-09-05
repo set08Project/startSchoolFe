@@ -29,7 +29,11 @@ const RecentPurcentScreen = () => {
   return (
     <div>
       <div
+<<<<<<< HEAD
         className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden"
+=======
+        className="py-6 px-2 border rounded-md min-w-[300px]"
+>>>>>>> c41bfe241b222f5f7ad37a0e86e239b8e4176fef
         style={{ color: "var(--secondary)" }}
       >
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
