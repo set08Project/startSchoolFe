@@ -65,7 +65,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         } else {
           console.log("Checking Response", res);
           console.log("Checking status", res?.status);
-          toast.error("Grade deanied");
+          toast.error("Grade denied");
         }
       });
     } catch (error: any) {
