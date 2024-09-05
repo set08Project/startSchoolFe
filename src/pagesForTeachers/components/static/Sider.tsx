@@ -136,7 +136,8 @@ const Sider = () => {
 
       {/* Settings */}
       <div>
-        {schoolData?.data?.schoolTags[0].val === "Secondary School." ? (
+        {schoolData?.categoryType === "Secondary" ||
+        schoolData?.data?.schoolTags[0].val === "Secondary School." ? (
           <SecondaryScreen />
         ) : (
           <Primary />
