@@ -5,6 +5,8 @@ import axios from "axios";
 
 const URL: string = "https://startschoolbe.onrender.com/api";
 
+
+
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
     return await axios

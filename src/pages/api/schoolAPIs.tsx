@@ -11,6 +11,12 @@ import axios, { AxiosResponse } from "axios";
 const URL: string = "https://startschoolbe.onrender.com/api";
 const URL2: string = "https://startschoolbe.onrender.com";
 
+
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
+
+
+
 export const googleAuth = async () => {
   try {
     return await axios.get(`${URL}/api/auth/google`).then((res: any) => {
@@ -169,9 +175,6 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
     return error;
   }
 };
-// const URL: string = "https://startschool.onrender.com/api";
-// const URL2: string = "https://startschool.onrender.com";
-// const URL2: string = "http://localhost:2244/api";
 
 export const makePayment = async (schoolID: string, email: string) => {
   try {
