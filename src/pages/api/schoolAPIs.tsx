@@ -11,11 +11,8 @@ import axios, { AxiosResponse } from "axios";
 const URL: string = "https://startschoolbe.onrender.com/api";
 const URL2: string = "https://startschoolbe.onrender.com";
 
-
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
-
-
 
 export const googleAuth = async () => {
   try {
