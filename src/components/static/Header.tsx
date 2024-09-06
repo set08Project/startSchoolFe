@@ -203,7 +203,8 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          {data?.schoolTags[0].val === "Secondary School." ? (
+          {data?.categoryType === "Secondary" ||
+          data?.schoolTags[0].val === "Secondary School." ? (
             <SmallPiece
               name={[
                 {

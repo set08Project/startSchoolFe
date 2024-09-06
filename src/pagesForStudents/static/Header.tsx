@@ -49,6 +49,9 @@ const Header = () => {
   const { studentInfo } = useStudentInfo();
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
   const [sess, setSess] = useState<boolean>(false);
+  const initials =
+    studentInfo?.studentFirstName.charAt(0).toUpperCase() +
+    studentInfo?.studentLastName.charAt(0).toUpperCase();
 
   const handleMenu = () => {
     if (!document.startViewTransition) {
@@ -84,7 +87,7 @@ const Header = () => {
     >
       {/* <div>  */}
       <div className="flex items-center  justify-end w-[90%]">
-        <div className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
+        <div className="mr-4 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
           {" "}
           <FaCalendar />
           <span className="text-[12px] mx-1">
@@ -117,6 +120,9 @@ const Header = () => {
                 src={studentInfo?.avatar ? studentInfo?.avatar : pic}
               />
             )}
+          </div>
+          <div className="py-[5px] px-2 rounded-md border text-[13px] bg-white font-extrabold">
+            {initials}
           </div>
 
           {toggle ? (
@@ -170,7 +176,8 @@ const Header = () => {
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
-          {schoolData?.data.schoolTags[0] === "Secondary School." ? (
+          {schoolData?.data?.categoryType === "Secondary" ||
+          schoolData?.data.schoolTags[0] === "Secondary School." ? (
             <div>
               <SmallPiece
                 name={[
@@ -215,7 +222,7 @@ const Header = () => {
                     to: "assignment",
                   },
                   {
-                    title: "Gallaries",
+                    title: "Gallery",
                     icon: <FaPhotoFilm />,
                     to: "gallary",
                   },
@@ -225,13 +232,13 @@ const Header = () => {
                     to: "report",
                   },
                   {
-                    title: "complain",
+                    title: "Complain",
                     icon: <MdRadio />,
                     to: "complain",
                   },
 
                   {
-                    title: "Seetings",
+                    title: "Settings",
                     icon: <MdSettings />,
                     to: "your-profile",
                   },
@@ -274,7 +281,7 @@ const Header = () => {
                     to: "assignment",
                   },
                   {
-                    title: "Gallaries",
+                    title: "Gallery",
                     icon: <FaPhotoFilm />,
                     to: "gallary",
                   },
@@ -284,13 +291,13 @@ const Header = () => {
                     to: "report",
                   },
                   {
-                    title: "complain",
+                    title: "Complain",
                     icon: <MdRadio />,
                     to: "complain",
                   },
 
                   {
-                    title: "Seetings",
+                    title: "Settings",
                     icon: <MdSettings />,
                     to: "your-profile",
                   },

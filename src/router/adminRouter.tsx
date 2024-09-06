@@ -221,20 +221,10 @@ export const adminRouter = createBrowserRouter([
             path: "expenditures",
             element: (
               <Suspense fallback={<LoadingScreen />}>
-                <Expenditure />
-              </Suspense>
-            ),
-          },
-          {
-            index: true,
-            path: "/view-all-expenditures",
-            element: (
-              <Suspense fallback={<LoadingScreen />}>
                 <AllExpenditures />
               </Suspense>
             ),
           },
-
           {
             index: true,
             path: "result-history/:session/:term",

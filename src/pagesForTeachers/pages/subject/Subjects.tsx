@@ -91,7 +91,7 @@ const TeacherSubject: FC = () => {
                     </div>
                     <Link to={`/subjects/${props.id}`}>
                       <Button
-                        name="view all subject"
+                        name={`view ${props?.title}`}
                         className="py-4 px-0 bg-black text-white hover:bg-neutral-800 transition-all duration-300 w-[200px]"
                       />
                     </Link>

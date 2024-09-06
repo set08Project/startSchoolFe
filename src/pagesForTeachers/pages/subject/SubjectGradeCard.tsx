@@ -46,23 +46,32 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [exam, setExam] = useState("");
 
   const makeGrade = () => {
-    setLoading(true);
-    createGradeScore(teacherInfo?._id, props?._id, {
-      subject: subjectInfo?.subjectTitle,
-      test1: parseInt(test1),
-      test2: parseInt(test2),
-      test3: parseInt(test3),
-      test4: parseInt(test4),
-      exam: parseInt(exam),
-    }).then((res) => {
-      setLoading(false);
-      if (res.status === 201) {
-        mutate(`api/student-report-card/${props?._id}`);
-        toast.success("Grade added");
-      } else {
-        toast.error("Grade deanied");
-      }
-    });
+    try {
+      setLoading(true);
+      createGradeScore(teacherInfo?._id, props?._id, {
+        subject: subjectInfo?.subjectTitle,
+        test1: parseInt(test1),
+        test2: parseInt(test2),
+        test3: parseInt(test3),
+        test4: parseInt(test4),
+        exam: parseInt(exam),
+      }).then((res) => {
+        setLoading(false);
+        if (res.status === 201) {
+          console.log("Checking Response", res);
+          console.log("Checking status", res?.status);
+          mutate(`api/student-report-card/${props?._id}`);
+          toast.success("Grade added");
+        } else {
+          console.log("Checking Response", res);
+          console.log("Checking status", res?.status);
+          toast.error("Grade denied");
+        }
+      });
+    } catch (error: any) {
+      console.error();
+      return error.stack;
+    }
   };
 
   const { gradeData } = useStudentGrade(props?._id);
