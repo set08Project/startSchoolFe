@@ -64,9 +64,23 @@ const StudentDashboard = () => {
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
           <div className="flex items-center justify-between mb-1">
-            <div className="mb-4 text-medium capitalize font-semibold flex gap-2">
-              <div> My Class:</div>
-              <div className="font-bold">{studentInfo?.classAssigned}</div>
+            <div className="w-full mb-4 text-medium capitalize font-medium gap-2">
+              <div className="mb-2 flex items-center gap-2">
+                <div>My Name: </div>
+                <div className="font-bold text-[20px]">
+                  {" "}
+                  {studentInfo?.studentFirstName}
+                </div>
+                <div className="font-bold text-[20px]">
+                  {studentInfo?.studentLastName}
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div> My Class:</div>
+                <div className="font-bold text-[20px]">
+                  {studentInfo?.classAssigned}
+                </div>
+              </div>
             </div>
 
             {/* <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">
