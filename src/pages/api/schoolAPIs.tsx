@@ -152,14 +152,17 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async () => {
+export const approveRegisterationStatus = async (schoolID: any) => {
   try {
+    console.log("schoolID:", schoolID);
     return await axios
-      .patch(`${URL}/approved-school-registration`)
+      .patch(`${URL}/approved-school-registration/${schoolID}`)
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
+    console.log(error.message);
     return error;
   }
 };

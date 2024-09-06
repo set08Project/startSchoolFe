@@ -8,6 +8,7 @@ const SignIn = React.lazy(() => import("../pages/page/auth/SignIn"));
 const RegisterCard = React.lazy(
   () => import("../pages/page/auth/RegisterCard")
 );
+
 import LoadingScreen from "../components/static/LoadingScreen";
 
 // import SecondStep from "../pages/home/start/SecondStep";
@@ -41,6 +42,15 @@ const StartUsing = React.lazy(
 import SchoolPageEntry from "../schoolPage/SchoolPageEntry";
 import ResultHistory from "../pages/page/ResultHistory/Result";
 import Feature from "../LandingPage1/Feature";
+import DashboardDisplay from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/DashboardDisplay";
+import TotalSchools from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/TotalSchools";
+import TotalStudents from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/TotalStudents";
+import Finances from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Finances";
+import Feedbacks from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Feedbacks";
+import Reports from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Reports";
+import Settings from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Settings";
+import Daisy from "../mainPage/TeamScreen/DaisyComponents/Daisy";
+import TeacherLayout from "../mainPage/TeamScreen/NextSuperAdmin/components/layout/TeacherLayout";
 const EnquiryForm = React.lazy(() => import("../pages/page/auth/EnquiryForm"));
 
 export const mainRouter = createBrowserRouter([
@@ -219,5 +229,44 @@ export const mainRouter = createBrowserRouter([
         ),
       },
     ],
+  },
+
+  {
+    path: "/team-account",
+    element: <TeacherLayout />,
+    children: [
+      {
+        index: true,
+        element: <DashboardDisplay />,
+      },
+      {
+        path: "total-schools",
+        element: <TotalSchools />,
+      },
+      {
+        path: "total-students",
+        element: <TotalStudents />,
+      },
+      {
+        path: "finances",
+        element: <Finances />,
+      },
+      {
+        path: "feedbacks",
+        element: <Feedbacks />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+    ],
+  },
+  {
+    path: "/daisy",
+    element: <Daisy />,
   },
 ]);
