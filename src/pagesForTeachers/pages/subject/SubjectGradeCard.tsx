@@ -58,13 +58,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       }).then((res) => {
         setLoading(false);
         if (res.status === 201) {
-          console.log("Checking Response", res);
-          console.log("Checking status", res?.status);
           mutate(`api/student-report-card/${props?._id}`);
           toast.success("Grade added");
         } else {
-          console.log("Checking Response", res);
-          console.log("Checking status", res?.status);
           toast.error("Grade denied");
         }
       });

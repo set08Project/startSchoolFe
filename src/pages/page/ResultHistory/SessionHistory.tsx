@@ -50,11 +50,9 @@ const PropsData: FC<iProps> = ({ props }) => {
   const { termData } = useViewTermDetail(props);
   const { sessionTermData } = useViewSessionTerm(props);
 
-  console.log();
-
   return (
-    <div className="flex  text-[10px] font-extrabold mt-3 italic gap-5 text-blue-900 ">
-      <p className="text-[12px] font-bold ">
+    <div className="flex text-[10px] font-extrabold mt-3 italic gap-5 text-blue-900 ">
+      <p className="text-[14px] font-bold pl-2">
         {termData?.classResult?.length > 0 &&
           termData?.classResult
             .map((el: any) => {
@@ -71,6 +69,8 @@ const PropsData: FC<iProps> = ({ props }) => {
 const Fee: FC<iProps> = ({ props }) => {
   const { sessionTermData } = useViewSessionTerm(props);
   const { termData } = useViewTermDetail(props);
+
+  console.log("FEE: ", termData);
 
   return (
     <div className="w-12">
@@ -132,6 +132,8 @@ const SessionHistory = () => {
   const { data: schoolData } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(schoolData?._id);
 
+  console.log(schoolInfo);
+
   return (
     <div className="">
       <LittleHeader name="Viewing School Academic History" />
@@ -192,11 +194,15 @@ const SessionHistory = () => {
                     {props?.term.length}
                   </div>
                   <div className="w-[150px] border-r text-black flex">
-                    {props?.totalTeachers}
+                    {props?.numberOfTeachers}
                   </div>
-                  <div className="w-[150px] border-r text-black">
-                    {props?.term?.map((props: any) => (
-                      <PropsData props={props} />
+
+                  <div className="w-[150px] flex border-r text-black">
+                    {props?.term?.map((props: any, i: number) => (
+                      <div key={i} className="w-12">
+                        {" "}
+                        <PropsData props={props} />
+                      </div>
                     ))}
                   </div>
                   <div className="w-[220px] gap-5 border-r text-black flex">
