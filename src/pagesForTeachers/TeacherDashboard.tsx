@@ -58,6 +58,7 @@ const TeacherDashboard = () => {
   const { termData } = useViewTermDetail(termID);
 
   const { oneClass } = useReadOneClassInfo(state);
+
   const { classStudents } = useClassStudent(oneClass?._id);
   const monitor = classStudents?.students?.find((el: any) => {
     return el?.monitor === true;

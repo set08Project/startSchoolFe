@@ -54,7 +54,7 @@ const TeacherSubject: FC = () => {
 
       <div className=" w-full">
         <div className=" w-full overflow-x-hidden">
-          <div className="py-6 px-2 border rounded-md min-w-[600px] overflow-y-hidden mt-9">
+          <div className="py-6 px-2 border rounded-md min-w-[350px] overflow-y-hidden mt-9">
             <div className="w-[1200px] text-[gray] flex gap-9 text-[12px] font-medium uppercase mb-10 px-4">
               <div className="w-[150px] border-r">Teacher Subject</div>
               <div className="w-[100px] border-r">No of Quiz</div>
