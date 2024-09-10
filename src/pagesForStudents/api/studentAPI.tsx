@@ -33,6 +33,22 @@ export const loginStudent = async (data: {}) => {
   }
 };
 
+export const loginStudentToken = async (data: {}) => {
+  try {
+    return await axios
+      .post(
+        `${URL}/login-student-token/`,
+        data
+        // { withCredentials: true }
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readClassInfo = async (className: string) => {
   try {
     return await axios

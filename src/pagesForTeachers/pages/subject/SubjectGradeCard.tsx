@@ -2,7 +2,7 @@ document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
@@ -58,13 +58,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       }).then((res) => {
         setLoading(false);
         if (res.status === 201) {
-          console.log("Checking Response", res);
-          console.log("Checking status", res?.status);
           mutate(`api/student-report-card/${props?._id}`);
           toast.success("Grade added");
         } else {
-          console.log("Checking Response", res);
-          console.log("Checking status", res?.status);
           toast.error("Grade denied");
         }
       });
@@ -232,7 +228,7 @@ const SubjectGradeCard = () => {
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
   const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs);
 
-  const mainClass = viewClasses?.classRooms?.find((el: any) => {
+  let mainClass = viewClasses?.classRooms?.find((el: any) => {
     return el?.classSubjects?.find((el: any) => {
       return el === subjectID;
     });

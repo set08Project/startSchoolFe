@@ -232,7 +232,7 @@ export const mainRouter = createBrowserRouter([
   },
 
   {
-    path: "/team-account",
+    path: "/admin/team-account/view-only",
     element: <TeacherLayout />,
     children: [
       {
