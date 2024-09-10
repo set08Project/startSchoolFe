@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = "https://startschoolbe.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -20,6 +20,18 @@ export const updaetTeacherSalary = async (teacherID: string, data: {}) => {
   try {
     return await axios
       .patch(`${URL}/update-teacher-salery/${teacherID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loginTeacherToken = async (data: {}) => {
+  try {
+    return await axios
+      .post(`${URL}/login-teacher-token/`, data, { withCredentials: true })
       .then((res: any) => {
         return res?.data;
       });
