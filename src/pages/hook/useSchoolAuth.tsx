@@ -1,5 +1,6 @@
 import useSWR, { mutate } from "swr";
 import {
+  allSchools,
   classAttendance,
   getClassSubjects,
   getClassTimeTable,
@@ -409,4 +410,13 @@ export const useSchoolSchoolFees = (schoolID: string) => {
     }
   );
   return { schoolFeeRecord };
+};
+
+export const useAllSchools = () => {
+  const { data: allSchool } = useSWR(`api/view-all-school`, async () => {
+    return await allSchools().then((res: any) => {
+      return res?.data?.data;
+    });
+  });
+  return { allSchool };
 };

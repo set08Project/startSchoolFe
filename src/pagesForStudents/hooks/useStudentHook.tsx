@@ -158,8 +158,8 @@ export const useReadMyClassInfoData = (classAssigned: string) => {
 export const useReadOneClassInfo = (classID: string) => {
   const { data: oneClass } = useSWR(
     `api/view-one-classroom-info/${classID}`,
-    () => {
-      return readOneClassInfo(classID!).then((res: any) => {
+    async () => {
+      return await readOneClassInfo(classID!).then((res: any) => {
         return res.data;
       });
     }
