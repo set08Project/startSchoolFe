@@ -255,51 +255,59 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {getPayments?.map((props: any) => (
-                <div key="">
-                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
-                    {/* start */}
-                    <div className="w-[90px] border-r">
-                      {moment(props?.createdAt).format("ll")}
-                    </div>
-                    <div className="w-[150px] border-r flex font-semibold gap-1 items-center">
-                      <div>{props?.studentFirstName}</div>
-                      <div>{props?.studentLastName}</div>
-                    </div>
+              {getPayments.length > 0 ? (
+                getPayments?.map((props: any) => (
+                  <div key="">
+                    <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
+                      {/* start */}
+                      <div className="w-[90px] border-r">
+                        {moment(props?.createdAt).format("ll")}
+                      </div>
+                      <div className="w-[150px] border-r flex font-semibold gap-1 items-center">
+                        <div>{props?.studentFirstName}</div>
+                        <div>{props?.studentLastName}</div>
+                      </div>
 
-                    <div
-                      className="w-[120px] border-r 
-                     text-green-600 font-semibold"
-                    >
-                      ₦{props?.feePaid[0]}
-                    </div>
-
-                    {/* name */}
-                    <div className="w-[120px] border-r text-red-600 font-semibold">
-                      ₦{props?.feeBalance}
-                    </div>
-                    <div className="w-[120px] border-r text-blue-600 font-semibold">
-                      ₦{props?.classFees}
-                    </div>
-                    <div className="w-[90px] border-r">{props?.paidByWho}</div>
-                    {/* check */}
-                    <div className="w-[90px] border-r">
-                      {props?.paymentMode}
-                    </div>
-                    <div className="w-[120px] ">
                       <div
-                        className="ml-5 relative group"
-                        onClick={handleDeleteRecord(props?._id)}
+                        className="w-[120px] border-r 
+                   text-green-600 font-semibold"
                       >
-                        <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
-                        <span className="absolute left-6 -translate-x-1/2 bottom-full mb-[3px] text-[10px] w-max px-2 py-[2px] text-sm bg-gray-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-                          Delete
-                        </span>
+                        ₦{props?.feePaid[0]}
+                      </div>
+
+                      {/* name */}
+                      <div className="w-[120px] border-r text-red-600 font-semibold">
+                        ₦{props?.feeBalance}
+                      </div>
+                      <div className="w-[120px] border-r text-blue-600 font-semibold">
+                        ₦{props?.classFees}
+                      </div>
+                      <div className="w-[90px] border-r">
+                        {props?.paidByWho}
+                      </div>
+                      {/* check */}
+                      <div className="w-[90px] border-r">
+                        {props?.paymentMode}
+                      </div>
+                      <div className="w-[120px] ">
+                        <div
+                          className="ml-5 relative group"
+                          onClick={() => {
+                            handleDeleteRecord(props?._id);
+                          }}
+                        >
+                          <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
+                          <span className="absolute left-6 -translate-x-1/2 bottom-full mb-[3px] text-[10px] w-max px-2 py-[2px] text-sm bg-gray-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                            Delete
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="px-4">No Payments Currently Recorded</div>
+              )}
             </div>
           </div>
         </div>
