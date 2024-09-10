@@ -225,8 +225,6 @@ const StudentDashboard = () => {
           </div>
         </div>
 
-        {!studentInfo?.parentEmail && <UpdateEmail />}
-
         {schl?.freeMode ? null : (
           <div>
             {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
