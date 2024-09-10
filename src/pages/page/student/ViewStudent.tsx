@@ -515,7 +515,7 @@ const ViewStudent = () => {
                             }
                             `}
                                   onChange={() => {}}
-                                  checked={props?.feesPaid4rd}
+                                  checked={props?.feesPaid3rd}
                                   onClick={() => {
                                     schoolPaymentEndPoint(props?._id, {
                                       date: moment(Date.now()).format("lll"),

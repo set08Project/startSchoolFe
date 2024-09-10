@@ -9,6 +9,16 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe.onrender.com/api";
 // const URL2: string = "https://startschoolbe.onrender.com";
 
+export const allSchools = async () => {
+  try {
+    return await axios.get(`${URL}/view-all-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const googleAuth = async () => {
   try {
     return await axios.get(`${URL}/api/auth/google`).then((res: any) => {
@@ -142,11 +152,10 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async (schoolID: any) => {
+export const approveRegisterationStatus = async (email: string) => {
   try {
-    console.log("schoolID:", schoolID);
     return await axios
-      .patch(`${URL}/approved-school-registration/${schoolID}`)
+      .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
         console.log("res", res?.data);
         return res;

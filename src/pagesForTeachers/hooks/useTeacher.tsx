@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { Cache } from "swr";
 import {
   classAssignment,
   classAttendance,
@@ -22,6 +22,19 @@ import {
   getSchoolEvent,
 } from "../../pages/api/schoolAPIs";
 import { useSelector } from "react-redux";
+
+const localStorageProvider = () => {
+  // When initializing, we restore the data from `localStorage` into SWR's internal cache:
+  const map = new Map(JSON.parse(localStorage.getItem("app-cache") || "[]"));
+
+  // Before unloading the app, we write back all the data into `localStorage`:
+  window.addEventListener("beforeunload", () => {
+    const appCache = JSON.stringify(Array.from(map.entries()));
+    localStorage.setItem("app-cache", appCache);
+  });
+
+  return map;
+};
 
 export const useTeacherCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -50,6 +63,7 @@ export const useTeacherInfo = () => {
 
   const { data: teacherInfo } = useSWR(
     `api/view-teacher-detail/${dataID}`,
+
     () => {
       return viewTeacherDetail(dataID!).then((res: any) => {
         return res.data;

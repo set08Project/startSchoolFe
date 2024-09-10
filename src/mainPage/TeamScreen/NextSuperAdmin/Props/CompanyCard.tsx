@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { getSchool } from "../../../../pages/api/schoolAPIs";
+import {
+  approveRegisterationStatus,
+  getSchool,
+} from "../../../../pages/api/schoolAPIs";
+import { useAllSchools } from "../../../../pages/hook/useSchoolAuth";
+import { FaSpinner } from "react-icons/fa6";
 
 interface iPropsCard {
   text?: string;
@@ -15,50 +20,24 @@ const CompanyCard: FC<iPropsCard> = ({
   setTotalTeachers,
   setTotalStudents,
 }) => {
-  const [schoolData, setSchoolData] = useState<any[]>([]);
+  const { allSchool } = useAllSchools();
 
-  const getData = async () => {
-    try {
-      const res = await getSchool();
-      if (res?.status === 200) {
-        const schools = res.data?.data || [];
-        setSchoolData(schools);
-        setTotalSchools(schools.length);
-        setTotalTeachers(
-          schools.reduce(
-            (acc: any, school: any) => acc + school.totalTeachers,
-            0
-          )
-        );
-        setTotalStudents(
-          schools.reduce(
-            (acc: any, school: any) => acc + school.totalStudents,
-            0
-          )
-        );
-      } else {
-        console.error("Failed to fetch school data. Status:", res?.status);
-      }
-    } catch (error: any) {
-      console.error("Error fetching school data:", error.message);
-    }
-  };
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const unverifiedSchools = allSchool?.filter((school: any) => !school?.verify);
 
-  const unverifiedSchools = schoolData.filter((school) => !school.verify);
-  const verifiedSchools = schoolData.filter((school) => school.verify);
+  const verifiedSchools = allSchool?.filter((school: any) => school?.verify);
+
+  const [toggle, setToggle] = useState<boolean>(false);
 
   const renderSchoolRow = (school: any) => (
-    <tr key={school._id}>
+    <tr key={school?._id}>
       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex justify-start gap-2 items-center">
-        <img
+        {/* <img
           src={logo}
           alt=""
           className="w-[50px] h-[20px] object-contain rounded-lg mt-2"
-        />
+        /> */}
         <div className="uppercase text-blue-950 text-[14px] mt-2">
           {school.schoolName}
         </div>
@@ -83,8 +62,32 @@ const CompanyCard: FC<iPropsCard> = ({
           className={`w-24 h-9 text-white rounded ${
             school.verify ? "bg-green-600" : "bg-red-600"
           }`}
+          onClick={() => {
+            setToggle(true);
+            console.log(school?._id);
+
+            approveRegisterationStatus(school?.email)
+              .then((res) => {
+                console.log(res);
+              })
+              .finally(() => {
+                setToggle(false);
+              });
+          }}
         >
-          {school.verify ? "Verified" : "Verify"}
+          {school.verify ? (
+            "Verified"
+          ) : (
+            <div className="flex items-center justify-center">
+              {toggle ? (
+                <div>
+                  <FaSpinner className="text-white animate-spin" />
+                </div>
+              ) : (
+                "Verify"
+              )}
+            </div>
+          )}
         </button>
       </td>
     </tr>
@@ -136,8 +139,8 @@ const CompanyCard: FC<iPropsCard> = ({
               </tr>
             </thead>
             <tbody>
-              {unverifiedSchools.length > 0 ? (
-                unverifiedSchools.map(renderSchoolRow)
+              {unverifiedSchools?.length > 0 ? (
+                unverifiedSchools?.map(renderSchoolRow)
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center p-4">
@@ -196,8 +199,8 @@ const CompanyCard: FC<iPropsCard> = ({
               </tr>
             </thead>
             <tbody>
-              {verifiedSchools.length > 0 ? (
-                verifiedSchools.map(renderSchoolRow)
+              {verifiedSchools?.length > 0 ? (
+                verifiedSchools?.map(renderSchoolRow)
               ) : (
                 <tr>
                   <td colSpan={6} className="text-center p-4">
