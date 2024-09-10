@@ -1,8 +1,5 @@
 import axios from "axios";
 
-// const URL: string =
-//   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
-
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
 const URL: string = "https://startschoolbe.onrender.com/api";

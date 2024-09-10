@@ -21,6 +21,7 @@ import ArticleHolderScreen from "./pages/screens/ArticleHolderScreen";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
+
   const { studentInfo } = useStudentInfo();
   document.title = `${studentInfo?.studentFirstName}'s Record and Stats`;
 
@@ -224,12 +225,6 @@ const StudentDashboard = () => {
             <ArticleHolderScreen />
           </div>
         </div>
-
-        {schl?.freeMode ? null : (
-          <div>
-            {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
-          </div>
-        )}
       </div>
     </div>
   );
