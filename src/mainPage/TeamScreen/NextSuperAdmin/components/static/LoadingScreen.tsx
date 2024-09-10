@@ -1,7 +1,7 @@
 import ClipLoader from "react-spinners/ClipLoader";
-import Button from "../reUse/Button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Button from "../../../../../components/reUse/Button";
 
 const LoadingScreen = () => {
   const [state, setState] = useState<boolean>(false);
