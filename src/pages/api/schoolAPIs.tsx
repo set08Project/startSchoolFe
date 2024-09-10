@@ -120,6 +120,16 @@ export const getRecords = async (schoolID: string) => {
 
 // School Fees Records Expenditures api ends here
 
+export const getSchool = async () => {
+  try {
+    return await axios.get(`${URL}/get-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const updateRegisterationStatus = async (data: {}) => {
   try {
     return await axios
@@ -132,14 +142,17 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async () => {
+export const approveRegisterationStatus = async (schoolID: any) => {
   try {
+    console.log("schoolID:", schoolID);
     return await axios
-      .patch(`${URL}/approved-school-registration`)
+      .patch(`${URL}/approved-school-registration/${schoolID}`)
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
+    console.log(error.message);
     return error;
   }
 };
