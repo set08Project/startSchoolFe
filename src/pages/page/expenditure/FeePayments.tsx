@@ -7,6 +7,7 @@ import Select from "react-select";
 import { useEffect, useState } from "react";
 import { getRecords, recordFeesPayment } from "../../api/schoolAPIs";
 import { useSchoolCookie, useSchoolStudents } from "../../hook/useSchoolAuth";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const FeePayments = () => {
   const [fee, setFee] = useState(0);
@@ -63,6 +64,12 @@ const FeePayments = () => {
     handleRecordFee();
     handleGetFeeRecords();
   }, []);
+
+  // const filteredStudents = students?.data?.students?.filter((student: any) => {
+  //   const fullName =
+  //     `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+  //   return fullName.includes(searchStudents.toLowerCase());
+  // });
 
   return (
     <div>
@@ -215,13 +222,15 @@ const FeePayments = () => {
         >
           <div className="w-full ml-[15px] mb-6 flex justify-start items-center"></div>
           <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+            <div className="w-[90px] border-r">Date Paid</div>
             <div className="w-[150px] border-r">Student Name</div>
             <div className="w-[120px] border-r">Amount Paid</div>
-            <div className="w-[200px] border-r">Date Paid</div>
             <div className="w-[120px] border-r">Balance</div>
-            <div className="w-[150px] border-r">Paid By</div>
+            <div className="w-[120px] border-r">Class School Fee</div>
+            <div className="w-[90px] border-r">Paid By</div>
 
-            <div className="w-[120px] border-r">Payment Mode</div>
+            <div className="w-[90px] border-r">Payment Mode</div>
+            <div className="w-[120px] border-r"></div>
           </div>
 
           <div className=" w-[1100px] overflow-hidden">
@@ -230,7 +239,9 @@ const FeePayments = () => {
                 <div key="">
                   <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden">
                     {/* start */}
-
+                    <div className="w-[90px] border-r">
+                      {moment(props?.createdAt).format("ll")}
+                    </div>
                     <div className="w-[150px] border-r flex font-semibold gap-1 items-center">
                       <div>{props?.studentFirstName}</div>
                       <div>{props?.studentLastName}</div>
@@ -243,18 +254,22 @@ const FeePayments = () => {
                       ₦{props?.feePaid[0]}
                     </div>
 
-                    <div className="w-[200px] border-r">
-                      {moment(props?.createdAt).format("ll")}
-                    </div>
                     {/* name */}
                     <div className="w-[120px] border-r text-red-600 font-semibold">
                       ₦{props?.feeBalance}
                     </div>
-                    <div className="w-[150px] border-r">{props?.paidByWho}</div>
-
+                    <div className="w-[120px] border-r text-blue-600 font-semibold">
+                      ₦{props?.classFees}
+                    </div>
+                    <div className="w-[90px] border-r">{props?.paidByWho}</div>
                     {/* check */}
-                    <div className="w-[120px] border-r">
+                    <div className="w-[90px] border-r">
                       {props?.paymentMode}
+                    </div>
+                    <div className="w-[120px] border-r ">
+                      <AiOutlineDelete className="relative text-red-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold">
+                        <div className="absolute top-0 w-[40px] h-[40px] bg-red-500"></div>
+                      </AiOutlineDelete>
                     </div>
                   </div>
                 </div>
