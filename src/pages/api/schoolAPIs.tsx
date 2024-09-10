@@ -117,7 +117,10 @@ export const updateRecordFee = async (recordID: string) => {
         console.log("Get Update Patch Record Api ress", res?.data);
         return res?.data;
       });
-  } catch (error) {}
+  } catch (error) {
+    console.error();
+    return error;
+  }
 };
 
 export const getRecords = async (schoolID: string) => {
