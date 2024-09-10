@@ -12,7 +12,9 @@ const FeePayments = () => {
   const [fee, setFee] = useState(0);
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [feePayments, setFeePayments] = useState(null);
+  const [paidby, setPaidby] = useState("");
+  const [paymentMode, setPaymentMode] = useState("");
+  const [getPayments, setGetPayments] = useState([]);
 
   const schoolID = useSchoolCookie().dataID;
   const formattedDate = dueDate ? moment(dueDate).format("YYYY-MM-DD") : "";
@@ -20,26 +22,19 @@ const FeePayments = () => {
   const getSchool = useSchoolStudents(schoolID);
   const getAllStudents = getSchool?.students?.data?.students;
 
-  // console.log(
-  //   "reading all students",
-  //   getAllStudents.map((el) => {
-  //     return el._id;
-  //   })
-  // );
-
-  const students = getAllStudents?.map((el) => ({
+  const students = getAllStudents?.map!((el) => ({
     value: el._id,
-    label: el.studentFirstName.concat(el?.studentLastName),
+    label: el.studentFirstName.concat("", el?.studentLastName),
   }));
-
-  // console.log("The selected id", selectedStudent.value);
 
   const handleRecordFee = () => {
     try {
       recordFeesPayment(
         schoolID,
-        selectedStudent.value,
+        selectedStudent?.value,
         fee,
+        paidby,
+        paymentMode,
         formattedDate
       ).then((res) => {
         console.log("codebase res", res.data);
@@ -51,22 +46,22 @@ const FeePayments = () => {
     }
   };
 
-  // const handleGetFeeRecords = () => {
-  //   try {
-  //     getRecords(schoolID).then((res) => {
-  //       console.log(res.data);
-  //       setFeePayments(res?.data);
-  //       return res.data;
-  //     });
-  //   } catch (error) {
-  //     console.error();
-  //     return error;
-  //   }
-  // };
+  const handleGetFeeRecords = () => {
+    try {
+      getRecords(schoolID).then((res) => {
+        console.log("code res consol.log", res?.data?.recordPayments);
+        setGetPayments(res?.data?.recordPayments);
+        return res.data;
+      });
+    } catch (error) {
+      console.error();
+      return error;
+    }
+  };
 
   useEffect(() => {
     handleRecordFee();
-    // handleGetFeeRecords();
+    handleGetFeeRecords();
   }, []);
 
   return (
@@ -113,7 +108,7 @@ const FeePayments = () => {
                         placeholder="Select or search for a student"
                         isSearchable
                         onChange={(selectedOption: any) =>
-                          setSelectedStudent(selectedOption.value)
+                          setSelectedStudent(selectedOption)
                         }
                       />
                     </div>
@@ -130,6 +125,52 @@ const FeePayments = () => {
                         setFee(parseFloat(e.target.value) || 0);
                       }}
                     />
+                  </div>
+                  <div className="flex justify-between gap-[20px] items-center ">
+                    <div className="mb-5 w-[50%]">
+                      <div className="text-[15px] mb-1 text-blue-950 font-medium">
+                        Paid By Who
+                      </div>
+                      <div>
+                        <select
+                          className="select select-bordered border-gray-500 w-full max-w-xs"
+                          value={paidby}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setPaidby(e.target.value);
+                          }}
+                        >
+                          <option disabled selected>
+                            Choose
+                          </option>
+                          <option value="Parent">Parent</option>
+                          <option value="Guardian">Guardian</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="mb-5 w-[50%]">
+                      <div className="text-[15px] mb-1 text-blue-950 font-medium">
+                        Mode Of Payment
+                      </div>
+                      <div>
+                        <select
+                          className="select select-bordered border-gray-500 w-full max-w-xs"
+                          value={paymentMode}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setPaymentMode(e.target.value);
+                          }}
+                        >
+                          <option disabled selected>
+                            Payment Method
+                          </option>
+                          <option value="Cash">Cash</option>
+                          <option value="Transfer">Transfer</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div className="mb-5 flex items-center justify-start gap-[20px]">
                     <div className="text-[15px] text-blue-950 font-medium">
@@ -178,39 +219,41 @@ const FeePayments = () => {
             <div className="w-[120px] border-r">Amount</div>
             <div className="w-[200px] border-r">Item</div>
             <div className="w-[120px] border-r">Payment Method</div>
-            <div className="w-[300px] border-r">Description / Notes</div>
+            <div className="w-[150px] border-r">Description / Notes</div>
 
             <div className="w-[120px] border-r">Category</div>
           </div>
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              <div key="">
-                <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
-                  {/* start */}
+              {getPayments?.map((props: any) => (
+                <div key="">
+                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-red-500">
+                    {/* start */}
 
-                  <div className="w-[130px] border-r">
-                    {/* {moment(props?.createdAt).format("ll")} */} Hii
-                  </div>
+                    <div className="w-[130px] border-r">
+                      {moment(props?.createdAt).format("ll")} Hii
+                    </div>
 
-                  <div
-                    className="w-[120px] border-r 
+                    <div
+                      className="w-[120px] border-r 
                      text-red-600"
-                  >
-                    ₦100
-                  </div>
+                    >
+                      ₦100
+                    </div>
 
-                  <div className="w-[200px] border-r">Hello</div>
-                  {/* name */}
-                  <div className="w-[120px] flex justify-center border-r">
-                    vulnerabilities
-                  </div>
-                  <div className="w-[300px] border-r">vulnerabilities</div>
+                    <div className="w-[200px] border-r">Hello</div>
+                    {/* name */}
+                    <div className="w-[120px] flex justify-center border-r">
+                      vulnerabilities
+                    </div>
+                    <div className="w-[150px] border-r">vulnerabilities</div>
 
-                  {/* check */}
-                  <div className="w-[120px] border-r  ">vulnerabilities</div>
+                    {/* check */}
+                    <div className="w-[120px] border-r  ">vulnerabilities</div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

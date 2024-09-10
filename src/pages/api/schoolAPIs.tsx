@@ -90,13 +90,17 @@ export const recordFeesPayment = async (
   schoolID: string,
   studentID: string,
   feePaid: number,
-  feePaidDate: string
+  feePaidDate: string,
+  paidByWho: string,
+  paymentMode: string
 ) => {
   try {
     return await axios
-      .post(`${URL}/record-expense/${schoolID}/${studentID}`, {
+      .post(`${URL}/record-payment/${schoolID}/${studentID}`, {
         feePaid,
         feePaidDate,
+        paidByWho,
+        paymentMode,
       })
       .then((res: any) => {
         console.log("api Record Post Api res", res.data);
@@ -128,7 +132,7 @@ export const getRecords = async (schoolID: string) => {
     return await axios
       .get(`${URL}/getall-fee-records/${schoolID}`)
       .then((res) => {
-        console.log("api GetALL Records Api res", res.data);
+        console.log("Get All Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
