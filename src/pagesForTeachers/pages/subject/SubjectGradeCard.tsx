@@ -2,7 +2,7 @@ document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
@@ -228,7 +228,7 @@ const SubjectGradeCard = () => {
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
   const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs);
 
-  const mainClass = viewClasses?.classRooms?.find((el: any) => {
+  let mainClass = viewClasses?.classRooms?.find((el: any) => {
     return el?.classSubjects?.find((el: any) => {
       return el === subjectID;
     });

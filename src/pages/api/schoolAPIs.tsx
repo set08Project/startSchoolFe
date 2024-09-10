@@ -1,15 +1,23 @@
 import axios, { AxiosResponse } from "axios";
 
-// const URL2: string =
-//   import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
+const URL2: string = import.meta.env.VITE_URL;
 
-// const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
-const URL: string = "https://startschoolbe.onrender.com/api";
-const URL2: string = "https://startschoolbe.onrender.com";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
+
+export const allSchools = async () => {
+  try {
+    return await axios.get(`${URL}/view-all-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const googleAuth = async () => {
   try {
@@ -122,6 +130,16 @@ export const getRecords = async (schoolID: string) => {
 
 // School Fees Records Expenditures api ends here
 
+export const getSchool = async () => {
+  try {
+    return await axios.get(`${URL}/get-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const updateRegisterationStatus = async (data: {}) => {
   try {
     return await axios
@@ -134,14 +152,16 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async () => {
+export const approveRegisterationStatus = async (email: string) => {
   try {
     return await axios
-      .patch(`${URL}/approved-school-registration`)
+      .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
+    console.log(error.message);
     return error;
   }
 };

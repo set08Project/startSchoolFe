@@ -129,7 +129,7 @@ const ScreenHome = () => {
           </div>
         </div>
 
-        <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3  ">
+        <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3">
           {/* Appointment */}
 
           <div className=" rounded-md w-full overflow-x-auto">
