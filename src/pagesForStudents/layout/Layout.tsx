@@ -12,8 +12,11 @@ import toast from "react-hot-toast";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import Sider from "../static/Sider";
 import Header from "../static/Header";
+import UpdateEmail from "../UpdateEmail";
+import { useStudentInfo } from "../hooks/useStudentHook";
 
 const Layout: FC = () => {
+  const { studentInfo } = useStudentInfo();
   const { data } = useSchoolData();
   const show = useSelector((state: any) => state.showStaffComp);
   const showII = useSelector((state: any) => state.showStudent);
@@ -145,6 +148,8 @@ const Layout: FC = () => {
           </div>
         </div>
       </div>
+
+      {!studentInfo?.parentEmail && <UpdateEmail />}
     </div>
   );
 };

@@ -36,6 +36,9 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
     ).then((res: any) => {
       if (res?.status === 200) {
         toast.success("Parent's email added/updated successfully");
+        // mutate(`api/view-student-info/${studentInfo?._id}`);
+
+        console.log("reading: ", res);
 
         setTimeout(() => {
           setStated(false);
@@ -125,7 +128,11 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                     !viewState
                       ? onCreateAssignment
                       : () => {
-                          navigate("/");
+                          mutate(
+                            `api/view-student-info/${studentInfo?._id}`
+                          ).then(() => {
+                            navigate(`/dashboard`);
+                          });
                         }
                   }
                 >
