@@ -215,42 +215,47 @@ const FeePayments = () => {
         >
           <div className="w-full ml-[15px] mb-6 flex justify-start items-center"></div>
           <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
-            <div className="w-[130px] border-r">Date</div>
-            <div className="w-[120px] border-r">Amount</div>
-            <div className="w-[200px] border-r">Item</div>
-            <div className="w-[120px] border-r">Payment Method</div>
-            <div className="w-[150px] border-r">Description / Notes</div>
+            <div className="w-[150px] border-r">Student Name</div>
+            <div className="w-[120px] border-r">Amount Paid</div>
+            <div className="w-[200px] border-r">Date Paid</div>
+            <div className="w-[120px] border-r">Balance</div>
+            <div className="w-[150px] border-r">Paid By</div>
 
-            <div className="w-[120px] border-r">Category</div>
+            <div className="w-[120px] border-r">Payment Mode</div>
           </div>
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
               {getPayments?.map((props: any) => (
                 <div key="">
-                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-red-500">
+                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden">
                     {/* start */}
 
-                    <div className="w-[130px] border-r">
-                      {moment(props?.createdAt).format("ll")} Hii
+                    <div className="w-[150px] border-r flex font-semibold gap-1 items-center">
+                      <div>{props?.studentFirstName}</div>
+                      <div>{props?.studentLastName}</div>
                     </div>
 
                     <div
                       className="w-[120px] border-r 
-                     text-red-600"
+                     text-green-600 font-semibold"
                     >
-                      ₦100
+                      ₦{props?.feePaid[0]}
                     </div>
 
-                    <div className="w-[200px] border-r">Hello</div>
-                    {/* name */}
-                    <div className="w-[120px] flex justify-center border-r">
-                      vulnerabilities
+                    <div className="w-[200px] border-r">
+                      {moment(props?.createdAt).format("ll")}
                     </div>
-                    <div className="w-[150px] border-r">vulnerabilities</div>
+                    {/* name */}
+                    <div className="w-[120px] border-r text-red-600 font-semibold">
+                      ₦{props?.feeBalance}
+                    </div>
+                    <div className="w-[150px] border-r">{props?.paidByWho}</div>
 
                     {/* check */}
-                    <div className="w-[120px] border-r  ">vulnerabilities</div>
+                    <div className="w-[120px] border-r">
+                      {props?.paymentMode}
+                    </div>
                   </div>
                 </div>
               ))}
