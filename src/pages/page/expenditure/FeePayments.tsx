@@ -1,6 +1,6 @@
 import moment from "moment";
 import Input from "../../../components/reUse/Input";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -58,6 +58,7 @@ const FeePayments = () => {
       getRecords(schoolID).then((res) => {
         if (res && res?.data) {
           setGetPayments(res?.data?.recordPayments);
+          toast.success("School Fees Record Deleted");
           return res.data;
         } else {
           setGetPayments([]);
@@ -270,7 +271,7 @@ const FeePayments = () => {
 
                       <div
                         className="w-[120px] border-r 
-                   text-green-600 font-semibold"
+                    text-green-600 font-semibold"
                       >
                         ₦{props?.feePaid[0]}
                       </div>
@@ -283,11 +284,11 @@ const FeePayments = () => {
                         ₦{props?.classFees}
                       </div>
                       <div className="w-[90px] border-r">
-                        {props?.paidByWho}
+                        {props?.feePaidDate}
                       </div>
                       {/* check */}
                       <div className="w-[90px] border-r">
-                        {props?.paymentMode}
+                        {props?.paidByWho}
                       </div>
                       <div className="w-[120px] ">
                         <div
