@@ -5,7 +5,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import { useEffect, useState } from "react";
-import { getRecords, recordFeesPayment } from "../../api/schoolAPIs";
+import {
+  deleteRecord,
+  getRecords,
+  recordFeesPayment,
+} from "../../api/schoolAPIs";
 import { useSchoolCookie, useSchoolStudents } from "../../hook/useSchoolAuth";
 import { AiOutlineDelete } from "react-icons/ai";
 
@@ -27,6 +31,8 @@ const FeePayments = () => {
     value: el._id,
     label: el.studentFirstName.concat("", el?.studentLastName),
   }));
+
+  const studentID = "66cdeaffeda125af9c927287";
 
   const handleRecordFee = () => {
     try {
@@ -50,8 +56,22 @@ const FeePayments = () => {
   const handleGetFeeRecords = () => {
     try {
       getRecords(schoolID).then((res) => {
-        console.log("code res consol.log", res?.data?.recordPayments);
-        setGetPayments(res?.data?.recordPayments);
+        if (res && res?.data) {
+          setGetPayments(res?.data?.recordPayments);
+          return res.data;
+        } else {
+          setGetPayments([]);
+        }
+      });
+    } catch (error) {
+      console.error();
+      return error;
+    }
+  };
+
+  const handleDeleteRecord = (recordID) => {
+    try {
+      deleteRecord(schoolID, studentID, recordID).then((res) => {
         return res.data;
       });
     } catch (error) {
@@ -230,14 +250,14 @@ const FeePayments = () => {
             <div className="w-[90px] border-r">Paid By</div>
 
             <div className="w-[90px] border-r">Payment Mode</div>
-            <div className="w-[120px] border-r"></div>
+            <div className="w-[120px]"></div>
           </div>
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
               {getPayments?.map((props: any) => (
                 <div key="">
-                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden">
+                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
                     {/* start */}
                     <div className="w-[90px] border-r">
                       {moment(props?.createdAt).format("ll")}
@@ -266,10 +286,16 @@ const FeePayments = () => {
                     <div className="w-[90px] border-r">
                       {props?.paymentMode}
                     </div>
-                    <div className="w-[120px] border-r ">
-                      <AiOutlineDelete className="relative text-red-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold">
-                        <div className="absolute top-0 w-[40px] h-[40px] bg-red-500"></div>
-                      </AiOutlineDelete>
+                    <div className="w-[120px] ">
+                      <div
+                        className="ml-5 relative group"
+                        onClick={handleDeleteRecord(props?._id)}
+                      >
+                        <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
+                        <span className="absolute left-6 -translate-x-1/2 bottom-full mb-[3px] text-[10px] w-max px-2 py-[2px] text-sm bg-gray-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                          Delete
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
