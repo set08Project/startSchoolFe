@@ -106,16 +106,11 @@ export const useSchoolClassRM = () => {
 };
 
 export const useViewSchoolClassRM = (schoolID: string) => {
-  const { data: viewClasses } = useSWR(
-    `api/view-classrooms/`,
-    () => {
-      return viewSchoolClassroom(schoolID!).then((res) => {
-        return res.data;
-      });
-    }
-
-    // { refreshInterval: 2000 }
-  );
+  const { data: viewClasses } = useSWR(`api/view-classrooms/`, async () => {
+    return await viewSchoolClassroom(schoolID!).then((res) => {
+      return res.data;
+    });
+  });
   return { viewClasses };
 };
 
