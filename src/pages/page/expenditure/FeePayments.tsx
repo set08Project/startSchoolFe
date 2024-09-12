@@ -10,7 +10,11 @@ import {
   getRecords,
   recordFeesPayment,
 } from "../../api/schoolAPIs";
-import { useSchoolCookie, useSchoolStudents } from "../../hook/useSchoolAuth";
+import {
+  useFeeRecords,
+  useSchoolCookie,
+  useSchoolStudents,
+} from "../../hook/useSchoolAuth";
 import { AiOutlineDelete } from "react-icons/ai";
 
 const FeePayments = () => {
@@ -19,10 +23,10 @@ const FeePayments = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [paidby, setPaidby] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  const [getPayments, setGetPayments] = useState([]);
+  // const [getPayments, setGetPayments] = useState([]);
 
   const schoolID = useSchoolCookie().dataID;
-  
+
   const formattedDate = dueDate ? moment(dueDate).format("YYYY-MM-DD") : "";
 
   const getSchool = useSchoolStudents(schoolID);
@@ -33,8 +37,8 @@ const FeePayments = () => {
     label: el.studentFirstName.concat("", el?.studentLastName),
   }));
 
-  const studentID = "66cdef09eda125af9c9277a2";
-  console.log("Reading", selectedStudent?.value);
+  // My Get Function
+  const { payments } = useFeeRecords(schoolID);
 
   const handleRecordFee = () => {
     try {
@@ -55,23 +59,23 @@ const FeePayments = () => {
     }
   };
 
-  const handleGetFeeRecords = () => {
-    try {
-      getRecords(schoolID).then((res) => {
-        if (res && res?.data) {
-          setGetPayments(res?.data?.recordPayments);
-          return res.data;
-        } else {
-          setGetPayments([]);
-        }
-      });
-    } catch (error) {
-      console.error();
-      return error;
-    }
-  };
+  // const handleGetFeeRecords = () => {
+  //   try {
+  //     getRecords(schoolID).then((res) => {
+  //       if (res && res?.data) {
+  //         setGetPayments(res?.data?.recordPayments);
+  //         return res.data;
+  //       } else {
+  //         setGetPayments([]);
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error();
+  //     return error;
+  //   }
+  // };
 
-  const handleDeleteRecord = (recordID) => {
+  const handleDeleteRecord = (studentID, recordID) => {
     try {
       deleteRecord(schoolID, studentID, recordID).then((res) => {
         toast.success("School Fees Record Deleted");
@@ -86,7 +90,6 @@ const FeePayments = () => {
 
   useEffect(() => {
     handleRecordFee();
-    handleGetFeeRecords();
   }, []);
 
   // const filteredStudents = students?.data?.students?.filter((student: any) => {
@@ -259,8 +262,8 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {getPayments.length >= 0 ? (
-                getPayments?.map((props: any) => (
+              {payments.length >= 0 ? (
+                payments?.map((props: any) => (
                   <div key={props?._id} className="">
                     <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
                       {/* start */}
@@ -302,7 +305,7 @@ const FeePayments = () => {
                         <div
                           className="ml-5 relative group"
                           onClick={() => {
-                            handleDeleteRecord(props?._id);
+                            handleDeleteRecord(props?.studentID, props?._id);
                           }}
                         >
                           <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
