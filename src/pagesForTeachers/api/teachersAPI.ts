@@ -1,16 +1,11 @@
 import axios from "axios";
 
-<<<<<<< HEAD
-// const URL: string =
-//   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
+const URL: string =
+  import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-=======
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
->>>>>>> b3ecae159edf199d7b91a94fcf043f74379fef9c
-const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = "https://startschoolbe.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
