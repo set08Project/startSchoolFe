@@ -425,18 +425,18 @@ export const useAllSchools = () => {
 
 export const useFeeRecords = (schoolID: string) => {
   try {
-    const { data, error } = useSWR(
+    const { data: recordPayment } = useSWR(
       `api/getall-fee-records/${schoolID}`,
       async () => {
         return await getRecords(schoolID).then(
           (res: any) => res?.data?.recordPayments || []
         );
       },
-      { refreshInterval: 3000 }
+      { refreshInterval: 2000 }
     );
 
     return {
-      payments: data || [],
+      payments: recordPayment || [],
     };
   } catch (error) {
     console.error();

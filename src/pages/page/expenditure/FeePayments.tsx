@@ -23,7 +23,6 @@ const FeePayments = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [paidby, setPaidby] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  // const [getPayments, setGetPayments] = useState([]);
 
   const schoolID = useSchoolCookie().dataID;
 
@@ -40,6 +39,7 @@ const FeePayments = () => {
   // My Get Function
   const { payments } = useFeeRecords(schoolID);
 
+  // My Post Function
   const handleRecordFee = () => {
     try {
       recordFeesPayment(
@@ -50,30 +50,15 @@ const FeePayments = () => {
         paymentMode,
         formattedDate
       ).then((res) => {
-        console.log("codebase res", res.data);
+        toast.success("Successfully Recorded Fee Payment");
         return res?.data;
       });
     } catch (error) {
+      toast.success("Network Connection Error");
       console.error();
       return error;
     }
   };
-
-  // const handleGetFeeRecords = () => {
-  //   try {
-  //     getRecords(schoolID).then((res) => {
-  //       if (res && res?.data) {
-  //         setGetPayments(res?.data?.recordPayments);
-  //         return res.data;
-  //       } else {
-  //         setGetPayments([]);
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error();
-  //     return error;
-  //   }
-  // };
 
   const handleDeleteRecord = (studentID, recordID) => {
     try {
@@ -87,10 +72,6 @@ const FeePayments = () => {
       return error;
     }
   };
-
-  useEffect(() => {
-    handleRecordFee();
-  }, []);
 
   // const filteredStudents = students?.data?.students?.filter((student: any) => {
   //   const fullName =
@@ -175,9 +156,7 @@ const FeePayments = () => {
                             setPaidby(e.target.value);
                           }}
                         >
-                          <option disabled selected>
-                            Choose
-                          </option>
+                          <option selected>Choose</option>
                           <option value="Parent">Parent</option>
                           <option value="Guardian">Guardian</option>
                         </select>
@@ -197,9 +176,7 @@ const FeePayments = () => {
                             setPaymentMode(e.target.value);
                           }}
                         >
-                          <option disabled selected>
-                            Payment Method
-                          </option>
+                          <option selected>Payment Method</option>
                           <option value="Cash">Cash</option>
                           <option value="Transfer">Transfer</option>
                         </select>
@@ -262,7 +239,7 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {payments.length >= 0 ? (
+              {payments.length > 0 ? (
                 payments?.map((props: any) => (
                   <div key={props?._id} className="">
                     <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
@@ -308,7 +285,7 @@ const FeePayments = () => {
                             handleDeleteRecord(props?.studentID, props?._id);
                           }}
                         >
-                          <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
+                          <AiOutlineDelete className="text-slate-600 text-[22px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
                           <span className="absolute left-6 -translate-x-1/2 bottom-full mb-[3px] text-[10px] w-max px-2 py-[2px] text-sm bg-gray-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
                             Delete
                           </span>
