@@ -5,6 +5,7 @@ import {
   getClassSubjects,
   getClassTimeTable,
   getClassroom,
+  getRecords,
   getSchoolAnncoement,
   getSchoolClassroom,
   getSchoolCookie,
@@ -60,11 +61,15 @@ export const useSchool = (schoolID: string) => {
 export const useSchoolCookie = () => {
   const user = useSelector((state: any) => state.user);
 
-  const { data: dataID } = useSWR(`api/read-school-cookie/`, () => {
-    return getSchoolCookie().then((res) => {
-      return res.data;
-    });
-  });
+  const { data: dataID } = useSWR(
+    `api/read-school-cookie/`,
+    () => {
+      return getSchoolCookie().then((res) => {
+        return res.data;
+      });
+    },
+    { refreshInterval: 3000 }
+  );
 
   return { dataID: user?.id };
 };
@@ -414,4 +419,27 @@ export const useAllSchools = () => {
     });
   });
   return { allSchool };
+};
+
+// Records Get all
+
+export const useFeeRecords = (schoolID: string) => {
+  try {
+    const { data: recordPayment } = useSWR(
+      `api/getall-fee-records/${schoolID}`,
+      async () => {
+        return await getRecords(schoolID).then(
+          (res: any) => res?.data?.recordPayments || []
+        );
+      },
+      { refreshInterval: 2000 }
+    );
+
+    return {
+      payments: recordPayment || [],
+    };
+  } catch (error) {
+    console.error();
+    return error;
+  }
 };

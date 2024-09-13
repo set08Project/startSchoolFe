@@ -85,7 +85,8 @@ const ViewSubjects = () => {
   };
 
   const subjectSearch = schoolSubject?.subjects?.filter((subject: any) => {
-    const subjectName = `${subject?.subjectTitle}`.toLowerCase();
+    const subjectName =
+      `${subject?.subjectTitle} ${subject?.designated}`.toLowerCase();
     return subjectName.includes(searchSubject.toLowerCase());
   });
 
@@ -97,7 +98,7 @@ const ViewSubjects = () => {
 
       <div className="flex w-full justify-between items-start">
         <Input
-          placeholder="Search Subject Name"
+          placeholder="Search Subject Or Class Name "
           className="ml-0"
           value={searchSubject}
           onChange={handleSubjectSearch}

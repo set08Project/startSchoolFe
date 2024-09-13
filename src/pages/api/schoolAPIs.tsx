@@ -113,7 +113,6 @@ export const recordFeesPayment = async (
         paymentMode,
       })
       .then((res: any) => {
-        console.log("api Record Post Api res", res.data);
         return res.data;
       });
   } catch (error: any) {
@@ -128,7 +127,6 @@ export const updateRecordFee = async (recordID: string) => {
     return await axios
       .patch(`${URL}/second-payment/${recordID}`)
       .then((res) => {
-        console.log("Get Update Patch Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -142,7 +140,6 @@ export const getRecords = async (schoolID: string) => {
     return await axios
       .get(`${URL}/getall-fee-records/${schoolID}`)
       .then((res) => {
-        console.log("Get All Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -156,7 +153,6 @@ export const getOneRecord = async (studentID: string) => {
     return await axios
       .get(`${URL}/getone-fee-records/${studentID}`)
       .then((res) => {
-        console.log("Get One Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -174,7 +170,6 @@ export const deleteRecord = async (
     return await axios
       .delete(`${URL}/delete-fee-record/${schoolID}/${studentID}/${recordID}`)
       .then((res) => {
-        console.log("Get Delete Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
