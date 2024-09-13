@@ -67,8 +67,8 @@ export const useSchoolCookie = () => {
       return getSchoolCookie().then((res) => {
         return res.data;
       });
-    },
-    { refreshInterval: 3000 }
+    }
+    // { refreshInterval: 3000 }
   );
 
   return { dataID: user?.id };
@@ -170,12 +170,12 @@ export const useSchoolTeacher = () => {
 
   const { data: schoolTeacher } = useSWR(
     `api/view-school-teacher/${dataID}`,
-    () => {
-      return viewSchoolTeacher(dataID!).then((res) => {
+    async () => {
+      return await viewSchoolTeacher(dataID!).then((res) => {
         return res.data;
       });
-    },
-    { refreshInterval: 3500 }
+    }
+    // { refreshInterval: 3500 }
   );
   return { schoolTeacher };
 };
@@ -237,8 +237,8 @@ export const useSchoolStudents = (schoolID: string) => {
       return getSchoolStudents(schoolID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 3500 }
+    }
+    // { refreshInterval: 3500 }
   );
 
   return { students };
