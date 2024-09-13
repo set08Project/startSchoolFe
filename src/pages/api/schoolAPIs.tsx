@@ -8,8 +8,11 @@ import axios from "axios";
 
 // working locally
 
-const URL: string = "https://startschoolbe.onrender.com/api";
-const URL2: string = "https://startschoolbe.onrender.com";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
+
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
 
 export const allSchools = async () => {
   try {
