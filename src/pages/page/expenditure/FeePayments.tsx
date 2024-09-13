@@ -4,12 +4,8 @@ import toast, { Toaster } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import { useEffect, useState } from "react";
-import {
-  deleteRecord,
-  getRecords,
-  recordFeesPayment,
-} from "../../api/schoolAPIs";
+import { useState } from "react";
+import { deleteRecord, recordFeesPayment } from "../../api/schoolAPIs";
 import {
   useFeeRecords,
   useSchoolCookie,
@@ -23,6 +19,7 @@ const FeePayments = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [paidby, setPaidby] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const schoolID = useSchoolCookie().dataID;
 
@@ -73,11 +70,14 @@ const FeePayments = () => {
     }
   };
 
-  // const filteredStudents = students?.data?.students?.filter((student: any) => {
-  //   const fullName =
-  //     `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
-  //   return fullName.includes(searchStudents.toLowerCase());
-  // });
+  const filteredPayments = payments?.filter((payment) => {
+    const fullName =
+      `${payment?.studentFirstName} ${payment?.studentLastName}`.toLowerCase();
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      payment?.studentClass?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   return (
     <div>
@@ -90,6 +90,8 @@ const FeePayments = () => {
             <Input
               placeholder="Search for expense ITEM"
               className="ml-1 mt-6"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
 
             <div className="modal-action ml-6 flex">
@@ -239,8 +241,8 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {payments.length > 0 ? (
-                payments?.map((props: any) => (
+              {filteredPayments.length > 0 ? (
+                filteredPayments?.map((props: any) => (
                   <div key={props?._id} className="">
                     <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
                       {/* start */}
@@ -261,15 +263,15 @@ const FeePayments = () => {
                         className="w-[90px] border-r 
                     text-green-600 font-semibold"
                       >
-                        ₦{props?.feePaid[0]}
+                        ₦{props?.feePaid[0].toLocaleString()}
                       </div>
 
                       {/* name */}
                       <div className="w-[90px] border-r text-red-600 font-semibold">
-                        ₦{props?.feeBalance}
+                        ₦{props?.feeBalance.toLocaleString()}
                       </div>
                       <div className="w-[120px] border-r text-blue-600 font-semibold">
-                        ₦{props?.classFees}
+                        ₦{props?.classFees.toLocaleString()}
                       </div>
                       <div className="w-[90px] border-r">
                         {props?.feePaidDate}
