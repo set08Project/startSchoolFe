@@ -232,7 +232,7 @@ const ViewStudent = () => {
 
   const filteredStudents = students?.data?.students?.filter((student: any) => {
     const fullName =
-      `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+      `${student.studentFirstName} ${student.studentLastName} ${student.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
 
@@ -249,7 +249,7 @@ const ViewStudent = () => {
 
       <div className="flex w-full justify-between items-start">
         <Input
-          placeholder="Search Student Name"
+          placeholder="Search Student Name or Class"
           className="ml-0"
           value={searchStudents}
           onChange={handleSearch}

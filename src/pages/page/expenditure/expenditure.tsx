@@ -21,6 +21,7 @@ const expenditure = () => {
   const [description, setDescription] = useState<string>();
   const [paymentCategory, setPaymentCategory] = useState<string>();
   const [paymentMode, setPaymentMode] = useState<string>();
+  const [search, setSearch] = useState("");
 
   const { data } = useSchoolData();
   const { termlyExpense } = useTermExpenses(data?._id);
@@ -53,6 +54,14 @@ const expenditure = () => {
     .reduce((a: number, b: number) => {
       return a + b;
     }, 0);
+
+  const allExpenditures: any = termlyExpense?.data?.expense;
+
+  const filteredExpenditure = allExpenditures?.filter((expendyture) => {
+    const full =
+      `${expendyture?.item} ${expendyture?.paymentMode}`.toLowerCase();
+    return full.includes(search.toLowerCase());
+  });
 
   return (
     <div>
@@ -147,7 +156,12 @@ const expenditure = () => {
       </div>
       <div>
         <div className="flex w-full justify-between items-start">
-          <Input placeholder="Search for expense ITEM" className="ml-1" />
+          <Input
+            placeholder="Search for expense Item Or Payment Mode"
+            className="ml-1"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
           <div className="modal-action ml-6">
             <label
@@ -262,11 +276,9 @@ const expenditure = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="w-full ml-[15px] mb-6 flex justify-start items-center">
-          <Link to="/view-all-expenditures">
-            <div className="text-blue-950 text-[12px] uppercase font-semibold">
-              view all expenses
-            </div>
-          </Link>
+          <div className="text-blue-950 text-[12px] uppercase font-semibold">
+            All expenses
+          </div>
         </div>
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Date</div>
@@ -280,7 +292,7 @@ const expenditure = () => {
 
         <div className=" w-[1100px] overflow-hidden">
           <div className="transition-all duration-300">
-            {termlyExpense?.data?.expense?.map((props: any) => (
+            {filteredExpenditure?.map((props: any) => (
               <div key={props?._id}>
                 <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
                   {/* start */}

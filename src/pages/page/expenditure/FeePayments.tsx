@@ -72,11 +72,8 @@ const FeePayments = () => {
 
   const filteredPayments = payments?.filter((payment) => {
     const fullName =
-      `${payment?.studentFirstName} ${payment?.studentLastName}`.toLowerCase();
-    return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      payment?.studentClass?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      `${payment?.studentFirstName} ${payment?.studentLastName} ${payment?.studentClass}`.toLowerCase();
+    return fullName.includes(searchTerm.toLowerCase());
   });
 
   return (
@@ -88,7 +85,7 @@ const FeePayments = () => {
         <div>
           <div className="w-full flex justify-between items-start">
             <Input
-              placeholder="Search for expense ITEM"
+              placeholder="Search Student Name or Class"
               className="ml-1 mt-6"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
