@@ -277,7 +277,7 @@ const expenditure = () => {
       >
         <div className="w-full ml-[15px] mb-6 flex justify-start items-center">
           <div className="text-blue-950 text-[12px] uppercase font-semibold">
-            All expenses
+            all expenses
           </div>
         </div>
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
@@ -292,36 +292,42 @@ const expenditure = () => {
 
         <div className=" w-[1100px] overflow-hidden">
           <div className="transition-all duration-300">
-            {filteredExpenditure?.map((props: any) => (
-              <div key={props?._id}>
-                <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
-                  {/* start */}
+            {filteredExpenditure?.length > 0 ? (
+              filteredExpenditure?.map((props: any) => (
+                <div key={props?._id}>
+                  <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
+                    {/* start */}
 
-                  <div className="w-[130px] border-r">
-                    {moment(props?.createdAt).format("ll")}
-                  </div>
+                    <div className="w-[130px] border-r">
+                      {moment(props?.createdAt).format("ll")}
+                    </div>
 
-                  <div
-                    className="w-[120px] border-r 
+                    <div
+                      className="w-[120px] border-r 
                      text-red-600"
-                  >
-                    ₦{props?.amount?.toLocaleString()}
-                  </div>
+                    >
+                      ₦{props?.amount?.toLocaleString()}
+                    </div>
 
-                  <div className="w-[200px] border-r">{props?.item}</div>
-                  {/* name */}
-                  <div className="w-[120px] flex justify-center border-r">
-                    {props?.paymentMode}
-                  </div>
-                  <div className="w-[300px] border-r">{props?.description}</div>
+                    <div className="w-[200px] border-r">{props?.item}</div>
+                    {/* name */}
+                    <div className="w-[120px] flex justify-center border-r">
+                      {props?.paymentMode}
+                    </div>
+                    <div className="w-[300px] border-r">
+                      {props?.description}
+                    </div>
 
-                  {/* check */}
-                  <div className="w-[120px] border-r  ">
-                    {props?.paymentCategory}
+                    {/* check */}
+                    <div className="w-[120px] border-r  ">
+                      {props?.paymentCategory}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="px-4">No Expenditure Currently Recorded</div>
+            )}
           </div>
         </div>
       </div>
