@@ -1,15 +1,15 @@
 import axios from "axios";
 
-// const URL2: string =
-//   import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
+const URL2: string =
+  import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
 
-// const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+const URL: string =
+  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // working locally
 
-const URL: string = "https://startschoolbe.onrender.com/api";
-const URL2: string = "https://startschoolbe.onrender.com";
+// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL2: string = "https://startschoolbe.onrender.com";
 
 export const allSchools = async () => {
   try {
@@ -110,7 +110,6 @@ export const recordFeesPayment = async (
         paymentMode,
       })
       .then((res: any) => {
-        console.log("api Record Post Api res", res.data);
         return res.data;
       });
   } catch (error: any) {
@@ -125,7 +124,6 @@ export const updateRecordFee = async (recordID: string) => {
     return await axios
       .patch(`${URL}/second-payment/${recordID}`)
       .then((res) => {
-        console.log("Get Update Patch Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -139,7 +137,6 @@ export const getRecords = async (schoolID: string) => {
     return await axios
       .get(`${URL}/getall-fee-records/${schoolID}`)
       .then((res) => {
-        console.log("Get All Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -153,7 +150,6 @@ export const getOneRecord = async (studentID: string) => {
     return await axios
       .get(`${URL}/getone-fee-records/${studentID}`)
       .then((res) => {
-        console.log("Get One Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -171,7 +167,6 @@ export const deleteRecord = async (
     return await axios
       .delete(`${URL}/delete-fee-record/${schoolID}/${studentID}/${recordID}`)
       .then((res) => {
-        console.log("Get Delete Record Api ress", res?.data);
         return res?.data;
       });
   } catch (error) {

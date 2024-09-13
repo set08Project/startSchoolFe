@@ -4,13 +4,13 @@ import toast, { Toaster } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { deleteRecord, recordFeesPayment } from "../../api/schoolAPIs";
 import {
-  deleteRecord,
-  getRecords,
-  recordFeesPayment,
-} from "../../api/schoolAPIs";
-import { useSchoolCookie, useSchoolStudents } from "../../hook/useSchoolAuth";
+  useFeeRecords,
+  useSchoolCookie,
+  useSchoolStudents,
+} from "../../hook/useSchoolAuth";
 import { AiOutlineDelete } from "react-icons/ai";
 
 const FeePayments = () => {
@@ -19,9 +19,10 @@ const FeePayments = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [paidby, setPaidby] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  const [getPayments, setGetPayments] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const schoolID = useSchoolCookie().dataID;
+
   const formattedDate = dueDate ? moment(dueDate).format("YYYY-MM-DD") : "";
 
   const getSchool = useSchoolStudents(schoolID);
@@ -32,8 +33,10 @@ const FeePayments = () => {
     label: el.studentFirstName.concat("", el?.studentLastName),
   }));
 
-  const studentID = "66cdeaffeda125af9c927287";
+  // My Get Function
+  const { payments } = useFeeRecords(schoolID);
 
+  // My Post Function
   const handleRecordFee = () => {
     try {
       recordFeesPayment(
@@ -44,53 +47,34 @@ const FeePayments = () => {
         paymentMode,
         formattedDate
       ).then((res) => {
-        console.log("codebase res", res.data);
+        toast.success("Successfully Recorded Fee Payment");
         return res?.data;
       });
     } catch (error) {
+      toast.success("Network Connection Error");
       console.error();
       return error;
     }
   };
 
-  const handleGetFeeRecords = () => {
-    try {
-      getRecords(schoolID).then((res) => {
-        if (res && res?.data) {
-          setGetPayments(res?.data?.recordPayments);
-          toast.success("School Fees Record Deleted");
-          return res.data;
-        } else {
-          setGetPayments([]);
-        }
-      });
-    } catch (error) {
-      console.error();
-      return error;
-    }
-  };
-
-  const handleDeleteRecord = (recordID) => {
+  const handleDeleteRecord = (studentID, recordID) => {
     try {
       deleteRecord(schoolID, studentID, recordID).then((res) => {
+        toast.success("School Fees Record Deleted");
         return res.data;
       });
     } catch (error) {
+      toast.error("Error Deleting Fees Record");
       console.error();
       return error;
     }
   };
 
-  useEffect(() => {
-    handleRecordFee();
-    handleGetFeeRecords();
-  }, []);
-
-  // const filteredStudents = students?.data?.students?.filter((student: any) => {
-  //   const fullName =
-  //     `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
-  //   return fullName.includes(searchStudents.toLowerCase());
-  // });
+  const filteredPayments = payments?.filter((payment) => {
+    const fullName =
+      `${payment?.studentFirstName} ${payment?.studentLastName} ${payment?.studentClass}`.toLowerCase();
+    return fullName.includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div>
@@ -101,8 +85,10 @@ const FeePayments = () => {
         <div>
           <div className="w-full flex justify-between items-start">
             <Input
-              placeholder="Search for expense ITEM"
+              placeholder="Search Student Name or Class"
               className="ml-1 mt-6"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
 
             <div className="modal-action ml-6 flex">
@@ -147,7 +133,7 @@ const FeePayments = () => {
                     </div>
                     <input
                       type="text"
-                      placeholder="Enter amount, e.g., ₦20,000"
+                      placeholder="Enter amount, e.g., 20000"
                       className="border-[1px] border-gray-400 outline-none w-full rounded-md p-2"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setFee(parseFloat(e.target.value) || 0);
@@ -169,9 +155,7 @@ const FeePayments = () => {
                             setPaidby(e.target.value);
                           }}
                         >
-                          <option disabled selected>
-                            Choose
-                          </option>
+                          <option selected>Choose</option>
                           <option value="Parent">Parent</option>
                           <option value="Guardian">Guardian</option>
                         </select>
@@ -191,9 +175,7 @@ const FeePayments = () => {
                             setPaymentMode(e.target.value);
                           }}
                         >
-                          <option disabled selected>
-                            Payment Method
-                          </option>
+                          <option selected>Payment Method</option>
                           <option value="Cash">Cash</option>
                           <option value="Transfer">Transfer</option>
                         </select>
@@ -244,10 +226,10 @@ const FeePayments = () => {
           <div className="w-full ml-[15px] mb-6 flex justify-start items-center"></div>
           <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
             <div className="w-[90px] border-r">Date Paid</div>
-            <div className="w-[150px] border-r">Student Name</div>
-            <div className="w-[120px] border-r">Amount Paid</div>
-            <div className="w-[120px] border-r">Balance</div>
-            <div className="w-[120px] border-r">Class School Fee</div>
+            <div className="w-[230px] border-r">Student Name</div>
+            <div className="w-[90px] border-r">Amount Paid</div>
+            <div className="w-[90px] border-r">Balance</div>
+            <div className="w-[120px] border-r">School Class Fee</div>
             <div className="w-[90px] border-r">Paid By</div>
 
             <div className="w-[90px] border-r">Payment Mode</div>
@@ -256,32 +238,37 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {getPayments.length > 0 ? (
-                getPayments?.map((props: any) => (
-                  <div key="">
+              {filteredPayments.length > 0 ? (
+                filteredPayments?.map((props: any) => (
+                  <div key={props?._id} className="">
                     <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
                       {/* start */}
                       <div className="w-[90px] border-r">
                         {moment(props?.createdAt).format("ll")}
                       </div>
-                      <div className="w-[150px] border-r flex font-semibold gap-1 items-center">
-                        <div>{props?.studentFirstName}</div>
-                        <div>{props?.studentLastName}</div>
+                      <div className="w-[230px] border-r pr-2 flex justify-between items-end font-semibold gap-1">
+                        <div className="flex items-center gap-1">
+                          <div>{props?.studentFirstName}</div>
+                          <div>{props?.studentLastName}</div>
+                        </div>
+                        <div className="text-[10px] border rounded-md py-[2px] px-[3px] font-bold">
+                          {props?.studentClass}
+                        </div>
                       </div>
 
                       <div
-                        className="w-[120px] border-r 
+                        className="w-[90px] border-r 
                     text-green-600 font-semibold"
                       >
-                        ₦{props?.feePaid[0]}
+                        ₦{props?.feePaid[0].toLocaleString()}
                       </div>
 
                       {/* name */}
-                      <div className="w-[120px] border-r text-red-600 font-semibold">
-                        ₦{props?.feeBalance}
+                      <div className="w-[90px] border-r text-red-600 font-semibold">
+                        ₦{props?.feeBalance.toLocaleString()}
                       </div>
                       <div className="w-[120px] border-r text-blue-600 font-semibold">
-                        ₦{props?.classFees}
+                        ₦{props?.classFees.toLocaleString()}
                       </div>
                       <div className="w-[90px] border-r">
                         {props?.feePaidDate}
@@ -294,10 +281,10 @@ const FeePayments = () => {
                         <div
                           className="ml-5 relative group"
                           onClick={() => {
-                            handleDeleteRecord(props?._id);
+                            handleDeleteRecord(props?.studentID, props?._id);
                           }}
                         >
-                          <AiOutlineDelete className="text-slate-600 text-[20px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
+                          <AiOutlineDelete className="text-slate-600 text-[22px] hover:scale-105 hover:animate-pulse cursor-pointer font-extrabold hover:text-[22px] transition-all duration-[350ms]" />
                           <span className="absolute left-6 -translate-x-1/2 bottom-full mb-[3px] text-[10px] w-max px-2 py-[2px] text-sm bg-gray-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
                             Delete
                           </span>
