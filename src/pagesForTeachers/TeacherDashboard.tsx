@@ -68,6 +68,13 @@ const TeacherDashboard = () => {
     <div className="text-blue-950 flex flex-col h-full">
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
+          <div className="mb-4 flex items-center gap-2">
+            <div>My Name: </div>
+            <div className="font-bold text-[20px]">
+              {" "}
+              {teacherInfo?.staffName}
+            </div>
+          </div>
           <div className="flex justify-between items-center mb-6 text-blue-950 ">
             <div className="mb-4 text-medium capitalize font-semibold ">
               <div className="text-[12px]"> My Present Class View: </div>

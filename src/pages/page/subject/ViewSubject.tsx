@@ -98,7 +98,7 @@ const ViewSubjects = () => {
 
       <div className="flex w-full justify-between items-start">
         <Input
-          placeholder="Search Subject Name"
+          placeholder="Search Subject Or Class Name "
           className="ml-0"
           value={searchSubject}
           onChange={handleSubjectSearch}
