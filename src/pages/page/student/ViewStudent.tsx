@@ -587,6 +587,9 @@ const ViewStudent = () => {
                         </div>
                         <div className="w-[200px] border-r gap-2 font-bold">
                           {props?.studentFirstName} {props?.studentLastName}
+                          <div className="text-slate-500 font-medium">
+                            RegID: {props?.enrollmentID}
+                          </div>
                         </div>
                         <div className="w-[100px] border-r  ">
                           {props?.classAssigned}

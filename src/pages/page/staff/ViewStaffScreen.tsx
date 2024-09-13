@@ -186,7 +186,13 @@ const ViewStaffScreen = () => {
                       src={props?.avatar ? props?.avatar : pix}
                     />
                   </div>
-                  <div className="w-[200px] border-r">{props?.staffName}</div>
+                  <div className="w-[200px] border-r">
+                    {props?.staffName}
+
+                    <div className="text-slate-500">
+                      ID: {props?.enrollmentID}
+                    </div>
+                  </div>
 
                   {/* check */}
                   <div className="w-[100px] border-r  ">{props?.staffRole}</div>
