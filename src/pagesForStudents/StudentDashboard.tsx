@@ -200,7 +200,7 @@ const StudentDashboard = () => {
 
           <div className="border-b my-5" />
 
-          <div className="flex flex-col items-center w-full  justify-center">
+          <div className="flex flex-col items-center w-full  justify-center w-full">
             <div className=" flex justify-center gap-3 w-full items-center">
               <Calendar />
             </div>

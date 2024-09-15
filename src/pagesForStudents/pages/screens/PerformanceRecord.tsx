@@ -44,9 +44,9 @@ const PerformanceRecord = () => {
   }
 
   return (
-    <div className="mt-5 border rounded-md p-2 bg-slate-100 text-[12px] w-full">
+    <div className="mt-5 border rounded-md p-2 bg-slate-100 text-[12px] w-full overflow-hidden">
       <div
-        className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
+        className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden"
         style={{ color: "var(--secondary)" }}
       >
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
