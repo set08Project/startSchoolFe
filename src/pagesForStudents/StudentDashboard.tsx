@@ -137,7 +137,7 @@ const StudentDashboard = () => {
         <div className="min-w-[300px] overflow-hidden min-h-[3030px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
             <div>
-              <div className="  gap-2 mb-10">
+              <div className="gap-2 mb-10">
                 <div className="flex gap-2 pb-10">
                   <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4  rounded-md  text-center">
                     <MakeComplains />
@@ -216,7 +216,7 @@ const StudentDashboard = () => {
           </div>
 
           <div className="mt-2 text-blue-950">
-            <div className="flex gap-3 text-[15px] ">
+            <div className="flex gap-3 text-[15px]">
               <p>Most Recent Article</p>
               <Link to="/articles">
                 <p className="font-bold">View More</p>
