@@ -2,7 +2,6 @@ import { useState } from "react";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../pagesForTeachers/components/reUse/Button";
-import { Link } from "react-router-dom";
 import {
   useTermBudget,
   useTermExpenses,

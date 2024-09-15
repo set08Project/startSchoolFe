@@ -1,4 +1,5 @@
 import PasswordInput from "../../../components/reUse/PasswordIput";
+import Input from "../../components/reUse/Input";
 
 const PasswordSecurity = () => {
   return (

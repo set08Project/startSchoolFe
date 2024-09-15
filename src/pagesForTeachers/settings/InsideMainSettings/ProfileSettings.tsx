@@ -1,10 +1,13 @@
 const ProfileSettings = () => {
   return (
     <div>
-      <div className="border rounded-[4px] shadow-sm">
+      <div className="border mb-4 rounded-[4px] shadow-sm">
+        <div className="py-3 px-4 uppercase text-blue-950 font-medium">
+          General
+        </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-normal w-[100px]">Full Name</h3>
+            <h3 className="font-normal w-[100px] text-blue-950">Full Name</h3>
             <h1 className="text-[18px] font-semibold">
               Rasheedat Eromosele Daniel
             </h1>
@@ -41,6 +44,11 @@ const ProfileSettings = () => {
           <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
             Edit
           </div>
+        </div>
+      </div>
+      <div className="border rounded-[4px] shadow-sm">
+        <div className="py-3 px-4 uppercase text-blue-950 font-medium">
+          Contact
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">

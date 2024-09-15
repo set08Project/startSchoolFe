@@ -9,6 +9,9 @@ const SocialsSettings = () => {
       {" "}
       <div>
         <div className="border rounded-[4px] shadow-sm">
+          <div className="py-3 px-4 uppercase text-blue-950 font-medium">
+            Socials
+          </div>
           <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
             <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
               <h3 className="font-normal w-[120px] flex items-center gap-2">
