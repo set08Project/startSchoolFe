@@ -3,23 +3,26 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
-import { MdCheck, MdClose, MdDelete } from "react-icons/md";
+import { MdCheck, MdClose, MdDelete, MdSave } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
 import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
 
+import BeatLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
 import {
   useClassAttendance,
   useClassSubjects,
   useSchoolClassRMDetail,
   useSchoolCookie,
+  useSchoolData,
   useSchoolTeacher,
 } from "../../hook/useSchoolAuth";
 import {
   createSchoolSubject,
+  updateClassName,
   updateClassroomTeacher,
   verifyPayment1st,
 } from "../../api/schoolAPIs";
@@ -231,14 +234,98 @@ const ClassDetailScreen = () => {
   //   });
   // };
 
+  const { data } = useSchoolData();
+
   const { mainAttendance } = useClassAttendance(classID!);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [className, setClassName] = useState<string>("");
 
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
-      <div>Class: {classroom?.className}</div>
-      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden ">
+
+      <div>Class: {classroom?.className} </div>
+
+      <span
+        className="text-[12px] bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
+        onClick={() => {
+          if (!document.startViewTransition) {
+            setToggle(!toggle);
+          } else {
+            document.startViewTransition(() => {
+              setToggle(!toggle);
+            });
+          }
+        }}
+      >
+        Edit className
+      </span>
+
+      <div>
+        {/* <div>Updating ClassName</div> */}
+
+        {toggle ? (
+          <div
+            className="absolute top-[9%] z-10 
+                h-[200px] w-[100%] sm:w-[120%] md:w-[60%] rounded-md pr-10 bg-blue-500 py-4
+                "
+            style={{
+              background: "rgba(252, 254, 255, 0.45)",
+              backdropFilter: " blur( 4px )",
+            }}
+          >
+            <div className="z-20">
+              <div className="flex w-full">
+                <Input
+                  className="flex-1 mr-1 text-white text-[18px] placeholder:text-gray-400 "
+                  defaultValue={classroom?.className}
+                  value={classroom?.className}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setClassName(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <Button
+                  name={`${loading ? " Loading" : "Change Class Name"}`}
+                  icon={
+                    loading ? (
+                      <BeatLoader
+                        color={"color"}
+                        size={18}
+                        className="mb-[0.12rem]"
+                      />
+                    ) : (
+                      <MdSave />
+                    )
+                  }
+                  className={` bg-blue-950 transition-all duration-300 ${
+                    loading && "h-12"
+                  }`}
+                  onClick={() => {
+                    setLoading(true);
+                    updateClassName(data?._id, classID, className).then(() => {
+                      toast.success("class name Updated successfully");
+                      setLoading(false);
+                      setToggle(false);
+                      mutate(`api/view-classrooms/${classID}`);
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 mt-1">
+            By clicking the above, you'll be editing the class name
+          </div>
+        )}
+      </div>
+
+      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden mt-5">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div className="md:text-[17px] text-[10px]">
             Total Number of Students:
