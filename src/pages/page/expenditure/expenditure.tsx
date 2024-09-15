@@ -184,10 +184,10 @@ const expenditure = () => {
             <div>
               <main>
                 <div className="flex flex-col">
-                  <label className="font-semibold">Items</label>
+                  <label className="font-semibold">Name of Item</label>
                   <input
                     className="h-[45px] text-[12px] px-2 w-full border rounded-md mb-2 "
-                    placeholder="Name of Item"
+                    placeholder="A4 paper, Cleaning Agents etc"
                     value={item}
                     onChange={(e: any) => {
                       setItem(e.target.value);
@@ -208,11 +208,11 @@ const expenditure = () => {
                   />
                 </div>
                 <div className="flex flex-col mb-5">
-                  <label className="font-semibold">Other Details</label>
+                  <label className="font-semibold">Item Amount</label>
                   <div className="flex gap-2">
                     <input
                       className="h-[45px]  text-[12px] px-2 w-full border rounded-md mb-2 "
-                      placeholder="Amount"
+                      placeholder="₦2000 etc"
                       value={amount}
                       onChange={(e: any) => {
                         setAmount(e.target.value);
@@ -294,7 +294,7 @@ const expenditure = () => {
           <div className="transition-all duration-300">
             {filteredExpenditure?.length > 0 ? (
               filteredExpenditure?.map((props: any) => (
-                <div key={props?._id}>
+                <div key={props?._id} className="smooth">
                   <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
                     {/* start */}
 

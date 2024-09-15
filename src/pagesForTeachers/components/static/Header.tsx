@@ -117,15 +117,15 @@ const Header = () => {
               />
             )}
           </div>
+          <div className="py-[5px] px-2 rounded-md border text-[13px] bg-white font-extrabold">
+            {initials}
+          </div>
 
           {toggle ? (
             <FaArrowDown className="rotate-180 duration-300 transition-all" />
           ) : (
             <FaArrowDown className="rotate-0 duration-300 transition-all" />
           )}
-        </div>
-        <div className="py-[5px] px-2 rounded-md border text-[13px] bg-white font-extrabold">
-          {initials}
         </div>
 
         <div className="md:hidden text-[30px] cursor-pointer ml-3  duration-300 transition-all">

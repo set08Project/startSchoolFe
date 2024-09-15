@@ -95,6 +95,12 @@ const TableTag = React.lazy(
 const SubjectGradeCard = React.lazy(
   () => import("../pagesForTeachers/pages/subject/SubjectGradeCard")
 );
+const TeacherMainSettings = React.lazy(
+  () => import("../pagesForTeachers/settings/MainSettings")
+);
+const MyProfile = React.lazy(
+  () => import("../pagesForTeachers/pages/myProfile/MyProfile")
+);
 
 export const teacherRouter = createBrowserRouter([
   {
@@ -330,6 +336,22 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <GalleryScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <TeacherMainSettings />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-profile",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MyProfile />
           </Suspense>
         ),
       },
