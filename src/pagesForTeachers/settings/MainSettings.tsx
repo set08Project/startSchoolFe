@@ -1,6 +1,8 @@
 import { useState } from "react";
 import LittleHeader from "../components/layout/LittleHeader";
 import ProfileSettings from "./InsideMainSettings/ProfileSettings";
+import SocialsSettings from "./InsideMainSettings/SocialsSettings";
+import PasswordSecurity from "./InsideMainSettings/PasswordSecurity";
 
 const MainSettings = () => {
   const [activeSection, setActiveSection] = useState("My Profile");
@@ -43,7 +45,7 @@ const MainSettings = () => {
           </div>
         </div>
 
-        {/* EXPENDITURES AND FEES RECORDS DIVS */}
+        {/* SETTINGS DIVS */}
 
         {activeSection === "My Profile" && (
           <div className="mt-5 min-h-[60vh] freshh">
@@ -53,12 +55,16 @@ const MainSettings = () => {
 
         {activeSection === "My Socials" && (
           <div className="mt-5 min-h-[60vh] freshh">
-            <div>My Socials</div>
+            <div>
+              <SocialsSettings />
+            </div>
           </div>
         )}
         {activeSection === "Password and Security" && (
           <div className="mt-5 min-h-[60vh] freshh">
-            <div>Password and Security</div>
+            <div>
+              <PasswordSecurity />
+            </div>
           </div>
         )}
       </div>
