@@ -172,159 +172,161 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          {schoolData?.data?.categoryType === "Secondary" ||
-          schoolData?.data?.schoolTags[0] === "Secondary School." ? (
-            <div>
-              <SmallPiece
-                name={[
-                  {
-                    title: "Dashboard",
-                    icon: <MdQueryStats />,
-                    to: "/",
-                  },
-                  {
-                    title: "My Schedule",
-                    icon: <MdPeople />,
-                    to: "my-schedule",
-                  },
-                  {
-                    title: "My Class",
-                    icon: <FaBarsProgress />,
-                    to: "my-class",
-                  },
-                  {
-                    title: "My Subjects",
-                    icon: <MdSchool />,
-                    to: "subjects",
-                  },
-                  {
-                    title: "Student's Articles",
-                    icon: <MdArticle />,
-                    to: "view-articles",
-                  },
-                  {
-                    title: "Lesson Note",
-                    icon: <MdReport />,
-                    to: "lesson-note",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
-                  {
-                    title: "Store",
-                    icon: <FaStore />,
-                    to: "store",
-                  },
-                  {
-                    title: "Gallaries",
-                    icon: <FaPhotoFilm />,
-                    to: "gallary",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report-card",
-                  },
-                  {
-                    title: "Report Card",
-                    icon: <MdSdCard />,
-                    to: "report-card",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "week-report",
-                  },
-                  {
-                    title: "Complain",
-                    icon: <MdBadge />,
-                    to: "complain",
-                  },
-                  {
-                    title: "Settings",
-                    icon: <MdSettings />,
-                    to: "settings",
-                  },
-                ]}
-                but
-              />
-            </div>
-          ) : (
-            <div>
-              <SmallPiece
-                name={[
-                  {
-                    title: "Dashboard",
-                    icon: <MdQueryStats />,
-                    to: "/",
-                  },
-                  {
-                    title: "My Schedule",
-                    icon: <MdPeople />,
-                    to: "my-schedule",
-                  },
-                  {
-                    title: "My Class",
-                    icon: <FaBarsProgress />,
-                    to: "my-class",
-                  },
-                  {
-                    title: "My Subjects",
-                    icon: <MdSchool />,
-                    to: "subjects",
-                  },
-                  {
-                    title: "Lesson Note",
-                    icon: <MdReport />,
-                    to: "lesson-note",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
-                  {
-                    title: "Store",
-                    icon: <FaStore />,
-                    to: "store",
-                  },
-                  {
-                    title: "Gallaries",
-                    icon: <FaPhotoFilm />,
-                    to: "gallary",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report-card",
-                  },
-                  {
-                    title: "Report Card",
-                    icon: <MdSdCard />,
-                    to: "report-card",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "week-report",
-                  },
-                  {
-                    title: "Complain",
-                    icon: <MdBadge />,
-                    to: "complain",
-                  },
-                  {
-                    title: "Settings",
-                    icon: <MdSettings />,
-                    to: "settings",
-                  },
-                ]}
-                but
-              />
-            </div>
-          )}
+          <div className="h-[500px] overflow-y-scroll">
+            {schoolData?.data?.categoryType === "Secondary" ||
+            schoolData?.data?.schoolTags[0] === "Secondary School." ? (
+              <div>
+                <SmallPiece
+                  name={[
+                    {
+                      title: "Dashboard",
+                      icon: <MdQueryStats />,
+                      to: "/",
+                    },
+                    {
+                      title: "My Schedule",
+                      icon: <MdPeople />,
+                      to: "my-schedule",
+                    },
+                    {
+                      title: "My Class",
+                      icon: <FaBarsProgress />,
+                      to: "my-class",
+                    },
+                    {
+                      title: "My Subjects",
+                      icon: <MdSchool />,
+                      to: "subjects",
+                    },
+                    {
+                      title: "Student's Articles",
+                      icon: <MdArticle />,
+                      to: "view-articles",
+                    },
+                    {
+                      title: "Lesson Note",
+                      icon: <MdReport />,
+                      to: "lesson-note",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "report",
+                    },
+                    {
+                      title: "Store",
+                      icon: <FaStore />,
+                      to: "store",
+                    },
+                    {
+                      title: "Gallaries",
+                      icon: <FaPhotoFilm />,
+                      to: "gallary",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "report-card",
+                    },
+                    {
+                      title: "Report Card",
+                      icon: <MdSdCard />,
+                      to: "report-card",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "week-report",
+                    },
+                    {
+                      title: "Complain",
+                      icon: <MdBadge />,
+                      to: "complain",
+                    },
+                    {
+                      title: "Settings",
+                      icon: <MdSettings />,
+                      to: "settings",
+                    },
+                  ]}
+                  but
+                />
+              </div>
+            ) : (
+              <div>
+                <SmallPiece
+                  name={[
+                    {
+                      title: "Dashboard",
+                      icon: <MdQueryStats />,
+                      to: "/",
+                    },
+                    {
+                      title: "My Schedule",
+                      icon: <MdPeople />,
+                      to: "my-schedule",
+                    },
+                    {
+                      title: "My Class",
+                      icon: <FaBarsProgress />,
+                      to: "my-class",
+                    },
+                    {
+                      title: "My Subjects",
+                      icon: <MdSchool />,
+                      to: "subjects",
+                    },
+                    {
+                      title: "Lesson Note",
+                      icon: <MdReport />,
+                      to: "lesson-note",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "report",
+                    },
+                    {
+                      title: "Store",
+                      icon: <FaStore />,
+                      to: "store",
+                    },
+                    {
+                      title: "Gallaries",
+                      icon: <FaPhotoFilm />,
+                      to: "gallary",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "report-card",
+                    },
+                    {
+                      title: "Report Card",
+                      icon: <MdSdCard />,
+                      to: "report-card",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "week-report",
+                    },
+                    {
+                      title: "Complain",
+                      icon: <MdBadge />,
+                      to: "complain",
+                    },
+                    {
+                      title: "Settings",
+                      icon: <MdSettings />,
+                      to: "settings",
+                    },
+                  ]}
+                  but
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
