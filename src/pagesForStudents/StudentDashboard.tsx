@@ -67,18 +67,18 @@ const StudentDashboard = () => {
           <div className="flex items-center justify-between mb-1">
             <div className="w-full mb-4 text-medium capitalize font-medium gap-2">
               <div className="mb-2 flex items-center gap-2">
-                <div>My Name: </div>
-                <div className="font-bold text-[20px]">
+                <div className="text-[12px] md:text-[16px]">My Name: </div>
+                <div className="font-bold md:text-[20px] text-[13px]">
                   {" "}
                   {studentInfo?.studentFirstName}
                 </div>
-                <div className="font-bold text-[20px]">
+                <div className="font-bold md:text-[20px] text-[13px]">
                   {studentInfo?.studentLastName}
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div> My Class:</div>
-                <div className="font-bold text-[20px]">
+                <div className="text-[12px] md:text-[16px]"> My Class:</div>
+                <div className="font-bold md:text-[20px] text-[11px]">
                   {studentInfo?.classAssigned}
                 </div>
               </div>
@@ -107,7 +107,7 @@ const StudentDashboard = () => {
                 </div>
               </Link>
             ) : (
-              <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
+              <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[11px] md:text-[17px]">
                 Term's report card(Not Ready)
               </div>
             )}
@@ -137,14 +137,14 @@ const StudentDashboard = () => {
         <div className="min-w-[300px] overflow-hidden min-h-[3030px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
             <div>
-              <div className="  gap-2 mb-10">
+              <div className="gap-2 mb-10">
                 <div className="flex gap-2 pb-10">
                   <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4  rounded-md  text-center">
                     <MakeComplains />
                   </div>
                 </div>
                 <div className="font-medium text-[12px] text-blue-950 px-6 py-2 rounded-sm  text-center w-full flex flex-col items-center overflow-hidden">
-                  <p className="font-bold text-left pb-3 text-[15px] ">
+                  <p className="font-bold text-left pb-3 text-[11px] md:text-[15px] ">
                     Student of the Week for class {studentInfo?.classAssigned}
                   </p>
 
@@ -179,8 +179,8 @@ const StudentDashboard = () => {
               <div className="flex justify-center flex-col gap-3 w-full items-center ">
                 {/* from complain */}
                 <div className="w-full">
-                  <p className="font-bold text-left pb-5 text-[15px] ">
-                    Top 3 Performancing Students
+                  <p className="font-bold text-left pb-5 md:text-[15px] text-[12px]">
+                    Top 3 Performing Students
                   </p>
                 </div>
 
@@ -200,7 +200,7 @@ const StudentDashboard = () => {
 
           <div className="border-b my-5" />
 
-          <div className="flex flex-col items-center w-full  justify-center">
+          <div className="flex flex-col items-center w-full  justify-center w-full">
             <div className=" flex justify-center gap-3 w-full items-center">
               <Calendar />
             </div>
@@ -216,7 +216,7 @@ const StudentDashboard = () => {
           </div>
 
           <div className="mt-2 text-blue-950">
-            <div className="flex gap-3 text-[15px] ">
+            <div className="flex gap-3 text-[15px]">
               <p>Most Recent Article</p>
               <Link to="/articles">
                 <p className="font-bold">View More</p>
