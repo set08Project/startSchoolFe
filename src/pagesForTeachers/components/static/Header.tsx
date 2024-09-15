@@ -172,7 +172,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll">
+          <div className="h-[500px] overflow-y-scroll rounded-md border">
             {schoolData?.data?.categoryType === "Secondary" ||
             schoolData?.data?.schoolTags[0] === "Secondary School." ? (
               <div>

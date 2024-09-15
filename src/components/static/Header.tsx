@@ -203,7 +203,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll">
+          <div className="h-[500px] overflow-y-scroll rounded-md border">
             {data?.categoryType === "Secondary" ||
             data?.schoolTags[0].val === "Secondary School." ? (
               <SmallPiece
