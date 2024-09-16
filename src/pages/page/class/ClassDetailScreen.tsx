@@ -252,7 +252,7 @@ const ClassDetailScreen = () => {
       <div>Class: {classroom?.className} </div>
 
       <span
-        className="text-[12px] bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
+        className="text-[12px] uppercase bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
         onClick={() => {
           if (!document.startViewTransition) {
             setToggle(!toggle);
@@ -263,7 +263,7 @@ const ClassDetailScreen = () => {
           }
         }}
       >
-        Edit className
+        Edit class name
       </span>
 
       <div>
