@@ -89,7 +89,9 @@ const MyProfile = () => {
                 <BsPhone />
                 Phone Number:
               </p>
-              <h1 className="text-[18px] font-semibold">+234 812-910-0830</h1>
+              <h1 className="text-[18px] font-semibold">
+                + add your phone number
+              </h1>
             </div>
             <div className="mb-2 py-2 px-3 bg-gray-100 rounded-lg">
               <p className="mb-1 flex items-center gap-1">
