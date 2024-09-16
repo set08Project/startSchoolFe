@@ -118,3 +118,36 @@
 .phone-input input {
   border: none;
 }
+
+@keyframes fall-in {
+  0% {
+    transform: translateY(-20px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(0);
+    transition: all 300ms;
+  }
+}
+
+@keyframes settings {
+  0% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(0);
+    transition: all 300ms;
+  }
+}
+
+.smooth {
+  animation: settings 2s;
+}
+.freshh {
+  animation: settings 2s;
+}

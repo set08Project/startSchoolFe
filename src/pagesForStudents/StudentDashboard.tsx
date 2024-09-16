@@ -69,8 +69,7 @@ const StudentDashboard = () => {
               <div className="mb-2 flex items-center gap-2">
                 <div className="text-[12px] md:text-[16px]">My Name: </div>
                 <div className="font-bold md:text-[20px] text-[13px]">
-                  {" "}
-                  {studentInfo?.studentFirstName}
+                 {studentInfo?.studentFirstName}
                 </div>
                 <div className="font-bold md:text-[20px] text-[13px]">
                   {studentInfo?.studentLastName}

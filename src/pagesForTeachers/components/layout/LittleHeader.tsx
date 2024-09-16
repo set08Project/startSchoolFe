@@ -29,7 +29,7 @@ const LittleHeader: FC<iProps> = ({ name, back }) => {
           </div>
         )}
       </div>
-      <div className="text-blue-800 mt-5 font-[500] text-[30px] mb-10 capitalize">
+      <div className="text-blue-800 mt-4 font-[500] text-[30px] mb-10 capitalize">
         {name}
       </div>
     </div>
