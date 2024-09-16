@@ -4,6 +4,7 @@ import {
   FaBarsProgress,
   FaCalendar,
   FaPhotoFilm,
+  FaStore,
   FaTable,
 } from "react-icons/fa6";
 import pic from "../../assets/pix.jpg";
@@ -231,7 +232,12 @@ const Header = () => {
                     to: "report",
                   },
                   {
-                    title: "complain",
+                    title: "Store",
+                    icon: <FaStore />,
+                    to: "store",
+                  },
+                  {
+                    title: "Complain",
                     icon: <MdRadio />,
                     to: "complain",
                   },
@@ -288,6 +294,11 @@ const Header = () => {
                     title: "Reports",
                     icon: <MdReport />,
                     to: "report",
+                  },
+                  {
+                    title: "Store",
+                    icon: <FaStore />,
+                    to: "store",
                   },
                   {
                     title: "Complain",
