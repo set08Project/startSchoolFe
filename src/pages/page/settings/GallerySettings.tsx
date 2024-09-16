@@ -24,6 +24,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className: string;
 }
 
 const GallerySettings = () => {
@@ -106,9 +107,26 @@ const GallerySettings = () => {
 
     return (
       <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white text-[12px] text-gray-500 p-4 rounded-lg lg:w-full w-[88%] max-w-sm h-[450px] flex items-center justify-around  flex-col">
-          <button onClick={onClose} className="absolute top-2 right-2">
-            X
+        <div className="relative bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm lg:w-full min-h-[350px] max-h-[450px] flex flex-col items-center justify-between overflow-y-auto">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 bg-gray-600 hover:bg-gray-700 text-white w-7 h-7 flex items-center justify-center rounded-full focus:outline-none"
+            aria-label="Close"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
           {children}
         </div>
@@ -133,56 +151,47 @@ const GallerySettings = () => {
               Upload
             </button>
 
-            <Modal isOpen={isFeeModalOpen} onClose={closeFeeModal}>
-              <h2 className="text-lg text-left font-bold mb-4 text-blue-950">
-                Upload
+            <Modal
+              isOpen={isFeeModalOpen}
+              onClose={closeFeeModal}
+              className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto"
+            >
+              <h2 className="text-xl font-semibold mb-6 text-gray-800">
+                Upload School Image
               </h2>
+
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="outline-none border p-2 w-full mb-4 text-gray-600"
-                placeholder="enter your school image title"
+                className="border border-gray-300 rounded-lg p-3 w-full mb-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your school image title"
               />
 
-              <div>
-                <div className=" flex items-center">
-                  <label
-                    htmlFor="gallery-upload"
-                    className="mb-3 px-5 py-3 border rounded-md m-2 overflow-hidden flex gap-2 items-center justify-center bg-blue-950 text-white text-[18px] cursor-pointer"
-                  >
-                    {loading ? (
-                      <div className="text-[12px] flex items-center gap-1">
-                        <ClipLoader color="white" size={15} />
-                        <span>Loading</span>
-                      </div>
-                    ) : (
-                      <div className="text-[12px] flex items-center gap-1">
-                        <BsCamera color="white" size={18} />
-                        <span>Upload</span>
-                      </div>
-                    )}
-                  </label>
-                  <input
-                    type="file"
-                    id="gallery-upload"
-                    className="hidden"
-                    placeholder="Upload"
-                    onChange={onHandleImage}
-                  />
-                </div>
-              </div>
-              {/* <div className="flex gap-9">
-                <button
-                  // onClick={handleUpdateFee}
-                  className={`bg-green-500 text-white p-2 rounded text-[17px] ${
-                    !isFormFilled ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  disabled={!isFormFilled}
+              <div className="flex flex-col items-center mb-6">
+                <label
+                  htmlFor="gallery-upload"
+                  className="flex items-center justify-center w-full px-6 py-3 border border-transparent rounded-lg bg-blue-950 text-white text-lg cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Submit
-                </button>
-              </div> */}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <ClipLoader color="white" size={20} />
+                      <span>Loading...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <BsCamera size={20} />
+                      <span>Upload Image</span>
+                    </div>
+                  )}
+                </label>
+                <input
+                  type="file"
+                  id="gallery-upload"
+                  className="hidden"
+                  onChange={onHandleImage}
+                />
+              </div>
             </Modal>
           </div>
         )}

@@ -49,6 +49,9 @@ const Header = () => {
   const { studentInfo } = useStudentInfo();
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
   const [sess, setSess] = useState<boolean>(false);
+  const initials =
+    studentInfo?.studentFirstName.charAt(0).toUpperCase() +
+    studentInfo?.studentLastName.charAt(0).toUpperCase();
 
   const handleMenu = () => {
     if (!document.startViewTransition) {
@@ -70,7 +73,7 @@ const Header = () => {
 
           setSchoolData(data);
         } catch (error) {
-          console.log(error);
+          return error;
         }
       }
     };
@@ -84,7 +87,7 @@ const Header = () => {
     >
       {/* <div>  */}
       <div className="flex items-center  justify-end w-[90%]">
-        <div className="mr-5 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
+        <div className="mr-4 font-medium cursor-pointer flex items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
           {" "}
           <FaCalendar />
           <span className="text-[12px] mx-1">
@@ -117,6 +120,9 @@ const Header = () => {
                 src={studentInfo?.avatar ? studentInfo?.avatar : pic}
               />
             )}
+          </div>
+          <div className="py-[5px] px-2 rounded-md border text-[13px] bg-white font-extrabold">
+            {initials}
           </div>
 
           {toggle ? (
@@ -163,13 +169,14 @@ const Header = () => {
       >
         <Session />
       </div>
-
+      {/* <div className="h-[500px] overflow-y-scroll"> */}
       {toggleMenu && (
         <div
           className={`absolute md:hidden duration-300  transition-all overflow-y-auto  ${
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
+
           {schoolData?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
@@ -230,75 +237,76 @@ const Header = () => {
                     to: "complain",
                   },
 
-                  {
-                    title: "Seetings",
-                    icon: <MdSettings />,
-                    to: "your-profile",
-                  },
-                ]}
-                but
-              />
-            </div>
-          ) : (
-            <div>
-              <SmallPiece
-                name={[
-                  {
-                    title: "Dashboard",
-                    icon: <MdQueryStats />,
-                    to: "/dashboard",
-                  },
-                  {
-                    title: "My ClassRoom",
-                    icon: <MdStadium />,
-                    to: "my-classroom",
-                  },
-                  {
-                    title: "My Subject",
-                    icon: <FaTable />,
-                    to: "your-subjects",
-                  },
-                  {
-                    title: "Lessons",
-                    icon: <MdClass />,
-                    to: "lesson",
-                  },
-                  {
-                    title: "Profile",
-                    icon: <CgProfile />,
-                    to: "your-profile",
-                  },
-                  {
-                    title: "Assignments",
-                    icon: <MdAssignmentAdd />,
-                    to: "assignment",
-                  },
-                  {
-                    title: "Gallaries",
-                    icon: <FaPhotoFilm />,
-                    to: "gallary",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
-                  {
-                    title: "complain",
-                    icon: <MdRadio />,
-                    to: "complain",
-                  },
+                    {
+                      title: "Settings",
+                      icon: <MdSettings />,
+                      to: "your-profile",
+                    },
+                  ]}
+                  but
+                />
+              </div>
+            ) : (
+              <div>
+                <SmallPiece
+                  name={[
+                    {
+                      title: "Dashboard",
+                      icon: <MdQueryStats />,
+                      to: "/dashboard",
+                    },
+                    {
+                      title: "My ClassRoom",
+                      icon: <MdStadium />,
+                      to: "my-classroom",
+                    },
+                    {
+                      title: "My Subject",
+                      icon: <FaTable />,
+                      to: "your-subjects",
+                    },
+                    {
+                      title: "Lessons",
+                      icon: <MdClass />,
+                      to: "lesson",
+                    },
+                    {
+                      title: "Profile",
+                      icon: <CgProfile />,
+                      to: "your-profile",
+                    },
+                    {
+                      title: "Assignments",
+                      icon: <MdAssignmentAdd />,
+                      to: "assignment",
+                    },
+                    {
+                      title: "Gallery",
+                      icon: <FaPhotoFilm />,
+                      to: "gallary",
+                    },
+                    {
+                      title: "Reports",
+                      icon: <MdReport />,
+                      to: "report",
+                    },
+                    {
+                      title: "Complain",
+                      icon: <MdRadio />,
+                      to: "complain",
+                    },
 
-                  {
-                    title: "Seetings",
-                    icon: <MdSettings />,
-                    to: "your-profile",
-                  },
-                ]}
-                but
-              />
-            </div>
-          )}
+                    {
+                      title: "Settings",
+                      icon: <MdSettings />,
+                      to: "your-profile",
+                    },
+                  ]}
+                  but
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

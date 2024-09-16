@@ -1,9 +1,16 @@
 import { UnLazyImage } from "@unlazy/react";
 import pix from "../../../assets/pix.jpg";
-import { useSchoolTeacher } from "../../hook/useSchoolAuth";
+import {
+  useSchool,
+  useSchoolData,
+  useSchoolTeacher,
+} from "../../hook/useSchoolAuth";
 import lodash from "lodash";
+import { useEffect } from "react";
+import { mutate } from "swr";
 const TopRatedTeacher = () => {
   const { schoolTeacher } = useSchoolTeacher();
+  const { data } = useSchoolData();
 
   let rate = lodash.orderBy(schoolTeacher?.staff, "staffRating");
 
@@ -12,6 +19,10 @@ const TopRatedTeacher = () => {
       return el.staffRating;
     },
   ]);
+
+  useEffect(() => {
+    mutate(`api/view-school-teacher/${data?._id}`);
+  }, [schoolTeacher]);
 
   return (
     <div className="carousel carousel-end rounded-box w-96 gap-2 *:bg-slate-100">

@@ -2,7 +2,7 @@ document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
@@ -46,23 +46,28 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [exam, setExam] = useState("");
 
   const makeGrade = () => {
-    setLoading(true);
-    createGradeScore(teacherInfo?._id, props?._id, {
-      subject: subjectInfo?.subjectTitle,
-      test1: parseInt(test1),
-      test2: parseInt(test2),
-      test3: parseInt(test3),
-      test4: parseInt(test4),
-      exam: parseInt(exam),
-    }).then((res) => {
-      setLoading(false);
-      if (res.status === 201) {
-        mutate(`api/student-report-card/${props?._id}`);
-        toast.success("Grade added");
-      } else {
-        toast.error("Grade deanied");
-      }
-    });
+    try {
+      setLoading(true);
+      createGradeScore(teacherInfo?._id, props?._id, {
+        subject: subjectInfo?.subjectTitle,
+        test1: parseInt(test1),
+        test2: parseInt(test2),
+        test3: parseInt(test3),
+        test4: parseInt(test4),
+        exam: parseInt(exam),
+      }).then((res) => {
+        setLoading(false);
+        if (res.status === 201) {
+          mutate(`api/student-report-card/${props?._id}`);
+          toast.success("Grade added");
+        } else {
+          toast.error("Grade denied");
+        }
+      });
+    } catch (error: any) {
+      console.error();
+      return error.stack;
+    }
   };
 
   const { gradeData } = useStudentGrade(props?._id);
@@ -223,7 +228,7 @@ const SubjectGradeCard = () => {
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
   const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs);
 
-  const mainClass = viewClasses?.classRooms?.find((el: any) => {
+  let mainClass = viewClasses?.classRooms?.find((el: any) => {
     return el?.classSubjects?.find((el: any) => {
       return el === subjectID;
     });
@@ -231,6 +236,10 @@ const SubjectGradeCard = () => {
 
   const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
+
+  useEffect(() => {
+    mutate(`api/view-classrooms/`);
+  }, [teacherInfo, subjectInfo, viewClasses]);
 
   return (
     <div className="">

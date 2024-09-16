@@ -205,6 +205,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
+
           {data?.categoryType === "Secondary" ? (
             <SmallPiece
               name={[
@@ -328,6 +329,7 @@ const Header = () => {
               but
             />
           )}
+
         </div>
       )}
     </div>

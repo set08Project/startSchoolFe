@@ -22,7 +22,7 @@ import {
   useClassSubject,
   useStudentGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { adminReport, approveMainReport } from "../../api/schoolAPIs";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -338,6 +338,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 };
 
 const ReportCardApproved = () => {
+  const navigate = useNavigate();
   const { classID } = useParams();
 
   const { oneClass } = useReadOneClassInfo(classID);
@@ -448,6 +449,7 @@ const ReportCardApproved = () => {
                 .then((res) => {
                   if (res.status === 200) {
                     toast.success("Result will be Published in a minute time");
+                    navigate("/dashboard");
                   }
                 })
                 .finally(() => {

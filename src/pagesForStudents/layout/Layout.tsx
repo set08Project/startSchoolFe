@@ -9,11 +9,21 @@ import AddAnyItem from "../static/AddAnyItems";
 import { displayClass } from "../../global/reduxState";
 import { createSchoolClassroom } from "../../pages/api/schoolAPIs";
 import toast from "react-hot-toast";
-import { useSchoolData } from "../../pages/hook/useSchoolAuth";
+import {
+  useSchoolData,
+  useSchoolDataByName,
+  useSchoolSessionData,
+  useViewTermDetail,
+} from "../../pages/hook/useSchoolAuth";
 import Sider from "../static/Sider";
 import Header from "../static/Header";
+import UpdateEmail from "../UpdateEmail";
+import { useReadOneClassInfo, useStudentInfo } from "../hooks/useStudentHook";
+import { useStudentGrade } from "../../pagesForTeachers/hooks/useTeacher";
+import BlockPaymentScreen from "../BlockPaymentScreen";
 
 const Layout: FC = () => {
+  const { studentInfo } = useStudentInfo();
   const { data } = useSchoolData();
   const show = useSelector((state: any) => state.showStaffComp);
   const showII = useSelector((state: any) => state.showStudent);
@@ -62,6 +72,30 @@ const Layout: FC = () => {
       return error;
     }
   };
+
+  const { schoolInfo }: any = useSchoolSessionData(studentInfo?.schoolIDs);
+
+  let refID = schoolInfo;
+
+  let obj: any = {};
+
+  if (refID?.length > 0) {
+    for (let i = 0; i < refID.length; i++) {
+      obj = refID[0];
+    }
+  }
+
+  let termID: string = "";
+
+  if (obj !== null) {
+    for (let i = 0; i < obj?.term?.reverse().length; i++) {
+      termID = obj?.term[0];
+    }
+  }
+
+  const { termData } = useViewTermDetail(termID);
+
+  const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
   return (
     <div className="flex w-[100%] ">
@@ -145,6 +179,14 @@ const Layout: FC = () => {
           </div>
         </div>
       </div>
+
+      {!studentInfo?.parentEmail && <UpdateEmail />}
+
+      {schl?.freeMode ? null : (
+        <div>
+          {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+        </div>
+      )}
     </div>
   );
 };

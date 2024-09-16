@@ -1,30 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { PiStudentFill } from "react-icons/pi";
 import { MdCheck, MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
-import {
-  createAssignment,
-  readClassInfo,
-  studentOfTheWeek,
-} from "../../api/teachersAPI";
-import {
-  useClassStudent,
-  useSujectInfo,
-  useTeacherInfo,
-} from "../../hooks/useTeacher";
-import Input from "../../components/reUse/Input";
+import { studentOfTheWeek } from "../../api/teachersAPI";
+import { useClassStudent, useTeacherInfo } from "../../hooks/useTeacher";
 
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
-import { mutate } from "swr";
-import {
-  useReadMyClassInfo,
-  useReadMyClassInfoData,
-  useReadOneClassInfo,
-} from "../../../pagesForStudents/hooks/useStudentHook";
-import { useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
 
 interface iProps {
   oneClass?: any;
@@ -42,16 +24,12 @@ const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
 
   // api/view-subject-assignment/${subjectID}
 
-  console.log("coming from: ", oneClass?.className);
-
   const onCreateAssignment = () => {
     studentOfTheWeek(teacherInfo?._id, {
       remark: period,
       studentName: subject,
     })
       .then((res) => {
-        console.log(period, subject);
-        console.log(res);
         if (res?.status === 201) {
           //   mutate(`api/view-subject-assignment/${subjectInfo?._id}`);
           toast.success("Added Successfully...!");

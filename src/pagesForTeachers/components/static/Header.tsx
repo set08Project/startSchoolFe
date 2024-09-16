@@ -59,6 +59,8 @@ const Header = () => {
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
   const [schoolData, setSchoolData] = useState<any>([]);
 
+  const initials = teacherInfo?.staffName?.slice(0, 2).toUpperCase();
+
   useEffect(() => {
     const fetchSchoolData = async () => {
       if (teacherInfo?.schoolIDs) {
@@ -122,6 +124,9 @@ const Header = () => {
             <FaArrowDown className="rotate-0 duration-300 transition-all" />
           )}
         </div>
+        <div className="py-[5px] px-2 rounded-md border text-[13px] bg-white font-extrabold">
+          {initials}
+        </div>
 
         <div className="md:hidden text-[30px] cursor-pointer ml-3  duration-300 transition-all">
           {toggleMenu ? (
@@ -167,6 +172,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
+
           {schoolData?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
@@ -319,6 +325,7 @@ const Header = () => {
               />
             </div>
           )}
+
         </div>
       )}
     </div>

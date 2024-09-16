@@ -48,7 +48,7 @@ const Input: FC<iInputProps> = ({
       <label
         className={`text-[lightgray] transition-all duration-300 absolute ${
           bg ? bg : "bg-white"
-        }  text-[12px] ml-2 px-[2px]
+        }  text-[8px] md:text-[12px] ml-2 px-[2px]
         `}
         style={{
           top: `${

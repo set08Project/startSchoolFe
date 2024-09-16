@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 // const URL: string =
-// import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_URL;
+//   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+
+const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -24,6 +24,22 @@ export const loginStudent = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-student/`,
+        data
+        // { withCredentials: true }
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loginStudentToken = async (data: {}) => {
+  try {
+    return await axios
+      .post(
+        `${URL}/login-student-token/`,
         data
         // { withCredentials: true }
       )

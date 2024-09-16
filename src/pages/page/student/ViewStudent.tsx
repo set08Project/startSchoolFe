@@ -232,7 +232,7 @@ const ViewStudent = () => {
 
   const filteredStudents = students?.data?.students?.filter((student: any) => {
     const fullName =
-      `${student.studentFirstName} ${student.studentLastName}`.toLowerCase();
+      `${student.studentFirstName} ${student.studentLastName} ${student.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
 
@@ -249,7 +249,7 @@ const ViewStudent = () => {
 
       <div className="flex w-full justify-between items-start">
         <Input
-          placeholder="Search Student Name"
+          placeholder="Search Student Name or Class"
           className="ml-0"
           value={searchStudents}
           onChange={handleSearch}
@@ -257,12 +257,12 @@ const ViewStudent = () => {
 
         <Button
           name="Add a new Student"
-          className="uppercase py- text-[12px] font-medium bg-blue-950 py-4 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+          className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
           onClick={handleDisplayStaff}
         />
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
-        <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
@@ -515,7 +515,7 @@ const ViewStudent = () => {
                             }
                             `}
                                   onChange={() => {}}
-                                  checked={props?.feesPaid4rd}
+                                  checked={props?.feesPaid3rd}
                                   onClick={() => {
                                     schoolPaymentEndPoint(props?._id, {
                                       date: moment(Date.now()).format("lll"),
@@ -587,6 +587,9 @@ const ViewStudent = () => {
                         </div>
                         <div className="w-[200px] border-r gap-2 font-bold">
                           {props?.studentFirstName} {props?.studentLastName}
+                          <div className="text-slate-500 font-medium">
+                            RegID: {props?.enrollmentID}
+                          </div>
                         </div>
                         <div className="w-[100px] border-r  ">
                           {props?.classAssigned}

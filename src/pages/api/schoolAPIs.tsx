@@ -1,14 +1,47 @@
 import axios from "axios";
 
-const URL2: string =
-  import.meta.env.VITE_URL || import.meta.env.VITE_PRODUCTION_URL2;
+// const URL2: string = import.meta.env.VITE_URL;
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
-// const URL2: string = "https://startschoolbe.onrender.com";
+// working locally
 
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
+
+export const allSchools = async () => {
+  try {
+    return await axios.get(`${URL}/view-all-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const googleAuth = async () => {
+  try {
+    return await axios.get(`${URL}/api/auth/google`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const googleData = async () => {
+  try {
+    return await axios
+      .get(`${URL}/auth/google-data`, { withCredentials: true })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+// Expenditures Api
 export const setTermBudet = async (schoolID: string, budget: number) => {
   try {
     return await axios
@@ -57,6 +90,120 @@ export const createExpense = async (schoolID: string, data: {}) => {
   }
 };
 
+// School Fees Installmental Api starts here
+export const recordFeesPayment = async (
+  schoolID: string,
+  studentID: string,
+  feePaid: number,
+  feePaidDate: string,
+  paidByWho: string,
+  paymentMode: string
+) => {
+  try {
+    return await axios
+      .post(`${URL}/record-payment/${schoolID}/${studentID}`, {
+        feePaid,
+        feePaidDate,
+        paidByWho,
+        paymentMode,
+      })
+      .then((res: any) => {
+        return res.data;
+      });
+  } catch (error: any) {
+    console.error();
+    console.log(error.message);
+    return error;
+  }
+};
+
+export const updateClassName = async (
+  schoolID: string,
+  classID: string,
+  data: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-classname/${schoolID}/${classID}`, {
+        className: data,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateRecordFee = async (recordID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/second-payment/${recordID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getRecords = async (schoolID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getall-fee-records/${schoolID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getOneRecord = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getone-fee-records/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const deleteRecord = async (
+  schoolID: string,
+  studentID: string,
+  recordID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-fee-record/${schoolID}/${studentID}/${recordID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+// School Fees Records Expenditures api ends here
+
+export const getSchool = async () => {
+  try {
+    return await axios.get(`${URL}/get-school`).then((res: any) => {
+      return res;
+    });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const updateRegisterationStatus = async (data: {}) => {
   try {
     return await axios
@@ -69,14 +216,16 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async () => {
+export const approveRegisterationStatus = async (email: string) => {
   try {
     return await axios
-      .patch(`${URL}/approved-school-registration`)
+      .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
+    console.log(error.message);
     return error;
   }
 };

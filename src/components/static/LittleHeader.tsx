@@ -22,9 +22,12 @@ const LittleHeader: FC<iProps> = ({ name, url }) => {
         <Link to="/dashboard" className="flex items-center">
           Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
         </Link>
-        <div className="capitalize text-[17px] font-[500]">{name}</div>
+        <div className="capitalize lg:text-[17px] text-[12px] font-[500]">
+          {name}
+        </div>
       </div>
       <Link to={url}>
+
         <div
           className={`${
             data?.categoryType === "Secondary"
@@ -32,6 +35,7 @@ const LittleHeader: FC<iProps> = ({ name, url }) => {
               : "text-green-800"
           } mt-5 font-[500] text-[30px] capitalize`}
         >
+
           {name}
         </div>
       </Link>

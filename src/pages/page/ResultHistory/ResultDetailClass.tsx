@@ -90,8 +90,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
     );
   });
 
-  console.log("PAID: ", term);
-
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -151,8 +149,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
         <div className="flex gap-4 ">
           {lodash
             .sortBy(subjectData?.classSubjects, "subjectTitle")
-            ?.map((el: any) => (
-              <SubjectScore props={props} el={el} />
+            ?.map((el: any, i: number) => (
+              <SubjectScore props={props} el={el} key={i} />
             ))}
         </div>
       </div>
@@ -211,6 +209,7 @@ const ResultDetailClass = () => {
 
   const { sessionTermData } = useViewSessionTerm(termID);
   document.title = `Viewing ${sessionTermData?.data?.year} session of ${sessionTermData?.data?.presentTerm}`;
+
   const getResult = sessionTermData?.data?.classResult?.find((el: any) => {
     return el._id === ID;
   });
@@ -268,8 +267,8 @@ const ResultDetailClass = () => {
               <div className="flex gap-4">
                 {lodash
                   .sortBy(subjectData?.classSubjects, "subjectTitle")
-                  ?.map((props: any) => (
-                    <SubjectMap key={props} props={props} />
+                  ?.map((props: any, i: number) => (
+                    <SubjectMap key={i} props={props} />
                   ))}
               </div>
             </div>
@@ -291,7 +290,7 @@ const ResultDetailClass = () => {
             <div>
               {readStudent?.resultHistory?.map((props: any, i: number) => {
                 return (
-                  <div key={props}>
+                  <div key={i}>
                     <MainStudentRow
                       props={props}
                       i={i}

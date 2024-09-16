@@ -5,18 +5,25 @@ import pic from "../../../assets/pix1.png";
 import pic1 from "../../../assets/pix2.png";
 import pic2 from "../../../assets/pix3.png";
 import pic3 from "../../../assets/pix4.png";
-import { useSelector } from "react-redux";
-import { updateRegisterationStatus } from "../../api/schoolAPIs";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  googleData,
+  readSchool,
+  updateRegisterationStatus,
+} from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { getEntryEmail } from "../../../global/reduxState";
 
 const pix = [pic, pic1, pic2, pic3];
 
 const EnquiryForm = () => {
+  const dispatch = useDispatch();
   const schoolEmail = useSelector((state: any) => state.getEmail);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("Select Role");
 
+  const [schoolGoogleEmail, setSchoolGoogleEmail] = useState<string>("");
   const [schoolName, setSchoolName] = useState<string>("");
   const [schoolLocation, setSchoolLocation] = useState<string>("");
   const [schoolCategory, setSchoolCategory] =
@@ -39,7 +46,20 @@ const EnquiryForm = () => {
   const [count, setCount] = useState<number>(0);
   const navigate = useNavigate();
 
+  const getData = async () => {
+    await googleData().then((res) => {
+      if (res?.data?.data !== "") {
+        readSchool(res?.data?.data).then((res) => {
+          if (res.status === 200) {
+            setSchoolGoogleEmail(res?.data?.email);
+          }
+        });
+      }
+    });
+  };
+
   useEffect(() => {
+    getData();
     let timer: NodeJS.Timer | null | any = null;
 
     timer = setTimeout(() => {
@@ -86,7 +106,10 @@ const EnquiryForm = () => {
                   htmlFor="input-field"
                   className="text-[18px] mb-5  font-semibold text-gray-700 pl-2"
                 >
-                  School Email: <strong>{schoolEmail}</strong>
+                  School Email:{" "}
+                  <strong>
+                    {schoolGoogleEmail ? schoolGoogleEmail : schoolEmail}
+                  </strong>
                 </label>
               </div>
               <div className="h-[20%] w-full flex flex-col">
@@ -217,6 +240,7 @@ const EnquiryForm = () => {
                       schoolOrganization,
                     }).then((res) => {
                       if (res?.data?.status === 201) {
+                        dispatch(getEntryEmail(""));
                         toast.success("School registration successful!");
                         navigate("/auth/register-message");
                       }
