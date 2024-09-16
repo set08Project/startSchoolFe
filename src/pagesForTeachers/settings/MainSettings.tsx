@@ -9,7 +9,7 @@ const MainSettings = () => {
 
   return (
     <div>
-      <LittleHeader name={"Settings"} />
+      <LittleHeader name={"Settings"} back />
 
       <div>
         <div className="flex justify-start items-center gap-[20px] border-b transition-all duration-300">

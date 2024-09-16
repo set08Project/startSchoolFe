@@ -7,23 +7,40 @@ import IG from "../../../assets/socials/Ig.png";
 import FB from "../../../assets/socials/fb.png";
 import Linkden from "../../../assets/socials/linkden.png";
 import X from "../../../assets/socials/twitt.png";
+import { useTeacherInfo } from "../../hooks/useTeacher";
+import moment from "moment";
+import { FaEdit, FaUserEdit } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 const MyProfile = () => {
+  const teacher = useTeacherInfo().teacherInfo;
+  const initials =
+    teacher?.staffName?.charAt(0) +
+    teacher?.staffName?.charAt(teacher?.staffName.indexOf(" ") + 1);
+
   return (
-    <div className="">
+    <div className="freshh">
       <div>
         <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
           <div className="flex items-center gap-2">
-            <div className="text-[22px] font-semibold text-blue-950">
-              Rasheedat Daniels Eromosele
+            <div className="rounded-full border py-2 px-2 font-semibold bg-gray-50">
+              {initials}
+            </div>
+            <div className="text-[24px] font-semibold text-blue-950">
+              {teacher?.staffName}
             </div>
           </div>
-          <div>Edit Profile</div>
+          <Link to="/settings">
+            <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105">
+              <FaUserEdit /> Edit Profile
+            </div>
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         <div className="min-h-[87vh] ">
-          <div className="mb-5">
+          <div className="mb-8">
             <h1 className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
               Profile Image:
             </h1>
@@ -46,15 +63,25 @@ const MyProfile = () => {
                 <BsPerson /> Full Name:
               </p>
               <h1 className="text-[18px] font-semibold">
-                Rasheedat Eromosele Daniel
+                {teacher?.staffName}
               </h1>
+            </div>
+            <div className="mb-2 py-2 px-3 bg-gray-100 rounded-lg">
+              <p className="mb-1 flex items-center gap-1">
+                <BsPerson /> Gender:
+              </p>
+              {teacher?.gender === "" ? (
+                <h1 className="text-[18px] font-normal">+ add your gender</h1>
+              ) : (
+                <h1 className="text-[18px] font-semibold">{teacher?.gender}</h1>
+              )}
             </div>
             <div className="mb-2 py-2 px-3 bg-gray-100 rounded-lg">
               <p className="mb-1 flex items-center gap-1">
                 <MdEmail /> Email Address:
               </p>
               <h1 className="text-[18px] font-semibold lowercase">
-                RasheedatEromosele@officialnextschools.com
+                {teacher?.email}
               </h1>
             </div>
             <div className="mb-2 py-2 px-3 bg-gray-100 rounded-lg">
@@ -69,7 +96,7 @@ const MyProfile = () => {
                 <FaAddressBook /> Home Address:
               </p>
               <h1 className="text-[18px] font-semibold">
-                12, Gregg Crescent, Victoria Island Lagos
+                {teacher?.staffAddress}
               </h1>
             </div>
           </div>
@@ -77,30 +104,44 @@ const MyProfile = () => {
 
         {/* Section 2 */}
         <div className="min-h-[65vh] transition-all duration-300 ">
-          <div className="mb-3 md:mb-10">
+          <div className="mb-3 md:mb-5">
             <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
               Status:
             </div>
             <div className="font-medium rounded-lg flex justify-start items-center">
-              <div className="py-1 px-3 rounded-xl bg-green-50 text-[16px] text-green-600">
-                Active
+              <div
+                className={`py-1 px-3 rounded-xl  text-[16px] ${
+                  teacher?.activeStatus === true
+                    ? "text-green-600 bg-green-50"
+                    : "text-red-600 bg-red-50"
+                }`}
+              >
+                {String(teacher?.activeStatus)}
               </div>
             </div>
           </div>
-          <div className="mb-3 md:mb-10">
+          <div className="mb-3 md:mb-5">
             <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
               Role:
             </div>
-            <div className="p-3 bg-gray-100 font-medium rounded-lg text-[18px]">
+            <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
               Teacher
             </div>
           </div>
-          <div className="mb-10">
+          <div className="mb-3 md:mb-5">
+            <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
+              School Employment ID:
+            </div>
+            <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+              {teacher?.enrollmentID}
+            </div>
+          </div>
+          <div className="mb-5">
             <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
               Onboard Date:
             </div>
-            <div className="p-3 bg-gray-100 font-medium rounded-lg text-[18px]">
-              22-Septmber-2024
+            <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+              {moment(teacher?.createdAt).format("ll")}
             </div>
           </div>
           <div className="">
@@ -118,7 +159,7 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3>Rasheedat Daniel</h3>
+              <h3>+ add your facebook handle</h3>
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -128,7 +169,7 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3>@rasheedanielss</h3>
+              <h3>+ add your instagram handle</h3>
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -138,7 +179,7 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3>@rashdaniels</h3>
+              <h3>+ add your X handle</h3>
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -148,7 +189,7 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3>Rasheedat Daniel</h3>
+              <h3>+ add your linkedIn handle</h3>
             </div>
           </div>
         </div>
@@ -158,43 +199,33 @@ const MyProfile = () => {
             <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
               My Assigned Classes:
             </div>
-            <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
-              <h1>Class Teacher :</h1>
-              <h1 className="font-semibold text-[18px] uppercase">
-                SS3 Commercial
-              </h1>
-            </div>
-            <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
-              <h1>Class Teacher :</h1>
-              <h1 className="font-semibold text-[18px] uppercase">
-                SS2 Science
-              </h1>
-            </div>
+            {teacher?.classesAssigned?.length > 0 ? (
+              teacher?.classesAssigned?.map((props) => (
+                <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
+                  <h1>Class Teacher :</h1>
+                  <h1 className="font-semibold text-[18px] uppercase">
+                    {props?.className}
+                  </h1>
+                </div>
+              ))
+            ) : (
+              <div>No class assigned yet</div>
+            )}
           </div>
           <div className="lg:w-[47%] xl:w-auto">
             <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
               My Assigned Subjects:
             </div>
-            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-              <h1>Biology</h1>
-              <h1>SS3</h1>
-            </div>
-            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-              <h1>English</h1>
-              <h1>SS1</h1>
-            </div>
-            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-              <h1>Chemistry</h1>
-              <h1>SS2</h1>
-            </div>
-            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-              <h1>Agricultural Science</h1>
-              <h1>SS3</h1>
-            </div>
-            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-              <h1>Physics</h1>
-              <h1>SS2</h1>
-            </div>
+            {teacher?.subjectAssigned?.length > 0 ? (
+              teacher?.subjectAssigned?.map((props: any) => (
+                <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+                  <h1>{props?.subjectTitle}</h1>
+                  <h1>{props?.designated}</h1>
+                </div>
+              ))
+            ) : (
+              <div>No Subject assigned yet</div>
+            )}
           </div>
         </div>
       </div>

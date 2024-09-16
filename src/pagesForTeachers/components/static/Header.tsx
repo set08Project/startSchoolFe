@@ -34,6 +34,7 @@ import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import ClipLoader from "react-spinners/ClipLoader";
 import { readSchool } from "../../../pages/api/schoolAPIs";
+import { CgProfile } from "react-icons/cg";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const Header = () => {
       onClick={() => {}}
     >
       <div className="flex items-center justify-end w-[90%]">
-        <div className="hidden sm:flex">
+        <div className="sm:flex">
           <div className="flex mr-5 font-medium cursor-pointer items-center bg-slate-200 px-4 py-2 rounded-sm z-30">
             <FaCalendar />
             <span className="text-[12px] mx-1">
@@ -198,6 +199,11 @@ const Header = () => {
                     to: "subjects",
                   },
                   {
+                    title: "My Profile",
+                    icon: <CgProfile />,
+                    to: "my-profile",
+                  },
+                  {
                     title: "Student's Articles",
                     icon: <MdArticle />,
                     to: "view-articles",
@@ -207,25 +213,16 @@ const Header = () => {
                     icon: <MdReport />,
                     to: "lesson-note",
                   },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
+
                   {
                     title: "Store",
                     icon: <FaStore />,
                     to: "store",
                   },
                   {
-                    title: "Gallaries",
+                    title: "Gallery",
                     icon: <FaPhotoFilm />,
                     to: "gallary",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report-card",
                   },
                   {
                     title: "Report Card",
@@ -276,14 +273,14 @@ const Header = () => {
                     to: "subjects",
                   },
                   {
+                    title: "My Profile",
+                    icon: <CgProfile />,
+                    to: "my-profile",
+                  },
+                  {
                     title: "Lesson Note",
                     icon: <MdReport />,
                     to: "lesson-note",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report",
                   },
                   {
                     title: "Store",
@@ -291,14 +288,9 @@ const Header = () => {
                     to: "store",
                   },
                   {
-                    title: "Gallaries",
+                    title: "Gallery",
                     icon: <FaPhotoFilm />,
                     to: "gallary",
-                  },
-                  {
-                    title: "Reports",
-                    icon: <MdReport />,
-                    to: "report-card",
                   },
                   {
                     title: "Report Card",
