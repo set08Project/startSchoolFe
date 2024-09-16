@@ -11,6 +11,7 @@ import moment from "moment";
 import { createExpense, setTermBudet } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const expenditure = () => {
   const [budget, setBudget] = useState<number>();
@@ -291,7 +292,6 @@ const expenditure = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="w-full ml-[15px] mb-6 flex justify-start items-center">
-
           <Link to="/view-all-expenditures">
             <div
               className={`${
@@ -303,7 +303,6 @@ const expenditure = () => {
               view all expenses
             </div>
           </Link>
-
         </div>
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Date</div>
