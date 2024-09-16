@@ -56,7 +56,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <div className=" text-[13px] font-medium">
-        <div className="" />
+        <div />
         <input
           type="checkbox"
           checked={studentInfo?.parentEmail ? false : true}
