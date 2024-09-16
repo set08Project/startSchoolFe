@@ -3,23 +3,26 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
-import { MdCheck, MdClose, MdDelete } from "react-icons/md";
+import { MdCheck, MdClose, MdDelete, MdSave } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
 import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
 
+import BeatLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
 import {
   useClassAttendance,
   useClassSubjects,
   useSchoolClassRMDetail,
   useSchoolCookie,
+  useSchoolData,
   useSchoolTeacher,
 } from "../../hook/useSchoolAuth";
 import {
   createSchoolSubject,
+  updateClassName,
   updateClassroomTeacher,
   verifyPayment1st,
 } from "../../api/schoolAPIs";
@@ -146,6 +149,8 @@ const ClassDetailScreen = () => {
   const [secondTermFee, setSecondTermFee] = useState<string>("");
   const [thirdTermFee, setThirdTermFee] = useState<string>("");
 
+  // const { oneClass } = useReadOneClassInfo(state);
+
   const isFormFilled =
     firstTermFee !== "" && secondTermFee !== "" && thirdTermFee !== "";
 
@@ -231,14 +236,98 @@ const ClassDetailScreen = () => {
   //   });
   // };
 
+  const { data } = useSchoolData();
+
   const { mainAttendance } = useClassAttendance(classID!);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [className, setClassName] = useState<string>("");
 
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
-      <div>Class: {classroom?.className}</div>
-      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden ">
+
+      <div>Class: {classroom?.className} </div>
+
+      <span
+        className="text-[12px] uppercase bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
+        onClick={() => {
+          if (!document.startViewTransition) {
+            setToggle(!toggle);
+          } else {
+            document.startViewTransition(() => {
+              setToggle(!toggle);
+            });
+          }
+        }}
+      >
+        Edit class name
+      </span>
+
+      <div>
+        {/* <div>Updating ClassName</div> */}
+
+        {toggle ? (
+          <div
+            className="absolute top-[9%] z-10 
+                h-[200px] w-[100%] sm:w-[120%] md:w-[60%] rounded-md pr-10 bg-blue-500 py-4
+                "
+            style={{
+              background: "rgba(252, 254, 255, 0.45)",
+              backdropFilter: " blur( 4px )",
+            }}
+          >
+            <div className="z-20">
+              <div className="flex w-full">
+                <Input
+                  className="flex-1 mr-1 text-white text-[18px] placeholder:text-gray-400 "
+                  defaultValue={classroom?.className}
+                  value={classroom?.className}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setClassName(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <Button
+                  name={`${loading ? " Loading" : "Change Class Name"}`}
+                  icon={
+                    loading ? (
+                      <BeatLoader
+                        color={"color"}
+                        size={18}
+                        className="mb-[0.12rem]"
+                      />
+                    ) : (
+                      <MdSave />
+                    )
+                  }
+                  className={` bg-blue-950 transition-all duration-300 ${
+                    loading && "h-12"
+                  }`}
+                  onClick={() => {
+                    setLoading(true);
+                    updateClassName(data?._id, classID, className).then(() => {
+                      toast.success("class name Updated successfully");
+                      setLoading(false);
+                      setToggle(false);
+                      mutate(`api/view-classrooms/${classID}`);
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 mt-1">
+            By clicking the above, you'll be editing the class name
+          </div>
+        )}
+      </div>
+
+      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden mt-5">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div className="md:text-[17px] text-[10px]">
             Total Number of Students:
@@ -256,6 +345,7 @@ const ClassDetailScreen = () => {
           <p className="font-medium"></p>
         </div>
       </div>
+
       <div className="my-6 border-t" />
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4">
         <div className="px-3 opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
@@ -337,6 +427,113 @@ const ClassDetailScreen = () => {
           </Modal>
         </div>
       </div>
+
+      <main className="mt-3">
+        <p>Manage Class Teacher: </p>
+        <p className="text-[13px] flex items-center font-bold">
+          Class teacher is responsible for day to day activities of the class{" "}
+          <span className="font-bold flex items-center gap-1"></span>
+        </p>
+
+        <div className="mt-5 text-[13px] font-medium">
+          <div className="mt-5 text-[13px] font-medium">
+            <label
+              htmlFor="assign_teacher"
+              className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
+            >
+              + Assign class Teacher
+            </label>
+            <div className="mt-3" />
+            {/* Put this part before </body> tag */}
+            <input
+              type="checkbox"
+              id="assign_teacher"
+              className="modal-toggle"
+            />
+            <div className="modal rounded-md" role="dialog">
+              <div className="modal-box  rounded-md bg-white">
+                <p className="flex items-center justify-between my-4 ">
+                  <p className="font-bold">Assigning Teacher to this class</p>
+
+                  <label
+                    htmlFor="assign_teacher"
+                    className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+                  >
+                    <MdClose />
+                  </label>
+                </p>
+                <hr />
+
+                <p className="mt-2 leading-tight text-[13px] font-medium">
+                  Please note that this teacher you're about to assign to this
+                  class will exhibit all feature, roles and previlage to
+                  supervise this class.
+                  <br />
+                  <br />
+                  <div className="flex gap-2  items-center">
+                    <p> Teacher: {teacher}</p>
+                    {teacher && (
+                      <div className="flex items-center font-bold">
+                        <span>selected</span>
+                        <MdCheck className="text-green-500 text-[25px] mb-1 " />
+                      </div>
+                    )}
+                  </div>
+                </p>
+
+                <div className="mt-10 w-full gap-2 flex flex-col items-center">
+                  <div className="w-full flex flex-col">
+                    <label className="font-medium text-[12px]">
+                      Subject Teacher <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3 bg-white"
+                      value={teacher}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setTeacher(e.target.value);
+                      }}
+                    >
+                      <option disabled defaultValue={"Select a Teacher"}>
+                        Select a Teacher
+                      </option>
+                      {schoolTeacher?.staff?.map((props: any, i: number) => (
+                        <option key={i} value={props?.staffName}>
+                          {props?.staffName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="w-full flex justify-end transition-all duration-300">
+                  {teacher !== "" ? (
+                    <label
+                      htmlFor="assign_teacher"
+                      className="bg-blue-950 text-white px-8 py-3 rounded-md cursor-pointer"
+                      onClick={updateTeacher}
+                    >
+                      Proceed
+                    </label>
+                  ) : (
+                    <Button
+                      name="Can't Proceed"
+                      className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                    />
+                  )}
+                </div>
+              </div>
+
+              <label className="modal-backdrop" htmlFor="assign_teacher">
+                Close
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-[12px]"> class Teacher Assigned</div>
+        <StaffDetail props={classroom?.teacherID} />
+      </main>
+
       <div className="my-6 border-t" />
       {/* SUbjects */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
@@ -360,101 +557,12 @@ const ClassDetailScreen = () => {
             id="assign_class_subject"
             className="modal-toggle"
           />
-          <div className="modal rounded-md" role="dialog">
-            <div className="modal-box  rounded-md">
-              <p className="flex items-center justify-between my-4 ">
-                <p className="font-bold">Add New Subject</p>
-
-                <label
-                  htmlFor="assign_class_subject"
-                  className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
-                >
-                  <MdClose />
-                </label>
-              </p>
-              <hr />
-              <p className="mt-2 leading-tight text-[13px] font-medium">
-                Please note that by assigning this subject to this class, it
-                automtically becomes one of the class must take suject.
-                <br />
-                <br />
-                You are about to add this subject:{" "}
-                {subject ? subject : "********"} to this class:{" "}
-                {classroom?.className} and assigning it to: {teacher}
-              </p>
-              <div className="mt-10 w-full gap-2 flex flex-col items-center">
-                <div className="w-full">
-                  <label className="font-medium text-[12px]">
-                    Subject Title <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Enter the here: English"
-                      className="mx-0 h-12 w-[100%]"
-                      value={subject}
-                      onChange={(e: any) => {
-                        setSubject(e.target.value);
-                      }}
-                    />
-                    <div className="-mt-4 w-full gap-2 flex flex-col items-center">
-                      <div className="w-full flex flex-col">
-                        <label className="font-medium text-[12px] mb-2">
-                          Subject Teacher{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
-                          value={teacher}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLSelectElement>
-                          ) => {
-                            setTeacher(e.target.value);
-                          }}
-                        >
-                          <option disabled selected>
-                            Select a Teacher
-                          </option>
-                          {schoolTeacher?.staff?.map(
-                            (props: any, i: number) => (
-                              <option key={i} value={props?.staffName}>
-                                {props?.staffName}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full flex justify-end transition-all duration-300">
-                {subject !== "" && teacher !== "" ? (
-                  <label
-                    htmlFor="assign_class_subject"
-                    className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
-                    onClick={addClassSubject}
-                  >
-                    Proceed
-                  </label>
-                ) : (
-                  <Button
-                    name="Can't Proceed"
-                    className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
-                  />
-                )}
-              </div>
-            </div>
-
-            <label className="modal-backdrop" htmlFor="assign_class_subject">
-              Close
-            </label>
-          </div>
         </div>
 
         {/* Populate Class St */}
         <ClassSubjectScreen />
       </div>
+
       {/* Performance */}
       <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>

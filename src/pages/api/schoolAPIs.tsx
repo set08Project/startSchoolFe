@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const URL2: string = import.meta.env.VITE_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
 // working locally
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
-// const URL2: string = "https://just-next-be1.onrender.com";
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
 
 export const allSchools = async () => {
   try {
@@ -112,6 +113,25 @@ export const recordFeesPayment = async (
   } catch (error: any) {
     console.error();
     console.log(error.message);
+    return error;
+  }
+};
+
+export const updateClassName = async (
+  schoolID: string,
+  classID: string,
+  data: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-classname/${schoolID}/${classID}`, {
+        className: data,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
     return error;
   }
 };
