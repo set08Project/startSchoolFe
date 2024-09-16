@@ -174,8 +174,7 @@ const Header = () => {
           }`}
         >
           <div className="h-[500px] overflow-y-scroll rounded-md border">
-            {schoolData?.data?.categoryType === "Secondary" ||
-            schoolData?.data?.schoolTags[0] === "Secondary School." ? (
+            {schoolData?.categoryType === "Secondary" ? (
               <div>
                 <SmallPiece
                   name={[

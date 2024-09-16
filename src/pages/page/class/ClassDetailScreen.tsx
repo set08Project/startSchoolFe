@@ -49,6 +49,7 @@ const ClassSubjectScreen: FC = () => {
   // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
+  const { data } = useSchoolData();
 
   return (
     <div>
@@ -62,7 +63,13 @@ const ClassSubjectScreen: FC = () => {
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
                 <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                  <MdDelete className="hover:text-blue-900" />
+                  <MdDelete
+                    className={`${
+                      data?.categoryType === "Secondary"
+                        ? "hover:bg-blue-950"
+                        : "hover:bg-red-950"
+                    }`}
+                  />
                 </div>
               </div>
               <div className="flex">
@@ -75,7 +82,13 @@ const ClassSubjectScreen: FC = () => {
                 Subject Teacher Name: <span></span>
               </p>
               <div className="flex mb-4 gap-2 flex-wrap">
-                <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
+                <div
+                  className={`${
+                    data?.categoryType === "Secondary"
+                      ? "text-blue-950"
+                      : "text-green-950"
+                  }  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] `}
+                >
                   {props?.subjectTeacherName}
                 </div>
               </div>
@@ -239,6 +252,7 @@ const ClassDetailScreen = () => {
   const { data } = useSchoolData();
 
   const { mainAttendance } = useClassAttendance(classID!);
+  const { data } = useSchoolData();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
@@ -249,7 +263,20 @@ const ClassDetailScreen = () => {
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
 
-      <div>Class: {classroom?.className} </div>
+      <div>Class: {classroom?.className}</div>
+      <div
+        className={`w-full ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-950"
+            : "text-green-950"
+        } md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden`}
+      >
+        <div
+          className={`${
+            data?.categoryType === "Secondary" ? "bg-blue-950" : "bg-red-950"
+          } text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg`}
+        >
+
 
       <span
         className="text-[12px] uppercase bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
@@ -329,6 +356,7 @@ const ClassDetailScreen = () => {
 
       <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden mt-5">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
+
           <div className="md:text-[17px] text-[10px]">
             Total Number of Students:
           </div>
@@ -370,18 +398,28 @@ const ClassDetailScreen = () => {
             </div>
           </div>
           <button
-            className="btn text-blue-950 bg-white hover:bg-blue-50 transition-all duration-300 px-8 uppercase text-[15px]"
+
+            className={`btn ${
+              data?.categoryType === "Secondary"
+                ? "text-blue-950"
+                : "text-green-950"
+            } bg-white hover:bg-blue-50 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]`}
+
             onClick={openFeeModal}
           >
             Update Class Fee
           </button>
-          <Modal
-            isOpen={isFeeModalOpen}
-            onClose={closeFeeModal}
-            className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto"
-          >
-            <h2 className="text-2xl font-semibold mb-6 text-blue-950 flex items-center gap-2">
-              Update Class Fee 💼
+
+          <Modal isOpen={isFeeModalOpen} onClose={closeFeeModal}>
+            <h2
+              className={`text-lg text-left font-bold mb-4 flex items-center gap-2 ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              }`}
+            >
+              Update Class Fee 
+
             </h2>
 
             <div className="space-y-4">
@@ -509,7 +547,11 @@ const ClassDetailScreen = () => {
                   {teacher !== "" ? (
                     <label
                       htmlFor="assign_teacher"
-                      className="bg-blue-950 text-white px-8 py-3 rounded-md cursor-pointer"
+                      className={`${
+                        data?.categoryType === "Secondary"
+                          ? "bg-blue-950"
+                          : "bg-red-950"
+                      } text-white px-8 py-3 rounded-md cursor-pointer`}
                       onClick={updateTeacher}
                     >
                       Proceed
@@ -517,7 +559,11 @@ const ClassDetailScreen = () => {
                   ) : (
                     <Button
                       name="Can't Proceed"
-                      className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                      className={`bg-[lightgray] ${
+                        data?.categoryType === "Secondary"
+                          ? "text-blue-950"
+                          : "text-green-950"
+                      } mx-0 cursor-not-allowed`}
                     />
                   )}
                 </div>
@@ -557,6 +603,106 @@ const ClassDetailScreen = () => {
             id="assign_class_subject"
             className="modal-toggle"
           />
+
+          <div className="modal rounded-md" role="dialog">
+            <div className="modal-box  rounded-md">
+              <p className="flex items-center justify-between my-4 ">
+                <p className="font-bold">Add New Subject</p>
+
+                <label
+                  htmlFor="assign_class_subject"
+                  className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+                >
+                  <MdClose />
+                </label>
+              </p>
+              <hr />
+              <p className="mt-2 leading-tight text-[13px] font-medium">
+                Please note that by assigning this subject to this class, it
+                automtically becomes one of the class must take suject.
+                <br />
+                <br />
+                You are about to add this subject:{" "}
+                {subject ? subject : "********"} to this class:{" "}
+                {classroom?.className} and assigning it to: {teacher}
+              </p>
+              <div className="mt-10 w-full gap-2 flex flex-col items-center">
+                <div className="w-full">
+                  <label className="font-medium text-[12px]">
+                    Subject Title <span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter the here: English"
+                      className="mx-0 h-12 w-[100%]"
+                      value={subject}
+                      onChange={(e: any) => {
+                        setSubject(e.target.value);
+                      }}
+                    />
+                    <div className="-mt-4 w-full gap-2 flex flex-col items-center">
+                      <div className="w-full flex flex-col">
+                        <label className="font-medium text-[12px] mb-2">
+                          Subject Teacher{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
+                          value={teacher}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setTeacher(e.target.value);
+                          }}
+                        >
+                          <option disabled selected>
+                            Select a Teacher
+                          </option>
+                          {schoolTeacher?.staff?.map(
+                            (props: any, i: number) => (
+                              <option key={i} value={props?.staffName}>
+                                {props?.staffName}
+                              </option>
+                            )
+                          )}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full flex justify-end transition-all duration-300">
+                {subject !== "" && teacher !== "" ? (
+                  <label
+                    htmlFor="assign_class_subject"
+                    className={`${
+                      data?.categoryType === "Secondary"
+                        ? "bg-blue-950"
+                        : "bg-red-950"
+                    } text-white py-4 px-8 rounded-md cursor-pointer `}
+                    onClick={addClassSubject}
+                  >
+                    Proceed
+                  </label>
+                ) : (
+                  <Button
+                    name="Can't Proceed"
+                    className={`bg-[lightgray] ${
+                      data?.categoryType === "Secondary"
+                        ? "text-blue-950"
+                        : "text-green-950"
+                    } mx-0 cursor-not-allowed`}
+                  />
+                )}
+              </div>
+            </div>
+
+            <label className="modal-backdrop" htmlFor="assign_class_subject">
+              Close
+            </label>
+          </div>
+
         </div>
 
         {/* Populate Class St */}

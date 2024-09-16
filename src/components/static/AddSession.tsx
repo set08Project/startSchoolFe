@@ -135,13 +135,17 @@ const AddSession = () => {
                       <ClipLoader size={20} color="white" className="mb-0" />
                     }
                     name={"creating Session"}
-                    className="bg-blue-950 py-0 mx-0"
+                    className={` data?.categoryType === "Secondary"
+                        ? "bg-blue-950"
+                        : "bg-red-950" py-0 mx-0`}
                   />
                 </div>
               ) : (
                 <Button
                   name={"Proceed"}
-                  className="bg-blue-950  mx-0"
+                  className={` data?.categoryType === "Secondary"
+                        ? "bg-blue-950"
+                        : "bg-red-950" mx-0`}
                   onClick={() => {
                     handleSubmit();
                   }}
@@ -151,7 +155,11 @@ const AddSession = () => {
           ) : (
             <Button
               name="Can't Proceed"
-              className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+              className={`bg-[lightgray] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } mx-0 cursor-not-allowed`}
             />
           )}
         </div>

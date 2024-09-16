@@ -115,10 +115,22 @@ const expenditure = () => {
           <div className="h-full p-2">
             <div className="font-semibold mb-5">EXPENDITURE DASHBOARD</div>
             <h4 className="mb-1 font-medium">Main Budget :</h4>
-            <h1 className="mb-2 font-bold text-[25px] text-blue-950">
+            <h1
+              className={`mb-2 font-bold text-[25px] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              }`}
+            >
               ₦{termBudget?.data?.toLocaleString()}
             </h1>
-            <div className="flex items-center gap-[10px] text-blue-950 text-[12px]">
+            <div
+              className={`flex items-center gap-[10px] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } text-[12px]`}
+            >
               <div>Currency: </div>
               <div>Naira (₦)</div>
             </div>
@@ -165,7 +177,11 @@ const expenditure = () => {
           <div className="modal-action ml-6">
             <label
               htmlFor="my_modal_expenses_modal"
-              className="py-4 px-6 ml-3 border rounded-md bg-blue-950 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+              className={`py-4 px-6 ml-3 border rounded-md ${
+                data?.categoryType === "Secondary"
+                  ? "bg-blue-950"
+                  : "bg-red-950"
+              } text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center`}
             >
               Record An Expenditure
             </label>
@@ -275,9 +291,19 @@ const expenditure = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="w-full ml-[15px] mb-6 flex justify-start items-center">
-          <div className="text-blue-950 text-[12px] uppercase font-semibold">
-            all expenses
-          </div>
+
+          <Link to="/view-all-expenditures">
+            <div
+              className={`${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } text-[12px] uppercase font-semibold`}
+            >
+              view all expenses
+            </div>
+          </Link>
+
         </div>
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Date</div>
