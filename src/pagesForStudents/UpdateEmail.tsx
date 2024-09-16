@@ -48,7 +48,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
     });
   };
 
-  const reload = window.location.reload();
+  const reload = window.location.reload;
 
   const [viewState, setViewState] = useState<Boolean>(false);
 
