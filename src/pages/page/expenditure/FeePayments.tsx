@@ -238,9 +238,9 @@ const FeePayments = () => {
 
           <div className=" w-[1100px] overflow-hidden">
             <div className="transition-all duration-300">
-              {filteredPayments.length > 0 ? (
+              {filteredPayments?.length > 0 ? (
                 filteredPayments?.map((props: any) => (
-                  <div key={props?._id} className="">
+                  <div key={props?._id} className="smooth">
                     <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-3 my-2  overflow-hidden">
                       {/* start */}
                       <div className="w-[90px] border-r">

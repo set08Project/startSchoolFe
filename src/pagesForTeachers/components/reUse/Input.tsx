@@ -33,7 +33,7 @@ const Input: FC<iInputProps> = ({
   return (
     <div
       className={twMerge(
-        `w-[300px] h-[50px]  border rounded-md m-2  relative transition-all duration-300 mb-6 ${
+        `w-[300px] h-[50px] border rounded-md m-2  relative transition-all duration-300 mb-6 ${
           state && "border-blue-500"
         } `,
         className
