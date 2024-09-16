@@ -74,7 +74,13 @@ const Personal: FC = () => {
 
   return (
     <div>
-      <div className="mb-2 text-blue-950">
+      <div
+        className={`mb-2 ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-950"
+            : "text-green-950"
+        }`}
+      >
         <span className="font-bold text-[12px] ">Population Counts</span>
         <div className="grid grid-cols-2 gap-3 mt-2">
           <div className="border rounded-md min-h-[100px] p-4">

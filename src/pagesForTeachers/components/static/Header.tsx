@@ -167,7 +167,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          {schoolData?.data?.schoolTags[0] === "Secondary School." ? (
+          {schoolData?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
                 name={[

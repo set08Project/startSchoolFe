@@ -85,7 +85,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   };
 
   return (
-    <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1 ">
+    <div
+      className={`border w-[250px] ${
+        data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
+      } shadow-sm min-h-48 rounded-md p-1`}
+    >
       <div className="flex flex-col items-between  w-full">
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
@@ -95,7 +99,13 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           "
             onClick={handleMenu}
           >
-            <div className="text-[12px] w-full py-3 font-medium  duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between">
+            <div
+              className={`text-[12px] w-full py-3 font-medium  duration-300 transition-all ${
+                data?.categoryType === "Secondary"
+                  ? "hover:bg-blue-950"
+                  : "hover:bg-red-950"
+              } p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between`}
+            >
               <div>{title}</div>
               <div className="text-[17px]">{icon}</div>
             </div>
@@ -108,7 +118,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
             <Button
               name="Add to Store"
-              className=" text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[5px] py-3"
+              className={`text-[12px] uppercase font-bold ${
+                data?.categoryType === "Secondary"
+                  ? "bg-blue-950"
+                  : "bg-red-950"
+              } text-white rounded-[5px] py-3`}
             />
           </NavLink>
         </div>
@@ -117,7 +131,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
       {log && (
         <label
           htmlFor="id"
-          className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
+          className={`text-[12px] font-medium py-3 duration-300 transition-all ${
+            data?.categoryType === "Secondary"
+              ? "hover:bg-blue-950"
+              : "hover:bg-red-950"
+          } p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between`}
           onClick={() => {
             // dispatch(logoutState());
             handleMenu();
@@ -138,7 +156,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
       {log && (
         <div
-          className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
+          className={`text-[12px] font-medium py-3 duration-300 transition-all ${
+            data?.categoryType === "Secondary"
+              ? "hover:bg-blue-950"
+              : "hover:bg-red-950"
+          } p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between`}
           onClick={() => {
             // logout();
             dispatch(logoutState());

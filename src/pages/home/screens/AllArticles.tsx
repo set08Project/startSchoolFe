@@ -31,7 +31,13 @@ const AllArticle = () => {
             <Link to="/create-article">
               <div className="flex items-center gap-1">
                 <IoCreateOutline size={25} />
-                <p className="text-[12px] font-bold text-blue-950">
+                <p
+                  className={`text-[12px] font-bold ${
+                    data?.categoryType === "Secondary"
+                      ? "text-blue-950"
+                      : "text-green-950"
+                  }`}
+                >
                   Create New Thought
                 </p>
               </div>

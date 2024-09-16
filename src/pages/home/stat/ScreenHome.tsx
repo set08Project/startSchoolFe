@@ -10,6 +10,7 @@ import RecentPurcentScreen from "../screens/RecentPurchases";
 import { Link } from "react-router-dom";
 import ArticleHolderScreen from "../../../pagesForStudents/pages/screens/ArticleHolderScreen";
 import MainArticleHolderScreen from "../screens/ARticlaHolderScreen";
+import { useSchoolData } from "../../hook/useSchoolAuth";
 
 const ScreenHome = () => {
   document.title = "School's Record and Stats";
@@ -17,13 +18,18 @@ const ScreenHome = () => {
   const [state, setState] = useState<string>("");
 
   const readData = Array.from({ length: 2 });
+  const { data } = useSchoolData();
 
   useEffect(() => {
     // justRead();
   }, []);
 
   return (
-    <div className="text-blue-950 flex flex-col h-full">
+    <div
+      className={`${
+        data?.categoryType === "Secondary" ? "text-blue-950" : "text-green-950"
+      } flex flex-col h-full`}
+    >
       <div className=" grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4">
           <div className="mb-4 text-medium capitalize">School's Info</div>
@@ -102,7 +108,13 @@ const ScreenHome = () => {
             <hr />
           </div>
 
-          <div className="mt-2 text-blue-950">
+          <div
+            className={`mt-2 ${
+              data?.categoryType === "Secondary"
+                ? "text-blue-950"
+                : "text-green-950"
+            }`}
+          >
             <div className="flex gap-3 text-[15px] ">
               <p>Most Recent Article</p>
               <Link to="/articles">

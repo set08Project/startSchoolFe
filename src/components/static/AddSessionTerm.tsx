@@ -82,7 +82,11 @@ const AddSessionTerm = () => {
       });
   };
   return (
-    <div className="flex justify-center bg-blue-50   ">
+    <div
+      className={`flex justify-center ${
+        data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
+      }`}
+    >
       <Toaster position="top-center" reverseOrder={true} />
       <div className="w-[500px] min-h-[300px] border rounded-md bg-white shadow-lg p-4">
         <p className="flex items-center justify-between my-4 ">
@@ -145,13 +149,21 @@ const AddSessionTerm = () => {
                       <ClipLoader size={20} color="white" className="mb-0" />
                     }
                     name={"creating Term"}
-                    className="bg-blue-950 py-0 mx-0"
+                    className={`${
+                      data?.categoryType === "Secondary"
+                        ? "bg-blue-950"
+                        : "bg-red-950"
+                    } py-0 mx-0`}
                   />
                 </div>
               ) : (
                 <Button
                   name={"Proceed"}
-                  className="bg-blue-950  mx-0"
+                  className={`${
+                    data?.categoryType === "Secondary"
+                      ? "bg-blue-950"
+                      : "bg-red-950"
+                  } mx-0`}
                   onClick={() => {
                     handleSubmit();
                   }}
@@ -161,7 +173,11 @@ const AddSessionTerm = () => {
           ) : (
             <Button
               name="Can't Proceed"
-              className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+              className={`bg-[lightgray] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } mx-0 cursor-not-allowed`}
             />
           )}
         </div>

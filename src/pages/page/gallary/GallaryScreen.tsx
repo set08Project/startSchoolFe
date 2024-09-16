@@ -67,7 +67,15 @@ const GallaryScreen = () => {
                   </div>
                   <div className="card-actions justify-end">
                     <button
-                      className="btn bg-blue-950 hover:bg-blue-900 text-white rounded-md mt-4 "
+                      className={`btn ${
+                        data?.categoryType === "Secondary"
+                          ? "bg-blue-950"
+                          : "bg-red-950"
+                      }  ${
+                        data?.categoryType === "Secondary"
+                          ? "hover:bg-blue-950"
+                          : "hover:bg-red-950"
+                      } text-white rounded-md mt-4 `}
                       onClick={() => {
                         dispatch(addToCart(props));
                       }}

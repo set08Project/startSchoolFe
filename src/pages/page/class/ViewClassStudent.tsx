@@ -10,7 +10,11 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
 import moment from "moment";
-import { useSchool, useStudentAttendance } from "../../hook/useSchoolAuth";
+import {
+  useSchool,
+  useSchoolData,
+  useStudentAttendance,
+} from "../../hook/useSchoolAuth";
 import {
   updateSchoolFee,
   verifyPayment1st,
@@ -116,6 +120,7 @@ const ViewClassStudent: FC = () => {
   const { classID } = useParams();
   const user = useSelector((el: any) => el.user);
   const { classStudents } = useClassStudent(classID!);
+  const { data } = useSchoolData();
 
   return (
     <div>
@@ -169,7 +174,11 @@ const ViewClassStudent: FC = () => {
                               type="checkbox"
                               className={`toggle toggle-sm mt-2 ${
                                 props?.feesPaid1st
-                                  ? "bg-blue-950 border-blue-950"
+                                  ? `${
+                                      data?.categoryType === "Secondary"
+                                        ? "bg-blue-950 border-b-blue-950"
+                                        : "bg-red-950 border-red-950"
+                                    }`
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid1st}
@@ -196,7 +205,11 @@ const ViewClassStudent: FC = () => {
                               type="checkbox"
                               className={`toggle toggle-sm mt-2 ${
                                 props?.feesPaid2nd
-                                  ? "bg-blue-950 border-blue-950"
+                                  ? `${
+                                      data?.categoryType === "Secondary"
+                                        ? "bg-blue-950 border-b-blue-950"
+                                        : "bg-red-950 border-red-950"
+                                    }`
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid2nd}
@@ -211,7 +224,11 @@ const ViewClassStudent: FC = () => {
                               type="checkbox"
                               className={`toggle toggle-sm mt-2 ${
                                 props?.feesPaid3rd
-                                  ? "bg-blue-950 border-blue-950"
+                                  ? `${
+                                      data?.categoryType === "Secondary"
+                                        ? "bg-blue-950 border-b-blue-950"
+                                        : "bg-red-950 border-red-950"
+                                    }`
                                   : "bg-neutral-500 border-neutral-500"
                               } `}
                               checked={props?.feesPaid3rd}

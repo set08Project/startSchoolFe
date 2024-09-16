@@ -16,6 +16,7 @@ import {
   useClassSubjects,
   useSchoolClassRMDetail,
   useSchoolCookie,
+  useSchoolData,
   useSchoolTeacher,
 } from "../../hook/useSchoolAuth";
 import {
@@ -45,6 +46,7 @@ const ClassSubjectScreen: FC = () => {
   // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
+  const { data } = useSchoolData();
 
   return (
     <div>
@@ -58,7 +60,13 @@ const ClassSubjectScreen: FC = () => {
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
                 <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                  <MdDelete className="hover:text-blue-900" />
+                  <MdDelete
+                    className={`${
+                      data?.categoryType === "Secondary"
+                        ? "hover:bg-blue-950"
+                        : "hover:bg-red-950"
+                    }`}
+                  />
                 </div>
               </div>
               <div className="flex">
@@ -71,7 +79,13 @@ const ClassSubjectScreen: FC = () => {
                 Subject Teacher Name: <span></span>
               </p>
               <div className="flex mb-4 gap-2 flex-wrap">
-                <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
+                <div
+                  className={`${
+                    data?.categoryType === "Secondary"
+                      ? "text-blue-950"
+                      : "text-green-950"
+                  }  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] `}
+                >
                   {props?.subjectTeacherName}
                 </div>
               </div>
@@ -228,14 +242,25 @@ const ClassDetailScreen = () => {
   // };
 
   const { mainAttendance } = useClassAttendance(classID!);
+  const { data } = useSchoolData();
 
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
       <Toaster position="top-center" reverseOrder={true} />
       <div>Class: {classroom?.className}</div>
-      <div className="w-full text-blue-950 md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden ">
-        <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
+      <div
+        className={`w-full ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-950"
+            : "text-green-950"
+        } md:h-[90px] h-[70px] rounded-lg border flex justify-between overflow-hidden`}
+      >
+        <div
+          className={`${
+            data?.categoryType === "Secondary" ? "bg-blue-950" : "bg-red-950"
+          } text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg`}
+        >
           <div className="md:text-[17px] text-[10px]">
             Total Number of Students:
           </div>
@@ -283,13 +308,23 @@ const ClassDetailScreen = () => {
           </div>
           {/* <Button name="" className="text-blue-950 bg-white" /> */}
           <button
-            className="btn text-blue-950 bg-white hover:bg-blue-50 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]"
+            className={`btn ${
+              data?.categoryType === "Secondary"
+                ? "text-blue-950"
+                : "text-green-950"
+            } bg-white hover:bg-blue-50 transition-all duration-300 md:px-8 uppercase md:text-[19px] text-[9px] ml-[40px] md:ml-[0px]`}
             onClick={openFeeModal}
           >
             Update Class Fee
           </button>
           <Modal isOpen={isFeeModalOpen} onClose={closeFeeModal}>
-            <h2 className="text-lg text-left font-bold mb-4 text-blue-950">
+            <h2
+              className={`text-lg text-left font-bold mb-4 ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              }`}
+            >
               Update Class Fee
             </h2>
             <Input
@@ -404,7 +439,11 @@ const ClassDetailScreen = () => {
                   {teacher !== "" ? (
                     <label
                       htmlFor="assign_teacher"
-                      className="bg-blue-950 text-white px-8 py-3 rounded-md cursor-pointer"
+                      className={`${
+                        data?.categoryType === "Secondary"
+                          ? "bg-blue-950"
+                          : "bg-red-950"
+                      } text-white px-8 py-3 rounded-md cursor-pointer`}
                       onClick={updateTeacher}
                     >
                       Proceed
@@ -412,7 +451,11 @@ const ClassDetailScreen = () => {
                   ) : (
                     <Button
                       name="Can't Proceed"
-                      className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                      className={`bg-[lightgray] ${
+                        data?.categoryType === "Secondary"
+                          ? "text-blue-950"
+                          : "text-green-950"
+                      } mx-0 cursor-not-allowed`}
                     />
                   )}
                 </div>
@@ -522,7 +565,11 @@ const ClassDetailScreen = () => {
                 {subject !== "" && teacher !== "" ? (
                   <label
                     htmlFor="assign_class_subject"
-                    className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
+                    className={`${
+                      data?.categoryType === "Secondary"
+                        ? "bg-blue-950"
+                        : "bg-red-950"
+                    } text-white py-4 px-8 rounded-md cursor-pointer `}
                     onClick={addClassSubject}
                   >
                     Proceed
@@ -530,7 +577,11 @@ const ClassDetailScreen = () => {
                 ) : (
                   <Button
                     name="Can't Proceed"
-                    className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                    className={`bg-[lightgray] ${
+                      data?.categoryType === "Secondary"
+                        ? "text-blue-950"
+                        : "text-green-950"
+                    } mx-0 cursor-not-allowed`}
                   />
                 )}
               </div>

@@ -275,7 +275,11 @@ const HomeScreen = () => {
         <div
           className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
           style={{
-            background: "rgba(73, 154, 255, 0.2)",
+            background: `${
+              data?.categoryType === "Secondary"
+                ? "rgba(73, 154, 255, 0.2)"
+                : "rgba(255, 73, 85, 0.3)"
+            }`,
             boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
             backdropFilter: "blur(5px)",
             border: "1px solid rgba(73, 154, 255, 0.3)",
@@ -306,7 +310,11 @@ const HomeScreen = () => {
         <div
           className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
           style={{
-            background: "rgba(73, 154, 255, 0.2)",
+            background: `${
+              data?.categoryType === "Secondary"
+                ? "rgba(73, 154, 255, 0.2)"
+                : "rgba(255, 73, 85, 0.3)"
+            }`,
             boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
             backdropFilter: "blur(5px)",
             border: "1px solid rgba(73, 154, 255, 0.3)",
@@ -339,7 +347,11 @@ const HomeScreen = () => {
         <div
           className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
           style={{
-            background: "rgba(73, 154, 255, 0.2)",
+            background: `${
+              data?.categoryType === "Secondary"
+                ? "rgba(73, 154, 255, 0.2)"
+                : "rgba(255, 73, 85, 0.3)"
+            }`,
             boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
             backdropFilter: "blur(5px)",
             border: "1px solid rgba(73, 154, 255, 0.3)",

@@ -81,7 +81,9 @@ const Header = () => {
 
   return (
     <div
-      className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
+      className={`h-[50px] ${
+        data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
+      } border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-inherit`}
       onClick={() => {}}
     >
       {/* <div>  */}
@@ -203,7 +205,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          {data?.schoolTags[0].val === "Secondary School." ? (
+          {data?.categoryType === "Secondary" ? (
             <SmallPiece
               name={[
                 {
