@@ -66,7 +66,7 @@ const MyProfile = () => {
             </div>
             <div className="mb-2 py-2 px-3 bg-gray-100 rounded-lg">
               <p className="mb-1 flex items-center gap-1">
-                <FaAddressBook /> Address:
+                <FaAddressBook /> Home Address:
               </p>
               <h1 className="text-[18px] font-semibold">
                 12, Gregg Crescent, Victoria Island Lagos
@@ -77,7 +77,17 @@ const MyProfile = () => {
 
         {/* Section 2 */}
         <div className="min-h-[65vh] transition-all duration-300 ">
-          <div className="mb-4 md:mb-10">
+          <div className="mb-3 md:mb-10">
+            <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
+              Status:
+            </div>
+            <div className="font-medium rounded-lg flex justify-start items-center">
+              <div className="py-1 px-3 rounded-xl bg-green-50 text-[16px] text-green-600">
+                Active
+              </div>
+            </div>
+          </div>
+          <div className="mb-3 md:mb-10">
             <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
               Role:
             </div>
@@ -143,10 +153,47 @@ const MyProfile = () => {
           </div>
         </div>
         {/* Section 3 */}
-        <div className="min-h-[87vh]">
-          <div className="flex items-center gap-5">
-            <div className="mb-1 font-medium text-[17px] text-gray-600 uppercase">
+        <div className="min-h-[87vh] transition-all duration-300 lg:col-span-2 xl:col-auto lg:flex justify-between items-start xl:block">
+          <div className="mb-10 lg:w-[47%] xl:w-auto">
+            <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
+              My Assigned Classes:
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
+              <h1>Class Teacher :</h1>
+              <h1 className="font-semibold text-[18px] uppercase">
+                SS3 Commercial
+              </h1>
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
+              <h1>Class Teacher :</h1>
+              <h1 className="font-semibold text-[18px] uppercase">
+                SS2 Science
+              </h1>
+            </div>
+          </div>
+          <div className="lg:w-[47%] xl:w-auto">
+            <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
               My Assigned Subjects:
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+              <h1>Biology</h1>
+              <h1>SS3</h1>
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+              <h1>English</h1>
+              <h1>SS1</h1>
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+              <h1>Chemistry</h1>
+              <h1>SS2</h1>
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+              <h1>Agricultural Science</h1>
+              <h1>SS3</h1>
+            </div>
+            <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+              <h1>Physics</h1>
+              <h1>SS2</h1>
             </div>
           </div>
         </div>
