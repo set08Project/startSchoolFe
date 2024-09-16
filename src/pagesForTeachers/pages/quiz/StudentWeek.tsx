@@ -72,7 +72,7 @@ const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
         >
           <div className="modal-box rounded-md bg-white">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Add Assignment to Subject</p>
+              <p className="font-bold">Give student of the week</p>
 
               <label
                 htmlFor="assign_subject_timetable"
