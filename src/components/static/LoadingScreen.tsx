@@ -21,7 +21,7 @@ const LoadingScreen = () => {
         background: `${
           data?.categoryType === "Secondary"
             ? "rgba(73, 154, 255, 0.2)"
-            : "rgba(255, 73, 85, 0.3)"
+            : "rgba(73, 154, 255, 0.2)"
         }`,
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
