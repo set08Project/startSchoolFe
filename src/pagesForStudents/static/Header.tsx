@@ -176,67 +176,66 @@ const Header = () => {
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll rounded-md border">
-            {schoolData?.data?.categoryType === "Secondary" ||
-            schoolData?.data.schoolTags[0] === "Secondary School." ? (
-              <div>
-                <SmallPiece
-                  name={[
-                    {
-                      title: "Dashboard",
-                      icon: <MdQueryStats />,
-                      to: "/dashboard",
-                    },
-                    {
-                      title: "My ClassRoom",
-                      icon: <MdStadium />,
-                      to: "my-classroom",
-                    },
-                    {
-                      title: "My Subject",
-                      icon: <FaTable />,
-                      to: "your-subjects",
-                    },
-                    {
-                      title: `CBT (For SSS 3 Only)`,
-                      icon: <MdQuiz />,
-                      to: "CBT",
-                    },
-                    {
-                      title: "Lessons",
-                      icon: <MdClass />,
-                      to: "lesson",
-                    },
-                    {
-                      title: "Profile",
-                      icon: <CgProfile />,
-                      to: "your-profile",
-                    },
-                    {
-                      title: "Articles",
-                      icon: <MdOutlineArticle />,
-                      to: "articles",
-                    },
-                    {
-                      title: "Assignments",
-                      icon: <MdAssignmentAdd />,
-                      to: "assignment",
-                    },
-                    {
-                      title: "Gallery",
-                      icon: <FaPhotoFilm />,
-                      to: "gallary",
-                    },
-                    {
-                      title: "Reports",
-                      icon: <MdReport />,
-                      to: "report",
-                    },
-                    {
-                      title: "Complain",
-                      icon: <MdRadio />,
-                      to: "complain",
-                    },
+
+          {schoolData?.categoryType === "Secondary" ? (
+            <div>
+              <SmallPiece
+                name={[
+                  {
+                    title: "Dashboard",
+                    icon: <MdQueryStats />,
+                    to: "/dashboard",
+                  },
+                  {
+                    title: "My ClassRoom",
+                    icon: <MdStadium />,
+                    to: "my-classroom",
+                  },
+                  {
+                    title: "My Subject",
+                    icon: <FaTable />,
+                    to: "your-subjects",
+                  },
+                  {
+                    title: `CBT (For SSS 3 Only)`,
+                    icon: <MdQuiz />,
+                    to: "CBT",
+                  },
+                  {
+                    title: "Lessons",
+                    icon: <MdClass />,
+                    to: "lesson",
+                  },
+                  {
+                    title: "Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
+                    title: "Articles",
+                    icon: <MdOutlineArticle />,
+                    to: "articles",
+                  },
+                  {
+                    title: "Assignments",
+                    icon: <MdAssignmentAdd />,
+                    to: "assignment",
+                  },
+                  {
+                    title: "Gallaries",
+                    icon: <FaPhotoFilm />,
+                    to: "gallary",
+                  },
+                  {
+                    title: "Reports",
+                    icon: <MdReport />,
+                    to: "report",
+                  },
+                  {
+                    title: "complain",
+                    icon: <MdRadio />,
+                    to: "complain",
+                  },
 
                     {
                       title: "Settings",

@@ -70,7 +70,13 @@ const Layout: FC = () => {
 
   return (
     <div className="flex w-[100%] ">
-      <div className="md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50">
+      <div
+        className={`md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50 ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-900"
+            : "text-green-900"
+        } ${data?.categoryType === "Secondary" ? "bg-blue-950" : "bg-red-950"}`}
+      >
         <Sider />
       </div>
 
@@ -90,7 +96,11 @@ const Layout: FC = () => {
               <div
                 className="top-0 w-full h-full left-0 absolute overflow-hidden rounded-md "
                 style={{
-                  background: "rgba(73, 154, 255, 0.2)",
+                  background: `${
+                    data?.categoryType === "Secondary"
+                      ? "rgba(73, 154, 255, 0.2)"
+                      : "bg-red-200"
+                  }`,
                   boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
                   backdropFilter: "blur(5px)",
                   border: "1px solid rgba(73, 154, 255, 0.3)",

@@ -7,7 +7,10 @@ import { Toaster } from "react-hot-toast";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useSchoolClassRM } from "../../pages/hook/useSchoolAuth";
+import {
+  useSchoolClassRM,
+  useSchoolData,
+} from "../../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
@@ -76,6 +79,7 @@ const AddAnyItem: FC<iProps> = ({
 }) => {
   //
   const { schoolClassroom } = useSchoolClassRM();
+  const { data } = useSchoolData();
 
   return (
     <div className={`flex ${date ? "mt-32" : "mt-60"} justify-center`}>
@@ -85,7 +89,11 @@ const AddAnyItem: FC<iProps> = ({
           <Toaster position="top-center" reverseOrder={true} />
 
           <p
-            className="hover:bg-blue-50 transition-all duration-300 cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+            className={` ${
+              data?.categoryType === "Secondary"
+                ? "hover:bg-blue-50"
+                : "hover:bg-red-50"
+            }transition-all duration-300 cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold`}
             onClick={offFn}
           >
             <MdClose />
@@ -209,7 +217,11 @@ const AddAnyItem: FC<iProps> = ({
         {date && (
           <div>
             <textarea
-              className="textarea bg-gray-100 border-blue-950 rounded-md w-[95%] resize-none h-[170px] text-[12px] font-normal placeholder:opacity-55"
+              className={`textarea bg-gray-100  ${
+                data?.categoryType === "Secondary"
+                  ? "border-blue-950"
+                  : "border-red-950"
+              } rounded-md w-[95%] resize-none h-[170px] text-[12px] font-normal placeholder:opacity-55`}
               placeholder="Event Details of this Announcement "
               value={announce}
               onChange={(e: any) => {
@@ -239,7 +251,11 @@ const AddAnyItem: FC<iProps> = ({
             ) : (
               <Button
                 name="Can't Proceed"
-                className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                className={`bg-[lightgray] ${
+                  data?.categoryType === "Secondary"
+                    ? "text-blue-950"
+                    : "text-green-950"
+                } mx-0 cursor-not-allowed`}
               />
             )}
           </div>
@@ -259,13 +275,21 @@ const AddAnyItem: FC<iProps> = ({
                     "Publish"
                   )
                 }
-                className="bg-blue-950  mx-0"
+                className={` ${
+                  data?.categoryType === "Secondary"
+                    ? "bg-blue-950"
+                    : "bg-red-950"
+                }  mx-0`}
                 onClick={handleFn}
               />
             ) : (
               <Button
                 name="Can't Publish"
-                className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                className={`bg-[lightgray] ${
+                  data?.categoryType === "Secondary"
+                    ? "text-blue-950"
+                    : "text-green-950"
+                } mx-0 cursor-not-allowed`}
               />
             )}
           </div>
@@ -285,13 +309,21 @@ const AddAnyItem: FC<iProps> = ({
                     "Proceed"
                   )
                 }
-                className="bg-blue-950  mx-0"
+                className={`${
+                  data?.categoryType === "Secondary"
+                    ? "bg-blue-950"
+                    : "bg-red-950"
+                }  mx-0`}
                 onClick={handleFn}
               />
             ) : (
               <Button
                 name="Can't Proceed"
-                className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                className={`bg-[lightgray] ${
+                  data?.categoryType === "Secondary"
+                    ? "text-blue-950"
+                    : "text-green-950"
+                } mx-0 cursor-not-allowed`}
               />
             )}
           </div>

@@ -49,14 +49,22 @@ const CreateArticle = () => {
             placeholder="Title"
             value={area}
             onChange={(e) => setArea(e.target.value)}
-            className=" capitalize bg-white border-b rounded-none outline-none w-full px-4 h-full text-blue-950"
+            className={` capitalize bg-white border-b rounded-none outline-none w-full px-4 h-full ${
+              studentInfo?.categoryType === "Secondary"
+                ? "text-blue-950"
+                : "text-green-950"
+            }`}
           />
           <textarea
             placeholder="Description"
             value={iValue}
             maxLength={100}
             onChange={(e) => setIValue(e.target.value)}
-            className="capitalize bg-white border-b rounded-none outline-none w-full px-4 h-full text-blue-950 resize-none mt-6 md:mt-0"
+            className={`capitalize bg-white border-b rounded-none outline-none w-full px-4 h-full ${
+              studentInfo?.categoryType === "Secondary"
+                ? "text-blue-950"
+                : "text-green-950"
+            } resize-none mt-6 md:mt-0`}
           />
         </div>
         {/* create space */}
@@ -64,7 +72,11 @@ const CreateArticle = () => {
           <div className="mt-28 md:mt-8">
             <label
               htmlFor="pix"
-              className="text-[12px] bg-blue-950 text-white py-4 px-6 cursor-pointer capitalize font-bold rounded-md "
+              className={`text-[12px] ${
+                studentInfo?.categoryType === "Secondary"
+                  ? "bg-blue-950"
+                  : "bg-red-950"
+              } text-white py-4 px-6 cursor-pointer capitalize font-bold rounded-md`}
             >
               upload Cover image
             </label>
@@ -93,7 +105,11 @@ const CreateArticle = () => {
         </div>
         <div className=" w-full">
           <button
-            className="mt-10 lg:mt-0 py-2 px-4 rounded-md bg-blue-950 text-white"
+            className={`mt-10 lg:mt-0 py-2 px-4 rounded-md ${
+              studentInfo?.categoryType === "Secondary"
+                ? "bg-blue-950"
+                : "bg-red-950"
+            } text-white`}
             onClick={handleSubmit}
           >
             Submit
