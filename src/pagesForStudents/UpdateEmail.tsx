@@ -38,8 +38,6 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
         toast.success("Parent's email added/updated successfully");
         // mutate(`api/view-student-info/${studentInfo?._id}`);
 
-        console.log("reading: ", res);
-
         setTimeout(() => {
           setStated(false);
           setViewState(true);
@@ -49,6 +47,8 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
       }
     });
   };
+
+  const reload = window.location.reload();
 
   const [viewState, setViewState] = useState<Boolean>(false);
 
@@ -131,6 +131,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                           mutate(
                             `api/view-student-info/${studentInfo?._id}`
                           ).then(() => {
+                            reload;
                             navigate(`/dashboard`);
                           });
                         }
