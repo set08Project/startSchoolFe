@@ -5,6 +5,7 @@ import {
   getClassSubjects,
   getClassTimeTable,
   getClassroom,
+  getRecords,
   getSchoolAnncoement,
   getSchoolClassroom,
   getSchoolCookie,
@@ -60,11 +61,15 @@ export const useSchool = (schoolID: string) => {
 export const useSchoolCookie = () => {
   const user = useSelector((state: any) => state.user);
 
-  const { data: dataID } = useSWR(`api/read-school-cookie/`, () => {
-    return getSchoolCookie().then((res) => {
-      return res.data;
-    });
-  });
+  const { data: dataID } = useSWR(
+    `api/read-school-cookie/`,
+    () => {
+      return getSchoolCookie().then((res) => {
+        return res.data;
+      });
+    }
+    // { refreshInterval: 3000 }
+  );
 
   return { dataID: user?.id };
 };
@@ -106,16 +111,11 @@ export const useSchoolClassRM = () => {
 };
 
 export const useViewSchoolClassRM = (schoolID: string) => {
-  const { data: viewClasses } = useSWR(
-    `api/view-classrooms/`,
-    () => {
-      return viewSchoolClassroom(schoolID!).then((res) => {
-        return res.data;
-      });
-    }
-
-    // { refreshInterval: 2000 }
-  );
+  const { data: viewClasses } = useSWR(`api/view-classrooms/`, async () => {
+    return await viewSchoolClassroom(schoolID!).then((res) => {
+      return res.data;
+    });
+  });
   return { viewClasses };
 };
 
@@ -170,12 +170,12 @@ export const useSchoolTeacher = () => {
 
   const { data: schoolTeacher } = useSWR(
     `api/view-school-teacher/${dataID}`,
-    () => {
-      return viewSchoolTeacher(dataID!).then((res) => {
+    async () => {
+      return await viewSchoolTeacher(dataID!).then((res) => {
         return res.data;
       });
-    },
-    { refreshInterval: 3500 }
+    }
+    // { refreshInterval: 3500 }
   );
   return { schoolTeacher };
 };
@@ -237,8 +237,8 @@ export const useSchoolStudents = (schoolID: string) => {
       return getSchoolStudents(schoolID!).then((res) => {
         return res;
       });
-    },
-    { refreshInterval: 3500 }
+    }
+    // { refreshInterval: 3500 }
   );
 
   return { students };
@@ -419,4 +419,27 @@ export const useAllSchools = () => {
     });
   });
   return { allSchool };
+};
+
+// Records Get all
+
+export const useFeeRecords = (schoolID: string) => {
+  try {
+    const { data: recordPayment } = useSWR(
+      `api/getall-fee-records/${schoolID}`,
+      async () => {
+        return await getRecords(schoolID).then(
+          (res: any) => res?.data?.recordPayments || []
+        );
+      },
+      { refreshInterval: 2000 }
+    );
+
+    return {
+      payments: recordPayment || [],
+    };
+  } catch (error) {
+    console.error();
+    return error;
+  }
 };

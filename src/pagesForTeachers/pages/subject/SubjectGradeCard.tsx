@@ -2,7 +2,7 @@ document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
@@ -236,6 +236,10 @@ const SubjectGradeCard = () => {
 
   const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
+
+  useEffect(() => {
+    mutate(`api/view-classrooms/`);
+  }, [teacherInfo, subjectInfo, viewClasses]);
 
   return (
     <div className="">

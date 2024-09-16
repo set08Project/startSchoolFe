@@ -1,6 +1,8 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useSchoolData, useSchoolStudents } from "../../hook/useSchoolAuth";
+import { useEffect } from "react";
+import { mutate } from "swr";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,6 +33,10 @@ const MaleFemaleTeacherScreen = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    mutate(`api/read-student/${data?._id}`);
+  }, [students]);
 
   return (
     <div className="w-full flex justify-center">

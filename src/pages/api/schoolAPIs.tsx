@@ -1,13 +1,13 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
-const URL2: string = import.meta.env.VITE_URL;
+// const URL2: string = import.meta.env.VITE_URL;
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
-// const URL: string = "https://startschoolbe.onrender.com/api";
-// const URL2: string = "https://startschoolbe.onrender.com";
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
 
 export const allSchools = async () => {
   try {
@@ -90,21 +90,24 @@ export const createExpense = async (schoolID: string, data: {}) => {
   }
 };
 
-// School Fees Records Expenditures api starts here
+// School Fees Installmental Api starts here
 export const recordFeesPayment = async (
   schoolID: string,
   studentID: string,
   feePaid: number,
-  feePaidDate: string
+  feePaidDate: string,
+  paidByWho: string,
+  paymentMode: string
 ) => {
   try {
     return await axios
-      .post(`${URL}/record-expense/${schoolID}/${studentID}`, {
+      .post(`${URL}/record-payment/${schoolID}/${studentID}`, {
         feePaid,
         feePaidDate,
+        paidByWho,
+        paymentMode,
       })
       .then((res: any) => {
-        console.log("api post res", res.data);
         return res.data;
       });
   } catch (error: any) {
@@ -114,13 +117,74 @@ export const recordFeesPayment = async (
   }
 };
 
+export const updateClassName = async (
+  schoolID: string,
+  classID: string,
+  data: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-classname/${schoolID}/${classID}`, {
+        className: data,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateRecordFee = async (recordID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/second-payment/${recordID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getRecords = async (schoolID: string) => {
   try {
     return await axios
       .get(`${URL}/getall-fee-records/${schoolID}`)
       .then((res) => {
-        console.log("api get res", res.data);
-        return res.data;
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getOneRecord = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getone-fee-records/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const deleteRecord = async (
+  schoolID: string,
+  studentID: string,
+  recordID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-fee-record/${schoolID}/${studentID}/${recordID}`)
+      .then((res) => {
+        return res?.data;
       });
   } catch (error) {
     console.error();
