@@ -271,6 +271,11 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
+                    title: `CBT (For SSS 3 Only)`,
+                    icon: <MdQuiz />,
+                    to: "CBT",
+                  },
+                  {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
