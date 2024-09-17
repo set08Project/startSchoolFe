@@ -60,7 +60,9 @@ const Header = () => {
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
   const [schoolData, setSchoolData] = useState<any>([]);
 
-  const initials = teacherInfo?.staffName?.slice(0, 2).toUpperCase();
+  const initials =
+    teacherInfo?.staffName?.charAt(0) +
+    teacherInfo?.staffName?.charAt(teacherInfo?.staffName.indexOf(" ") + 1);
 
   useEffect(() => {
     const fetchSchoolData = async () => {

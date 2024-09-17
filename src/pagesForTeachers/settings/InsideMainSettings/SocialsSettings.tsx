@@ -1,7 +1,7 @@
 import IG from "../../../assets/socials/Ig.png";
 import FB from "../../../assets/socials/fb.png";
 import Linkden from "../../../assets/socials/linkden.png";
-import X from "../../../assets/socials/twitt.png";
+import X from "../../../assets/socials/x-social-media-round-icon.svg";
 
 const SocialsSettings = () => {
   return (
@@ -22,7 +22,9 @@ const SocialsSettings = () => {
                 />
                 facebook
               </h3>
-              <h1 className="text-[18px] font-semibold">Rasheedat Daniel</h1>
+              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                + add your facebook handle
+              </h1>
             </div>
             <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
               Edit
@@ -38,7 +40,9 @@ const SocialsSettings = () => {
                 />
                 instagram
               </h3>
-              <h1 className="text-[18px] font-semibold">@rasheedanielss</h1>
+              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                + add your instagram handle
+              </h1>
             </div>
             <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
               Edit
@@ -50,11 +54,13 @@ const SocialsSettings = () => {
                 <img
                   src={X}
                   alt=""
-                  className="w-[20px] h-[20px] object-contain"
+                  className="w-[20px] h-[17px] object-contain"
                 />
                 X
               </h3>
-              <h1 className="text-[18px] font-semibold">@rashdaniels</h1>
+              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                + add your X handle
+              </h1>
             </div>
             <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
               Edit
@@ -70,7 +76,9 @@ const SocialsSettings = () => {
                 />
                 linkedIn
               </h3>
-              <h1 className="text-[18px] font-semibold">Rasheedat Daniel</h1>
+              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                + add your linkedIn handle
+              </h1>
             </div>
             <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
               Edit

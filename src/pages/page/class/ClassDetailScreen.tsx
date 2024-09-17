@@ -9,6 +9,7 @@ import { displaySession } from "../../../global/reduxState";
 import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { useParams } from "react-router-dom";
+import { TfiClose } from "react-icons/tfi";
 
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -30,6 +31,8 @@ import ViewClassStudent from "./ViewClassStudent";
 import { mutate } from "swr";
 import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
 import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
+import { IoMdCloseCircle } from "react-icons/io";
+import { GrUpdate } from "react-icons/gr";
 
 // import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
@@ -109,9 +112,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white text-[12px] p-4 rounded-lg lg:w-full w-[88%] max-w-sm h-[450px] flex items-center justify-around  flex-col">
-        <button onClick={onClose} className="absolute top-2 right-2">
-          X
+      <div className="bg-white text-[12px] py-4 px-6 rounded-lg lg:w-full w-[88%] max-w-sm min-h-[400px] flex items-center justify-around relative flex-col">
+        <button
+          onClick={onClose}
+          className="absolute top-2 text-blue-950 text-[25px] font-bold right-5 transition-all duration-300"
+        >
+          <IoMdCloseCircle className="hover:scale-105 " />
         </button>
         {children}
       </div>
@@ -327,32 +333,52 @@ const ClassDetailScreen = () => {
             >
               Update Class Fee
             </h2>
+
+            {/* Instructional Text */}
+            <p className="mb-4 text-blue-950 text-sm">
+              Please ensure that all fees are entered correctly for the
+              respective terms. These values will take{" "}
+              <center>effect immediately</center>.
+            </p>
+
+            <div className="text-blue-950 flex justify-start w-full">
+              Enter 1st Term's New Fee
+            </div>
             <Input
               type="text"
               value={firstTermFee}
               onChange={(e) => setFirstTermFee(e.target.value)}
-              className="outline-none p-2 w-full mb-4 text-gray-600"
-              placeholder="Enter 1st fee"
+              className="outline-none p-2 w-full mb-4"
+              placeholder="30000"
             />
+            <div className="mt-2 text-blue-950 flex justify-start w-full">
+              Enter 2nd Term's New Fee
+            </div>
             <Input
               type="text"
               value={secondTermFee}
               onChange={(e) => setSecondTermFee(e.target.value)}
-              className="outline-none p-2 w-full mb-4 text-gray-600"
-              placeholder="Enter 2nd fee"
+              className="outline-none p-2 w-full mb-4 text-blue-950"
+              placeholder="30000"
             />
+            <div className="mt-2 text-blue-950 flex justify-start w-full">
+              Enter 3rd Term's New Fee
+            </div>
             <Input
               type="text"
               value={thirdTermFee}
               onChange={(e) => setThirdTermFee(e.target.value)}
               className="outline-none p-2 w-full mb-4 text-gray-600"
-              placeholder="Enter 3rd fee"
+              placeholder="30000"
             />
+
             <div className="flex gap-9">
               <button
                 onClick={handleUpdateFee}
-                className="bg-green-500 text-white p-2 rounded text-[17px]"
+                className="bg-green-500 flex items-center gap-3
+               text-white py-2 px-3 rounded-md text-[17px] transition-all duration-300 hover:scale-105"
               >
+                <GrUpdate />
                 Update Fee
               </button>
             </div>

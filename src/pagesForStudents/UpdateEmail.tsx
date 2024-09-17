@@ -48,8 +48,6 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
     });
   };
 
-  const reload = window.location.reload;
-
   const [viewState, setViewState] = useState<Boolean>(false);
 
   return (
@@ -131,7 +129,6 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                           mutate(
                             `api/view-student-info/${studentInfo?._id}`
                           ).then(() => {
-                            reload;
                             navigate(`/dashboard`);
                           });
                         }
