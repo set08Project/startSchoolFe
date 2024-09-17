@@ -276,6 +276,11 @@ const Header = () => {
                     to: "CBT",
                   },
                   {
+                    title: "Articles",
+                    icon: <MdOutlineArticle />,
+                    to: "articles",
+                  },
+                  {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
