@@ -8,6 +8,21 @@ import axios from "axios";
 const URL: string = "https://just-next-be1.onrender.com/api";
 const URL2: string = "https://just-next-be1.onrender.com";
 
+export const bulkUploadofStudent = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-bulk-student/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const allSchools = async () => {
   try {
     return await axios.get(`${URL}/view-all-school`).then((res: any) => {

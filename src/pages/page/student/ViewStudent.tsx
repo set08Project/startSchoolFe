@@ -17,6 +17,7 @@ import {
 import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
+  bulkUploadofStudent,
   deleteStudent,
   readSchool,
   updateSchoolFee,
@@ -34,6 +35,7 @@ import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI"
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
+import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
   props?: any;
@@ -200,6 +202,23 @@ const ViewStudent = () => {
     }
   };
 
+  const [file, setFile] = useState();
+  const [toggle, setToggle] = useState<boolean>(false);
+  const handleBulkStudent = () => {
+    setToggle(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    bulkUploadofStudent(UI?._id, formData)
+      .then(() => {
+        toast.success("Students Have Been Successfully Imported");
+        mutate(`api/read-student/${UI?._id}`);
+      })
+      .finally(() => {
+        setToggle(false);
+      });
+  };
+
   // Delete Student Function
 
   // getting schoolID
@@ -255,11 +274,47 @@ const ViewStudent = () => {
           onChange={handleSearch}
         />
 
-        <Button
-          name="Add a new Student"
-          className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
-          onClick={handleDisplayStaff}
-        />
+        <div className="flex items-center">
+          <Button
+            name="Add a new Student"
+            className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+            onClick={handleDisplayStaff}
+          />
+          <input
+            id="file"
+            type="file"
+            accept=".csv"
+            hidden
+            onChange={(e: any) => {
+              setFile(e.target.files[0]);
+            }}
+          />
+
+          {file ? (
+            <Button
+              name={
+                toggle ? (
+                  <div className="flex items-center gap-2 duration-300 transition-all">
+                    <FaSpinner className="animate-spin text-[18px]" />
+                    <span>Uploading Data</span>
+                  </div>
+                ) : (
+                  "Add file to Student"
+                )
+              }
+              className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
+              onClick={handleBulkStudent}
+            />
+          ) : (
+            <label
+              htmlFor="file"
+              className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px]"
+            >
+              {" "}
+              upload file for Bulk Entry
+            </label>
+          )}
+        </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
