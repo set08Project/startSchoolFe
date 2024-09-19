@@ -69,7 +69,6 @@ const StudentDashboard = () => {
               <div className="mb-2 flex items-center gap-2">
                 <div className="text-[12px] md:text-[16px]">My Name: </div>
                 <div className="font-bold md:text-[20px] text-[13px]">
-                  {" "}
                   {studentInfo?.studentFirstName}
                 </div>
                 <div className="font-bold md:text-[20px] text-[13px]">
@@ -200,7 +199,7 @@ const StudentDashboard = () => {
 
           <div className="border-b my-5" />
 
-          <div className="flex flex-col items-center w-full  justify-center w-full">
+          <div className="flex flex-col items-center w-full  justify-center">
             <div className=" flex justify-center gap-3 w-full items-center">
               <Calendar />
             </div>

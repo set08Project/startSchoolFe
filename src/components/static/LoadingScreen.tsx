@@ -3,8 +3,10 @@ import Button from "../reUse/Button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import fav from "../../../public/fav.png";
+import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 const LoadingScreen = () => {
   const [state, setState] = useState<boolean>(false);
+  const { data } = useSchoolData();
 
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -16,7 +18,11 @@ const LoadingScreen = () => {
     <div
       className="w-full h-screen absolute top-0 left-0 flex flex-col justify-center items-center "
       style={{
-        background: "rgba(73, 154, 255, 0.2)",
+        background: `${
+          data?.categoryType === "Secondary"
+            ? "rgba(73, 154, 255, 0.2)"
+            : "rgba(73, 154, 255, 0.2)"
+        }`,
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(73, 154, 255, 0.3)",
@@ -32,7 +38,14 @@ const LoadingScreen = () => {
           {" "}
           <p className="mt-8">Something went wrong</p>
           <Link to="/" className="">
-            <Button name="Retry" className="bg-blue-950 " />
+            <Button
+              name="Retry"
+              className={`${
+                data?.categoryType === "Secondary"
+                  ? "bg-blue-950"
+                  : "bg-red-950"
+              }`}
+            />
           </Link>
         </div>
       )}

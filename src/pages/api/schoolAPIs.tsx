@@ -1,13 +1,27 @@
 import axios from "axios";
 
-const URL2: string = import.meta.env.VITE_URL;
-
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
-// const URL2: string = "https://just-next-be1.onrender.com";
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
+
+export const bulkUploadofStudent = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-bulk-student/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
 
 export const allSchools = async () => {
   try {

@@ -20,7 +20,7 @@ const AllExpenditures = () => {
                 : "border-transparent"
             }`}
           >
-            <h1>Expenditures</h1>
+            <h1 className="mb-2">Expenditures</h1>
           </div>
           <div
             onClick={() => setActiveSection("RecordPayments")}
@@ -30,20 +30,20 @@ const AllExpenditures = () => {
                 : "border-transparent"
             }`}
           >
-            <h1>Record Installmental Payments</h1>
+            <h1 className="mb-2">Record Installmental Payments</h1>
           </div>
         </div>
 
         {/* EXPENDITURES AND FEES RECORDS DIVS */}
 
         {activeSection === "Expenditures" && (
-          <div className="mt-5 min-h-[70vh]">
+          <div className="mt-5 min-h-[70vh] smooth">
             <Expenditure />
           </div>
         )}
 
         {activeSection === "RecordPayments" && (
-          <div className="mt-5 min-h-[70vh]">
+          <div className="mt-5 min-h-[70vh] smooth">
             <FeePayments />
           </div>
         )}

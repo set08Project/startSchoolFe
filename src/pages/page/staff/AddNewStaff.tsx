@@ -19,7 +19,7 @@ const AddNewStaff = () => {
   return (
     <div className="w-full h-full flex justify-end overflow-hidden">
       <div
-        className={`h-full w-[500px] z-10  bg-white drop-shadow-lg rounded-r-md absolute transition-all duration-300
+        className={`h-full w-full md:w-[500px] z-10 bg-white drop-shadow-lg rounded-r-md absolute transition-all duration-300
           ${show ? "right-[0rem]" : "-right-[35rem]"} `}
       >
         <AddStaff />

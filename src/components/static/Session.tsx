@@ -33,7 +33,13 @@ const Session: FC = () => {
   const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(data?._id);
   return (
-    <div className="border w-[250px] bg-blue-50 shadow-sm min-h-42 rounded-md p-1 ">
+    <div
+      className={`border w-[250px] ${
+        data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
+      } shadow-sm min-h-42 rounded-md p-1 ${
+        data?.categoryType === "Secondary" ? "text-blue-950" : "text-green-950"
+      }`}
+    >
       <p className="text-[14px] mt-2 font-bold ml-2">
         Academic Session created
       </p>
@@ -60,7 +66,13 @@ const Session: FC = () => {
                       }
                     }}
                   >
-                    <div className="text-[12px] w-full py- font-medium  duration-300 transition-all hover:bg-blue-950 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border">
+                    <div
+                      className={`text-[12px] w-full py- font-medium  duration-300 transition-all ${
+                        data?.categoryType === "Secondary"
+                          ? "hover:bg-blue-950"
+                          : "hover:bg-red-950"
+                      } rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between border`}
+                    >
                       <Tooltip tip={"Add New Term"}>
                         {" "}
                         <div
@@ -93,7 +105,11 @@ const Session: FC = () => {
       <div className="mt-4" />
       <hr />
       <div
-        className="flex w-full justify-center items-center cursor-pointer hover:text-blue-900 transition-all duraion-300 mt-2"
+        className={`flex w-full justify-center items-center cursor-pointer ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-900"
+            : "text-green-900"
+        } transition-all duraion-300 mt-2`}
         onClick={handleToggleMenuFalse}
       >
         <p className="font-bold">+</p>

@@ -111,7 +111,7 @@ const StudentDetail = () => {
 
       {/* Attendance */}
 
-      <div className="mt-6 w-full min-h-[60px] py-5 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[60px] bg-slate-50 rounded-lg border py-2 px-4 ">
         <p className="mb-2">
           Attendance Heatmap:{" "}
           <span className="font-medium">

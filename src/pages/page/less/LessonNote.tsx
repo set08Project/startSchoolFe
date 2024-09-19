@@ -37,7 +37,13 @@ const AdminLessonNote = () => {
   return (
     <div>
       <LittleHeader name="Teacher's Lesson Notes" />
-      <div className="min-h-[82vh] text-blue-950">
+      <div
+        className={`min-h-[82vh] ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-950"
+            : "text-green-950"
+        } `}
+      >
         <div>
           <div className="flex float-end"></div>
           <div className="py-9 w-full mt-24 p-3 border-b-2">
@@ -115,7 +121,11 @@ const AdminLessonNote = () => {
                             <div className="w-full mb-[25px] flex justify-center items-center">
                               <label
                                 // htmlFor="send_response"
-                                className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                className={`py-3 px-3 ${
+                                  data?.categoryType === "Secondary"
+                                    ? "bg-blue-950"
+                                    : "bg-red-950"
+                                }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                               >
                                 Lesson Note has been Approved
                                 <FaThumbsUp className="mb-1" />
@@ -127,7 +137,11 @@ const AdminLessonNote = () => {
                             <div className="w-full mb-[25px] flex justify-center items-center">
                               <label
                                 htmlFor="send_response"
-                                className="py-3 px-3 bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                className={`py-3 px-3 ${
+                                  data?.categoryType === "Secondary"
+                                    ? "bg-blue-950"
+                                    : "bg-red-950"
+                                }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                                 onClick={() => {
                                   setID(props?._id);
                                   setObj(props);
@@ -147,7 +161,11 @@ const AdminLessonNote = () => {
                           className="modal-toggle"
                         />
                         <div
-                          className="modal rounded-md text-blue-950 text-left"
+                          className={`modal rounded-md ${
+                            data?.categoryType === "Secondary"
+                              ? "text-blue-950"
+                              : "text-green-950"
+                          }  text-left`}
                           role="dialog"
                         >
                           <div className="modal-box bg-white  rounded-md">
@@ -207,7 +225,11 @@ const AdminLessonNote = () => {
                               <select
                                 name="days"
                                 id="days"
-                                className="border p-2 rounded-md bg-gray-100 text-blue-950 w-[40%]"
+                                className={`border p-2 rounded-md bg-gray-100 ${
+                                  data?.categoryType === "Secondary"
+                                    ? "text-blue-950"
+                                    : "text-green-950"
+                                }  w-[40%]`}
                                 value={day}
                                 onChange={(e) => setDay(e.target.value)}
                               >
@@ -228,10 +250,20 @@ const AdminLessonNote = () => {
                                 <Button
                                   name="Send"
                                   onClick={() => handleSubmit(id)}
-                                  className="bg-blue-950"
+                                  className={`${
+                                    data?.categoryType === "Secondary"
+                                      ? "bg-blue-950"
+                                      : "bg-red-950"
+                                  } `}
                                 />
                               ) : (
-                                <button className="btn bg-blue-950 text-white hover:bg-blue-950 cursor-not-allowed">
+                                <button
+                                  className={`btn ${
+                                    data?.categoryType === "Secondary"
+                                      ? "bg-blue-950"
+                                      : "bg-red-950"
+                                  }  text-white hover:bg-blue-950 cursor-not-allowed`}
+                                >
                                   Send
                                 </button>
                               )}

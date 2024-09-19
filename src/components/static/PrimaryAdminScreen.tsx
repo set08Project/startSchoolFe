@@ -31,6 +31,7 @@ import Button from "../reUse/Button";
 
 const PrimaryAdminScreen = () => {
   const dispatch = useDispatch();
+  const { data } = useSchoolData();
 
   const starting = useSelector((state: any) => state.starting);
   const [start, setStart] = useState<string>("");
@@ -51,8 +52,8 @@ const PrimaryAdminScreen = () => {
             to="/dashboard"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -63,8 +64,8 @@ const PrimaryAdminScreen = () => {
             to="/view-staff"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -75,8 +76,8 @@ const PrimaryAdminScreen = () => {
             to="/view-students"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -87,8 +88,8 @@ const PrimaryAdminScreen = () => {
             to="/class-room"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -100,8 +101,8 @@ const PrimaryAdminScreen = () => {
             to="/subjects"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -112,8 +113,8 @@ const PrimaryAdminScreen = () => {
             to="/report"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -124,8 +125,8 @@ const PrimaryAdminScreen = () => {
             to="/lesson-note"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -137,8 +138,8 @@ const PrimaryAdminScreen = () => {
             to="/view-gallery"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -150,8 +151,8 @@ const PrimaryAdminScreen = () => {
             to="/store"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -174,8 +175,8 @@ const PrimaryAdminScreen = () => {
             to="/result-history/"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
@@ -189,8 +190,8 @@ const PrimaryAdminScreen = () => {
             to="/settings"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
+                ? `duration-500 transition-all p-2 rounded-sm bg-red-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
+                : `duration-500 transition-all p-2 rounded-sm hover:bg-red-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `
             }
             onClick={handleToggleMenuFalse}
           >
