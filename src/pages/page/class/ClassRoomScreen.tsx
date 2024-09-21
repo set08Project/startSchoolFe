@@ -61,6 +61,7 @@ const ClassRoomScreen = () => {
   const { schoolClassroom } = useSchoolClassRM();
 
   const classroom = useSelector((state: any) => state?.classroomToggled);
+  const { data } = useSchoolData();
 
   const handleDisplayClassroom = () => {
     if (!document.startViewTransition) {
@@ -83,7 +84,13 @@ const ClassRoomScreen = () => {
       <div className="flex w-full justify-end items-start">
         <Button
           name="Add new ClassRoom"
-          className="uppercase text-[12px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+          className={`uppercase text-[12px] font-medium ${
+            data?.categoryType === "Secondary" ? "bg-blue-950" : "bg-red-950"
+          } py-2 sm:py-4 md:py-2 lg:py-4 md:px-8 ${
+            data?.categoryType === "Secondary"
+              ? "hover:bg-blue-900"
+              : "hover:bg-red-900"
+          } cursor-pointer transition-all duration-300`}
           onClick={handleDisplayClassroom}
         />
       </div>
@@ -169,7 +176,11 @@ const ClassRoomScreen = () => {
                              props?.students?.length) *
                              100 >=
                            70
-                             ? "text-blue-950"
+                             ? `${
+                                 data?.categoryType === "Secondary"
+                                   ? "text-blue-950"
+                                   : "text-green-950"
+                               }`
                              : "text-red-500"
                          } 
                         `}
@@ -203,7 +214,11 @@ const ClassRoomScreen = () => {
                              props?.students?.length) *
                              100 >=
                            70
-                             ? "text-blue-950"
+                             ? `${
+                                 data?.categoryType === "Secondary"
+                                   ? "text-blue-950"
+                                   : "text-green-950"
+                               }`
                              : "text-red-500"
                          } 
                         `}
@@ -237,7 +252,11 @@ const ClassRoomScreen = () => {
                              props?.students?.length) *
                              100 >=
                            70
-                             ? "text-blue-950"
+                             ? `${
+                                 data?.categoryType === "Secondary"
+                                   ? "text-blue-950"
+                                   : "text-green-950"
+                               }`
                              : "text-red-500"
                          } 
                         `}

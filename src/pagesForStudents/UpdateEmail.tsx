@@ -38,8 +38,6 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
         toast.success("Parent's email added/updated successfully");
         // mutate(`api/view-student-info/${studentInfo?._id}`);
 
-        console.log("reading: ", res);
-
         setTimeout(() => {
           setStated(false);
           setViewState(true);
@@ -56,7 +54,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <div className=" text-[13px] font-medium">
-        <div className="" />
+        <div />
         <input
           type="checkbox"
           checked={studentInfo?.parentEmail ? false : true}

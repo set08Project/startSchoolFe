@@ -81,7 +81,9 @@ const Header = () => {
 
   return (
     <div
-      className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
+      className={`h-[50px] ${
+        data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
+      } border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-inherit`}
       onClick={() => {}}
     >
       {/* <div>  */}
@@ -203,132 +205,131 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll rounded-md border">
-            {data?.categoryType === "Secondary" ||
-            data?.schoolTags[0].val === "Secondary School." ? (
-              <SmallPiece
-                name={[
-                  {
-                    title: "Dashboard",
-                    icon: <MdQueryStats />,
-                    to: "/",
-                  },
-                  {
-                    title: "View Staffs",
-                    icon: <MdPeople />,
-                    to: "view-staff",
-                  },
-                  {
-                    title: "View Students",
-                    icon: <FaBarsProgress />,
-                    to: "view-students",
-                  },
-                  {
-                    title: "View Classrooms",
-                    icon: <FaSchool />,
-                    to: "class-room",
-                  },
-                  {
-                    title: "View Subjects",
-                    icon: <MdSchool />,
-                    to: "subjects",
-                  },
-                  {
-                    title: "Complains",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
-                  {
-                    title: "Lesson Notes",
-                    icon: <FaNoteSticky />,
-                    to: "lesson-note",
-                  },
-                  {
-                    title: "Gallaries",
-                    icon: <FaPhotoVideo />,
-                    to: "view-gallery",
-                  },
-                  {
-                    title: "Store",
-                    icon: <FaStore />,
-                    to: "store",
-                  },
-                  {
-                    title: "History",
-                    icon: <MdDataExploration />,
-                    to: "result-history",
-                  },
-                  {
-                    title: "Settings",
-                    icon: <MdSettings />,
-                    to: "settings",
-                  },
-                ]}
-                but
-              />
-            ) : (
-              <SmallPiece
-                name={[
-                  {
-                    title: "Dashboard",
-                    icon: <MdQueryStats />,
-                    to: "/",
-                  },
-                  {
-                    title: "View Staffs",
-                    icon: <MdPeople />,
-                    to: "view-staff",
-                  },
-                  {
-                    title: "View Students",
-                    icon: <FaBarsProgress />,
-                    to: "view-students",
-                  },
-                  {
-                    title: "View Classrooms",
-                    icon: <FaSchool />,
-                    to: "class-room",
-                  },
-                  {
-                    title: "View Subjects",
-                    icon: <MdSchool />,
-                    to: "subjects",
-                  },
-                  {
-                    title: "Complains",
-                    icon: <MdReport />,
-                    to: "report",
-                  },
-                  {
-                    title: "Lesson Notes",
-                    icon: <FaNoteSticky />,
-                    to: "lesson-note",
-                  },
-                  {
-                    title: "Gallaries",
-                    icon: <FaPhotoVideo />,
-                    to: "view-gallery",
-                  },
-                  {
-                    title: "Store",
-                    icon: <FaStore />,
-                    to: "store",
-                  },
-                  {
-                    title: "History",
-                    icon: <MdDataExploration />,
-                    to: "result-history",
-                  },
-                  {
-                    title: "Settings",
-                    icon: <MdSettings />,
-                    to: "settings",
-                  },
-                ]}
-                but
-              />
-            )}
-          </div>
+
+          {data?.categoryType === "Secondary" ? (
+            <SmallPiece
+              name={[
+                {
+                  title: "Dashboard",
+                  icon: <MdQueryStats />,
+                  to: "/",
+                },
+                {
+                  title: "View Staffs",
+                  icon: <MdPeople />,
+                  to: "view-staff",
+                },
+                {
+                  title: "View Students",
+                  icon: <FaBarsProgress />,
+                  to: "view-students",
+                },
+                {
+                  title: "View Classrooms",
+                  icon: <FaSchool />,
+                  to: "class-room",
+                },
+                {
+                  title: "View Subjects",
+                  icon: <MdSchool />,
+                  to: "subjects",
+                },
+                {
+                  title: "Complains",
+                  icon: <MdReport />,
+                  to: "report",
+                },
+                {
+                  title: "Lesson Notes",
+                  icon: <FaNoteSticky />,
+                  to: "lesson-note",
+                },
+                {
+                  title: "Gallaries",
+                  icon: <FaPhotoVideo />,
+                  to: "view-gallery",
+                },
+                {
+                  title: "Store",
+                  icon: <FaStore />,
+                  to: "store",
+                },
+                {
+                  title: "History",
+                  icon: <MdDataExploration />,
+                  to: "result-history",
+                },
+                {
+                  title: "Settings",
+                  icon: <MdSettings />,
+                  to: "settings",
+                },
+              ]}
+              but
+            />
+          ) : (
+            <SmallPiece
+              name={[
+                {
+                  title: "Dashboard",
+                  icon: <MdQueryStats />,
+                  to: "/",
+                },
+                {
+                  title: "View Staffs",
+                  icon: <MdPeople />,
+                  to: "view-staff",
+                },
+                {
+                  title: "View Students",
+                  icon: <FaBarsProgress />,
+                  to: "view-students",
+                },
+                {
+                  title: "View Classrooms",
+                  icon: <FaSchool />,
+                  to: "class-room",
+                },
+                {
+                  title: "View Subjects",
+                  icon: <MdSchool />,
+                  to: "subjects",
+                },
+                {
+                  title: "Complains",
+                  icon: <MdReport />,
+                  to: "report",
+                },
+                {
+                  title: "Lesson Notes",
+                  icon: <FaNoteSticky />,
+                  to: "lesson-note",
+                },
+                {
+                  title: "Gallaries",
+                  icon: <FaPhotoVideo />,
+                  to: "view-gallery",
+                },
+                {
+                  title: "Store",
+                  icon: <FaStore />,
+                  to: "store",
+                },
+                {
+                  title: "History",
+                  icon: <MdDataExploration />,
+                  to: "result-history",
+                },
+                {
+                  title: "Settings",
+                  icon: <MdSettings />,
+                  to: "settings",
+                },
+              ]}
+              but
+            />
+          )}
+
         </div>
       )}
     </div>

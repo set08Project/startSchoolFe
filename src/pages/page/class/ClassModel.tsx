@@ -54,7 +54,15 @@ const ClassModel = () => {
       <div className="mt-5 text-[13px] font-medium">
         <label
           htmlFor="assign_subject_timetable_for_class"
-          className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
+          className={` my-3 ${
+            data?.categoryType === "Secondary"
+              ? "text-blue-500"
+              : "text-green-500"
+          } transition-all duration-300 ${
+            data?.categoryType === "Secondary"
+              ? "hover:text-blue-500"
+              : "hover:text-green-500"
+          } cursor-pointer`}
         >
           + Add to TimeTable
         </label>
@@ -196,7 +204,11 @@ const ClassModel = () => {
               {subject !== "" && period !== "" && day !== "" ? (
                 <label
                   htmlFor="assign_subject_timetable_for_class"
-                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
+                  className={`${
+                    data?.categoryType === "Secondary"
+                      ? "bg-blue-950"
+                      : "bg-red-950"
+                  } text-white py-4 px-8 rounded-md cursor-pointer`}
                   onClick={onCreateTimeTable}
                 >
                   Proceed
@@ -204,7 +216,11 @@ const ClassModel = () => {
               ) : (
                 <Button
                   name="Can't Proceed"
-                  className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                  className={`bg-[lightgray] ${
+                    data?.categoryType === "Secondary"
+                      ? "text-blue-950"
+                      : "text-green-950"
+                  } mx-0 cursor-not-allowed`}
                 />
               )}
             </div>

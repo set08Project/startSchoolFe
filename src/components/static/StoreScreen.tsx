@@ -77,7 +77,15 @@ const StoreScreen = () => {
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="mt-5 text-[13px] font-medium text-blue-950 flex justify-start w-full bg-blue-400">
+      <div
+        className={`mt-5 text-[13px] font-medium ${
+          data?.categoryType === "Secondary"
+            ? "text-blue-950"
+            : "text-green-950"
+        } flex justify-start w-full ${
+          data?.categoryType === "Secondary" ? "bg-blue-400" : "bg-green-400"
+        }`}
+      >
         <label
           htmlFor="assign_subject_timetable"
           //   className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
@@ -100,7 +108,11 @@ const StoreScreen = () => {
 
               <label
                 htmlFor="assign_subject_timetable"
-                className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+                className={`${
+                  data?.categoryType === "Secondary"
+                    ? "hover:bg-blue-50 "
+                    : "hover:bg-red-50 "
+                } transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold `}
               >
                 <MdClose />
               </label>
@@ -142,7 +154,11 @@ const StoreScreen = () => {
             <div>
               <div className="mt-10 flex gap-4 w-full justify-start">
                 <label
-                  className=" text-white bg-blue-950 border px-6 py-3 cursor-pointer rounded-md  mt-4 "
+                  className={` text-white ${
+                    data?.categoryType === "Secondary"
+                      ? "bg-blue-950"
+                      : "bg-red-950"
+                  } border px-6 py-3 cursor-pointer rounded-md  mt-4`}
                   htmlFor="pix"
                 >
                   Upload Image
@@ -218,7 +234,11 @@ const StoreScreen = () => {
               {subject !== "" && period !== 0 && day !== "" ? (
                 <label
                   htmlFor="assign_subject_timetable"
-                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer transition-all duration-300 "
+                  className={`${
+                    data?.categoryType === "Secondary"
+                      ? "bg-blue-950"
+                      : "bg-red-950"
+                  } text-white py-4 px-8 rounded-md cursor-pointer transition-all duration-300`}
                   onClick={() => {
                     onHandleAdd();
                   }}
@@ -235,7 +255,11 @@ const StoreScreen = () => {
               ) : (
                 <Button
                   name="Can't Proceed"
-                  className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
+                  className={`bg-[lightgray] ${
+                    data?.categoryType === "Secondary"
+                      ? "text-blue-950"
+                      : "text-green-950"
+                  } mx-0 cursor-not-allowed`}
                 />
               )}
             </div>

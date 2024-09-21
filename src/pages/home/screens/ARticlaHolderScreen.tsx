@@ -58,7 +58,13 @@ const MainArticleHolderScreen = () => {
                         {el?.desc}
                       </p>
                       <p className="text-[14px] mb-5">{el?.title}</p>
-                      <div className="flex gap-3 text-blue-950">
+                      <div
+                        className={`flex gap-3 ${
+                          data?.categoryType === "Secondary"
+                            ? "text-blue-950"
+                            : "text-green-950"
+                        }`}
+                      >
                         <p className="flex items-center gap-1">
                           <PiHandsClapping />
                           <span className="font-semibold text-[12px]">

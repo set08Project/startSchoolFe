@@ -2,7 +2,6 @@ import { useState } from "react";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../pagesForTeachers/components/reUse/Button";
-import { Link } from "react-router-dom";
 import {
   useTermBudget,
   useTermExpenses,
@@ -12,6 +11,7 @@ import moment from "moment";
 import { createExpense, setTermBudet } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const expenditure = () => {
   const [budget, setBudget] = useState<number>();
@@ -116,10 +116,22 @@ const expenditure = () => {
           <div className="h-full p-2">
             <div className="font-semibold mb-5">EXPENDITURE DASHBOARD</div>
             <h4 className="mb-1 font-medium">Main Budget :</h4>
-            <h1 className="mb-2 font-bold text-[25px] text-blue-950">
+            <h1
+              className={`mb-2 font-bold text-[25px] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              }`}
+            >
               ₦{termBudget?.data?.toLocaleString()}
             </h1>
-            <div className="flex items-center gap-[10px] text-blue-950 text-[12px]">
+            <div
+              className={`flex items-center gap-[10px] ${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } text-[12px]`}
+            >
               <div>Currency: </div>
               <div>Naira (₦)</div>
             </div>
@@ -166,7 +178,11 @@ const expenditure = () => {
           <div className="modal-action ml-6">
             <label
               htmlFor="my_modal_expenses_modal"
-              className="py-4 px-6 ml-3 border rounded-md bg-blue-950 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+              className={`py-4 px-6 ml-3 border rounded-md ${
+                data?.categoryType === "Secondary"
+                  ? "bg-blue-950"
+                  : "bg-red-950"
+              } text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center`}
             >
               Record An Expenditure
             </label>
@@ -184,10 +200,10 @@ const expenditure = () => {
             <div>
               <main>
                 <div className="flex flex-col">
-                  <label className="font-semibold">Items</label>
+                  <label className="font-semibold">Name of Item</label>
                   <input
                     className="h-[45px] text-[12px] px-2 w-full border rounded-md mb-2 "
-                    placeholder="Name of Item"
+                    placeholder="A4 paper, Cleaning Agents etc"
                     value={item}
                     onChange={(e: any) => {
                       setItem(e.target.value);
@@ -208,11 +224,11 @@ const expenditure = () => {
                   />
                 </div>
                 <div className="flex flex-col mb-5">
-                  <label className="font-semibold">Other Details</label>
+                  <label className="font-semibold">Item Amount</label>
                   <div className="flex gap-2">
                     <input
                       className="h-[45px]  text-[12px] px-2 w-full border rounded-md mb-2 "
-                      placeholder="Amount"
+                      placeholder="₦2000 etc"
                       value={amount}
                       onChange={(e: any) => {
                         setAmount(e.target.value);
@@ -276,9 +292,17 @@ const expenditure = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="w-full ml-[15px] mb-6 flex justify-start items-center">
-          <div className="text-blue-950 text-[12px] uppercase font-semibold">
-            all expenses
-          </div>
+          <Link to="/view-all-expenditures">
+            <div
+              className={`${
+                data?.categoryType === "Secondary"
+                  ? "text-blue-950"
+                  : "text-green-950"
+              } text-[12px] uppercase font-semibold`}
+            >
+              view all expenses
+            </div>
+          </Link>
         </div>
         <div className="text-[gray] w-[1100px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[130px] border-r">Date</div>
@@ -294,7 +318,7 @@ const expenditure = () => {
           <div className="transition-all duration-300">
             {filteredExpenditure?.length > 0 ? (
               filteredExpenditure?.map((props: any) => (
-                <div key={props?._id}>
+                <div key={props?._id} className="smooth">
                   <div className="w-full flex items-center gap-2 text-[12px] font-medium  min-h-16 px-4 py-2 my-2  overflow-hidden bg-white">
                     {/* start */}
 

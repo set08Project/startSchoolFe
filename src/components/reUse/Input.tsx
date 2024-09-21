@@ -33,7 +33,7 @@ const Input: FC<iInputProps> = ({
   return (
     <div
       className={twMerge(
-        `w-[300px] h-[50px]  border rounded-md m-2 relative transition-all  duration-300 mb-6 ${
+        `w-[300px] h-[50px] border rounded-md m-2  relative transition-all duration-300 mb-6 ${
           state && "border-blue-500"
         } `,
         className
@@ -48,7 +48,7 @@ const Input: FC<iInputProps> = ({
       <label
         className={`text-[lightgray] transition-all duration-300 absolute ${
           bg ? bg : "bg-white"
-        }  text-[8px] md:text-[12px] ml-2 px-[2px]
+        }  text-[12px] ml-2 px-[2px]
         `}
         style={{
           top: `${
@@ -63,7 +63,7 @@ const Input: FC<iInputProps> = ({
       </label>
       {show && (
         <div className="absolute top-1/3 right-3 cursor-pointer bg-transparent mx-1">
-          {view ? (
+          {!view ? (
             <MdVisibility
               onClick={() => {
                 setView(!view);
@@ -86,7 +86,7 @@ const Input: FC<iInputProps> = ({
         className={twMerge(
           `px-2 outline-none ${
             show ? "w-[75%]" : "w-full"
-          } h-full bg-transparent absolute left-4 -bottom-0 -ml-4 text-[13px]`,
+          } h-full bg-transparent`,
           className
         )}
         onFocus={() => {
