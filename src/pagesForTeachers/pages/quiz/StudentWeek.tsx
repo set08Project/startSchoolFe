@@ -47,7 +47,7 @@ const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
   return (
     <div>
       {/* <Toaster position="top-center" reverseOrder={true} /> */}
-      <div className=" text-[13px]   font-medium">
+      <div className=" text-[13px] font-medium">
         <label
           htmlFor="assign_subject_timetable"
           className=" transition-all duration-300 cursor-pointer "

@@ -103,7 +103,7 @@ const expenditure = () => {
 
             <label
               htmlFor="my_modal_expenses"
-              className="btn text-white py-4 px-6 bg-blue-950 border hover: scale-105"
+              className="btn text-white py-4 px-6 bg-blue-950 border hover: scale-105 mt-7"
             >
               close
             </label>
