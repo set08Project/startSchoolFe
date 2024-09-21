@@ -159,6 +159,10 @@ const GallerySettings = () => {
               <h2 className="text-xl font-semibold mb-6 text-gray-800">
                 Upload School Image
               </h2>
+              <p className="text-[13px] font-semibold mb-6 text-black text-center">
+                By doing this you will have to upload <br /> your school events
+                images and describe the title of the Image
+              </p>
 
               <input
                 type="text"

@@ -7,6 +7,9 @@ import SchoolFeePaidScreen from "../pagesForStudents/schoolFee/SchoolFeePaidScre
 import DownloadTest from "../pagesForStudents/schoolFee/DownloadTest";
 import PrintReportCard from "../pagesForStudents/pages/CardTemplate/PrintReportCard";
 
+const QuizResultScreen = React.lazy(
+  () => import("../pagesForStudents/pages/quiz/QuizResultScreen")
+);
 const ReportCardPrint = React.lazy(
   () => import("../pagesForStudents/pages/CardTemplate/ReportCardPrint")
 );
@@ -210,6 +213,15 @@ export const studentRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             {" "}
             <ViewClassNoteDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/quiz-result/:quizID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <QuizResultScreen />
           </Suspense>
         ),
       },
