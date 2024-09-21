@@ -20,7 +20,7 @@ const QuizResultScreen = () => {
       }`}
     >
       {/* Header */}
-      <header className="bg-blue-950 text-white p-4 shadow-lg fixed top-20 lg:w-[80%] w-[84%] lg:ml-10">
+      <header className="bg-blue-950 text-white p-4 shadow-lg rounded-md">
         <h1 className="text-2xl font-bold text-center animate-fade-in">
           Quiz Results
         </h1>

@@ -77,7 +77,8 @@ const QuizTestScreen = () => {
     if (percentage <= 85) return "B";
     return "A";
   };
-  console.log("Reading...", quizData?.quiz[1]);
+
+  const myQuizData = quizData?.quiz[1];
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -104,40 +105,34 @@ const QuizTestScreen = () => {
         <div className="bg-slate-50 justify-center flex min-h-[100vh]">
           {start && (
             <div className="bg-white w-full px-5">
-              {Array.isArray(quizData?.quiz[1]?.question) &&
-                quizData?.quiz[1]?.question?.map(
-                  (question: any, index: number) => (
-                    <div key={index}>
-                      <p className="text-[14px] font-bold mt-10">
-                        Question {index + 1}.
+              {myQuizData?.question?.map((question: any, index: number) => (
+                <div key={index}>
+                  <p className="text-[14px] font-bold mt-10">
+                    Question {index + 1}.
+                  </p>
+                  <div className="ml-4">
+                    <p className="text-[18px]">{question?.question}</p>
+                    <div className="ml-8">
+                      <p className="text-[12px] mt-5">
+                        Choose your options carefully
                       </p>
-                      <div className="ml-4">
-                        <p className="text-[18px]">{question?.question}</p>
-                        <div className="ml-8">
-                          <p className="text-[12px] mt-5">
-                            Choose your options carefully
-                          </p>
-                          {question?.options?.map((option: any, i: number) => (
-                            <div
-                              key={i}
-                              className="flex items-center gap-2 ml-4"
-                            >
-                              <input
-                                className="radio radio-sm"
-                                type="radio"
-                                onChange={() =>
-                                  handleStateChange(index, option)
-                                }
-                                checked={state[index] === option}
-                              />
-                              <label>{option}</label>
-                            </div>
-                          ))}
+                      {question?.options?.map((el: any, i: number) => (
+                        <div key={i} className="flex items-center gap-2 ml-4">
+                          <input
+                            className="radio radio-sm"
+                            type="radio"
+                            onChange={() => handleStateChange(index, el)}
+                            checked={state[index] === el}
+                          />
+                          <label>
+                            {typeof el === "string" ? el : JSON.stringify(el)}
+                          </label>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  )
-                )}
+                  </div>
+                </div>
+              ))}
 
               <div>
                 <Button
