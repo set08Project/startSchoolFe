@@ -104,7 +104,7 @@ const Register = () => {
           className="h-14 bg-red-500 hover:bg-red-600 hover:text-white  transition-all duration-300 font-medium text-[#e6e6e6] leading-tight w-[97%]text-center text-[12px] sm:text-base "
           icon={<FaGoogle />}
           onClick={() => {
-            const URL: string = "https://startschoolbe.onrender.com/api";
+            const URL: string = "https://just-next-be1.onrender.com/api";
 
             window.location.replace(`${URL}/auth/google`);
           }}
