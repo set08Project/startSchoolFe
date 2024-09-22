@@ -22,12 +22,12 @@ const QuizResultScreen = () => {
       {/* Header */}
       <header className="bg-blue-950 text-white p-4 shadow-lg rounded-md">
         <h1 className="text-2xl font-bold text-center animate-fade-in">
-          Quiz Results
+          My Quiz Results
         </h1>
       </header>
 
       {/* Content */}
-      <main className="flex flex-col mt-24 items-center px-4">
+      <main className="flex flex-col mt-[30px] transition-all duration-300 items-center px-4">
         <p className="text-lg mt-4 font-medium text-gray-700">
           You scored{" "}
           <span className="text-green-600 font-bold text-2xl">{score}</span> out
@@ -45,7 +45,7 @@ const QuizResultScreen = () => {
               } transition-transform duration-500 hover:scale-105`}
             >
               <div className="flex justify-between items-center">
-                <h2 className="lg:text-xl text-[18px] font-semibold text-gray-800">
+                <h2 className="lg:text-xl text-[18px] font-semibold text-blue-950 underline">
                   Question {index + 1}
                 </h2>
                 {studentAnswers[index] === correctAnswer ? (
@@ -54,22 +54,23 @@ const QuizResultScreen = () => {
                   <FaTimesCircle className="h-6 w-6 text-red-500" />
                 )}
               </div>
-              <p className="mt-2 text-gray-600 text-[14px]">
-                <span className="font-medium text-gray-700">
-                  Correct Answer:
-                </span>{" "}
-                <span className="font-medium text-blue-600">
-                  {correctAnswer}
-                </span>
-              </p>
               <p
-                className={`mt-1 lg:text-lg text-[14px] font-medium ${
+                className={`mt-1 text-[14px] font-medium ${
                   studentAnswers[index] === correctAnswer
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                Your Answer: {studentAnswers[index] || "No answer selected"}
+                <span className="text-gray-600">Your Answer:</span>{" "}
+                {studentAnswers[index] || "No answer selected"}
+              </p>
+              <p className="mt-2  text-[16px] md:text-[18px]">
+                <span className="font-semibold text-gray-600">
+                  Correct Answer:
+                </span>{" "}
+                <span className="font-semibold text-green-600">
+                  {correctAnswer}
+                </span>
               </p>
             </div>
           ))}
