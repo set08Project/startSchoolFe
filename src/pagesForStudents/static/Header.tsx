@@ -38,6 +38,7 @@ import { useSchoolSessionData } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { CgProfile } from "react-icons/cg";
 import { readSchool } from "../../pages/api/schoolAPIs";
+import { BsCash } from "react-icons/bs";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -212,6 +213,11 @@ const Header = () => {
                     to: "your-profile",
                   },
                   {
+                    title: "Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
+                  },
+                  {
                     title: "Articles",
                     icon: <MdOutlineArticle />,
                     to: "articles",
@@ -284,6 +290,11 @@ const Header = () => {
                     title: "Profile",
                     icon: <CgProfile />,
                     to: "your-profile",
+                  },
+                  {
+                    title: "Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
                   },
                   {
                     title: "Assignments",

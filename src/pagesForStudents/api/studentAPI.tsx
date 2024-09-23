@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
+// const URL: string =
+//   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
+const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -47,6 +47,19 @@ export const loginStudentToken = async (data: {}) => {
         return res?.data;
       });
   } catch (error) {
+    return error;
+  }
+};
+
+export const getStudentPayRecord = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getone-fee-records/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
     return error;
   }
 };
