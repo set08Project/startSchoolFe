@@ -6,6 +6,7 @@ import Correction from "../pagesForStudents/pages/quiz/Correction";
 import SchoolFeePaidScreen from "../pagesForStudents/schoolFee/SchoolFeePaidScreen";
 import DownloadTest from "../pagesForStudents/schoolFee/DownloadTest";
 import PrintReportCard from "../pagesForStudents/pages/CardTemplate/PrintReportCard";
+import Finances from "../pagesForStudents/pages/Finances/Finances";
 
 const QuizResultScreen = React.lazy(
   () => import("../pagesForStudents/pages/quiz/QuizResultScreen")
@@ -164,6 +165,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CardReportHistory />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/my-finances",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Finances />
           </Suspense>
         ),
       },

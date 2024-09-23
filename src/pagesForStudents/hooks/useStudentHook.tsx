@@ -5,6 +5,7 @@ import {
   getOneArticle,
   getOneStudentHistory,
   getSchoolArticle,
+  getStudentPayRecord,
   lessonNotes,
   readClassInfo,
   readOneClassInfo,
@@ -271,4 +272,22 @@ export const useViewRemark = (studentID: string) => {
     });
   });
   return { remarks };
+};
+
+export const useStudentFeePayment = (studentID: string) => {
+  try {
+    const { data: studentFeePayment } = useSWR(
+      `api/getone-fee-records/${studentID}`,
+      () => {
+        return getStudentPayRecord(studentID).then((res) => {
+          return res?.data?.recordPayments || [];
+        });
+      }
+    );
+
+    return { studentFeePayment };
+  } catch (error) {
+    console.error();
+    return error;
+  }
 };
