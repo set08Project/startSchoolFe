@@ -8,6 +8,7 @@ import {
   FaSchool,
   FaStore,
 } from "react-icons/fa6";
+
 import pic from "../../assets/pix.jpg";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,7 +16,6 @@ import SmallPiece from "./SmallPiece";
 import {
   MdAccountCircle,
   MdClose,
-  MdDataArray,
   MdDataExploration,
   MdMenu,
   MdPeople,
@@ -23,8 +23,8 @@ import {
   MdReport,
   MdSchool,
   MdSettings,
-  MdStayCurrentPortrait,
 } from "react-icons/md";
+import { RiSchoolLine } from "react-icons/ri";
 import {
   changeMenuState,
   changeToggleMenuState,
@@ -88,7 +88,12 @@ const Header = () => {
     >
       {/* <div>  */}
       <div className="flex items-center gap-2 justify-end w-[90%]">
-        <Link to="/report" className="relative">
+        <div className="mr-4 font-medium cursor-pointer flex items-center justify-end px-4 py-2 gap-2 text-[13px] rounded-sm z-30">
+          <RiSchoolLine className="text-[30px]" />
+          <div className="xl:mt-1">{data?.categoryType}</div>
+        </div>
+
+        <Link to="/report" className="relative ml-[10px]">
           <FaMessage />
           {complainMessage > 0 && (
             <span className="-top-2 left-2 text-[11px] mt-1 bg-red-500 text-white font-bold w-4 h-4 rounded-full absolute flex justify-center items-center">
@@ -205,7 +210,6 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-
           {data?.categoryType === "Secondary" ? (
             <SmallPiece
               name={[
@@ -329,7 +333,6 @@ const Header = () => {
               but
             />
           )}
-
         </div>
       )}
     </div>

@@ -53,7 +53,7 @@ const SchoolFeesHistoryScreen = () => {
         <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[180px] border-r">Date Purchased</div>
 
-          <div className="w-[250px] border-r">Items Purchased</div>
+          <div className="w-[250px] border-r ">Items Purchased</div>
           <div className="w-[130px] border-r">School Fee Paid</div>
 
           <div className="w-[150px] border-r ml-1">Payment Receipt Code</div>

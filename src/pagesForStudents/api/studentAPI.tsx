@@ -51,6 +51,19 @@ export const loginStudentToken = async (data: {}) => {
   }
 };
 
+export const getStudentPayRecord = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/getone-fee-records/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const readClassInfo = async (className: string) => {
   try {
     return await axios
