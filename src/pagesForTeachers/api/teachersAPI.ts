@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+const URL: string =
+  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://just-next-be1.onrender.com/api";
+// const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -353,6 +353,26 @@ export const viewComplains = async (teacherID: string) => {
         return res?.data;
       });
   } catch (error) {
+    return error;
+  }
+};
+
+// Teacher Profile Settings
+
+export const updateTeacherFullName = async (
+  schoolID: string,
+  staffID: string,
+  staffName: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staffName/${schoolID}/${staffID}`, staffName)
+      .then((res) => {
+        console.log("Api Response", res?.data);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
     return error;
   }
 };
