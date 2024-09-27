@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { updateTeacherFullName } from "../../api/teachersAPI";
+import {
+  updateTeacherFullName,
+  updateTeacherPhoneNum,
+} from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
-import { useSchoolCookie } from "../../../pages/hook/useSchoolAuth";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import { CgClose } from "react-icons/cg";
@@ -10,16 +12,30 @@ import { CgClose } from "react-icons/cg";
 const ProfileSettings = () => {
   const [dropdown, setDropdown] = useState<string | null>(null);
   const [name, setName] = useState("");
-  const { teacherInfo } = useTeacherInfo();
+  const [phonenum, setPhonenum] = useState("");
 
-  const schoolID = useSchoolCookie().dataID;
+  // Teacher and School
+  const { teacherInfo } = useTeacherInfo();
+  const schoolID = teacherInfo?.schoolIDs;
   const staffID = teacherInfo?._id;
 
   const handleNameChange = () => {
     try {
       updateTeacherFullName(schoolID, staffID, name).then((res) => {
         toast.success("Full Name Updated");
-        console.log(res?.data);
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Full Name Not Updated, Try Again");
+      console.error();
+      return error;
+    }
+  };
+
+  const handlePhoneNumChange = () => {
+    try {
+      updateTeacherPhoneNum(schoolID, staffID, phonenum).then((res) => {
+        toast.success("Phone Number Updated");
         return res?.data;
       });
     } catch (error) {
@@ -31,6 +47,7 @@ const ProfileSettings = () => {
 
   return (
     <div className="relative">
+      <Toaster />
       <div className="border mb-4 rounded-[4px] shadow-sm">
         <div className="py-3 px-4 uppercase text-blue-950 font-medium">
           General
@@ -107,9 +124,15 @@ const ProfileSettings = () => {
             <h3 className="font-normal w-[100px] text-[13px] sm:text-[18px] md:text-[18px] ">
               Phone No:
             </h3>
-            <h1 className="text-[13px] sm:text-[17px] font-medium">
-              +234 812-910-0830
-            </h1>
+            {teacherInfo?.phone ? (
+              <div>
+                <h1 className="text-[13px] sm:text-[17px] font-medium">
+                  {teacherInfo?.phone}
+                </h1>
+              </div>
+            ) : (
+              <div>+ add your phone number</div>
+            )}
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[13px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
@@ -159,38 +182,38 @@ const ProfileSettings = () => {
                 value={name}
                 className="mb-4"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  e.target.value;
+                  setName(e.target.value);
                 }}
               />
             )}
             {dropdown === "Gender" && (
               <Input
-                placeholder="Example Prince John"
-                value={name}
-                className="mb-4"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  e.target.value;
-                }}
+                placeholder="Female"
+                // value={name}
+                // className="mb-4"
+                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                //   e.target.value;
+                // }}
               />
             )}
             {dropdown === "PhoneNum" && (
               <Input
                 placeholder="08123456789"
-                value={name}
+                value={phonenum}
                 className="mb-4"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  e.target.value;
+                  setPhonenum(e.target.value);
                 }}
               />
             )}
             {dropdown === "Address" && (
               <Input
                 placeholder="Example 402 creek road, Lekki Lagos"
-                value={name}
-                className="mb-4"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  e.target.value;
-                }}
+                // value={name}
+                // className="mb-4"
+                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                //   e.target.value;
+                // }}
               />
             )}
             {/* State Change For button */}
@@ -198,14 +221,24 @@ const ProfileSettings = () => {
               <Button
                 name="Update"
                 className="bg-blue-950 hover:scale-105"
-                onClick={handleNameChange}
+                onClick={() => {
+                  handleNameChange();
+                  setDropdown(null);
+                }}
               />
             )}
             {dropdown === "Gender" && (
               <Button name="Update" className="bg-blue-950 hover:scale-105" />
             )}
             {dropdown === "PhoneNum" && (
-              <Button name="Update" className="bg-blue-950 hover:scale-105" />
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  handlePhoneNumChange();
+                  setDropdown(null);
+                }}
+              />
             )}
             {dropdown === "Address" && (
               <Button name="Update" className="bg-blue-950 hover:scale-105" />

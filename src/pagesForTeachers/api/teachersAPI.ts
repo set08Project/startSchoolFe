@@ -366,11 +366,26 @@ export const updateTeacherFullName = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/update-staffName/${schoolID}/${staffID}`, staffName)
+      .patch(`${URL}/update-staffName/${schoolID}/${staffID}`, { staffName })
       .then((res) => {
-        console.log("Api Response", res?.data);
         return res?.data;
       });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateTeacherPhoneNum = async (
+  schoolID: string,
+  staffID: string,
+  phone: string
+) => {
+  try {
+    return await axios.patch(
+      `${URL}/update-phoneNumber/${schoolID}/${staffID}`,
+      { phone }
+    );
   } catch (error) {
     console.error();
     return error;
