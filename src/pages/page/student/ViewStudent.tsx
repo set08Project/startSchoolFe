@@ -204,6 +204,7 @@ const ViewStudent = () => {
 
   const [file, setFile] = useState();
   const [toggle, setToggle] = useState<boolean>(false);
+  
   const handleBulkStudent = () => {
     setToggle(true);
     const formData = new FormData();
