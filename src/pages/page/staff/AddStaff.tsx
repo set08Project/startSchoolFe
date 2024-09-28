@@ -56,7 +56,7 @@ const AddStaff = () => {
   };
 
   return (
-    <div className="top-0 lg:w-[100%] w-[60%] right-0 absolute h-full overflow-x-auto">
+    <div className="top-0 lg:w-[100%] md:w-[100%] w-[100%] right-0 absolute h-full overflow-x-auto">
       <div className="px-4 h-full top-0 mb-8  ">
         <div className="mt-20" />
         <div className="flex justify-between items-center">
