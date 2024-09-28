@@ -392,6 +392,37 @@ export const updateTeacherPhoneNum = async (
   }
 };
 
+export const updateTeacherGender = async (
+  schoolID: string,
+  staffID: string,
+  gender: string
+) => {
+  try {
+    return await axios.patch(
+      `${URL}/update-staffgender/${schoolID}/${staffID}`,
+      { gender }
+    );
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+export const updateTeacherAddress = async (
+  schoolID: string,
+  staffID: string,
+  staffAddress: string
+) => {
+  try {
+    return await axios.patch(
+      `${URL}/update-staff-address/${schoolID}/${staffID}`,
+      { staffAddress }
+    );
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const updateTeacherAvatar = async (teacherID: string, data: string) => {
   try {
     const config: any = {

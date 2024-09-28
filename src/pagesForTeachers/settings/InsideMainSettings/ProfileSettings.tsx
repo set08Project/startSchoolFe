@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
+  updateTeacherAddress,
   updateTeacherFullName,
+  updateTeacherGender,
   updateTeacherPhoneNum,
 } from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
@@ -11,8 +13,10 @@ import { CgClose } from "react-icons/cg";
 
 const ProfileSettings = () => {
   const [dropdown, setDropdown] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [phonenum, setPhonenum] = useState("");
+  const [name, setName] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phonenum, setPhonenum] = useState<string>("");
 
   // Teacher and School
   const { teacherInfo } = useTeacherInfo();
@@ -40,6 +44,32 @@ const ProfileSettings = () => {
       });
     } catch (error) {
       toast.error("Full Name Not Updated, Try Again");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleGenderChange = () => {
+    try {
+      updateTeacherGender(schoolID, staffID, gender).then((res) => {
+        toast.success("Your Gender is Successfully Updated");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Gender Not Updated, Try Again");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleAddressChange = () => {
+    try {
+      updateTeacherAddress(schoolID, staffID, address).then((res) => {
+        toast.success("Your Address is Successfully Updated");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Address Not Updated, Try Again");
       console.error();
       return error;
     }
@@ -75,7 +105,7 @@ const ProfileSettings = () => {
             <h3 className="font-normal w-[100px] flex items-center gap-1 text-[13px] sm:text-[15px] md:text-[18px]">
               Email
             </h3>
-            <div className="w-[60%] sm:w-[67%] xl:w-auto text-[13px] sm:text-[18px] md:text-[18px] font-medium lowercase break-words">
+            <div className="w-[60%] sm:w-[80%] xl:w-auto text-[13px] sm:text-[18px] md:text-[18px] font-medium lowercase break-words">
               {teacherInfo?.email}
             </div>
           </div>
@@ -162,8 +192,8 @@ const ProfileSettings = () => {
       {dropdown && (
         <div className="absolute w-full h-full flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm">
           <div className="p-4 min-h-[200px] min-w-[300px] bg-white border shadow-md rounded-lg">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-blue-950">
+            <div className="mb-4 flex items- center justify-between">
+              <h2 className="text-blue-950 font-semibold">
                 {dropdown === "Fullname" && "Enter Your Full Name"}
                 {dropdown === "Gender" && "Enter Your Gender"}
                 {dropdown === "PhoneNum" && "Enter Your Phone Number"}
@@ -187,14 +217,23 @@ const ProfileSettings = () => {
               />
             )}
             {dropdown === "Gender" && (
-              <Input
-                placeholder="Female"
-                // value={name}
-                // className="mb-4"
-                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                //   e.target.value;
-                // }}
-              />
+              <div>
+                <select
+                  name="gender"
+                  id="gender"
+                  className="mb-3 shadow-sm w-full bg-blue-50 text-blue-950 font-medium outline-none py-2 px-3 rounded-lg border"
+                  value={gender}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setGender(e.target.value);
+                  }}
+                >
+                  <option value="" disabled selected>
+                    select
+                  </option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
             )}
             {dropdown === "PhoneNum" && (
               <Input
@@ -209,11 +248,11 @@ const ProfileSettings = () => {
             {dropdown === "Address" && (
               <Input
                 placeholder="Example 402 creek road, Lekki Lagos"
-                // value={name}
-                // className="mb-4"
-                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                //   e.target.value;
-                // }}
+                value={address}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setAddress(e.target.value);
+                }}
               />
             )}
             {/* State Change For button */}
@@ -228,7 +267,14 @@ const ProfileSettings = () => {
               />
             )}
             {dropdown === "Gender" && (
-              <Button name="Update" className="bg-blue-950 hover:scale-105" />
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  handleGenderChange();
+                  setDropdown(null);
+                }}
+              />
             )}
             {dropdown === "PhoneNum" && (
               <Button
@@ -241,7 +287,14 @@ const ProfileSettings = () => {
               />
             )}
             {dropdown === "Address" && (
-              <Button name="Update" className="bg-blue-950 hover:scale-105" />
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  handleAddressChange();
+                  setDropdown(null);
+                }}
+              />
             )}
           </div>
         </div>
