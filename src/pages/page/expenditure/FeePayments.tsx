@@ -30,7 +30,7 @@ const FeePayments = () => {
 
   const students = getAllStudents?.map!((el) => ({
     value: el._id,
-    label: el.studentFirstName.concat("", el?.studentLastName),
+    label: el.studentFirstName.concat(" ", el?.studentLastName),
   }));
 
   // My Get Function
