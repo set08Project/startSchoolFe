@@ -73,8 +73,13 @@ const StudentLogin = () => {
             window.location.reload();
           }
         } else {
-          setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
+          if (res?.response?.data?.message === undefined || "undefined") {
+            setLoading(false);
+            toast.error("Poor Internet Connectivity");
+          } else {
+            setLoading(false);
+            toast.error(`${res?.response?.data?.message}`);
+          }
         }
       })
       .then(() => {});

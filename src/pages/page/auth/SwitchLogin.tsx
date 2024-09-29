@@ -47,8 +47,13 @@ const SwitchLogin = () => {
             window.location.reload();
           }
         } else {
-          setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
+          if (res?.response?.data?.message === undefined || "undefined") {
+            setLoading(false);
+            toast.error("Poor Internet Connectivity");
+          } else {
+            setLoading(false);
+            toast.error(`${res?.response?.data?.message}`);
+          }
         }
       })
       .then(() => {});
@@ -61,6 +66,7 @@ const SwitchLogin = () => {
 
     loginTeacherToken(val)
       .then((res) => {
+        console.log(res);
         if (res.status === 201) {
           dispatch(loginState(res));
           dispatch(displayUserStatus(res.user));
@@ -72,15 +78,20 @@ const SwitchLogin = () => {
             window.location.reload();
           }
         } else {
-          setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
+          if (res?.response?.data?.message === undefined || "undefined") {
+            setLoading(false);
+            toast.error("Poor Internet Connectivity");
+          } else {
+            setLoading(false);
+            toast.error(`${res?.response?.data?.message}`);
+          }
         }
       })
       .then(() => {});
   };
 
   return (
-    <div className=" w-full min-h-[94vh] flex flex-col justify-center items-center ">
+    <div className="freshh w-full min-h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
