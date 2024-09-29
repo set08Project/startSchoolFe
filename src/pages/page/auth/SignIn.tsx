@@ -65,7 +65,7 @@ const SignIn = () => {
   });
 
   return (
-    <div className=" w-full min-h-[94vh] flex flex-col justify-center items-center ">
+    <div className=" freshh w-full min-h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
@@ -81,7 +81,7 @@ const SignIn = () => {
       </div>
 
       <div
-        className="rounded-md bg-white min-h-[300px] w-[80%] md:w-[500px] border p-4"
+        className="rounded-md bg-white min-h-[300px] w-[80%] md:w-[500px] border-[2px] p-4"
         // onSubmit={handleSubmit}
       >
         <Input
@@ -116,7 +116,7 @@ const SignIn = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
           />
 
-          <div className="flex gap-3 md:gap-5 items-center flex-col sm:flex-row">
+          <div className="flex gap-[9px] md:gap-5 items-center flex-col sm:flex-row">
             <Link
               to="/auth/student-login"
               className="hover:bg-blue-50 hover:scale-105 rounded-lg px-1 transition-all duration-300"

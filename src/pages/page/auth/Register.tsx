@@ -58,7 +58,7 @@ const Register = () => {
       </div>
 
       <form
-        className="rounded-md min-h-[170px] w-[80%] md:w-[500px] border-[2px] p-4"
+        className="rounded-md min-h-[300px] w-[80%] md:w-[500px] border-[2px] p-4"
         onSubmit={handleSubmit}
       >
         <Input
@@ -96,27 +96,27 @@ const Register = () => {
             // onClick={handleSubmit}
           />
         </div>
-      </form>
-      <div className="mt-10 mb-2 ml-2 text-[13px] font-medium ">
-        Or Sign up with google
-      </div>
-      <div className="flex flex-col">
-        <button
-          className="h-14 px-3 flex items-center  border-[2px] border-black rounded-md text-white bg-slate-900 transition-all duration-300 font-medium leading-tight w-[97%] text-center text-[12px] sm:text-base hover:scale-105"
-          onClick={() => {
-            const URL: string = "https://just-next-be1.onrender.com/api";
+        <div className="mt-10 mb-2 ml-2 text-[13px] font-medium ">
+          Or Sign up with google
+        </div>
+        <div className="ml-[10px] flex flex-col">
+          <button
+            className="h-14 px-3 flex items-center  border-[2px] border-black rounded-md text-white bg-slate-900 transition-all duration-300 font-medium leading-tight w-[98%] text-center text-[12px] sm:text-base hover:scale-105"
+            onClick={() => {
+              const URL: string = "https://just-next-be1.onrender.com/api";
 
-            window.location.replace(`${URL}/auth/google`);
-          }}
-        >
-          <img
-            src={google}
-            alt="google_logo"
-            className="w-[20%] h-full object-contain"
-          />
-          <p>Continue with Google</p>
-        </button>
-      </div>
+              window.location.replace(`${URL}/auth/google`);
+            }}
+          >
+            <img
+              src={google}
+              alt="google_logo"
+              className="w-[20%] h-full object-contain"
+            />
+            <p>Continue with Google</p>
+          </button>
+        </div>
+      </form>
 
       <div className="mt-5 mb-[35px] sm:mb-[70px] text-[13px] text-center w-[250px] sm:w-[350px] md:w-auto">
         Already have an Account with us?

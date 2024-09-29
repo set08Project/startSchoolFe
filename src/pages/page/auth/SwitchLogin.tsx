@@ -91,8 +91,7 @@ const SwitchLogin = () => {
           Welcome Back
         </div>
         <div className="text-[14px] -mt-3 w-[70%] leading-tight">
-          {" "}
-          Sign in as Teacher to continue your Experience.
+          Sign in as Teacher/Staff to continue your Experience.
         </div>
       </div>
 
@@ -143,7 +142,7 @@ const SwitchLogin = () => {
               name={
                 loading ? "Loading..." : "Teacher Login with Email/Password"
               }
-              className="w-[97%] bg-neutral-800 text-white h-14 hover:bg-neutral-950 transition-all duration-300"
+              className="w-[97%] bg-neutral-950 text-white h-14 hover:bg-neutral-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmit}
               icon={loading && <ClipLoader color="white" size={18} />}
@@ -175,7 +174,7 @@ const SwitchLogin = () => {
           <div>
             <Button
               name={loading ? "Loading..." : "Teacher Login with EnrollmentID"}
-              className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
+              className="w-[97%] bg-blue-950 text-white h-14 hover:bg-blue-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmitToken}
               icon={loading && <ClipLoader color="white" size={18} />}
@@ -188,7 +187,7 @@ const SwitchLogin = () => {
         </div>
       )}
 
-      <div className="mt-5 text-[13px]">
+      <div className="mt-5 pb-[20px] text-[13px]">
         Don’t have an account yet?{" "}
         <span className="font-bold text-blue-900">
           <Link to="/auth">Register here</Link>
