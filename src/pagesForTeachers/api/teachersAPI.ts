@@ -376,6 +376,46 @@ export const updateTeacherFullName = async (
   }
 };
 
+//Update Socials
+
+export const updateStaffFacebook = async (
+  schoolID: string,
+  staffID: string,
+  facebookAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staff-facebook/${schoolID}/${staffID}`, {
+        facebookAcct,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStaffXAcct = async (
+  schoolID: string,
+  staffID: string,
+  xAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staff-x/${schoolID}/${staffID}`, { xAcct })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+//Update Socials Ends Here
+
 export const updateTeacherPhoneNum = async (
   schoolID: string,
   staffID: string,
