@@ -88,7 +88,7 @@ const Header = () => {
     >
       {/* <div>  */}
       <div className="flex items-center gap-2 justify-end w-[90%]">
-        <div className="mr-4 font-medium cursor-pointer flex items-center justify-end px-4 py-2 gap-2 text-[13px] rounded-sm z-30">
+        <div className="mr-4 hidden font-medium cursor-pointer xl:flex items-center justify-end px-4 py-2 gap-2 text-[13px] rounded-sm z-30">
           <RiSchoolLine className="text-[30px]" />
           <div className="xl:mt-1">{data?.categoryType}</div>
         </div>

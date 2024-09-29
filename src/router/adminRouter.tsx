@@ -36,6 +36,9 @@ import SuccessfulPaymentScreen from "../pages/page/payment/PaymentSuccessfulScre
 import DownloadTest from "../pages/page/payment/DownloadTest";
 
 import AllExpenditures from "../pages/page/expenditure/AllExpenditures";
+import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
+import SchemeDeatails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
+import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
 
 const Expenditure = React.lazy(
   () => import("../pages/page/expenditure/expenditure")
@@ -212,6 +215,24 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <AdminLessonNote />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "schemes",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SchemeOfWorkTable />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "schemes/:className/:subjectName/:term",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SchemeDetails />
               </Suspense>
             ),
           },

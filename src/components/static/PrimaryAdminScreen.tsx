@@ -11,6 +11,7 @@ import {
   FaBarsProgress,
   FaNoteSticky,
   FaSchool,
+  FaSchoolFlag,
   FaStore,
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -121,6 +122,19 @@ const PrimaryAdminScreen = () => {
             Complains
             <MdReport />
           </NavLink>
+          <NavLink
+            to="/schemes"
+            className={({ isActive }) =>
+              isActive
+                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+            }
+            onClick={handleToggleMenuFalse}
+          >
+            Scheme Of Work
+            <FaSchoolFlag />
+          </NavLink>
+
           <NavLink
             to="/lesson-note"
             className={({ isActive }) =>

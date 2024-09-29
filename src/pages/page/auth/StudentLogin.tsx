@@ -73,25 +73,32 @@ const StudentLogin = () => {
             window.location.reload();
           }
         } else {
-          setLoading(false);
-          toast.error(`${res?.response?.data?.message}`);
+          if (res?.response?.data?.message === undefined || "undefined") {
+            setLoading(false);
+            toast.error("Poor Internet Connectivity");
+          } else {
+            setLoading(false);
+            toast.error(`${res?.response?.data?.message}`);
+          }
         }
       })
       .then(() => {});
   };
 
   return (
-    <div className=" w-full min-h-[94vh] flex flex-col justify-center items-center ">
+    <div className="freshh w-full min-h-[94vh] flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
-          <img className="mb-5 w-56 h-28 object-contain" src={logo} />{" "}
+          <img
+            className="mb-5 w-[180px] md:w-56 h-[80px] sm:h-28 object-contain"
+            src={logo}
+          />{" "}
         </Link>
         <div className="text-[26px] font-bold mb-3 text-blue-900">
           Welcome Back
         </div>
         <div className="text-[14px] -mt-3 w-[70%] leading-tight">
-          {" "}
           Sign in as Student or Parent to continue your Experience.
         </div>
       </div>
@@ -112,7 +119,7 @@ const StudentLogin = () => {
       </div>
       {token ? (
         <div
-          className="rounded-md bg-white transition-all duration-300 min-h-[200px] w-[80%] md:w-[500px] border p-4"
+          className="rounded-md bg-white transition-all duration-300 min-h-[200px] w-[80%] md:w-[500px] border-[2px] p-4"
           // onSubmit={handleSubmit}
         >
           <Input
@@ -143,7 +150,7 @@ const StudentLogin = () => {
               name={
                 loading ? "Loading..." : "Student Login with Email/Password"
               }
-              className="w-[97%] bg-neutral-800 text-white h-14 hover:bg-neutral-950 transition-all duration-300"
+              className="w-[97%] bg-neutral-950 text-white h-14 hover:bg-neutral-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmit}
               icon={loading && <ClipLoader color="white" size={18} />}
@@ -156,7 +163,7 @@ const StudentLogin = () => {
         </div>
       ) : (
         <div
-          className="rounded-md transition-all duration-300 bg-white min-h-[100px] w-[80%] md:w-[500px] border p-4"
+          className="rounded-md transition-all duration-300 bg-white min-h-[100px] w-[80%] md:w-[500px] border-[2px] p-4"
           // onSubmit={handleSubmit}
         >
           <PasswordInput
@@ -179,7 +186,7 @@ const StudentLogin = () => {
                   ? "Loading..."
                   : "Student/Parent Login with EnrollmentID"
               }
-              className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
+              className="w-[97%] bg-blue-950 text-white h-14 hover:bg-blue-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmitToken}
               icon={loading && <ClipLoader color="white" size={18} />}
@@ -192,9 +199,9 @@ const StudentLogin = () => {
         </div>
       )}
 
-      <div className="mt-5 text-[13px]">
-        Don’t have an account yet?{" "}
-        <span className="font-bold text-blue-900">
+      <div className="mt-5 pb-[20px] text-[13px] w-[250px] sm:w-[350px] md:w-auto text-center">
+        Don’t have an account with us?{" "}
+        <span className="font-bold ml-2 text-blue-900">
           <Link to="/auth">Register here</Link>
         </span>
       </div>

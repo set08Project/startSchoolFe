@@ -3,9 +3,6 @@ import axios from "axios";
 // const URL2: string = import.meta.env.VITE_URL;
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL2: string = import.meta.env.VITE_URL;
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
 // working locally
 
 const URL: string = "https://just-next-be1.onrender.com/api";
@@ -26,9 +23,46 @@ export const bulkUploadofStudent = async (schoolID: string, data: any) => {
   }
 };
 
+export const bulkUploadSchemeOfWork = async (data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/upload-schemes`, data, config)
+      .then((res: any) => {
+        console.log("res", res);
+        return res;
+      });
+  } catch (error: any) {
+    console.log("error", error.message);
+    return error;
+  }
+};
+
+export const fetchSchemeOfWork = async (
+  selectedClass,
+  selectedSubject,
+  selectTerm
+) => {
+  try {
+    const response = await axios.get(
+      `${URL}/schemes/${selectedClass}/${selectedSubject}/${selectTerm}`
+    );
+    console.log(response);
+    console.log(response?.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching scheme of work:", error);
+    return null;
+  }
+};
+
 export const allSchools = async () => {
   try {
     return await axios.get(`${URL}/view-all-school`).then((res: any) => {
+      // console.log(res);
+
       return res;
     });
   } catch (error: any) {
