@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../../../components/reUse/Button";
 import Input from "../../../components/reUse/Input";
+import google from "../../../assets/socials/google_logosvg.svg";
 import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -115,33 +116,42 @@ const SignIn = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
           />
 
-          <div className="flex gap-2 items-center">
-            <Link to="/auth/student-login">
-              <div className="text-[12px] ml-2 font-bold cursor-pointer">
+          <div className="flex gap-3 md:gap-5 items-center flex-col sm:flex-row">
+            <Link
+              to="/auth/student-login"
+              className="hover:bg-blue-50 hover:scale-105 rounded-lg px-1 transition-all duration-300"
+            >
+              <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Student Login
               </div>
             </Link>
-            <Link to="/auth/switch-login">
-              <div className="text-[12px] ml-2 font-bold cursor-pointer">
+            <Link
+              to="/auth/switch-login"
+              className="hover:bg-blue-50 hover:scale-105 rounded-lg px-1 transition-all duration-300"
+            >
+              <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Teacher Login
               </div>
             </Link>
           </div>
         </div>
-        <div className="mt-10 mb-0 mx-2 text-[13px] font-medium flex  justify-between ">
-          <div>Sign in with social network</div>
+        <div className="mt-10 ml-[10px] mb-3 mx-2 text-[13px] font-medium flex  justify-between ">
+          <div>Or Sign up with google</div>
         </div>
         <div className="flex flex-col">
-          <Button
-            name="Continue with Google (coming soon)"
-            className="h-14 bg-red-900 hover:bg-red-600 opacity-50 hover:text-white  transition-all duration-300 font-medium text-[#ababab] leading-tight w-[97%]text-center text-[12px] sm:text-base "
-            icon={<FaGoogle />}
-          />
+          <button className="ml-[10px] h-14 px-3 flex items-center  border-[2px] border-black rounded-md text-[#ababab] bg-slate-900 transition-all duration-300 font-medium leading-tight w-[97%] text-center text-[12px] sm:text-base hover:scale-105">
+            <img
+              src={google}
+              alt="google_logo"
+              className="w-[20%] h-full object-contain"
+            />
+            <p>Continue with Google (coming soon) </p>
+          </button>
         </div>
       </div>
-      <div className="mt-5 text-[13px]">
-        Don’t have an account yet?{" "}
-        <span className="font-bold text-blue-900">
+      <div className="mt-5 pb-[20px] text-[13px] w-[250px] sm:w-[350px] md:w-auto text-center">
+        Don’t have an account with us?{" "}
+        <span className="font-bold ml-2 text-blue-900">
           <Link to="/auth">Register here</Link>
         </span>
       </div>

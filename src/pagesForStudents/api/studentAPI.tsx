@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// const URL: string =
-// import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
+const URL: string =
+  import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://just-next-be1.onrender.com/api";
+// const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../../components/reUse/Button";
 import Input from "../../../components/reUse/Input";
 import { FaGoogle } from "react-icons/fa6";
+import google from "../../../assets/socials/google_logosvg.svg";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { googleAuth, registerSchool } from "../../api/schoolAPIs";
@@ -26,6 +27,7 @@ const Register = () => {
         if (res.status === 201) {
           dispatch(getEntryEmail(email));
           setLoading(false);
+          toast.success("Email Registered");
           navigate("/auth/enquiry-form");
         } else {
           setLoading(false);
@@ -42,7 +44,7 @@ const Register = () => {
   };
 
   return (
-    <div className=" w-full h-[94vh] flex flex-col justify-center items-center ">
+    <div className=" w-full h-[94vh] pt-[100px] md:pt-[150px] flex flex-col justify-center items-center freshh">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
@@ -50,13 +52,13 @@ const Register = () => {
         </Link>
 
         <div className="text-[26px] font-bold mb-3">Create an Account</div>
-        <div className="text-[14px] -mt-4 ">
-          sign up now and get free account instant.
+        <div className=" w-[270px] sm:w-[350px] md:w-auto text-[14px] -mt-4">
+          Sign up today for instant access and start with a free account.
         </div>
       </div>
 
       <form
-        className="rounded-md bg-white min-h-[150px] w-[80%] md:w-[500px] border p-4"
+        className="rounded-md min-h-[170px] w-[80%] md:w-[500px] border-[2px] p-4"
         onSubmit={handleSubmit}
       >
         <Input
@@ -95,27 +97,40 @@ const Register = () => {
           />
         </div>
       </form>
-      <div className="mt-10 mb-0 ml-2 text-[13px] font-medium ">
-        Sign up with social network
+      <div className="mt-10 mb-2 ml-2 text-[13px] font-medium ">
+        Or Sign up with google
       </div>
       <div className="flex flex-col">
-        <Button
-          name="Continue with Google"
-          className="h-14 bg-red-500 hover:bg-red-600 hover:text-white  transition-all duration-300 font-medium text-[#e6e6e6] leading-tight w-[97%]text-center text-[12px] sm:text-base "
-          icon={<FaGoogle />}
+        <button
+          className="h-14 px-3 flex items-center  border-[2px] border-black rounded-md text-white bg-slate-900 transition-all duration-300 font-medium leading-tight w-[97%] text-center text-[12px] sm:text-base hover:scale-105"
           onClick={() => {
             const URL: string = "https://just-next-be1.onrender.com/api";
 
             window.location.replace(`${URL}/auth/google`);
           }}
-        />
+        >
+          <img
+            src={google}
+            alt="google_logo"
+            className="w-[20%] h-full object-contain"
+          />
+          <p>Continue with Google</p>
+        </button>
       </div>
 
-      <div className="mt-5 text-[13px]">
-        Already have an Account?{" "}
-        <span className="font-bold text-blue-900">
+      <div className="mt-5 mb-[35px] sm:mb-[70px] text-[13px] text-center w-[250px] sm:w-[350px] md:w-auto">
+        Already have an Account with us?
+        <span className="font-bold ml-2 text-blue-900">
           <Link to="/auth/login">Login here</Link>
         </span>
+      </div>
+      <div className="w-full pb-3 flex flex-col items-center">
+        <div className="border-b w-[40%]  " />
+
+        <div className="text-[13px] mt-2">Built to support your school</div>
+        <p className="font-medium text-[14px] mt-1">
+          Innovating Education, Just for you!
+        </p>
       </div>
     </div>
   );
