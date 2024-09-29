@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+const URL: string =
+  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://just-next-be1.onrender.com/api";
+// const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -375,6 +375,46 @@ export const updateTeacherFullName = async (
     return error;
   }
 };
+
+//Update Socials
+
+export const updateStaffFacebook = async (
+  schoolID: string,
+  staffID: string,
+  facebookAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staff-facebook/${schoolID}/${staffID}`, {
+        facebookAcct,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStaffXAcct = async (
+  schoolID: string,
+  staffID: string,
+  xAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staff-x/${schoolID}/${staffID}`, { xAcct })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+//Update Socials Ends Here
 
 export const updateTeacherPhoneNum = async (
   schoolID: string,
