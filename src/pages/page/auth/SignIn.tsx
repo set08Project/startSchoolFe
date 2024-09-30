@@ -121,10 +121,10 @@ const SignIn = () => {
             icon={loading && <ClipLoader color="white" size={18} />}
           />
 
-          <div className="flex gap-[9px] md:gap-5 items-center flex-col sm:flex-row">
+          <div className="flex gap-[9px] md:gap-5 items-center flex-col sm:flex-row mt-5 mx-3 justify-between">
             <Link
               to="/auth/student-login"
-              className="hover:bg-blue-50 hover:scale-105 rounded-lg px-1 transition-all duration-300"
+              className="hover:bg-blue-50 hover:scale-105   transition-all duration-300 border px-5 py-3 rounded-md text-center"
             >
               <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Student Login
@@ -132,7 +132,7 @@ const SignIn = () => {
             </Link>
             <Link
               to="/auth/switch-login"
-              className="hover:bg-blue-50 hover:scale-105 rounded-lg px-1 transition-all duration-300"
+              className="hover:bg-blue-50 hover:scale-105 transition-all duration-300 border px-5 py-3 rounded-md text-center"
             >
               <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Teacher Login
@@ -140,7 +140,7 @@ const SignIn = () => {
             </Link>
           </div>
         </div>
-        <div className="mt-10 ml-[10px] mb-3 mx-2 text-[13px] font-medium flex  justify-between ">
+        {/* <div className="mt-10 ml-[10px] mb-3 mx-2 text-[13px] font-medium flex  justify-between ">
           <div>Or Sign up with google</div>
         </div>
         <div className="flex flex-col">
@@ -152,7 +152,7 @@ const SignIn = () => {
             />
             <p>Continue with Google (coming soon) </p>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="mt-5 pb-[20px] text-[13px] w-[250px] sm:w-[350px] md:w-auto text-center">
         Don’t have an account with us?{" "}

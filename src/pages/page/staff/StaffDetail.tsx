@@ -252,6 +252,7 @@ const StaffDetail = () => {
 
   const { staffID } = useParams();
   const { teacherDetail } = useTeacherDetail(staffID!);
+
   const initials =
     teacherDetail?.staffName?.charAt(0) +
     teacherDetail?.staffName?.charAt(teacherDetail?.staffName.indexOf(" ") + 1);
@@ -261,7 +262,7 @@ const StaffDetail = () => {
       <div>
         <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
           <div className="flex items-center gap-4">
-            <div className="rounded-full shadow-sm border py-2 px-2 font-semibold bg-gray-50">
+            <div className="rounded-full shadow-sm border w-10 h-10 flex justify-center items-center font-semibold bg-gray-50">
               {initials}
             </div>
             <div className="text-[24px] font-semibold text-blue-950">
@@ -271,9 +272,15 @@ const StaffDetail = () => {
           <div className="w-[100px] md:w-[150px] lg:w-auto flex justify-end flex-col">
             <div className="mb-1 text-[14px]">Increase Staff Salary</div>
             <button
-              className="py-2 px-2 text-[13px bg-blue-950 text-white rounded-md hover:scale-105"
+              className="uppercase py-2 px-2 text-[13px bg-blue-950 text-white rounded-md hover:scale-[1.01]"
               onClick={() => {
-                setShow(!show);
+                if (!document.startViewTransition) {
+                  setShow(!show);
+                } else {
+                  document.startViewTransition(() => {
+                    setShow(!show);
+                  });
+                }
               }}
             >
               upgrade
@@ -304,13 +311,29 @@ const StaffDetail = () => {
                   name="Upgrade"
                   className="bg-blue-950"
                   onClick={() => {
-                    setShow(!show);
-                    updaetTeacherSalary(teacherDetail?._id, { salary }).then(
-                      () => {
-                        mutate(`api/view-teacher-detail/${teacherDetail?._id}`);
-                        toast.success("Successfully Updated Staff Salary");
-                      }
-                    );
+                    if (!document.startViewTransition) {
+                      setShow(!show);
+                      updaetTeacherSalary(teacherDetail?._id, { salary }).then(
+                        () => {
+                          mutate(
+                            `api/view-teacher-detail/${teacherDetail?._id}`
+                          );
+                          toast.success("Successfully Updated Staff Salary");
+                        }
+                      );
+                    } else {
+                      document.startViewTransition(() => {
+                        setShow(!show);
+                        updaetTeacherSalary(teacherDetail?._id, {
+                          salary,
+                        }).then(() => {
+                          mutate(
+                            `api/view-teacher-detail/${teacherDetail?._id}`
+                          );
+                          toast.success("Successfully Updated Staff Salary");
+                        });
+                      });
+                    }
                   }}
                 />
 
@@ -328,7 +351,7 @@ const StaffDetail = () => {
           )}
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         <div className="min-h-[87vh] ">
           <div className="mb-8">
             <h1 className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
@@ -342,7 +365,7 @@ const StaffDetail = () => {
               <img
                 src={teacherDetail?.avatar ? teacherDetail?.avatar : pic}
                 alt="profile-image"
-                className="mb-2 border h-[320px] md:h-[300px] w-[90%] md:w-[80%] object-cover rounded-lg"
+                className="w-[100%] mb-2 border h-[320px] md:h-[300px] md:w-[100%] object-cover rounded-lg"
               />
             )}
           </div>
