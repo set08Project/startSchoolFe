@@ -90,10 +90,12 @@ const Register = () => {
           {/* {check ? ( */}
           <Button
             name="Register"
-            className="w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
+            className="text-[15px] w-[97%] bg-blue-900 text-white h-14 hover:bg-blue-800 transition-all duration-300"
             type="submit"
             icon={loading && <ClipLoader color="white" size={18} />}
             // onClick={handleSubmit}
+
+            style={{ fontSize: "18px" }}
           />
         </div>
         <div className="mt-10 mb-2 ml-2 text-[13px] font-medium ">
@@ -101,11 +103,13 @@ const Register = () => {
         </div>
         <div className="ml-[10px] flex flex-col">
           <button
-            className="h-14 px-3 flex items-center  border-[2px] border-black rounded-md text-white bg-slate-900 transition-all duration-300 font-medium leading-tight w-[98%] text-center text-[12px] sm:text-base hover:scale-105"
+            className="justify-center h-14 px-3 flex items-center border-[2px] border-black rounded-md text-white bg-slate-900 transition-all duration-300 font-medium leading-tight w-[98%] text-center text-[12px] sm:text-base  hover:bg-slate-800"
             onClick={() => {
               const URL: string = "https://just-next-be1.onrender.com/api";
 
-              window.location.replace(`${URL}/auth/google`);
+              window.location.replace(
+                `${"https://just-next-be1.onrender.com/api"}/auth/google`
+              );
             }}
           >
             <img
