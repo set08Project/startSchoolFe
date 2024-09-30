@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = "https://just-next-be1.onrender.com/api";
 
@@ -414,7 +414,42 @@ export const updateStaffXAcct = async (
   }
 };
 
-//Update Socials Ends Here
+export const updateStaffInstagramAcct = async (
+  schoolID: string,
+  staffID: string,
+  instagramAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/${schoolID}/${staffID}`, {
+        instagramAcct,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStaffLinkinAcct = async (
+  schoolID: string,
+  staffID: string,
+  linkedinAcct: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/${schoolID}/${staffID}`, { linkedinAcct })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+//Update Socials Ends Here!
 
 export const updateTeacherPhoneNum = async (
   schoolID: string,
