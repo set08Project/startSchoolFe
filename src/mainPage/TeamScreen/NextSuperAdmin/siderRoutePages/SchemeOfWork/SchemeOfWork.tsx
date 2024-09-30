@@ -21,7 +21,7 @@ const SchemeOfWorkTable = () => {
   ];
 
   const [filteredData, setFilteredData] = useState(scheme[0]?.list || []);
-  const [classPick, setClassPick] = useState<string>("");
+  const [classPick, setClassPick] = useState<string>("JSS1");
 
   const handleClassFilter = (classId: any) => {
     const filteredClass = scheme[classId]?.list || [];
