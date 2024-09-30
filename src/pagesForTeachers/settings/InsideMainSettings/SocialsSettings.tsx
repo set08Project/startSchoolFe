@@ -7,13 +7,20 @@ import { useTeacherInfo } from "../../hooks/useTeacher";
 import { CgClose } from "react-icons/cg";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
-import { updateStaffFacebook, updateStaffXAcct } from "../../api/teachersAPI";
+import {
+  updateStaffFacebook,
+  updateStaffInstagramAcct,
+  updateStaffLinkinAcct,
+  updateStaffXAcct,
+} from "../../api/teachersAPI";
 import toast, { Toaster } from "react-hot-toast";
 
 const SocialsSettings = () => {
   const [toggle, setToggle] = useState<string | null>(null);
   const [facebook, setFacebook] = useState<string>("");
   const [x, setX] = useState<string>("");
+  const [instagram, setInstagram] = useState<string>("");
+  const [linkedin, setLinkedin] = useState<string>("");
 
   const { teacherInfo } = useTeacherInfo();
   // console.log("This is Teacher Info", teacherInfo);
@@ -45,6 +52,29 @@ const SocialsSettings = () => {
     }
   };
 
+  const changeStaffInstagramAcct = () => {
+    try {
+      updateStaffInstagramAcct(schoolID, staffID, instagram).then((res) => {
+        toast.success("IG Acct Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating Instagram Acct");
+      return error;
+    }
+  };
+
+  const changeStaffLinkedinAcct = () => {
+    try {
+      updateStaffLinkinAcct(schoolID, staffID, linkedin).then((res) => {
+        toast.success("Staff Linkedin Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating Linkedin Account");
+      return error;
+    }
+  };
   return (
     <div>
       {" "}
@@ -93,11 +123,22 @@ const SocialsSettings = () => {
                 />
                 instagram
               </h3>
-              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
-                + add your instagram handle
-              </h1>
+              {teacherInfo?.instagramAcct ? (
+                <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                  {teacherInfo?.instagramAcct}
+                </h1>
+              ) : (
+                <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                  + add your instagram handle
+                </h1>
+              )}
             </div>
-            <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
+            <div
+              className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+              onClick={() => {
+                setToggle("instagram");
+              }}
+            >
               Edit
             </div>
           </div>
@@ -140,11 +181,22 @@ const SocialsSettings = () => {
                 />
                 linkedIn
               </h3>
-              <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
-                + add your linkedIn handle
-              </h1>
+              {teacherInfo?.linkedinAcct ? (
+                <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                  {teacherInfo?.linkedinAcct}
+                </h1>
+              ) : (
+                <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-normal text-blue-500">
+                  + add your linkedIn handle
+                </h1>
+              )}
             </div>
-            <div className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105">
+            <div
+              className="py-1 px-3 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+              onClick={() => {
+                setToggle("linkedin");
+              }}
+            >
               Edit
             </div>
           </div>
@@ -155,9 +207,9 @@ const SocialsSettings = () => {
               <div className="mb-4 flex items- center justify-between">
                 <h2 className="text-blue-950 font-semibold">
                   {toggle === "facebook" && "Enter Your Facebook Handle"}
-                  {toggle === "linkdln" && "Enter Your Linkdln handle"}
+                  {toggle === "linkedin" && "Enter Your Linkedln Handle"}
                   {toggle === "X" && "Enter Your X Handle"}
-                  {toggle === "Instagram" && "Enter Your Instagram Handle"}
+                  {toggle === "instagram" && "Enter Your Instagram Handle"}
                 </h2>
                 <CgClose
                   className="text-blue-950 text-[20px] font-bold cursor-pointer hover:scale-110 ml-[50px]"
@@ -187,6 +239,28 @@ const SocialsSettings = () => {
                   }}
                 />
               )}
+
+              {toggle === "linkedin" && (
+                <Input
+                  placeholder="Enter Your Linkedin Handle"
+                  value={linkedin}
+                  className="mb-4"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setLinkedin(e.target.value);
+                  }}
+                />
+              )}
+
+              {toggle === "instagram" && (
+                <Input
+                  placeholder="Enter Your Linkedin Handle"
+                  value={instagram}
+                  className="mb-4"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setInstagram(e.target.value);
+                  }}
+                />
+              )}
               {/* State Change For button */}
               {toggle === "facebook" && (
                 <Button
@@ -205,6 +279,28 @@ const SocialsSettings = () => {
                   className="bg-blue-950 hover:scale-105"
                   onClick={() => {
                     changeStaffXAcct();
+                    setToggle(null);
+                  }}
+                />
+              )}
+
+              {toggle === "instagram" && (
+                <Button
+                  name="Update"
+                  className="bg-blue-950 hover:scale-105"
+                  onClick={() => {
+                    changeStaffInstagramAcct();
+                    setToggle(null);
+                  }}
+                />
+              )}
+
+              {toggle === "linkedin" && (
+                <Button
+                  name="Update"
+                  className="bg-blue-950 hover:scale-105"
+                  onClick={() => {
+                    changeStaffLinkedinAcct();
                     setToggle(null);
                   }}
                 />
