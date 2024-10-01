@@ -3,9 +3,9 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://just-next-be1.onrender.com/api";
+// const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
@@ -421,7 +421,7 @@ export const updateStaffInstagramAcct = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/${schoolID}/${staffID}`, {
+      .patch(`${URL}/update-staff-instagram/${schoolID}/${staffID}`, {
         instagramAcct,
       })
       .then((res) => {
@@ -440,7 +440,9 @@ export const updateStaffLinkinAcct = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/${schoolID}/${staffID}`, { linkedinAcct })
+      .patch(`${URL}/update-staff-linkedin/${schoolID}/${staffID}`, {
+        linkedinAcct,
+      })
       .then((res) => {
         return res?.data;
       });
