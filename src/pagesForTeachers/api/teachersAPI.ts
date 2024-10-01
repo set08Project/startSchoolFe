@@ -421,7 +421,7 @@ export const updateStaffInstagramAcct = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/${schoolID}/${staffID}`, {
+      .patch(`${URL}/update-staff-instagram/${schoolID}/${staffID}`, {
         instagramAcct,
       })
       .then((res) => {
@@ -440,7 +440,9 @@ export const updateStaffLinkinAcct = async (
 ) => {
   try {
     return await axios
-      .patch(`${URL}/${schoolID}/${staffID}`, { linkedinAcct })
+      .patch(`${URL}/update-staff-linkedin/${schoolID}/${staffID}`, {
+        linkedinAcct,
+      })
       .then((res) => {
         return res?.data;
       });
