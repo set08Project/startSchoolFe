@@ -47,7 +47,7 @@ const SchemeOfWorkTable = () => {
                 } border rounded-full
                 ${
                   el.className === classPick
-                    ? "bg-orange-500 text-white"
+                    ? "bg-gray-500 text-white"
                     : "bg-slate-50 "
                 }
                 `}

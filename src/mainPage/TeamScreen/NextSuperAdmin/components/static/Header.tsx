@@ -26,7 +26,7 @@ const Header = () => {
         if (res.status === 201) {
           toast.success("Scheme of work has been successfully imported");
         } else {
-          toast.error(res.data?.message || "Failed to upload scheme of work");
+          toast.error(res?.data?.message || "Failed to upload scheme");
         }
       })
       .catch((err) => {
