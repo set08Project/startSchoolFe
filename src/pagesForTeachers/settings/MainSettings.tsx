@@ -21,7 +21,7 @@ const MainSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3">My Profile</h1>
+            <h1 className="mb-3 text-[9px] md:text-[19px]">My Profile</h1>
           </div>
           <div
             onClick={() => setActiveSection("My Socials")}
@@ -31,7 +31,7 @@ const MainSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3">My Socials</h1>
+            <h1 className="mb-3 text-[9px] md:text-[19px]">My Socials</h1>
           </div>
           <div
             onClick={() => setActiveSection("Password and Security")}
@@ -41,7 +41,9 @@ const MainSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3">Password and Security</h1>
+            <h1 className="mb-3 text-[9px] md:text-[19px]">
+              Password and Security
+            </h1>
           </div>
         </div>
 
@@ -54,7 +56,7 @@ const MainSettings = () => {
         )}
 
         {activeSection === "My Socials" && (
-          <div className="mt-5 min-h-[60vh] freshh">
+          <div className="mt-5 min-h-[60vh]">
             <div>
               <SocialsSettings />
             </div>
