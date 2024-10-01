@@ -3,7 +3,7 @@ import axios from "axios";
 const URL2: string = import.meta.env.VITE_URL;
 const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL2: string = importmeta.env.VITE_URL;
+// const URL2: string = import.meta.env.VITE_URL;
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
