@@ -1,6 +1,5 @@
 document.title = "View Students";
-// import moment from "moment"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
@@ -20,22 +19,16 @@ import {
   bulkUploadofStudent,
   deleteAllStudent,
   deleteStudent,
-  readSchool,
-  updateSchoolFee,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
 } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
-import {
-  useStudentCookie,
-  useStudentInfo,
-} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
@@ -108,6 +101,7 @@ const ViewStudent = () => {
   const [searchStudents, setSearchStudents] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [spin, setSpin] = useState(false);
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -246,13 +240,21 @@ const ViewStudent = () => {
 
   const handleDeleteAllStudents = () => {
     try {
-      deleteAllStudent(schoolID).then((res) => {
-        toast.success("All Student Has Been Successfully Deleted");
-        return res.data;
-      });
+      setSpin(true);
+      setTimeout(() => {
+        deleteAllStudent(schoolID).then((res) => {
+          if (res.status === 200) {
+            toast.success("All Student Has Been Successfully Deleted");
+            return res.data;
+          }
+          clearTimeout;
+        });
+      }, 2000);
     } catch (error) {
       toast.error("Error In Deleting All Student");
       console.log(error);
+    } finally {
+      setSpin(false);
     }
   };
 
@@ -322,14 +324,25 @@ const ViewStudent = () => {
               htmlFor="file"
               className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px]"
             >
-              {" "}
               upload file for Bulk Entry
             </label>
           )}
-          <Button
-            name="Delete All Students"
-            className="hidden lg:block uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
-          />
+          <div>
+            {spin ? (
+              <Button
+                name="deleting..."
+                className="hidden lg:flex justify-center items-center uppercase py- lg:text-[12px] text-[9px] font-medium bg-green-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 cursor-pointer transition-all duration-300"
+                onClick={handleDeleteAllStudents}
+                icon={<ClipLoader color="white" size={18} />}
+              />
+            ) : (
+              <Button
+                name="Delete All Students"
+                className="hidden lg:block uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 cursor-pointer transition-all duration-300"
+                onClick={handleDeleteAllStudents}
+              />
+            )}
+          </div>
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
