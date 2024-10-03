@@ -18,6 +18,7 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
+  deleteAllStudent,
   deleteStudent,
   readSchool,
   updateSchoolFee,
@@ -204,7 +205,7 @@ const ViewStudent = () => {
 
   const [file, setFile] = useState();
   const [toggle, setToggle] = useState<boolean>(false);
-  
+
   const handleBulkStudent = () => {
     setToggle(true);
     const formData = new FormData();
@@ -243,12 +244,22 @@ const ViewStudent = () => {
     }
   };
 
+  const handleDeleteAllStudents = () => {
+    try {
+      deleteAllStudent(schoolID).then((res) => {
+        toast.success("All Student Has Been Successfully Deleted");
+        return res.data;
+      });
+    } catch (error) {
+      toast.error("Error In Deleting All Student");
+      console.log(error);
+    }
+  };
+
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
-
-  // const user = useSelector((el: any) => el.user);
 
   const filteredStudents = students?.data?.students?.filter((student: any) => {
     const fullName =
@@ -315,6 +326,10 @@ const ViewStudent = () => {
               upload file for Bulk Entry
             </label>
           )}
+          <Button
+            name="Delete All Students"
+            className="hidden lg:block uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+          />
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">

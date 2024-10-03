@@ -293,6 +293,20 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
   }
 };
 
+export const deleteAllStudent = async (schoolID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-all-students/${schoolID}`)
+      .then((res: any) => {
+        console.log("api res", res);
+        return res;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const deleteStaff = async (schoolID: string, staffID: string) => {
   try {
     return await axios
