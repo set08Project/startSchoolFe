@@ -8,6 +8,9 @@ import DownloadTest from "../pagesForStudents/schoolFee/DownloadTest";
 import PrintReportCard from "../pagesForStudents/pages/CardTemplate/PrintReportCard";
 import Finances from "../pagesForStudents/pages/Finances/Finances";
 
+const StudentProfile = React.lazy(
+  () => import("../pagesForStudents/StudentProfile")
+);
 const QuizResultScreen = React.lazy(
   () => import("../pagesForStudents/pages/quiz/QuizResultScreen")
 );
@@ -34,11 +37,9 @@ const StudentDashboard = React.lazy(
 const Assignment = React.lazy(() => import("../pagesForStudents/Assignment"));
 const Article = React.lazy(() => import("../pagesForStudents/Article"));
 const TimeTable = React.lazy(() => import("../pagesForStudents/TimeTable"));
-const StudentProfile = React.lazy(
-  () => import("../pagesForStudents/StudentProfile")
-);
+
 const StudentSettings = React.lazy(
-  () => import("../pagesForStudents/StudentSettings")
+  () => import("../pagesForStudents/Settings/StudentSettings")
 );
 
 const Layout = React.lazy(() => import("../pagesForStudents/layout/Layout"));
