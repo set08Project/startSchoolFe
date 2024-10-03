@@ -1,6 +1,5 @@
 document.title = "View Students";
-// import moment from "moment"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
@@ -18,23 +17,18 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
+  deleteAllStudent,
   deleteStudent,
-  readSchool,
-  updateSchoolFee,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
 } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
-import {
-  useStudentCookie,
-  useStudentInfo,
-} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
@@ -204,7 +198,7 @@ const ViewStudent = () => {
 
   const [file, setFile] = useState();
   const [toggle, setToggle] = useState<boolean>(false);
-  
+
   const handleBulkStudent = () => {
     setToggle(true);
     const formData = new FormData();
@@ -247,8 +241,6 @@ const ViewStudent = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
-
-  // const user = useSelector((el: any) => el.user);
 
   const filteredStudents = students?.data?.students?.filter((student: any) => {
     const fullName =
@@ -311,7 +303,6 @@ const ViewStudent = () => {
               htmlFor="file"
               className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px]"
             >
-              {" "}
               upload file for Bulk Entry
             </label>
           )}

@@ -371,7 +371,7 @@ const StaffDetail = () => {
           </div>
           <div className="">
             <h1 className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
-              Personal Information
+              Personal Information:
             </h1>
             <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
               <p className="mb-1 flex items-center gap-1">
@@ -399,7 +399,7 @@ const StaffDetail = () => {
               <p className="mb-1 flex items-center gap-1">
                 <MdEmail /> Email Address:
               </p>
-              <h1 className="text-[18px] font-semibold lowercase">
+              <h1 className="text-[18px] font-semibold lowercase break-words">
                 {teacherDetail?.email}
               </h1>
             </div>
@@ -408,7 +408,7 @@ const StaffDetail = () => {
                 <BsPhone />
                 Phone Number:
               </p>
-              {teacherDetail?.phone === "" ? (
+              {!teacherDetail?.phone ? (
                 <h1 className="text-[14px] text-blue-500 font-normal">
                   + no phone number set
                 </h1>
@@ -422,7 +422,7 @@ const StaffDetail = () => {
               <p className="mb-1 flex items-center gap-1">
                 <FaAddressBook /> Home Address:
               </p>
-              <h1 className="text-[18px] font-semibold">
+              <h1 className="text-[18px] font-semibold break-words">
                 {teacherDetail?.staffAddress}
               </h1>
             </div>
@@ -497,7 +497,11 @@ const StaffDetail = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ no facebook handle set</h3>
+              {teacherDetail?.facebookAcct ? (
+                <h3 className="text-blue-950">{teacherDetail?.facebookAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ no facebook handle set</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -507,7 +511,13 @@ const StaffDetail = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ no instagram set</h3>
+              {teacherDetail?.instagramAcct ? (
+                <h3 className="text-blue-950">
+                  {teacherDetail?.instagramAcct}
+                </h3>
+              ) : (
+                <h3 className="text-blue-500">+ no instagram handle set</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -517,7 +527,11 @@ const StaffDetail = () => {
                   className="w-[20px] h-[17px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ no X handle set</h3>
+              {teacherDetail?.xAcct ? (
+                <h3 className="text-blue-950">{teacherDetail?.xAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ no X handle set</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -527,7 +541,11 @@ const StaffDetail = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ no linkedIn handle set</h3>
+              {teacherDetail?.instagramAcct ? (
+                <h3 className="text-blue-950">{teacherDetail?.linkedinAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ no linkedIn handle set</h3>
+              )}
             </div>
           </div>
         </div>
