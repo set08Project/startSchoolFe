@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { inputData } from "./InputData";
 import lodash from "lodash";
 import LittleHeader from "../../components/layout/LittleHeader";
@@ -18,6 +18,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditorInspector from "@ckeditor/ckeditor5-inspector";
 import Input from "../../components/reUse/Input";
 import MainInput from "./MainInput";
+import { mutate } from "swr";
 
 document.title = "update and Improve Lesson Note ";
 
@@ -87,11 +88,11 @@ const EditLessonNote = () => {
   //   EditorState.createEmpty()
   // );
 
-  let getRead = { ...lessonNoteData };
-  let fetchRead = { ...lessonNoteData };
-  let readData = { ...lessonNoteData };
+  let getRead = { ...lessonNoteData! };
+  let fetchRead = { ...lessonNoteData! };
+  let readData = { ...lessonNoteData! };
 
-  const mainInputData = [
+  let mainInputData = [
     {
       label: "This lesson is for what week?",
       placeholder: "Week 1",
@@ -154,9 +155,87 @@ const EditLessonNote = () => {
     },
   ];
 
-  const show = mainInputData.map((el) => {
+  let show = mainInputData.map((el) => {
     return el.defaultValue;
   });
+
+  useEffect(() => {
+    mutate(`api/view-lesson-note-detail/${noteID}`);
+    console.log("run again!!");
+
+    let x = setTimeout(() => {
+      mainInputData = [
+        {
+          label: "This lesson is for what week?",
+          placeholder: "Week 1",
+          name: "week",
+          defaultValue: `${readData?.week}`,
+        },
+        {
+          label: "Input the started date",
+          placeholder: "10/02/2024",
+          name: "createDate",
+          defaultValue: `${readData?.createDate}`,
+        },
+        {
+          label: "This lesson is for what class?",
+          placeholder: "JSS 1B",
+          name: "classes",
+          defaultValue: `${readData?.classes}`,
+        },
+        {
+          label: "This lesson is for what subject?",
+          placeholder: "Mathematics",
+          name: "subject",
+          defaultValue: `${readData?.subject}`,
+        },
+        {
+          label: "This lesson is for what topic?",
+          placeholder: "Probabilty",
+          name: "topic",
+          defaultValue: `${readData?.topic}`,
+        },
+        {
+          label: "This lesson is for what sub-topic?",
+          placeholder: "Sub-Topic",
+          name: "subTopic",
+          defaultValue: `${readData?.subTopic}`,
+        },
+        {
+          label: "This lesson is for how many periods?",
+          placeholder: "2 - 5",
+          name: "period",
+          defaultValue: `${readData?.period}`,
+        },
+        {
+          label: "How long will this lesson take?",
+          placeholder: "40 minutes x no of periods",
+          name: "duration",
+          defaultValue: `${readData?.duration}`,
+        },
+        {
+          label: "What are your teaching materials?",
+          placeholder: "die, coins, or charts",
+          name: "instructionalMaterial",
+          defaultValue: `${readData?.instructionalMaterial}`,
+        },
+        {
+          label: "What are your reference materials?",
+          placeholder: "Integrated Mathematics",
+          name: "referenceMaterial",
+          defaultValue: `${readData?.referenceMaterial}`,
+        },
+      ];
+
+      show = mainInputData.map((el) => {
+        return el.defaultValue;
+      });
+
+      clearTimeout(x);
+    }, 100);
+  }, [lessonNoteData, mainInputData, show, getRead, fetchRead, readData]);
+
+  console.log(mainInputData);
 
   return (
     <div>

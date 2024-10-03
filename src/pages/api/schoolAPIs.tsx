@@ -267,10 +267,10 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async (email: string) => {
+export const approveRegisterationStatus = async (id: string) => {
   try {
     return await axios
-      .patch(`${URL}/approved-school-registration`, { email })
+      .patch(`${URL}/approved-school-registration/${id}`)
       .then((res: any) => {
         console.log("res", res?.data);
         return res;

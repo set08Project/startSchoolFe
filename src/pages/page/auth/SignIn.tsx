@@ -48,6 +48,7 @@ const SignIn = () => {
             clearTimeout(x);
           }, 10);
         } else {
+          console.log(res);
           if (res?.response?.data?.message === undefined || "undefined") {
             setLoading(false);
             toast.error("Poor Internet Connectivity");

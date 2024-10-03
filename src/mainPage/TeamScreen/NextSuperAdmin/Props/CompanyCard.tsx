@@ -64,9 +64,8 @@ const CompanyCard: FC<iPropsCard> = ({
           }`}
           onClick={() => {
             setToggle(true);
-            console.log(school?._id);
 
-            approveRegisterationStatus(school?.email)
+            approveRegisterationStatus(school?._id)
               .then((res) => {
                 console.log(res);
               })
