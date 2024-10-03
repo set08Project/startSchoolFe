@@ -12,16 +12,16 @@ const SchemeOfWorkTable = () => {
   };
 
   const listOfClass = [
-    { id: "0", className: "JSS1" },
-    { id: "1", className: "JSS2" },
-    { id: "2", className: "JSS3" },
-    { id: "3", className: "SS1" },
-    { id: "4", className: "SS2" },
-    { id: "5", className: "SS3" },
+    { id: "0", className: "JSS 1" },
+    { id: "1", className: "JSS 2" },
+    { id: "2", className: "JSS 3" },
+    { id: "3", className: "SSS 1" },
+    { id: "4", className: "SSS 2" },
+    { id: "5", className: "SSS 3" },
   ];
 
   const [filteredData, setFilteredData] = useState(scheme[0]?.list || []);
-  const [classPick, setClassPick] = useState<string>("JSS1");
+  const [classPick, setClassPick] = useState<string>("JSS 1");
 
   const handleClassFilter = (classId: any) => {
     const filteredClass = scheme[classId]?.list || [];
@@ -40,14 +40,14 @@ const SchemeOfWorkTable = () => {
             {listOfClass.map((el) => (
               <div
                 key={el.id}
-                className={` cursor-pointer w-[80px] md:w-[100px] lg:w-[80px] text-center text-[14px] transition-all duration-300 font-semibold py-2 hover:bg-gray-200 px-2 ${
+                className={` cursor-pointer  text-center text-[14px] transition-all duration-300 font-semibold py-2 px-10 hover:bg-gray-200 ${
                   data?.categoryType === "Secondary"
                     ? "text-blue-950"
                     : "text-green-950"
                 } border rounded-full
                 ${
                   el.className === classPick
-                    ? "bg-orange-500 text-white"
+                    ? "bg-blue-950 text-white"
                     : "bg-slate-50 "
                 }
                 `}
