@@ -285,7 +285,7 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
     return await axios
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
       .then((res: any) => {
-        return res.data;
+        return res?.data;
       });
   } catch (error: any) {
     return error;
@@ -297,7 +297,7 @@ export const deleteAllStudent = async (schoolID: string) => {
     return await axios
       .delete(`${URL}/delete-all-students/${schoolID}`)
       .then((res: any) => {
-        return res.data;
+        return res?.data;
       });
   } catch (error) {
     console.error();
