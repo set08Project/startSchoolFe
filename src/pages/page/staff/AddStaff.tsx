@@ -107,7 +107,7 @@ const AddStaff = () => {
                 setGender(e.target.value);
               }}
             >
-              <option disabled selected value="Choose a Genders">
+              <option selected value="Choose a Genders">
                 Choose a Gender
               </option>
               <option value="Male">Male</option>
@@ -149,14 +149,18 @@ const AddStaff = () => {
           </div> */}
           <div className="mt-1">
             <label className="text-[14px]">Staff Role</label>
-            <Input
-              placeholder="Enter Staff Role"
-              className="ml-0 w-full"
+            <select
+              className="ml-0 select bg-gray-100 select-bordered w-full "
               value={assignedRole}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAssignedRole(e.target.value);
               }}
-            />
+            >
+              <option selected value="Choose Staff Role">
+                Choose Staff Role
+              </option>
+              <option value="teacher">Teacher</option>
+            </select>
           </div>
 
           <div className="mt-10" />
