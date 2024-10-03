@@ -3,18 +3,22 @@ import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import BeatLoader from "react-spinners/ClipLoader";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchoolCookie, useSchoolData } from "../../hook/useSchoolAuth";
 import {
   changeSchoolName,
   changeSchoolPersonalName,
   changeSchoolPhone,
+  deleteAllStudent,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
+  const schoolID = useSchoolCookie().dataID;
 
+  const [spin, setSpin] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [toggle, setToggle] = useState<boolean>(false);
@@ -78,6 +82,26 @@ const PersonalInfoScreen = () => {
         setToggle3(!toggle3);
         setToggle(false);
       });
+    }
+  };
+
+  const handleDeleteAllStudents = () => {
+    try {
+      setSpin(true);
+      setTimeout(() => {
+        deleteAllStudent(schoolID).then((res) => {
+          if (res.status === 200) {
+            toast.success("All Student Has Been Successfully Deleted");
+            return res.data;
+          }
+          clearTimeout;
+        });
+      }, 2000);
+    } catch (error) {
+      toast.error("Error In Deleting All Student");
+      console.log(error);
+    } finally {
+      setSpin(false);
     }
   };
 
@@ -387,6 +411,42 @@ const PersonalInfoScreen = () => {
             onClick={onToggle3}
           >
             Change
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex justify-between items-center">
+        <div className="w-[300px] ">
+          <h1 className="font-medium text-[16px]">
+            Delete All Students In your School
+          </h1>
+          <h3 className="text-[12px] font-extrabold">
+            This is an irreversible action, All students and associated data's
+            about each student will be wiped off. Be absolutely sure about
+            taking this action.
+          </h3>
+        </div>
+        <div>
+          <div>
+            {spin ? (
+              <div className=" w-full">
+                <button
+                  className="text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
+                  onClick={handleDeleteAllStudents}
+                >
+                  <ClipLoader color="white" size={18} />
+                  Deleting...
+                </button>
+              </div>
+            ) : (
+              <div className=" w-full">
+                <button
+                  className="text-white font-medium bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
+                  onClick={handleDeleteAllStudents}
+                >
+                  Delete All Students
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

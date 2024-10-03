@@ -101,7 +101,6 @@ const ViewStudent = () => {
   const [searchStudents, setSearchStudents] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [spin, setSpin] = useState(false);
   const { studentInfo } = useStudentInfo();
 
   const getValue = (length: number): string => {
@@ -238,26 +237,6 @@ const ViewStudent = () => {
     }
   };
 
-  const handleDeleteAllStudents = () => {
-    try {
-      setSpin(true);
-      setTimeout(() => {
-        deleteAllStudent(schoolID).then((res) => {
-          if (res.status === 200) {
-            toast.success("All Student Has Been Successfully Deleted");
-            return res.data;
-          }
-          clearTimeout;
-        });
-      }, 2000);
-    } catch (error) {
-      toast.error("Error In Deleting All Student");
-      console.log(error);
-    } finally {
-      setSpin(false);
-    }
-  };
-
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
@@ -327,22 +306,6 @@ const ViewStudent = () => {
               upload file for Bulk Entry
             </label>
           )}
-          <div>
-            {spin ? (
-              <Button
-                name="deleting..."
-                className="hidden lg:flex justify-center items-center uppercase py- lg:text-[12px] text-[9px] font-medium bg-green-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 cursor-pointer transition-all duration-300"
-                onClick={handleDeleteAllStudents}
-                icon={<ClipLoader color="white" size={18} />}
-              />
-            ) : (
-              <Button
-                name="Delete All Students"
-                className="hidden lg:block uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 cursor-pointer transition-all duration-300"
-                onClick={handleDeleteAllStudents}
-              />
-            )}
-          </div>
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
