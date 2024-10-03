@@ -40,15 +40,15 @@ const SchemeOfWorkTable = () => {
             {listOfClass.map((el) => (
               <div
                 key={el.id}
-                className={` cursor-pointer  text-center text-[14px] transition-all duration-300 font-semibold py-2 px-10 hover:bg-gray-200 ${
+                className={` cursor-pointer  text-center text-[14px] transition-all duration-300 font-semibold py-2 px-10 ${
                   data?.categoryType === "Secondary"
                     ? "text-blue-950"
                     : "text-green-950"
                 } border rounded-full
                 ${
                   el.className === classPick
-                    ? "bg-blue-950 text-white"
-                    : "bg-slate-50 "
+                    ? "bg-blue-950 hover:bg-blue-900  text-white"
+                    : "bg-slate-50 hover:bg-gray-200 "
                 }
                 `}
                 onClick={() => {
