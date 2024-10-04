@@ -214,6 +214,10 @@ const ViewStudent = () => {
       });
   };
 
+  const [valueStored, setValueStored] = useState<Array<string>>([]);
+
+  useEffect(() => {}, [valueStored]);
+
   // Delete Student Function
 
   // getting schoolID
@@ -248,9 +252,6 @@ const ViewStudent = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
-  const [valueStored, setValueStored] = useState<Array<string>>([]);
-
-  useEffect(() => {}, [valueStored]);
   return (
     <div className="">
       {/* header */}
@@ -732,7 +733,11 @@ const ViewStudent = () => {
                                       name="Delete Student"
                                       className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
                                       onClick={() => {
-                                        handeDeleteStudent(valueStored[1]);
+                                        if (valueStored?.length <= 2) {
+                                          handeDeleteStudent(valueStored[0]);
+                                        } else {
+                                          handeDeleteStudent(valueStored[1]);
+                                        }
                                       }}
                                     />
                                   )
