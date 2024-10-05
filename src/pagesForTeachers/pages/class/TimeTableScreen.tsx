@@ -15,28 +15,49 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
     lodash.groupBy(timetbale?.data?.timeTable, "day")
   );
 
+  const dateTime = [
+    "07:45AM - 08:00AM",
+    "08:00AM - 08:40AM",
+    "08:40AM - 09:20AM",
+    "09:20AM - 10:00AM",
+    "10:00AM - 10:40AM",
+    "10:40AM - 11:20AM",
+    "11:20AM - 11:50AM",
+    "11:50AM - 12:30AM",
+    "12:30PM - 01:10PM",
+    "01:10PM - 01:50PM",
+    "01:50PM - 02:30PM",
+    "02:30PM - 03:00PM",
+  ];
+
+  const dateTime35 = [
+    "07:45AM - 08:00AM",
+    "08:00AM - 08:40AM",
+    "08:40AM - 09:20AM",
+    "09:20AM - 10:00AM",
+    "10:00AM - 10:40AM",
+    "10:40AM - 11:20AM",
+    "11:20AM - 12:00NOON",
+    "12:00NOON - 12:30PM",
+    "12:30PM - 01:10PM",
+    "01:10PM - 01:50PM",
+    "01:50PM - 02:30PM",
+    "02:30PM - 03:00PM",
+  ];
+
   return (
     <div className="w-full ">
       <div className=" h-screen">
         <div className=" w-full h-[415px] bg-slate-100  border rounded-md p-2 overflow-x-auto gap-4">
           {/* Header */}
-          <div className="flex w-[2600px] gap-4 bg-white py-3 px-1">
+          <div className={`flex w-[2700px] gap-4 bg-white py-3 px-1`}>
             <div className="w-[300px] h-6 border-r">days</div>
-
-            <div className="w-[300px] h-6  border-r">07:45AM - 08:10AM </div>
-            <div className="w-[300px] h-6  border-r">08:10AM - 08:50AM </div>
-            <div className="w-[300px] h-6  border-r">08:50AM - 09:30AM </div>
-            <div className="w-[300px] h-6  border-r">09:30AM - 10:10AM</div>
-            <div className="w-[300px] h-6  border-r">10:10AM - 10:20AM </div>
-            <div className="w-[300px] h-6  border-r">10:20AM - 11:00AM </div>
-            <div className="w-[300px] h-6  border-r">11:00AM - 11:40AM </div>
-            <div className="w-[300px] h-6  border-r">11:40AM - 12:00NOON </div>
-            <div className="w-[300px] h-6  border-r">12:00NOON - 12:40PM </div>
-            <div className="w-[300px] h-6  border-r">12:40PM - 01:20PM </div>
-            <div className="w-[300px] h-6  border-r">01:20PM - 02:00PM </div>
+            {dateTime?.map((el) => (
+              <div className="w-[300px] h-6 border-r">07:45AM - 08:10AM</div>
+            ))}
           </div>
 
-          <div className="flex w-[2600px] gap-0  py-3 mt-2 ">
+          <div className="flex w-[2700px] gap-0  py-3 mt-2 ">
             <div className="w-[200px] h-6 border-r">
               {daysData?.map((props: string, i: number) => (
                 <div
@@ -51,7 +72,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
               ))}
             </div>
 
-            <div className="w-[calc(2600px-200px)] gap-1 px-1">
+            <div className="w-[calc(2700px-200px)] gap-1 px-1">
               {dataTime?.map((props: any, i: number) => (
                 <div
                   key={i}
