@@ -31,11 +31,11 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
   ];
 
   const dateTime35 = [
-    "07:45AM - 08:00AM",
-    "08:00AM - 08:40AM",
-    "08:40AM - 09:20AM",
-    "09:20AM - 10:00AM",
-    "10:00AM - 10:40AM",
+    "07:45AM - 08:10AM",
+    "08:10AM - 08:50AM",
+    "08:50AM - 09:30AM",
+    "09:30AM - 10:10AM",
+    "10:10AM - 10:20AM",
     "10:40AM - 11:20AM",
     "11:20AM - 12:00NOON",
     "12:00NOON - 12:30PM",
