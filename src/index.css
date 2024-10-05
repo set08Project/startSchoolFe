@@ -34,6 +34,13 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+@media (max-width: 320px) {
+  .smallphone {
+    width: 300px;
+    font-size: 14px;
+  }
+}
+
 .dash {
   transition: transform 0.2s ease-in-out;
   transform: translateY(-2px);
