@@ -442,8 +442,8 @@ const PersonalInfoScreen = () => {
           </div>
           {/* Popup Card */}
           {popup === "Delete" && (
-            <div className="absolute freshh py-[20px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
-              <div className="p-4 w-[400px] min-h-[300px] bg-white rounded-lg smallphone">
+            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
+              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-[whitesmoke] rounded-lg smallphone">
                 <div className="mb-3 text-center">
                   <h3 className="font-bold text-lg text-center text-blue-950">
                     All Student Deletion Notice
@@ -470,7 +470,7 @@ const PersonalInfoScreen = () => {
                       If <span className="text-[20px]">NO</span> cancel.
                     </p>
                   </div>
-                  <div className="pt-2 pb-5 flex justify-between items-center">
+                  <div className="pt-2 flex justify-between items-center sm:justify-center sm:gap-5">
                     {spin ? (
                       <div className="">
                         <button
