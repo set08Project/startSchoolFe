@@ -8,6 +8,30 @@ import axios from "axios";
 const URL: string = "https://just-next-be1.onrender.com/api";
 const URL2: string = "https://just-next-be1.onrender.com";
 
+export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-school-admin-code/${schoolID}`, { adminCode: data })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const timeTableSetups = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/create-school-time-table/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const bulkUploadofStudent = async (schoolID: string, data: any) => {
   try {
     const config: any = {
