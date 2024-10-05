@@ -1,8 +1,5 @@
 import axios from "axios";
 
-// const URL2: string = import.meta.env.VITE_URL;
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
 const URL2: string = import.meta.env.VITE_URL;
 const URL: string = import.meta.env.VITE_MAIN_URL;
 
@@ -275,7 +272,6 @@ export const approveRegisterationStatus = async (id: string) => {
     return await axios
       .patch(`${URL}/approved-school-registration/${id}`)
       .then((res: any) => {
-        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
@@ -289,9 +285,22 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
     return await axios
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
       .then((res: any) => {
-        return res;
+        return res?.data;
       });
   } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteAllStudent = async (schoolID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-all-students/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
     return error;
   }
 };

@@ -86,7 +86,7 @@ const SocialsSettings = () => {
           </div>
           <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
             <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[12px] md:text-[18px]">
                 <img
                   src={FB}
                   alt=""
@@ -95,11 +95,11 @@ const SocialsSettings = () => {
                 facebook
               </h3>
               {teacherInfo?.facebookAcct ? (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   {teacherInfo?.facebookAcct}
                 </h1>
               ) : (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   + add your facebook handle
                 </h1>
               )}
@@ -115,7 +115,7 @@ const SocialsSettings = () => {
           </div>
           <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
             <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[12px] md:text-[18px]">
                 <img
                   src={IG}
                   alt=""
@@ -124,11 +124,11 @@ const SocialsSettings = () => {
                 instagram
               </h3>
               {teacherInfo?.instagramAcct ? (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
                   {teacherInfo?.instagramAcct}
                 </h1>
               ) : (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
                   + add your instagram handle
                 </h1>
               )}
@@ -144,7 +144,7 @@ const SocialsSettings = () => {
           </div>
           <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
             <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[12px] md:text-[18px]">
                 <img
                   src={X}
                   alt=""
@@ -153,11 +153,11 @@ const SocialsSettings = () => {
                 X
               </h3>
               {teacherInfo?.xAcct ? (
-                <h1 className="text-[9px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   {teacherInfo?.xAcct}
                 </h1>
               ) : (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   + add your X handle
                 </h1>
               )}
@@ -173,7 +173,7 @@ const SocialsSettings = () => {
           </div>
           <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
             <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+              <h3 className="font-normal w-[120px] flex items-center gap-2 text-[12px] md:text-[18px]">
                 <img
                   src={Linkden}
                   alt=""
@@ -182,11 +182,11 @@ const SocialsSettings = () => {
                 linkedIn
               </h3>
               {teacherInfo?.linkedinAcct ? (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   {teacherInfo?.linkedinAcct}
                 </h1>
               ) : (
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                <h1 className="text-[11px] md:text-[18px] font-[700] text-blue-500">
                   + add your linkedIn handle
                 </h1>
               )}
@@ -202,8 +202,8 @@ const SocialsSettings = () => {
           </div>
         </div>
         {toggle && (
-          <div className="w-full h-full absolute top-0 backdrop-blur-sm flex justify-center items-center">
-            <div className="p-4 min-h-[300px] min-w-[400px] bg-white border shadow-md rounded-lg flex justify-center items-center flex-col">
+          <div className="absolute w-full h-full flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm">
+            <div className="p-4 min-h-[200px] min-w-[250px] bg-white border shadow-md rounded-lg">
               <div className="mb-4 flex items- center justify-between">
                 <h2 className="text-blue-950 font-semibold">
                   {toggle === "facebook" && "Enter Your Facebook Handle"}

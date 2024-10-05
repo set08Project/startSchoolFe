@@ -26,6 +26,7 @@ const MyProfile = () => {
     teacher?.staffName?.charAt(teacher?.staffName.indexOf(" ") + 1);
 
   const { teacherInfo } = useTeacherInfo();
+  console.log("Reading..", teacherInfo);
   const changeImage = (e: any) => {
     console.log("start...");
     const file = e.target.files[0];
@@ -63,7 +64,7 @@ const MyProfile = () => {
             </div>
           </div>
           <Link to="/settings">
-            <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105">
+            <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105 transition-all duration-300">
               <FaUserEdit /> Edit Profile
             </div>
           </Link>
@@ -105,7 +106,7 @@ const MyProfile = () => {
           </div>
           <div className="">
             <h1 className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
-              Personal Information
+              Personal Information:
             </h1>
             <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
               <p className="mb-1 flex items-center gap-1">
@@ -131,7 +132,7 @@ const MyProfile = () => {
               <p className="mb-1 flex items-center gap-1">
                 <MdEmail /> Email Address:
               </p>
-              <h1 className="text-[18px] font-semibold lowercase">
+              <h1 className="text-[18px] font-semibold lowercase break-words">
                 {teacher?.email}
               </h1>
             </div>
@@ -148,7 +149,7 @@ const MyProfile = () => {
               <p className="mb-1 flex items-center gap-1">
                 <FaAddressBook /> Home Address:
               </p>
-              <h1 className="text-[18px] font-semibold">
+              <h1 className="text-[18px] font-semibold break-words">
                 {teacher?.staffAddress}
               </h1>
             </div>
@@ -212,7 +213,11 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ add your facebook handle</h3>
+              {teacherInfo?.facebookAcct ? (
+                <h3 className="text-blue-950">{teacherInfo?.facebookAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ add your facebook handle</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -222,7 +227,11 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ add your instagram handle</h3>
+              {teacherInfo?.instagramAcct ? (
+                <h3 className="text-blue-950">{teacherInfo?.instagramAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ add your instagram handle</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -232,7 +241,11 @@ const MyProfile = () => {
                   className="w-[20px] h-[17px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ add your X handle</h3>
+              {teacherInfo?.xAcct ? (
+                <h3 className="text-blue-950">{teacherInfo?.xAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ add your X handle</h3>
+              )}
             </div>
             <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
               <div>
@@ -242,7 +255,11 @@ const MyProfile = () => {
                   className="w-[20px] h-[20px] object-contain"
                 />
               </div>
-              <h3 className="text-blue-500">+ add your linkedIn handle</h3>
+              {teacherInfo?.instagramAcct ? (
+                <h3 className="text-blue-950">{teacherInfo?.linkedinAcct}</h3>
+              ) : (
+                <h3 className="text-blue-500">+ add your instagram handle</h3>
+              )}
             </div>
           </div>
         </div>

@@ -115,7 +115,7 @@ const AddStudent = () => {
                 setGender(e.target.value);
               }}
             >
-              <option disabled selected value="Choose a Genders">
+              <option selected value="Choose a Gender">
                 Choose a Gender
               </option>
               <option value="Male">Male</option>
