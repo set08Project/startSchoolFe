@@ -151,8 +151,7 @@ const TimeTableSettingsScreen = () => {
             peroid: parseInt(period),
           })
             .then((res) => {
-              console.log(res);
-              if (res.data.data.status === 201) {
+              if (res.data.status === 201) {
                 toast.success("Updated Successfully...!");
               }
             })
