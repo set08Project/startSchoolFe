@@ -26,11 +26,19 @@ const SettingScreen: FC = () => {
       url: "/my-personal-info/theme-setting",
       size: 35,
     },
+    // {
+    //   icon: <HiMiniBuildingOffice2 size={45} />,
+    //   title: "School's Page Settings",
+    //   detail: "Provide studio details and how we can reach you.",
+    //   url: "/my-personal-info/theme-settings",
+    //   size: 35,
+    // },
     {
       icon: <HiMiniBuildingOffice2 size={45} />,
       title: "School's Page Settings",
-      detail: "Provide studio details and how we can reach you.",
-      url: "/my-personal-info/theme-settings",
+      detail:
+        "This enable school to setup structure with which the time-table can be build up off.",
+      url: "/my-personal-info/timetable-setting",
       size: 35,
     },
   ];

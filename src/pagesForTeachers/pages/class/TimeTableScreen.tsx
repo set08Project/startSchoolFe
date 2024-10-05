@@ -1,6 +1,10 @@
 import { FC } from "react";
 import lodash from "lodash";
-import { useClassTimeTable } from "../../../pages/hook/useSchoolAuth";
+import {
+  useClassTimeTable,
+  useSchool,
+  useSchoolData,
+} from "../../../pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: any;
@@ -31,75 +35,24 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
     "02:30PM - 03:00PM",
   ];
 
-  const dateTime35 = [
-    "07:45AM - 08:00AM",
-    "08:00AM - 08:30AM",
-    "08:50AM - 09:30AM",
-    "09:30AM - 10:10AM",
-    "10:10AM - 10:20AM",
-    "10:40AM - 11:20AM",
-    "11:20AM - 12:00NOON",
-    "12:00NOON - 12:30PM",
-    "12:30PM - 01:10PM",
-    "01:10PM - 01:50PM",
-    "01:50PM - 02:30PM",
-    "02:30PM - 03:00PM",
-  ];
-
-  const timeStructure = (
-    startTime = "08:00",
-    endTime = "15:00",
-    interval = 40
-  ) => {
-    const timeSlots = [];
-    let [startHour, startMinute] = startTime.split(":").map(Number);
-    let [endHour, endMinute] = endTime.split(":").map(Number);
-
-    let currentMinutes = startHour * 60 + startMinute;
-    const endMinutes = endHour * 60 + endMinute;
-
-    while (currentMinutes < endMinutes) {
-      let startHours = Math.floor(currentMinutes / 60);
-      let startMinutes = currentMinutes % 60;
-
-      currentMinutes += interval;
-
-      let endHours = Math.floor(currentMinutes / 60);
-      let endMinutes = currentMinutes % 60;
-      const startPeriod = startHours >= 12 ? "PM" : "AM";
-
-      const endPeriod = endHours >= 12 ? "PM" : "AM";
-      endHours = endHours % 12 || 12;
-
-      const startFormatted = `${startHours
-        .toString()
-        .padStart(2, "0")}:${startMinutes
-        .toString()
-        .padStart(2, "0")}${startPeriod}`;
-      const endFormatted = `${endHours.toString().padStart(2, "0")}:${endMinutes
-        .toString()
-        .padStart(2, "0")}${endPeriod}`;
-
-      timeSlots.push(`${startFormatted} - ${endFormatted}`);
-    }
-
-    return timeSlots;
-  };
+  const { data } = useSchoolData();
 
   return (
     <div className="w-full ">
       <div className=" h-screen">
         <div className=" w-full h-[415px] bg-slate-100  border rounded-md p-2 overflow-x-auto gap-4">
           {/* Header */}
-          <div className={`flex w-[2700px] gap-4 bg-white py-3 px-1`}>
+          <div className={`flex w-[3150px] gap-4 bg-white py-3 px-1`}>
             <div className="w-[300px] h-6 border-r">days</div>
-            <div className="w-[300px] h-6 border-r">07:45AM - 08:00AM</div>
-            {timeStructure()?.map((el) => (
-              <div className="w-[300px] h-6 border-r">{el}</div>
+            {/* <div className="w-[300px] h-6 border-r">07:45AM - 08:00AM</div> */}
+            {data?.timeTableStructure?.map((el: string, i: number) => (
+              <div key={i} className="w-[300px] h-6 border-r">
+                {el}
+              </div>
             ))}
           </div>
 
-          <div className="flex w-[2700px] gap-0  py-3 mt-2 ">
+          <div className="flex w-[3150px] gap-0  py-3 mt-2 ">
             <div className="w-[200px] h-6 border-r">
               {daysData?.map((props: string, i: number) => (
                 <div
@@ -114,7 +67,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
               ))}
             </div>
 
-            <div className="w-[calc(2700px-200px)] gap-1 px-1">
+            <div className="w-[calc(3150px-200px)] gap-1 px-1">
               {dataTime?.map((props: any, i: number) => (
                 <div
                   key={i}
