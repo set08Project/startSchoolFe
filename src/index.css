@@ -38,6 +38,15 @@
   .smallphone {
     width: 300px;
     font-size: 14px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+  }
+}
+@media (max-width: 320px) {
+  .smallphon {
+    display: block;
   }
 }
 

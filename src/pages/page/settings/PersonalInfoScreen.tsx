@@ -20,7 +20,8 @@ const PersonalInfoScreen = () => {
 
   const [spin, setSpin] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [popup, setPopup] = useState<boolean>(false);
+  const [popup, setPopup] = useState<string | null>(null);
+  const [changeText, setchangeText] = useState<boolean>(false);
 
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggle1, setToggle1] = useState<boolean>(false);
@@ -415,8 +416,8 @@ const PersonalInfoScreen = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-between items-center relative">
-        <div className="w-[300px] ">
+      <div className="w-full flex justify-between items-center smallphon relative">
+        <div className="w-[280px] ">
           <h1 className="font-medium text-[16px]">
             Delete All Students In your School
           </h1>
@@ -428,83 +429,89 @@ const PersonalInfoScreen = () => {
         </div>
         <div>
           <div>
-            {spin ? (
-              <div className=" w-full">
-                <button
-                  className="text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                  onClick={() => {
-                    setPopup(true);
-                  }}
-                >
-                  <ClipLoader color="white" size={18} />
-                  Deleting...
-                </button>
-              </div>
-            ) : (
-              <div className=" w-full">
-                <button
-                  className="text-white font-medium bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                  onClick={handleDeleteAllStudents}
-                >
-                  Delete All Students
-                </button>
-              </div>
-            )}
-          </div>
-          {/* Popup Card */}
-          <div className="absolute mb-3 w-full min-h-[300px] backdrop-blur-md top-0 left-0 rounded-lg">
-            <div className="p-4 w-[350px] h-[60%] smallphone flex justify-end items-center flex-col rounded-lg bg-white smallphone">
-              <div className="mb-3 text-center">
-                <h3 className="font-bold text-lg text-center text-blue-950">
-                  All Student Deletion Notice
-                </h3>
-              </div>
-              <div className="mb text-blue-950">
-                <p className="mb-3 text-[14px]">
-                  You are about to permanently delete{" "}
-                  <span className="font-extrabold">All students </span> record
-                  from your database. This action is irreversible and cannot be
-                  undone, and will result in the complete removal of all
-                  associated data, including academic history, contact
-                  information, and every other students detail.{" "}
-                </p>
-                <p className="ml-3 mb-3 font-extrabold">
-                  Be Absolutely Sure of this decision
-                </p>
-                <div className="mb-3 flex items-center justify-center gap-3 font-semibold  text-[15px]">
-                  <p>
-                    If <span className="text-red-500 text-[20px]">YES</span>{" "}
-                    continue,
-                  </p>
-                  <p className="">
-                    If <span className="text-[20px]">NO</span> cancel.
-                  </p>
-                </div>
-                <div className="pt-2 pb-5">
-                  {spin ? (
-                    <div className=" w-full">
-                      <button
-                        className="text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                        onClick={handleDeleteAllStudents}
-                      >
-                        <ClipLoader color="white" size={18} />
-                        Deleting...
-                      </button>
-                    </div>
-                  ) : (
-                    <div className=" w-full">
-                      <button
-                        className="text-white font-medium bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                        onClick={handleDeleteAllStudents}
-                      >
-                        Delete All Students
-                      </button>
-                    </div>
-                  )}
-                </div>
+            <div className=" w-full">
+              <div
+                className="underline font-medium py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
+                onClick={() => {
+                  setPopup("Delete");
+                }}
+              >
+                Proceed
               </div>
             </div>
           </div>
+          {/* Popup Card */}
+          {popup === "Delete" && (
+            <div className="absolute freshh py-[20px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
+              <div className="p-4 w-[400px] min-h-[300px] bg-white rounded-lg smallphone">
+                <div className="mb-3 text-center">
+                  <h3 className="font-bold text-lg text-center text-blue-950">
+                    All Student Deletion Notice
+                  </h3>
+                </div>
+                <div className="mb text-blue-950">
+                  <p className="mb-3 text-[14px]">
+                    You are about to permanently delete{" "}
+                    <span className="font-extrabold">All students </span> record
+                    from your database. This action is irreversible and cannot
+                    be undone, and will result in the complete removal of all
+                    associated data, including academic history, contact
+                    information, and every other students detail.{" "}
+                  </p>
+                  <p className="ml-3 mb-3 font-extrabold">
+                    Be Absolutely Sure of this decision
+                  </p>
+                  <div className="mb-3 flex items-center justify-center gap-3 font-semibold  text-[15px]">
+                    <p>
+                      If <span className="text-red-500 text-[20px]">YES</span>{" "}
+                      continue,
+                    </p>
+                    <p className="">
+                      If <span className="text-[20px]">NO</span> cancel.
+                    </p>
+                  </div>
+                  <div className="pt-2 pb-5 flex justify-between items-center">
+                    {spin ? (
+                      <div className="">
+                        <button
+                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
+                            changeText ? "hidden" : "block"
+                          }`}
+                        >
+                          <ClipLoader color="white" size={18} />
+                          Deleting...
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="">
+                        <button
+                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
+                            changeText ? "hidden" : "block"
+                          }`}
+                          onClick={() => {
+                            handleDeleteAllStudents();
+                            setchangeText(true);
+                          }}
+                        >
+                          Delete All Students
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105 cursor-pointer"
+                      onClick={() => {
+                        setPopup(null);
+                        setchangeText(false);
+                      }}
+                    >
+                      {changeText ? "Close" : "Cancel"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
