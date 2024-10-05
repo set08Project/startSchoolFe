@@ -12,7 +12,7 @@ import {
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
-import ClipLoader from "react-spinners/ClipLoader";
+import { ClipLoader } from "react-spinners";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
@@ -88,27 +88,33 @@ const PersonalInfoScreen = () => {
   };
 
   const handleDeleteAllStudents = () => {
-    try {
-      setSpin(true);
-      setTimeout(() => {
+    setSpin(true);
+    setTimeout(() => {
+      try {
         deleteAllStudent(schoolID).then((res) => {
+          console.log(res);
           if (res.status === 200) {
-            toast.success("All Student Has Been Successfully Deleted");
-            return res.data;
+            if (res?.data?.length < 1) {
+              toast.error("There Are No Students Registered");
+              return res.data;
+            } else {
+              toast.success("All Student Has Been Successfully Deleted");
+              return res.data;
+            }
           }
-          clearTimeout;
         });
-      }, 2000);
-    } catch (error) {
-      toast.error("Error In Deleting All Student");
-      console.log(error);
-    } finally {
-      setSpin(false);
-    }
+      } catch (error) {
+        toast.error("Error In Deleting All Student");
+        console.log(error);
+      } finally {
+        setSpin(false);
+      }
+      clearTimeout;
+    }, 2000);
   };
 
   return (
-    <div className="grid col-span-3 pr-0 h-[100px] text-blue-950">
+    <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
       <Toaster position="top-center" />
       {/* forms */}
       <div>
@@ -443,7 +449,7 @@ const PersonalInfoScreen = () => {
           {/* Popup Card */}
           {popup === "Delete" && (
             <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
-              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-[whitesmoke] rounded-lg smallphone">
+              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-gray-50 rounded-lg smallphone">
                 <div className="mb-3 text-center">
                   <h3 className="font-bold text-lg text-center text-blue-950">
                     All Student Deletion Notice
@@ -478,7 +484,11 @@ const PersonalInfoScreen = () => {
                             changeText ? "hidden" : "block"
                           }`}
                         >
-                          <ClipLoader color="white" size={18} />
+                          <ClipLoader
+                            color={"#fff"}
+                            loading={loading}
+                            size={20}
+                          />
                           Deleting...
                         </button>
                       </div>
