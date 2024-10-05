@@ -479,7 +479,7 @@ const ClassDetailScreen = () => {
                       Subject Teacher <span className="text-red-500">*</span>
                     </label>
                     <select
-                      className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3 bg-white"
+                      className="select border border-slate-200 text-[12px] py-0 px-2 w-[150px] mb-3 bg-white"
                       value={teacher}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setTeacher(e.target.value);
@@ -682,7 +682,7 @@ const ClassDetailScreen = () => {
       </div>
       {/* timetable */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <div className="flex items-center w-full justify-between">
+        <div className="flex items-start w-full justify-between">
           <div>
             <p>Viewing Class TimeTable</p>
             <p className="text-[13px]  flex items-center font-bold">

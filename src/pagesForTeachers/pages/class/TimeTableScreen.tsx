@@ -20,6 +20,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
     "08:00AM - 08:40AM",
     "08:40AM - 09:20AM",
     "09:20AM - 10:00AM",
+
     "10:00AM - 10:40AM",
     "10:40AM - 11:20AM",
     "11:20AM - 11:50AM",
@@ -31,8 +32,8 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
   ];
 
   const dateTime35 = [
-    "07:45AM - 08:10AM",
-    "08:10AM - 08:50AM",
+    "07:45AM - 08:00AM",
+    "08:00AM - 08:30AM",
     "08:50AM - 09:30AM",
     "09:30AM - 10:10AM",
     "10:10AM - 10:20AM",
@@ -45,6 +46,46 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
     "02:30PM - 03:00PM",
   ];
 
+  const timeStructure = (
+    startTime = "08:00",
+    endTime = "15:00",
+    interval = 40
+  ) => {
+    const timeSlots = [];
+    let [startHour, startMinute] = startTime.split(":").map(Number);
+    let [endHour, endMinute] = endTime.split(":").map(Number);
+
+    let currentMinutes = startHour * 60 + startMinute;
+    const endMinutes = endHour * 60 + endMinute;
+
+    while (currentMinutes < endMinutes) {
+      let startHours = Math.floor(currentMinutes / 60);
+      let startMinutes = currentMinutes % 60;
+
+      currentMinutes += interval;
+
+      let endHours = Math.floor(currentMinutes / 60);
+      let endMinutes = currentMinutes % 60;
+      const startPeriod = startHours >= 12 ? "PM" : "AM";
+
+      const endPeriod = endHours >= 12 ? "PM" : "AM";
+      endHours = endHours % 12 || 12;
+
+      const startFormatted = `${startHours
+        .toString()
+        .padStart(2, "0")}:${startMinutes
+        .toString()
+        .padStart(2, "0")}${startPeriod}`;
+      const endFormatted = `${endHours.toString().padStart(2, "0")}:${endMinutes
+        .toString()
+        .padStart(2, "0")}${endPeriod}`;
+
+      timeSlots.push(`${startFormatted} - ${endFormatted}`);
+    }
+
+    return timeSlots;
+  };
+
   return (
     <div className="w-full ">
       <div className=" h-screen">
@@ -52,8 +93,9 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
           {/* Header */}
           <div className={`flex w-[2700px] gap-4 bg-white py-3 px-1`}>
             <div className="w-[300px] h-6 border-r">days</div>
-            {dateTime?.map((el) => (
-              <div className="w-[300px] h-6 border-r">07:45AM - 08:10AM</div>
+            <div className="w-[300px] h-6 border-r">07:45AM - 08:00AM</div>
+            {timeStructure()?.map((el) => (
+              <div className="w-[300px] h-6 border-r">{el}</div>
             ))}
           </div>
 
