@@ -284,7 +284,7 @@ const ClassDetailScreen = () => {
         </div>
       </div>
       <div className="my-6 border-t" />
-      <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4 ">
+      <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4">
         <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
           <div className="flex gap-2 font-normal ml-[12px] md:ml-[0px] mb-[10px] md:mb-[0px]">
             <p className="text-[12px]">
