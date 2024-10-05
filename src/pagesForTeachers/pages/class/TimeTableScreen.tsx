@@ -19,22 +19,6 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
     lodash.groupBy(timetbale?.data?.timeTable, "day")
   );
 
-  const dateTime = [
-    "07:45AM - 08:00AM",
-    "08:00AM - 08:40AM",
-    "08:40AM - 09:20AM",
-    "09:20AM - 10:00AM",
-
-    "10:00AM - 10:40AM",
-    "10:40AM - 11:20AM",
-    "11:20AM - 11:50AM",
-    "11:50AM - 12:30AM",
-    "12:30PM - 01:10PM",
-    "01:10PM - 01:50PM",
-    "01:50PM - 02:30PM",
-    "02:30PM - 03:00PM",
-  ];
-
   const { data } = useSchoolData();
 
   return (
