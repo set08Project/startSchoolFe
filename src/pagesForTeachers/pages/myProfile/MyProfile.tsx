@@ -26,7 +26,6 @@ const MyProfile = () => {
     teacher?.staffName?.charAt(teacher?.staffName.indexOf(" ") + 1);
 
   const { teacherInfo } = useTeacherInfo();
-  console.log("Reading..", teacherInfo);
   const changeImage = (e: any) => {
     console.log("start...");
     const file = e.target.files[0];
