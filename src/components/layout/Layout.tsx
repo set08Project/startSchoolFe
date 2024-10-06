@@ -47,16 +47,13 @@ const Layout: FC = () => {
   //createSchoolClassroom
 
   const handleCreateClassRoom = () => {
-    console.log("reading classroom");
-
     const validateClass = (input: string): string => {
       const classPattern =
         /^(JSS|SSS|KG|Nursery|kindergarten|Basic|Primary)\s[1-6][A-Z]$|^Nur\s[1-6]$|^Pry\s[1-6]$|^KG\s[1-6]$|^SSS\s[1-3](SCIENCE|ART|COMMERCIAL|TECHNICAL)$/;
 
-      console.log(classPattern.test(input));
-
       if (classPattern.test(input)) {
         setApproved(true);
+
         toast.success(
           `${input} has been successfully added to your class list`
         );
@@ -71,7 +68,7 @@ const Layout: FC = () => {
       }
     };
 
-    console.log("hmmmmm1: ", validateClass(classRM.toUpperCase()));
+    console.log(validateClass(classRM.toUpperCase()));
 
     try {
       if (approved) {
