@@ -24,7 +24,6 @@ import {
   createSchoolSubject,
   updateClassName,
   updateClassroomTeacher,
-  verifyPayment1st,
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import ClassModel from "./ClassModel";
