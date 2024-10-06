@@ -8,6 +8,9 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://just-next-be1.onrender.com/api";
 // const URL2: string = "https://just-next-be1.onrender.com";
 
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+// const URL2: string = "https://startschoolbe-1.onrender.com";
+
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
     return await axios
@@ -321,7 +324,6 @@ export const deleteAllStudent = async (schoolID: string) => {
     return await axios
       .delete(`${URL}/delete-all-students/${schoolID}`)
       .then((res: any) => {
-        console.log("ap res", res);
         return res?.data;
       });
   } catch (error) {

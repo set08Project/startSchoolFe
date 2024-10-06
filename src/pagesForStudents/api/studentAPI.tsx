@@ -7,6 +7,8 @@ const URL: string =
 
 // const URL: string = "https://just-next-be1.onrender.com/api";
 
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
     return await axios
@@ -277,6 +279,8 @@ export const getSchoolArticle = async (schoolID: string) => {
   }
 };
 
+//Update Student Profile
+
 export const updateProfile = async (studntID: string, data: {}) => {
   try {
     return await axios
@@ -291,6 +295,138 @@ export const updateProfile = async (studntID: string, data: {}) => {
     return error;
   }
 };
+
+export const updateStudentFirstName = async (
+  schoolID: string,
+  studentID: string,
+  studentFirstName: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-student-firstname/${schoolID}/${studentID}`, {
+        studentFirstName,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentLastName = async (
+  schoolID: string,
+  studentID: string,
+  studentLastName: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-student-lastname/${schoolID}/${studentID}`, {
+        studentLastName,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentAddress = async (
+  schoolID: string,
+  studentID: string,
+  studentAddress: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-student-address/${schoolID}/${studentID}`, {
+        studentAddress,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentParentNumber = async (
+  schoolID: string,
+  studentID: string,
+  parentPhoneNumber: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-parent-number/${schoolID}/${studentID}`, {
+        parentPhoneNumber,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentPhoneNumber = async (
+  schoolID: string,
+  studentID: string,
+  phone: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-student-phone/${schoolID}/${studentID}`, { phone })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentGender = async (
+  schoolID: string,
+  studentID: string,
+  gender: string
+) => {
+  try {
+    return axios
+      .patch(`${URL}/update-student-gender/${schoolID}/${studentID}`, {
+        gender,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateParentEmail = async (
+  schoolID: string,
+  studentID: string,
+  parentEmail: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, {
+        parentEmail,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+//Update Student Profile ends Here
 
 export const makeComplains = async (studentID: string, data: any) => {
   try {
