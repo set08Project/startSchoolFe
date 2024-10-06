@@ -126,7 +126,6 @@ const AttendanceScreen = () => {
   const sortedStudents = allStudents?.sort((a, b) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
-  console.log("reading Class students", sortedStudents);
 
   return (
     <div className="">

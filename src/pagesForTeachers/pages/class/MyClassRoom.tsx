@@ -202,7 +202,7 @@ const MyClassRoomScreen = () => {
       </div>
 
       {/* Top Students */}
-      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
