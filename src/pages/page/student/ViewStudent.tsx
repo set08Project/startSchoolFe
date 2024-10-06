@@ -249,9 +249,9 @@ const ViewStudent = () => {
     setSearchStudents(e.target.value);
   };
 
-  const filteredStudents = sortedStudents.filter((student: any) => {
+  const filteredStudents = sortedStudents?.filter((student: any) => {
     const fullName =
-      `${student.studentFirstName} ${student.studentLastName} ${student.classAssigned}`.toLowerCase();
+      `${student?.studentFirstName} ${student?.studentLastName} ${student?.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
 
