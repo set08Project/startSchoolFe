@@ -3,9 +3,9 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
+const URL: string = "https://just-next-be1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -377,7 +377,7 @@ export const updateStudentPhoneNumber = async (
 ) => {
   try {
     return axios
-      .patch(`${URL}/update-student-phone/${schoolID}, ${studentID}`, { phone })
+      .patch(`${URL}/update-student-phone/${schoolID}/${studentID}`, { phone })
       .then((res) => {
         return res?.data;
       });
@@ -396,6 +396,25 @@ export const updateStudentGender = async (
     return axios
       .patch(`${URL}/update-student-gender/${schoolID}/${studentID}`, {
         gender,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateParentEmail = async (
+  schoolID: string,
+  studentID: string,
+  parentEmail: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-parent-email/${schoolID}/${studentID}`, {
+        parentEmail,
       })
       .then((res) => {
         return res?.data;

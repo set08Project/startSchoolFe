@@ -11,21 +11,94 @@ import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import { CgClose } from "react-icons/cg";
 import { useStudentInfo } from "../hooks/useStudentHook";
+import {
+  updateParentEmail,
+  updateStudentAddress,
+  updateStudentGender,
+  updateStudentParentNumber,
+  updateStudentPhoneNumber,
+} from "../api/studentAPI";
 
 const StudentProfileSettings = () => {
-  {
-    /* const [dropdown, setDropdown] = useState<string | null>(null);
-  const [name, setName] = useState<string>("");
+  const [toggle, setToggle] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [phonenum, setPhonenum] = useState<string>(""); */
-  }
-
-  // Teacher and School
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [parentPhoneNum, setParentPhoneNumb] = useState<string>("");
+  const [parentEmail, setParentEmail] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
-  console.log("This Is StudentInfo", studentInfo);
+  // console.log("Student Info", studentInfo);
+  const schoolID = studentInfo?.schoolIDs;
+  const studentID = studentInfo?._id;
 
+  const handleParentEmail = () => {
+    try {
+      updateParentEmail(schoolID, studentID, parentEmail).then((res) => {
+        toast.success("Parent Email Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Couldn't Update Check Your Internet Connection");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleGender = () => {
+    try {
+      updateStudentGender(schoolID, studentID, gender).then((res) => {
+        toast.success("Gender Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating Gender");
+      console.error();
+      return error();
+    }
+  };
+
+  const handlePhoneNumber = () => {
+    try {
+      updateStudentPhoneNumber(schoolID, studentID, phoneNumber).then((res) => {
+        toast.success("Phone Number Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      error.toast("Error, Check Your Internet Connection");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleParentPhoneNumber = () => {
+    try {
+      updateStudentParentNumber(schoolID, studentID, parentPhoneNum).then(
+        (res) => {
+          toast.success("Parent Number Updated Successfully");
+          return res?.data;
+        }
+      );
+    } catch (error) {
+      toast.error("Error Updating Parent Number");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleStudentAddress = () => {
+    try {
+      updateStudentAddress(schoolID, studentID, address).then((res) => {
+        toast.success("Address Updated Successfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating Address");
+      console.error();
+      return error;
+    }
+  };
   return (
     <div className="relative">
       <Toaster />
@@ -44,9 +117,9 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => {
-            //   setDropdown("Fullname");
-            // }}
+            onClick={() => {
+              setToggle("firstName");
+            }}
           >
             Edit
           </div>
@@ -63,9 +136,9 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => {
-            //   setDropdown("Fullname");
-            // }}
+            onClick={() => {
+              setToggle("lastName");
+            }}
           >
             Edit
           </div>
@@ -83,9 +156,9 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => {
-            //   setDropdown("Fullname");
-            // }}
+            onClick={() => {
+              setToggle("ParentEmail");
+            }}
           >
             Edit
           </div>
@@ -102,7 +175,7 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[100px] text-[13px] sm:text-[18px] md:text-[18px] ">
+            <h3 className="font-bold w-[100px] text-[13px] sm:text-[18px] md:text-[18px]">
               Role:
             </h3>
             <h1 className=" font-medium text-[13px] sm:text-[18px] md:text-[18px] ">
@@ -128,7 +201,7 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => setDropdown("Gender")}
+            onClick={() => setToggle("gender")}
           >
             Edit
           </div>
@@ -157,7 +230,7 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => setDropdown("PhoneNum")}
+            onClick={() => setToggle("phone")}
           >
             Edit
           </div>
@@ -167,10 +240,10 @@ const StudentProfileSettings = () => {
             <h3 className="font-bold w-[70px] text-[11px] md:text-[18px] md:w-[30%]">
               Parent No:
             </h3>
-            {studentInfo?.phone ? (
+            {studentInfo?.parentPhoneNumber ? (
               <div>
                 <h1 className="text-[13px] sm:text-[17px] font-medium">
-                  {studentInfo?.phone}
+                  {studentInfo?.parentPhoneNumber}
                 </h1>
               </div>
             ) : (
@@ -181,7 +254,7 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => setDropdown("PhoneNum")}
+            onClick={() => setToggle("parentNumber")}
           >
             Edit
           </div>
@@ -197,13 +270,184 @@ const StudentProfileSettings = () => {
           </div>
           <div
             className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            // onClick={() => setDropdown("Address")}
+            onClick={() => setToggle("Address")}
           >
             Edit
           </div>
         </div>
       </div>
       {/* Dropdown Modal For Editing */}
+
+      {toggle && (
+        <div className="absolute w-full h-full flex justify-center items-center top-0 backdrop-blur-sm">
+          <div className="p-4 h-[300px] w-[300px] md:h-[300px] md:w-[400px] bg-white border shadow-md rounded-lg flex justify-center items-center flex-col">
+            <div className="mb-4 flex items- center justify-between">
+              <h2 className="text-blue-950 font-semibold">
+                {toggle === "firstName" && "Enter Your First Name"}
+                {toggle === "lastName" && "Enter Your Last Name"}
+                {toggle === "gender" && "Enter Your Gender"}
+                {toggle === "ParentEmail" && "Enter Your Parents Email"}
+                {toggle === "phone" && "Enter Your Phone Number"}
+                {toggle === "parentNumber" && "Enter Your ParentPhone Number"}
+                {toggle === "Address" && "Enter Your Address"}
+              </h2>
+              <CgClose
+                className="text-blue-950 text-[18px] font-bold cursor-pointer hover:scale-110 ml-[80px]"
+                onClick={() => {
+                  setToggle(null);
+                }}
+              />
+            </div>
+            {toggle === "firstName" && (
+              <Input
+                placeholder="Example Tobi"
+                value={firstName}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setFirstName(e.target.value);
+                }}
+              />
+            )}
+            {toggle === "lastName" && (
+              <Input
+                placeholder="Example Ajayi"
+                value={firstName}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setFirstName(e.target.value);
+                }}
+              />
+            )}
+            {toggle === "gender" && (
+              <div>
+                <select
+                  name="gender"
+                  id="gender"
+                  className="mb-3 shadow-sm w-full bg-blue-50 text-blue-950 font-medium outline-none py-2 px-3 rounded-lg border"
+                  value={gender}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setGender(e.target.value);
+                  }}
+                >
+                  <option value="select">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            )}
+            {toggle === "ParentEmail" && (
+              <Input
+                placeholder="@johndoe@gmail.com"
+                value={parentEmail}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setParentEmail(e.target.value);
+                }}
+              />
+            )}
+            {toggle === "Address" && (
+              <Input
+                placeholder="Example 402 creek road, Lekki Lagos"
+                value={address}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setAddress(e.target.value);
+                }}
+              />
+            )}
+
+            {toggle === "parentNumber" && (
+              <Input
+                placeholder="0900007777776"
+                value={parentPhoneNum}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setParentPhoneNumb(e.target.value);
+                }}
+              />
+            )}
+            {toggle === "phone" && (
+              <Input
+                placeholder="0900007777776"
+                value={phoneNumber}
+                className="mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPhoneNumber(e.target.value);
+                }}
+              />
+            )}
+            {/* State Change For button */}
+            {toggle === "firstName" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105 mt-10"
+                onClick={() => {
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "lastName" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "ParentEmail" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  handleParentEmail();
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "gender" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105"
+                onClick={() => {
+                  handleGender();
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "phone" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105 mt-[60px]"
+                onClick={() => {
+                  handlePhoneNumber();
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "parentNumber" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105 mt-[60px]"
+                onClick={() => {
+                  handleParentPhoneNumber();
+                  setToggle(null);
+                }}
+              />
+            )}
+            {toggle === "Address" && (
+              <Button
+                name="Update"
+                className="bg-blue-950 hover:scale-105 mt-[60px]"
+                onClick={() => {
+                  handleStudentAddress();
+                  setToggle(null);
+                }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
