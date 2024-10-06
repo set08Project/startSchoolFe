@@ -84,7 +84,11 @@ const ViewSubjects = () => {
     setSearchSubject(e.target.value);
   };
 
-  const subjectSearch = schoolSubject?.subjects?.filter((subject: any) => {
+  const sortedSubjects = schoolSubject?.subjects?.sort((a, b) =>
+    a.subjectTitle?.localeCompare(b.subjectTitle)
+  );
+
+  const subjectSearch = sortedSubjects?.filter((subject: any) => {
     const subjectName =
       `${subject?.subjectTitle} ${subject?.designated}`.toLowerCase();
     return subjectName.includes(searchSubject.toLowerCase());

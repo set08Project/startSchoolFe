@@ -101,11 +101,11 @@ const ViewStaffScreen = () => {
     setStaffSearch(e.target.value);
   };
 
-  const sortedStudents = schoolTeacher?.staff?.sort((a, b) =>
+  const sortedStaffs = schoolTeacher?.staff?.sort((a, b) =>
     a.staffName?.localeCompare(b.staffName)
   );
 
-  const filteredTeacher = sortedStudents?.filter((staff: any) => {
+  const filteredTeacher = sortedStaffs?.filter((staff: any) => {
     const fullName = `${staff.staffName}`.toLowerCase();
     return fullName.includes(searchStaff.toLowerCase());
   });
