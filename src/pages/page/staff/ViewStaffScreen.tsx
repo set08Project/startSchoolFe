@@ -101,7 +101,11 @@ const ViewStaffScreen = () => {
     setStaffSearch(e.target.value);
   };
 
-  const filteredTeacher = schoolTeacher?.staff.filter((staff: any) => {
+  const sortedStaffs = schoolTeacher?.staff?.sort((a, b) =>
+    a.staffName?.localeCompare(b.staffName)
+  );
+
+  const filteredTeacher = sortedStaffs?.filter((staff: any) => {
     const fullName = `${staff.staffName}`.toLowerCase();
     return fullName.includes(searchStaff.toLowerCase());
   });
@@ -137,11 +141,13 @@ const ViewStaffScreen = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="text-[gray] w-[2060px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+          <div className="w-[50px] border-r">S/N</div>
+          <div className="w-[90px] border-r">Staff Image</div>
+          <div className="w-[200px] border-r">Staff Name</div>
           <div className="w-[130px] border-r">Reg. Date</div>
           <div className="w-[80px] border-r">Status</div>
+          <div className="w-[100px] border-r">Gender</div>
           <div className="w-[100px] border-r">Attendance Ratio</div>
-          <div className="w-[150px] border-r">Staff Image</div>
-          <div className="w-[200px] border-r">Staff Name</div>
 
           <div className="w-[100px] border-r">Staff Role</div>
 
@@ -149,7 +155,6 @@ const ViewStaffScreen = () => {
           <div className="w-[200px] border-r">Contact </div>
           <div className="w-[200px] border-r">Subjects Taking</div>
           <div className="w-[200px] border-r">Class Handle</div>
-          <div className="w-[200px] border-r">Class Teaches</div>
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">Action</div>
           <div className="w-[180px] border-r">Staff Action</div>
@@ -166,21 +171,9 @@ const ViewStaffScreen = () => {
                 >
                   {/* start */}
 
-                  <div className="w-[130px] border-r">
-                    {moment(props?.createdAt)?.format("ll")}
-                  </div>
-
-                  <div
-                    className={`w-[80px] border-r ${
-                      props?.activeStatus ? "text-green-600" : "text-red-600"
-                    }`}
-                  >
-                    {props?.activeStatus ? "Active" : "Idle"}
-                  </div>
-
-                  <div className="w-[100px] border-r">2:10</div>
-                  {/* name */}
-                  <div className="w-[150px] flex justify-center border-r">
+                  <div className="w-[50px] border-r">{i + 1}</div>
+                  {/* Image and Name */}
+                  <div className="w-[90px] flex justify-start border-r">
                     <img
                       className="w-14 h-14 rounded-md border object-cover"
                       src={props?.avatar ? props?.avatar : pix}
@@ -193,6 +186,26 @@ const ViewStaffScreen = () => {
                       ID: {props?.enrollmentID}
                     </div>
                   </div>
+                  <div className="w-[130px] border-r">
+                    {moment(props?.createdAt)?.format("ll")}
+                  </div>
+
+                  <div
+                    className={`w-[80px] border-r ${
+                      props?.activeStatus ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {props?.activeStatus ? "Active" : "Idle"}
+                  </div>
+
+                  <div className="w-[100px] border-r">
+                    {props?.gender ? (
+                      <div>{props?.gender}</div>
+                    ) : (
+                      <div>gender not added</div>
+                    )}
+                  </div>
+                  <div className="w-[100px] border-r">2:10</div>
 
                   {/* check */}
                   <div className="w-[100px] border-r  ">{props?.staffRole}</div>
@@ -241,13 +254,6 @@ const ViewStaffScreen = () => {
                     ) : (
                       "Not Yet Assigned"
                     )}
-                  </div>
-                  <div className="w-[200px] border-r  ">
-                    {props?.classAssigned
-                      ? props?.classAssigned?.map((el: any) => (
-                          <div>{el.className}</div>
-                        ))
-                      : "Not Yet Assigned"}
                   </div>
 
                   <div className="w-[80px] border-r">

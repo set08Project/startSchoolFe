@@ -74,25 +74,25 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const ReadingClassStudents: FC<iProps> = ({ props }) => {
   const { classStudents } = useClassStudent(props);
-
-  console.log(props);
+  const allStudents = classStudents?.students;
+  const sortedStudents = allStudents?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
 
   return (
     <div>
       <div className="mt-4">
         <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-          <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
-            <div className="w-[130px] border-r">Reg. Date</div>
-            <div className="w-[100px] border-r">Today's Attendance</div>
-            <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-            <div className="w-[220px] border-r">Session Fee</div>
-
-            <div className="w-[150px] border-r">student Image</div>
+          <div className="text-[gray] w-[1500px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
+            <div className="w-[50px] border-r">S/N</div>
+            <div className="w-[80px] border-r">student Image</div>
             <div className="w-[200px] border-r">student Name</div>
+            <div className="w-[120px] border-r">Today's Attendance</div>
+            <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
-            <div className="w-[100px] border-r">student Class</div>
+            <div className="w-[100px] border-r">Student Class</div>
 
-            <div className="w-[150px] border-r">Parent Contact</div>
+            <div className="w-[150px] border-r">Gender</div>
             <div className="w-[200px] border-r">Address </div>
 
             <div className="w-[200px] border-r">Performance Ratio</div>
@@ -102,9 +102,9 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
           </div>
 
           <div>
-            {classStudents?.students.length > 0 ? (
+            {sortedStudents.length > 0 ? (
               <div className=" w-[1920px] overflow-hidden">
-                {classStudents?.students?.map((props: any, i: number) => (
+                {sortedStudents?.map((props: any, i: number) => (
                   <div>
                     <div>
                       <div
@@ -113,56 +113,9 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
-                        <div className="w-[130px] border-r">
-                          {moment(props.createdAt).format("ll")}
-                        </div>
-
-                        <Remark data={props} id={classStudents?._id} />
-
-                        <div className="w-[100px] border-r">
-                          <AttendanceRatio props={props?._id} />
-                        </div>
-                        <div className="w-[220px] border-r flex gap-4">
-                          <div className="flex flex-col items-center">
-                            <label>1st Term</label>
-                            <input
-                              type="checkbox"
-                              className={`toggle toggle-sm mt-2 ${
-                                props?.feesPaid1st
-                                  ? "bg-blue-950 border-blue-950"
-                                  : "bg-neutral-500 border-neutral-500"
-                              } `}
-                              checked={props?.feesPaid1st}
-                            />
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <label>2nd Term</label>
-                            <input
-                              type="checkbox"
-                              className={`toggle toggle-sm mt-2 ${
-                                props?.feesPaid2nd
-                                  ? "bg-blue-950 border-blue-950"
-                                  : "bg-neutral-500 border-neutral-500"
-                              } `}
-                              checked={props?.feesPaid2nd}
-                            />
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <label>3rd Term</label>
-                            <input
-                              type="checkbox"
-                              className={`toggle toggle-sm mt-2 ${
-                                props?.feesPaid3rd
-                                  ? "bg-blue-950 border-blue-950"
-                                  : "bg-neutral-500 border-neutral-500"
-                              } `}
-                              checked={props?.feesPaid3rd}
-                            />
-                          </div>
-                        </div>
-
-                        {/* name */}
-                        <div className="w-[150px] flex justify-center border-r">
+                        <div className="w-[50px] border-r">{i + 1}</div>
+                        {/* Image and Name */}
+                        <div className="w-[80px] flex justify-center border-r">
                           <img
                             className="w-14 h-14 rounded-md border object-cover"
                             src={pix}
@@ -172,6 +125,14 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           {props?.studentFirstName} {props?.studentLastName}
                         </div>
 
+                        <div className="w-[120px]">
+                          <Remark data={props} id={classStudents?._id} />
+                        </div>
+
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props?._id} />
+                        </div>
+
                         <div className="w-[100px] border-r  ">
                           {classStudents?.className}
                         </div>
@@ -179,9 +140,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           {props?.phone ? props.phone : "no phone yet"}
                         </div>
                         <div className="w-[200px] border-r  ">
-                          {props?.studentAddress
-                            ? props.studentAddress
-                            : "no Address yet"}
+                          {props?.gender ? props.gender : "no gender added"}
                         </div>
                         <div className="w-[200px] border-r  ">
                           {props?.totalPerformance

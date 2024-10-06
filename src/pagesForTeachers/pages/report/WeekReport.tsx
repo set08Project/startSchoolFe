@@ -160,6 +160,11 @@ const WeekReport = () => {
   const { oneClass } = useReadOneClassInfo(state);
   const { classStudents } = useClassStudent(oneClass?._id!);
 
+  const allStudents = classStudents?.students;
+  const sortedStudents = allStudents?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -205,9 +210,9 @@ const WeekReport = () => {
         </div>
 
         <div className=" w-[1110px] overflow-hidden">
-          {classStudents?.students?.length > 0 ? (
+          {sortedStudents?.length > 0 ? (
             <div>
-              {classStudents?.students?.map((props: any, i: number) => (
+              {sortedStudents?.map((props: any, i: number) => (
                 <div key={props}>
                   <MainStudentRow props={props} i={i} />
                 </div>

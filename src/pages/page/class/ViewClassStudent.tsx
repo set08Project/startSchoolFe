@@ -121,6 +121,10 @@ const ViewClassStudent: FC = () => {
   const user = useSelector((el: any) => el.user);
   const { classStudents } = useClassStudent(classID!);
   const { data } = useSchoolData();
+  const allStudents = classStudents?.students;
+  const sortedStudents = allStudents?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
 
   return (
     <div>
@@ -147,9 +151,9 @@ const ViewClassStudent: FC = () => {
           </div>
 
           <div>
-            {classStudents?.students.length > 0 ? (
+            {sortedStudents?.length > 0 ? (
               <div className=" w-[1920px] overflow-hidden">
-                {classStudents?.students?.map((props: any, i: number) => (
+                {sortedStudents?.map((props: any, i: number) => (
                   <div>
                     <div>
                       <div
