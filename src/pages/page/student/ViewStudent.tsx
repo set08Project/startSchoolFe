@@ -241,12 +241,15 @@ const ViewStudent = () => {
     }
   };
 
+  const sortedStudents = students?.data?.students?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
 
-  const filteredStudents = students?.data?.students?.filter((student: any) => {
+  const filteredStudents = sortedStudents.filter((student: any) => {
     const fullName =
       `${student.studentFirstName} ${student.studentLastName} ${student.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
