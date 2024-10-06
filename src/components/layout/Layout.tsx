@@ -32,6 +32,7 @@ const Layout: FC = () => {
   const [num3, setNumb3] = useState<number>(0);
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [approved, setApproved] = useState<boolean>(false);
 
   const handleDisplaySubjectOff = () => {
     if (!document.startViewTransition) {
@@ -46,23 +47,44 @@ const Layout: FC = () => {
   //createSchoolClassroom
 
   const handleCreateClassRoom = () => {
+    const validateClass = (input: string): string => {
+      const classPattern =
+        /^(JSS|SSS|KG|Nursery|kindergarten|Basic|Primary)\s[1-6][A-Z]$|^Nur\s[1-6]$|^Pry\s[1-6]$|^KG\s[1-6]$|^SSS\s[1-3](Science|Art|Commercial|Technical)$/;
+
+      if (classPattern.test(input)) {
+        setApproved(true);
+        toast.success(
+          `${input} has been successfully added to your class list`
+        );
+        return input;
+      } else {
+        setApproved(false);
+        toast.error(
+          "Invalid class format. Example: 'JSS 2A' or 'SSS 1E' or 'JSS 2'!"
+        );
+        return "Invalid class format. Example: 'JSS 2A','SSS 1E' or 'JSS 2'";
+      }
+    };
+
     try {
-      setLoading(true);
-      createSchoolClassroom(data?._id, {
-        className: classRM.toLocaleUpperCase(),
-        class1stFee: num1,
-        class2ndFee: num2,
-        class3rdFee: num3,
-      }).then((res: any) => {
-        if (res.status === 201) {
-          mutate(`api/view-classrooms/`);
-          setLoading(false);
-          handleDisplaySubjectOff();
-        } else {
-          setLoading(false);
-          toast.error(`${res.response.data.message}`);
-        }
-      });
+      if (approved) {
+        setLoading(true);
+        createSchoolClassroom(data?._id, {
+          className: validateClass(classRM).toLocaleUpperCase(),
+          class1stFee: num1,
+          class2ndFee: num2,
+          class3rdFee: num3,
+        }).then((res: any) => {
+          if (res.status === 201) {
+            mutate(`api/view-classrooms/`);
+            setLoading(false);
+            handleDisplaySubjectOff();
+          } else {
+            setLoading(false);
+            toast.error(`${res.response.data.message}`);
+          }
+        });
+      }
     } catch (error) {
       return error;
     }
