@@ -1,16 +1,29 @@
 import { MdOutlineSecurity } from "react-icons/md";
 import PasswordInput from "../../../components/reUse/PasswordIput";
+import { useTeacherInfo } from "../../hooks/useTeacher";
 
 const PasswordSecurity = () => {
+  const { teacherInfo } = useTeacherInfo();
   return (
     <div className="overflow-hidden">
       {/* Terms and Guidelines */}
       <div className="mt-5 p-4 xl:w-[900px] bg-gray-200 transition-all duration-300 rounded-md shadow-sm">
-        <h4 className="font-semibold mb-3 text-[17px] flex items-center gap-2">
+        <h4 className="font-semibold mb-5 text-[18px] sm:text-[20px] flex items-center gap-2">
           <MdOutlineSecurity />{" "}
           <span className="text-blue-950 font-extrabold">NEXT</span> Security
           Guidelines
         </h4>
+        <div className="mb-5 bg-gray-200 transition-all duration-300 font-medium ">
+          At<span className="font-semibold"> NEXT</span>, We highly recommend
+          logging in using your School Employment ID. This method is not only
+          more convenient but also more secure, as it eliminates the need to
+          frequently update your password, which is typically required when
+          using email and password logins. By opting for your Employment ID,
+          you’ll streamline your login process while maintaining the highest
+          level of security, ensuring a smoother experience for you as a valued
+          member of our team.
+        </div>
+
         <ul className="ml-5 list-disc text-gray-700 text-sm">
           <li className="mb-2">
             Passwords must be changed regularly to enhance your account
@@ -30,7 +43,14 @@ const PasswordSecurity = () => {
           </li>
         </ul>
       </div>
+
       <div className="border my-10" />
+      <div className="my-5 text-[17px] font-medium">
+        Your Current Employment ID ={" "}
+        <span className="text-[20px] font-bold">
+          {teacherInfo?.enrollmentID}
+        </span>
+      </div>
       <div className="lg:flex lg:gap-4 items-start">
         {/* Step 1: Confirm Older Password */}
         <div className="mb-4 lg:mb-0">

@@ -7,6 +7,8 @@ const URL: string =
 
 // const URL: string = "https://just-next-be1.onrender.com/api";
 
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
     return await axios

@@ -18,6 +18,7 @@ import { updateStudentAvatar } from "../../../pagesForStudents/api/studentAPI";
 import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import { updateTeacherAvatar } from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
+import { FaMarker } from "react-icons/fa6";
 
 interface iData {
   title?: string;
@@ -111,10 +112,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
       {but && (
         <div className="w-full flex justify-center mt-3">
-          <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
+          <NavLink to="/attendance" onClick={handleToggleMenuFalse}>
             <Button
               name="Mark Attendance"
-              className="text-[12px] uppercase font-bold bg-blue-950 text-white rounded-[3px]"
+              className="text-[12px] uppercase font-bold bg-blue-950 text-white rounded-lg"
+              icon={<FaMarker className="text-[11px]" />}
             />
           </NavLink>
         </div>
