@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { LiaGreaterThanSolid } from "react-icons/lia";
+import { MdDoubleArrow } from "react-icons/md";
+
 import { Link, useNavigate } from "react-router-dom";
 
 interface iProps {
@@ -14,14 +15,14 @@ const LittleHeader: FC<iProps> = ({ name, back }) => {
       {" "}
       <div className="flex items-center text-blue-950 ">
         <Link to="/dashboard" className="flex items-center">
-          Account <LiaGreaterThanSolid size={13} className="mx-4 " />{" "}
+          Account <MdDoubleArrow size={13} className="mx-4 " />{" "}
         </Link>
         <div className="capitalize lg:text-[17px] text-[12px] font-[500]">
           {name}
         </div>
         {back && (
           <div className="flex items-center">
-            <LiaGreaterThanSolid size={13} className="mx-4 " />
+            <MdDoubleArrow size={13} className="mx-4 " />
             <div
               className="underline font-bold cursor-pointer"
               onClick={() => {
