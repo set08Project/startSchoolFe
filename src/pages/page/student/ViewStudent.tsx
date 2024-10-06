@@ -314,19 +314,21 @@ const ViewStudent = () => {
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
-          <div className="w-[130px] border-r">Reg. Date</div>
-          <div className="w-[100px] border-r">Today's Attendance</div>
-          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-          <div className="w-[220px] border-r">Session Fee</div>
-
+          <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
+          <div className="w-[130px] border-r">Reg. Date</div>
+
+          <div className="w-[240px] border-r">Session Fee</div>
+          <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
 
           <div className="w-[150px] border-r">Parent Contact</div>
           <div className="w-[200px] border-r">Address </div>
 
+          <div className="w-[100px] border-r">Today's Attendance</div>
+          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[200px] border-r">Performance Rating</div>
 
           <div className="w-[80px] border-r">Rate</div>
@@ -347,14 +349,25 @@ const ViewStudent = () => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
+                        <div className="w-[50px] border-r">{i + 1}</div>
+                        {/* Image and Name */}
+                        <div className="w-[150px] flex justify-center border-r">
+                          <img
+                            className="w-14 h-14 rounded-md border object-cover"
+                            src={props?.avtar ? props?.avatar : pix}
+                          />
+                        </div>
+                        <div className="w-[200px] border-r gap-2 font-bold">
+                          {props?.studentFirstName} {props?.studentLastName}
+                          <div className="text-slate-500 font-medium">
+                            RegID: {props?.enrollmentID}
+                          </div>
+                        </div>
                         <div className="w-[130px] border-r">
                           {moment(props?.createdAt).format("ll")}
                         </div>
-                        <Remark data={props} id={props?._id} />
-                        <div className="w-[100px] border-r">
-                          <AttendanceRatio props={props} />
-                        </div>
-                        <div className="w-[220px] border-r flex gap-4">
+
+                        <div className="w-[240px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
 
@@ -629,19 +642,10 @@ const ViewStudent = () => {
                             </label>
                           </div>
                         </div>
-                        {/* name */}
-                        <div className="w-[150px] flex justify-center border-r">
-                          <img
-                            className="w-14 h-14 rounded-md border object-cover"
-                            src={props?.avtar ? props?.avatar : pix}
-                          />
+                        <div className="w-[100px] border-r">
+                          {props?.gender}
                         </div>
-                        <div className="w-[200px] border-r gap-2 font-bold">
-                          {props?.studentFirstName} {props?.studentLastName}
-                          <div className="text-slate-500 font-medium">
-                            RegID: {props?.enrollmentID}
-                          </div>
-                        </div>
+
                         <div className="w-[100px] border-r  ">
                           {props?.classAssigned}
                         </div>
@@ -652,6 +656,10 @@ const ViewStudent = () => {
                           {props?.studentAddress
                             ? props?.studentAddress
                             : "Not yet Added"}
+                        </div>
+                        <Remark data={props} id={props?._id} />
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props} />
                         </div>
                         <div className="w-[200px] border-r  ">
                           {props?.totalPerformance
