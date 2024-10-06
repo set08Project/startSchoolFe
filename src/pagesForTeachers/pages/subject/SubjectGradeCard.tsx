@@ -236,6 +236,10 @@ const SubjectGradeCard = () => {
 
   const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
+  const allStudents = classStudents?.students;
+  const sortedStudents = allStudents?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
 
   useEffect(() => {
     mutate(`api/view-classrooms/`);
@@ -281,9 +285,9 @@ const SubjectGradeCard = () => {
         </div>
 
         <div className=" w-[1300px] overflow-hidden">
-          {classStudents?.students?.length > 0 ? (
+          {sortedStudents?.length > 0 ? (
             <div>
-              {classStudents?.students?.map((props: any, i: number) => (
+              {sortedStudents?.map((props: any, i: number) => (
                 <div key={props}>
                   <MainStudentRow props={props} i={i} />
                 </div>

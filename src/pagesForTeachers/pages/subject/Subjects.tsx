@@ -34,7 +34,6 @@ const SubjectRecord: FC<iProp> = ({ props, quiz, test, ass }) => {
 const TeacherSubject: FC = () => {
   const { teacherInfo } = useTeacherInfo();
 
-  console.log(teacherInfo?.subjectAssigned);
   return (
     <div className="">
       <LittleHeader name="Class Teacher Subject" />
