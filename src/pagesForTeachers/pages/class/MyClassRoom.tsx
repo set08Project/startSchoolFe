@@ -73,7 +73,7 @@ const StaffDetail: FC<iProps> = ({ props }) => {
   return (
     <div className="flex gap-2 mt-1 items-start  ">
       <img
-        className="w-10 h-10 object-cover rounded-full"
+        className="w-12 h-12 object-cover rounded-full"
         src={teacherInfo?.avatar ? teacherInfo?.avatar : pix}
       />
       <p>
@@ -156,28 +156,6 @@ const MyClassRoomScreen = () => {
       </div>
       <div className="my-6 border-t" />
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4 ">
-        <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 flex justify-between items-center ">
-          <div className="flex gap-2 font-normal">
-            <p className="text-[12px]">
-              <p className="font-normal">First Term</p>
-              <p className="font-bold">
-                ₦{oneClass?.class1stFee.toLocaleString()}
-              </p>
-            </p>
-            <p className="text-[12px]">
-              <p className="font-normal">Second Term</p>
-              <p className="font-bold">
-                ₦{oneClass?.class2ndFee.toLocaleString()}
-              </p>
-            </p>
-            <p className="text-[12px]">
-              <p className="font-normal">Third Term</p>
-              <p className="font-bold">
-                ₦{oneClass?.class3rdFee.toLocaleString()}
-              </p>
-            </p>
-          </div>
-        </div>
         <p>Manage Class Teacher: </p>
         <p className="text-[13px] flex items-center font-bold">
           Class teacher is responsible for day to day activities of the class{" "}
@@ -202,7 +180,7 @@ const MyClassRoomScreen = () => {
       </div>
 
       {/* Top Students */}
-      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}

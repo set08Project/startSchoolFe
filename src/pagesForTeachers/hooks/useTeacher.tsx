@@ -1,4 +1,4 @@
-import useSWR, { Cache } from "swr";
+import useSWR, { Cache, mutate } from "swr";
 import {
   classAssignment,
   classAttendance,
@@ -214,13 +214,14 @@ export const useSubjectAssignment = (subjectID: string) => {
 
 export const useLessonNote = (lessonID: string) => {
   const { data: lessonNoteData } = useSWR(
-    `api/view-subject-assignment/${lessonID}`,
+    `api/view-lesson-note-detail/${lessonID}`,
     () => {
       return lessonNote(lessonID!).then((res) => {
         return res.data;
       });
     }
   );
+  mutate(`api/view-lesson-note-detail/${lessonID}`);
   return { lessonNoteData };
 };
 

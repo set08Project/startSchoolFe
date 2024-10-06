@@ -168,11 +168,13 @@ const ClassModel = () => {
                       >
                         Choose Period
                       </option>
-                      {periodicData.map((props: any, i: number) => (
-                        <option key={i} value={props}>
-                          {props}
-                        </option>
-                      ))}
+                      {data?.timeTableStructure?.map(
+                        (props: any, i: number) => (
+                          <option key={i} value={props}>
+                            {props}
+                          </option>
+                        )
+                      )}
                     </select>
                   </div>
 

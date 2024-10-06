@@ -3,19 +3,25 @@ import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
 import BeatLoader from "react-spinners/ClipLoader";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchoolCookie, useSchoolData } from "../../hook/useSchoolAuth";
 import {
   changeSchoolName,
   changeSchoolPersonalName,
   changeSchoolPhone,
+  deleteAllStudent,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
+  const schoolID = useSchoolCookie().dataID;
 
+  const [spin, setSpin] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [popup, setPopup] = useState<string | null>(null);
+  const [changeText, setchangeText] = useState<boolean>(false);
 
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggle1, setToggle1] = useState<boolean>(false);
@@ -81,8 +87,34 @@ const PersonalInfoScreen = () => {
     }
   };
 
+  const handleDeleteAllStudents = () => {
+    setSpin(true);
+    setTimeout(() => {
+      try {
+        deleteAllStudent(schoolID).then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            if (res?.data?.length < 1) {
+              toast.error("There Are No Students Registered");
+              return res.data;
+            } else {
+              toast.success("All Student Has Been Successfully Deleted");
+              return res.data;
+            }
+          }
+        });
+      } catch (error) {
+        toast.error("Error In Deleting All Student");
+        console.log(error);
+      } finally {
+        setSpin(false);
+      }
+      clearTimeout;
+    }, 2000);
+  };
+
   return (
-    <div className=" grid col-span-3 pr-0 h-[100px] text-blue-950 ">
+    <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
       <Toaster position="top-center" />
       {/* forms */}
       <div>
@@ -388,6 +420,108 @@ const PersonalInfoScreen = () => {
           >
             Change
           </div>
+        </div>
+      </div>
+      <div className="w-full flex justify-between items-center smallphon relative">
+        <div className="w-[280px] ">
+          <h1 className="font-medium text-[16px]">
+            Delete All Students In your School
+          </h1>
+          <h3 className="text-[12px] font-extrabold">
+            This is an irreversible action, All students and associated data's
+            about each student will be wiped off. Be absolutely sure about
+            taking this action.
+          </h3>
+        </div>
+        <div>
+          <div>
+            <div className=" w-full">
+              <div
+                className="underline font-medium py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
+                onClick={() => {
+                  setPopup("Delete");
+                }}
+              >
+                Proceed
+              </div>
+            </div>
+          </div>
+          {/* Popup Card */}
+          {popup === "Delete" && (
+            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
+              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-gray-50 rounded-lg smallphone">
+                <div className="mb-3 text-center">
+                  <h3 className="font-bold text-lg text-center text-blue-950">
+                    All Student Deletion Notice
+                  </h3>
+                </div>
+                <div className="mb text-blue-950">
+                  <p className="mb-3 text-[14px]">
+                    You are about to permanently delete{" "}
+                    <span className="font-extrabold">All students </span> record
+                    from your database. This action is irreversible and cannot
+                    be undone, and will result in the complete removal of all
+                    associated data, including academic history, contact
+                    information, and every other students detail.{" "}
+                  </p>
+                  <p className="ml-3 mb-3 font-extrabold">
+                    Be Absolutely Sure of this decision
+                  </p>
+                  <div className="mb-3 flex items-center justify-center gap-3 font-semibold  text-[15px]">
+                    <p>
+                      If <span className="text-red-500 text-[20px]">YES</span>{" "}
+                      continue,
+                    </p>
+                    <p className="">
+                      If <span className="text-[20px]">NO</span> cancel.
+                    </p>
+                  </div>
+                  <div className="pt-2 flex justify-between items-center sm:justify-center sm:gap-5">
+                    {spin ? (
+                      <div className="">
+                        <button
+                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
+                            changeText ? "hidden" : "block"
+                          }`}
+                        >
+                          <ClipLoader
+                            color={"#fff"}
+                            loading={loading}
+                            size={20}
+                          />
+                          Deleting...
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="">
+                        <button
+                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
+                            changeText ? "hidden" : "block"
+                          }`}
+                          onClick={() => {
+                            handleDeleteAllStudents();
+                            setchangeText(true);
+                          }}
+                        >
+                          Delete All Students
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105 cursor-pointer"
+                      onClick={() => {
+                        setPopup(null);
+                        setchangeText(false);
+                      }}
+                    >
+                      {changeText ? "Close" : "Cancel"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

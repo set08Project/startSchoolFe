@@ -1,6 +1,5 @@
 document.title = "View Students";
-// import moment from "moment"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
@@ -18,23 +17,18 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
+  deleteAllStudent,
   deleteStudent,
-  readSchool,
-  updateSchoolFee,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
 } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
-import {
-  useStudentCookie,
-  useStudentInfo,
-} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useClassStudent } from "../../../pagesForTeachers/hooks/useTeacher";
 import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
@@ -204,7 +198,7 @@ const ViewStudent = () => {
 
   const [file, setFile] = useState();
   const [toggle, setToggle] = useState<boolean>(false);
-  
+
   const handleBulkStudent = () => {
     setToggle(true);
     const formData = new FormData();
@@ -219,6 +213,10 @@ const ViewStudent = () => {
         setToggle(false);
       });
   };
+
+  const [valueStored, setValueStored] = useState<Array<string>>([]);
+
+  useEffect(() => {}, [valueStored]);
 
   // Delete Student Function
 
@@ -243,22 +241,20 @@ const ViewStudent = () => {
     }
   };
 
+  const sortedStudents = students?.data?.students?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
 
-  // const user = useSelector((el: any) => el.user);
-
-  const filteredStudents = students?.data?.students?.filter((student: any) => {
+  const filteredStudents = sortedStudents?.filter((student: any) => {
     const fullName =
-      `${student.studentFirstName} ${student.studentLastName} ${student.classAssigned}`.toLowerCase();
+      `${student?.studentFirstName} ${student?.studentLastName} ${student?.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
 
-  const [valueStored, setValueStored] = useState<Array<string>>([]);
-
-  useEffect(() => {}, [valueStored]);
   return (
     <div className="">
       {/* header */}
@@ -311,7 +307,6 @@ const ViewStudent = () => {
               htmlFor="file"
               className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px]"
             >
-              {" "}
               upload file for Bulk Entry
             </label>
           )}
@@ -319,19 +314,21 @@ const ViewStudent = () => {
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
         <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
-          <div className="w-[130px] border-r">Reg. Date</div>
-          <div className="w-[100px] border-r">Today's Attendance</div>
-          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-          <div className="w-[220px] border-r">Session Fee</div>
-
+          <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
+          <div className="w-[130px] border-r">Reg. Date</div>
+
+          <div className="w-[240px] border-r">Session Fee</div>
+          <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
 
           <div className="w-[150px] border-r">Parent Contact</div>
           <div className="w-[200px] border-r">Address </div>
 
+          <div className="w-[100px] border-r">Today's Attendance</div>
+          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[200px] border-r">Performance Rating</div>
 
           <div className="w-[80px] border-r">Rate</div>
@@ -352,14 +349,25 @@ const ViewStudent = () => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
+                        <div className="w-[50px] border-r">{i + 1}</div>
+                        {/* Image and Name */}
+                        <div className="w-[150px] flex justify-center border-r">
+                          <img
+                            className="w-14 h-14 rounded-md border object-cover"
+                            src={props?.avtar ? props?.avatar : pix}
+                          />
+                        </div>
+                        <div className="w-[200px] border-r gap-2 font-bold">
+                          {props?.studentFirstName} {props?.studentLastName}
+                          <div className="text-slate-500 font-medium">
+                            RegID: {props?.enrollmentID}
+                          </div>
+                        </div>
                         <div className="w-[130px] border-r">
                           {moment(props?.createdAt).format("ll")}
                         </div>
-                        <Remark data={props} id={props?._id} />
-                        <div className="w-[100px] border-r">
-                          <AttendanceRatio props={props} />
-                        </div>
-                        <div className="w-[220px] border-r flex gap-4">
+
+                        <div className="w-[240px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
 
@@ -634,19 +642,10 @@ const ViewStudent = () => {
                             </label>
                           </div>
                         </div>
-                        {/* name */}
-                        <div className="w-[150px] flex justify-center border-r">
-                          <img
-                            className="w-14 h-14 rounded-md border object-cover"
-                            src={props?.avtar ? props?.avatar : pix}
-                          />
+                        <div className="w-[100px] border-r">
+                          {props?.gender}
                         </div>
-                        <div className="w-[200px] border-r gap-2 font-bold">
-                          {props?.studentFirstName} {props?.studentLastName}
-                          <div className="text-slate-500 font-medium">
-                            RegID: {props?.enrollmentID}
-                          </div>
-                        </div>
+
                         <div className="w-[100px] border-r  ">
                           {props?.classAssigned}
                         </div>
@@ -657,6 +656,10 @@ const ViewStudent = () => {
                           {props?.studentAddress
                             ? props?.studentAddress
                             : "Not yet Added"}
+                        </div>
+                        <Remark data={props} id={props?._id} />
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props} />
                         </div>
                         <div className="w-[200px] border-r  ">
                           {props?.totalPerformance
@@ -741,7 +744,11 @@ const ViewStudent = () => {
                                       name="Delete Student"
                                       className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
                                       onClick={() => {
-                                        handeDeleteStudent(valueStored[1]);
+                                        if (valueStored?.length <= 2) {
+                                          handeDeleteStudent(valueStored[0]);
+                                        } else {
+                                          handeDeleteStudent(valueStored[1]);
+                                        }
                                       }}
                                     />
                                   )

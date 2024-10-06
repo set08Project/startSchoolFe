@@ -16,7 +16,6 @@ import { changeStudentClass } from "../../api/schoolAPIs";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
-  console.log(studentID);
 
   const { mainStudentAttendance } = useStudentAttendance(studentID!);
 

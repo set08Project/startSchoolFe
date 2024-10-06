@@ -47,6 +47,10 @@ const Expenditure = React.lazy(
 const AllArticle = React.lazy(
   () => import("../pages/home/screens/AllArticles")
 );
+
+const TimeTableSettingsScreen = React.lazy(
+  () => import("../pages/page/settings/TimeTableSettings")
+);
 const ClassReportCardReady = React.lazy(
   () => import("../pages/page/ResultHistory/ClassReportReady")
 );
@@ -508,6 +512,15 @@ export const adminRouter = createBrowserRouter([
                 element: (
                   <Suspense fallback={<LoadingScreen />}>
                     <ThemeScreen />
+                  </Suspense>
+                ),
+              },
+              {
+                index: true,
+                path: "timetable-setting",
+                element: (
+                  <Suspense fallback={<LoadingScreen />}>
+                    <TimeTableSettingsScreen />
                   </Suspense>
                 ),
               },

@@ -22,6 +22,9 @@ import toast from "react-hot-toast";
 import Announcement from "./Announcement";
 import moment from "moment";
 import { mutate } from "swr";
+import { GiPadlock } from "react-icons/gi";
+import { MdClose } from "react-icons/md";
+import Input from "../../components/reUse/Input";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -181,10 +184,14 @@ const HomeScreen = () => {
     }
     goToTop();
   };
+
+  const [view, setView] = useState<boolean>(false);
+  const [codeValue, setCodeValue] = useState<string>("");
+
   return (
     <div>
       <LittleHeader name={"Dashboard"} />
-      <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
+      <div className=" relative grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
         <div className="mt-44 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
           <div className="w-full min-h-[130px] bg-blue-950 rounded-lg text-white p-3 mt-8">
             <p className="text-[20px] mb-2">Announcement/Event</p>
@@ -243,13 +250,16 @@ const HomeScreen = () => {
                 />
               </Link>
 
-              <Link to="/expenditures">
-                <Button
-                  name="Expenditures"
-                  className="bg-green-600 hover:bg-green-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
-                  onClick={handleDisplayNotice}
-                />
-              </Link>
+              {/* <Link to="/expenditures"> */}
+              <Button
+                name="Expenditures"
+                className="bg-green-600 hover:bg-green-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                // onClick={handleDisplayNotice}
+                onClick={() => {
+                  setView(true);
+                }}
+              />
+              {/* </Link> */}
             </div>
           </div>
 
@@ -270,6 +280,68 @@ const HomeScreen = () => {
           </div>
         </div>
       </div>
+
+      {view && (
+        <div className="absolute  top-0 left-0 backdrop-blur-md h-[99%] w-full rounded-lg flex items-center pt-[200px] flex-col">
+          <div className="w-[90%] lg:w-[700px] h-[300px] bg-white border rounded-md p-4 flex flex-col shadow-sm">
+            <div>
+              <h2 className="font-semibold mb-2">Security Measure</h2>
+              <p className="text-[12px]">
+                You are about to enter a very sensitive area, as a measure of
+                security, You would be required to provider your{" "}
+                <strong className="font-medium">"Secure Code"</strong>
+                ...
+              </p>
+            </div>
+            <div className="flex-1" />
+            <div className="flex-col flex">
+              <label className="text-[12px] font-semibold mb-3">
+                Enter your Admin secret code
+              </label>
+              <Input
+                placeholder="Enter Secret Code"
+                className="w-[90%] ml-0 mt-0"
+                value={codeValue}
+                onChange={(e) => {
+                  setCodeValue(e.target.value);
+                }}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                icon={<MdClose size={30} />}
+                name={"Close"}
+                className=" bg-red-500 text-white"
+                onClick={() => {
+                  if (!document.startViewTransition) {
+                    setView(false);
+                  } else {
+                    document.startViewTransition(() => {
+                      setView(false);
+                    });
+                  }
+                }}
+              />
+              {data?.adminCode === codeValue ? (
+                <Link to={`${"props.url"}`}>
+                  <Button
+                    icon={<GiPadlock size={30} />}
+                    name={"Proceed"}
+                    className="ml-2 bg-blue-950 "
+                    onClick={handleDisplayNotice}
+                  />
+                </Link>
+              ) : (
+                <Button
+                  icon={<GiPadlock size={30} />}
+                  name={"Proceed"}
+                  className="ml-2 bg-blue-950 "
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {showIV && (
         <div

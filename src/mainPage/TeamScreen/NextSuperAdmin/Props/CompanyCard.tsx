@@ -39,7 +39,19 @@ const CompanyCard: FC<iPropsCard> = ({
           className="w-[50px] h-[20px] object-contain rounded-lg mt-2"
         /> */}
         <div className="uppercase text-blue-950 text-[14px] mt-2">
-          {school.schoolName}
+          <div>{school.schoolName}</div>
+          <p className="mt-4 text-[12px] font-medium normal-case">
+            EnrollmentID: {school?.enrollmentID}
+          </p>
+          <p className="mt- text-[12px] font-medium normal-case">
+            Admin Code: {school?.adminCode}
+          </p>
+          <p className="mt-4 text-[12px] font-medium normal-case">
+            Total Students: {school?.students?.length}
+          </p>
+          <p className="mt- text-[12px] font-medium normal-case">
+            Total Staffs: {school?.staff?.length}
+          </p>
         </div>
       </th>
       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -64,9 +76,8 @@ const CompanyCard: FC<iPropsCard> = ({
           }`}
           onClick={() => {
             setToggle(true);
-            console.log(school?._id);
 
-            approveRegisterationStatus(school?.email)
+            approveRegisterationStatus(school?._id)
               .then((res) => {
                 console.log(res);
               })
@@ -179,7 +190,7 @@ const CompanyCard: FC<iPropsCard> = ({
             <thead>
               <tr>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  School Name
+                  School Info
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                   Email
