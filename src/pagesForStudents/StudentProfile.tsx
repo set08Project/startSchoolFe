@@ -3,95 +3,305 @@ import pix from "../assets/Child2.jpg";
 import LittleHeader from "../components/layout/LittleHeader";
 import { useStudentInfo } from "./hooks/useStudentHook";
 import { Link } from "react-router-dom";
+import pic from "../../src/assets/Child1.jpg";
+import { MdEmail } from "react-icons/md";
+import { HiPhoto } from "react-icons/hi2";
+import { BsPerson, BsPhone } from "react-icons/bs";
+import { FaAddressBook } from "react-icons/fa6";
+import IG from "../../src/assets/ig.png";
+import FB from "../../src/assets/fb.png";
+import Linkden from "../../src/assets/linkden.png";
+import X from "../../src/assets/ig.png";
+import { FaUserEdit } from "react-icons/fa";
+// import { Link } from "react-router-dom";
+// import { updateTeacherAvatar } from "../../api/teachersAPI";
+import { mutate } from "swr";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+import { updateStudentAvatar } from "./api/studentAPI";
 
 const StudentProfile = () => {
+  const [state, setState] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const student = useStudentInfo().studentInfo;
+  const initials =
+    student?.studentName?.charAt(0) +
+    student?.staffName?.charAt(student?.staffName.indexOf(" ") + 1);
+
   const { studentInfo } = useStudentInfo();
+  const changeImage = (e: any) => {
+    // console.log("start...");
+    const file = e.target.files[0];
+
+    const formData: any = new FormData();
+    formData.append("avatar", file);
+    setState(file);
+
+    if (state) {
+      const timer = setTimeout(() => {
+        setLoading(true);
+        updateStudentAvatar(studentInfo?._id, formData).then((res) => {
+          mutate(`api/view-teacher-detail/${studentInfo?._id}`);
+          if (res.status === 201) {
+            toast.success("Image has been updated");
+          } else {
+            toast.error(`${res?.response?.data?.message}`);
+          }
+        });
+        clearTimeout(timer);
+      }, 50);
+    }
+  };
 
   return (
     <div>
       <LittleHeader name={`My Profile`} />
-      <div className="grid lg:grid-cols-1 grid-cols-1 w-full h-full gap-6">
-        <div className="col-span-1 rounded-lg border-slate-300 border pb-4 min-h-[100px] flex  justify-between">
-          <div className="flex">
-            <div className="w-[100px] rounded-[50%] bg-slate-500 h-[100px] m-4">
-              <img
-                src={studentInfo?.avatar ? studentInfo?.avatar : pix}
-                alt="My picture"
-                className=" object-cover rounded-[50%] w-full h-full"
-              />
+
+      <div className="freshh">
+        <div>
+          <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
+            <div className="flex items-center gap-4">
+              <div className="text-[24px] text-blue-850">
+                <div className="text-[12px] md:text-[29px]">
+                  Welcome To your Profile,
+                </div>
+                {student?.studentFirstName}
+              </div>
             </div>
-            <div className="">
-              <h1 className="text-[20px] font-semibold pt-5">
-                {studentInfo?.studentFirstName} {studentInfo?.studentLastName}
-              </h1>
-              <p className="pt-2 text-slate-500">
-                {studentInfo?.classAssigned}
-              </p>
-              <p className="pt-2 text-slate-500">Lagos, Nigeria</p>
-            </div>
-          </div>
-          <Link
-            className="w-[100px] h-[45px] flex justify-center  items-center  font-semibold text-blue-950 cursor-pointer  border m-4 text-[18px] rounded-md"
-            to={"/your-settings"}
-          >
-            Edit
-          </Link>
-        </div>
-        <div className="col-span-1 rounded-lg border-slate-300 border pb-4 min-h-[100px] ">
-          <div className=" flex  justify-between pb-4">
-            <p className="m-4 text-blue-950 font-semibold text-[20px]">
-              Personal Information
-            </p>
-            <Link
-              className="w-[100px] h-[45px] border-slate-300 border flex justify-center  font-semibold text-blue-950 cursor-pointer items-center  m-4 text-[18px] rounded-md"
-              to={"/your-settings"}
-            >
-              Edit
+            <Link to="/settings">
+              <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105 text-[11px] md:text-[18px]">
+                <FaUserEdit /> Edit Profile
+              </div>
             </Link>
           </div>
-          <div className="py-4 px-4 min-h-[100px] flex p-4 -mt-10 max-lg:flex-col">
-            <div className="p-3 ">
-              <h1 className=" font-semibold pt-2  text-slate-400">
-                First Name
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="min-h-[87vh] ">
+            <div className="mb-8">
+              <h1 className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
+                Profile Image:
               </h1>
-              <p className="pt-2">{studentInfo?.studentFirstName}</p>
-              <h1 className="font-semibold pt-5 text-slate-400">
-                E-mail Address
-              </h1>
-              <p className="pt-2">{studentInfo?.email}</p>
-              <h1 className=" font-semibold pt-5 text-slate-400">Bio</h1>
-              <p className="pt-2">Student</p>
+              {loading ? (
+                <div className="mb-2 h-[320px] md:h-[300px] w-[90%] md:w-[80%] object-cover rounded-lg border flex justify-center items-center">
+                  <ClipLoader color="#172554" size={30} />
+                </div>
+              ) : (
+                <img
+                  src={student?.avatar ? student?.avatar : pic}
+                  alt="profile-image"
+                  className="mb-2 border h-[320px] md:h-[300px] w-[90%] md:w-[80%] object-cover rounded-lg"
+                />
+              )}
+
+              <div className="ml-7 flex gap-2 text-blue-800 items-center ">
+                <HiPhoto className="cursor-pointer hover:scale-105 transition-all duration-300" />
+                <label
+                  htmlFor="id"
+                  className="cursor-pointer hover:scale-105 transition-all duration-300"
+                >
+                  Change Profile Image
+                </label>
+                <input
+                  id="id"
+                  className="hidden"
+                  onChange={changeImage}
+                  type="file"
+                />
+              </div>
             </div>
-            <div className="p-3 ">
-              <h1 className=" font-semibold text-slate-400">Last Name</h1>
-              <p className="pt-2">{studentInfo?.studentLastName}</p>
-              <h1 className=" font-semibold pt-5 text-slate-400">Phone</h1>
-              <p className="pt-2">
-                {studentInfo?.contact
-                  ? studentInfo?.contact
-                  : "No Phono contact yet"}
-              </p>
+            <div className="">
+              <h1 className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
+                Personal Information
+              </h1>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1">
+                  <BsPerson /> First Name:
+                </p>
+                <h1 className="text-[18px] font-semibold">
+                  {student?.studentFirstName}
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1">
+                  <BsPerson /> First LastName:
+                </p>
+                <h1 className="text-[18px] font-semibold">
+                  {student?.studentLastName}
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1">
+                  <BsPerson /> Gender:
+                </p>
+                {student?.gender === "" ? (
+                  <h1 className="text-[18px] text-blue-500 font-normal">
+                    + add your gender
+                  </h1>
+                ) : (
+                  <h1 className="text-[18px] font-semibold">
+                    {student?.gender}
+                  </h1>
+                )}
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
+                  <MdEmail /> My Email Address:
+                </p>
+                <h1 className="md:text-[18px] font-semibold lowercase text-[11px]">
+                  {student?.email}
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
+                  <MdEmail /> Parent Email Address:
+                </p>
+                <h1 className="md:text-[18px] font-semibold lowercase text-[11px]">
+                  {student?.parentEmail}
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
+                  <BsPhone />
+                  My Phone Number:
+                </p>
+                <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                  + add your phone number
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
+                  <BsPhone />
+                  Parent Phone Number:
+                </p>
+                <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                  + add parent phone number
+                </h1>
+              </div>
+              <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
+                <p className="mb-1 flex items-center gap-1">
+                  <FaAddressBook /> Home Address:
+                </p>
+                <h1 className="text-[11px] md:text-[18px] font-semibold">
+                  {student?.studentAddress}
+                </h1>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-span-1 rounded-lg border-slate-300 border pb-4 min-h-[100px]">
-          <p className="m-4 text-blue-950 font-semibold text-[20px]">Address</p>
-          <div className="py-4 px-4 min-h-[100px] flex gap-5 p-4 -mt-10 ">
-            <div className="p-4">
-              <h1 className=" font-semibold pt-5  text-slate-400">Country</h1>
-              <p className="pt-2">Nigeria</p>
-              <h1 className=" font-semibold pt-5 text-slate-400">
-                Local Government
-              </h1>
-              <p className="pt-2">Ajeromi Ifelodun</p>
+
+          {/* Section 2 */}
+          <div className="min-h-[65vh] transition-all duration-300 ">
+            <div className="mb-3 md:mb-5">
+              <div className="mb-2 font-medium md:text-[17px] text-[11px] text-gray-600 uppercase">
+                School Fees:
+              </div>
+              <div className="font-bold rounded-lg flex justify-start items-center">
+                {studentInfo?.classTermFee}
+              </div>
             </div>
-            <div className=" p-4 ">
-              <h1 className=" font-semibold pt-5 text-slate-400">City/State</h1>
-              <p className="pt-2">Lagos</p>
-              <h1 className=" font-semibold pt-5 text-slate-400">
-                House Address
-              </h1>
-              <p className="pt-2">{studentInfo?.studentAddress}</p>
+            <div className="mb-3 md:mb-5">
+              <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
+                Role:
+              </div>
+              <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+                Student
+              </div>
+            </div>
+            <div className="mb-3 md:mb-5">
+              <div className="mb-2 font-medium md:text-[17px] text-[11px] text-gray-600 uppercase">
+                School EnrollmentID:
+              </div>
+              <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+                {student?.enrollmentID}
+              </div>
+            </div>
+            <div className="mb-5">
+              <div className="mb-2 font-medium text-[11px] md:text-[17px] text-gray-600 uppercase">
+                Onboard Date:
+              </div>
+              <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+                {moment(student?.createdAt).format("ll")}
+              </div>
+            </div>
+            <div className="">
+              <div className="flex items-center gap-5">
+                <div className="mb-1 font-medium text-[11px] md:text-[17px] text-gray-600 uppercase">
+                  Socials:
+                </div>
+                <div className="border w-full" />
+              </div>
+              <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
+                <div>
+                  <img
+                    src={FB}
+                    alt="facebook pic"
+                    className="w-[20px] h-[20px] object-contain"
+                  />
+                </div>
+                <h3 className="text-blue-500 text-[11px] md:text-[17px]">
+                  + add your facebook handle or parents
+                </h3>
+              </div>
+              <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
+                <div>
+                  <img
+                    src={IG}
+                    alt="instagram pic"
+                    className="w-[20px] h-[20px] object-contain"
+                  />
+                </div>
+                <h3 className="text-blue-500 text-[11px] md:text-[17px]">
+                  + add your instagram handle or parents
+                </h3>
+              </div>
+              <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
+                <div>
+                  <img
+                    src={X}
+                    alt="X pic"
+                    className="w-[20px] h-[17px] object-contain"
+                  />
+                </div>
+                <h3 className="text-blue-500 text-[11px] md:text-[17px]">
+                  + add your X handle or parents
+                </h3>
+              </div>
+              <div className="mb-1 p-3 font-medium rounded-lg text-[18px] flex items-center gap-2 italic">
+                <div>
+                  <img
+                    src={Linkden}
+                    alt="LinkedIn pic"
+                    className="w-[20px] h-[20px] object-contain"
+                  />
+                </div>
+                <h3 className="text-blue-500 text-[11px] md:text-[17px]">
+                  + add your linkedIn handle or parents
+                </h3>
+              </div>
+            </div>
+          </div>
+          {/* Section 3 */}
+          <div className="min-h-[87vh] transition-all duration-300 lg:col-span-2 xl:col-auto lg:flex justify-between items-start xl:block">
+            <div className="mb-10 lg:w-[47%] xl:w-auto">
+              <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
+                My Current Class:
+              </div>
+              <div className="font-[700]">{studentInfo?.classAssigned}</div>
+            </div>
+            <div className="lg:w-[47%] xl:w-auto">
+              <div className="mb-3 font-bold md:text-[17px] text-gray-600 uppercase text-[12px]">
+                Subjects Offered:
+              </div>
+              {student?.subjectAssigned?.length > 0 ? (
+                student?.subjectAssigned?.map((props: any) => (
+                  <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+                    <h1>{props?.title}</h1>
+                    <h1>{props?.classMeant}</h1>
+                  </div>
+                ))
+              ) : (
+                <div>No Subject assigned yet</div>
+              )}
             </div>
           </div>
         </div>
