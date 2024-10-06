@@ -131,13 +131,14 @@ const ViewClassStudent: FC = () => {
       <div className="mt-4">
         <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
           <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
+            <div className="w-[50px] border-r">S/N</div>
+            <div className="w-[90px] border-r">student Image</div>
+            <div className="w-[200px] border-r">student Name</div>
+            <div className="w-[220px] border-r">Session Fee</div>
+
             <div className="w-[130px] border-r">Reg. Date</div>
             <div className="w-[100px] border-r">Today's Attendance</div>
             <div className="w-[100px] border-r">This team Attendance Ratio</div>
-            <div className="w-[220px] border-r">Session Fee</div>
-
-            <div className="w-[150px] border-r">student Image</div>
-            <div className="w-[200px] border-r">student Name</div>
 
             <div className="w-[100px] border-r">student Class</div>
 
@@ -162,13 +163,16 @@ const ViewClassStudent: FC = () => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
-                        <div className="w-[130px] border-r">
-                          {moment(props.createdAt).format("ll")}
+                        <div className="w-[50px] border-r">{i + 1}</div>
+                        {/* Name And Image */}
+                        <div className="w-[90px] flex justify-center border-r">
+                          <img
+                            className="w-14 h-14 rounded-md border object-cover"
+                            src={pix}
+                          />
                         </div>
-                        <Remark data={props} id={classStudents?._id} />
-
-                        <div className="w-[100px] border-r">
-                          <AttendanceRatio props={props?._id} />
+                        <div className="w-[200px] border-r">
+                          {props?.studentFirstName} {props?.studentLastName}
                         </div>
 
                         <div className="w-[220px] border-r flex gap-4">
@@ -242,16 +246,17 @@ const ViewClassStudent: FC = () => {
                             />
                           </div>
                         </div>
-                        {/* name */}
-                        <div className="w-[150px] flex justify-center border-r">
-                          <img
-                            className="w-14 h-14 rounded-md border object-cover"
-                            src={pix}
-                          />
+                        <div className="w-[130px] border-r">
+                          {moment(props.createdAt).format("ll")}
                         </div>
-                        <div className="w-[200px] border-r">
-                          {props?.studentFirstName} {props?.studentLastName}
+                        <div className="w-[100px] border-r">
+                          <Remark data={props} id={classStudents?._id} />
                         </div>
+
+                        <div className="w-[100px] border-r">
+                          <AttendanceRatio props={props?._id} />
+                        </div>
+
                         <div className="w-[100px] border-r  ">
                           {classStudents?.className}
                         </div>

@@ -36,7 +36,6 @@ import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
 interface iProps {
   props?: string;
-  name?: string;
 }
 interface ModalProps {
   isOpen: boolean;
@@ -128,7 +127,6 @@ const StaffDetail: FC<iProps> = ({ props }) => {
             : "Hasn't been assigned"}
         </p>
         <p className="text-[12px] mt-2 flex items-center gap-1">
-          <FaStar />{" "}
           <span className="font-bold text-[15px]">
             {teacherDetail?.staffRating}
           </span>{" "}
@@ -206,7 +204,6 @@ const ClassDetailScreen = () => {
     updateClassroomTeacher(dataID!, classID!, {
       classTeacherName: teacher,
     }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         mutate(`api/view-classrooms/${classID}`);
 
@@ -243,7 +240,6 @@ const ClassDetailScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [className, setClassName] = useState<string>("");
 
-  console.log(classroom);
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -347,213 +343,89 @@ const ClassDetailScreen = () => {
       </div>
       <div className="my-6 border-t" />
       <div className="mt-6 w-full min-h-[80px] pb-4 bg-slate-50 rounded-lg border pt-2 px-4">
-        <div className=" px-3  opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
-          <div className="flex gap-2 font-normal ml-[12px] md:ml-[0px] mb-[10px] md:mb-[0px]">
-            <p className="text-[12px]">
-              <p className="font-normal md:text-[15px] text-[10px]">
-                First Term
+        <div className="px-3 opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
+          <div className="flex gap-4 font-normal ml-[12px] md:ml-0 mb-[10px] md:mb-0">
+            <div className="text-center">
+              <p className="font-normal text-[15px]">First Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class1stFee?.toLocaleString()}
               </p>
-            </p>
-            <div className="px-3 opacity-100 rounded-md bg-orange-400 text-white mb-2 py-2 md:flex md:justify-between md:items-center">
-              <div className="flex gap-4 font-normal ml-[12px] md:ml-0 mb-[10px] md:mb-0">
-                <div className="text-center">
-                  <p className="font-normal text-[15px]">First Term</p>
-                  <p className="font-bold">
-                    ₦{classroom?.class1stFee?.toLocaleString()}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="font-normal text-[15px]">Second Term</p>
-                  <p className="font-bold">
-                    ₦{classroom?.class2ndFee?.toLocaleString()}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="font-normal text-[15px]">Third Term</p>
-                  <p className="font-bold">
-                    ₦{classroom?.class3rdFee?.toLocaleString()}
-                  </p>
-                </div>
+            </div>
+            <div className="text-center">
+              <p className="font-normal text-[15px]">Second Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class2ndFee?.toLocaleString()}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="font-normal text-[15px]">Third Term</p>
+              <p className="font-bold">
+                ₦{classroom?.class3rdFee?.toLocaleString()}
+              </p>
+            </div>
+          </div>
+          <button
+            className="btn text-blue-950 bg-white hover:bg-blue-50 transition-all duration-300 px-8 uppercase text-[15px]"
+            onClick={openFeeModal}
+          >
+            Update Class Fee
+          </button>
+          <Modal
+            isOpen={isFeeModalOpen}
+            onClose={closeFeeModal}
+            className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto"
+          >
+            <h2 className="text-2xl font-semibold mb-6 text-blue-950 flex items-center gap-2">
+              Update Class Fee 💼
+            </h2>
+
+            <div className="space-y-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={firstTermFee}
+                  onChange={(e) => setFirstTermFee(e.target.value)}
+                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter 1st Term Fee 💰"
+                />
               </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={secondTermFee}
+                  onChange={(e) => setSecondTermFee(e.target.value)}
+                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter 2nd Term Fee 💰"
+                />
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={thirdTermFee}
+                  onChange={(e) => setThirdTermFee(e.target.value)}
+                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter 3rd Term Fee 💰"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
               <button
-                className="btn text-blue-950 bg-white hover:bg-blue-50 transition-all duration-300 px-8 uppercase text-[15px]"
-                onClick={openFeeModal}
+                onClick={handleUpdateFee}
+                className="bg-green-500 text-white px-5 py-2 rounded-lg text-[16px] hover:bg-green-600 transition-all duration-300 flex items-center gap-2"
               >
-                Update Class Fee
+                <span>Update Fee</span> ✨
               </button>
-              <Modal
-                isOpen={isFeeModalOpen}
-                onClose={closeFeeModal}
-                className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto"
-              >
-                <h2 className="text-2xl font-semibold mb-6 text-blue-950 flex items-center gap-2">
-                  Update Class Fee 💼
-                </h2>
-
-                <div className="space-y-4">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={firstTermFee}
-                      onChange={(e) => setFirstTermFee(e.target.value)}
-                      className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter 1st Term Fee 💰"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={secondTermFee}
-                      onChange={(e) => setSecondTermFee(e.target.value)}
-                      className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter 2nd Term Fee 💰"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={thirdTermFee}
-                      onChange={(e) => setThirdTermFee(e.target.value)}
-                      className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter 3rd Term Fee 💰"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6 flex justify-end gap-3">
-                  <button
-                    onClick={handleUpdateFee}
-                    className="bg-green-500 text-white px-5 py-2 rounded-lg text-[16px] hover:bg-green-600 transition-all duration-300 flex items-center gap-2"
-                  >
-                    <span>Update Fee</span> ✨
-                  </button>
-                </div>
-              </Modal>
             </div>
-          </div>
+          </Modal>
         </div>
-        <p>Manage Class Teacher: </p>
-        <p className="text-[13px] flex items-center font-bold">
-          Class teacher is responsible for day to day activities of the class{" "}
-          <span className="font-bold flex items-center gap-1"></span>
-        </p>
-        {/* + Assign class Teacher{ */}
-        <div className="mt-5 text-[13px] font-medium">
-          <div className="mt-5 text-[13px] font-medium">
-            <label
-              htmlFor="assign_teacher"
-              className=" my-3 text-blue-500 transition-all duration-300 hover:text-blue-600 cursor-pointer "
-            >
-              + Assign class Teacher
-            </label>
-            <div className="mt-3" />
-            {/* Put this part before </body> tag */}
-            <input
-              type="checkbox"
-              id="assign_teacher"
-              className="modal-toggle"
-            />
-            <div className="modal rounded-md" role="dialog">
-              <div className="modal-box  rounded-md bg-white">
-                <p className="flex items-center justify-between my-4 ">
-                  <p className="font-bold">Assigning Teacher to this class</p>
-
-                  <label
-                    htmlFor="assign_teacher"
-                    className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
-                  >
-                    <MdClose />
-                  </label>
-                </p>
-                <hr />
-
-                <p className="mt-2 leading-tight text-[13px] font-medium">
-                  Please note that this teacher you're about to assign to this
-                  class will exhibit all feature, roles and previlage to
-                  supervise this class.
-                  <br />
-                  <br />
-                  <div className="flex gap-2  items-center">
-                    <p> Teacher: {teacher}</p>
-                    {teacher && (
-                      <div className="flex items-center font-bold">
-                        <span>selected</span>
-                        <MdCheck className="text-green-500 text-[25px] mb-1 " />
-                      </div>
-                    )}
-                  </div>
-                </p>
-
-                <div className="mt-10 w-full gap-2 flex flex-col items-center">
-                  <div className="w-full flex flex-col">
-                    <label className="font-medium text-[12px]">
-                      Subject Teacher <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      className="select border border-slate-200 text-[12px] py-0 px-2 w-full max-w-xs mb-3 bg-white"
-                      value={teacher}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        setTeacher(e.target.value);
-                      }}
-                    >
-                      <option disabled defaultValue={"Select a Teacher"}>
-                        Select a Teacher
-                      </option>
-                      {schoolTeacher?.staff?.map((props: any, i: number) => (
-                        <option key={i} value={props?.staffName}>
-                          {props?.staffName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="w-full flex justify-end transition-all duration-300">
-                  {teacher !== "" ? (
-                    <label
-                      htmlFor="assign_teacher"
-                      className={`${
-                        data?.categoryType === "Secondary"
-                          ? "bg-blue-950"
-                          : "bg-red-950"
-                      } text-white px-8 py-3 rounded-md cursor-pointer`}
-                      onClick={updateTeacher}
-                    >
-                      Proceed
-                    </label>
-                  ) : (
-                    <Button
-                      name="Can't Proceed"
-                      className={`bg-[lightgray] ${
-                        data?.categoryType === "Secondary"
-                          ? "text-blue-950"
-                          : "text-green-950"
-                      } mx-0 cursor-not-allowed`}
-                    />
-                  )}
-                </div>
-              </div>
-
-              <label className="modal-backdrop" htmlFor="assign_teacher">
-                Close
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="text-[12px]"> class Teacher Assigned</div>
-        <StaffDetail
-          props={classroom?.teacherID}
-          name={classroom?.classTeacherName}
-        />
       </div>
-      {/* <div className="my-6 border-t" /> */}
-      {/* </div> */}
       <div className="my-6 border-t" />
       {/* SUbjects */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Manage Class Subject for JSS 1A </p>
+        <p>Manage Class Subject for {classroom?.className} </p>
         <p className="text-[13px] font-bold">
           Add/Remove Subjects for this class
         </p>
@@ -669,7 +541,7 @@ const ClassDetailScreen = () => {
         <ClassSubjectScreen />
       </div>
       {/* Performance */}
-      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
