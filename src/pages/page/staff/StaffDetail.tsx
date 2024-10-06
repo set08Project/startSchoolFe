@@ -462,7 +462,7 @@ const StaffDetail = () => {
             <div className="p-3 bg-gray-100 text-green-600 font-medium rounded-lg text-[17px]">
               ₦
               {teacherDetail?.salary
-                ? teacherDetail.salary.toLocaleString()
+                ? teacherDetail?.salary.toLocaleString()
                 : "N/A"}
             </div>
           </div>

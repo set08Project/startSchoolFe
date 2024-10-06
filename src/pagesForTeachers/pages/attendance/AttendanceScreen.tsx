@@ -122,6 +122,10 @@ const AttendanceScreen = () => {
   // const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
   const { classStudents } = useClassStudent(oneClass?._id);
+  const allStudents = classStudents?.students;
+  const sortedStudents = allStudents?.sort((a, b) =>
+    a.studentFirstName?.localeCompare(b.studentFirstName)
+  );
 
   return (
     <div className="">
@@ -157,13 +161,13 @@ const AttendanceScreen = () => {
         style={{ color: "var(--secondary)" }}
       >
         <div className="text-[gray] w-[1020px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
-          <div className="w-[130px] border-r">Reg. Date</div>
-          <div className="w-[100px] border-r">Today's Attendance</div>
-
-          <div className="w-[200px] border-r">Mark Attendance</div>
-          {/* <div className="w-[100px] border-r">This team Attendance Ratio</div> */}
-
+          <div className="w-[50px] border-r">s/n</div>
           <div className="w-[250px] border-r">student info</div>
+          <div className="w-[200px] border-r">Mark Attendance</div>
+          <div className="w-[100px] border-r">Today's Attendance</div>
+          <div className="w-[130px] border-r">Gender</div>
+
+          {/* <div className="w-[100px] border-r">This team Attendance Ratio</div> */}
 
           <div className="w-[100px] border-r">student Class</div>
 
@@ -173,9 +177,9 @@ const AttendanceScreen = () => {
         </div>
 
         <div className=" w-[1020px] overflow-hidden">
-          {classStudents?.students?.length > 0 ? (
+          {sortedStudents?.length > 0 ? (
             <div>
-              {classStudents?.students?.map((props: any, i: number) => (
+              {sortedStudents?.map((props: any, i: number) => (
                 <div>
                   <div>
                     <div
@@ -184,25 +188,7 @@ const AttendanceScreen = () => {
                         i % 2 === 0 ? "bg-slate-50" : "bg-white"
                       }`}
                     >
-                      <div className="w-[130px] border-r">
-                        {moment(props?.createdAt).format("ll")}
-                      </div>
-
-                      <Remark
-                        props={oneClass?._id}
-                        data={props}
-                        id={props?._id}
-                      />
-
-                      <div className="w-[200px] border-r">
-                        <Attendance
-                          props={oneClass?._id}
-                          id={props?._id}
-                          data={props}
-                        />
-                      </div>
-
-                      {/* name */}
+                      <div className="w-[50px]">{i + 1}</div>
                       <div className="w-[250px] flex  border-r">
                         <div className="flex gap-2">
                           <UnLazyImage
@@ -217,6 +203,24 @@ const AttendanceScreen = () => {
                           </div>
                         </div>
                       </div>
+
+                      <div className="w-[200px] border-r">
+                        <Attendance
+                          props={oneClass?._id}
+                          id={props?._id}
+                          data={props}
+                        />
+                      </div>
+
+                      <Remark
+                        props={oneClass?._id}
+                        data={props}
+                        id={props?._id}
+                      />
+
+                      <div className="w-[130px] border-r">{props?.gender}</div>
+
+                      {/* name */}
 
                       <div className="w-[100px] border-r  ">
                         {props?.classAssigned}

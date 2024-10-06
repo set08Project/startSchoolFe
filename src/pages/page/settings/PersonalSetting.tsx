@@ -49,11 +49,11 @@ const PersonalSetting: FC = () => {
         {name.split("/")[2].replaceAll("-", " ")}
       </div>
 
-      <div className="w-full sm:grid sm:grid-cols-6 min-h-[65vh]  text-blue-950">
+      <div className="w-full relative sm:grid sm:grid-cols-6 min-h-[65vh]  text-blue-950">
         <Outlet />
 
         <div
-          className="border ml-2 rounded-md hidden sm:block text-blue-950 "
+          className="border ml-2 rounded-md hidden lg:block text-blue-950 "
           style={{
             gridColumn: "5/7",
           }}
