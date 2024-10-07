@@ -3,15 +3,9 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
-const URL: string = "https://just-next-be1.onrender.com/api";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-
 // const URL: string = "https://just-next-be1.onrender.com/api";
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -303,12 +297,14 @@ export const updateProfile = async (studntID: string, data: {}) => {
 export const updateStudentFirstName = async (
   schoolID: string,
   studentID: string,
-  studentFirstName: string
+  studentFirstName: string,
+  studentLastName: string
 ) => {
   try {
     return axios
       .patch(`${URL}/update-student-firstname/${schoolID}/${studentID}`, {
         studentFirstName,
+        studentLastName,
       })
       .then((res) => {
         return res?.data;
@@ -322,12 +318,14 @@ export const updateStudentFirstName = async (
 export const updateStudentLastName = async (
   schoolID: string,
   studentID: string,
-  studentLastName: string
+  studentLastName: string,
+  studentFirstName: string
 ) => {
   try {
     return axios
       .patch(`${URL}/update-student-lastname/${schoolID}/${studentID}`, {
         studentLastName,
+        studentFirstName,
       })
       .then((res) => {
         return res?.data;

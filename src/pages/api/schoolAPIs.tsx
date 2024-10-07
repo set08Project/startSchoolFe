@@ -8,15 +8,8 @@ import axios from "axios";
 // const URL: string = "https://just-next-be1.onrender.com/api";
 // const URL2: string = "https://just-next-be1.onrender.com";
 
-//
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL2: string = "https://startschoolbe-1.onrender.com";
-
-const URL: string = "https://just-next-be1.onrender.com/api";
-const URL2: string = "https://just-next-be1.onrender.com";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL2: string = "https://startschoolbe-1.onrender.com";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL2: string = "https://startschoolbe-1.onrender.com";
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
@@ -301,11 +294,12 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async (id: string) => {
+export const approveRegisterationStatus = async (email: string) => {
   try {
     return await axios
-      .patch(`${URL}/approved-school-registration/${id}`)
+      .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
@@ -319,22 +313,9 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
     return await axios
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
       .then((res: any) => {
-        return res?.data;
+        return res;
       });
   } catch (error: any) {
-    return error;
-  }
-};
-
-export const deleteAllStudent = async (schoolID: string) => {
-  try {
-    return await axios
-      .delete(`${URL}/delete-all-students/${schoolID}`)
-      .then((res: any) => {
-        return res?.data;
-      });
-  } catch (error) {
-    console.error();
     return error;
   }
 };
