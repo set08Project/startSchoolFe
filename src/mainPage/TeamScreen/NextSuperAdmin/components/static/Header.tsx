@@ -22,7 +22,7 @@ const Header = () => {
     console.log("FormData:", formData);
 
     bulkUploadSchemeOfWork(formData)
-      .then((res) => {
+      .then((res: any) => {
         if (res.status === 201) {
           toast.success("Scheme of work has been successfully imported");
         } else {
