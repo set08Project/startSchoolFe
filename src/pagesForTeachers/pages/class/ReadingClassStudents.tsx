@@ -102,7 +102,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
           </div>
 
           <div>
-            {sortedStudents.length > 0 ? (
+            {sortedStudents?.length > 0 ? (
               <div className=" w-[1920px] overflow-hidden">
                 {sortedStudents?.map((props: any, i: number) => (
                   <div>

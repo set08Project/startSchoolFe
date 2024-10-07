@@ -22,16 +22,16 @@ const Header = () => {
     console.log("FormData:", formData);
 
     bulkUploadSchemeOfWork(formData)
-      .then((res) => {
+      .then((res: any) => {
         if (res.status === 201) {
           toast.success("Scheme of work has been successfully imported");
         } else {
-          toast.error(res.data.message || "Failed to upload scheme of work");
+          toast.error(res?.data?.message || "Failed to upload scheme");
         }
       })
       .catch((err) => {
         toast.error(
-          err.response?.data?.message || "Failed to upload scheme of work"
+          err.res?.data?.message || "Failed to upload scheme of work"
         );
         console.error("Error:", err);
       })

@@ -24,7 +24,6 @@ import {
   createSchoolSubject,
   updateClassName,
   updateClassroomTeacher,
-  verifyPayment1st,
 } from "../../api/schoolAPIs";
 import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
 import ClassModel from "./ClassModel";
@@ -426,7 +425,7 @@ const ClassDetailScreen = () => {
       <div className="my-6 border-t" />
       {/* SUbjects */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Manage Class Subject for JSS 1A </p>
+        <p>Manage Class Subject for {classroom?.className} </p>
         <p className="text-[13px] font-bold">
           Add/Remove Subjects for this class
         </p>
@@ -542,7 +541,7 @@ const ClassDetailScreen = () => {
         <ClassSubjectScreen />
       </div>
       {/* Performance */}
-      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}

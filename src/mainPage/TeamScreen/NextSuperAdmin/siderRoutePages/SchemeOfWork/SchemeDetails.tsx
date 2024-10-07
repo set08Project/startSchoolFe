@@ -78,6 +78,9 @@ const SchemeDetails = () => {
             <p className="text-lg text-gray-600 mt-1">
               Weeks: {weekData.weeks || "N/A"}
             </p>
+            <p className="text-lg text-gray-600 mt-1">
+              status: {weekData.status || "un-set"}
+            </p>
           </div>
 
           <div className="p-8 space-y-6">
