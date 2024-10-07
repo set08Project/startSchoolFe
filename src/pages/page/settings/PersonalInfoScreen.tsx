@@ -8,7 +8,7 @@ import {
   changeSchoolName,
   changeSchoolPersonalName,
   changeSchoolPhone,
-  deleteAllStudent,
+  // deleteAllStudent,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -87,31 +87,31 @@ const PersonalInfoScreen = () => {
     }
   };
 
-  const handleDeleteAllStudents = () => {
-    setSpin(true);
-    setTimeout(() => {
-      try {
-        deleteAllStudent(schoolID).then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            if (res?.data?.length < 1) {
-              toast.error("There Are No Students Registered");
-              return res.data;
-            } else {
-              toast.success("All Student Has Been Successfully Deleted");
-              return res.data;
-            }
-          }
-        });
-      } catch (error) {
-        toast.error("Error In Deleting All Student");
-        console.log(error);
-      } finally {
-        setSpin(false);
-      }
-      clearTimeout;
-    }, 2000);
-  };
+  // const handleDeleteAllStudents = () => {
+  //   setSpin(true);
+  //   setTimeout(() => {
+  //     try {
+  //       deleteAllStudent(schoolID).then((res) => {
+  //         console.log(res);
+  //         if (res.status === 200) {
+  //           if (res?.data?.length < 1) {
+  //             toast.error("There Are No Students Registered");
+  //             return res.data;
+  //           } else {
+  //             toast.success("All Student Has Been Successfully Deleted");
+  //             return res.data;
+  //           }
+  //         }
+  //       });
+  //     } catch (error) {
+  //       toast.error("Error In Deleting All Student");
+  //       console.log(error);
+  //     } finally {
+  //       setSpin(false);
+  //     }
+  //     clearTimeout;
+  //   }, 2000);
+  // };
 
   return (
     <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
@@ -499,11 +499,11 @@ const PersonalInfoScreen = () => {
                             changeText ? "hidden" : "block"
                           }`}
                           onClick={() => {
-                            handleDeleteAllStudents();
+                            // handleDeleteAllStudents();
                             setchangeText(true);
                           }}
                         >
-                          Delete All Students
+                          Delete All Students(Not Active)
                         </button>
                       </div>
                     )}
