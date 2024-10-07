@@ -8,8 +8,15 @@ import axios from "axios";
 // const URL: string = "https://just-next-be1.onrender.com/api";
 // const URL2: string = "https://just-next-be1.onrender.com";
 
-const URL: string = "https://startschoolbe-1.onrender.com/api";
-const URL2: string = "https://startschoolbe-1.onrender.com";
+//
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+// const URL2: string = "https://startschoolbe-1.onrender.com";
+
+const URL: string = "https://just-next-be1.onrender.com/api";
+const URL2: string = "https://just-next-be1.onrender.com";
+
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+// const URL2: string = "https://startschoolbe-1.onrender.com";
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {

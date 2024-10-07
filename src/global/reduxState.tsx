@@ -161,6 +161,20 @@ const reduxState = createSlice({
       state.test[1].question?.push(payload);
     },
 
+    updateTestQuestion: (state, { payload }) => {
+      const { id, question, answer, options } = payload;
+      const index = state.test[1].question.findIndex((q) => q.id === id);
+
+      if (index !== -1) {
+        state.test[1].question[index] = {
+          ...state.test[1].question[index],
+          question,
+          answer,
+          options,
+        };
+      }
+    },
+
     addTestQuestionTry: (state, { payload }: any) => {
       const vale = { ...payload };
       state.testTry.question?.push(vale);
@@ -227,6 +241,7 @@ export const {
   removeFromCart,
   changeCartPick,
   displayEmptyTest,
+  updateTestQuestion,
   addTestInstruction,
   addTestQuestion,
   loginState,
