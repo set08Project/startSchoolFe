@@ -56,8 +56,6 @@ const StudentProfile = () => {
 
   return (
     <div>
-      <LittleHeader name={`My Profile`} />
-
       <div className="freshh">
         <div>
           <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
@@ -66,7 +64,9 @@ const StudentProfile = () => {
                 <div className="text-[12px] md:text-[29px]">
                   Welcome To your Profile,
                 </div>
-                {student?.studentFirstName}
+                <span className="font-bold text-blue-950">
+                  {student?.studentFirstName}
+                </span>
               </div>
             </div>
             <Link to="/settings">
@@ -195,8 +195,8 @@ const StudentProfile = () => {
               <div className="mb-2 font-medium md:text-[17px] text-[11px] text-gray-600 uppercase">
                 School Fees:
               </div>
-              <div className="font-bold rounded-lg flex justify-start items-center">
-                {studentInfo?.classTermFee}
+              <div className="font-bold rounded-lg flex justify-start items-center text-green-600">
+                ₦{studentInfo?.classTermFee?.toLocaleString()}
               </div>
             </div>
             <div className="mb-3 md:mb-5">

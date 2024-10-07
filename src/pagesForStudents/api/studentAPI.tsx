@@ -9,6 +9,10 @@ const URL: string = "https://just-next-be1.onrender.com/api";
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 
+// const URL: string = "https://just-next-be1.onrender.com/api";
+
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
     return await axios

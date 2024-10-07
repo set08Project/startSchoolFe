@@ -4,15 +4,21 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
-//
+
 // const URL: string = "https://just-next-be1.onrender.com/api";
 // const URL2: string = "https://just-next-be1.onrender.com";
+<<<<<<< HEAD
 //
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 // const URL2: string = "https://startschoolbe-1.onrender.com";
 
 const URL: string = "https://just-next-be1.onrender.com/api";
 const URL2: string = "https://just-next-be1.onrender.com";
+=======
+
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL2: string = "https://startschoolbe-1.onrender.com";
+>>>>>>> 80595941594b3e11bc86334d71821818a113acb7
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
