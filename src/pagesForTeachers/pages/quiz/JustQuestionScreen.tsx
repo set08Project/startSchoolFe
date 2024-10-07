@@ -2,16 +2,22 @@ import { useState } from "react";
 import Button from "../../components/reUse/Button";
 import Input from "../../components/reUse/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { addTestQuestion, displayEmptyTest } from "../../../global/reduxState";
+import {
+  addTestQuestion,
+  displayEmptyTest,
+  updateTestQuestion,
+} from "../../../global/reduxState";
 
 const JustQuestionScreen = () => {
   const dispatch = useDispatch();
   const testQuestion = useSelector((state: any) => state.test);
+  // const questions = useSelector((state: any) => state.test.test[1].question);
 
   const [questionSet, setQuestionSet] = useState<Array<{}>>([]);
   const [quest, setQuest] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
   const [options, setOptions] = useState<Array<{}>>([{ 1: "" }]);
+  const [editingId, setEditingId] = useState(null);
 
   const handleAddOption = (i: number) => {
     setOptions([...options, { [parseInt(`${i + 1}`)]: "" }]);
