@@ -14,7 +14,9 @@ import { useStudentInfo } from "../hooks/useStudentHook";
 import {
   updateParentEmail,
   updateStudentAddress,
+  updateStudentFirstName,
   updateStudentGender,
+  updateStudentLastName,
   updateStudentParentNumber,
   updateStudentPhoneNumber,
 } from "../api/studentAPI";
@@ -22,6 +24,7 @@ import {
 const StudentProfileSettings = () => {
   const [toggle, setToggle] = useState<string | null>(null);
   const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -95,6 +98,35 @@ const StudentProfileSettings = () => {
       });
     } catch (error) {
       toast.error("Error Updating Address");
+      console.error();
+      return error;
+    }
+  };
+
+  const handleFirstName = () => {
+    try {
+      updateStudentFirstName(schoolID, studentID, firstName, lastName).then(
+        (res) => {
+          toast.success("First Name Updated Successfully");
+          return res?.data;
+        }
+      );
+    } catch (error) {
+      toast.error("Error Updating First Name");
+      console.error();
+      return error;
+    }
+  };
+  const handleLastName = () => {
+    try {
+      updateStudentLastName(schoolID, studentID, lastName, firstName).then(
+        (res) => {
+          toast.success("Last Name Updated Successfully");
+          return res?.data;
+        }
+      );
+    } catch (error) {
+      toast.error("Error Updating First Name");
       console.error();
       return error;
     }
@@ -300,7 +332,7 @@ const StudentProfileSettings = () => {
             </div>
             {toggle === "firstName" && (
               <Input
-                placeholder="Example Tobi"
+                placeholder="Input FirstName"
                 value={firstName}
                 className="mb-4"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,11 +342,11 @@ const StudentProfileSettings = () => {
             )}
             {toggle === "lastName" && (
               <Input
-                placeholder="Example Ajayi"
-                value={firstName}
+                placeholder="Input LastName"
+                value={lastName}
                 className="mb-4"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFirstName(e.target.value);
+                  setLastName(e.target.value);
                 }}
               />
             )}
@@ -382,6 +414,7 @@ const StudentProfileSettings = () => {
                 name="Update"
                 className="bg-blue-950 hover:scale-105 mt-10"
                 onClick={() => {
+                  handleFirstName();
                   setToggle(null);
                 }}
               />
@@ -391,6 +424,7 @@ const StudentProfileSettings = () => {
                 name="Update"
                 className="bg-blue-950 hover:scale-105"
                 onClick={() => {
+                  handleLastName();
                   setToggle(null);
                 }}
               />

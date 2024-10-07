@@ -297,12 +297,14 @@ export const updateProfile = async (studntID: string, data: {}) => {
 export const updateStudentFirstName = async (
   schoolID: string,
   studentID: string,
-  studentFirstName: string
+  studentFirstName: string,
+  studentLastName: string
 ) => {
   try {
     return axios
       .patch(`${URL}/update-student-firstname/${schoolID}/${studentID}`, {
         studentFirstName,
+        studentLastName,
       })
       .then((res) => {
         return res?.data;
@@ -316,12 +318,14 @@ export const updateStudentFirstName = async (
 export const updateStudentLastName = async (
   schoolID: string,
   studentID: string,
-  studentLastName: string
+  studentLastName: string,
+  studentFirstName: string
 ) => {
   try {
     return axios
       .patch(`${URL}/update-student-lastname/${schoolID}/${studentID}`, {
         studentLastName,
+        studentFirstName,
       })
       .then((res) => {
         return res?.data;
