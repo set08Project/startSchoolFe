@@ -175,7 +175,7 @@ const MyClassRoomScreen = () => {
       </div>
 
       {/* Top Students */}
-      <div className="m>t-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>
         <p className="text-[13px]  flex items-center font-bold">
           Here is the list of the top 5 performing student:{" "}
@@ -193,17 +193,6 @@ const MyClassRoomScreen = () => {
       </div>
 
       {/* viewing Students */}
-      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
-        <p>Viewing Students</p>
-        <p className="text-[13px]  flex items-center font-bold">
-          Here are all the students in this class:{" "}
-        </p>
-        <div className="flex gap-4 mt-5">
-          <div className="overflow-x-auto">
-            <ReadingClassStudents props={oneClass?._id} />
-          </div>
-        </div>
-      </div>
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <div className="flex items-center w-full justify-between">
           <div>
