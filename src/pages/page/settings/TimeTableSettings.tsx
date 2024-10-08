@@ -38,7 +38,7 @@ const TimeTableSettingsScreen = () => {
         <div className="text-[12px] mt-5 font-semibold w-full">
           <div className="flex flex-col gap-6 w-full lg:flex-row">
             <div className="flex flex-col w-full">
-              <p>First Class begins: </p>
+              <p>First Class Begins: </p>
               <select
                 className=" border-blue-950 select select-info flex-1"
                 // value={startClass}
@@ -47,6 +47,7 @@ const TimeTableSettingsScreen = () => {
                 <option disabled selected>
                   Class Starts
                 </option>
+                <option value={"07:45"}>07:45AM</option>
                 <option value={"08:00"}>08:00AM</option>
                 <option value={"08:10"}>08:10AM</option>
               </select>
@@ -72,7 +73,7 @@ const TimeTableSettingsScreen = () => {
           {/* break */}
           <div className="flex flex-col gap-6 w-full lg:flex-row mt-5">
             <div className="flex flex-col w-full">
-              <p>Break begins: </p>
+              <p>Break Begins: </p>
               <select
                 className=" border-blue-950 select select-info flex-1"
                 // value={startBreak}
@@ -81,7 +82,10 @@ const TimeTableSettingsScreen = () => {
                 <option disabled selected>
                   Break begins
                 </option>
+                <option value={"10:30"}>10:30AM</option>
+                <option value={"10:45"}>10:45AM</option>
                 <option value={"11:00"}>11:00AM</option>
+                <option value={"11:20"}>11:20AM</option>
                 <option value={"11:30"}>11:30AM</option>
                 <option value={"12:00"}>12:00NOON</option>
               </select>
@@ -97,6 +101,7 @@ const TimeTableSettingsScreen = () => {
                 <option disabled selected>
                   Break ends
                 </option>
+                <option value={"11:00"}>11:00AM</option>
                 <option value={"11:20"}>11:20AM</option>
                 <option value={"11:30"}>11:30AM</option>
                 <option value={"11:50"}>11:50AM</option>

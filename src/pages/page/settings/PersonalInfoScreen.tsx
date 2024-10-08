@@ -8,7 +8,7 @@ import {
   changeSchoolName,
   changeSchoolPersonalName,
   changeSchoolPhone,
-  // deleteAllStudent,
+  deleteAllStudent,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -87,31 +87,30 @@ const PersonalInfoScreen = () => {
     }
   };
 
-  // const handleDeleteAllStudents = () => {
-  //   setSpin(true);
-  //   setTimeout(() => {
-  //     try {
-  //       deleteAllStudent(schoolID).then((res) => {
-  //         console.log(res);
-  //         if (res.status === 200) {
-  //           if (res?.data?.length < 1) {
-  //             toast.error("There Are No Students Registered");
-  //             return res.data;
-  //           } else {
-  //             toast.success("All Student Has Been Successfully Deleted");
-  //             return res.data;
-  //           }
-  //         }
-  //       });
-  //     } catch (error) {
-  //       toast.error("Error In Deleting All Student");
-  //       console.log(error);
-  //     } finally {
-  //       setSpin(false);
-  //     }
-  //     clearTimeout;
-  //   }, 2000);
-  // };
+  const handleDeleteAllStudents = () => {
+    setSpin(true);
+    setTimeout(() => {
+      try {
+        deleteAllStudent(schoolID).then((res) => {
+          if (res.status === 200) {
+            if (res?.data?.length < 1) {
+              toast.error("There Are No Students Registered");
+              return res.data;
+            } else {
+              toast.success("All Student Has Been Successfully Deleted");
+              return res.data;
+            }
+          }
+        });
+      } catch (error) {
+        toast.error("Error In Deleting All Student");
+        console.log(error);
+      } finally {
+        setSpin(false);
+      }
+      clearTimeout;
+    }, 2000);
+  };
 
   return (
     <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
@@ -448,8 +447,8 @@ const PersonalInfoScreen = () => {
           </div>
           {/* Popup Card */}
           {popup === "Delete" && (
-            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
-              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-gray-50 rounded-lg smallphone">
+            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm bg-blue-50 top-0 left-0 rounded-lg">
+              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-white rounded-lg smallphone">
                 <div className="mb-3 text-center">
                   <h3 className="font-bold text-lg text-center text-blue-950">
                     All Student Deletion Notice
@@ -499,7 +498,7 @@ const PersonalInfoScreen = () => {
                             changeText ? "hidden" : "block"
                           }`}
                           onClick={() => {
-                            // handleDeleteAllStudents();
+                            handleDeleteAllStudents();
                             setchangeText(true);
                           }}
                         >
