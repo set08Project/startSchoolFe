@@ -51,7 +51,6 @@ export const useTeacherDetail = (teacherID: string) => {
     `api/view-teacher-detail/${teacherID}`,
     () => {
       return viewTeacherDetail(teacherID!).then((res: any) => {
-        console.log(res);
         return res.data;
       });
     }
