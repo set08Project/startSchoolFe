@@ -549,6 +549,7 @@ export const reportCardRemark = async (
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
+        console.log(res);
         return res?.data;
       });
   } catch (error) {

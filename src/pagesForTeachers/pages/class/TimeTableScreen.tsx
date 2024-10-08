@@ -30,10 +30,12 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
             className={`flex w-[${
               data?.timeTableStructure?.length * 300
             }px] gap-4 bg-white py-3 px-1`}
-            style={{ width: `${data?.timeTableStructure?.length * 300}px` }}
+            style={{
+              width: `${data?.timeTableStructure?.length * 300}px`,
+            }}
           >
-            <div className="w-[210px] h-6 border-r bg-red-50">days</div>
-            {/* <div className="w-[300px] h-6 border-r">07:45AM - 08:00AM</div> */}
+            <div className="w-[210px] h-6 border-r ">days</div>
+            {/* <div className="w-[280px] h-6 border-r">07:45AM - 08:00AM</div> */}
             {data?.timeTableStructure?.map((el: string, i: number) => (
               <div key={i} className="w-[300px] h-6 border-r">
                 {el}
@@ -70,6 +72,9 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
                 `}
                 >
                   <div className="flex   ">
+                    {/* <div className="w-[270px] h-6 border-r">
+                      07:45AM - 08:00AM
+                    </div> */}
                     {props?.map((props: any, e: number) => (
                       <div key={e} className="flex">
                         <div className="w-[285px] h-11 border-r px-4">

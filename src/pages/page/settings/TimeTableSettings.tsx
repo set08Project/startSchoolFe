@@ -60,7 +60,7 @@ const TimeTableSettingsScreen = () => {
                 onChange={(e) => setEndClass(e.target.value)}
               >
                 <option disabled selected>
-                  Class Starts
+                  Class Ends
                 </option>
                 <option value={"15:00"}>03:00PM</option>
                 <option value={"15:30"}>03:30PM</option>
