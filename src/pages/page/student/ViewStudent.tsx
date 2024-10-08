@@ -17,7 +17,7 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
-  deleteAllStudent,
+  // deleteAllStudent,
   deleteStudent,
   verifyPayment1st,
   verifyPayment2nd,

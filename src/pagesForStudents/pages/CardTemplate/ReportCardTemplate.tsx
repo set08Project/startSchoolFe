@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import pix from "../../../assets/logo.png";
 import { GrDownload } from "react-icons/gr";
 import html2canvas from "html2canvas";
@@ -26,13 +26,28 @@ const ReportCardTemplate: FC<iSchool> = ({
 
     // Traverse the DOM and replace "oklch" color functions with a fallback color
     const elementsWithUnsupportedColors = content.querySelectorAll("*");
-    elementsWithUnsupportedColors.forEach((element: any) => {
+    elementsWithUnsupportedColors.forEach((element: HTMLElement) => {
       const computedStyles = window.getComputedStyle(element);
+
+      // Handle text color
       if (computedStyles.color.includes("oklch")) {
-        element.style.color = "#000000"; // Replace with a fallback color
+        element.style.color = "#000000"; // Fallback color for text
+      }
+
+      // Handle background color
+      if (computedStyles.backgroundColor.includes("oklch")) {
+        element.style.backgroundColor = "#ffffff"; // Fallback color for background
+      }
+
+      // Handle border color
+      if (computedStyles.borderColor.includes("oklch")) {
+        element.style.borderColor = "#000000"; // Fallback color for border
       }
     });
   };
+
+  // preprocessContent();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     preprocessContent();
@@ -42,18 +57,39 @@ const ReportCardTemplate: FC<iSchool> = ({
     const input = contentRef.current;
 
     if (!input) {
+      console.error("No content to export");
       return;
     }
 
+    // Use html2canvas to capture the content
     html2canvas(input)
       .then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-        const pdf: any = new jsPDF();
-        pdf.addImage(imgData, "PNG", 30, 10);
-        pdf.save(`report-card-${moment(Date.now()).format("llll")}.pdf`);
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // Add the first page
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        // Handle multiple pages if necessary
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight; // Move to the next page's start
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        // Save the generated PDF
+        pdf.save(`webpage-${new Date().toISOString()}.pdf`);
       })
       .catch((error) => {
-        return error;
+        console.error("Error generating PDF:", error);
       });
   };
 
@@ -81,7 +117,9 @@ const ReportCardTemplate: FC<iSchool> = ({
                 className="py-2 px-4 bg-blue-950 text-white flex items-center gap-2 rounded-md cursor-pointer mt-2"
                 onClick={downloadPDF}
               >
-                <div>Download Result</div>
+                <div>
+                  {loading ? "Generating PDF..." : "Download Resut as PDF"}
+                </div>
                 <GrDownload className="mb-1" />
               </div>
             </div>
@@ -269,7 +307,6 @@ const ReportCardTemplate: FC<iSchool> = ({
               <tbody>{/* Optional: Add rows if necessary */}</tbody>
             </table>
           </div>
-
           {/* <table className="w-[100%] border-collapse border border-gray-300 bg-gray-400 overflow-y-auto">
             <thead>
               <tr>
@@ -308,7 +345,7 @@ const ReportCardTemplate: FC<iSchool> = ({
               </tr>
             </tbody>
           </table> */}
-          <div className="p-4 bg-gray-200 w-full min-h-[300px] text-center font-bold lg:text-[20px] text-[15px]">
+          <div className="p-4 bg-gray-200 w-full min-h-[100px] text-center font-bold lg:text-[20px] text-[15px]">
             Students's Performance Chart
           </div>
 
@@ -320,7 +357,6 @@ const ReportCardTemplate: FC<iSchool> = ({
               {subjects?.adminComment}
             </p>
           </div>
-
           <div className="p-4 w-full lg:h-[180px] min-h-[70px] mb-12 bg-gray-400 mt-3 border ">
             <h1 className="font-bold text-white pl-6 py-2 bg-gray-500">
               Class Teacher's Comment

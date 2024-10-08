@@ -323,7 +323,7 @@ const HomeScreen = () => {
                 }}
               />
               {data?.adminCode === codeValue ? (
-                <Link to={`${"props.url"}`}>
+                <Link to={`${"/expenditures"}`}>
                   <Button
                     icon={<GiPadlock size={30} />}
                     name={"Proceed"}
@@ -378,7 +378,7 @@ const HomeScreen = () => {
         </div>
       )}
 
-      {notice && (
+      {!notice && (
         <div
           className="-top-0 w-full h-full left-0 absolute rounded-md overflow-hidden"
           style={{
