@@ -31,7 +31,8 @@ const TimeTableSettingsScreen = () => {
         <br />
         <br />
         Once you've updated your settings, click "Update Table Detail" to
-        confirm.
+        confirm. Your customized timetable will be reflected throughout the
+        system.
         <br />
       </p>
 
