@@ -5,6 +5,9 @@ import axios from "axios";
 
 // working locally
 
+// const URL: string = "https://just-next-be1.onrender.com/api";
+// const URL2: string = "https://just-next-be1.onrender.com";
+
 const URL: string = "https://startschoolbe-1.onrender.com/api";
 const URL2: string = "https://startschoolbe-1.onrender.com";
 
@@ -330,6 +333,17 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
       .then((res: any) => {
         return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+export const deleteAllStudent = async (schoolID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-all-students/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
       });
   } catch (error: any) {
     return error;
