@@ -1,10 +1,16 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import lodash from "lodash";
 import {
+  useClassSubjects,
   useClassTimeTable,
   useSchool,
   useSchoolData,
 } from "../../../pages/hook/useSchoolAuth";
+import { BsThreeDots } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+import { updateTimeTableSubject } from "../../../pages/api/schoolAPIs";
+import toast from "react-hot-toast";
+import { mutate } from "swr";
 
 interface iProps {
   props?: any;
@@ -15,16 +21,6 @@ const daysData = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TimeTableScreen: FC<iProps> = ({ props }) => {
   const { timetbale } = useClassTimeTable(props!);
 
-  const parseTime = (timeString: string): number => {
-    const [time, modifier] = timeString.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
-
-    if (modifier === "PM" && hours < 12) hours += 12;
-    if (modifier === "AM" && hours === 12) hours = 0;
-
-    return hours * 60 + minutes;
-  };
-
   const dataTime: any = Object.values(
     lodash.groupBy(timetbale?.data?.timeTable, "day")
   )?.map((subArray: any) =>
@@ -33,9 +29,12 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     )
   );
-
-  // parseTime(a.time.split(" - ")[0]) - parseTime(b.time.split(" - ")[0])
   const { data } = useSchoolData();
+
+  const [state, setState] = useState<number | null>(null);
+  const [subject, setSubject] = useState<string>("");
+  const { classID } = useParams();
+  const { readSubject } = useClassSubjects(classID!);
 
   return (
     <div className="w-full ">
@@ -64,7 +63,7 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
               {daysData?.map((props: string, i: number) => (
                 <div
                   key={i}
-                  className={`py-2 pl-2 h-[3.75rem] w-[188px] ${
+                  className={`py-2 pl-2 h-[3.75rem] w-[188px] flex items-center ${
                     i % 2 === 0 ? "bg-white" : "bg-slate-50"
                   }`}
                 >
@@ -93,8 +92,95 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
                     </div> */}
                     {props?.map((props: any, e: number) => (
                       <div key={e} className="flex">
-                        <div className="w-[285px] h-11 border-r px-4">
-                          {props.subject}
+                        <div className="relative w-[285px] h-11 border-r px-4 flex items-center justify-between  ">
+                          {props.subject}{" "}
+                          <div
+                            className=" cursor-pointer text-slate-400 hover:text-slate-900 transition-all duration-300"
+                            onClick={() => {
+                              setState(e);
+                            }}
+                          >
+                            <BsThreeDots />
+                          </div>
+                          {state === e && (
+                            <div
+                              className="absolute w-[280px] mx-1 min-h-[180px] p-4 backdrop-blur-sm top-10 left-0 rounded-md border
+                            isolate aspect-video bg-white/30 shadow-lg ring-1 ring-black/5
+                            "
+                            >
+                              <p className="text-[13px] font-semibold">
+                                Change Subject for this Time
+                              </p>
+
+                              <select
+                                className="select select-bordered w-full mt-2 mb-8"
+                                onChange={(e: any) => {
+                                  setSubject(e.target.value);
+                                }}
+                              >
+                                <option disabled selected>
+                                  Choose Period
+                                </option>
+                                <option value={"Short Break"}>
+                                  Short Break
+                                </option>
+                                <option value={"Long Break"}>Long Break</option>
+                                <option value={"Free Period"}>
+                                  Free Period
+                                </option>
+                                <option value={"Assembly"}>Assembly</option>
+                                {readSubject?.map((props: any, i: number) => (
+                                  <option
+                                    key={i}
+                                    value={props.subjectTitle}
+                                    className="py-4 my-8"
+                                  >
+                                    {props?.subjectTitle}
+                                  </option>
+                                ))}
+                              </select>
+
+                              <div className="flex gap-2 items-center">
+                                <button
+                                  className="w-full px-4 py-2 text-white font-medium rounded-md bg-red-500 hover:bg-red-600 transition-all duration-300"
+                                  onClick={() => {
+                                    setState(null);
+                                  }}
+                                >
+                                  Close
+                                </button>
+                                <button
+                                  className="w-full px-4 py-2 text-white font-medium rounded-md bg-blue-950 hover:bg-blue-900 transition-all duration-300"
+                                  onClick={() => {
+                                    updateTimeTableSubject(
+                                      data?._id,
+                                      classID,
+                                      props?._id,
+                                      subject
+                                    ).then((res) => {
+                                      if (res.status === 201) {
+                                        toast.success(
+                                          "subject updated successfully"
+                                        );
+                                        setState(null);
+                                        mutate(
+                                          `api/view-time-table/${classID}`
+                                        );
+                                      } else {
+                                        toast.error(
+                                          "Please try again, something went wrong!"
+                                        );
+
+                                        setState(null);
+                                      }
+                                    });
+                                  }}
+                                >
+                                  update
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}

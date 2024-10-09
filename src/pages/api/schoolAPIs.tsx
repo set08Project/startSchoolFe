@@ -23,6 +23,25 @@ export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   }
 };
 
+export const updateTimeTableSubject = async (
+  schoolID: string,
+  classID: string,
+  tableID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-time-table/${schoolID}/${classID}/${tableID}`, {
+        subject: data,
+      })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const timeTableSetups = async (schoolID: string, data: any) => {
   try {
     return await axios
