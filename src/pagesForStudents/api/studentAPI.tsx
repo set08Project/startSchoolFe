@@ -430,6 +430,24 @@ export const updateParentEmail = async (
 };
 //Update Student Profile ends Here
 
+//Student Socials
+export const updateStudentFacebook = async (
+  schoolID: string,
+  studentID: string,
+  facebookAccount: string
+) => {
+  try {
+    return await axios.patch(
+      `${URL}/update-student-facebook/${schoolID}/${studentID}`,
+      { facebookAccount }
+    );
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+//Student Socials Ends Here
+
 export const makeComplains = async (studentID: string, data: any) => {
   try {
     return await axios
