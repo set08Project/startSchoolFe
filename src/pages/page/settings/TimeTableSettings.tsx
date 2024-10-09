@@ -22,8 +22,7 @@ const TimeTableSettingsScreen = () => {
     <div className="sm:w-[350%] rounded-lg border min-h-[560px] text-blue-950">
       <Toaster position="top-center" />
       <p className="text-[13px] p-4 font-medium ">
-        Please note that all online Payment, will be Paid to this Account detail
-        provided below.
+        This section allows you to customize
         <br />
         <br />
         So it is very important that the information provided below are accurate
