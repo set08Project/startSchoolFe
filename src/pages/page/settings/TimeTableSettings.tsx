@@ -23,10 +23,12 @@ const TimeTableSettingsScreen = () => {
       <Toaster position="top-center" />
       <p className="text-[13px] p-4 font-medium ">
         This section allows you to customize and tailor your timetable to align
+        with your schools unique daily educational schedule
         <br />
         <br />
-        So it is very important that the information provided below are accurate
-        and correct. <br />
+        Please note that its crucial to ensure the information entered
+        accurately
+        <br />
       </p>
 
       <div className="mx-5">
