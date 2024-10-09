@@ -27,7 +27,7 @@ const TimeTableSettingsScreen = () => {
         <br />
         <br />
         Please note that its crucial to ensure the information entered
-        accurately
+        accurately reflects your school's schedule
         <br />
       </p>
 
