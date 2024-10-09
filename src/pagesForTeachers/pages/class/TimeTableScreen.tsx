@@ -15,10 +15,26 @@ const daysData = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TimeTableScreen: FC<iProps> = ({ props }) => {
   const { timetbale } = useClassTimeTable(props!);
 
-  const dataTime = Object.values(
+  const parseTime = (timeString: string): number => {
+    const [time, modifier] = timeString.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    return hours * 60 + minutes;
+  };
+
+  const dataTime: any = Object.values(
     lodash.groupBy(timetbale?.data?.timeTable, "day")
+  )?.map((subArray: any) =>
+    subArray.sort(
+      (a: any, b: any) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    )
   );
 
+  // parseTime(a.time.split(" - ")[0]) - parseTime(b.time.split(" - ")[0])
   const { data } = useSchoolData();
 
   return (
