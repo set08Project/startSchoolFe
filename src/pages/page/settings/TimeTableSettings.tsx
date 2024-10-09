@@ -29,6 +29,10 @@ const TimeTableSettingsScreen = () => {
         Please note that its crucial to ensure the information entered
         accurately reflects your school's schedule
         <br />
+        <br />
+        Once you've updated your settings, click "Update Table Detail" to
+        confirm.
+        <br />
       </p>
 
       <div className="mx-5">
