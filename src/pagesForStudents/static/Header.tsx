@@ -82,6 +82,7 @@ const Header = () => {
 
     fetchSchoolData();
   }, [studentInfo?.schoolIDs]);
+
   return (
     <div
       className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
@@ -178,7 +179,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
-          {schoolData?.categoryType === "Secondary" ? (
+          {schoolData?.data?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
                 name={[
