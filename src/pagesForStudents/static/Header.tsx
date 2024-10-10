@@ -198,9 +198,14 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
-                    title: "Profile",
+                    title: "My Profile",
                     icon: <CgProfile />,
                     to: "your-profile",
+                  },
+                  {
+                    title: "My Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
                   },
                   {
                     title: `CBT (For SSS 3 Only)`,
@@ -211,11 +216,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Financials",
-                    icon: <BsCash />,
-                    to: "my-finances",
                   },
                   {
                     title: "Articles",
@@ -277,9 +277,14 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
-                    title: "Profile",
+                    title: "My Profile",
                     icon: <CgProfile />,
                     to: "your-profile",
+                  },
+                  {
+                    title: "My Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
                   },
                   {
                     title: "Articles",
@@ -290,11 +295,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Financials",
-                    icon: <BsCash />,
-                    to: "my-finances",
                   },
                   {
                     title: "Assignments",
