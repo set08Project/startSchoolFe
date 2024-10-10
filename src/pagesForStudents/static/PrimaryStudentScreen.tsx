@@ -87,6 +87,18 @@ const PrimaryStudentScreen = () => {
           My Subjects
           <FaTable />
         </NavLink>
+        <NavLink
+          to="/your-profile"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Profile
+          <CgProfile />
+        </NavLink>
 
         {/* <NavLink
           to="/lesson"
@@ -112,19 +124,6 @@ const PrimaryStudentScreen = () => {
         >
           Lessons
           <MdClass />
-        </NavLink>
-
-        <NavLink
-          to="/your-profile"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          Profile
-          <CgProfile />
         </NavLink>
 
         <NavLink

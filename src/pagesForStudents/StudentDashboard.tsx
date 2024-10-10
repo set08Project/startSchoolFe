@@ -5,7 +5,7 @@ import StudentPerformance from "./pages/Chart/PerformingStudent";
 import Calendar from "./pages/Chart/Calendar";
 import pix from "./../assets/pix.jpg";
 import MakeActiveClass from "./pages/complain/MarkActiveClass";
-import UpdateEmail from "./UpdateEmail";
+import { GoVerified } from "react-icons/go";
 import {
   useSchoolDataByName,
   useSchoolSessionData,
@@ -67,7 +67,7 @@ const StudentDashboard = () => {
       <div className=" grid grid-cols-1 lg:grid-cols-5 gap-3 mt-5">
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4 col-span-3">
           <div className="flex items-center justify-between mb-1">
-            <div className="w-full bg-red-600 mb-4 text-medium capitalize font-medium gap-2">
+            <div className="w-full mb-4 text-medium capitalize font-medium gap-2">
               <div className="mb-2 flex items-center gap-2">
                 <div className="text-[12px] md:text-[16px]">My Name: </div>
                 <div className="font-bold md:text-[20px] text-[13px]">
@@ -77,13 +77,17 @@ const StudentDashboard = () => {
                   {studentInfo?.studentLastName}
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="mb-2 flex items-center gap-3">
                 <div className="text-[12px] md:text-[16px]"> My Class:</div>
-                <div className="font-bold md:text-[20px] text-[11px]">
+                <div className="font-bold md:text-[20px] text-[11px] ">
                   {studentInfo?.classAssigned}
-                  <span>Current Class Monitor</span>
                 </div>
               </div>
+              {studentInfo?.monitor === true && (
+                <div className="flex md:text-[18px] text-[11px] font-bold gap-1 items-center">
+                  <GoVerified /> Class Representative/Monitor
+                </div>
+              )}
             </div>
 
             {/* <div className=" gap-6 font-medium cursor-pointer text-[12px] bg-blue-950 leading-tight text-white px-6 py-4  rounded-md  text-center">

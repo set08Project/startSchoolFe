@@ -198,6 +198,11 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
+                    title: "Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
                     title: `CBT (For SSS 3 Only)`,
                     icon: <MdQuiz />,
                     to: "CBT",
@@ -206,11 +211,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Profile",
-                    icon: <CgProfile />,
-                    to: "your-profile",
                   },
                   {
                     title: "Financials",
@@ -277,6 +277,11 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
+                    title: "Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
                     title: "Articles",
                     icon: <MdOutlineArticle />,
                     to: "articles",
@@ -285,11 +290,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Profile",
-                    icon: <CgProfile />,
-                    to: "your-profile",
                   },
                   {
                     title: "Financials",
