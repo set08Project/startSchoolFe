@@ -90,9 +90,11 @@ const TimeTableSettingsScreen = () => {
                 </option>
                 <option value={"10:30"}>10:30AM</option>
                 <option value={"10:45"}>10:45AM</option>
+                <option value={"10:45"}>10:45AM</option>
                 <option value={"11:00"}>11:00AM</option>
                 <option value={"11:20"}>11:20AM</option>
                 <option value={"11:30"}>11:30AM</option>
+                <option value={"11:40"}>11:40AM</option>
                 <option value={"12:00"}>12:00NOON</option>
               </select>
             </div>
