@@ -60,7 +60,7 @@ const StudentSocialSettings = () => {
                   </h1>
                 ) : (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                    + add your facebook handle
+                    + add your facebook handle or Guidience
                   </h1>
                 )}
               </div>
@@ -90,7 +90,7 @@ const StudentSocialSettings = () => {
                 </h1>
                 {/* ) : ( */}
                 <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
-                  + add your instagram handle
+                  + add your instagram handle or Guidience
                 </h1>
                 {/* )} */}
               </div>
@@ -119,7 +119,7 @@ const StudentSocialSettings = () => {
                 </h1>
                 {/* ) : ( */}
                 <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                  + add your X handle
+                  + add your X handle or Guidience
                 </h1>
                 {/* )} */}
               </div>
@@ -148,7 +148,7 @@ const StudentSocialSettings = () => {
                 </h1>
                 {/* ) : ( */}
                 <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                  + add your linkedIn handle
+                  + add your linkedIn handle or Guidience
                 </h1>
                 {/* )} */}
               </div>
@@ -226,44 +226,4 @@ const StudentSocialSettings = () => {
 
 export default StudentSocialSettings;
 
-{
-  /* {toggle && (
-          <div className="w-full h-full absolute top-0 backdrop-blur-sm flex justify-center items-center">
-            <div className="p-4 min-h-[300px] min-w-[400px] bg-white border shadow-md rounded-lg flex justify-center items-center flex-col">
-              
-              
 
-              {toggle === "X" && (
-                <Input
-                  placeholder="Enter Your X Handle"
-                  value={x}
-                  className="mb-4"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setX(e.target.value);
-                  }}
-                />
-              )}
-
-              {toggle === "linkedin" && (
-                <Input
-                  placeholder="Enter Your Linkedin Handle"
-                  value={linkedin}
-                  className="mb-4"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setLinkedin(e.target.value);
-                  }}
-                />
-              )}
-
-              {toggle === "instagram" && (
-                <Input
-                  placeholder="Enter Your Linkedin Handle"
-                  value={instagram}
-                  className="mb-4"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setInstagram(e.target.value);
-                  }}
-                />
-              )}
-              {/* State Change For button */
-}
