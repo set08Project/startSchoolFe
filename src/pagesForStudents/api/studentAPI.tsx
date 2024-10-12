@@ -3,9 +3,9 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
@@ -437,10 +437,13 @@ export const updateStudentFacebook = async (
   facebookAccount: string
 ) => {
   try {
-    return await axios.patch(
-      `${URL}/update-student-facebook/${schoolID}/${studentID}`,
-      { facebookAccount }
-    );
+    return await axios
+      .patch(`${URL}/update-student-facebook/${schoolID}/${studentID}`, {
+        facebookAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
   } catch (error) {
     console.error();
     return error;
@@ -453,8 +456,55 @@ export const updateStudentInstagram = async (
   instagramAccount: string
 ) => {
   try {
-    return await axios.patch(`${URL}`);
-  } catch (error) {}
+    return await axios
+      .patch(`${URL}/update-student-instagram/${schoolID}/${studentID}`, {
+        instagramAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateLinkedin = async (
+  schoolID: string,
+  studentID: string,
+  linkedinAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-linkedin/${schoolID}/${studentID}`, {
+        linkedinAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateXAccount = async (
+  schoolID: string,
+  studentID: string,
+  xAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}//update-student-xAccount/${schoolID}/${studentID}`, {
+        xAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
 };
 //Student Socials Ends Here
 

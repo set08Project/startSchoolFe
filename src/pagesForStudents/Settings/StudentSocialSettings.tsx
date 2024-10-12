@@ -8,7 +8,12 @@ import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useStudentInfo } from "../hooks/useStudentHook";
-import { updateStudentFacebook } from "../api/studentAPI";
+import {
+  updateLinkedin,
+  updateStudentFacebook,
+  updateStudentInstagram,
+  updateXAccount,
+} from "../api/studentAPI";
 
 const StudentSocialSettings = () => {
   const [toggle, setToggle] = useState<string | null>(null);
@@ -18,7 +23,7 @@ const StudentSocialSettings = () => {
   const [linkedin, setLinkedin] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
-  // console.log("This is studentInfo", studentInfo);
+  console.log("This is studentInfo", studentInfo);
   const schoolID = studentInfo?.schoolIDs;
   const studentID = studentInfo?._id;
 
@@ -30,6 +35,44 @@ const StudentSocialSettings = () => {
       });
     } catch (error) {
       toast.error("Error Updating Facebook Account");
+      console.error();
+      return error;
+    }
+  };
+
+  const studentInstagram = () => {
+    try {
+      updateStudentInstagram(schoolID, studentID, instagram).then((res) => {
+        toast.success("Instagram Updated Successsfully");
+        return res?.data;
+      });
+    } catch (error) {
+      console.error();
+      return error;
+    }
+  };
+
+  const updateLinkedinAcct = () => {
+    try {
+      updateLinkedin(schoolID, studentID, linkedin).then((res) => {
+        toast.success("Linkedin Account Updated");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating Linkedin");
+      console.error();
+      return error;
+    }
+  };
+
+  const studentXAccount = () => {
+    try {
+      updateXAccount(schoolID, studentID, x).then((res) => {
+        toast.success("X Updated Successsfully");
+        return res?.data;
+      });
+    } catch (error) {
+      toast.error("Error Updating X");
       console.error();
       return error;
     }
@@ -83,9 +126,9 @@ const StudentSocialSettings = () => {
                   />
                   instagram
                 </h3>
-                {studentInfo?.instagramAcct ? (
+                {studentInfo?.instagramAccount ? (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
-                    {studentInfo?.instagramAcct}
+                    {studentInfo?.instagramAccount}
                   </h1>
                 ) : (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
@@ -112,9 +155,9 @@ const StudentSocialSettings = () => {
                   />
                   X
                 </h3>
-                {studentInfo?.xAcct ? (
+                {studentInfo?.xAccount ? (
                   <h1 className="text-[9px] md:text-[18px] font-[700] text-blue-500">
-                    {studentInfo?.xAcct}
+                    {studentInfo?.xAccount}
                   </h1>
                 ) : (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
@@ -141,9 +184,9 @@ const StudentSocialSettings = () => {
                   />
                   linkedIn
                 </h3>
-                {studentInfo?.linkedinAcct ? (
+                {studentInfo?.linkedinAccount ? (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                    {studentInfo?.linkedinAcct}
+                    {studentInfo?.linkedinAccount}
                   </h1>
                 ) : (
                   <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
@@ -233,7 +276,7 @@ const StudentSocialSettings = () => {
                     name="Update"
                     className="bg-blue-950 hover:scale-105 transition-all duration-300"
                     onClick={() => {
-                      // StudentFacebook();
+                      StudentFacebook();
                       setToggle(null);
                     }}
                   />
@@ -243,7 +286,7 @@ const StudentSocialSettings = () => {
                     name="Update"
                     className="bg-blue-950 hover:scale-105 transition-all duration-300"
                     onClick={() => {
-                      // StudentFacebook();
+                      studentInstagram();
                       setToggle(null);
                     }}
                   />
@@ -253,7 +296,7 @@ const StudentSocialSettings = () => {
                     name="Update"
                     className="bg-blue-950 hover:scale-105 transition-all duration-300"
                     onClick={() => {
-                      StudentFacebook();
+                      studentXAccount();
                       setToggle(null);
                     }}
                   />
@@ -263,7 +306,7 @@ const StudentSocialSettings = () => {
                     name="Update"
                     className="bg-blue-950 hover:scale-105 transition-all duration-300"
                     onClick={() => {
-                      // StudentFacebook();
+                      updateLinkedinAcct();
                       setToggle(null);
                     }}
                   />
