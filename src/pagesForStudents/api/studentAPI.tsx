@@ -446,6 +446,16 @@ export const updateStudentFacebook = async (
     return error;
   }
 };
+
+export const updateStudentInstagram = async (
+  schoolID: string,
+  studentID: string,
+  instagramAccount: string
+) => {
+  try {
+    return await axios.patch(`${URL}`);
+  } catch (error) {}
+};
 //Student Socials Ends Here
 
 export const makeComplains = async (studentID: string, data: any) => {

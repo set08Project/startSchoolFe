@@ -2,7 +2,7 @@ import { useState } from "react";
 import IG from "../../assets/ig.png";
 import FB from "../../assets/fb.png";
 import Linkden from "../../assets/linkden.png";
-import X from "../../assets/fb.png";
+import X from "../../assets/twitter.png";
 import { CgClose } from "react-icons/cg";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
@@ -14,7 +14,7 @@ const StudentSocialSettings = () => {
   const [toggle, setToggle] = useState<string | null>(null);
   const [facebook, setFacebook] = useState<string>("");
   const [instagram, setInstagram] = useState<string>("");
-  const [x, seX] = useState<string>("");
+  const [x, setX] = useState<string>("");
   const [linkedin, setLinkedin] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
@@ -22,7 +22,7 @@ const StudentSocialSettings = () => {
   const schoolID = studentInfo?.schoolIDs;
   const studentID = studentInfo?._id;
 
-  const updatefacebook = () => {
+  const StudentFacebook = () => {
     try {
       updateStudentFacebook(schoolID, studentID, facebook).then((res) => {
         toast.success("Facebook Updated Successfully");
@@ -67,7 +67,6 @@ const StudentSocialSettings = () => {
               <div
                 className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
                 onClick={() => {
-                  updatefacebook();
                   setToggle("facebook");
                 }}
               >
@@ -84,21 +83,21 @@ const StudentSocialSettings = () => {
                   />
                   instagram
                 </h3>
-                {/* {teacherInfo?.instagramAcct ? ( */}
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
-                  {/* {teacherInfo?.instagramAcct} */}
-                </h1>
-                {/* ) : ( */}
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
-                  + add your instagram handle or Guidience
-                </h1>
-                {/* )} */}
+                {studentInfo?.instagramAcct ? (
+                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
+                    {studentInfo?.instagramAcct}
+                  </h1>
+                ) : (
+                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
+                    + add your instagram handle or Guidience
+                  </h1>
+                )}
               </div>
               <div
                 className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
-                //   onClick={() => {
-                //     setToggle("instagram");
-                //   }}
+                onClick={() => {
+                  setToggle("instagram");
+                }}
               >
                 Edit
               </div>
@@ -113,21 +112,21 @@ const StudentSocialSettings = () => {
                   />
                   X
                 </h3>
-                {/* {teacherInfo?.xAcct ? ( */}
-                <h1 className="text-[9px] md:text-[18px] font-[700] text-blue-500">
-                  {/* {teacherInfo?.xAcct} */}
-                </h1>
-                {/* ) : ( */}
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                  + add your X handle or Guidience
-                </h1>
-                {/* )} */}
+                {studentInfo?.xAcct ? (
+                  <h1 className="text-[9px] md:text-[18px] font-[700] text-blue-500">
+                    {studentInfo?.xAcct}
+                  </h1>
+                ) : (
+                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                    + add your X handle or Guidience
+                  </h1>
+                )}
               </div>
               <div
                 className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
-                //   onClick={() => {
-                //     setToggle("X");
-                //   }}
+                onClick={() => {
+                  setToggle("x");
+                }}
               >
                 Edit
               </div>
@@ -142,21 +141,21 @@ const StudentSocialSettings = () => {
                   />
                   linkedIn
                 </h3>
-                {/* {teacherInfo?.linkedinAcct ? ( */}
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                  {/* {teacherInfo?.linkedinAcct} */}
-                </h1>
-                {/* ) : ( */}
-                <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                  + add your linkedIn handle or Guidience
-                </h1>
-                {/* )} */}
+                {studentInfo?.linkedinAcct ? (
+                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                    {studentInfo?.linkedinAcct}
+                  </h1>
+                ) : (
+                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                    + add your linkedIn handle or Guidience
+                  </h1>
+                )}
               </div>
               <div
                 className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
-                //   onClick={() => {
-                //     setToggle("linkedin");
-                //   }}
+                onClick={() => {
+                  setToggle("linkedin");
+                }}
               >
                 Edit
               </div>
@@ -169,7 +168,7 @@ const StudentSocialSettings = () => {
                   <h2 className="text-blue-950 font-semibold">
                     {toggle === "facebook" && "Enter Your Facebook Handle"}
                     {toggle === "linkedin" && "Enter Your Linkedln Handle"}
-                    {toggle === "X" && "Enter Your X Handle"}
+                    {toggle === "x" && "Enter Your X Handle"}
                     {toggle === "instagram" && "Enter Your Instagram Handle"}
                   </h2>
                   <CgClose
@@ -197,9 +196,33 @@ const StudentSocialSettings = () => {
                     <Input
                       placeholder="Enter Your Facebook Handle"
                       value={instagram}
-                      className=""
+                      className="w-[230px] md:w-[300px]"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setInstagram(e.target.value);
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="mt-[50px]">
+                  {toggle === "x" && (
+                    <Input
+                      placeholder="Enter Your Facebook Handle"
+                      value={x}
+                      className="w-[230px] md:w-[300px]"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setX(e.target.value);
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="mt-[50px]">
+                  {toggle === "linkedin" && (
+                    <Input
+                      placeholder="Enter Your Facebook Handle"
+                      value={linkedin}
+                      className="w-[230px] md:w-[300px]"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setLinkedin(e.target.value);
                       }}
                     />
                   )}
@@ -210,7 +233,37 @@ const StudentSocialSettings = () => {
                     name="Update"
                     className="bg-blue-950 hover:scale-105 transition-all duration-300"
                     onClick={() => {
-                      // changeStaffInstagramAcct();
+                      // StudentFacebook();
+                      setToggle(null);
+                    }}
+                  />
+                )}
+                {toggle === "instagram" && (
+                  <Button
+                    name="Update"
+                    className="bg-blue-950 hover:scale-105 transition-all duration-300"
+                    onClick={() => {
+                      // StudentFacebook();
+                      setToggle(null);
+                    }}
+                  />
+                )}
+                {toggle === "x" && (
+                  <Button
+                    name="Update"
+                    className="bg-blue-950 hover:scale-105 transition-all duration-300"
+                    onClick={() => {
+                      StudentFacebook();
+                      setToggle(null);
+                    }}
+                  />
+                )}
+                {toggle === "linkedin" && (
+                  <Button
+                    name="Update"
+                    className="bg-blue-950 hover:scale-105 transition-all duration-300"
+                    onClick={() => {
+                      // StudentFacebook();
                       setToggle(null);
                     }}
                   />
@@ -225,5 +278,3 @@ const StudentSocialSettings = () => {
 };
 
 export default StudentSocialSettings;
-
-
