@@ -428,6 +428,84 @@ export const updateParentEmail = async (
 };
 //Update Student Profile ends Here
 
+//Student Socials
+export const updateStudentFacebook = async (
+  schoolID: string,
+  studentID: string,
+  facebookAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-facebook/${schoolID}/${studentID}`, {
+        facebookAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateStudentInstagram = async (
+  schoolID: string,
+  studentID: string,
+  instagramAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-instagram/${schoolID}/${studentID}`, {
+        instagramAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateLinkedin = async (
+  schoolID: string,
+  studentID: string,
+  linkedinAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-linkedin/${schoolID}/${studentID}`, {
+        linkedinAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const updateXAccount = async (
+  schoolID: string,
+  studentID: string,
+  xAccount: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}//update-student-xAccount/${schoolID}/${studentID}`, {
+        xAccount,
+      })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+//Student Socials Ends Here
+
 export const makeComplains = async (studentID: string, data: any) => {
   try {
     return await axios
