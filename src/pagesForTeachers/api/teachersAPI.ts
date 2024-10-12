@@ -1,9 +1,7 @@
 import axios from "axios";
 
 // const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
-
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+// import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 const URL: string = "https://startschoolbe-1.onrender.com/api";
 
@@ -552,6 +550,7 @@ export const reportCardRemark = async (
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
+        console.log(res);
         return res?.data;
       });
   } catch (error) {
