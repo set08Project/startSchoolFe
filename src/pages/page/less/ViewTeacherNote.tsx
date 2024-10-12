@@ -63,29 +63,63 @@ const ViewTeacherNoteByAdmin = () => {
       <div className="flex justify-center items-center ">
         {/* Lesson note starts */}
         <div
-          className="p-5 bg-white shadow-lg min-h-[80vh] w-[95%] md:w-[90%] xl:w-[80%] "
+          className="p-5 bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] "
           ref={lessonNoteRef}
         >
           {/* <div className="w-full h-[40px] bg-blue-500 rounded-lg"></div> */}
-          <div>
-            <div className="mb-3 flex justify-between items-center">
-              <div>
-                <h1 className="text-[35px] font-semibold text-blue-950">
-                  English Language
+          <div className="pt-[20px]">
+            <div className="mb-3 flex items-center">
+              <div className="w-full text-center">
+                <h1 className="text-[18px] md:text-[25px] font-semibold text-blue-950">
+                  English Language <span>(JSS 1A)</span>
+                </h1>
+                <h1 className="text-[25px] md:text-[35px] font-semibold text-blue-950">
+                  Grammar and Punctuation
                 </h1>
               </div>
-              <h1 className="text-[20px] font-semibold text-blue-950">
+              {/* <h1 className="text-[18px] md:text-[20px] font-semibold text-blue-950">
                 JSS 1B
-              </h1>
+              </h1> */}
             </div>
-            <div>
-              <h2>
-                Started Date: <span className="font-medium">10/02/2024</span>
-              </h2>
+            <div className=" text-blue-950">
+              <div>
+                <div className="flex mb-2 items-center">
+                  <h2 className="w-[150px]">By:</h2>
+                  <h2 className="font-semibold">Prince John</h2>
+                </div>
+                <div className="flex mb-2 items-center">
+                  <h2 className="w-[150px]">Started Date:</h2>
+                  <h2 className="font-semibold">10/02/2024</h2>
+                </div>
+                <div className="flex mb-2 items-center">
+                  <h2 className="w-[150px]">Topic:</h2>
+                  <h2 className="font-semibold">Grammar and Punctuation</h2>
+                </div>
+                <div className="flex mb-2 items-center">
+                  <h2 className="w-[150px]">Sub Topic:</h2>
+                  <h2 className="font-semibold">English Language</h2>
+                </div>
+              </div>
+            </div>
+            <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div className="">
+                <h1 className="font-semibold mb-2">Previous Knowledge:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
+              <div className="">
+                <h1 className="font-semibold mb-2">Specific Objectives:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
             </div>
 
             <div className="my-5 border-b w-full" />
-            <h3 className="font-medium leading-10">
+            <h3 className="mb-3 font-medium leading-10 text-blue-950">
               Dive into Next's virtual hub where you (admin & teachers) can
               effortlessly manage student information. From academic
               performances to writing articles and CBTs to rating teachers and
@@ -109,6 +143,43 @@ const ViewTeacherNoteByAdmin = () => {
               CBTs to rating teachers and lessons taught and to attendance
               records.
             </h3>
+            <div className="my-5 border-b w-full" />
+            <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div className="min-h-[150px] p-2 rounded-md bg-gray-100">
+                <h1 className="font-semibold mb-2">Evaluation:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
+              <div className="min-h-[150px] p-2 rounded-md bg-gray-100">
+                <h1 className="font-semibold mb-2">Summary:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
+            </div>
+            <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div className="min-h-[150px] p-2 rounded-md bg-gray-100">
+                <h1 className="font-semibold mb-2">Presentation:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
+              <div className="min-h-[150px] p-2 rounded-md bg-gray-100">
+                <h1 className="font-semibold mb-2">Assignments:</h1>
+                <h2>
+                  From academic performances to writing articles and CBTs to
+                  rating teachers and lessons taught and to attendance records.
+                </h2>
+              </div>
+            </div>
           </div>
         </div>
         {/* Lesson note starts */}
@@ -132,7 +203,7 @@ const ViewTeacherNoteByAdmin = () => {
         <div>
           Sub Topic:
           <span className="uppercase font-bold">
-            {" "}
+            
             {lessonNoteData?.subTopic}
           </span>
         </div>
