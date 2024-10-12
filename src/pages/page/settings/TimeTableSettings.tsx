@@ -18,6 +18,8 @@ const TimeTableSettingsScreen = () => {
 
   const [toggle, setToggle] = useState<Boolean>(false);
 
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   return (
     <div className="sm:w-[350%] rounded-lg border min-h-[560px] text-blue-950">
       <Toaster position="top-center" />
