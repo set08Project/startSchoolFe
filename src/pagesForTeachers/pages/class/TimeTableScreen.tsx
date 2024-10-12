@@ -8,9 +8,14 @@ import {
 } from "../../../pages/hook/useSchoolAuth";
 import { BsThreeDots } from "react-icons/bs";
 import { useParams } from "react-router-dom";
-import { updateTimeTableSubject } from "../../../pages/api/schoolAPIs";
+import {
+  deleteTimeTableSubject,
+  updateTimeTableSubject,
+} from "../../../pages/api/schoolAPIs";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
+import { MdDelete } from "react-icons/md";
+import Tooltip from "../../components/static/Tooltip";
 
 interface iProps {
   props?: any;
@@ -105,12 +110,42 @@ const TimeTableScreen: FC<iProps> = ({ props }) => {
                           {state === e && (
                             <div
                               className="absolute w-[280px] mx-1 min-h-[180px] p-4 backdrop-blur-sm top-10 left-0 rounded-md border
-                            isolate aspect-video bg-white/30 shadow-lg ring-1 ring-black/5
+                             bg-white/30 shadow-lg ring-1 ring-black/5
                             "
                             >
-                              <p className="text-[13px] font-semibold">
-                                Change Subject for this Time
-                              </p>
+                              <div className="flex items-center justify-between mb-5">
+                                <p className="text-[13px] font-semibold">
+                                  Change Subject
+                                </p>
+                                <Tooltip tip="Delete this Subject">
+                                  <MdDelete
+                                    className="text-red-600 cursor-pointer text-[22px]"
+                                    onClick={() => {
+                                      deleteTimeTableSubject(
+                                        data?._id,
+                                        props?._id
+                                      ).then((res) => {
+                                        console.log(res);
+                                        if (res.status === 201) {
+                                          toast.success(
+                                            "subject deleted successfully"
+                                          );
+                                          setState(null);
+                                          mutate(
+                                            `api/view-time-table/${classID}`
+                                          );
+                                        } else {
+                                          toast.error(
+                                            "Please try again, something went wrong!"
+                                          );
+
+                                          setState(null);
+                                        }
+                                      });
+                                    }}
+                                  />
+                                </Tooltip>
+                              </div>
 
                               <select
                                 className="select select-bordered w-full mt-2 mb-8"

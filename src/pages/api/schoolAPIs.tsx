@@ -1,15 +1,12 @@
 import axios from "axios";
 
-const URL2: string = import.meta.env.VITE_URL;
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
-// const URL2: string = "https://just-next-be1.onrender.com";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL2: string = "https://startschoolbe-1.onrender.com";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL2: string = "https://startschoolbe-1.onrender.com";
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
@@ -34,6 +31,21 @@ export const updateTimeTableSubject = async (
       .patch(`${URL}/update-time-table/${schoolID}/${classID}/${tableID}`, {
         subject: data,
       })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteTimeTableSubject = async (
+  schoolID: string,
+  tableID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-time-table/${schoolID}/${tableID}`)
       .then((res: any) => {
         return res;
       });
