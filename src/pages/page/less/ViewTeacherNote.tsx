@@ -14,6 +14,7 @@ const ViewTeacherNoteByAdmin = () => {
   const { data } = useSchoolData();
   const { noteID } = useParams();
   const { lessonNoteData } = useLessonNote(noteID!);
+  console.log(lessonNoteData);
 
   const lessonNoteRef = useRef<HTMLDivElement>(null);
 
@@ -68,125 +69,120 @@ const ViewTeacherNoteByAdmin = () => {
           className="bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] "
           ref={lessonNoteRef}
         >
-          <div className="w-full h-[40px] bg-blue-950 rounded-tl-md rounded-tr-md"></div>
+          <div className="w-full h-[40px] bg-blue-950 rounded-tl-md rounded-tr-md" />
           <div className="p-5">
             <div className="pt-[20px]">
               <div className="mb-5 flex items-center">
                 <div className="w-full text-center">
                   <h1 className="text-[18px] md:text-[25px] font-semibold text-blue-950">
-                    English Language <span>(JSS 1A)</span>
+                    {lessonNoteData?.subject}{" "}
+                    <span>({lessonNoteData?.classes})</span>
                   </h1>
                   <h1 className="text-[25px] md:text-[35px] font-semibold text-blue-950">
-                    Grammar and Punctuation
+                    {lessonNoteData?.topic}
                   </h1>
                 </div>
-                {/* <h1 className="text-[18px] md:text-[20px] font-semibold text-blue-950">
-                JSS 1B
-              </h1> */}
               </div>
               <div className=" text-blue-950">
                 <div className="font-medium">
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">By:</h2>
-                    <h2 className="font-semibold">Prince John</h2>
+                    <h2 className="font-semibold">{lessonNoteData?.teacher}</h2>
                   </div>
                   <div className="flex mb-2 items-center">
-                    <h2 className="w-[150px]">Started Date:</h2>
-                    <h2 className="font-semibold">10/02/2024</h2>
+                    <h2 className="w-[150px]">Starting Date:</h2>
+                    <h2 className="font-semibold">
+                      {lessonNoteData?.createDate}
+                    </h2>
                   </div>
                   <div className="flex mb-2 items-center">
-                    <h2 className="w-[150px]">Topic:</h2>
-                    <h2 className="font-semibold">Grammar and Punctuation</h2>
+                    <h2 className="w-[150px]">Status:</h2>
+                    <h2
+                      className={`${
+                        lessonNoteData?.adminSignation === true
+                          ? "text-green-500"
+                          : "text-red-500"
+                      } font-semibold`}
+                    >
+                      {lessonNoteData?.adminSignation === true
+                        ? "Approved"
+                        : "Not-Approved"}
+                    </h2>
                   </div>
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Sub Topic:</h2>
-                    <h2 className="font-semibold">English Language</h2>
+                    <h2 className="font-semibold">
+                      {lessonNoteData?.subTopic}
+                    </h2>
+                  </div>
+                  <div className="flex mb-2 items-center">
+                    <h2 className="w-[150px]">Week:</h2>
+                    <h2 className="font-semibold">{lessonNoteData?.week}</h2>
                   </div>
                 </div>
               </div>
+              <div className="my-5 border-b w-full" />
+              <div className="grid grid-cols-1 text-blue-950 bg-gray-50 md:grid-cols-1 xl:grid-cols-2 gap-3">
+                <div className="flex p-2 mb-2 justify-start items-center">
+                  <h2 className="w-[150px] ">Duration:</h2>
+                  <h2 className="font-semibold">{lessonNoteData?.duration}</h2>
+                </div>
+                <div className="flex p-2  mb-2 justify-start items-center">
+                  <h2 className="w-[150px]">Period:</h2>
+                  <h2 className="font-semibold">{lessonNoteData?.period}</h2>
+                </div>
+                <div className="flex p-2 mb-2 justify-start items-center">
+                  <h2 className="w-[150px]">Instructional Material:</h2>
+                  <div className="font-semibold break-words">
+                    {lessonNoteData?.instructionalMaterial}
+                  </div>
+                </div>
+                <div className="flex mb-2 p-2 justify-start items-center">
+                  <h2 className="w-[150px]">Reference Material:</h2>
+                  <h2 className="font-semibold">
+                    {lessonNoteData?.referenceMaterial}
+                  </h2>
+                </div>
+              </div>
+              <div className="my-5 border-b w-full" />
               <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div className="">
                   <h1 className="font-semibold mb-2">Previous Knowledge:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.previousKnowledge}</h2>
                 </div>
                 <div className="">
                   <h1 className="font-semibold mb-2">Specific Objectives:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.specificObjectives}</h2>
                 </div>
               </div>
 
               <div className="my-5 border-b w-full" />
-              <h3 className="mb-3 font-medium leading-9 text-blue-950">
-                Dive into Next's virtual hub where you (admin & teachers) can
-                effortlessly manage student information. From academic
-                performances to writing articles and CBTs to rating teachers and
-                lessons taught and to attendance records. Dive into Next's
-                virtual hub where you (admin & teachers) can effortlessly manage
-                student information. From academic performances to writing
-                articles and CBTs to rating teachers and lessons taught and to
-                attendance records.Dive into Next's virtual hub where you (admin
-                & teachers) can effortlessly manage student information. From
-                academic performances to writing articles and CBTs to rating
-                teachers and lessons taught and to attendance records.Dive into
-                Next's virtual hub where you (admin & teachers) can effortlessly
-                manage student information. From academic performances to
-                writing articles and CBTs to rating teachers and lessons taught
-                and to attendance records.Dive into Next's virtual hub where you
-                (admin & teachers) can effortlessly manage student information.
-                From academic performances to writing articles and CBTs to
-                rating teachers and lessons taught and to attendance
-                records.Dive into Next's virtual hub where you (admin &
-                teachers) can effortlessly manage student information. From
-                academic performances to writing articles and CBTs to rating
-                teachers and lessons taught and to attendance records.
-              </h3>
+              <h3
+                className="mb-3 w-full font-medium leading-9 text-blue-950"
+                dangerouslySetInnerHTML={{
+                  __html: `${lessonNoteData?.content}`,
+                }}
+              />
+
               <div className="my-5 border-b w-full" />
               <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Evaluation:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records. From academic performances to writing articles and
-                    CBTs to rating teachers and lessons taught and to attendance
-                    records. From academic performances to writing articles and
-                    CBTs to rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.evaluation}</h2>
                 </div>
                 <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Summary:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.summary}</h2>
                 </div>
               </div>
               <div className="pt-[20px] text-blue-950 grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Presentation:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.presentation}</h2>
                 </div>
                 <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Assignments:</h1>
-                  <h2>
-                    From academic performances to writing articles and CBTs to
-                    rating teachers and lessons taught and to attendance
-                    records.
-                  </h2>
+                  <h2>{lessonNoteData?.assignment}</h2>
                 </div>
               </div>
             </div>
