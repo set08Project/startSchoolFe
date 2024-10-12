@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useLessonNote } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
-import { approveNoted } from "../../api/schoolAPIs";
+import { FcApproval, FcCancel } from "react-icons/fc";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { useRef } from "react";
@@ -49,6 +49,36 @@ const ViewTeacherNoteByAdmin = () => {
       windowPrint.print();
       windowPrint.close();
     }
+  };
+
+  const numberMap = () => {
+    return lessonNoteData?.week === "1"
+      ? "One"
+      : lessonNoteData?.week === "2"
+      ? "Two"
+      : lessonNoteData?.week === "3"
+      ? "Three"
+      : lessonNoteData?.week === "4"
+      ? "Four"
+      : lessonNoteData?.week === "5"
+      ? "Five"
+      : lessonNoteData?.week === "6"
+      ? "Six"
+      : lessonNoteData?.week === "7"
+      ? "Seven"
+      : lessonNoteData?.week === "8"
+      ? "Eight"
+      : lessonNoteData?.week === "9"
+      ? "Nine"
+      : lessonNoteData?.week === "10"
+      ? "Ten"
+      : lessonNoteData?.week === "11"
+      ? "Eleven"
+      : lessonNoteData?.week === "12"
+      ? "Twelve"
+      : lessonNoteData?.week === "13"
+      ? "Thirteen"
+      : "";
   };
 
   return (
@@ -97,17 +127,17 @@ const ViewTeacherNoteByAdmin = () => {
                   </div>
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Status:</h2>
-                    <h2
-                      className={`${
-                        lessonNoteData?.adminSignation === true
-                          ? "text-green-500"
-                          : "text-red-500"
-                      } font-semibold`}
-                    >
-                      {lessonNoteData?.adminSignation === true
-                        ? "Approved"
-                        : "Not-Approved"}
-                    </h2>
+                    <div>
+                      {lessonNoteData?.adminSignation === true ? (
+                        <h2 className="font-semibold text-green-500 flex items-center gap-1">
+                          Approved <FcApproval />
+                        </h2>
+                      ) : (
+                        <h2 className="font-semibold text-red-500 flex items-center gap-1">
+                          Not Approved <FcCancel />
+                        </h2>
+                      )}
+                    </div>
                   </div>
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Sub Topic:</h2>
@@ -117,7 +147,9 @@ const ViewTeacherNoteByAdmin = () => {
                   </div>
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Week:</h2>
-                    <h2 className="font-semibold">{lessonNoteData?.week}</h2>
+                    <h2 className="font-semibold">
+                      {lessonNoteData?.week} <span>({numberMap()})</span>
+                    </h2>
                   </div>
                 </div>
               </div>
