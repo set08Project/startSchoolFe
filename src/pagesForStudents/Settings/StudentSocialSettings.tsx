@@ -23,7 +23,6 @@ const StudentSocialSettings = () => {
   const [linkedin, setLinkedin] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
-  console.log("This is studentInfo", studentInfo);
   const schoolID = studentInfo?.schoolIDs;
   const studentID = studentInfo?._id;
 
