@@ -18,6 +18,8 @@ const TimeTableSettingsScreen = () => {
 
   const [toggle, setToggle] = useState<Boolean>(false);
 
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   return (
     <div className="sm:w-[350%] rounded-lg border min-h-[560px] text-blue-950">
       <Toaster position="top-center" />
@@ -89,10 +91,12 @@ const TimeTableSettingsScreen = () => {
                   Break begins
                 </option>
                 <option value={"10:30"}>10:30AM</option>
+                <option value={"10:40"}>10:40AM</option>
                 <option value={"10:45"}>10:45AM</option>
                 <option value={"11:00"}>11:00AM</option>
                 <option value={"11:20"}>11:20AM</option>
                 <option value={"11:30"}>11:30AM</option>
+                <option value={"11:40"}>11:40AM</option>
                 <option value={"12:00"}>12:00NOON</option>
               </select>
             </div>
@@ -110,6 +114,7 @@ const TimeTableSettingsScreen = () => {
                 <option value={"11:00"}>11:00AM</option>
                 <option value={"11:20"}>11:20AM</option>
                 <option value={"11:30"}>11:30AM</option>
+                <option value={"11:45"}>11:45AM</option>
                 <option value={"11:50"}>11:50AM</option>
                 <option value={"12:00"}>12:00NOON</option>
                 <option value={"12:20"}>12:20PM</option>
