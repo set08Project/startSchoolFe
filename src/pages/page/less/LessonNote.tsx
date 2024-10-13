@@ -4,12 +4,13 @@ import { FaBook, FaReply, FaThumbsUp } from "react-icons/fa6";
 import { MdAutoAwesome, MdCheck, MdClose } from "react-icons/md";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useNotes, useSchoolData } from "../../hook/useSchoolAuth";
-import { FiLoader } from "react-icons/fi";
+import { FcApproval, FcCancel } from "react-icons/fc";
 import Button from "../../../pagesForTeachers/components/reUse/Button";
 import { useState } from "react";
 import { adminlessonNoteReply } from "../../../pagesForTeachers/api/teachersAPI";
 import { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+import pic from "../../../assets/pix.jpg";
 
 const AdminLessonNote = () => {
   const { data } = useSchoolData();
@@ -33,6 +34,8 @@ const AdminLessonNote = () => {
       });
     });
   };
+
+  const lessonNote = notes?.data?.lessonNotes;
 
   return (
     <div>
@@ -281,6 +284,209 @@ const AdminLessonNote = () => {
                     </div>
                   </div>
                 )}
+              </div>
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-1 ">
+                <div className="p-5 min-h-[200px] border rounded-[15px] shadow-sm">
+                  <div className="mb-3 flex justify-between items-start">
+                    <div>
+                      <div className="mb-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <FaBook />
+                          English Language <span>JSS 2B</span>
+                        </h3>
+                      </div>
+                      <div className=" mb-3 text-[25px] font-bold flex items-center gap-3 ">
+                        <h1>Money Momentum</h1>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={pic}
+                        alt="teacher_profile_pic"
+                        className="h-[60px] w-[60px] border object-cover rounded-full"
+                      />
+                      {/* <h4 className="text-[15px]">Eromonsaelle Rasheedatee</h4> */}
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <p>
+                      Dive into Next's virtual hub where you (admin & teachers)
+                      can effortlessly manage student information. From academic
+                      performances to writing articles and CBTs to rating
+                      teachers and lessons taught and to attendance records
+                    </p>
+                  </div>
+                  <div className="w-full border mb-3" />
+                  <div className="mb-3 font-semibold italic">
+                    <h3>Rasheedat Eromonsele</h3>
+                  </div>
+                  <div className="mb-3">
+                    {lessonNote?.adminSignation === true ? (
+                      <h2 className="font-semibold text-green-500 flex items-center gap-1">
+                        Approved <FcApproval />
+                      </h2>
+                    ) : (
+                      <h2 className="font-semibold text-red-500 flex items-center gap-1">
+                        Not Approved <FcCancel />
+                      </h2>
+                    )}
+                  </div>
+                  {lessonNote?.adminSignation ? (
+                    <div>
+                      <div className="w-full mb-[25px] flex justify-center items-center">
+                        <label
+                          // htmlFor="send_response"
+                          className={`py-3 px-3 ${
+                            data?.categoryType === "Secondary"
+                              ? "bg-blue-950"
+                              : "bg-red-950"
+                          }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
+                        >
+                          Lesson Note has been Approved
+                          <FaThumbsUp className="mb-1" />
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="w-full mb-[25px] flex justify-center items-center">
+                        <label
+                          htmlFor="send_response"
+                          className={`py-3 px-3 ${
+                            data?.categoryType === "Secondary"
+                              ? "bg-blue-950"
+                              : "bg-red-950"
+                          }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
+                          onClick={() => {
+                            // setID(props?._id);
+                            // setObj(props);
+                          }}
+                        >
+                          Send Response to Teacher
+                          <FaReply />
+                        </label>
+                      </div>{" "}
+                    </div>
+                  )}
+
+                  {/* Administrator Response Toggle */}
+                  <input
+                    type="checkbox"
+                    id="send_response"
+                    className="modal-toggle"
+                  />
+                  <div
+                    className={`modal rounded-md ${
+                      data?.categoryType === "Secondary"
+                        ? "text-blue-950"
+                        : "text-green-950"
+                    }  text-left`}
+                    role="dialog"
+                  >
+                    <div className="modal-box bg-white  rounded-md">
+                      <div className="flex items-center justify-between my-4 ">
+                        <p className="font-bold">
+                          Give a Lesson Note Feedback to your Teacher
+                        </p>
+
+                        <label
+                          htmlFor="send_response"
+                          className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
+                        >
+                          <MdClose />
+                        </label>
+                      </div>
+                      <hr />
+                      <div className="mt-2 leading-tight text-[13px] font-medium">
+                        {obj?.responseDetail}
+                        {obj?.deadline}
+                        <br />
+                        <br />
+                        Send your thoughts, reviews on the lesson note back to
+                        your teacher so that updates will be made, hereby
+                        ensuring a top class lesson note
+                        <br />
+                      </div>
+                      <div className="mt-10 w-full gap-2 flex flex-col items-center">
+                        <div className="w-full">
+                          <label className="font-medium text-[12px]">
+                            Response Detail{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+
+                          {/* // readSubject */}
+                          <textarea
+                            className="border w-full resize-none h-[200px] mb-5 rounded-md mt-2 p-2 bg-gray-100 outline-none"
+                            value={response}
+                            defaultValue={`${obj?.responseDetail}`}
+                            onChange={(e) => setResponse(e.target.value)}
+                            // value={period}
+                            // onChange={(e) => {
+                            //   setPeriod(e.target.value);
+                            // }}
+                            placeholder={
+                              obj?.responseDetail
+                                ? obj?.responseDetail
+                                : `Response Detail`
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2  items-start">
+                        <label htmlFor="">
+                          What is the deadline for the lesson note update to be
+                          done?
+                        </label>
+                        <select
+                          name="days"
+                          id="days"
+                          className={`border p-2 rounded-md bg-gray-100 ${
+                            data?.categoryType === "Secondary"
+                              ? "text-blue-950"
+                              : "text-green-950"
+                          }  w-[40%]`}
+                          value={day}
+                          onChange={(e) => setDay(e.target.value)}
+                        >
+                          <option disabled selected>
+                            {obj?.deadLine}
+                          </option>
+                          <option value="1 day">1 day</option>
+                          <option value="2 days">2 days</option>
+                          <option value="3 days">3 days</option>
+                          <option value="4 days">4 days</option>
+                          <option value="5 days">5 days</option>
+                          <option value="6 days">6 days</option>
+                          <option value="7 days">1 week</option>
+                        </select>
+                      </div>
+                      <div className="mt-[10px] flex justify-end items-center">
+                        {response.length > 1 ? (
+                          <Button
+                            name="Send"
+                            onClick={() => handleSubmit(id)}
+                            className={`${
+                              data?.categoryType === "Secondary"
+                                ? "bg-blue-950"
+                                : "bg-red-950"
+                            } `}
+                          />
+                        ) : (
+                          <button
+                            className={`btn ${
+                              data?.categoryType === "Secondary"
+                                ? "bg-blue-950"
+                                : "bg-red-950"
+                            }  text-white hover:bg-blue-950 cursor-not-allowed`}
+                          >
+                            Send
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
