@@ -167,7 +167,3 @@
 .freshh {
   animation: settings 2s;
 }
-
-.curvedd {
-  clip-path: ellipse(70% 100% at 50% 100%);
-}
