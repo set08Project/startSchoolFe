@@ -94,7 +94,7 @@ const ViewTeacherNoteByAdmin = () => {
           Print
         </button>
       </div>
-      <div className="flex justify-center items-center ">
+      <div className="flex justify-center items-center flex-col ">
         {/* Lesson note starts */}
         <div
           className="bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] "
@@ -227,7 +227,7 @@ const ViewTeacherNoteByAdmin = () => {
         <div>
           <Button
             name={"Approve this Lesson Note"}
-            className="bg-blue-950 ml-0"
+            className="bg-blue-950 text-[17px] md:text-[18px] lg:text-[20px] ml-0"
             onClick={() => {
               approveNoted(data?._id, noteID!)
                 .then((res: any) => {
