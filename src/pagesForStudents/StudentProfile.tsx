@@ -69,7 +69,7 @@ const StudentProfile = () => {
                 </span>
               </div>
             </div>
-            <Link to="/settings">
+            <Link to="/your-settings">
               <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105 text-[11px] md:text-[18px]">
                 <FaUserEdit /> Edit Profile
               </div>
