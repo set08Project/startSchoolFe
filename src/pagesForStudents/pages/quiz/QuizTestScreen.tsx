@@ -79,6 +79,7 @@ const QuizTestScreen = () => {
   };
 
   const myQuizData = quizData?.quiz[1];
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />

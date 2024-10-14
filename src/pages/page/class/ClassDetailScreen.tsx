@@ -98,7 +98,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="relative bg-white p-6 rounded-lg shadow-lg lg:w-full w-[88%] max-w-sm h-[450px] flex flex-col items-center justify-around">
+      <div className="relative bg-white p-6 rounded-lg shadow-lg lg:w-full w-[90%] max-w-sm h-[498px] flex flex-col items-center justify-around">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 bg-gray-500 text-white w-6 h-6 flex items-center justify-center rounded-full focus:outline-none"
@@ -369,20 +369,23 @@ const ClassDetailScreen = () => {
           <Modal
             isOpen={isFeeModalOpen}
             onClose={closeFeeModal}
-            className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto"
+            className="p-10 bg-white rounded-lg shadow-xl max-w-xl w-full mx-auto"
           >
-            <h2 className="text-2xl font-semibold mb-6 text-blue-950 flex items-center gap-2">
-              Update Class Fee 💼
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+              Class Fee Update
             </h2>
+            <p className="text-gray-600 mb-10 text-center">
+              By doing this you are about to update this class fee
+            </p>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="relative">
                 <input
                   type="text"
                   value={firstTermFee}
                   onChange={(e) => setFirstTermFee(e.target.value)}
-                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter 1st Term Fee 💰"
+                  className="outline-none p-2 h-14 w-[300px] text-[14px] text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                  placeholder="Enter 1st Term Fee"
                 />
               </div>
 
@@ -391,8 +394,8 @@ const ClassDetailScreen = () => {
                   type="text"
                   value={secondTermFee}
                   onChange={(e) => setSecondTermFee(e.target.value)}
-                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter 2nd Term Fee 💰"
+                  className="outline-none p-2 h-14 w-[300px] text-[14px] text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                  placeholder="Enter 2nd Term Fee"
                 />
               </div>
 
@@ -401,18 +404,18 @@ const ClassDetailScreen = () => {
                   type="text"
                   value={thirdTermFee}
                   onChange={(e) => setThirdTermFee(e.target.value)}
-                  className="outline-none p-3 w-full text-[15px] text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter 3rd Term Fee 💰"
+                  className="outline-none p-2 h-14 w-[300px] text-[14px] text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                  placeholder="Enter 3rd Term Fee"
                 />
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-10 flex justify-center">
               <button
                 onClick={handleUpdateFee}
-                className="bg-green-500 text-white px-5 py-2 rounded-lg text-[16px] hover:bg-green-600 transition-all duration-300 flex items-center gap-2"
+                className="bg-blue-950 text-white px-8 py-3 rounded-lg text-[16px] font-semibold hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <span>Update Fee</span> ✨
+                Update Fees
               </button>
             </div>
           </Modal>
