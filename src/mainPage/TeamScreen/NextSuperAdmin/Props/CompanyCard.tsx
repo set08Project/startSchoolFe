@@ -1,8 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import {
-  approveRegisterationStatus,
-  getSchool,
-} from "../../../../pages/api/schoolAPIs";
+import { approveRegisterationStatusUpdate } from "../../../../pages/api/schoolAPIs";
 import { useAllSchools } from "../../../../pages/hook/useSchoolAuth";
 import { FaSpinner } from "react-icons/fa6";
 
@@ -77,7 +74,7 @@ const CompanyCard: FC<iPropsCard> = ({
           onClick={() => {
             setToggle(true);
 
-            approveRegisterationStatus(school?._id)
+            approveRegisterationStatusUpdate(school?._id)
               .then((res) => {
                 console.log(res);
               })

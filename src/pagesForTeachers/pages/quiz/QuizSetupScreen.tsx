@@ -6,8 +6,9 @@ import { MdPlayCircle } from "react-icons/md";
 import { FaCheckDouble } from "react-icons/fa6";
 import ClassModelAssignment from "./AddAssignment";
 import { useEffect, useState } from "react";
-import { readClassInfo } from "../../api/teachersAPI";
+import { deleteQuiz, readClassInfo } from "../../api/teachersAPI";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import { FaTrashAlt } from "react-icons/fa";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
@@ -29,6 +30,20 @@ const QuizSetupScreen = () => {
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+    if (confirmed) {
+      console.log("Deleting quiz with ID:", id);
+      try {
+        await deleteQuiz(id);
+      } catch (error) {
+        console.error("Failed to delete item:", error);
+      }
+    }
+  };
 
   return (
     <div className="text-blue-950 relative">
@@ -63,6 +78,15 @@ const QuizSetupScreen = () => {
                 <div className="border p-4 rounded-md h-[270px] flex flex-col relative overflow-hidden">
                   <div className="absolute top-0 right-0 text-[300px] opacity-5 font-bold">
                     {i + 1}
+                  </div>
+                  <div className="mt-4 text-center relative bottom-4">
+                    <button
+                      onClick={() => handleDelete(props._id)}
+                      className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                    >
+                      <FaTrashAlt size={20} className="mr-1" />
+                      Delete
+                    </button>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="font-bold mt-0 text-[20px] ">

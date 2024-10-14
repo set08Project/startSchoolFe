@@ -17,7 +17,17 @@ const SchemeDetails = () => {
         console.log("Fetched response:", response);
 
         if (Array.isArray(response.data)) {
-          setSchemeData(response.data);
+          const sortedData = response.data.sort((a, b) => {
+            const weekA = parseInt(a.weeks, 10);
+            const weekB = parseInt(b.weeks, 10);
+
+            if (isNaN(weekA)) return 1;
+            if (isNaN(weekB)) return -1;
+
+            return weekA - weekB;
+          });
+
+          setSchemeData(sortedData);
         } else {
           setSchemeData([]);
           setError("Unexpected data format.");
@@ -32,10 +42,6 @@ const SchemeDetails = () => {
     getSchemeData();
   }, [className, subjectName, term]);
 
-  let schemeWork = schemeData[0];
-
-  console.log(schemeWork?.weeks);
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -47,12 +53,6 @@ const SchemeDetails = () => {
   if (!schemeData.length) {
     return <p>No data found for this scheme of work.</p>;
   }
-
-  // const [view, setView]: any = useState();
-  // console.log("week found", view);
-  // const handleWeek = () => {
-  //   setView(schemeWork?.weeks);
-  // };
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
@@ -79,7 +79,7 @@ const SchemeDetails = () => {
               Weeks: {weekData.weeks || "N/A"}
             </p>
             <p className="text-lg text-gray-600 mt-1">
-              status: {weekData.status || "un-set"}
+              Status: {weekData.status || "un-set"}
             </p>
           </div>
 
@@ -91,7 +91,7 @@ const SchemeDetails = () => {
               </h2>
               <ul className="space-y-2 text-lg">
                 {weekData.topics && weekData.topics.length > 0 ? (
-                  weekData?.topics?.map((topic, idx) => (
+                  weekData.topics.map((topic, idx) => (
                     <li key={idx}>
                       -{" "}
                       {typeof topic === "string"

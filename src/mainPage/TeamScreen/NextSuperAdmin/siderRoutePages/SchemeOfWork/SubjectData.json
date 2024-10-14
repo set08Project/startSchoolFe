@@ -1294,6 +1294,24 @@
         "subject": "Book Keeping",
         "term": "Third term",
         "classType": "SS1"
+      },
+      {
+        "id": "79",
+        "subject": "Data Processing",
+        "term": "First term",
+        "classType": "SS1"
+      },
+      {
+        "id": "79",
+        "subject": "Data Processing",
+        "term": "Second term",
+        "classType": "SS1"
+      },
+      {
+        "id": "79",
+        "subject": "Data Processing",
+        "term": "Third term",
+        "classType": "SS1"
       }
     ]
   },
