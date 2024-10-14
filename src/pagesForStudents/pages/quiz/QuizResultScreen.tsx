@@ -1,17 +1,25 @@
+// src/pages/Student/QuizResultScreen.tsx
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useStudentInfo } from "../../hooks/useStudentHook";
 
 const QuizResultScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { correctAnswers, studentAnswers, score, total } = location.state;
   const [animate, setAnimate] = useState(false);
+  const { studentInfo } = useStudentInfo();
 
   useEffect(() => {
     setTimeout(() => setAnimate(true), 100);
   }, []);
+
+  const BackOn = () => {
+    navigate(-2);
+  };
 
   return (
     <div
@@ -21,13 +29,11 @@ const QuizResultScreen = () => {
     >
       {/* Header */}
       <header className="bg-blue-950 text-white p-4 shadow-lg rounded-md">
-        <h1 className="text-2xl font-bold text-center animate-fade-in">
-          My Quiz Results
-        </h1>
+        <h1 className="text-2xl font-bold text-center">My Quiz Results</h1>
       </header>
 
       {/* Content */}
-      <main className="flex flex-col mt-[30px] transition-all duration-300 items-center px-4">
+      <main className="flex flex-col mt-8 transition-all duration-300 items-center px-4">
         <p className="text-lg mt-4 font-medium text-gray-700">
           You scored{" "}
           <span className="text-green-600 font-bold text-2xl">{score}</span> out
@@ -64,7 +70,7 @@ const QuizResultScreen = () => {
                 <span className="text-gray-600">Your Answer:</span>{" "}
                 {studentAnswers[index] || "No answer selected"}
               </p>
-              <p className="mt-2  text-[16px] md:text-[18px]">
+              <p className="mt-2 text-[16px] md:text-[18px]">
                 <span className="font-semibold text-gray-600">
                   Correct Answer:
                 </span>{" "}
@@ -81,8 +87,8 @@ const QuizResultScreen = () => {
       <footer className="flex justify-center mt-auto mb-8">
         <Button
           className="bg-blue-950 mt-8 px-8 py-3 text-white rounded-full shadow-md hover:bg-blue-800 transition-colors duration-300"
-          name="Go back to Home"
-          onClick={() => navigate("/")}
+          name="🔙 view quiz"
+          onClick={BackOn}
         />
       </footer>
     </div>

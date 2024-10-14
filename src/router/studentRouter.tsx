@@ -50,6 +50,9 @@ const MyClassroom = React.lazy(
 const QuizSetupScreen = React.lazy(
   () => import("../pagesForStudents/pages/quiz/QuizSetupScreen")
 );
+const QuizRecordScreen = React.lazy(
+  () => import("../pagesForStudents/pages/quiz/QuizRecordScreen")
+);
 const QuizTestScreen = React.lazy(
   () => import("../pagesForStudents/pages/quiz/QuizTestScreen")
 );
@@ -288,6 +291,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <QuizTestScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/quiz-record/:studentID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <QuizRecordScreen />
           </Suspense>
         ),
       },

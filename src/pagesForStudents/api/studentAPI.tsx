@@ -5,6 +5,19 @@ const URL: string =
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 
+export const getQuizRecord = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-quiz-record/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const viewStduentDetail: any = async (studentID: any) => {
   try {
     return await axios
