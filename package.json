@@ -30,6 +30,7 @@
     "chart.js": "^4.4.1",
     "date-fns": "^3.3.1",
     "firebase-tools": "^13.4.1",
+    "framer-motion": "^11.11.8",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.4.3",
     "jspdf": "^2.5.1",
