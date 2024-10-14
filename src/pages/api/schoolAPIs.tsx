@@ -5,19 +5,6 @@ import axios from "axios";
 
 // working locally
 
-// const URL: string = "https://just-next-be1.onrender.com/api";
-// const URL2: string = "https://just-next-be1.onrender.com";
-
-//
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL2: string = "https://startschoolbe-1.onrender.com";
-
-// const URL: string = "https://just-next-be1.onrender.com/api";
-// const URL2: string = "https://just-next-be1.onrender.com";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL2: string = "https://startschoolbe-1.onrender.com";
-
 const URL: string = "https://startschoolbe-1.onrender.com/api";
 const URL2: string = "https://startschoolbe-1.onrender.com";
 
@@ -308,6 +295,20 @@ export const approveRegisterationStatus = async (email: string) => {
   try {
     return await axios
       .patch(`${URL}/approved-school-registration`, { email })
+      .then((res: any) => {
+        console.log("res", res?.data);
+        return res;
+      });
+  } catch (error: any) {
+    console.log(error.message);
+    return error;
+  }
+};
+
+export const approveRegisterationStatusUpdate = async (id: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/approved-school-registration/${id}`)
       .then((res: any) => {
         console.log("res", res?.data);
         return res;
