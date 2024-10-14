@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const URL2: string = import.meta.env.VITE_URL;
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
 
@@ -17,6 +17,9 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 // const URL2: string = "https://startschoolbe-1.onrender.com";
+
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL2: string = "https://startschoolbe-1.onrender.com";
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
@@ -301,11 +304,12 @@ export const updateRegisterationStatus = async (data: {}) => {
   }
 };
 
-export const approveRegisterationStatus = async (id: string) => {
+export const approveRegisterationStatus = async (email: string) => {
   try {
     return await axios
-      .patch(`${URL}/approved-school-registration/${id}`)
+      .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
+        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
@@ -319,7 +323,7 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
     return await axios
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
       .then((res: any) => {
-        return res?.data;
+        return res;
       });
   } catch (error: any) {
     return error;
@@ -343,6 +347,42 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
   try {
     return await axios
       .delete(`${URL}/delete-staff/${schoolID}/${staffID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteTimeTableSubject = async (
+  schoolID: string,
+  tableID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-time-table/${schoolID}/${tableID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateTimeTableSubject = async (
+  schoolID: string,
+  classID: string,
+  tableID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(
+        `${URL}/update-time-table/${schoolID}/${classID}/${tableID}, {
+        subject: data,
+      }`
+      )
       .then((res: any) => {
         return res;
       });

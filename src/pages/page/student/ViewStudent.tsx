@@ -17,7 +17,7 @@ import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
-  deleteAllStudent,
+  // deleteAllStudent,
   deleteStudent,
   verifyPayment1st,
   verifyPayment2nd,
@@ -319,7 +319,7 @@ const ViewStudent = () => {
           <div className="w-[200px] border-r">student Name</div>
           <div className="w-[130px] border-r">Reg. Date</div>
 
-          <div className="w-[240px] border-r">Session Fee</div>
+          <div className="w-[270px] border-r">Session Fee</div>
           <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
@@ -367,7 +367,7 @@ const ViewStudent = () => {
                           {moment(props?.createdAt).format("ll")}
                         </div>
 
-                        <div className="w-[240px] border-r flex gap-4">
+                        <div className="w-[270px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
 

@@ -82,6 +82,7 @@ const Header = () => {
 
     fetchSchoolData();
   }, [studentInfo?.schoolIDs]);
+
   return (
     <div
       className="h-[50px] bg-blue-50 border-b w-full flex justify-center items-center  z-10 fixed top-0 left-0 text-blue-950"
@@ -178,7 +179,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14" : "right-6 -top-24"
           }`}
         >
-          {schoolData?.categoryType === "Secondary" ? (
+          {schoolData?.data?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
                 name={[
@@ -198,6 +199,16 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
+                    title: "My Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
+                    title: "My Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
+                  },
+                  {
                     title: `CBT (For SSS 3 Only)`,
                     icon: <MdQuiz />,
                     to: "CBT",
@@ -206,16 +217,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Profile",
-                    icon: <CgProfile />,
-                    to: "your-profile",
-                  },
-                  {
-                    title: "Financials",
-                    icon: <BsCash />,
-                    to: "my-finances",
                   },
                   {
                     title: "Articles",
@@ -277,6 +278,16 @@ const Header = () => {
                     to: "your-subjects",
                   },
                   {
+                    title: "My Profile",
+                    icon: <CgProfile />,
+                    to: "your-profile",
+                  },
+                  {
+                    title: "My Financials",
+                    icon: <BsCash />,
+                    to: "my-finances",
+                  },
+                  {
                     title: "Articles",
                     icon: <MdOutlineArticle />,
                     to: "articles",
@@ -285,16 +296,6 @@ const Header = () => {
                     title: "Lessons",
                     icon: <MdClass />,
                     to: "lesson",
-                  },
-                  {
-                    title: "Profile",
-                    icon: <CgProfile />,
-                    to: "your-profile",
-                  },
-                  {
-                    title: "Financials",
-                    icon: <BsCash />,
-                    to: "my-finances",
                   },
                   {
                     title: "Assignments",

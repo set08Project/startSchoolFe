@@ -92,7 +92,6 @@ const PersonalInfoScreen = () => {
     setTimeout(() => {
       try {
         deleteAllStudent(schoolID).then((res) => {
-          console.log(res);
           if (res.status === 200) {
             if (res?.data?.length < 1) {
               toast.error("There Are No Students Registered");
@@ -448,8 +447,8 @@ const PersonalInfoScreen = () => {
           </div>
           {/* Popup Card */}
           {popup === "Delete" && (
-            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm top-0 left-0 rounded-lg">
-              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-gray-50 rounded-lg smallphone">
+            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm bg-blue-50 top-0 left-0 rounded-lg">
+              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-white rounded-lg smallphone">
                 <div className="mb-3 text-center">
                   <h3 className="font-bold text-lg text-center text-blue-950">
                     All Student Deletion Notice
@@ -503,7 +502,7 @@ const PersonalInfoScreen = () => {
                             setchangeText(true);
                           }}
                         >
-                          Delete All Students
+                          Delete All Students(Not Active)
                         </button>
                       </div>
                     )}

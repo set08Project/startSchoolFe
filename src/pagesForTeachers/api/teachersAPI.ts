@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
@@ -12,6 +12,8 @@ const URL: string =
 // const URL: string = "https://just-next-be1.onrender.com/api";
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
+
+const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 export const deleteQuiz = async (quizID: any) => {
   try {
@@ -572,6 +574,7 @@ export const reportCardRemark = async (
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
+        console.log(res);
         return res?.data;
       });
   } catch (error) {

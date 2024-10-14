@@ -38,7 +38,7 @@ const SettingScreen: FC = () => {
     // },
     {
       icon: <HiMiniBuildingOffice2 size={45} />,
-      title: "School's Page Settings",
+      title: "Timetable Setup",
       detail:
         "This enable school to setup structure with which the time-table can be build up off.",
       url: "/my-personal-info/timetable-setting",

@@ -69,7 +69,7 @@ const StudentProfile = () => {
                 </span>
               </div>
             </div>
-            <Link to="/settings">
+            <Link to="/your-settings">
               <div className="font-normal flex items-center gap-2 cursor-pointer hover:scale-105 text-[11px] md:text-[18px]">
                 <FaUserEdit /> Edit Profile
               </div>
@@ -165,18 +165,30 @@ const StudentProfile = () => {
                   <BsPhone />
                   My Phone Number:
                 </p>
-                <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
-                  + add your phone number
-                </h1>
+                {studentInfo?.phone === "" ? (
+                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                    + add your phone number
+                  </h1>
+                ) : (
+                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                    {studentInfo?.phone}
+                  </h1>
+                )}
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
                   <BsPhone />
                   Parent Phone Number:
                 </p>
-                <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
-                  + add parent phone number
-                </h1>
+                {studentInfo?.parentPhoneNumber === "" ? (
+                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                    + add parent phone number
+                  </h1>
+                ) : (
+                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
+                    {studentInfo?.parentPhoneNumber}
+                  </h1>
+                )}
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1">

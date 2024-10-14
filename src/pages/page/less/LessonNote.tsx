@@ -44,7 +44,7 @@ const AdminLessonNote = () => {
             : "text-green-950"
         } `}
       >
-        <div>
+        <div className="">
           <div className="flex float-end"></div>
           <div className="py-9 w-full mt-24 p-3 border-b-2">
             <p className="font-bold mb-7">Lesson Note</p>
