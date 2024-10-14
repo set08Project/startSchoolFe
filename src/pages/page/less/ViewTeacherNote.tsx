@@ -203,7 +203,7 @@ const ViewTeacherNoteByAdmin = () => {
                   <h1 className="font-semibold mb-2">Evaluation:</h1>
                   <h2>{lessonNoteData?.evaluation}</h2>
                 </div>
-                <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
+                <div className="min-h-[150px] p-3 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Summary:</h1>
                   <h2>{lessonNoteData?.summary}</h2>
                 </div>
