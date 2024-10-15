@@ -350,7 +350,7 @@ const AdminLessonNote = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="freshh">No Lesson Note Created So Far</div>
+                  <div className="freshh">No Lesson Note Created</div>
                 )}
               </div>
             </div>
