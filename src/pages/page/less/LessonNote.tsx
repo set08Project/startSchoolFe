@@ -336,7 +336,7 @@ const AdminLessonNote = () => {
                           </div>
                           {/* Click to View button */}
                           <div>
-                            <NavLink to={props?._id} className="cursor-pointer">
+                            <NavLink to={props?._id}>
                               <div
                                 // style={{ color: randomBg }}
                                 className="py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
