@@ -114,7 +114,7 @@ const AdminLessonNote = () => {
                         //   backgroundColor: randomBg,
                         //   border: `1px solid ${randomBg}`,
                         // }}
-                        className="p-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col"
+                        className="pt-6 pb-3 px-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col"
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">
