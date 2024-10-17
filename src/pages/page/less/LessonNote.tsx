@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import pic from "../../../assets/pix.jpg";
 import { BsArrowRight } from "react-icons/bs";
 import Input from "../../../components/reUse/Input";
+import moment from "moment";
 
 const AdminLessonNote = () => {
   const { data } = useSchoolData();
@@ -118,13 +119,16 @@ const AdminLessonNote = () => {
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">
-                            <div className="mb-2">
+                            <div className="mb-2 flex items-center gap-2">
                               <h3
                                 className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
                               >
                                 <FaBook />
                                 {props?.subject}
                               </h3>
+                              <p className=" mt-2 text-green-500 text-[12px] font-medium">
+                                {moment(props?.createdAt).fromNow()}
+                              </p>
                             </div>
                             <div className=" mb-3 text-[25px] lg:text-[27px] font-bold flex items-center gap-3 ">
                               <h1>{props?.topic}</h1>
