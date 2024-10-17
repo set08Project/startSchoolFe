@@ -305,6 +305,20 @@ export const approveRegisterationStatus = async (email: string) => {
   }
 };
 
+export const approveRegisterationStatusUpdate = async (id: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/approved-school-registration/${id}`)
+      .then((res: any) => {
+        console.log("res", res?.data);
+        return res;
+      });
+  } catch (error: any) {
+    console.log(error.message);
+    return error;
+  }
+};
+
 export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
     return await axios
@@ -317,10 +331,59 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
   }
 };
 
+export const deleteAllStudent = async (schoolID: string) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-all-students/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const deleteStaff = async (schoolID: string, staffID: string) => {
   try {
     return await axios
       .delete(`${URL}/delete-staff/${schoolID}/${staffID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteTimeTableSubject = async (
+  schoolID: string,
+  tableID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-time-table/${schoolID}/${tableID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateTimeTableSubject = async (
+  schoolID: string,
+  classID: string,
+  tableID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(
+        `${URL}/update-time-table/${schoolID}/${classID}/${tableID}, {
+        subject: data,
+      }`
+      )
       .then((res: any) => {
         return res;
       });

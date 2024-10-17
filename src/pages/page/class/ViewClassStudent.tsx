@@ -43,7 +43,7 @@ const Remark: FC<iProps> = ({ id, data }) => {
 
   return (
     <div
-      className={`w-[100px] border-r 
+      className={`w-[100px] border-r
       ${
         result?.present
           ? "text-green-600"
@@ -164,7 +164,7 @@ const ViewClassStudent: FC = () => {
                         }`}
                       >
                         <div className="w-[50px] border-r">{i + 1}</div>
-                        {/* Name And Image */}
+
                         <div className="w-[90px] flex justify-center border-r">
                           <img
                             className="w-14 h-14 rounded-md border object-cover"
