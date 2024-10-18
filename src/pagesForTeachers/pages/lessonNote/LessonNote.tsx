@@ -6,20 +6,53 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import Button from "../../components/reUse/Button";
 import { FiLoader } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
+import { BsArrowRight } from "react-icons/bs";
+import pic from "../../../assets/pix.jpg";
+import moment from "moment";
+import { FcApproval, FcCancel } from "react-icons/fc";
+import { LuSend } from "react-icons/lu";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+import { readSchool } from "../../../pages/api/schoolAPIs";
 
 const LessonNote = () => {
+  document.title = "Teacher's Lesson Notes";
+
   const { teacherInfo } = useTeacherInfo();
   const { lessonNote } = useLessonNote(
     teacherInfo?.schoolIDs,
     teacherInfo?._id
   );
+  const [searchNote, setSearchNote] = useState("");
+
+  const filteredNotes = lessonNote?.lessonNotes?.filter((notes: any) => {
+    const allNotes = `${notes?.subject} ${notes?.topic}`.toLowerCase();
+    return allNotes.includes(searchNote.toLowerCase());
+  });
+
+  lessonNote?.lessonNotes?.reverse();
 
   const [id, setID] = useState<string>("");
   const [obj, setObj] = useState<any>({});
 
-  document.title = "Teacher's Lesson Notes";
+  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+  const [schoolData, setSchoolData] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      if (teacherInfo?.schoolIDs) {
+        try {
+          const data = await readSchool(teacherInfo.schoolIDs);
+          setSchoolData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchSchoolData();
+  }, [teacherInfo?.schoolIDs]);
 
   return (
     <div>
@@ -50,9 +83,135 @@ const LessonNote = () => {
             <p className="font-bold mb-7">Lesson Note</p>
 
             <div className="">
+              <div className="">
+                {filteredNotes?.length > 0 ? (
+                  <div className="mt-5 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-1 freshh">
+                    {filteredNotes?.map((props: any, i: number) => (
+                      <div
+                        key={props?._id || i}
+                        className="pt-6 pb-3 px-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col"
+                      >
+                        <div className="w-full mb-3 flex justify-between items-start">
+                          <div className="w-[75%]">
+                            <div className="mb-2 flex items-center gap-2">
+                              <h3
+                                className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
+                              >
+                                <FaBook />
+                                {props?.subject}
+                              </h3>
+                              <p className=" mt-2 text-green-500 text-[12px] font-medium">
+                                {moment(props?.createdAt).fromNow()}
+                              </p>
+                            </div>
+                            <div className=" mb-3 text-[25px] lg:text-[27px] font-bold flex items-center gap-3 ">
+                              <h1>{props?.topic}</h1>
+                            </div>
+                          </div>
+
+                          <div className="w-[20%] h-full flex justify-center items-start gap-2">
+                            <img
+                              src={props?.profilePic ? props?.profilePic : pic}
+                              alt="teacher_profile_pic"
+                              className="h-[60px] w-[60px] border object-cover rounded-full"
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <p className="break-words">
+                            {props?.summary ? (
+                              props?.summary.substring(0, 500)
+                            ) : (
+                              <div className="opacity-50">No summary</div>
+                            )}
+                          </p>
+                        </div>
+                        <div className="w-full border mb-3" />
+                        <div className="mb-2 flex items-center font-semibold ">
+                          <h2 className="w-[70px]">By:</h2>
+                          <h2 className="">{props?.teacher}</h2>
+                        </div>
+                        <div className="mb-2 flex items-center font-semibold ">
+                          <h2 className="w-[70px]">For:</h2>
+                          <h2 className="">{props?.classes}</h2>
+                        </div>
+                        <div className="mb-8 font-semibold flex items-center">
+                          <h2 className="w-[70px]">Status</h2>
+                          {props?.adminSignation ? (
+                            <h2 className="font-semibold text-green-500 flex items-center gap-1">
+                              Approved <FcApproval />
+                            </h2>
+                          ) : (
+                            <h2 className="font-semibold text-red-500 flex items-center gap-1">
+                              Not Approved <FcCancel />
+                            </h2>
+                          )}
+                        </div>
+                        <div className="flex-1" />
+
+                        <div className="w-full flex justify-between items-start">
+                          {/* Send Response to Admin Button */}
+                          <div>
+                            {props?.adminSignation ? (
+                              <div>
+                                <div className="w-full mb-[25px] flex justify-center items-center">
+                                  <label
+                                    // htmlFor="send_response"
+                                    className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                  >
+                                    Lesson Note has been Approved
+                                    <FaThumbsUp className="mb-1" />
+                                  </label>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="w-[90%] mb-[25px] flex justify-center items-center">
+                                {props?.messageSent ? (
+                                  <div className="w-full flex justify-center items-center">
+                                    <label
+                                      htmlFor="view_response"
+                                      className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                      onClick={() => {
+                                        setID(props?._id);
+                                        setObj(props);
+                                      }}
+                                    >
+                                      View Administrator's Response
+                                      <FaEye />
+                                    </label>
+                                  </div>
+                                ) : (
+                                  <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
+                                    <div>Awaiting Administrator's Response</div>
+                                    <FiLoader className="animate-spin transition-all duration-1000" />
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          {/* Click to View button */}
+                          <div>
+                            <NavLink to={props?._id}>
+                              <div
+                                // style={{ color: randomBg }}
+                                className="py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
+                              >
+                                <BsArrowRight className="animate-pulse scale-105" />
+                              </div>
+                            </NavLink>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="freshh">No Lesson Note Created</div>
+                )}
+              </div>
+              {/* Comparison */}
               <div>
                 {lessonNote?.lessonNotes?.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
+                  <div className="grid bg-red-800 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
                     {lessonNote?.lessonNotes?.map((props: any) => (
                       <div
                         className={`min-h-[200px] hover:bxs transition-all duration-300 hover:scale-[1.005] border flex justify-between items-center flex-col rounded-sm `}
