@@ -15,6 +15,7 @@ import { FcApproval, FcCancel } from "react-icons/fc";
 import { LuSend } from "react-icons/lu";
 import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import { readSchool } from "../../../pages/api/schoolAPIs";
+import Input from "../../components/reUse/Input";
 
 const LessonNote = () => {
   document.title = "Teacher's Lesson Notes";
@@ -80,7 +81,16 @@ const LessonNote = () => {
           </div>
 
           <div className="py-9 w-full mt-4 p-3 border-b-2">
-            <p className="font-bold mb-7">Lesson Note</p>
+            <p className="font-bold mb-3">Lesson Note</p>
+            <div>
+              <Input
+                placeholder="Search By Subject Or Topic"
+                value={searchNote}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearchNote(e.target.value);
+                }}
+              />
+            </div>
 
             <div className="">
               <div className="">
