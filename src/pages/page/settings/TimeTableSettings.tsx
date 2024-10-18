@@ -149,6 +149,7 @@ const TimeTableSettingsScreen = () => {
                 <option value={30}>30Mins</option>
                 <option value={35}>35Mins</option>
                 <option value={40}>40Mins</option>
+                <option value={45}>45Mins</option>
               </select>
             </div>
           </div>
