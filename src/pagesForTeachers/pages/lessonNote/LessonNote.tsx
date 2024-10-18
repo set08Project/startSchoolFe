@@ -130,7 +130,7 @@ const LessonNote = () => {
                         <div className="mb-3">
                           <p className="break-words text-wrap">
                             {props?.summary ? (
-                              props?.summary.substring(0, 300)
+                              props?.summary.substring(0, 250)
                             ) : (
                               <div className="opacity-50">No summary</div>
                             )}
