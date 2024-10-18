@@ -89,7 +89,7 @@ const LessonNote = () => {
                     {filteredNotes?.map((props: any, i: number) => (
                       <div
                         key={props?._id || i}
-                        className="pt-6 pb-3 px-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col"
+                        className="pt-6 pb-3 px-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col overflow-hidden"
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">

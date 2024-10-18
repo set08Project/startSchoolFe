@@ -87,7 +87,7 @@ const ViewTeacherNote = () => {
         </div>
         {/* Lesson note starts */}
         <div
-          className="bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] "
+          className="bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] overflow-hidden"
           ref={lessonNoteRef}
         >
           <div className="w-full h-[40px] bg-blue-950 rounded-tl-md rounded-tr-md" />
