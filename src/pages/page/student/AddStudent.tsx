@@ -106,7 +106,7 @@ const AddStudent = () => {
           <div className="mt-1 flex flex-col mb-6">
             <label className="text-[14px] mb-2">
               Gender:{" "}
-              <span className="font-bold text-[10px]">Choose a Genders</span>
+              <span className="font-bold text-[10px]">Choose a Gender</span>
             </label>
             <select
               className="ml-0 bg-gray-100 select select-bordered w-full "
