@@ -223,25 +223,29 @@ const ViewTeacherNoteByAdmin = () => {
         {/* Lesson note ends */}
 
         <div className="mt-10" />
-        <div>
-          <Button
-            name={"Approve this Lesson Note"}
-            className="bg-blue-950 text-[17px] md:text-[18px] lg:text-[20px] ml-0"
-            onClick={() => {
-              approveNoted(data?._id, noteID!)
-                .then((res: any) => {
-                  if (res.status === 200) {
-                    toast.success("Lesson note has been Approved");
-                  } else {
-                    toast.error("Fail to approve this Note");
-                  }
-                })
-                .then(() => {
-                  navigate(-1);
-                });
-            }}
-          />
-        </div>
+        {lessonNoteData?.adminSignation ? (
+          <div></div>
+        ) : (
+          <div>
+            <Button
+              name={"Approve this Lesson Note"}
+              className="bg-blue-950 text-[17px] md:text-[18px] lg:text-[20px] ml-0"
+              onClick={() => {
+                approveNoted(data?._id, noteID!)
+                  .then((res: any) => {
+                    if (res.status === 200) {
+                      toast.success("Lesson note has been Approved");
+                    } else {
+                      toast.error("Fail to approve this Note");
+                    }
+                  })
+                  .then(() => {
+                    navigate(-1);
+                  });
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
