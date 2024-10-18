@@ -76,11 +76,13 @@ const AdminLessonNote = () => {
   const { randomBg } = randomBgColors();
   const [searchNote, setSearchNote] = useState("");
 
+  // const reverseNotes = lessonNote?.reverse();
+
   const filteredNotes = lessonNote?.filter((notes: any) => {
     const allNotes = `${notes?.subject} ${notes?.topic}`.toLowerCase();
     return allNotes.includes(searchNote.toLowerCase());
   });
-
+  console.log(lessonNote);
   return (
     <div>
       <LittleHeader name="Teacher's Lesson Notes" />
@@ -178,11 +180,11 @@ const AdminLessonNote = () => {
                         <div className="w-full flex justify-between items-start">
                           {/* Send Response to Teacher Button */}
                           <div className="">
-                            {lessonNote?.adminSignation ? (
+                            {props?.adminSignation ? (
                               <div>
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
-                                    // htmlFor="send_response"
+                                    htmlFor="send_response"
                                     className={`py-3 px-3 ${
                                       data?.categoryType === "Secondary"
                                         ? "bg-blue-950"
@@ -205,8 +207,8 @@ const AdminLessonNote = () => {
                                         : "bg-red-950"
                                     }  text-white rounded-md flex justify-center items-center scale-105 gap-2 transition-all duration-300 cursor-pointer`}
                                     onClick={() => {
-                                      // setID(props?._id);
-                                      // setObj(props);
+                                      setID(props?._id);
+                                      setObj(props);
                                     }}
                                   >
                                     Send Response to Teacher
