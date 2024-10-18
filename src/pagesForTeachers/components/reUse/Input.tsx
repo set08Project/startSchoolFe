@@ -48,14 +48,10 @@ const Input: FC<iInputProps> = ({
       <label
         className={`text-[lightgray] transition-all duration-300 absolute ${
           bg ? bg : "bg-white"
-        }  text-[12px] ml-2 px-[2px]
+        }  text-[8px] md:text-[12px] ml-2 px-[2px]
         `}
         style={{
-          top: `${
-            state
-              ? "-0.75rem"
-              : "0.75rem" && `${value ? "-0.75rem" : "0.75rem"}`
-          }`,
+          top: state ? "-0.75rem" : value ? "-0.75rem" : "0.75rem",
           backgroundColor: `${bg ? bg : "white"}`,
         }}
       >
