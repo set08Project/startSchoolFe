@@ -1,11 +1,9 @@
 import axios from "axios";
 
-<<<<<<< HEAD
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
-=======
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
@@ -26,7 +24,6 @@ export const deleteQuiz = async (quizID: any) => {
     return error;
   }
 };
->>>>>>> ea0107bf75e3ddcd496de2857bb3e32ca51adf61
 
 export const viewTeacherDetail: any = async (teacherID: string) => {
   try {
