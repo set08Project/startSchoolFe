@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useLessonNote } from "../../../pagesForTeachers/hooks/useTeacher";
 import Button from "../../../components/reUse/Button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { rateNote } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import { FcApproval, FcCancel } from "react-icons/fc";
@@ -17,6 +17,42 @@ const ViewClassNoteDetail = () => {
   const check = lessonNoteData?.rateData?.some((el: any) => {
     return el.id === studentInfo?._id;
   });
+
+  const lessonNoteRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = () => {
+    const printContent = lessonNoteRef.current;
+    const windowPrint = window.open("", "", "width=800,height=600");
+    if (windowPrint && printContent) {
+      windowPrint.document.write(`
+        <html>
+          <head>
+            <title>Print Lesson Note</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                font-weight: 100;
+              }
+              .print-content {
+                display: block;
+                width: 100%;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="print-content">${printContent.innerHTML}</div>
+          </body>
+        </html>
+      `);
+      windowPrint.document.close();
+      windowPrint.focus();
+      windowPrint.print();
+      windowPrint.close();
+    }
+  };
+
   const numberMap = () => {
     return lessonNoteData?.week === "1"
       ? "One"
