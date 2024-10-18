@@ -87,7 +87,7 @@ const ViewClassNoteDetail = () => {
       <LittleHeader name={`${""} Lesson Note Details`} />
       <div className="mb-[30px]">
         <button
-          // onClick={handlePrint}
+          onClick={handlePrint}
           className="border border-blue-950 hover:scale-105 text-blue-950 bg-white py-2 px-3"
         >
           Print
@@ -97,7 +97,7 @@ const ViewClassNoteDetail = () => {
         {/* Lesson note starts */}
         <div
           className="bg-white shadow-lg rounded-md min-h-[100vh] w-[95%] md:w-[97%] xl:w-[80%] "
-          // ref={lessonNoteRef}
+          ref={lessonNoteRef}
         >
           <div className="w-full h-[40px] bg-blue-950 rounded-tl-md rounded-tr-md" />
           <div className="p-5">
