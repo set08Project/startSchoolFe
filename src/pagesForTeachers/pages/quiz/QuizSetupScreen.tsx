@@ -1,28 +1,28 @@
-import LittleHeader from "../../components/layout/LittleHeader";
-import pix from "../../../assets/pix.jpg";
+// src/screens/QuizSetupScreen.js
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useSubjectAssignment, useSujectQuiz } from "../../hooks/useTeacher";
+import { FaTrashAlt, FaCheckDouble } from "react-icons/fa";
 import { MdPlayCircle } from "react-icons/md";
-import { FaCheckDouble } from "react-icons/fa6";
-import ClassModelAssignment from "./AddAssignment";
-import { useEffect, useState } from "react";
+import LittleHeader from "../../components/layout/LittleHeader";
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; 
+import pix from "../../../assets/pix.jpg";
+import { useSubjectAssignment, useSujectQuiz } from "../../hooks/useTeacher";
 import { deleteQuiz, readClassInfo } from "../../api/teachersAPI";
-import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
-import { FaTrashAlt } from "react-icons/fa";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
 
   const [state, setState] = useState<any>({});
-
-  // const {} = useReadOneClassInfo(teacher)
-
+  const [isModalOpen, setModalOpen] = useState(false); 
+  const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
   useEffect(() => {
-    readClassInfo(subjectQuiz?.designated).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
+    if (subjectQuiz?.designated) {
+      readClassInfo(subjectQuiz.designated).then((res: any) => {
+        setState(res.data);
+      });
+    }
+  }, [subjectQuiz]);
 
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
@@ -31,17 +31,21 @@ const QuizSetupScreen = () => {
 
   const combine: Array<any> = quiz?.concat(assign);
 
-  const handleDelete = async (id: string) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this item?"
-    );
-    if (confirmed) {
-      console.log("Deleting quiz with ID:", id);
+  const handleDelete = (id: string) => {
+    setSelectedQuizId(id);
+    setModalOpen(true); 
+  };
+
+  const confirmDelete = async () => {
+    if (selectedQuizId) {
       try {
-        await deleteQuiz(id);
+        await deleteQuiz(selectedQuizId);
+        console.log("Deleting quiz with ID:", selectedQuizId);
       } catch (error) {
         console.error("Failed to delete item:", error);
       }
+      setModalOpen(false); 
+      setSelectedQuizId(null); 
     }
   };
 
@@ -49,13 +53,20 @@ const QuizSetupScreen = () => {
     <div className="text-blue-950 relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
 
+   
+      <ConfirmDeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={confirmDelete}
+      />
+
       <div className="mt-10" />
 
       <div>
-        <div className="mb-16 flex-col-reverse flex  lg:flex-row justify-between items-center ">
+        <div className="mb-16 flex-col-reverse flex lg:flex-row justify-between items-center">
           <p className="mt-10 lg:mt-0">View Assignment/Test/Quiz</p>
 
-          <div className=" flex gap-2 ">
+          <div className="flex gap-2">
             <Link to={`/create-quiz/${subjectID}`}>
               <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-4 rounded-md text-[12px] text-center">
                 + Create Quiz
@@ -72,11 +83,12 @@ const QuizSetupScreen = () => {
 
       {combine?.length > 0 ? (
         <div>
+         
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
             {quiz?.map((props: any, i: number) => (
-              <div key={i}>
-                <div className="border p-4 rounded-md h-[270px] flex flex-col relative overflow-hidden">
-                  <div className="absolute top-0 right-0 text-[300px] opacity-5 font-bold">
+              <div key={props._id}>
+                <div className="border p-6 rounded-md h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                  <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                     {i + 1}
                   </div>
                   <div className="mt-4 text-center relative bottom-4">
@@ -89,20 +101,19 @@ const QuizSetupScreen = () => {
                     </button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="font-bold mt-0 text-[20px] ">
-                      {props?.subjectTitle}{" "}
-                      {props?.quiz ? "Quiz" : "Assignment"}
+                    <p className="font-bold mt-0 text-[20px]">
+                      {props?.subjectTitle} {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
                     <Link to={`/quiz/details/${props?._id}`}>
                       <MdPlayCircle
-                        size={90}
-                        className="rotate-0 opacity-60 text-red-600 hover:text-red-400 transition-all duration-300 absolute right-0 top-2"
+                        size={40}
+                        className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"
                       />
                     </Link>
                   </div>
 
-                  <div className="flex">
-                    <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 ">
+                  <div className="flex mt-2">
+                    <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50">
                       Quiz
                     </p>
                   </div>
@@ -114,11 +125,12 @@ const QuizSetupScreen = () => {
                     <div className="flex gap-2">
                       <img
                         src={pix}
+                        alt="Student"
                         className="w-[50px] h-[50px] border rounded-xl object-cover"
                       />
                       <div>
-                        <p className="font-bold capitalize ">name</p>
-                        <p>point</p>
+                        <p className="font-bold capitalize">Name</p>
+                        <p>Points</p>
                       </div>
                     </div>
                   </div>
@@ -126,27 +138,29 @@ const QuizSetupScreen = () => {
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz[1]?.question &&
-                          props?.quiz[1]?.question?.length}
+                        {props?.quiz[1]?.question
+                          ? props?.quiz[1]?.question.length
+                          : 0}
                       </span>
                     </div>
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz[0]?.instruction &&
-                          props?.quiz[0]?.instruction?.mark}
+                        {props?.quiz[0]?.instruction
+                          ? props?.quiz[0]?.instruction.mark
+                          : 0}
                       </span>
                     </div>
                   </div>
                   <div className="text-[12px] mt-2 font-bold">
-                    Instrunction:{" "}
+                    Instruction:{" "}
                     <span className="font-normal">
-                      {/* {props?.quiz[0]?.instruction?.instruction &&
-                      `${props?.quiz[0]?.instruction?.instruction}`.slice(
-                        0,
-                        Math.ceil(Math.random() * (100 - 70)) + 70
-                      )} */}
-                      ...
+                      {props?.quiz[0]?.instruction?.instruction
+                        ? `${props?.quiz[0]?.instruction.instruction}`.slice(
+                            0,
+                            70
+                          ) + "..."
+                        : "..."}
                     </span>
                   </div>
                 </div>
@@ -156,22 +170,23 @@ const QuizSetupScreen = () => {
 
           <div className="my-8 border-t" />
 
+          {/* Assignments Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
             {assign?.map((props: any, i: number) => (
-              <div key={i}>
-                <div className="border p-4 rounded-md h-[270px] flex flex-col relative overflow-hidden">
-                  <div className="absolute top-0 right-0 text-[300px] opacity-5 font-bold">
+              <div key={props._id}>
+                <div className="border p-6 rounded-md h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                  <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-green-300">
                     {i + 1}
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="font-bold mt-0 text-[20px] ">
+                    <p className="font-bold mt-0 text-[20px]">
                       {props?.subjectTitle}{" "}
                       {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
                   </div>
 
-                  <div className="flex">
-                    <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 ">
+                  <div className="flex mt-2">
+                    <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50">
                       Assignment
                     </p>
                   </div>
@@ -183,11 +198,12 @@ const QuizSetupScreen = () => {
                     <div className="flex gap-2">
                       <img
                         src={pix}
+                        alt="Student"
                         className="w-[50px] h-[50px] border rounded-xl object-cover"
                       />
                       <div>
-                        <p className="font-bold capitalize ">name</p>
-                        <p>point</p>
+                        <p className="font-bold capitalize">Name</p>
+                        <p>Points</p>
                       </div>
                     </div>
                   </div>
@@ -212,11 +228,9 @@ const QuizSetupScreen = () => {
                   <div className="text-[12px] mt-2 font-bold">
                     Question Detail:{" "}
                     <span className="font-normal">
-                      {`${props?.assignmentDetails}`.slice(
-                        0,
-                        Math.ceil(Math.random() * (100 - 70)) + 70
-                      )}
-                      ...
+                      {props?.assignmentDetails
+                        ? `${props.assignmentDetails}`.slice(0, 70) + "..."
+                        : "..."}
                     </span>
                   </div>
                 </div>
