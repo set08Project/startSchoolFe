@@ -147,7 +147,7 @@ const AdminLessonNote = () => {
                         <div className="mb-3">
                           <p>
                             {props?.summary ? (
-                              props?.summary.substring(0, 500)
+                              props?.summary.substring(0, 300)
                             ) : (
                               <div className="opacity-50">No summary</div>
                             )}
