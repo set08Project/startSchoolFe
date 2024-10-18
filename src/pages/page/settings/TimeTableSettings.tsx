@@ -58,6 +58,11 @@ const TimeTableSettingsScreen = () => {
                 <option value={"07:45"}>07:45AM</option>
                 <option value={"08:00"}>08:00AM</option>
                 <option value={"08:10"}>08:10AM</option>
+                <option value={"08:15"}>08:15AM</option>
+                <option value={"08:20"}>08:20AM</option>
+                <option value={"08:30"}>08:30AM</option>
+                <option value={"08:40"}>08:40AM</option>
+                <option value={"08:45"}>08:45AM</option>
               </select>
             </div>
 
@@ -71,8 +76,12 @@ const TimeTableSettingsScreen = () => {
                 <option disabled selected>
                   Class Ends
                 </option>
+                <option value={"14:30"}>02:30PM</option>
+                <option value={"14:45"}>02:45PM</option>
+                <option value={"14:50"}>02:50PM</option>
                 <option value={"15:00"}>03:00PM</option>
                 <option value={"15:30"}>03:30PM</option>
+                <option value={"15:45"}>03:45PM</option>
                 <option value={"16:00"}>04:00PM</option>
               </select>
             </div>
@@ -119,6 +128,8 @@ const TimeTableSettingsScreen = () => {
                 <option value={"12:00"}>12:00NOON</option>
                 <option value={"12:20"}>12:20PM</option>
                 <option value={"12:30"}>12:30PM</option>
+                <option value={"12:45"}>12:45PM</option>
+                <option value={"13:00"}>1:00PM</option>
               </select>
             </div>
           </div>
