@@ -241,7 +241,7 @@ const ViewStudent = () => {
     }
   };
 
-  const sortedStudents = students?.data?.students?.sort((a, b) =>
+  const sortedStudents = students?.data?.students?.sort((a: any, b: any) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
   // Search Function
@@ -271,10 +271,10 @@ const ViewStudent = () => {
           onChange={handleSearch}
         />
 
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <Button
             name="Add a new Student"
-            className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+            className="uppercase py- md:text-[12px] text-[7px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
             onClick={handleDisplayStaff}
           />
           <input
@@ -305,7 +305,7 @@ const ViewStudent = () => {
           ) : (
             <label
               htmlFor="file"
-              className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px]"
+              className="uppercase py- lg:text-[12px]font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[7px]"
             >
               upload file for Bulk Entry
             </label>
