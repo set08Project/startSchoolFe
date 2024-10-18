@@ -15,7 +15,6 @@ const ViewTeacherNoteByAdmin = () => {
   const { data } = useSchoolData();
   const { noteID } = useParams();
   const { lessonNoteData } = useLessonNote(noteID!);
-  console.log(lessonNoteData);
 
   const lessonNoteRef = useRef<HTMLDivElement>(null);
 

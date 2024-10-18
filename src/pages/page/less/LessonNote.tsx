@@ -76,13 +76,12 @@ const AdminLessonNote = () => {
   const { randomBg } = randomBgColors();
   const [searchNote, setSearchNote] = useState("");
 
-  // const reverseNotes = lessonNote?.reverse();
-
   const filteredNotes = lessonNote?.filter((notes: any) => {
     const allNotes = `${notes?.subject} ${notes?.topic}`.toLowerCase();
     return allNotes.includes(searchNote.toLowerCase());
   });
-  console.log(lessonNote);
+
+  lessonNote?.reverse();
   return (
     <div>
       <LittleHeader name="Teacher's Lesson Notes" />
@@ -139,7 +138,7 @@ const AdminLessonNote = () => {
 
                           <div className="w-[20%] h-full flex justify-center items-start gap-2">
                             <img
-                              src={props?.avatar ? props?.avatar : pic}
+                              src={props?.profilePic ? props?.profilePic : pic}
                               alt="teacher_profile_pic"
                               className="h-[60px] w-[60px] border object-cover rounded-full"
                             />
@@ -187,8 +186,8 @@ const AdminLessonNote = () => {
                                     htmlFor="send_response"
                                     className={`py-3 px-3 ${
                                       data?.categoryType === "Secondary"
-                                        ? "bg-blue-950"
-                                        : "bg-red-950"
+                                        ? "bg-green-700"
+                                        : "bg-green-700"
                                     }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                                   >
                                     Lesson Note has been Approved
