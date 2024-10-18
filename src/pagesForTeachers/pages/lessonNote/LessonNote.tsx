@@ -57,7 +57,7 @@ const LessonNote = () => {
   return (
     <div>
       <LittleHeader name="Teacher's Lesson Notes" />
-      <div className="min-h-[82vh] text-blue-950">
+      <div className="min-h-[82vh] text-blue-950 overflow-hidden">
         <div>
           {/* <div className="flex float-end">
             <NavLink to="/create-notes">
@@ -118,7 +118,7 @@ const LessonNote = () => {
                           </div>
                         </div>
                         <div className="mb-3">
-                          <p className="break-words">
+                          <p className="break-words text-wrap">
                             {props?.summary ? (
                               props?.summary.substring(0, 500)
                             ) : (
@@ -157,7 +157,7 @@ const LessonNote = () => {
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
                                     // htmlFor="send_response"
-                                    className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                    className="py-3 px-3 bg-green-700 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
@@ -170,14 +170,14 @@ const LessonNote = () => {
                                   <div className="w-full flex justify-center items-center">
                                     <label
                                       htmlFor="view_response"
-                                      className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                      className="py-2 px-6 w-[270px] h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                                       onClick={() => {
                                         setID(props?._id);
                                         setObj(props);
                                       }}
                                     >
-                                      View Administrator's Response
-                                      <FaEye />
+                                      View Admin's Reply
+                                      <FaEye className="ml-3 text-[18px] animate-pulse" />
                                     </label>
                                   </div>
                                 ) : (
@@ -205,124 +205,10 @@ const LessonNote = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="freshh">No Lesson Note Created</div>
+                  <div className="freshh">No Lesson Note Created Yet</div>
                 )}
               </div>
               {/* Comparison */}
-              <div>
-                {lessonNote?.lessonNotes?.length > 0 ? (
-                  <div className="grid bg-red-800 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
-                    {lessonNote?.lessonNotes?.map((props: any) => (
-                      <div
-                        className={`min-h-[200px] hover:bxs transition-all duration-300 hover:scale-[1.005] border flex justify-between items-center flex-col rounded-sm `}
-                      >
-                        <NavLink
-                          key={props?._id}
-                          to={`/lesson-note/${props?._id}`}
-                          className="w-[85%]"
-                        >
-                          <div className="w-full h-full py-[20px] flex justify-center items-start flex-col ">
-                            <div className="w-full py-[10px] flex items-center justify-between">
-                              <div className="flex items-center text-[21px] gap-1">
-                                <FaBook />
-                                <div className="font-semibold">
-                                  {props?.subject}
-                                </div>
-                              </div>
-                              <div className="text-[20px] font-semibold">
-                                {props?.classes}
-                              </div>
-                            </div>
-                            <div className="py-[20px]">
-                              <div className="flex items-center gap-5">
-                                <h1 className="font-medium">Topic:</h1>
-                                <h1 className="font-bold text-[18px]">
-                                  {props?.topic ? (
-                                    props?.topic
-                                  ) : (
-                                    <div className="opacity-50">No Topic</div>
-                                  )}
-                                </h1>
-                              </div>
-                              <div className="flex items-center gap-5">
-                                <h1 className="font-medium">Notes:</h1>
-                                <p className="pt-5 text-[15px] flex justify-start items-center ">
-                                  {props?.summary ? (
-                                    props?.summary.substring(0, 500)
-                                  ) : (
-                                    <div className="opacity-50">No summary</div>
-                                  )}
-                                  ...
-                                </p>
-                              </div>
-                              <div className="w-full mt-[32px] flex items-center gap-5">
-                                <h1 className="font-medium">Status:</h1>
-                                <p
-                                  className={`${
-                                    props?.adminSignation
-                                      ? "text-green-500 font-bold"
-                                      : "text-red-500 font-bold"
-                                  }`}
-                                >
-                                  <p className="text-[12px]">
-                                    {props?.adminSignation
-                                      ? "Approved ✅"
-                                      : "Not-Approved ❌"}
-                                  </p>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </NavLink>
-
-                        {props?.adminSignation ? (
-                          <div>
-                            <div className="w-full mb-[25px] flex justify-center items-center">
-                              <label
-                                // htmlFor="send_response"
-                                className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                              >
-                                Lesson Note has been Approved
-                                <FaThumbsUp className="mb-1" />
-                              </label>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-[90%] mb-[25px] flex justify-center items-center">
-                            {props?.messageSent ? (
-                              <div className="w-full flex justify-center items-center">
-                                <label
-                                  htmlFor="view_response"
-                                  className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                                  onClick={() => {
-                                    setID(props?._id);
-                                    setObj(props);
-                                  }}
-                                >
-                                  View Administrator's Response
-                                  <FaEye />
-                                </label>
-                              </div>
-                            ) : (
-                              <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
-                                <div>Awaiting Administrator's Response</div>
-                                <FiLoader />
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className=" mt-32 w-full h-full flex flex-col items-center justify-center ">
-                    <MdAutoAwesome />
-                    <div className="opacity-50 mt-5">
-                      No Lesson Published yet
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>
