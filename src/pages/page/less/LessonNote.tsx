@@ -142,7 +142,7 @@ const AdminLessonNote = () => {
                                 {moment(props?.createdAt).fromNow()}
                               </p>
                             </div>
-                            <div className=" mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3 ">
+                            <div className="w-[280px] sm:w-auto mt-4 sm:mt-0 mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3 ">
                               <h1>{props?.topic}</h1>
                             </div>
                           </div>
@@ -194,12 +194,12 @@ const AdminLessonNote = () => {
                               <div>
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
-                                    htmlFor="send_response"
+                                    htmlFor=""
                                     className={`py-3 px-2 ${
                                       data?.categoryType === "Secondary"
                                         ? "bg-green-700"
                                         : "bg-green-700"
-                                    }  text-white text-[10px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
+                                    }  text-white text-[11px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
