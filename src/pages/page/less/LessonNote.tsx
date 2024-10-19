@@ -94,7 +94,7 @@ const AdminLessonNote = () => {
       >
         <div className="">
           <div className="flex float-end"></div>
-          <div className="py-9 w-full mt-[20px] p-3 border-b-2">
+          <div className="py-9 w-full mt-[20px] p-0 sm:p-3 border-b">
             <p className="font-bold mb-3">Lesson Note</p>
             <div>
               <Input
@@ -176,7 +176,7 @@ const AdminLessonNote = () => {
                         </div>
                         <div className="flex-1" />
 
-                        <div className="w-full flex justify-between items-start">
+                        <div className="w-full block md:flex justify-between items-start">
                           {/* Send Response to Teacher Button */}
                           <div className="">
                             {props?.adminSignation ? (
@@ -188,7 +188,7 @@ const AdminLessonNote = () => {
                                       data?.categoryType === "Secondary"
                                         ? "bg-green-700"
                                         : "bg-green-700"
-                                    }  text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
+                                    }  text-white  text-[11px] rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
@@ -344,7 +344,7 @@ const AdminLessonNote = () => {
                             <NavLink to={props?._id}>
                               <div
                                 // style={{ color: randomBg }}
-                                className="py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
+                                className="w-[50px] py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
                               >
                                 <BsArrowRight className="animate-pulse scale-105" />
                               </div>
