@@ -217,7 +217,7 @@ export const useLessonNote = (lessonID: string) => {
     `api/view-lesson-note-detail/${lessonID}`,
     () => {
       return lessonNote(lessonID!).then((res) => {
-        return res.data;
+        return res?.data;
       });
     }
   );
