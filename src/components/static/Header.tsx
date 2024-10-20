@@ -249,7 +249,7 @@ const Header = () => {
                   to: "lesson-note",
                 },
                 {
-                  title: "Gallaries",
+                  title: "Gallery",
                   icon: <FaPhotoVideo />,
                   to: "view-gallery",
                 },
@@ -310,7 +310,7 @@ const Header = () => {
                   to: "lesson-note",
                 },
                 {
-                  title: "Gallaries",
+                  title: "Gallery",
                   icon: <FaPhotoVideo />,
                   to: "view-gallery",
                 },

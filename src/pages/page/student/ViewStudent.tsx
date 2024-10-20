@@ -263,7 +263,7 @@ const ViewStudent = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-between items-start">
+      <div className=" sm:flex w-full justify-between items-start">
         <Input
           placeholder="Search Student Name or Class"
           className="ml-0"
@@ -271,10 +271,10 @@ const ViewStudent = () => {
           onChange={handleSearch}
         />
 
-        <div className="flex items-center w-full">
+        <div className="mb-3 sm:mb-0 flex items-center">
           <Button
             name="Add a new Student"
-            className="uppercase py- md:text-[12px] text-[7px] font-medium bg-blue-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+            className="uppercase md:text-[12px] text-[11px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
             onClick={handleDisplayStaff}
           />
           <input
@@ -299,13 +299,13 @@ const ViewStudent = () => {
                   "Add file to Student"
                 )
               }
-              className="uppercase py- lg:text-[12px] text-[9px] font-medium bg-red-500 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
+              className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
               onClick={handleBulkStudent}
             />
           ) : (
             <label
               htmlFor="file"
-              className="uppercase py- lg:text-[12px]font-medium bg-neutral-950 py-1 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[7px]"
+              className="uppercase lg:text-[12px]font-medium bg-neutral-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[11px]"
             >
               upload file for Bulk Entry
             </label>

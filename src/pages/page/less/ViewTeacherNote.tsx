@@ -15,7 +15,6 @@ const ViewTeacherNoteByAdmin = () => {
   const { data } = useSchoolData();
   const { noteID } = useParams();
   const { lessonNoteData } = useLessonNote(noteID!);
-  console.log(lessonNoteData);
 
   const lessonNoteRef = useRef<HTMLDivElement>(null);
 
@@ -82,8 +81,10 @@ const ViewTeacherNoteByAdmin = () => {
       : "";
   };
 
+  console.log(lessonNoteData);
+
   return (
-    <div className="">
+    <div className="freshh">
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader name={`${""} Lesson Note Details`} />
       <div className="mb-[30px]">
@@ -129,14 +130,16 @@ const ViewTeacherNoteByAdmin = () => {
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Status:</h2>
                     <div>
-                      {lessonNoteData?.adminSignation === true ? (
+                      {lessonNoteData?.adminSignation ? (
                         <h2 className="font-semibold text-green-500 flex items-center gap-1">
                           Approved <FcApproval />
                         </h2>
-                      ) : (
+                      ) : lessonNoteData?.adminSignation === false ? (
                         <h2 className="font-semibold text-red-500 flex items-center gap-1">
                           Not Approved <FcCancel />
                         </h2>
+                      ) : (
+                        <h2 className="font-semibold text-red-500 flex items-center gap-1"></h2>
                       )}
                     </div>
                   </div>
@@ -203,7 +206,7 @@ const ViewTeacherNoteByAdmin = () => {
                   <h1 className="font-semibold mb-2">Evaluation:</h1>
                   <h2>{lessonNoteData?.evaluation}</h2>
                 </div>
-                <div className="min-h-[150px] p-2 rounded-md bg-blue-50">
+                <div className="min-h-[150px] p-3 rounded-md bg-blue-50">
                   <h1 className="font-semibold mb-2">Summary:</h1>
                   <h2>{lessonNoteData?.summary}</h2>
                 </div>
@@ -224,25 +227,29 @@ const ViewTeacherNoteByAdmin = () => {
         {/* Lesson note ends */}
 
         <div className="mt-10" />
-        <div>
-          <Button
-            name={"Approve this Lesson Note"}
-            className="bg-blue-950 text-[17px] md:text-[18px] lg:text-[20px] ml-0"
-            onClick={() => {
-              approveNoted(data?._id, noteID!)
-                .then((res: any) => {
-                  if (res.status === 200) {
-                    toast.success("Lesson note has been Approved");
-                  } else {
-                    toast.error("Fail to approve this Note");
-                  }
-                })
-                .then(() => {
-                  navigate(-1);
-                });
-            }}
-          />
-        </div>
+        {lessonNoteData?.adminSignation ? (
+          <div></div>
+        ) : (
+          <div>
+            <Button
+              name={"Approve this Lesson Note"}
+              className="bg-blue-950 text-[17px] md:text-[18px] lg:text-[20px] ml-0"
+              onClick={() => {
+                approveNoted(data?._id, noteID!)
+                  .then((res: any) => {
+                    if (res.status === 200) {
+                      toast.success("Lesson note has been Approved");
+                    } else {
+                      toast.error("Fail to approve this Note");
+                    }
+                  })
+                  .then(() => {
+                    navigate(-1);
+                  });
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
