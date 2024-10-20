@@ -199,7 +199,7 @@ const AdminLessonNote = () => {
                                       data?.categoryType === "Secondary"
                                         ? "bg-green-700"
                                         : "bg-green-700"
-                                    }  text-white text-[11px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
+                                    }  text-white text-[11px] sm:text-[14px] lg:text-[13px] xl:text-[14px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer`}
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
