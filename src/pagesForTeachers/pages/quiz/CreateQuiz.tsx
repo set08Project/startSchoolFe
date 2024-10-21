@@ -18,7 +18,7 @@ const CreateQuiz = () => {
 
   return (
     <div>
-      <LittleHeader name="Create Quiz Screen" />
+      <LittleHeader name="Create Test Screen" />
 
       <div className="mt-10" />
 
