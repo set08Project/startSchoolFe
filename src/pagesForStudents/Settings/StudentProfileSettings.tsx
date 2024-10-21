@@ -1,11 +1,5 @@
 import { useState } from "react";
-// import {
-//   updateTeacherAddress,
-//   updateTeacherFullName,
-//   updateTeacherGender,
-//   updateTeacherPhoneNum,
-// } from "../../api/teachersAPI";
-// import { useTeacherInfo } from "../../hooks/useTeacher";
+
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
