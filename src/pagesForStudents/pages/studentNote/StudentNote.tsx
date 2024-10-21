@@ -59,7 +59,7 @@ const ClassLessonNote = () => {
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">
-                            <div className="mb-2 flex items-center gap-2">
+                            <div className="mb-2 block md:flex items-center gap-2">
                               <h3
                                 className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
                               >
@@ -70,7 +70,7 @@ const ClassLessonNote = () => {
                                 {moment(props?.createdAt).fromNow()}
                               </p>
                             </div>
-                            <div className=" mb-3 text-[25px] lg:text-[27px] font-bold flex items-center gap-3 ">
+                            <div className="w-[280px] sm:w-auto mt-4 sm:mt-0 mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3 ">
                               <h1>{props?.topic}</h1>
                             </div>
                           </div>

@@ -114,7 +114,7 @@ const LessonNote = () => {
                                 {moment(props?.createdAt).fromNow()}
                               </p>
                             </div>
-                            <div className=" mb-3 text-[25px] lg:text-[27px] font-bold flex items-center gap-3 ">
+                            <div className="w-[280px] sm:w-auto mt-4 sm:mt-0 mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3">
                               <h1>{props?.topic}</h1>
                             </div>
                           </div>
@@ -180,7 +180,7 @@ const LessonNote = () => {
                                   <div className="w-full flex justify-center items-center">
                                     <label
                                       htmlFor="view_response"
-                                      className="py-2 px-6 w-[270px] h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                      className="py-2 px-4 w-[270px] h-[43px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                                       onClick={() => {
                                         setID(props?._id);
                                         setObj(props);
