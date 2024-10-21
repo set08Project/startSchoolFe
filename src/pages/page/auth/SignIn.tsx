@@ -49,7 +49,19 @@ const SignIn = () => {
           }, 10);
         } else {
           console.log(res);
-          if (res?.response?.data?.message === undefined || "undefined") {
+          if (res?.response?.data?.message === "Error finding school") {
+            setLoading(false);
+            toast.error("Error Finding School, Please Check your Connectivity");
+          } else if (
+            res?.response?.data?.message ===
+            "Error reading your school enrollment ID"
+          ) {
+            setLoading(false);
+            toast.error("Incorrect School enrollment ID");
+          } else if (
+            res?.response?.data?.message === undefined ||
+            "undefined"
+          ) {
             setLoading(false);
             toast.error("Poor Internet Connectivity");
           } else {
