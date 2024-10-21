@@ -8,7 +8,6 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 // const URL2: string = "https://startschoolbe-1.onrender.com";
 
-
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
     return await axios

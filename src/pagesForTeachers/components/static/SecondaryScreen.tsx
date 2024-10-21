@@ -9,7 +9,12 @@ import {
 } from "react-icons/md";
 import { Link, NavLink, useParams } from "react-router-dom";
 import Button from "../reUse/Button";
-import { FaBarsProgress, FaPhotoFilm, FaStore } from "react-icons/fa6";
+import {
+  FaBarsProgress,
+  FaPhotoFilm,
+  FaSchoolFlag,
+  FaStore,
+} from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeMenuState,
@@ -175,6 +180,18 @@ const SecondaryScreen = () => {
         >
           Lesson Note
           <MdReport />
+        </NavLink>
+        <NavLink
+          to="/schemes"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Scheme Of Work
+          <FaSchoolFlag />
         </NavLink>
 
         <NavLink

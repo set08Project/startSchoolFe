@@ -6,25 +6,59 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import Button from "../../components/reUse/Button";
 import { FiLoader } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
+import { BsArrowRight } from "react-icons/bs";
+import pic from "../../../assets/pix.jpg";
+import moment from "moment";
+import { FcApproval, FcCancel } from "react-icons/fc";
+import { LuSend } from "react-icons/lu";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+import { readSchool } from "../../../pages/api/schoolAPIs";
+import Input from "../../components/reUse/Input";
 
 const LessonNote = () => {
+  document.title = "Teacher's Lesson Notes";
+
   const { teacherInfo } = useTeacherInfo();
   const { lessonNote } = useLessonNote(
     teacherInfo?.schoolIDs,
     teacherInfo?._id
   );
+  const [searchNote, setSearchNote] = useState("");
+
+  const filteredNotes = lessonNote?.lessonNotes?.filter((notes: any) => {
+    const allNotes = `${notes?.subject} ${notes?.topic}`.toLowerCase();
+    return allNotes.includes(searchNote.toLowerCase());
+  });
+
+  lessonNote?.lessonNotes?.reverse();
 
   const [id, setID] = useState<string>("");
   const [obj, setObj] = useState<any>({});
 
-  document.title = "Teacher's Lesson Notes";
+  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+  const [schoolData, setSchoolData] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      if (teacherInfo?.schoolIDs) {
+        try {
+          const data = await readSchool(teacherInfo.schoolIDs);
+          setSchoolData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchSchoolData();
+  }, [teacherInfo?.schoolIDs]);
 
   return (
     <div>
       <LittleHeader name="Teacher's Lesson Notes" />
-      <div className="min-h-[82vh] text-blue-950">
+      <div className="min-h-[82vh] text-blue-950 overflow-hidden">
         <div>
           {/* <div className="flex float-end">
             <NavLink to="/create-notes">
@@ -47,123 +81,144 @@ const LessonNote = () => {
           </div>
 
           <div className="py-9 w-full mt-4 p-3 border-b-2">
-            <p className="font-bold mb-7">Lesson Note</p>
+            <p className="font-bold mb-3">Lesson Note</p>
+            <div>
+              <Input
+                placeholder="Search By Subject Or Topic"
+                value={searchNote}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearchNote(e.target.value);
+                }}
+              />
+            </div>
 
             <div className="">
-              <div>
-                {lessonNote?.lessonNotes?.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-2  xl:grid-cols-3 ">
-                    {lessonNote?.lessonNotes?.map((props: any) => (
+              <div className="">
+                {filteredNotes?.length > 0 ? (
+                  <div className="mt-5 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:grid-cols-1 freshh">
+                    {filteredNotes?.map((props: any, i: number) => (
                       <div
-                        className={`min-h-[200px] hover:bxs transition-all duration-300 hover:scale-[1.005] border flex justify-between items-center flex-col rounded-sm `}
+                        key={props?._id || i}
+                        className="pt-6 pb-3 px-5 min-h-[200px] border rounded-[15px] shadow-sm flex items-start justify-center flex-col overflow-hidden"
                       >
-                        <NavLink
-                          key={props?._id}
-                          to={`/lesson-note/${props?._id}`}
-                          className="w-[85%]"
-                        >
-                          <div className="w-full h-full py-[20px] flex justify-center items-start flex-col ">
-                            <div className="w-full py-[10px] flex items-center justify-between">
-                              <div className="flex items-center text-[21px] gap-1">
+                        <div className="w-full mb-3 flex justify-between items-start">
+                          <div className="w-[75%]">
+                            <div className="mb-2 block md:flex items-center gap-2">
+                              <h3
+                                className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
+                              >
                                 <FaBook />
-                                <div className="font-semibold">
-                                  {props?.subject}
+                                {props?.subject}
+                              </h3>
+                              <p className=" mt-2 text-green-500 text-[12px] font-medium">
+                                {moment(props?.createdAt).fromNow()}
+                              </p>
+                            </div>
+                            <div className="w-[280px] sm:w-auto mt-4 sm:mt-0 mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3">
+                              <h1>{props?.topic}</h1>
+                            </div>
+                          </div>
+
+                          <div className="w-[20%] h-full flex justify-center items-start gap-2">
+                            <img
+                              src={props?.profilePic ? props?.profilePic : pic}
+                              alt="teacher_profile_pic"
+                              className="h-[60px] w-[60px] border object-cover rounded-full"
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <p className="break-words text-wrap">
+                            {props?.summary ? (
+                              props?.summary.substring(0, 250)
+                            ) : (
+                              <div className="opacity-50">No summary</div>
+                            )}
+                          </p>
+                        </div>
+                        <div className="w-full border mb-3" />
+                        <div className="mb-2 flex items-center font-semibold ">
+                          <h2 className="w-[70px]">By:</h2>
+                          <h2 className="">{props?.teacher}</h2>
+                        </div>
+                        <div className="mb-2 flex items-center font-semibold ">
+                          <h2 className="w-[70px]">For:</h2>
+                          <h2 className="">{props?.classes}</h2>
+                        </div>
+                        <div className="mb-8 font-semibold flex items-center">
+                          <h2 className="w-[70px]">Status</h2>
+                          {props?.adminSignation ? (
+                            <h2 className="font-semibold text-green-500 flex items-center gap-1">
+                              Approved <FcApproval />
+                            </h2>
+                          ) : (
+                            <h2 className="font-semibold text-red-500 flex items-center gap-1">
+                              Not Approved <FcCancel />
+                            </h2>
+                          )}
+                        </div>
+                        <div className="flex-1" />
+
+                        <div className="w-full smallphon flex justify-between items-start">
+                          {/* Send Response to Admin Button */}
+                          <div>
+                            {props?.adminSignation ? (
+                              <div>
+                                <div className="w-full mb-[25px] flex justify-center items-center">
+                                  <label
+                                    htmlFor=""
+                                    className="py-3 px-3 bg-green-700 text-white text-[11px] sm:text-[14px] lg:text-[13px] xl:text-[14px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 "
+                                  >
+                                    Lesson Note has been Approved
+                                    <FaThumbsUp className="mb-1" />
+                                  </label>
                                 </div>
                               </div>
-                              <div className="text-[20px] font-semibold">
-                                {props?.classes}
-                              </div>
-                            </div>
-                            <div className="py-[20px]">
-                              <div className="flex items-center gap-5">
-                                <h1 className="font-medium">Topic:</h1>
-                                <h1 className="font-bold text-[18px]">
-                                  {props?.topic ? (
-                                    props?.topic
-                                  ) : (
-                                    <div className="opacity-50">No Topic</div>
-                                  )}
-                                </h1>
-                              </div>
-                              <div className="flex items-center gap-5">
-                                <h1 className="font-medium">Notes:</h1>
-                                <p className="pt-5 text-[15px] flex justify-start items-center ">
-                                  {props?.summary ? (
-                                    props?.summary.substring(0, 500)
-                                  ) : (
-                                    <div className="opacity-50">No summary</div>
-                                  )}
-                                  ...
-                                </p>
-                              </div>
-                              <div className="w-full mt-[32px] flex items-center gap-5">
-                                <h1 className="font-medium">Status:</h1>
-                                <p
-                                  className={`${
-                                    props?.adminSignation
-                                      ? "text-green-500 font-bold"
-                                      : "text-red-500 font-bold"
-                                  }`}
-                                >
-                                  <p className="text-[12px]">
-                                    {props?.adminSignation
-                                      ? "Approved ✅"
-                                      : "Not-Approved ❌"}
-                                  </p>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </NavLink>
-
-                        {props?.adminSignation ? (
-                          <div>
-                            <div className="w-full mb-[25px] flex justify-center items-center">
-                              <label
-                                // htmlFor="send_response"
-                                className="py-3 px-3 bg-blue-900 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                              >
-                                Lesson Note has been Approved
-                                <FaThumbsUp className="mb-1" />
-                              </label>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-[90%] mb-[25px] flex justify-center items-center">
-                            {props?.messageSent ? (
-                              <div className="w-full flex justify-center items-center">
-                                <label
-                                  htmlFor="view_response"
-                                  className="py-3 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
-                                  onClick={() => {
-                                    setID(props?._id);
-                                    setObj(props);
-                                  }}
-                                >
-                                  View Administrator's Response
-                                  <FaEye />
-                                </label>
-                              </div>
                             ) : (
-                              <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
-                                <div>Awaiting Administrator's Response</div>
-                                <FiLoader />
+                              <div className="w-[90%] mb-[25px] flex justify-center items-center">
+                                {props?.messageSent ? (
+                                  <div className="w-full flex justify-center items-center">
+                                    <label
+                                      htmlFor="view_response"
+                                      className="py-2 px-4 w-[270px] h-[43px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                      onClick={() => {
+                                        setID(props?._id);
+                                        setObj(props);
+                                      }}
+                                    >
+                                      View Admin's Reply
+                                      <FaEye className="ml-3 text-[18px] animate-pulse" />
+                                    </label>
+                                  </div>
+                                ) : (
+                                  <div className="py-4 px-3 h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 cursor-pointer opacity-30">
+                                    <div>Awaiting Administrator's Response</div>
+                                    <FiLoader className="animate-spin transition-all duration-1000" />
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
-                        )}
+                          {/* Click to View button */}
+                          <div>
+                            <NavLink to={props?._id}>
+                              <div
+                                // style={{ color: randomBg }}
+                                className="w-[40px] h-[40px] flex justify-center items-center bg-blue-950 text-[25px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
+                              >
+                                <BsArrowRight className="animate-pulse scale-105" />
+                              </div>
+                            </NavLink>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className=" mt-32 w-full h-full flex flex-col items-center justify-center ">
-                    <MdAutoAwesome />
-                    <div className="opacity-50 mt-5">
-                      No Lesson Published yet
-                    </div>
-                  </div>
+                  <div className="freshh">No Lesson Note Created Yet</div>
                 )}
               </div>
+              {/* Comparison */}
             </div>
           </div>
         </div>

@@ -252,7 +252,7 @@ const Header = () => {
                   {
                     title: "Settings",
                     icon: <MdSettings />,
-                    to: "your-profile",
+                    to: "your-settings",
                   },
                 ]}
                 but
@@ -326,7 +326,7 @@ const Header = () => {
                   {
                     title: "Settings",
                     icon: <MdSettings />,
-                    to: "your-profile",
+                    to: "your-settings",
                   },
                 ]}
                 but

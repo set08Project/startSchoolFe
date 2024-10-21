@@ -6,6 +6,7 @@ import {
   FaMessage,
   FaNoteSticky,
   FaSchool,
+  FaSchoolFlag,
   FaStore,
 } from "react-icons/fa6";
 
@@ -244,12 +245,17 @@ const Header = () => {
                   to: "report",
                 },
                 {
+                  title: "Scheme of Work",
+                  icon: <FaSchoolFlag />,
+                  to: "schemes",
+                },
+                {
                   title: "Lesson Notes",
                   icon: <FaNoteSticky />,
                   to: "lesson-note",
                 },
                 {
-                  title: "Gallaries",
+                  title: "Gallery",
                   icon: <FaPhotoVideo />,
                   to: "view-gallery",
                 },
@@ -310,7 +316,7 @@ const Header = () => {
                   to: "lesson-note",
                 },
                 {
-                  title: "Gallaries",
+                  title: "Gallery",
                   icon: <FaPhotoVideo />,
                   to: "view-gallery",
                 },
