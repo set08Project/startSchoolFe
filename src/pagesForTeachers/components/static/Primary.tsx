@@ -30,7 +30,7 @@ import { readSchool } from "../../../pages/api/schoolAPIs";
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 
-const Primary = () => {
+const Primary = ({ studentID }) => {
   const dispatch = useDispatch();
   const toggleImage = useSelector((state: any) => state.imageToggle);
   const showing = useSelector((state: any) => state.showStaffComp);
@@ -122,6 +122,19 @@ const Primary = () => {
           onClick={handleToggleMenuFalse}
         >
           My Subjects
+          <MdSchool />
+        </NavLink>
+
+        <NavLink
+          to={`/quiz-records`}
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          Quiz-Record
           <MdSchool />
         </NavLink>
 
