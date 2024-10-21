@@ -211,7 +211,7 @@ const AdminLessonNote = () => {
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
                                     htmlFor="send_response"
-                                    className={`py-2 px-3 ${
+                                    className={`py-3 px-3 ${
                                       data?.categoryType === "Secondary"
                                         ? "bg-blue-950"
                                         : "bg-red-950"

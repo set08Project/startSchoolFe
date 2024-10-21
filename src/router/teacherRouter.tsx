@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
+import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
+
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
 );
@@ -307,6 +310,26 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CreateLesson />
+          </Suspense>
+        ),
+      },
+
+      // Scheme of work
+      {
+        index: true,
+        path: "schemes",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SchemeOfWorkTable />
+          </Suspense>
+        ),
+      },
+      {
+        index: true,
+        path: "schemes/:className/:subjectName/:term",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SchemeDetails />
           </Suspense>
         ),
       },

@@ -103,7 +103,7 @@ const LessonNote = () => {
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">
-                            <div className="mb-2 flex items-center gap-2">
+                            <div className="mb-2 block md:flex items-center gap-2">
                               <h3
                                 className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
                               >
@@ -204,7 +204,7 @@ const LessonNote = () => {
                             <NavLink to={props?._id}>
                               <div
                                 // style={{ color: randomBg }}
-                                className="py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
+                                className="w-[40px] h-[40px] flex justify-center items-center bg-blue-950 text-[25px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
                               >
                                 <BsArrowRight className="animate-pulse scale-105" />
                               </div>
