@@ -139,7 +139,7 @@ const SecondaryScreen = () => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Quiz-Record
+          Test-Record
           <MdSchool />
         </NavLink>
 

@@ -34,7 +34,7 @@ const SchemeOfWorkTable = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen p-6 text-blue-950">
-      <div className="max-w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="max-w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
         <div className="px-2 py-2">
           <div className="flex flex-wrap gap-3 md:gap-5 ">
             {listOfClass.map((el) => (

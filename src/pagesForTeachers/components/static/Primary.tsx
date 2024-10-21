@@ -134,7 +134,7 @@ const Primary = ({ studentID }) => {
           }
           onClick={handleToggleMenuFalse}
         >
-          Quiz-Record
+          Test-Record
           <MdSchool />
         </NavLink>
 

@@ -29,7 +29,7 @@ const QuizResultScreen = () => {
     >
       {/* Header */}
       <header className="bg-blue-950 text-white p-4 shadow-lg rounded-md">
-        <h1 className="text-2xl font-bold text-center">My Quiz Results</h1>
+        <h1 className="text-2xl font-bold text-center">My Test Results</h1>
       </header>
 
       {/* Content */}
