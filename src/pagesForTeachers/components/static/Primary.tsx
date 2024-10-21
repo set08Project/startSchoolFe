@@ -30,7 +30,7 @@ import { readSchool } from "../../../pages/api/schoolAPIs";
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 
-const Primary = ({ studentID }) => {
+const Primary = () => {
   const dispatch = useDispatch();
   const toggleImage = useSelector((state: any) => state.imageToggle);
   const showing = useSelector((state: any) => state.showStaffComp);
