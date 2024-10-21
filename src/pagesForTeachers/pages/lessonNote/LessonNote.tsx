@@ -159,15 +159,15 @@ const LessonNote = () => {
                         </div>
                         <div className="flex-1" />
 
-                        <div className="w-full flex justify-between items-start">
+                        <div className="w-full smallphon flex justify-between items-start">
                           {/* Send Response to Admin Button */}
                           <div>
                             {props?.adminSignation ? (
                               <div>
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
-                                    // htmlFor="send_response"
-                                    className="py-3 px-3 bg-green-700 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                    htmlFor=""
+                                    className="py-3 px-3 bg-green-700 text-white text-[11px] sm:text-[14px] lg:text-[13px] xl:text-[14px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 "
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
