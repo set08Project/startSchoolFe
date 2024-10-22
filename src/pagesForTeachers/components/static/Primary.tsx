@@ -126,7 +126,7 @@ const Primary = () => {
         </NavLink>
 
         <NavLink
-          to={`/quiz-records`}
+          to="/quiz-records"
           className={({ isActive }) =>
             isActive
               ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
