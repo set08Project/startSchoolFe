@@ -34,12 +34,12 @@ const QuizSetupScreen = () => {
       <div className="mt-10" />
 
       <div className="mb-16 flex justify-between items-center ">
-        <p>View Quiz</p>
+        <p>View Test</p>
         <div
           className="font-bold text-blue-550 cursor-pointer"
           onClick={handleViewRecords}
         >
-          Quiz Record
+          Test Record
         </div>
       </div>
 
@@ -68,7 +68,7 @@ const QuizSetupScreen = () => {
 
                   <div className="flex">
                     <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 ">
-                      Quiz
+                      Test
                     </p>
                   </div>
 
@@ -118,7 +118,7 @@ const QuizSetupScreen = () => {
       ) : (
         <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
           <FaCheckDouble size={13} />
-          <p className="mt-3 text-[12px] font-medium">No QUIZ set yet</p>
+          <p className="mt-3 text-[12px] font-medium">No Test set yet</p>
         </div>
       )}
 
