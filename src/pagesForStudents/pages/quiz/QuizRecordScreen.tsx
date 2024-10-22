@@ -32,11 +32,11 @@ const QuizRecordScreen = () => {
           if (res?.data?.performance) {
             setQuizRecords(res.data.performance);
           } else {
-            toast.error("Failed to fetch quiz records");
+            toast.error("Failed to fetch test records");
           }
         })
         .catch((error) => {
-          toast.error("An error occurred while fetching quiz records");
+          toast.error("An error occurred while fetching test records");
           console.error(error);
         })
         .finally(() => {
@@ -52,7 +52,7 @@ const QuizRecordScreen = () => {
     <div className="min-h-screen bg-gray-100">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="ml-5 pt-2">
-        <LittleHeader name="Your Quiz Records" />
+        <LittleHeader name="Your Test Records" />
       </div>
 
       <div className="container mx-auto px-4 py-8">
@@ -68,7 +68,7 @@ const QuizRecordScreen = () => {
           >
             {quizRecords.length === 0 ? (
               <p className="text-center text-gray-600">
-                No quiz records found.
+                No test records found.
               </p>
             ) : (
               <div className="overflow-x-auto">
@@ -76,7 +76,7 @@ const QuizRecordScreen = () => {
                   <thead>
                     <tr>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Quiz Title
+                        Test Title
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                         Score

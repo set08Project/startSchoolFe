@@ -69,7 +69,7 @@ const QuizSetupScreen = () => {
           <div className="flex gap-2">
             <Link to={`/create-quiz/${subjectID}`}>
               <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-4 rounded-md text-[12px] text-center">
-                + Create Quiz
+                + Create Test
               </p>
             </Link>
             <Link to={`/test-exam-grade/${subjectID}`}>
@@ -114,7 +114,7 @@ const QuizSetupScreen = () => {
 
                   <div className="flex mt-2">
                     <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50">
-                      Quiz
+                      Test
                     </p>
                   </div>
 
@@ -241,7 +241,7 @@ const QuizSetupScreen = () => {
       ) : (
         <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
           <FaCheckDouble size={13} />
-          <p className="mt-3 text-[12px] font-medium">No QUIZ set yet</p>
+          <p className="mt-3 text-[12px] font-medium">No Test set yet</p>
         </div>
       )}
 
