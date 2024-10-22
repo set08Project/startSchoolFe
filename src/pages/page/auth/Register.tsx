@@ -44,7 +44,7 @@ const Register = () => {
   };
 
   return (
-    <div className=" w-full h-[94vh] pt-[100px] md:pt-[150px] flex flex-col justify-center items-center freshh">
+    <div className=" w-full pt-[100px] md:pt-[150px] flex flex-col justify-center items-center freshh">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
@@ -127,14 +127,6 @@ const Register = () => {
         <span className="font-bold ml-2 text-blue-900">
           <Link to="/auth/login">Login here</Link>
         </span>
-      </div>
-      <div className="w-full pb-3 flex flex-col items-center">
-        <div className="border-b w-[40%]  " />
-
-        <div className="text-[13px] mt-2">Built to support your school</div>
-        <p className="font-medium text-[14px] mt-1">
-          Innovating Education, Just for you!
-        </p>
       </div>
     </div>
   );

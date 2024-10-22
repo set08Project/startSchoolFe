@@ -86,7 +86,7 @@ const StudentLogin = () => {
   };
 
   return (
-    <div className="freshh w-full min-h-[94vh] flex flex-col justify-center items-center ">
+    <div className="freshh w-full h-full flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
