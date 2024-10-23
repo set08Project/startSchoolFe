@@ -6,8 +6,9 @@ import { useTeacherInfo } from "../../hooks/useTeacher";
 const StudentTestRecord = () => {
   const { teacherInfo } = useTeacherInfo();
   const [testRecords, setTestRecords] = useState([]);
-  const URL =
-    import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+  const URL: string = "https://startschoolbe-1.onrender.com/api";
+  // const URL =
+  //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
   useEffect(() => {
     const fetchRecords = async () => {
