@@ -4,18 +4,23 @@ import { Link, useParams } from "react-router-dom";
 import { FaTrashAlt, FaCheckDouble } from "react-icons/fa";
 import { MdPlayCircle } from "react-icons/md";
 import LittleHeader from "../../components/layout/LittleHeader";
-import ConfirmDeleteModal from "./ConfirmDeleteModal"; 
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import pix from "../../../assets/pix.jpg";
 import { useSubjectAssignment, useSujectQuiz } from "../../hooks/useTeacher";
 import { deleteQuiz, readClassInfo } from "../../api/teachersAPI";
+import { useStudentPerfomance } from "../../hooks/useQuizHook";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
+  const { performance } = useStudentPerfomance(subjectID!);
+
+  console.log("perfomance", performance);
 
   const [state, setState] = useState<any>({});
-  const [isModalOpen, setModalOpen] = useState(false); 
+  const [isModalOpen, setModalOpen] = useState(false);
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+
   useEffect(() => {
     if (subjectQuiz?.designated) {
       readClassInfo(subjectQuiz.designated).then((res: any) => {
@@ -27,13 +32,14 @@ const QuizSetupScreen = () => {
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
   const quiz: [] = subjectQuiz?.quiz;
+  console.log("Viewing Quiz", quiz);
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
 
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
-    setModalOpen(true); 
+    setModalOpen(true);
   };
 
   const confirmDelete = async () => {
@@ -44,16 +50,15 @@ const QuizSetupScreen = () => {
       } catch (error) {
         console.error("Failed to delete item:", error);
       }
-      setModalOpen(false); 
-      setSelectedQuizId(null); 
+      setModalOpen(false);
+      setSelectedQuizId(null);
     }
   };
 
   return (
-    <div className="text-blue-950 relative">
+    <div className="text-blue-950  relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
 
-   
       <ConfirmDeleteModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
@@ -74,7 +79,7 @@ const QuizSetupScreen = () => {
             </Link>
             <Link to={`/test-exam-grade/${subjectID}`}>
               <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-4 rounded-md text-center">
-                + Enter Test Records
+                + Record Report Card Scores
               </p>
             </Link>
           </div>
@@ -83,7 +88,6 @@ const QuizSetupScreen = () => {
 
       {combine?.length > 0 ? (
         <div>
-         
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
             {quiz?.map((props: any, i: number) => (
               <div key={props._id}>
@@ -102,7 +106,8 @@ const QuizSetupScreen = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="font-bold mt-0 text-[20px]">
-                      {props?.subjectTitle} {props?.quiz ? "Quiz" : "Assignment"}
+                      {props?.subjectTitle}{" "}
+                      {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
                     <Link to={`/quiz/details/${props?._id}`}>
                       <MdPlayCircle

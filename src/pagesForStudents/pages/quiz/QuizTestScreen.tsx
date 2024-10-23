@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useQuiz,
+  useSujectQuiz,
+} from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
@@ -14,6 +17,9 @@ const QuizTestScreen = () => {
   const [state, setState] = useState<any>({});
   const { quizData } = useQuiz(quizID!);
   const [start, setStart] = useState<boolean>(false);
+
+  console.log("Reading Quiz Data", quizData);
+  const courseID = quizData?.subjectID;
   const { studentInfo } = useStudentInfo();
 
   const handleStateChange = (questionIndex: any, optionValue: any) => {
@@ -39,7 +45,9 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
-    performanceTest(studentInfo?._id, quizID!, {
+    // To be continued later. I will return the SubjectID at the backend and Consume it on the frontend. then try to populate it back to see if the performance is pushed to the subject array from the backend.
+
+    performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
       studentGrade: grade,
       remark,
