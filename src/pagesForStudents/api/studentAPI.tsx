@@ -113,12 +113,13 @@ export const viewPerformanceTest = async (studentID: string) => {
 export const performanceTest = async (
   studentID: string,
   quizID: string,
+  subjectID: string,
   data: {}
 ) => {
   try {
     return await axios
       .post(
-        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/`,
+        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/${subjectID}`,
         data
       )
       .then((res: any) => {

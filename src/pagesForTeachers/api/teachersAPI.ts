@@ -7,6 +7,20 @@ const URL: string =
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 
+export const getStudentPerformance = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-quiz-performance/${studentID}`)
+      .then((res) => {
+        console.log(res?.data);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getStudentTestRecord = async (quizID: string) => {
   try {
     const response = await axios.get(`${URL}/quiz/${quizID}/record`);
