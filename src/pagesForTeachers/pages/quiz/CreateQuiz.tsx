@@ -56,7 +56,7 @@ const CreateQuiz = () => {
           ) : (
             <div className="h-full flex flex-col">
               <p className="my-2 font-medium capitalize border-b">
-                set Question Instruction
+                Set Question Instruction
               </p>
               <div>
                 <div className="mt-5">
@@ -97,7 +97,7 @@ const CreateQuiz = () => {
               </div>
 
               <div className="flex-1" />
-              {testQuestion[0]?.instruction?.instruction ? (
+              {testQuestion[0]?.binstruction?.instruction ? (
                 <Button
                   name={"add to Preview"}
                   className="text-white bg-blue-950 uppercase text-[12px]px-8 py-4"
