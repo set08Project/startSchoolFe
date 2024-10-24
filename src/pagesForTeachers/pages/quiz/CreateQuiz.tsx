@@ -56,7 +56,7 @@ const CreateQuiz = () => {
           ) : (
             <div className="h-full flex flex-col">
               <p className="my-2 font-medium capitalize border-b">
-                Set Question Instruction
+                Set Test Instruction
               </p>
               <div>
                 <div className="mt-5">
@@ -72,18 +72,29 @@ const CreateQuiz = () => {
                 </div>
                 <div className="mt-1 w-full flex gap-2">
                   <div>
-                    <label className="text-[12px]">Enter Time</label>
-                    <Input
-                      placeholder="Enter Time"
-                      className="ml-0 w-full"
+                    <label className="text-[12px]">
+                      Enter Time/Duration(Hours))
+                    </label>
+
+                    <select
+                      name="hour"
+                      id="hour"
                       value={duration}
-                      onChange={(e) => {
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setDuration(e.target.value);
                       }}
-                    />
+                    >
+                      <option value="1">1 Hour</option>
+                      <option value="2">2 Hours</option>
+                      <option value="3">3 Hours</option>
+                      <option value="4">4 Hours</option>
+                      <option value="5">5 Hours</option>
+                    </select>
                   </div>
                   <div>
-                    <label className="text-[12px]">Enter Mark/Question</label>
+                    <label className="text-[12px]">
+                      Enter Mark Per Question
+                    </label>
                     <Input
                       placeholder="Enter Marks"
                       className="ml-0 w-full"
