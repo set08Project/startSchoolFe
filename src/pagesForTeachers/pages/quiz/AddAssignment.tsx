@@ -89,7 +89,7 @@ const ClassModelAssignment: FC<iProps> = ({ props }) => {
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
               Please note that by assigning this subject to this class, it
-              automtically becomes one of the class must take suject.
+              automtically becomes one of the class's compulsory subject.
               <br />
               <br />
               <div className="flex gap-2  items-center">
