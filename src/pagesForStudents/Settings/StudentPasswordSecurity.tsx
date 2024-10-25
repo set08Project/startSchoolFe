@@ -1,14 +1,17 @@
 import PasswordInput from "../../components/reUse/PasswordIput";
 import { MdOutlineSecurity } from "react-icons/md";
+import { useStudentInfo } from "../hooks/useStudentHook";
 
 const StudentPasswordSecurity = () => {
+  const { studentInfo } = useStudentInfo();
+
   return (
     <div className="overflow-hidden">
       {/* Terms and Guidelines */}
       <div className="mt-5 p-4 xl:w-[900px] bg-gray-200 transition-all duration-300 rounded-md shadow-sm">
         <h4 className="font-semibold mb-5 text-[18px] sm:text-[20px] flex items-center gap-2">
           <MdOutlineSecurity />{" "}
-          <span className="text-blue-950 font-extrabold">NEXT</span> Security
+          <span className="text-blue-950 ,font-extrabold">NEXT</span> Security
           Guidelines
         </h4>
         <div className="mb-5 bg-gray-200 transition-all duration-300 font-medium ">
@@ -46,7 +49,7 @@ const StudentPasswordSecurity = () => {
       <div className="my-5 text-[17px] font-medium">
         Your Current Employment ID ={" "}
         <span className="text-[20px] font-bold">
-          {teacherInfo?.enrollmentID}
+          {studentInfo?.enrollmentID}
         </span>
       </div>
       <div className="lg:flex lg:gap-4 items-start">
