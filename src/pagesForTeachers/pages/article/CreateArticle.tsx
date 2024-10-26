@@ -82,7 +82,7 @@ const CreateArticle = () => {
         </div>
 
         <div className=" mt-10 mb-20 min-h-[500px]">
-          <p className="text-[12px] mt-3">Write Article</p>
+          <p className="text-[12px] mt-3">Publish Article</p>
           <div className="w-full my-1  min-h-[300px] border">
             <CKEditor
               editor={ClassicEditor}

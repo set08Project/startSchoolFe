@@ -173,7 +173,7 @@ const MyClassRoomScreen = () => {
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Class Subject for {oneClass?.className} </p>
         <p className="text-[13px] font-bold">
-          Below are all the subject this CLASS offers!
+          Below are all the subjects this CLASS offers!
         </p>
 
         <ClassSubjectScreen props={oneClass?._id} />
