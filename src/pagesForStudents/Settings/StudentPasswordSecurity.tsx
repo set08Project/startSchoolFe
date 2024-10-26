@@ -56,7 +56,7 @@ const StudentPasswordSecurity = () => {
         {/* Step 1: Confirm Older Password */}
         <div className="mb-4 lg:mb-0">
           <div>Step 1</div>
-          <div className="mb-3 font-semibold">Confirm Older Passwordds</div>
+          <div className="mb-3 font-semibold">Confirm Older Password</div>
           <div className="p-4 min-h-[250px] xl:w-[450px] bg-gray-100 transition-all duration-300 rounded-md shadow-sm">
             <h3 className="ml-3 mb-5 font-semibold text-[17px]">
               Input your current password
