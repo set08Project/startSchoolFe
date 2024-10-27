@@ -47,7 +47,7 @@ const StudentPasswordSecurity = () => {
 
       <div className="border my-10" />
       <div className="my-5 text-[17px] font-medium">
-        Your Current Employment ID ={" "}
+        Your Current Enrollment ID ={" "}
         <span className="text-[20px] font-bold">
           {studentInfo?.enrollmentID}
         </span>
@@ -69,8 +69,8 @@ const StudentPasswordSecurity = () => {
               For your security, please enter your current password to verify
               your identity before making any changes.
             </p>
-            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-blue-950 text-white transition-all duration-300 hover:scale-105">
-              Confirm
+            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-neutral-400 cursor-not-allowed text-white transition-all duration-300 hover:scale-105">
+              Confirm (..coming soon)
             </button>
           </div>
         </div>
@@ -91,8 +91,8 @@ const StudentPasswordSecurity = () => {
               Ensure that your new password is unique and hasn't been used
               before.
             </p>
-            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-blue-950 text-white transition-all duration-300 hover:scale-105">
-              Update
+            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-neutral-400 text-white transition-all duration-300 hover:scale-105 cursor-not-allowed">
+              Update (...coming soon)
             </button>
           </div>
         </div>
