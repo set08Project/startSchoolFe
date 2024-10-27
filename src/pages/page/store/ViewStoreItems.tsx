@@ -46,7 +46,14 @@ const ViewStoreItems = () => {
       {/* <div className="my-5 " /> */}
 
       <div className="flex justify-between mb-10 w-full">
-        <div className=" flex items-center">
+        <div className=" flex items-center gap-3">
+          <label
+            htmlFor="assign_subject_timetable"
+            className="px-5 py-2 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white text-[11px] md:text-[13px] ml-0 bg-green-500 cursor-pointer hover:scale-105  transition-all duration-300"
+          >
+            Add item to Store
+          </label>
+
           <Button
             name="Store View"
             className="ml-0 bg-orange-500  "

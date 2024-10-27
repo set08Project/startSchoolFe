@@ -118,7 +118,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
 
       {but && (
         <div className="w-full flex justify-center mt-3">
-          <NavLink to="/upgrade" onClick={handleToggleMenuFalse}>
+          <NavLink to="/store" onClick={handleToggleMenuFalse}>
             <Button
               name="Add to Store"
               className={`text-[12px] uppercase font-bold ${
