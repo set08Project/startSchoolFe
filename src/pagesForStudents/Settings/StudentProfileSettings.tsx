@@ -190,7 +190,7 @@ const StudentProfileSettings = () => {
           </div>
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
-          <div className="min-w-[80%] lg:min-w-[30%]">
+          <div className="min-w-[80%] flex items-center gap-3 lg:min-w-[30%]">
             <h3 className="font-bold w-[50px] flex items-center gap-1 text-[13px] sm:text-[15px] md:text-[18px] mr-[5px] md:mr-[50px]">
               Email:
             </h3>
@@ -297,7 +297,7 @@ const StudentProfileSettings = () => {
 
       {toggle && (
         <div className="absolute w-full h-full flex justify-center items-center top-0 backdrop-blur-sm">
-          <div className="p-4 min-h-[200px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[300px] bg-white border shadow-md rounded-lg flex justify-center items-center flex-col">
+          <div className="freshh p-4 min-h-[200px] min-w-[300px] bg-white border shadow-md rounded-lg flex justify-start items-center flex-col">
             <div className="mb-4 flex items- center justify-between">
               <h2 className="text-blue-950 font-semibold">
                 {toggle === "firstName" && "Enter Your First Name"}
