@@ -89,7 +89,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
     <div className="border w-[250px] bg-blue-50 shadow-sm  rounded-md p-1 overflow-y-auto  z-50">
       <div
         className={`flex flex-col items-between w-full ${
-          propName === "navs" ? "h-[500px] overflow-y-auto" : ""
+          propName === "navs" ? "smallph h-[500px] overflow-y-auto" : ""
         }`}
       >
         {name?.map(({ title, icon, to }, i: number) => (

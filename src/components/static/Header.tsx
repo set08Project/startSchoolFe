@@ -173,6 +173,7 @@ const Header = () => {
         }`}
       >
         <SmallPiece
+          propName="account"
           name={[
             { title: "Account", icon: <MdAccountCircle />, to: "settings" },
           ]}
@@ -213,6 +214,7 @@ const Header = () => {
         >
           {data?.categoryType === "Secondary" ? (
             <SmallPiece
+              propName="navs"
               name={[
                 {
                   title: "Dashboard",
@@ -279,6 +281,7 @@ const Header = () => {
             />
           ) : (
             <SmallPiece
+              propName="navs"
               name={[
                 {
                   title: "Dashboard",

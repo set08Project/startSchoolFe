@@ -27,9 +27,10 @@ interface iProps {
 
   log?: boolean;
   but?: boolean;
+  propName: string;
 }
 
-const SmallPiece: FC<iProps> = ({ log, name, but }) => {
+const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
   const { data } = useSchoolData();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,9 +87,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
   return (
     <div
-      className={`border w-[250px] ${
+      className={`border  overflow-y-auto w-[250px] ${
         data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
-      } shadow-sm min-h-48 rounded-md p-1`}
+      } shadow-sm min-h-48 rounded-md p-1 ${
+        propName === "navs" ? "smallph h-[550px] overflow-y-auto" : ""
+      }`}
     >
       <div className="flex flex-col items-between  w-full">
         {name?.map(({ title, icon, to }, i: number) => (
