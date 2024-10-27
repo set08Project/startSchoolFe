@@ -296,7 +296,7 @@ const StudentProfileSettings = () => {
       {/* Dropdown Modal For Editing */}
 
       {toggle && (
-        <div className="absolute w-full h-full flex justify-center items-center top-0 backdrop-blur-sm">
+        <div className="absolute w-full h-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm">
           <div className="freshh p-4 min-h-[200px] min-w-[300px] bg-white border shadow-md rounded-lg flex justify-start items-center flex-col">
             <div className="mb-4 flex items- center justify-between">
               <h2 className="text-blue-950 font-semibold">
@@ -305,7 +305,7 @@ const StudentProfileSettings = () => {
                 {toggle === "gender" && "Enter Your Gender"}
                 {toggle === "ParentEmail" && "Enter Your Parents Email"}
                 {toggle === "phone" && "Enter Your Phone Number"}
-                {toggle === "parentNumber" && "Enter Your ParentPhone Number"}
+                {toggle === "parentNumber" && "Enter Your Parent Phone Number"}
                 {toggle === "Address" && "Enter Your Address"}
               </h2>
               <CgClose
@@ -336,7 +336,7 @@ const StudentProfileSettings = () => {
               />
             )}
             {toggle === "gender" && (
-              <div>
+              <div className="w-full">
                 <select
                   name="gender"
                   id="gender"

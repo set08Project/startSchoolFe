@@ -68,7 +68,7 @@ const TeacherSubject: FC = () => {
                 return (
                   <div
                     key={props.id}
-                    className="w-[1200px] flex items-center gap-9 text-[12px] font-medium  h-16 px-4 my-2 overflow-hidden"
+                    className="w-[1400px] flex items-center gap-9 text-[12px] font-medium  h-16 px-4 my-2 overflow-hidden"
                   >
                     <div className="w-[150px] border-r text-black">
                       {props.title}:

@@ -25,12 +25,14 @@ interface iData {
 }
 interface iProps {
   name?: iData[];
+  propName: string;
 
   log?: boolean;
   but?: boolean;
+  maxHeight?: string;
 }
 
-const SmallPiece: FC<iProps> = ({ log, name, but }) => {
+const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
   const { studentInfo } = useStudentInfo();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -85,7 +87,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm  rounded-md p-1 overflow-y-auto  z-50">
-      <div className="flex flex-col items-between w-full">
+      <div
+        className={`flex flex-col items-between w-full ${
+          propName === "navs" ? "h-[500px] overflow-y-auto" : ""
+        }`}
+      >
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
             key={i}

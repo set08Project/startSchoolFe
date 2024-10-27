@@ -203,7 +203,7 @@ const SocialsSettings = () => {
         </div>
         {toggle && (
           <div className="absolute w-full h-full flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm">
-            <div className="p-4 min-h-[200px] min-w-[250px] bg-white border shadow-md rounded-lg">
+            <div className="freshh p-4 min-h-[200px] min-w-[250px] bg-white border shadow-md rounded-lg">
               <div className="mb-4 flex items- center justify-between">
                 <h2 className="text-blue-950 font-semibold">
                   {toggle === "facebook" && "Enter Your Facebook Handle"}
