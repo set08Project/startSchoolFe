@@ -50,6 +50,13 @@
   }
 }
 
+@media (max-width: 320px) {
+  .smallph {
+    height: 370px;
+    overflow-y: auto;
+  }
+}
+
 .dash {
   transition: transform 0.2s ease-in-out;
   transform: translateY(-2px);

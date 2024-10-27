@@ -68,8 +68,8 @@ const PasswordSecurity = () => {
               For your security, please enter your current password to verify
               your identity before making any changes.
             </p>
-            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-blue-950 text-white transition-all duration-300 hover:scale-105">
-              Confirm
+            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-neutral-400 text-white transition-all duration-300 hover:scale-105 cursor-not-allowed">
+              Confirm(...coming soon)
             </button>
           </div>
         </div>
@@ -90,8 +90,8 @@ const PasswordSecurity = () => {
               Ensure that your new password is unique and hasn't been used
               before.
             </p>
-            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-blue-950 text-white transition-all duration-300 hover:scale-105">
-              Update
+            <button className="ml-3 mt-4 rounded-md py-2 px-3 bg-neutral-400 text-white transition-all duration-300 hover:scale-105 cursor-not-allowed">
+              Update (...coming soon)
             </button>
           </div>
         </div>

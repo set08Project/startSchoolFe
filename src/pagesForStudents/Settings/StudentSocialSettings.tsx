@@ -101,8 +101,8 @@ const StudentSocialSettings = () => {
                     {studentInfo?.facebookAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                    + add your facebook handle or Guidience
+                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                    + add your facebook handle
                   </h1>
                 )}
               </div>
@@ -130,8 +130,8 @@ const StudentSocialSettings = () => {
                     {studentInfo?.instagramAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
-                    + add your instagram handle or Guidience
+                  <h1 className="text-[8px] md:text-[18px] text-blue-500 md:ml-[5px]">
+                    + add your instagram handle
                   </h1>
                 )}
               </div>
@@ -159,8 +159,8 @@ const StudentSocialSettings = () => {
                     {studentInfo?.xAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                    + add your X handle or Guidience
+                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                    + add your X handle
                   </h1>
                 )}
               </div>
@@ -188,8 +188,8 @@ const StudentSocialSettings = () => {
                     {studentInfo?.linkedinAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
-                    + add your linkedIn handle or Guidience
+                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                    + add your linkedIn handle
                   </h1>
                 )}
               </div>
@@ -204,8 +204,8 @@ const StudentSocialSettings = () => {
             </div>
           </div>
           {toggle && (
-            <div className="absolute w-full h-full backdrop-blur-sm top-0 flex justify-center items-center">
-              <div className="md:w-[350px] md:h-[250px] shadow-md bg-white rounded-md p-4 text-[11px] md:text-[16px] w-[280px] h-[250px]">
+            <div className="absolute w-full h-full backdrop-blur-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
+              <div className="freshh md:w-[350px] shadow-md bg-white rounded-md p-4 text-[11px] md:text-[16px] w-[280px] min-h-[200px]">
                 <div className="mb-4 flex items- center justify-between">
                   <h2 className="text-blue-950 font-semibold">
                     {toggle === "facebook" && "Enter Your Facebook Handle"}
