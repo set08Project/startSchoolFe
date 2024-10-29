@@ -338,7 +338,7 @@ const StudentProfile = () => {
               </div>
               {readSubject?.length > 0 ? (
                 readSubject?.map((subject: any) => (
-                  <div className="border-b mb-1 py-1 flex items-center justify-between font-medium text-[10px] md:text-[17px] w-[85%]">
+                  <div className="border-b mb-1 py-1 flex items-center justify-between font-medium text-[10px] md:text-[17px] w-[84%]">
                     <h1>{subject?.subjectTitle}</h1>
                     <h1>{subject?.subjectTeacherName}</h1>
                   </div>
