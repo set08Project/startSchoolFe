@@ -1,11 +1,10 @@
 import PasswordInput from "../../components/reUse/PasswordIput";
 import { MdOutlineSecurity } from "react-icons/md";
-<<<<<<< HEAD
+
 import { useParams } from "react-router-dom";
 import { useClassSubjects } from "../../pages/hook/useSchoolAuth";
-=======
+
 import { useStudentInfo } from "../hooks/useStudentHook";
->>>>>>> f42080a786d7e91e3a8919185abb84062be73151
 
 const StudentPasswordSecurity = () => {
   const { studentInfo } = useStudentInfo();

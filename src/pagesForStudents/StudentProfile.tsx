@@ -84,7 +84,7 @@ const StudentProfile = () => {
   };
 
   const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
-  console.log("readSubject", readSubject);
+  // console.log("readSubject", readSubject);
 
   return (
     <div>
