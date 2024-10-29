@@ -7,7 +7,7 @@ import IG from "../../../assets/socials/Ig.png";
 import FB from "../../../assets/socials/fb.png";
 import Linkden from "../../../assets/socials/linkden.png";
 import X from "../../../assets/socials/x-social-media-round-icon.svg";
-import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useClassSubject, useTeacherInfo } from "../../hooks/useTeacher";
 import moment from "moment";
 import { FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -26,6 +26,7 @@ const MyProfile = () => {
     teacher?.staffName?.charAt(teacher?.staffName.indexOf(" ") + 1);
 
   const { teacherInfo } = useTeacherInfo();
+  // console.log("Teacher's Info", teacherInfo);
   const changeImage = (e: any) => {
     console.log("start...");
     const file = e.target.files[0];

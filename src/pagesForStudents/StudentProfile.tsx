@@ -1,8 +1,8 @@
 import moment from "moment";
 import pix from "../assets/Child2.jpg";
 import LittleHeader from "../components/layout/LittleHeader";
-import { useStudentInfo } from "./hooks/useStudentHook";
-import { Link } from "react-router-dom";
+import { useStudentInfo, useStudentInfoData } from "./hooks/useStudentHook";
+import { Link, useParams } from "react-router-dom";
 import pic from "../../src/assets/Child1.jpg";
 import { MdEmail } from "react-icons/md";
 import { HiPhoto } from "react-icons/hi2";
@@ -14,22 +14,51 @@ import Linkden from "../../src/assets/linkden.png";
 import X from "../../src/assets/ig.png";
 import { FaUserEdit } from "react-icons/fa";
 // import { Link } from "react-router-dom";
-// import { updateTeacherAvatar } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { updateStudentAvatar } from "./api/studentAPI";
+import {
+  readClassInfo,
+  readOneClassInfo,
+  updateStudentAvatar,
+} from "./api/studentAPI";
+import {
+  useClassSubjects,
+  useSchoolStudentDetail,
+} from "../pages/hook/useSchoolAuth";
 
 const StudentProfile = () => {
   const [state, setState] = useState<string>("");
+  const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const student = useStudentInfo().studentInfo;
+  const fetchOnce = useRef(true);
   const initials =
     student?.studentName?.charAt(0) +
     student?.staffName?.charAt(student?.staffName.indexOf(" ") + 1);
 
-  const { studentInfo } = useStudentInfo();
+  const studentInfo = useStudentInfo()?.studentInfo;
+
+  console.log(student);
+
+  const { studentDetails } = useSchoolStudentDetail(student?._id);
+  // console.log("Student Details:", studentInfo);
+  const fetchSubjects = async (classID: string) => {
+    setLoading(true);
+    try {
+      const res = await readClassInfo(classID);
+      // console.log("Fetched subjects:", res);
+      setSubjects(res.subjects);
+    } catch (error) {
+      console.error("Failed to fetch subjects:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log("FetchSubject", fetchSubjects);
+
   const changeImage = (e: any) => {
     // console.log("start...");
     const file = e.target.files[0];
@@ -53,6 +82,9 @@ const StudentProfile = () => {
       }, 50);
     }
   };
+
+  const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
+  console.log("readSubject", readSubject);
 
   return (
     <div>
@@ -300,19 +332,21 @@ const StudentProfile = () => {
               </div>
               <div className="font-[700]">{studentInfo?.classAssigned}</div>
             </div>
-            <div className="lg:w-[47%] xl:w-auto">
-              <div className="mb-3 font-bold md:text-[17px] text-gray-600 uppercase text-[12px]">
-                Subjects Offered:
+            <div className="lg:w-[47%] xl:w-auto h-[500px] w-[330px]">
+              <div className="mb-3 font-bold md:text-[17px] text-gray-600 uppercase text-[9px]">
+                Subjects Offered & Subject Teachers Name:
               </div>
-              {student?.subjectAssigned?.length > 0 ? (
-                student?.subjectAssigned?.map((props: any) => (
-                  <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-                    <h1>{props?.title}</h1>
-                    <h1>{props?.classMeant}</h1>
+              {readSubject?.length > 0 ? (
+                readSubject?.map((subject: any) => (
+                  <div className="border-b mb-1 py-1 flex items-center justify-between font-medium text-[10px] md:text-[17px] w-[85%]">
+                    <h1>{subject?.subjectTitle}</h1>
+                    <h1>{subject?.subjectTeacherName}</h1>
                   </div>
                 ))
               ) : (
-                <div>No Subject assigned yet</div>
+                <div className="flex justify-center items-center h-full">
+                  <h2 className="text-gray-500">No subjects assigned yet</h2>
+                </div>
               )}
             </div>
           </div>
