@@ -81,8 +81,10 @@ const ViewTeacherNoteByAdmin = () => {
       : "";
   };
 
+  console.log(lessonNoteData);
+
   return (
-    <div className="">
+    <div className="freshh">
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader name={`${""} Lesson Note Details`} />
       <div className="mb-[30px]">
@@ -128,14 +130,16 @@ const ViewTeacherNoteByAdmin = () => {
                   <div className="flex mb-2 items-center">
                     <h2 className="w-[150px]">Status:</h2>
                     <div>
-                      {lessonNoteData?.adminSignation === true ? (
+                      {lessonNoteData?.adminSignation ? (
                         <h2 className="font-semibold text-green-500 flex items-center gap-1">
                           Approved <FcApproval />
                         </h2>
-                      ) : (
+                      ) : lessonNoteData?.adminSignation === false ? (
                         <h2 className="font-semibold text-red-500 flex items-center gap-1">
                           Not Approved <FcCancel />
                         </h2>
+                      ) : (
+                        <h2 className="font-semibold text-red-500 flex items-center gap-1"></h2>
                       )}
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import {
   FaMessage,
   FaNoteSticky,
   FaSchool,
+  FaSchoolFlag,
   FaStore,
 } from "react-icons/fa6";
 
@@ -172,6 +173,7 @@ const Header = () => {
         }`}
       >
         <SmallPiece
+          propName="account"
           name={[
             { title: "Account", icon: <MdAccountCircle />, to: "settings" },
           ]}
@@ -212,6 +214,7 @@ const Header = () => {
         >
           {data?.categoryType === "Secondary" ? (
             <SmallPiece
+              propName="navs"
               name={[
                 {
                   title: "Dashboard",
@@ -244,6 +247,11 @@ const Header = () => {
                   to: "report",
                 },
                 {
+                  title: "Scheme of Work",
+                  icon: <FaSchoolFlag />,
+                  to: "schemes",
+                },
+                {
                   title: "Lesson Notes",
                   icon: <FaNoteSticky />,
                   to: "lesson-note",
@@ -273,6 +281,7 @@ const Header = () => {
             />
           ) : (
             <SmallPiece
+              propName="navs"
               name={[
                 {
                   title: "Dashboard",

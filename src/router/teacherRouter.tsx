@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
+import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
+
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
 );
@@ -68,6 +71,10 @@ const QuizTestScreen = React.lazy(
 );
 const CreateQuiz = React.lazy(
   () => import("../pagesForTeachers/pages/quiz/CreateQuiz")
+);
+
+const StudentTestRecord = React.lazy(
+  () => import("../pagesForTeachers/pages/studentRecord/studentRecord")
 );
 const CreateLesson = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/CreateLessonNote")
@@ -212,6 +219,15 @@ export const teacherRouter = createBrowserRouter([
         ),
       },
       {
+        path: "quiz-records",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <StudentTestRecord />
+          </Suspense>
+        ),
+      },
+      {
         path: "quiz/details/:quizID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
@@ -307,6 +323,26 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CreateLesson />
+          </Suspense>
+        ),
+      },
+
+      // Scheme of work
+      {
+        index: true,
+        path: "schemes",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SchemeOfWorkTable />
+          </Suspense>
+        ),
+      },
+      {
+        index: true,
+        path: "schemes/:className/:subjectName/:term",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SchemeDetails />
           </Suspense>
         ),
       },

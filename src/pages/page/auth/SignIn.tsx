@@ -49,7 +49,19 @@ const SignIn = () => {
           }, 10);
         } else {
           console.log(res);
-          if (res?.response?.data?.message === undefined || "undefined") {
+          if (res?.response?.data?.message === "Error finding school") {
+            setLoading(false);
+            toast.error("Error Finding School, Please Check your Connectivity");
+          } else if (
+            res?.response?.data?.message ===
+            "Error reading your school enrollment ID"
+          ) {
+            setLoading(false);
+            toast.error("Incorrect School enrollment ID");
+          } else if (
+            res?.response?.data?.message === undefined ||
+            "undefined"
+          ) {
             setLoading(false);
             toast.error("Poor Internet Connectivity");
           } else {
@@ -71,7 +83,7 @@ const SignIn = () => {
   });
 
   return (
-    <div className=" freshh w-full min-h-[94vh] flex flex-col justify-center items-center ">
+    <div className=" freshh w-full h-full flex flex-col justify-center items-center ">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="mb-10 text-center flex items-center w-full flex-col">
         <Link to="/">
@@ -87,7 +99,7 @@ const SignIn = () => {
       </div>
 
       <div
-        className="rounded-md bg-white min-h-[300px] w-[80%] md:w-[500px] border-[2px] p-4"
+        className="rounded-md bg-white min-h-[300px] w-[80%] md:w-[500px] border  p-4"
         // onSubmit={handleSubmit}
       >
         <Input
@@ -125,7 +137,7 @@ const SignIn = () => {
           <div className="flex gap-[9px] md:gap-5 items-center flex-col sm:flex-row mt-5 mx-3 justify-between">
             <Link
               to="/auth/student-login"
-              className="hover:bg-blue-50 hover:scale-105   transition-all duration-300 border px-5 py-3 rounded-md text-center"
+              className="hover:bg-blue-50 hover:scale-105 flex-1 transition-all duration-300 border px-5 py-3 rounded-md text-center"
             >
               <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Student Login
@@ -133,7 +145,7 @@ const SignIn = () => {
             </Link>
             <Link
               to="/auth/switch-login"
-              className="hover:bg-blue-50 hover:scale-105 transition-all duration-300 border px-5 py-3 rounded-md text-center"
+              className="hover:bg-blue-50 hover:scale-105 transition-all duration-300 border px-5 py-3 rounded-md text-center flex-1"
             >
               <div className="text-[13px] ml-2 font-bold cursor-pointer">
                 Switch to Teacher Login

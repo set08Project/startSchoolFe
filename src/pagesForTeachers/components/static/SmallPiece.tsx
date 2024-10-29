@@ -93,7 +93,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
 
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1">
-      <div className="flex flex-col items-between  w-full  overflow-y-auto">
+      <div className="flex flex-col items-between w-full  overflow-y-auto">
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
             key={i}

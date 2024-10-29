@@ -3,13 +3,33 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-// const URL: string =
-//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
-
-// const URL: string = import.meta.env.VITE_MAIN_URL;
-
 const URL: string = "https://startschoolbe-1.onrender.com/api";
+
+export const getStudentPerformance = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-quiz-performance/${studentID}`)
+      .then((res) => {
+        console.log(res?.data);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getStudentTestRecord = async (quizID: string) => {
+  try {
+    const response = await axios.get(`${URL}/quiz/${quizID}/record`);
+    console.log("res", response.data.data);
+
+    return response?.data?.data;
+  } catch (error: any) {
+    console.log(error?.message);
+    return error;
+  }
+};
 
 export const deleteQuiz = async (quizID: any) => {
   try {

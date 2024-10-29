@@ -257,6 +257,7 @@ const HomeScreen = () => {
                 // onClick={handleDisplayNotice}
                 onClick={() => {
                   setView(true);
+                  goToTop();
                 }}
               />
               {/* </Link> */}

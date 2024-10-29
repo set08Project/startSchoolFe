@@ -4,6 +4,7 @@ import {
   FaBarsProgress,
   FaCalendar,
   FaPhotoFilm,
+  FaSchoolFlag,
   FaStore,
 } from "react-icons/fa6";
 import pic from "../../../assets/pix.jpg";
@@ -175,8 +176,8 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll rounded-md border">
-            {schoolData?.categoryType === "Secondary" ? (
+          <div className="h-[550px] smallph overflow-y-scroll rounded-md border">
+            {schoolData?.data?.categoryType === "Secondary" ? (
               <div>
                 <SmallPiece
                   name={[
@@ -201,6 +202,11 @@ const Header = () => {
                       to: "subjects",
                     },
                     {
+                      title: "Test-Records",
+                      icon: <MdSchool />,
+                      to: "quiz-records",
+                    },
+                    {
                       title: "My Profile",
                       icon: <CgProfile />,
                       to: "my-profile",
@@ -215,7 +221,11 @@ const Header = () => {
                       icon: <MdReport />,
                       to: "lesson-note",
                     },
-
+                    {
+                      title: "Scheme of Work",
+                      icon: <FaSchoolFlag />,
+                      to: "schemes",
+                    },
                     {
                       title: "Store",
                       icon: <FaStore />,

@@ -103,7 +103,7 @@ const LessonNote = () => {
                       >
                         <div className="w-full mb-3 flex justify-between items-start">
                           <div className="w-[75%]">
-                            <div className="mb-2 flex items-center gap-2">
+                            <div className="mb-2 block md:flex items-center gap-2">
                               <h3
                                 className={`font-semibold text-[15px] sm:text-[19px] lg:text-[21px] flex items-center gap-2`}
                               >
@@ -114,7 +114,7 @@ const LessonNote = () => {
                                 {moment(props?.createdAt).fromNow()}
                               </p>
                             </div>
-                            <div className=" mb-3 text-[25px] lg:text-[27px] font-bold flex items-center gap-3 ">
+                            <div className="w-[280px] sm:w-auto mt-4 sm:mt-0 mb-3 text-[23px] lg:text-[27px] font-bold flex items-center gap-3">
                               <h1>{props?.topic}</h1>
                             </div>
                           </div>
@@ -130,7 +130,7 @@ const LessonNote = () => {
                         <div className="mb-3">
                           <p className="break-words text-wrap">
                             {props?.summary ? (
-                              props?.summary.substring(0, 500)
+                              props?.summary.substring(0, 250)
                             ) : (
                               <div className="opacity-50">No summary</div>
                             )}
@@ -159,15 +159,15 @@ const LessonNote = () => {
                         </div>
                         <div className="flex-1" />
 
-                        <div className="w-full flex justify-between items-start">
+                        <div className="w-full smallphon flex justify-between items-start">
                           {/* Send Response to Admin Button */}
                           <div>
                             {props?.adminSignation ? (
                               <div>
                                 <div className="w-full mb-[25px] flex justify-center items-center">
                                   <label
-                                    // htmlFor="send_response"
-                                    className="py-3 px-3 bg-green-700 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                    htmlFor=""
+                                    className="py-3 px-3 bg-green-700 text-white text-[11px] sm:text-[14px] lg:text-[13px] xl:text-[14px] font-semibold rounded-md flex justify-center items-center gap-2 transition-all duration-300 "
                                   >
                                     Lesson Note has been Approved
                                     <FaThumbsUp className="mb-1" />
@@ -180,7 +180,7 @@ const LessonNote = () => {
                                   <div className="w-full flex justify-center items-center">
                                     <label
                                       htmlFor="view_response"
-                                      className="py-2 px-6 w-[270px] h-[50px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
+                                      className="py-2 px-4 w-[270px] h-[43px] bg-blue-950 text-white rounded-md flex justify-center items-center gap-2 transition-all duration-300 cursor-pointer "
                                       onClick={() => {
                                         setID(props?._id);
                                         setObj(props);
@@ -204,7 +204,7 @@ const LessonNote = () => {
                             <NavLink to={props?._id}>
                               <div
                                 // style={{ color: randomBg }}
-                                className="py-1 px-[6px] bg-blue-950 text-[32px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
+                                className="w-[40px] h-[40px] flex justify-center items-center bg-blue-950 text-[25px] font-extrabold rounded-lg text-white cursor-pointer scale-105"
                               >
                                 <BsArrowRight className="animate-pulse scale-105" />
                               </div>

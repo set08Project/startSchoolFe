@@ -1,19 +1,6 @@
 import axios from "axios";
 
-// const URL: string =
-//   import.meta.env.VITE_PROCUTION_URL || import.meta.env.VITE_MAIN_URL;
-
 // const URL: string = import.meta.env.VITE_MAIN_URL;
-
-// const URL: string = "https://just-next-be1.onrender.com/api";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-
-// const URL: string = "https://just-next-be1.onrender.com/api";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
-
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 const URL: string = "https://startschoolbe-1.onrender.com/api";
 
@@ -127,12 +114,13 @@ export const viewPerformanceTest = async (studentID: string) => {
 export const performanceTest = async (
   studentID: string,
   quizID: string,
+  subjectID: string,
   data: {}
 ) => {
   try {
     return await axios
       .post(
-        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/`,
+        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/${subjectID}`,
         data
       )
       .then((res: any) => {

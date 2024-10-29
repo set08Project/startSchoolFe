@@ -158,6 +158,7 @@ const Header = () => {
         }`}
       >
         <SmallPiece
+          propName="account"
           name={[
             { title: "Account", icon: <MdAccountCircle />, to: "settings" },
           ]}
@@ -182,6 +183,7 @@ const Header = () => {
           {schoolData?.data?.categoryType === "Secondary" ? (
             <div>
               <SmallPiece
+                propName="navs"
                 name={[
                   {
                     title: "Dashboard",
@@ -252,7 +254,7 @@ const Header = () => {
                   {
                     title: "Settings",
                     icon: <MdSettings />,
-                    to: "your-profile",
+                    to: "your-settings",
                   },
                 ]}
                 but
@@ -261,6 +263,7 @@ const Header = () => {
           ) : (
             <div>
               <SmallPiece
+                propName="navs"
                 name={[
                   {
                     title: "Dashboard",
@@ -326,7 +329,7 @@ const Header = () => {
                   {
                     title: "Settings",
                     icon: <MdSettings />,
-                    to: "your-profile",
+                    to: "your-settings",
                   },
                 ]}
                 but
