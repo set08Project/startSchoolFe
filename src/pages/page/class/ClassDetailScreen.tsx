@@ -48,9 +48,10 @@ const ClassSubjectScreen: FC = () => {
   // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
+  // console.log("This classID", classID);
 
   return (
-    <div>
+    <div className="">
       {readSubject?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
           {readSubject?.map((props: any) => (
@@ -534,7 +535,8 @@ const ClassDetailScreen = () => {
 
       <div className="my-6 border-t" />
       {/* SUbjects */}
-      <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+
+      <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4">
         <p>Manage Class Subject for {classroom?.className} </p>
         <p className="text-[13px] font-bold">
           Add/Remove Subjects for this class
@@ -650,6 +652,7 @@ const ClassDetailScreen = () => {
         {/* Populate Class St */}
         <ClassSubjectScreen />
       </div>
+
       {/* Performance */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Top Performing student </p>

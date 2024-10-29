@@ -92,6 +92,7 @@ export const readClassInfo = async (className: string) => {
     return await axios
       .post(`${URL}/view-classroom-info-name/`, { className })
       .then((res: any) => {
+        console.log("This is res", res);
         return res?.data;
       });
   } catch (error) {
