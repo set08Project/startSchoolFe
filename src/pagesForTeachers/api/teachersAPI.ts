@@ -36,7 +36,7 @@ export const deleteQuiz = async (quizID: any) => {
     return await axios
       .delete(`${URL}/delete-quiz/${quizID}`)
       .then((res: any) => {
-        console.log("res", res?.data);
+        // console.log("res", res?.data);
         return res?.data;
       });
   } catch (error) {
