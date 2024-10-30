@@ -134,8 +134,8 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-medium">
-              <h3 className="font-bold w-full text-[13px] sm:text-[15px] md:text-[18px] text-blue-950 mb-[20px]">
+            <h1 className="text-[13px] flex items-center gap-3 sm:text-[18px] md:text-[18px] font-medium">
+              <h3 className="font-bold w-full text-[13px] sm:text-[15px] md:text-[18px] text-blue-950">
                 First Name:
               </h3>
               {studentInfo?.studentFirstName}
@@ -152,8 +152,8 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-medium">
-              <h3 className="font-bold w-full text-[13px] sm:text-[15px] md:text-[18px] text-blue-950 mb-[20px]">
+            <h1 className="text-[13px] sm:text-[18px]  flex items-center gap-3 md:text-[18px] font-medium">
+              <h3 className="font-bold w-full text-[13px] sm:text-[15px] md:text-[18px] text-blue-950">
                 Last Name:
               </h3>
 
@@ -171,8 +171,8 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h1 className="text-[13px] sm:text-[18px] md:text-[18px] font-medium">
-              <h3 className="font-bold w-full text-[11px] md:text-[18px] text-blue-950 mb-[20px]">
+            <h1 className="text-[13px] flex items-center gap-3 sm:text-[18px] md:text-[18px] font-medium">
+              <h3 className="font-bold w-full text-[11px] md:text-[18px] text-blue-950 ">
                 Parent Email:
               </h3>
               <div className="text-[11px] md:text-[17px]">
@@ -190,7 +190,7 @@ const StudentProfileSettings = () => {
           </div>
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
-          <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
+          <div className="min-w-[80%] flex items-center gap-3 lg:min-w-[30%]">
             <h3 className="font-bold w-[50px] flex items-center gap-1 text-[13px] sm:text-[15px] md:text-[18px] mr-[5px] md:mr-[50px]">
               Email:
             </h3>
@@ -199,16 +199,7 @@ const StudentProfileSettings = () => {
             </div>
           </div>
         </div>
-        <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
-          <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[100px] text-[13px] sm:text-[18px] md:text-[18px]">
-              Role:
-            </h3>
-            <h1 className=" font-medium text-[13px] sm:text-[18px] md:text-[18px] ">
-              {studentInfo?.status}
-            </h1>
-          </div>
-        </div>
+
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
             <h3 className="font-bold w-[100px] text-[13px] sm:text-[18px] md:text-[18px] ">
@@ -305,8 +296,8 @@ const StudentProfileSettings = () => {
       {/* Dropdown Modal For Editing */}
 
       {toggle && (
-        <div className="absolute w-full h-full flex justify-center items-center top-0 backdrop-blur-sm">
-          <div className="p-4 h-[300px] w-[300px] md:h-[300px] md:w-[400px] bg-white border shadow-md rounded-lg flex justify-center items-center flex-col">
+        <div className="absolute w-full h-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm">
+          <div className="freshh p-4 min-h-[200px] min-w-[300px] bg-white border shadow-md rounded-lg flex justify-start items-center flex-col">
             <div className="mb-4 flex items- center justify-between">
               <h2 className="text-blue-950 font-semibold">
                 {toggle === "firstName" && "Enter Your First Name"}
@@ -314,7 +305,7 @@ const StudentProfileSettings = () => {
                 {toggle === "gender" && "Enter Your Gender"}
                 {toggle === "ParentEmail" && "Enter Your Parents Email"}
                 {toggle === "phone" && "Enter Your Phone Number"}
-                {toggle === "parentNumber" && "Enter Your ParentPhone Number"}
+                {toggle === "parentNumber" && "Enter Your Parent Phone Number"}
                 {toggle === "Address" && "Enter Your Address"}
               </h2>
               <CgClose
@@ -345,7 +336,7 @@ const StudentProfileSettings = () => {
               />
             )}
             {toggle === "gender" && (
-              <div>
+              <div className="w-full">
                 <select
                   name="gender"
                   id="gender"

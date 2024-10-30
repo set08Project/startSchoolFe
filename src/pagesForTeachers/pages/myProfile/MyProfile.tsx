@@ -7,7 +7,7 @@ import IG from "../../../assets/socials/Ig.png";
 import FB from "../../../assets/socials/fb.png";
 import Linkden from "../../../assets/socials/linkden.png";
 import X from "../../../assets/socials/x-social-media-round-icon.svg";
-import { useTeacherInfo } from "../../hooks/useTeacher";
+import { useClassSubject, useTeacherInfo } from "../../hooks/useTeacher";
 import moment from "moment";
 import { FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -26,6 +26,7 @@ const MyProfile = () => {
     teacher?.staffName?.charAt(teacher?.staffName.indexOf(" ") + 1);
 
   const { teacherInfo } = useTeacherInfo();
+  // console.log("Teacher's Info", teacherInfo);
   const changeImage = (e: any) => {
     console.log("start...");
     const file = e.target.files[0];
@@ -285,16 +286,18 @@ const MyProfile = () => {
             <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
               My Assigned Subjects:
             </div>
-            {teacher?.subjectAssigned?.length > 0 ? (
-              teacher?.subjectAssigned?.map((props: any) => (
-                <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-                  <h1>{props?.title}</h1>
-                  <h1>{props?.classMeant}</h1>
-                </div>
-              ))
-            ) : (
-              <div>No Subject assigned yet</div>
-            )}
+            <div className="h-[300px] md:h-[400px] xl:h-[700px] overflow-y-auto">
+              {teacher?.subjectAssigned?.length > 0 ? (
+                teacher?.subjectAssigned?.map((props: any) => (
+                  <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+                    <h1>{props?.title}</h1>
+                    <h1>{props?.classMeant}</h1>
+                  </div>
+                ))
+              ) : (
+                <div>No Subject assigned yet</div>
+              )}
+            </div>
           </div>
         </div>
       </div>

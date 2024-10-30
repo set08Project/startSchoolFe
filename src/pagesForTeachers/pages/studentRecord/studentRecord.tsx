@@ -12,10 +12,7 @@ const StudentTestRecord = () => {
 
   useEffect(() => {
     const fetchRecords = async () => {
-      console.log(
-        "Fetching records for student:",
-        teacherInfo?.quiz?.performance
-      );
+      console.log("Fetching records for student:", teacherInfo?.quiz);
 
       if (teacherInfo) {
         try {
@@ -41,6 +38,8 @@ const StudentTestRecord = () => {
                 }),
               }))
           );
+
+          console.log("perf records", performanceRecords);
 
           setTestRecords(performanceRecords);
         } catch (error) {
@@ -90,7 +89,7 @@ const StudentTestRecord = () => {
               </tr>
             </thead>
             <tbody>
-              {testRecords.map((record, index) => (
+              {testRecords?.map((record, index) => (
                 <motion.tr
                   key={index}
                   className="border-b transition-all duration-300 hover:bg-gray-50"
@@ -103,22 +102,22 @@ const StudentTestRecord = () => {
                   }}
                 >
                   <td className="py-4 px-6 text-gray-800 font-medium">
-                    {record.studentName}
+                    {record?.studentName}
                   </td>
                   <td
                     className={`py-4 px-6 font-bold ${
-                      record.studentScore >= 10
+                      record?.studentScore >= 10
                         ? "text-red-600"
                         : "text-black-600"
                     }`}
                   >
-                    {record.studentScore}
+                    {record?.studentScore}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
-                    {record.studentGrade}
+                    {record?.studentGrade}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
-                    {record.subjectTitle}
+                    {record?.subjectTitle}
                   </td>
                   <td className="py-4 px-6 text-gray-600">{record.date}</td>
                 </motion.tr>

@@ -7,7 +7,7 @@ const SchemeOfWorkTable = () => {
   const { data } = useSchoolData();
   const navigate = useNavigate();
 
-  // Load upload status from localStorage or set to an empty object initially
+
   const [uploadStatus, setUploadStatus] = useState(() => {
     const savedStatus = localStorage.getItem("uploadStatus");
     return savedStatus ? JSON.parse(savedStatus) : {};

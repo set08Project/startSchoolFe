@@ -176,7 +176,7 @@ const Header = () => {
             toggleMenu ? "right-6 top-14  " : "right-6 -top-24  "
           }`}
         >
-          <div className="h-[500px] overflow-y-scroll rounded-md border">
+          <div className="h-[550px] smallph overflow-y-scroll rounded-md border">
             {schoolData?.data?.categoryType === "Secondary" ? (
               <div>
                 <SmallPiece
@@ -200,6 +200,11 @@ const Header = () => {
                       title: "My Subjects",
                       icon: <MdSchool />,
                       to: "subjects",
+                    },
+                    {
+                      title: "Test-Records",
+                      icon: <MdSchool />,
+                      to: "quiz-records",
                     },
                     {
                       title: "My Profile",

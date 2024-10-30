@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 export const getQuizRecord = async (studentID: string) => {
   try {
@@ -79,6 +79,7 @@ export const readClassInfo = async (className: string) => {
     return await axios
       .post(`${URL}/view-classroom-info-name/`, { className })
       .then((res: any) => {
+        console.log("This is res", res);
         return res?.data;
       });
   } catch (error) {
@@ -113,12 +114,13 @@ export const viewPerformanceTest = async (studentID: string) => {
 export const performanceTest = async (
   studentID: string,
   quizID: string,
+  subjectID: string,
   data: {}
 ) => {
   try {
     return await axios
       .post(
-        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/`,
+        `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/${subjectID}`,
         data
       )
       .then((res: any) => {
