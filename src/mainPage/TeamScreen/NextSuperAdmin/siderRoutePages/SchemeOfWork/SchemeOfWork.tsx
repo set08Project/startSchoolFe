@@ -7,7 +7,13 @@ const SchemeOfWorkTable = () => {
   const { data } = useSchoolData();
   const navigate = useNavigate();
 
-  const handleRowClick = (className: any, subjectName: any, term: any) => {
+
+  const [uploadStatus, setUploadStatus] = useState(() => {
+    const savedStatus = localStorage.getItem("uploadStatus");
+    return savedStatus ? JSON.parse(savedStatus) : {};
+  });
+
+  const handleRowClick = (className, subjectName, term) => {
     navigate(`/schemes/${className}/${subjectName}/${term}`);
   };
 
@@ -21,9 +27,9 @@ const SchemeOfWorkTable = () => {
   ];
 
   const [filteredData, setFilteredData] = useState(scheme[0]?.list || []);
-  const [classPick, setClassPick] = useState<string>("JSS 1");
+  const [classPick, setClassPick] = useState("JSS 1");
 
-  const handleClassFilter = (classId: any) => {
+  const handleClassFilter = (classId) => {
     const filteredClass = scheme[classId]?.list || [];
     setFilteredData(filteredClass);
   };
@@ -31,6 +37,13 @@ const SchemeOfWorkTable = () => {
   useEffect(() => {
     handleClassFilter("0");
   }, []);
+
+  // Toggle upload status for a specific item
+  const handleMarkUploaded = (item) => {
+    const newStatus = { ...uploadStatus, [item.id]: !uploadStatus[item.id] };
+    setUploadStatus(newStatus);
+    localStorage.setItem("uploadStatus", JSON.stringify(newStatus));
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen p-6 text-blue-950">
@@ -40,21 +53,18 @@ const SchemeOfWorkTable = () => {
             {listOfClass.map((el) => (
               <div
                 key={el.id}
-                className={` cursor-pointer  text-center text-[14px] transition-all duration-300 font-semibold py-2 px-10 ${
+                className={`cursor-pointer text-center text-[14px] transition-all duration-300 font-semibold py-2 px-10 ${
                   data?.categoryType === "Secondary"
                     ? "text-blue-950"
                     : "text-green-950"
-                } border rounded-full
-                ${
+                } border rounded-full ${
                   el.className === classPick
                     ? "bg-gray-500 text-white"
-                    : "bg-slate-50 "
-                    ? "bg-blue-950 hover:bg-blue-900  text-white"
-                    : "bg-slate-50 hover:bg-gray-200 "
-                }
-                `}
+                    : "bg-slate-50 hover:bg-blue-950 hover:text-white"
+                }`}
                 onClick={() => {
-                  handleClassFilter(el.id), setClassPick(el.className);
+                  handleClassFilter(el.id);
+                  setClassPick(el.className);
                 }}
               >
                 {el.className}
@@ -74,39 +84,39 @@ const SchemeOfWorkTable = () => {
           <table className="min-w-full table-auto">
             <thead>
               <tr className="bg-gray-200">
-                <th className="px-4 py-2 text-left text-sm font-semibold ">
-                  No.
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold ">
-                  Subject
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold ">
-                  Term
-                </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold ">
-                  Class
-                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">No.</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">Subject</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">Term</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">Class</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">Status</th>
               </tr>
             </thead>
 
-            <tbody className="">
+            <tbody>
               {filteredData?.map((item) => (
                 <tr
                   key={item.id}
-                  className="[&:nth-child(3n)]:text-red-600 bg-white border-b cursor-pointer hover:bg-gray-50 "
-                  onClick={() =>
-                    handleRowClick(item.classType, item.subject, item.term)
-                  }
+                  className="bg-white border-b cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleRowClick(item.classType, item.subject, item.term)}
                 >
                   <td className="px-4 py-2 text-sm text-gray-700">{item.id}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {item.subject}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {item.term}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {item.classType}
+                  <td className="px-4 py-2 text-sm text-gray-700">{item.subject}</td>
+                  <td className="px-4 py-2 text-sm text-gray-700">{item.term}</td>
+                  <td className="px-4 py-2 text-sm text-gray-700">{item.classType}</td>
+                  <td className="px-4 py-2 text-sm">
+                    <button
+                      className={`py-1 px-3 rounded ${
+                        uploadStatus[item.id]
+                          ? "text-white bg-green-500"
+                          : "text-blue-500 font-medium"
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMarkUploaded(item);
+                      }}
+                    >
+                      {uploadStatus[item.id] ? "Uploaded" : "Not Uploaded"}
+                    </button>
                   </td>
                 </tr>
               ))}
