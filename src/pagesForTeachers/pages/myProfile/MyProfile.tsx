@@ -286,16 +286,18 @@ const MyProfile = () => {
             <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
               My Assigned Subjects:
             </div>
-            {teacher?.subjectAssigned?.length > 0 ? (
-              teacher?.subjectAssigned?.map((props: any) => (
-                <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
-                  <h1>{props?.title}</h1>
-                  <h1>{props?.classMeant}</h1>
-                </div>
-              ))
-            ) : (
-              <div>No Subject assigned yet</div>
-            )}
+            <div className="h-[300px] md:h-[400px] xl:h-[700px] overflow-y-auto">
+              {teacher?.subjectAssigned?.length > 0 ? (
+                teacher?.subjectAssigned?.map((props: any) => (
+                  <div className="border-b mb-1 py-2 flex items-center justify-between font-medium">
+                    <h1>{props?.title}</h1>
+                    <h1>{props?.classMeant}</h1>
+                  </div>
+                ))
+              ) : (
+                <div>No Subject assigned yet</div>
+              )}
+            </div>
           </div>
         </div>
       </div>
