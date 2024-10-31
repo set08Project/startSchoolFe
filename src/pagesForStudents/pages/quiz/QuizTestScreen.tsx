@@ -87,6 +87,8 @@ const QuizTestScreen = () => {
   };
 
   const myQuizData = quizData?.quiz[1];
+  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
+  console.log("Checking timer", timer);
 
   return (
     <div>
@@ -111,6 +113,7 @@ const QuizTestScreen = () => {
             <p className="font-bold">Push Play to start your Test</p>
           </div>
         )}
+        <div className="border font-semibold p-2">1:00 Hour</div>
         <div className="bg-slate-50 justify-center flex min-h-[100vh]">
           {start && (
             <div className="bg-white w-full px-5">
