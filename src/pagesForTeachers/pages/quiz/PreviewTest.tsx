@@ -85,7 +85,6 @@ const PreviewTest = () => {
         name={"Publish Question"}
         className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
         onClick={() => {
-          // setToggle(true);
           createQuiz(
             state?._id!,
             subjectID!,
