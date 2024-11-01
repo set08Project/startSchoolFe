@@ -27,6 +27,7 @@ const PreviewTest = () => {
   }, []);
 
   // console.log(state);
+  const questionsLength: number = testQuestion[1]?.question?.length;
 
   return (
     <div>
@@ -85,9 +86,12 @@ const PreviewTest = () => {
         className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
         onClick={() => {
           // setToggle(true);
-          console.log("clicked", state?._id!, subjectID!);
-
-          createQuiz(state?._id!, subjectID!, testQuestion).then((res: any) => {
+          createQuiz(
+            state?._id!,
+            subjectID!,
+            questionsLength,
+            testQuestion
+          ).then((res: any) => {
             console.log(res);
             if (res.status === 201) {
               mutate(`api/view-subject-quiz/${subjectID}`);

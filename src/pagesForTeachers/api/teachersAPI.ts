@@ -192,11 +192,13 @@ export const readSubjectDetail = async (subjectID: string) => {
 export const createQuiz = async (
   classID: string,
   subjectID: string,
+  totalQuestions: number,
   data: {}
 ) => {
   try {
     return await axios
       .post(`${URL}/create-subject-quiz/${classID}/${subjectID}`, {
+        totalQuestions,
         quiz: data,
       })
       .then((res: any) => {
