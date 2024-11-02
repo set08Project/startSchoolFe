@@ -17,6 +17,8 @@ const QuizSetupScreen = () => {
   const { performance } = useStudentPerfomance(subjectID!);
   const { studentPerformance } = useSubjectStudentPerfomance(subjectID!);
   const navigate = useNavigate();
+
+  // My Console.Logs
   console.log("viewing subjectID", subjectID);
   console.log("perfomance", performance);
   console.log("student Individual Perfomance", studentPerformance);
