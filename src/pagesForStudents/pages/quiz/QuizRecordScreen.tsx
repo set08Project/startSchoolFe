@@ -93,7 +93,7 @@ const QuizRecordScreen = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {quizRecords.map((record: QuizRecord) => (
+                    {quizRecords?.map((record: QuizRecord) => (
                       <motion.tr
                         key={record._id}
                         className="border-b hover:bg-gray-100 transition-colors duration-200"

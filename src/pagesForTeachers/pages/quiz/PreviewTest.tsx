@@ -91,7 +91,7 @@ const PreviewTest = () => {
             questionsLength,
             testQuestion
           ).then((res: any) => {
-            console.log(res);
+            console.log("Create Quiz res", res);
             if (res.status === 201) {
               mutate(`api/view-subject-quiz/${subjectID}`);
               dispatch(displayEmptyTest());

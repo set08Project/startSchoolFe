@@ -19,6 +19,19 @@ export const getStudentPerformance = async (studentID: string) => {
   }
 };
 
+export const getStudentSubjectPerformance = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subject-quiz-performance/${subjectID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getStudentTestRecord = async (quizID: string) => {
   try {
     const response = await axios.get(`${URL}/quiz/${quizID}/record`);

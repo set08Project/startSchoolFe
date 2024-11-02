@@ -90,7 +90,7 @@ const QuizTestScreen = () => {
   const myQuizData = quizData?.quiz[1];
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
-
+  console.log("The Quiz Data", quizData);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />

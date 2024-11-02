@@ -32,7 +32,6 @@ const QuizSetupScreen = () => {
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
   const quiz: [] = subjectQuiz?.quiz;
-  console.log("Viewing Quiz", quiz);
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
@@ -46,7 +45,6 @@ const QuizSetupScreen = () => {
     if (selectedQuizId) {
       try {
         await deleteQuiz(selectedQuizId);
-        console.log("Deleting quiz with ID:", selectedQuizId);
       } catch (error) {
         console.error("Failed to delete item:", error);
       }
