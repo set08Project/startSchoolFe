@@ -10,7 +10,6 @@ export const getStudentPerformance = async (studentID: string) => {
     return await axios
       .get(`${URL}/view-student-quiz-performance/${studentID}`)
       .then((res) => {
-        console.log(res?.data);
         return res?.data;
       });
   } catch (error) {
@@ -35,11 +34,10 @@ export const getStudentSubjectPerformance = async (subjectID: string) => {
 export const getStudentTestRecord = async (quizID: string) => {
   try {
     const response = await axios.get(`${URL}/quiz/${quizID}/record`);
-    console.log("res", response.data.data);
 
     return response?.data?.data;
   } catch (error: any) {
-    console.log(error?.message);
+    console.error();
     return error;
   }
 };
@@ -49,11 +47,10 @@ export const deleteQuiz = async (quizID: any) => {
     return await axios
       .delete(`${URL}/delete-quiz/${quizID}`)
       .then((res: any) => {
-        // console.log("res", res?.data);
         return res?.data;
       });
   } catch (error) {
-    console.log("error", error);
+    console.error();
     return error;
   }
 };
@@ -605,7 +602,6 @@ export const reportCardRemark = async (
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
-        console.log(res);
         return res?.data;
       });
   } catch (error) {

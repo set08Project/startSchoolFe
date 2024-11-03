@@ -33,6 +33,8 @@ const QuizSetupScreen = () => {
 
   const combine: Array<any> = quiz?.concat(assign);
 
+  console.log("Quizz", quiz);
+
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
     setModalOpen(true);

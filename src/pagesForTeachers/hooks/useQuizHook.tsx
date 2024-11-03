@@ -10,7 +10,6 @@ export const useStudentPerfomance = (studentID: string) => {
       `api/view-student-quiz-performance/${studentID}`,
       async () => {
         return getStudentPerformance(studentID).then((res) => {
-          console.log(res?.data);
           return res?.data || [];
         });
       }

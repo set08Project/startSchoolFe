@@ -12,7 +12,7 @@ const QuizSetupScreen = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("Performance", studentPerformance.deignated);
+  console.log("Performance", studentPerformance);
   const students = studentPerformance?.performance;
 
   const getGradeColor = (grade: string) => {
