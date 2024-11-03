@@ -65,7 +65,7 @@ const QuizScreen = () => {
   return (
     <div className="text-blue-950">
       <LittleHeader name="Setting Question" />
-      <p className="mb-5">set Instructions</p>
+      <p className="mb-5">Set Instructions</p>
       <div className="flex gap-4">
         <div>
           <label className="font-medium text-[12px] ">Set time</label>

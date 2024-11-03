@@ -229,7 +229,7 @@ export const teacherRouter = createBrowserRouter([
         ),
       },
       {
-        path: "quiz/details/:subjectID",
+        path: "quiz/details/:subjectID/:quizID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <QuizDetails />

@@ -79,6 +79,8 @@ const CreateQuiz = () => {
                     <select
                       name="hour"
                       id="hour"
+                      className="ml-2 border border-blue-950 
+                      px-2 rounded-md"
                       value={duration}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setDuration(e.target.value);

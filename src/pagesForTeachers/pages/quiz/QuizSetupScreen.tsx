@@ -13,9 +13,6 @@ import { useStudentPerfomance } from "../../hooks/useQuizHook";
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
-  const { performance } = useStudentPerfomance(subjectID!);
-
-  console.log("perfomance", performance);
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState(false);
@@ -107,7 +104,7 @@ const QuizSetupScreen = () => {
                       {props?.subjectTitle}{" "}
                       {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
-                    <Link to={`/quiz/details/${props?._id}`}>
+                    <Link to={`/quiz/details/${subjectID}/${props?._id}`}>
                       <MdPlayCircle
                         size={40}
                         className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"
