@@ -1,19 +1,27 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../components/layout/LittleHeader";
-import { useSubjectStudentPerfomance } from "../../hooks/useQuizHook";
+import {
+  useOneSubjectStudentPerfomance,
+  useSubjectStudentPerfomance,
+} from "../../hooks/useQuizHook";
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import Button from "../../components/reUse/Button";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
-  const { studentPerformance } = useSubjectStudentPerfomance(subjectID);
+  const { quizID } = useParams();
+  console.log("Reading QuizID", quizID);
+  const { oneStudentPerformance } = useOneSubjectStudentPerfomance(
+    subjectID,
+    quizID
+  );
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("Performance", studentPerformance);
-  const students = studentPerformance?.performance;
+  console.log("Performance", oneStudentPerformance);
+  const students = oneStudentPerformance;
 
   const getGradeColor = (grade: string) => {
     switch (grade) {
@@ -38,9 +46,7 @@ const QuizSetupScreen = () => {
     <div className="min-h-screen bg-gray-100">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="ml-5 pt-2">
-        <LittleHeader
-          name={`${studentPerformance?.designated} Students Test Results`}
-        />
+        <LittleHeader name={` Students Test Results`} />
       </div>
 
       <div className="container mx-auto px-4 py-8">
@@ -64,6 +70,9 @@ const QuizSetupScreen = () => {
                   <thead>
                     <tr>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                        S/N
+                      </th>
+                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                         Student Name
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
@@ -84,7 +93,7 @@ const QuizSetupScreen = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {students?.map((record: any) => (
+                    {students?.map((record: any, i: number) => (
                       <motion.tr
                         key={record._id}
                         className="border-b hover:bg-gray-100 transition-colors duration-200"
@@ -92,6 +101,9 @@ const QuizSetupScreen = () => {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.1 }}
                       >
+                        <td className="py-4 px-6 text-sm text-gray-700">
+                          {i + 1}
+                        </td>
                         <td className="py-4 px-6 text-sm text-gray-700">
                           {record?.studentName}
                         </td>

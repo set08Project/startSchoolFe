@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  getOneStudentSubjectPerformance,
   getStudentPerformance,
   getStudentSubjectPerformance,
 } from "../api/teachersAPI";
@@ -32,6 +33,28 @@ export const useSubjectStudentPerfomance = (subjectID: string) => {
       }
     );
     return { studentPerformance };
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const useOneSubjectStudentPerfomance = (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    const { data: oneStudentPerformance } = useSWR(
+      `api/view-student-quiz-performance/${subjectID}/${quizID}`,
+      async () => {
+        return getOneStudentSubjectPerformance(subjectID, quizID).then(
+          (res) => {
+            return res?.data || [];
+          }
+        );
+      }
+    );
+    return { oneStudentPerformance };
   } catch (error) {
     console.error();
     return error;
