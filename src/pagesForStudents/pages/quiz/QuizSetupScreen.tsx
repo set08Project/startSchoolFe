@@ -27,6 +27,8 @@ const QuizSetupScreen = () => {
     setCompletedQuizzes((prev) => [...prev, quizId]);
   };
 
+  console.log("Main Quiz Page Students", subjectQuiz);
+
   return (
     <div className="text-blue-950 relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />

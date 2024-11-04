@@ -13,9 +13,6 @@ import { useStudentPerfomance } from "../../hooks/useQuizHook";
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
-  const { performance } = useStudentPerfomance(subjectID!);
-
-  console.log("perfomance", performance);
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState(false);
@@ -32,10 +29,11 @@ const QuizSetupScreen = () => {
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
   const quiz: [] = subjectQuiz?.quiz;
-  console.log("Viewing Quiz", quiz);
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
+
+  console.log("Quizz", quiz);
 
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
@@ -46,7 +44,6 @@ const QuizSetupScreen = () => {
     if (selectedQuizId) {
       try {
         await deleteQuiz(selectedQuizId);
-        console.log("Deleting quiz with ID:", selectedQuizId);
       } catch (error) {
         console.error("Failed to delete item:", error);
       }
@@ -109,7 +106,7 @@ const QuizSetupScreen = () => {
                       {props?.subjectTitle}{" "}
                       {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
-                    <Link to={`/quiz/details/${props?._id}`}>
+                    <Link to={`/quiz/details/${subjectID}/${props?._id}`}>
                       <MdPlayCircle
                         size={40}
                         className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"

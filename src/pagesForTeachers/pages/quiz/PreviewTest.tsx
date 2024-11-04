@@ -27,11 +27,12 @@ const PreviewTest = () => {
   }, []);
 
   // console.log(state);
+  const questionsLength: number = testQuestion[1]?.question?.length;
 
   return (
     <div>
       <p>Preview Test Entries</p>
-      <p className="mt-10 font-bold">Test Instruction</p>
+      <p className="mt-10 font-bold">Test Instructions</p>
       <p className="mr-6 mt-2">{testQuestion[0]?.instruction?.instruction}</p>
       <div className="flex gap-3 capitalize mt-5 font-medium text-[14px] mr-6 pb-5 border-b">
         <p>duration: {testQuestion[0]?.instruction?.duration}hour</p>
@@ -47,7 +48,7 @@ const PreviewTest = () => {
 
               <div className="ml-8">
                 <p className="text-[15px] mt-5 mb-3 italic">
-                  Answer: {props.answer}
+                  Answer: {props?.answer}
                 </p>
                 {props.options.map((props: any, i: number) => {
                   const choiceValue = Object.values(props)[0];
@@ -84,14 +85,15 @@ const PreviewTest = () => {
         name={"Publish Question"}
         className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
         onClick={() => {
-          // setToggle(true);
-          console.log("clicked", state?._id!, subjectID!);
-
-          createQuiz(state?._id!, subjectID!, testQuestion).then((res: any) => {
-            console.log(res);
+          createQuiz(
+            state?._id!,
+            subjectID!,
+            questionsLength,
+            testQuestion
+          ).then((res: any) => {
+            console.log("Create Quiz res", res);
             if (res.status === 201) {
               mutate(`api/view-subject-quiz/${subjectID}`);
-
               dispatch(displayEmptyTest());
 
               navigate(`/subjects/${subjectID}`);
