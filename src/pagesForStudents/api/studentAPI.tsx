@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+
+// const URL: string = "http://13.51.1.65:2244/api";
 
 export const getQuizRecord = async (studentID: string) => {
   try {

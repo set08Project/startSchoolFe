@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const URL: string =
-  import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
-// const URL: string = "https://startschoolbe-1.onrender.com/api";
+const URL: string = "https://startschoolbe-1.onrender.com/api";
+
+// const URL: string = "http://13.51.1.65:2244/api";
 
 export const getStudentPerformance = async (studentID: string) => {
   try {
@@ -49,9 +51,10 @@ export const getOneStudentSubjectPerformance = async (
 
 export const getStudentTestRecord = async (quizID: string) => {
   try {
-    const response = await axios.get(`${URL}/quiz/${quizID}/record`);
-
-    return response?.data?.data;
+    return await axios.get(`${URL}/quiz/${quizID}/record`).then((res) => {
+      console.log("res", res?.data?.data);
+      return res?.data?.data;
+    });
   } catch (error: any) {
     console.error();
     return error;
