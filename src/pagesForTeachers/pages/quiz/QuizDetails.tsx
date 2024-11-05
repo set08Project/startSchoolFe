@@ -12,7 +12,6 @@ import Button from "../../components/reUse/Button";
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { quizID } = useParams();
-  console.log("Reading QuizID", quizID);
   const { oneStudentPerformance } = useOneSubjectStudentPerfomance(
     subjectID,
     quizID
@@ -20,7 +19,7 @@ const QuizSetupScreen = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("Performance", oneStudentPerformance);
+
   const students = oneStudentPerformance;
 
   const getGradeColor = (grade: string) => {
