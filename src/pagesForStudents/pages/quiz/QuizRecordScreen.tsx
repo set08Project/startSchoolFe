@@ -28,7 +28,6 @@ const QuizRecordScreen = () => {
     if (studentID) {
       getQuizRecord(studentID)
         .then((res) => {
-          console.log(res?.data?.performance);
           if (res?.data?.performance) {
             setQuizRecords(res.data.performance);
           } else {

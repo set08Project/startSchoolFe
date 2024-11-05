@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 
 interface CountdownTimerProps {
   initialSeconds: number;
+  onTimeUp: () => void;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds }) => {
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  initialSeconds,
+  onTimeUp,
+}) => {
   const [seconds, setSeconds] = useState<number>(() => {
     const savedSeconds = localStorage.getItem("countdown");
     return savedSeconds ? Number(savedSeconds) : initialSeconds;
@@ -16,20 +20,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds }) => {
         setSeconds((prevSeconds) => {
           const newSeconds = prevSeconds - 1;
           localStorage.setItem("countdown", newSeconds.toString());
-          clearInterval(timerId);
           return newSeconds >= 0 ? newSeconds : 0;
         });
       }, 1000);
+
+      return () => clearInterval(timerId); // Clear interval on unmount
     } else {
       localStorage.removeItem("countdown");
+      onTimeUp(); // Trigger onTimeUp callback when time reaches 0
     }
-  }, [seconds]);
+  }, [seconds, onTimeUp]);
 
   const formatTime = (secs: number): string => {
     const hours = Math.floor(secs / 3600);
     const minutes = Math.floor((secs % 3600) / 60);
     const remainingSeconds = secs % 60;
-
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
       2,
       "0"
@@ -53,8 +58,6 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds }) => {
       <div className={`text-[30px] font-bold ${getColor()}`}>
         {formatTime(seconds)}
       </div>
-
-      {/* Animated circular progress bar */}
       <div>
         <svg
           className="w-[50px] h-[80px] transition-all duration-300 transform -rotate-90"

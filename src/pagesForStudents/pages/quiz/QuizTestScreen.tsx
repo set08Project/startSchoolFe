@@ -9,17 +9,19 @@ import toast, { Toaster } from "react-hot-toast";
 import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
-import { useSubjectStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
 
 const QuizTestScreen = () => {
   const navigate = useNavigate();
   const { quizID } = useParams();
   const { quizData } = useQuiz(quizID!);
   const { studentInfo } = useStudentInfo();
+  const { performance } = useStudentPerfomance(studentInfo?._id);
 
   const [state, setState] = useState<any>({});
   const [start, setStart] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
+  const [timeUp, setTimeUp] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
 
@@ -89,114 +91,101 @@ const QuizTestScreen = () => {
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
 
-  const { studentPerformance } = useSubjectStudentPerfomance(
-    quizData?.subjectID
+  const isQuizDone = performance?.performance?.find(
+    (el: any) => el?.quizID === quizID && el?.quizDone
   );
 
-  const checkQuizId = studentPerformance?.performance[0]?.quizID;
-  const finishedQuiz = studentPerformance?.performance[0]?.quizDone;
-
-  console.log("Quiz Data API", quizData);
-  console.log("Performance Data API", studentPerformance?.performance);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader name={`${quizData?.subjectTitle} Test Screen`} />
 
-      {checkQuizId === quizID ? (
-        finishedQuiz ? (
-          <div>
-            <h1>Already Completed This Quiz</h1>
-          </div>
-        ) : (
-          <div className="relative">
-            {!start && (
-              <div className="absolute top-20 left-1/3 z-10">
-                <MdPlayCircle
-                  size={200}
-                  className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
-                  onClick={() => {
-                    if (!document.startViewTransition) {
+      {isQuizDone ? (
+        <div>
+          <h1>Already Completed This Quiz</h1>
+        </div>
+      ) : (
+        <div className="relative">
+          {!start && (
+            <div className="absolute top-20 left-1/3 z-10">
+              <MdPlayCircle
+                size={200}
+                className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
+                onClick={() => {
+                  if (!document.startViewTransition) {
+                    setStart(true);
+                    setActivate(true);
+                  } else {
+                    document.startViewTransition(() => {
                       setStart(true);
                       setActivate(true);
-                    } else {
-                      document.startViewTransition(() => {
-                        setStart(true);
-                        setActivate(true);
-                      });
-                    }
-                  }}
-                />
-                <p className="font-bold">Push Play to start your Test</p>
-              </div>
-            )}
-            {/* Timer */}
-            <div className="sticky flex top-[70px] justify-end items-center">
-              <div className="sticky min-w-[230px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
-                <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
-                  Test Count Down Timer <MdOutlineTimer />
-                </h1>
-                {activate && timerInSeconds ? (
-                  <div>
-                    <CountdownTimer initialSeconds={timerInSeconds} />
-                  </div>
-                ) : null}
-              </div>
+                    });
+                  }
+                }}
+              />
+              <p className="font-bold">Push Play to start your Test</p>
             </div>
-
-            {/* Quiz Content */}
-            <div className="bg-slate-50 justify-center flex min-h-[100vh]">
-              {start && (
-                <div className="bg-white w-full px-5">
-                  {myQuizData?.question?.map((question: any, index: number) => (
-                    <div key={index}>
-                      <p className="text-[14px] font-bold mt-10">
-                        Question {index + 1}.
-                      </p>
-                      <div className="ml-4">
-                        <p className="text-[18px]">{question?.question}</p>
-                        <div className="ml-8">
-                          <p className="text-[12px] mt-5">
-                            Choose your options carefully
-                          </p>
-                          {question?.options?.map((el: any, i: number) => (
-                            <div
-                              key={i}
-                              className="flex items-center gap-2 ml-4"
-                            >
-                              <input
-                                className="radio radio-sm"
-                                type="radio"
-                                onChange={() => handleStateChange(index, el)}
-                                checked={state[index] === el}
-                              />
-                              <label>
-                                {typeof el === "string"
-                                  ? el
-                                  : JSON.stringify(el)}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div>
-                    <Button
-                      className="bg-blue-950 px-12 mt-14 py-4"
-                      name="Submit"
-                      onClick={handleSubmit}
-                    />
-                  </div>
+          )}
+          {/* Timer */}
+          <div className="sticky flex top-[70px] justify-end items-center">
+            <div className="sticky min-w-[230px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
+              <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
+                Test Count Down Timer <MdOutlineTimer />
+              </h1>
+              {activate && timerInSeconds ? (
+                <div>
+                  <CountdownTimer
+                    initialSeconds={timerInSeconds}
+                    onTimeUp={() => setTimeUp(true)}
+                  />
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
-        )
-      ) : (
-        <div>
-          <p>Can't Continue with this Quiz...</p>
+
+          {/* Quiz Content */}
+          <div className="bg-slate-50 justify-center flex min-h-[100vh]">
+            {start && (
+              <div className="bg-white w-full px-5">
+                {myQuizData?.question?.map((question: any, index: number) => (
+                  <div key={index}>
+                    <p className="text-[14px] font-bold mt-10">
+                      Question {index + 1}.
+                    </p>
+                    <div className="ml-4">
+                      <p className="text-[18px]">{question?.question}</p>
+                      <div className="ml-8">
+                        <p className="text-[12px] mt-5">
+                          Choose your options carefully
+                        </p>
+                        {question?.options?.map((el: any, i: number) => (
+                          <div key={i} className="flex items-center gap-2 ml-4">
+                            <input
+                              className="radio radio-sm"
+                              type="radio"
+                              onChange={() => handleStateChange(index, el)}
+                              checked={state[index] === el}
+                            />
+                            <label>
+                              {typeof el === "string" ? el : JSON.stringify(el)}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div>
+                  <Button
+                    className="bg-blue-950 px-12 mt-14 py-4"
+                    name="Submit"
+                    onClick={handleSubmit}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

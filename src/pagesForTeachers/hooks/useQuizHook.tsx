@@ -45,7 +45,7 @@ export const useOneSubjectStudentPerfomance = (
 ) => {
   try {
     const { data: oneStudentPerformance } = useSWR(
-      `api/view-student-quiz-performance/${subjectID}/${quizID}`,
+      `api/view-onesubject-quiz-performance/${subjectID}/${quizID}`,
       async () => {
         return getOneStudentSubjectPerformance(subjectID, quizID).then(
           (res) => {
