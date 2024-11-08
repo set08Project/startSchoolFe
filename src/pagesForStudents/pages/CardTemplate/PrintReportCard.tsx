@@ -401,6 +401,122 @@ const PrintReportCard: React.FC = () => {
           </div>
         </main>
       </div>
+
+      {/* Psycho */}
+      <main className="mt-10">
+        <p className="font-semibold uppercase text-[12px] mb-5">
+          Psychometric Test Grading
+        </p>
+
+        <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="bg-slate-50 border min-h-20 m-2">
+            <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
+              Effective Domain
+            </p>
+            <div className="px-2 w-full border-b h-[45px] flex items-center text-[12px] uppercase ">
+              <p className="w-[30px] h-full border-r flex items-center">S/N</p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                SKill
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
+            </div>
+
+            {Array.from({ length: 8 }).map((el: any, i: number) => (
+              <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b ">
+                <p className="w-[30px] h-full border-r flex items-center">1</p>
+                <p className="flex-1 h-full border-r ml-2 flex items-center">
+                  Diligence
+                </p>
+                <p className="w-[60px] h-full ml-2 flex items-center">
+                  Excellent
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-red-50 min-h-20 m-2">
+            <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
+              Effective Domain
+            </p>
+            <div className="px-2 w-full border-b h-[45px] flex items-center text-[12px] uppercase border-x">
+              <p className="w-[30px] h-full border-r flex items-center">S/N</p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                SKill
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
+            </div>
+            {Array.from({ length: 8 }).map((el: any, i: number) => (
+              <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+                <p className="w-[30px] h-full border-r flex items-center">1</p>
+                <p className="flex-1 h-full border-r ml-2 flex items-center">
+                  Diligence
+                </p>
+                <p className="w-[60px] h-full ml-2 flex items-center">
+                  Excellent
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-green-50 min-h-20 col-span-1 sm:col-span-3 xl:col-span-1 m-2 ">
+            <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
+              Result Test
+            </p>
+            <div className="px-2 w-full border-b border-x h-[45px] flex items-center text-[12px] uppercase ">
+              <p className="w-[30px] h-full border-r flex items-center">S/N</p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                SKill
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
+            </div>
+
+            {Array.from({ length: 5 }).map((el: any, i: number) => (
+              <div
+                key={`${el}${i}`}
+                className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x"
+              >
+                <p className="w-[30px] h-full border-r flex items-center">
+                  {i + 1}
+                </p>
+                <p className="flex-1 h-full border-r ml-2 flex items-center">
+                  Diligence
+                </p>
+                <p className="w-[60px] h-full ml-2 flex items-center">
+                  Excellent
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Comments */}
+      <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
+        <div className="border mr-3 p-2">
+          <p>Principal's Comment</p>
+
+          <p className="my-2 border h-[120px] p-2 mb-5">comment</p>
+          <div className="flex w-full">
+            <div className="flex-1">
+              <p>Name</p>
+              <p>Principal</p>
+              <p>Date</p>
+            </div>
+            <div className="w-[160px] h-[80px] border">Signature</div>
+          </div>
+        </div>
+        <div className="border mr-3 p-2">
+          <p>Class Teacher's Comment</p>
+
+          <p className="my-2 border h-[120px] p-2 mb-5">comment</p>
+          <div className="flex w-full">
+            <div className="flex-1">
+              <p>Name</p>
+              <p>Class Teacher</p>
+              <p>Date</p>
+            </div>
+            <div className="w-[160px] h-[80px] border">Signature</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
