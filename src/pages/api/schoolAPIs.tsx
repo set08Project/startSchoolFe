@@ -5,11 +5,11 @@ import axios from "axios";
 
 // working locally
 
-const URL: string = "https://startschoolbe-1.onrender.com/api";
-const URL2: string = "https://startschoolbe-1.onrender.com";
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
+// const URL2: string = "https://startschoolbe-1.onrender.com";
 
-// const URL: string = "http://13.51.1.65:2244/api";
-// const URL2: string = "http://13.51.1.65:2244";
+const URL: string = "https://server.justnext.com.ng/api";
+const URL2: string = "https://server.justnext.com.ng";
 
 export const updateSchoolAdminCode = async (schoolID: string, data: any) => {
   try {
