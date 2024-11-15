@@ -28,7 +28,7 @@ const QuizTestScreen = () => {
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
       ...prev,
-      [questionIndex]: optionValue,
+      [questionIndex]: optionValue.toLowerCase().trim(),
     }));
   };
 
