@@ -28,18 +28,18 @@ const QuizTestScreen = () => {
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
       ...prev,
-      [questionIndex]: optionValue,
+      [questionIndex]: optionValue.toLowerCase().trim(),
     }));
   };
 
   const handleSubmit = () => {
-    const correctAnswers = quizData?.quiz[1]?.question?.map(
-      (q: any) => q.answer
+    const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>
+      q.answer.toLowerCase().trim()
     );
     let score = 0;
 
     correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]) {
+      if (correctAnswer === state[index]?.toLowerCase().trim()) {
         score++;
       }
     });
