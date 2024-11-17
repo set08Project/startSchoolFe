@@ -21,6 +21,7 @@ const QuizSetupScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const students = oneStudentPerformance;
+  console.log(students);
 
   const getGradeColor = (grade: string) => {
     switch (grade) {
