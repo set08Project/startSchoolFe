@@ -92,6 +92,9 @@ const QuizSetupScreen = () => {
                           {record.studentScore}/{record.totalQuestions}
                         </td>
                         <td className="py-4 px-6 text-sm text-gray-700">
+                          <div className="text-blue-700">
+                            ({Number(record.markPerQuestion)} Mark Per Question)
+                          </div>
                           {record.studentScore * Number(record.markPerQuestion)}
                           /
                           {record.totalQuestions *

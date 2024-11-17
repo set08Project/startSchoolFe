@@ -32,7 +32,6 @@ const QuizSetupScreen = () => {
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
-  console.log(quiz);
 
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
