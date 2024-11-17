@@ -202,11 +202,6 @@ const Header = () => {
                       to: "subjects",
                     },
                     {
-                      title: "Test-Records",
-                      icon: <MdSchool />,
-                      to: "quiz-records",
-                    },
-                    {
                       title: "My Profile",
                       icon: <CgProfile />,
                       to: "my-profile",

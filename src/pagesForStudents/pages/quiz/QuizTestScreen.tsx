@@ -6,6 +6,7 @@ import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
+import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
 import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
@@ -48,10 +49,17 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
+    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
+    const getQuizData = quizData?.quiz[1];
+
+    const totalquest = getQuizData?.question?.length;
+
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
       studentGrade: grade,
       remark,
+      totalQuestions: totalquest,
+      markPerQuestion: markPerQuest,
     }).then((res) => {
       if (res.status === 201) {
         toast.success("Quiz submitted successfully");
@@ -88,12 +96,12 @@ const QuizTestScreen = () => {
   };
 
   const myQuizData = quizData?.quiz[1];
-  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
-  const timerInSeconds = timer * 3600;
 
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
+  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
+  const timerInSeconds = timer * 3600;
 
   return (
     <div>
@@ -101,8 +109,15 @@ const QuizTestScreen = () => {
       <LittleHeader name={`${quizData?.subjectTitle} Test Screen`} />
 
       {isQuizDone ? (
-        <div>
-          <h1>Already Completed This Quiz</h1>
+        <div className="flex justify-center items-center flex-col">
+          <img
+            src={oops}
+            alt="Oops"
+            className="w-[250px] h-[250px] object-contain animate-pulse"
+          />
+          <h1 className="font-semibold text-purple-700">
+            You have already attempted and Completed this Test
+          </h1>
         </div>
       ) : (
         <div className="relative">

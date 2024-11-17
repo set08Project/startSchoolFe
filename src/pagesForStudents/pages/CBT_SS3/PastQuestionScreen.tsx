@@ -143,9 +143,9 @@ const PastQuestionScreen = () => {
           <LittleHeader name={`${subject.toUpperCase()} ${year} Test Screen`} />
 
           <div className="relative">
-            {/* <div className="fixed rounded-full md:w-[70px] md:h-[70px] flex justify-center items-center w-[70px] h-[70px] border-[8px] top-56 right-4 ">
+            <div className="fixed rounded-full md:w-[70px] md:h-[70px] flex justify-center items-center w-[70px] h-[70px] border-[8px] top-56 right-4 ">
               {`${minute}:${second < 10 ? "0" : ""}${second}`}
-            </div> */}
+            </div>
 
             <div className="bg-white justify-center flex min-h-[100vh]">
               <div className=" bg-white w-[90%] px-5">
