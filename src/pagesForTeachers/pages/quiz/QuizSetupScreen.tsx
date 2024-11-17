@@ -32,6 +32,7 @@ const QuizSetupScreen = () => {
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
+  console.log(quiz);
 
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
@@ -100,10 +101,15 @@ const QuizSetupScreen = () => {
                     </button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="font-bold mt-0 text-[20px]">
-                      {props?.subjectTitle}{" "}
-                      {props?.quiz ? "Quiz" : "Assignment"}
-                    </p>
+                    <div className="flex justify-center items-center gap-3">
+                      <p className="font-bold mt-0 text-[20px]">
+                        {props?.subjectTitle}{" "}
+                        {props?.quiz ? "Quiz" : "Assignment"}
+                      </p>
+                      <p className="font-semibold">
+                        {new Date(props?.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
                     <Link to={`/quiz/details/${subjectID}/${props?._id}`}>
                       <MdPlayCircle
                         size={40}

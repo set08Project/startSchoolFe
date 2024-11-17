@@ -23,25 +23,6 @@ const QuizSetupScreen = () => {
   const students = oneStudentPerformance;
   console.log(students);
 
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case "A":
-        return "text-green-600";
-      case "B":
-        return "text-blue-600";
-      case "C":
-        return "text-yellow-600";
-      case "D":
-        return "text-orange-600";
-      case "E":
-        return "text-red-600";
-      case "F":
-        return "text-red-700";
-      default:
-        return "text-gray-600";
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Toaster position="top-center" reverseOrder={true} />
@@ -82,9 +63,6 @@ const QuizSetupScreen = () => {
                         Student Score
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Grade
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                         Remark
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
@@ -119,13 +97,7 @@ const QuizSetupScreen = () => {
                           {record.totalQuestions *
                             Number(record.markPerQuestion)}
                         </td>
-                        <td
-                          className={`py-4 px-6 text-sm font-semibold ${getGradeColor(
-                            record.studentGrade
-                          )}`}
-                        >
-                          {record.studentGrade}
-                        </td>
+
                         <td className="py-4 px-6 text-sm text-gray-700">
                           {record.remark}
                         </td>
