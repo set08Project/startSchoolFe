@@ -48,10 +48,17 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
+    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
+    const getQuizData = quizData?.quiz[1];
+
+    const totalquest = getQuizData?.question?.length;
+
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
       studentGrade: grade,
       remark,
+      totalQuestions: totalquest,
+      markPerQuestion: markPerQuest,
     }).then((res) => {
       if (res.status === 201) {
         toast.success("Quiz submitted successfully");
@@ -88,12 +95,12 @@ const QuizTestScreen = () => {
   };
 
   const myQuizData = quizData?.quiz[1];
-  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
-  const timerInSeconds = timer * 3600;
 
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
+  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
+  const timerInSeconds = timer * 3600;
 
   return (
     <div>
