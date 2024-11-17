@@ -41,8 +41,6 @@ const QuizSetupScreen = () => {
         return "text-gray-600";
     }
   };
-  // const mainScore = Number(JSON.parse(students?.markPerQuestion));
-  const studentscores = 10;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -78,6 +76,9 @@ const QuizSetupScreen = () => {
                         Student Name
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                        Student Attempts
+                      </th>
+                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                         Student Score
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
@@ -110,7 +111,13 @@ const QuizSetupScreen = () => {
                           {record?.studentName}
                         </td>
                         <td className="py-4 px-6 text-sm text-gray-700">
-                          {record.studentScore} / {studentscores}
+                          {record.studentScore}/{record.totalQuestions}
+                        </td>
+                        <td className="py-4 px-6 text-sm text-gray-700">
+                          {record.studentScore * Number(record.markPerQuestion)}
+                          /
+                          {record.totalQuestions *
+                            Number(record.markPerQuestion)}
                         </td>
                         <td
                           className={`py-4 px-6 text-sm font-semibold ${getGradeColor(
