@@ -6,6 +6,7 @@ import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
+import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
 import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
@@ -108,8 +109,15 @@ const QuizTestScreen = () => {
       <LittleHeader name={`${quizData?.subjectTitle} Test Screen`} />
 
       {isQuizDone ? (
-        <div>
-          <h1>Already Completed This Quiz</h1>
+        <div className="flex justify-center items-center flex-col">
+          <img
+            src={oops}
+            alt="Oops"
+            className="w-[250px] h-[250px] object-contain animate-pulse"
+          />
+          <h1 className="font-semibold text-purple-700">
+            You have already attempted and Completed this Test
+          </h1>
         </div>
       ) : (
         <div className="relative">
