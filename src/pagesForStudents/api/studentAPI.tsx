@@ -2,9 +2,9 @@ import axios from "axios";
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://startschoolbe-1.onrender.com/api";
+// const URL: string = "https://startschoolbe-1.onrender.com/api";
 
-// const URL: string = "https://server.justnext.com.ng/api";
+const URL: string = "https://server.justnext.com.ng/api";
 
 export const getQuizRecord = async (studentID: string) => {
   try {
