@@ -21,25 +21,7 @@ const QuizSetupScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const students = oneStudentPerformance;
-
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case "A":
-        return "text-green-600";
-      case "B":
-        return "text-blue-600";
-      case "C":
-        return "text-yellow-600";
-      case "D":
-        return "text-orange-600";
-      case "E":
-        return "text-red-600";
-      case "F":
-        return "text-red-700";
-      default:
-        return "text-gray-600";
-    }
-  };
+  console.log(students);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -75,10 +57,10 @@ const QuizSetupScreen = () => {
                         Student Name
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Score
+                        Student Attempts
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Grade
+                        Student Score
                       </th>
                       <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                         Remark
@@ -107,15 +89,18 @@ const QuizSetupScreen = () => {
                           {record?.studentName}
                         </td>
                         <td className="py-4 px-6 text-sm text-gray-700">
-                          {record.studentScore}
+                          {record.studentScore}/{record.totalQuestions}
                         </td>
-                        <td
-                          className={`py-4 px-6 text-sm font-semibold ${getGradeColor(
-                            record.studentGrade
-                          )}`}
-                        >
-                          {record.studentGrade}
+                        <td className="py-4 px-6 text-sm text-gray-700">
+                          <div className="text-blue-700">
+                            ({Number(record.markPerQuestion)} Mark Per Question)
+                          </div>
+                          {record.studentScore * Number(record.markPerQuestion)}
+                          /
+                          {record.totalQuestions *
+                            Number(record.markPerQuestion)}
                         </td>
+
                         <td className="py-4 px-6 text-sm text-gray-700">
                           {record.remark}
                         </td>
