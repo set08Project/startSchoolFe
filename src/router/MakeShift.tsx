@@ -18,7 +18,6 @@ import LoadingScreen from "../components/static/LoadingScreen";
 const MakeShift = () => {
   const userStatus = useSelector((state: any) => state.userStatus);
   const [state, setState] = useState<any>({} || "" || 0);
-
   const user = useSelector((state: any) => state.user);
 
   useEffect(() => {

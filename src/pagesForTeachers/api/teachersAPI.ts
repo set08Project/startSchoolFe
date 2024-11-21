@@ -101,7 +101,7 @@ export const updaetTeacherSalary = async (teacherID: string, data: {}) => {
 export const loginTeacherToken = async (data: {}) => {
   try {
     return await axios
-      .post(`${URL}/login-teacher-token/`, data, { withCredentials: true })
+      .post(`${URL}/login-teacher-token/`, data)
       .then((res: any) => {
         return res?.data;
       });
