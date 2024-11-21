@@ -2,13 +2,10 @@ import React, { useRef, useEffect, FC } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
-  useReadMyClassInfo,
-  useReadMyClassInfoData,
   useReadOneClassInfo,
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import {
-  useClassStudent,
   useClassSubject,
   useSchoolAnnouncement,
   useStudentGrade,
@@ -21,7 +18,7 @@ import {
   useStudentAttendance,
 } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
-import { useOneSubjectStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+
 import moment from "moment";
 
 const PrintReportCard: React.FC = () => {
@@ -87,27 +84,11 @@ const PrintReportCard: React.FC = () => {
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
-  const { subjectData } = useClassSubject(studentInfo?.presentClassID);
+  const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
-  // const { subjectInfo } = useSujectInfo(subjectID);
 
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
-
-  // const studentDetails = {
-  //   name: `${studentInfo?.studentFirstName} ${studentInfo?.studentLastName} `,
-  //   class: studentInfo?.classAssigned,
-  //   term: school?.presentTerm,
-  //   session: school?.presentSession,
-  //   enrollmentID: `${studentInfo?.enrollmentID}`,
-  //   passport: "https://via.placeholder.com/150",
-  //   attendance:
-  //     (mainStudentAttendance?.data?.attendance?.filter((el: any) => {
-  //       return el.present === true;
-  //     }).length /
-  //       mainStudentAttendance?.data?.attendance?.length) *
-  //     100,
-  // };
 
   let numbPassed =
     grade?.result?.length -
@@ -126,7 +107,12 @@ const PrintReportCard: React.FC = () => {
 
   let holdeAll = [];
 
-  for (let i of subjectData?.students!) {
+  // }
+
+  let result = {};
+  let resultLow = {};
+
+  for (let i of subjectData?.students || []) {
     const { gradeData: details } = useStudentGrade(i);
 
     let reportData = details?.reportCard?.find((el: any) => {
@@ -146,30 +132,43 @@ const PrintReportCard: React.FC = () => {
     );
   }
 
-  let result = {};
-  let resultLow = {};
+  // for (let i = 0; i < subjectData?.students?.length; i++) {
+  //   const { gradeData: details } = useStudentGrade(subjectData?.students[i]);
+
+  //   let reportData = details?.reportCard?.find((el: any) => {
+  //     return (
+  //       el.classInfo ===
+  //       `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+  //     );
+  //   });
+
+  //   holdeAll.push(
+  //     reportData?.result?.map((el: any) => {
+  //       return {
+  //         [`${el?.subject}`]:
+  //           el?.test2 + el?.test1 + el?.test3 + el?.test4 + el?.exam,
+  //       };
+  //     })
+  //   );
+  // }
 
   lodash.sortBy(holdeAll, "subject")?.forEach((innerArray) => {
-    // Iterate over each object in the inner array
     innerArray?.forEach((obj: any) => {
       for (let key in obj) {
-        // Trim the key to handle potential trailing spaces
         let trimmedKey = key.trim();
         if (!result[trimmedKey] || result[trimmedKey] < obj[key]) {
-          result[trimmedKey] = obj[key]; // Store the highest value
+          result[trimmedKey] = obj[key];
         }
       }
     });
   });
 
   lodash.sortBy(holdeAll, "subject")?.forEach((innerArray) => {
-    // Iterate over each object in the inner array
     innerArray?.forEach((obj: any) => {
       for (let key in obj) {
-        // Trim the key to handle potential trailing spaces
         let trimmedKey = key.trim();
         if (!resultLow[trimmedKey] || resultLow[trimmedKey] > obj[key]) {
-          resultLow[trimmedKey] = obj[key]; // Store the highest value
+          resultLow[trimmedKey] = obj[key];
         }
       }
     });
@@ -190,9 +189,6 @@ const PrintReportCard: React.FC = () => {
     })),
     "subject"
   );
-
-  console.log(schoolInfo);
-  console.log(teacherDetail);
 
   return (
     <div ref={contentRef}>
