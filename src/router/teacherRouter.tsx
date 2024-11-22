@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
 import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
 import QuizDetails from "../pagesForTeachers/pages/quiz/QuizDetails";
+import CreateExamination from "../pagesForTeachers/pages/quiz/CreateExamination";
 
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
@@ -230,6 +231,15 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CreateQuiz />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "create-examination/:subjectID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateExamination />
           </Suspense>
         ),
       },

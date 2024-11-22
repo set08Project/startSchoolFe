@@ -238,6 +238,31 @@ export const createQuiz = async (
   }
 };
 
+export const createExaminationData = async (
+  classID: string,
+  subjectID: string,
+  data: any
+) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+
+    console.log(data);
+    return await axios
+      .post(
+        `${"http://localhost:2244/api"}/create-subject-examination/${classID}/${subjectID}`,
+        data,
+        config
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readSubjectQuiz = async (subjectID: string) => {
   try {
     return await axios
