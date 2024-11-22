@@ -107,7 +107,7 @@ const StudentDashboard = () => {
           </p>
           <div className="flex ">
             {resultData?.approve ? (
-              <Link to={`/print-result`}>
+              <Link to={`/print-result1`}>
                 <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                   view this term's report card
                 </div>

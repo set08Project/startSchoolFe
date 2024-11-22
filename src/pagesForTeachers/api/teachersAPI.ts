@@ -101,7 +101,7 @@ export const updaetTeacherSalary = async (teacherID: string, data: {}) => {
 export const loginTeacherToken = async (data: {}) => {
   try {
     return await axios
-      .post(`${URL}/login-teacher-token/`, data, { withCredentials: true })
+      .post(`${URL}/login-teacher-token/`, data)
       .then((res: any) => {
         return res?.data;
       });
@@ -620,6 +620,23 @@ export const reportCardRemark = async (
   try {
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const psychoReportCardRemark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-psycho-report/${teacherID}/${studentID}`, data)
+
       .then((res: any) => {
         return res?.data;
       });

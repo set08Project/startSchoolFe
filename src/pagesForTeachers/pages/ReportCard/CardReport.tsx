@@ -15,6 +15,7 @@ import {
   useTeacherInfo,
 } from "../../hooks/useTeacher";
 import {
+  psychoReportCardRemark,
   readClassInfo,
   remark,
   reportCardRemark,
@@ -330,6 +331,218 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   return <div className="w-[260px] border-r ">subject Offered</div>;
 };
 
+const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
+  const { teacherInfo } = useTeacherInfo();
+  const { gradeData } = useStudentGrade(props?._id);
+
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [confidence, setConfidence] = useState<string>("");
+  const [communication, setCommunication] = useState<string>("");
+  const [leadership, setLeadership] = useState<string>("");
+  const [punctuality, setPunctuality] = useState<string>("");
+  const [empathy, setEmpathy] = useState<string>("");
+  const [presentational, setPresentational] = useState<string>("");
+  const [hardworking, setHardworking] = useState<string>("");
+  const [resilient, setResilient] = useState<string>("");
+  const [sportship, setSportship] = useState<string>("");
+
+  let result = gradeData?.reportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
+        schoolInfo![0]!?.presentTerm
+      })`
+    );
+  });
+
+  return (
+    <div
+      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
+        i % 2 === 0 ? "bg-slate-50" : "bg-white"
+      }`}
+    >
+      <div className={`w-[100px] border-r font-bold`}>{i + 1}</div>
+      {/* name */}
+      <div className="w-[250px] flex border-r">
+        <div className="flex gap-2">
+          <img
+            className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
+            src={pix}
+          />
+
+          <div className="w-[180px] ">
+            {" "}
+            {props?.studentFirstName} {props?.studentLastName}
+          </div>
+        </div>
+      </div>
+
+      <div className={`w-[420px] bg- border-r items-center flex`}>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Communication</label>
+          <input
+            className="w-16 h-10 border p-2  mr-16"
+            placeholder={
+              gradeData?.reportCard[0].softSkill[0]?.[`communication`]
+            }
+            value={communication}
+            onChange={(e) => setCommunication(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Leadership</label>
+          <input
+            className="w-16 h-10 border p-2 mr-6"
+            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`leadership`]}
+            value={leadership}
+            onChange={(e) => setLeadership(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Punctuality</label>
+          <input
+            className="w-16 h-10 border p-2 mr-8"
+            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`punctuality`]}
+            value={punctuality}
+            onChange={(e) => setPunctuality(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Empathy</label>
+          <input
+            className="w-16 h-10 border p-2 "
+            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`empathy`]}
+            value={empathy}
+            onChange={(e) => setEmpathy(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className={`w-[420px] border-r items-center flex`}>
+        <div className="flex flex-col">
+          <label className="ml-2 text-[9px] uppercase">confidence</label>
+          <input
+            className="w-16 h-10 border p-2 ml-2 mr-6"
+            placeholder={
+              gradeData?.reportCard[0].peopleSkill[0]?.[`confidence`]
+            }
+            value={confidence}
+            onChange={(e) => setConfidence(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Presentational</label>
+          <input
+            className="w-16 h-10 border p-2 mr-14"
+            value={presentational}
+            placeholder={
+              gradeData?.reportCard[0].peopleSkill[0]?.[`presentational`]
+            }
+            onChange={(e) => setPresentational(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Hardworking</label>
+          <input
+            className="w-16 h-10 border p-2 mr-10"
+            value={hardworking}
+            placeholder={
+              gradeData?.reportCard[0].peopleSkill[0]?.[`hardworking`]
+            }
+            onChange={(e) => setHardworking(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[9px] uppercase">Resilient</label>
+          <input
+            className="w-16 h-10 border p-2 "
+            value={resilient}
+            placeholder={gradeData?.reportCard[0].peopleSkill[0]?.[`resilient`]}
+            onChange={(e) => setResilient(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className={`w-[120px] border-r items-center flex`}>
+        <div className="flex flex-col">
+          <label className="ml-2 text-[9px] uppercase">Sportship</label>
+          <input
+            className="w-16 h-10 border p-2 ml-2 mr-6"
+            value={sportship}
+            placeholder={
+              gradeData?.reportCard[0].physicalSkill[0]?.[`sportship`]
+            }
+            onChange={(e) => setSportship(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="w-[180px] border-r relative">
+        <Button
+          name={
+            result?.classTeacherComment
+              ? "Update Psychometric"
+              : loading
+              ? "Loading"
+              : "Add Comment"
+          }
+          icon={
+            loading && (
+              <ClipLoader
+                color="white"
+                size={20}
+                className="absolute left-7 top-5"
+              />
+            )
+          }
+          className={`pl-4 py-3 w-[85%]  text-white ${
+            result?.psycho
+              ? "bg-black hover:bg-neutral-800 "
+              : "bg-red-500 hover:bg-red-600 "
+          } transition-all duration-300`}
+          onClick={() => {
+            setLoading(true);
+            if (
+              communication !== "" &&
+              confidence !== "" &&
+              resilient !== "" &&
+              punctuality !== "" &&
+              leadership !== "" &&
+              empathy !== "" &&
+              presentational !== "" &&
+              sportship !== "" &&
+              hardworking !== ""
+            ) {
+              psychoReportCardRemark(teacherInfo?._id, props?._id, {
+                communication,
+                confidence,
+                resilient,
+                punctuality,
+                leadership,
+                hardworking,
+                presentational,
+                empathy,
+                sportship,
+              }).then((res: any) => {
+                setLoading(false);
+                if (res.status === 201) {
+                  mutate(`api/student-report-card/${props?._id}`);
+                  toast.success("Report Card Report Noted");
+                } else {
+                  toast.error(`${res?.response?.data?.message}`);
+                }
+              });
+            } else {
+              toast.error("Please give a REMARK");
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 const CardReport = () => {
   const { teacherInfo } = useTeacherInfo();
 
@@ -341,9 +554,12 @@ const CardReport = () => {
   const { classStudents } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
   const allStudents = classStudents?.students;
-  const sortedStudents = allStudents?.sort((a, b) =>
+  const sortedStudents = allStudents?.sort((a: any, b: any) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
+
+  const [toggle, setToggle] = useState<boolean>(true);
+  const [toggle1, setToggle1] = useState<boolean>(false);
 
   return (
     <div className="">
@@ -377,60 +593,161 @@ const CardReport = () => {
         </select>
       </div>
 
+      <div className="flex uppercase text-[12px] gap-4 mb-5">
+        <button
+          className={`${
+            toggle ? "bg-red-500 text-white" : "bg-slate-200"
+          } rounded-md px-6 py-2 duration-300 transition-all`}
+          onClick={() => {
+            setToggle1(false);
+            setToggle(true);
+          }}
+        >
+          Teacher's Comments
+        </button>
+        <button
+          className={`${
+            toggle1 ? "bg-red-500 text-white" : "bg-slate-200"
+          } rounded-md px-6 duration-300 transition-all py-2`}
+          onClick={() => {
+            setToggle1(true);
+            setToggle(false);
+          }}
+        >
+          Psychometric
+        </button>
+      </div>
+
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div
-          className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
-          style={{
-            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
-          }}
-        >
-          <div className="w-[100px] border-r">Sequence</div>
-          <div className="w-[250px] border-r">student Info</div>
-          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-          {/* 260px */}
-          <div
-            className={`w-[${
-              subjectData?.classSubjects.length * 260
-            }px] border-r`}
-          >
-            {/* <div>Subject Grade</div> */}
-            <div className=" flex ">
-              <div className="flex gap-4">
-                {lodash
-                  .sortBy(subjectData?.classSubjects, "subjectTitle")
-                  ?.map((props: any) => (
-                    <SubjectMap props={props} />
-                  ))}
+        {toggle ? (
+          <div>
+            <div
+              className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+              style={{
+                width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+              }}
+            >
+              <div className="w-[100px] border-r">Sequence</div>
+              <div className="w-[250px] border-r">student Info</div>
+              <div className="w-[100px] border-r">
+                Student's Attendance Ratio
               </div>
+              {/* 260px */}
+              <div
+                className={`w-[${
+                  subjectData?.classSubjects.length * 260
+                }px] border-r`}
+              >
+                {/* <div>Subject Grade</div> */}
+                <div className=" flex ">
+                  <div className="flex gap-4">
+                    {lodash
+                      .sortBy(subjectData?.classSubjects, "subjectTitle")
+                      ?.map((props: any) => (
+                        <SubjectMap props={props} />
+                      ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[100px] border-r">Total Points</div>
+              <div className="w-[100px] border-r">Grade</div>
+              <div className="w-[300px] border-r">Give Report/Remark</div>
+
+              <div className="w-[180px] border-r">Submit Report</div>
+            </div>
+
+            <div
+              className={` overflow-hidden`}
+              style={{
+                width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+              }}
+            >
+              {sortedStudents?.length > 0 ? (
+                <div>
+                  {sortedStudents?.map((props: any, i: number) => (
+                    <div key={props}>
+                      <MainStudentRow props={props} i={i} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>No student yet</div>
+              )}
             </div>
           </div>
+        ) : toggle1 ? (
+          <div>
+            <div
+              className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+              style={{
+                width: `${260 + subjectData?.classSubjects.length * 260}px`,
+              }}
+            >
+              <div className="w-[100px] border-r">Sequence</div>
+              <div className="w-[250px] border-r">student Info</div>
 
-          <div className="w-[100px] border-r">Total Points</div>
-          <div className="w-[100px] border-r">Grade</div>
-          <div className="w-[300px] border-r">Give Report/Remark</div>
-
-          <div className="w-[180px] border-r">Submit Report</div>
-        </div>
-
-        <div
-          className={` overflow-hidden`}
-          style={{
-            width: `${1200 + subjectData?.classSubjects.length * 260}px`,
-          }}
-        >
-          {sortedStudents?.length > 0 ? (
-            <div>
-              {sortedStudents?.map((props: any, i: number) => (
-                <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+              <div className="w-[420px] border-r px-1">
+                <p className="font-semibold text-blue-950 text-[13px]">
+                  {" "}
+                  Soft Skill
+                </p>
+                <div className="flex gap-4 mt-4">
+                  <p>Communication</p>
+                  <p>Leadership</p>
+                  <p>Punctuality</p>
+                  <p>Empathy</p>
                 </div>
-              ))}
+              </div>
+
+              <div className="w-[420px] border-r px-1">
+                <p className="font-semibold text-blue-950 text-[13px]">
+                  People Skill
+                </p>
+                <div className="flex gap-4 mt-4">
+                  <p>confidence</p>
+                  <p>Presentational</p>
+                  <p>HardWorking</p>
+                  <p>resilient</p>
+                </div>
+              </div>
+
+              <div className="w-[120px] border-r px-1">
+                <p className="font-semibold text-blue-950 text-[13px]">
+                  {" "}
+                  Physical Skill
+                </p>
+                <div className="flex gap-4 mt-4">
+                  <p>Sportship</p>
+                </div>
+              </div>
+
+              <div className="w-[180px] border-r text-[16px] font-semibold mt-4">
+                Submit Record
+              </div>
             </div>
-          ) : (
-            <div>No student yet</div>
-          )}
-        </div>
+
+            <div
+              className={` overflow-hidden`}
+              style={{
+                width: `${260 + subjectData?.classSubjects.length * 260}px`,
+              }}
+            >
+              {sortedStudents?.length > 0 ? (
+                <div>
+                  {sortedStudents?.map((props: any, i: number) => (
+                    <div key={props}>
+                      <MainStudentPsycho props={props} i={i} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>No student yet</div>
+              )}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
