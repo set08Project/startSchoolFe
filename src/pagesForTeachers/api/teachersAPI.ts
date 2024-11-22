@@ -628,6 +628,23 @@ export const reportCardRemark = async (
   }
 };
 
+export const psychoReportCardRemark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-psycho-report/${teacherID}/${studentID}`, data)
+
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const viewClassAcademicHistory = async (classID: string) => {
   try {
     return await axios

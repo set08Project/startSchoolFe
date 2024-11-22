@@ -20,6 +20,7 @@ import {
 import lodash from "lodash";
 
 import moment from "moment";
+import { useProcessStudentGrades } from "../../hooks/specialCall";
 
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -114,7 +115,6 @@ const PrintReportCard: React.FC = () => {
 
   for (let i of subjectData?.students || []) {
     const { gradeData: details } = useStudentGrade(i);
-
     let reportData = details?.reportCard?.find((el: any) => {
       return (
         el.classInfo ===
@@ -131,26 +131,6 @@ const PrintReportCard: React.FC = () => {
       })
     );
   }
-
-  // for (let i = 0; i < subjectData?.students?.length; i++) {
-  //   const { gradeData: details } = useStudentGrade(subjectData?.students[i]);
-
-  //   let reportData = details?.reportCard?.find((el: any) => {
-  //     return (
-  //       el.classInfo ===
-  //       `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
-  //     );
-  //   });
-
-  //   holdeAll.push(
-  //     reportData?.result?.map((el: any) => {
-  //       return {
-  //         [`${el?.subject}`]:
-  //           el?.test2 + el?.test1 + el?.test3 + el?.test4 + el?.exam,
-  //       };
-  //     })
-  //   );
-  // }
 
   lodash.sortBy(holdeAll, "subject")?.forEach((innerArray) => {
     innerArray?.forEach((obj: any) => {
@@ -189,6 +169,23 @@ const PrintReportCard: React.FC = () => {
     })),
     "subject"
   );
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
+        event.preventDefault();
+        alert("Refresh is disabled on this page.");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  console.log(grade?.peopleSkill);
 
   return (
     <div ref={contentRef}>
@@ -232,7 +229,7 @@ const PrintReportCard: React.FC = () => {
                   />
                 ) : (
                   <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
-                    {school?.schoolName?.charAt(0)}
+                    {studentInfo?.studentFirstName?.charAt(0)}
                   </div>
                 )}
               </div>
@@ -474,7 +471,6 @@ const PrintReportCard: React.FC = () => {
             {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-
             <main className="grid grid-cols-1 sm:grid-cols-3 my-10">
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">
@@ -570,11 +566,11 @@ const PrintReportCard: React.FC = () => {
                 </h1>
               </div>
             </main>
+
             <main className=" flex-col mt-5 ">
               <div className="my-5 px-20">
                 <hr />
               </div>
-
               <div className="flex flex-col items-center">
                 <p className="font-medium">
                   ACADEMIC PERFORMANCE INSIGHT/SUBJECT
@@ -595,32 +591,30 @@ const PrintReportCard: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              <main className="mt-10">
-                <div className="bg-slate-50 h-[100px] min-w-[1100px] flex items-end pb-2 ">
-                  {grade?.result?.map((el: any, i: number) => (
-                    <ChartPerformance
-                      low={resultMin[i]?.score}
-                      max={resultMax[i]?.score}
-                      key={i}
-                      subject={el?.subject}
-                      score={
-                        el?.test1 + el.test2 + el?.test3 + el.test4 + el.exam
-                      }
-                    />
-                  ))}
-                </div>
-              </main>
             </main>
+
+            <main className="mt-10">
+              <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
+                {grade?.result?.map((el: any, i: number) => (
+                  <ChartPerformance
+                    low={resultMin[i]?.score}
+                    max={resultMax[i]?.score}
+                    key={i}
+                    subject={el?.subject}
+                    score={
+                      el?.test1 + el.test2 + el?.test3 + el.test4 + el.exam
+                    }
+                  />
+                ))}
+              </div>
+            </main>
+
             <main className=" flex-col mt-5 ">
               <div className="my-5 px-20">
                 <hr />
               </div>
-
               <div className="flex flex-col items-center">
-                <p className="font-medium">
-                  INSIGHT INTO TERM PERFORMANCE/SUBJECT
-                </p>
+                <p className="font-medium">INSIGHT INTO TERM PERFORMANCE</p>
 
                 <div className="flex gap-4 mt-2">
                   <div className="flex gap-1 items-center">
@@ -637,9 +631,8 @@ const PrintReportCard: React.FC = () => {
                   </div>
                 </div>
               </div>
-
               <main className="mt-10">
-                <div className="bg-slate-50 h-[80px] min-w-[1100px] flex ">
+                <div className="bg-slate-50 h-[80px]  flex ">
                   <div className="flex items-end gap-1 border-r px-3">
                     <div
                       className="h-[80px] bg-red-500 w-3"
@@ -684,7 +677,7 @@ const PrintReportCard: React.FC = () => {
         <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           <div className="bg-slate-50 border min-h-20 m-2">
             <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
-              Effective Domain
+              Soft skill
             </p>
             <div className="px-2 w-full border-b h-[45px] flex items-center text-[12px] uppercase ">
               <p className="w-[30px] h-full border-r flex items-center">S/N</p>
@@ -694,21 +687,54 @@ const PrintReportCard: React.FC = () => {
               <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
             </div>
 
-            {Array.from({ length: 8 }).map((el: any, i: number) => (
-              <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b ">
-                <p className="w-[30px] h-full border-r flex items-center">1</p>
-                <p className="flex-1 h-full border-r ml-2 flex items-center">
-                  Diligence
-                </p>
-                <p className="w-[60px] h-full ml-2 flex items-center">
-                  Excellent
-                </p>
-              </div>
-            ))}
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                1
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                communication
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.softSkill[0].communication}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                2
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                leadership
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.softSkill[0].leadership}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                3
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                punctuality
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.softSkill[0].punctuality}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                4
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                empathy
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.softSkill[0].empathy}
+              </p>
+            </div>
           </div>
           <div className="bg-red-50 min-h-20 m-2">
             <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
-              Effective Domain
+              People Skill
             </p>
             <div className="px-2 w-full border-b h-[45px] flex items-center text-[12px] uppercase border-x">
               <p className="w-[30px] h-full border-r flex items-center">S/N</p>
@@ -717,21 +743,55 @@ const PrintReportCard: React.FC = () => {
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
             </div>
-            {Array.from({ length: 8 }).map((el: any, i: number) => (
-              <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
-                <p className="w-[30px] h-full border-r flex items-center">1</p>
-                <p className="flex-1 h-full border-r ml-2 flex items-center">
-                  Diligence
-                </p>
-                <p className="w-[60px] h-full ml-2 flex items-center">
-                  Excellent
-                </p>
-              </div>
-            ))}
+
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                1
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                Confidence
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.peopleSkill[0].confidence}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                2
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                hardworking
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.peopleSkill[0].hardworking}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                3
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                presentational
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.peopleSkill[0].presentational}
+              </p>
+            </div>
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center pl-2">
+                4
+              </p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                resilient
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.peopleSkill[0].resilient}
+              </p>
+            </div>
           </div>
           <div className="bg-green-50 min-h-20 col-span-1 sm:col-span-3 xl:col-span-1 m-2 ">
             <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
-              Result Test
+              Physical Skill
             </p>
             <div className="px-2 w-full border-b border-x h-[45px] flex items-center text-[12px] uppercase ">
               <p className="w-[30px] h-full border-r flex items-center">S/N</p>
@@ -741,22 +801,15 @@ const PrintReportCard: React.FC = () => {
               <p className="w-[60px] h-full ml-2 flex items-center">Rating</p>
             </div>
 
-            {Array.from({ length: 5 }).map((el: any, i: number) => (
-              <div
-                key={`${el}${i}`}
-                className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x"
-              >
-                <p className="w-[30px] h-full border-r flex items-center">
-                  {i + 1}
-                </p>
-                <p className="flex-1 h-full border-r ml-2 flex items-center">
-                  Diligence
-                </p>
-                <p className="w-[60px] h-full ml-2 flex items-center">
-                  Excellent
-                </p>
-              </div>
-            ))}
+            <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
+              <p className="w-[30px] h-full border-r flex items-center">1</p>
+              <p className="flex-1 h-full border-r ml-2 flex items-center">
+                sportship
+              </p>
+              <p className="w-[60px] h-full ml-2 flex items-center">
+                {grade?.physicalSkill[0].sportship}
+              </p>
+            </div>
           </div>
         </div>
       </main>
