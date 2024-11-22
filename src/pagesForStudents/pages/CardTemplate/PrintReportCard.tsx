@@ -428,7 +428,7 @@ const PrintReportCard: React.FC = () => {
                         <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text-[18px]">{el?.grade}</p>
                         </div>
-                        <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case">
+                        <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
                           <p
                             className={`
                           ${
@@ -695,7 +695,7 @@ const PrintReportCard: React.FC = () => {
                 communication
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.softSkill[0].communication}
+                {grade?.softSkill[0]?.communication}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -706,7 +706,7 @@ const PrintReportCard: React.FC = () => {
                 leadership
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.softSkill[0].leadership}
+                {grade?.softSkill[0]?.leadership}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -717,7 +717,7 @@ const PrintReportCard: React.FC = () => {
                 punctuality
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.softSkill[0].punctuality}
+                {grade?.softSkill[0]?.punctuality}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -728,7 +728,7 @@ const PrintReportCard: React.FC = () => {
                 empathy
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.softSkill[0].empathy}
+                {grade?.softSkill[0]?.empathy}
               </p>
             </div>
           </div>
@@ -752,7 +752,7 @@ const PrintReportCard: React.FC = () => {
                 Confidence
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.peopleSkill[0].confidence}
+                {grade?.peopleSkill[0]?.confidence}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -763,7 +763,7 @@ const PrintReportCard: React.FC = () => {
                 hardworking
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.peopleSkill[0].hardworking}
+                {grade?.peopleSkill[0]?.hardworking}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -774,7 +774,7 @@ const PrintReportCard: React.FC = () => {
                 presentational
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.peopleSkill[0].presentational}
+                {grade?.peopleSkill[0]?.presentational}
               </p>
             </div>
             <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -785,7 +785,7 @@ const PrintReportCard: React.FC = () => {
                 resilient
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.peopleSkill[0].resilient}
+                {grade?.peopleSkill[0]?.resilient}
               </p>
             </div>
           </div>
@@ -807,7 +807,7 @@ const PrintReportCard: React.FC = () => {
                 sportship
               </p>
               <p className="w-[60px] h-full ml-2 flex items-center">
-                {grade?.physicalSkill[0].sportship}
+                {grade?.physicalSkill[0]?.sportship}
               </p>
             </div>
           </div>

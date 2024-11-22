@@ -123,7 +123,7 @@ export const studentRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/print-result1",
+        path: "/print-result",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <PrintReportCard />
@@ -131,7 +131,7 @@ export const studentRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/print-result",
+        path: "/print-result1",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ReportCardPrint />
