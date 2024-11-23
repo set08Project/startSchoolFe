@@ -1,12 +1,12 @@
-import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/reUse/Button";
 import { createExaminationData, readClassInfo } from "../../api/teachersAPI";
 import { displayEmptyTest } from "../../../global/reduxState";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
+import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
 const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
@@ -14,12 +14,8 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
 
-  // const {} = useReadMyClassInfoData()
-
-  const testQuestion = useSelector((state: any) => state.test);
-  const dispatch = useDispatch();
-
   const [state, setState] = useState<any>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     readClassInfo(subjectQuiz?.designated).then((res: any) => {
@@ -27,11 +23,9 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
     });
   }, []);
 
-  console.log(subjectQuiz?.subjectClassID);
-
   return (
     <div>
-      <p>Preview Entries</p>
+      {/* <p>Preview Entries</p>
       <p className="mt-10 font-bold">Test Instructions</p>
       <p className="mr-6 mt-2">{testQuestion[0]?.instruction?.instruction}</p>
       <div className="flex gap-3 capitalize mt-5 font-medium text-[14px] mr-6 pb-5 border-b">
@@ -79,12 +73,24 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <Button
-        name={"Publish Question"}
-        className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
+        name={
+          loading ? (
+            <div className="gap-3 flex items-center justify-center">
+              <FaSpinner className="animate-spin text-[15px]" />{" "}
+              <span>Loading...</span>
+            </div>
+          ) : (
+            "Publish Question"
+          )
+        }
+        className={`text-black border mt-50 ${
+          instruction && mark && duration && "bg-neutral-950"
+        } uppercase text-[12px] px-10 ml-4 py-4 bg-blue-950`}
         onClick={() => {
+          setLoading(true);
           const formData: any = new FormData();
           formData.append("instruction", instruction);
           formData.append("duration", duration);
@@ -95,15 +101,16 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
             subjectQuiz?.subjectClassID!,
             subjectID!,
             formData
-          ).then((res: any) => {
-            console.log("Create Quiz res", res);
-            if (res.status === 201) {
-              mutate(`api/view-subject-quiz/${subjectID}`);
-              //   dispatch(displayEmptyTest());
-
-              //   navigate(`/subjects/${subjectID}`);
-            }
-          });
+          )
+            .then((res: any) => {
+              if (res.status === 201) {
+                mutate(`api/view-subject-quiz/${subjectID}`);
+                //   navigate(`/subjects/${subjectID}`);
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         }}
       />
     </div>

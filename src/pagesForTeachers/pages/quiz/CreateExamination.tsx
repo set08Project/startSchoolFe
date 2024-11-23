@@ -66,18 +66,19 @@ const CreateExamination = () => {
               <div className="mt-10 w-full flex gap-2">
                 <div className="flex flex-col">
                   <label className="text-[12px]">Time/Duration(Hours)</label>
-
                   <select
+                    className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
                     name="hour"
                     id="hour"
-                    className="border border-blue-950 w-[120px] h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6"
                     defaultValue={testQuestion[0]?.instruction?.duration}
                     value={duration}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setDuration(e.target.value);
                     }}
                   >
-                    <option selected>choose</option>
+                    <option disabled selected>
+                      choose
+                    </option>
                     <option value="1">1 Hour</option>
                     <option value="2">2 Hours</option>
                     <option value="3">3 Hours</option>
@@ -103,8 +104,10 @@ const CreateExamination = () => {
             </div>
             <div className="flex">
               <Button
-                name={"Add Examination Question"}
-                className="text-white bg-red-500 uppercase text-[12px] ml-0 px-8 py-4"
+                name={fileData ? "Ready To Publish" : "Yet to be Uploaded"}
+                className={`text-white ${
+                  fileData ? "bg-red-500" : "bg-neutral-950"
+                } uppercase text-[12px] ml-0 px-8 py-4`}
                 onClick={() => {
                   setToggle(true);
                   let data: any = { duration, instruction, mark };
@@ -115,7 +118,7 @@ const CreateExamination = () => {
             <div className="flex-1" />
           </div>
         </div>
-        <div className=" col-span-3 min-h-[60vh]">
+        <div className=" col-span-3 ">
           <PreviewExamination
             duration={duration}
             mark={mark}

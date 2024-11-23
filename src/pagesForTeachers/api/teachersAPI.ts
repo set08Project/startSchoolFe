@@ -238,6 +238,18 @@ export const createQuiz = async (
   }
 };
 
+export const viewExamination = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subject-exam/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const createExaminationData = async (
   classID: string,
   subjectID: string,
