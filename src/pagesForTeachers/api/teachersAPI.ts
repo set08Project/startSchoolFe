@@ -238,6 +238,30 @@ export const createQuiz = async (
   }
 };
 
+export const startExamination = async (examID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/start-subject-exam/${examID}`, { started: true })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const stopExamination = async (examID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/start-subject-exam/${examID}`, { started: false })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const viewExamination = async (subjectID: string) => {
   try {
     return await axios

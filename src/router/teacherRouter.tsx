@@ -5,6 +5,7 @@ import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRouteP
 import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
 import QuizDetails from "../pagesForTeachers/pages/quiz/QuizDetails";
 import CreateExamination from "../pagesForTeachers/pages/quiz/CreateExamination";
+import ExaminationPreviewScreen from "../pagesForTeachers/pages/quiz/ExaminationPreview";
 
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
@@ -222,6 +223,15 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <QuizDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: "examination-preview-details/:subjectID/:quizID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {/* <div>Start</div> */}
+            <ExaminationPreviewScreen />
           </Suspense>
         ),
       },

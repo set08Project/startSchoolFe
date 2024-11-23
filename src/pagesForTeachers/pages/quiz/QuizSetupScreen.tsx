@@ -11,7 +11,13 @@ import {
   useSubjectAssignment,
   useSujectQuiz,
 } from "../../hooks/useTeacher";
-import { deleteQuiz, readClassInfo } from "../../api/teachersAPI";
+import {
+  deleteQuiz,
+  readClassInfo,
+  startExamination,
+  stopExamination,
+} from "../../api/teachersAPI";
+import { mutate } from "swr";
 import { useStudentPerfomance } from "../../hooks/useQuizHook";
 
 const QuizSetupScreen = () => {
@@ -20,10 +26,11 @@ const QuizSetupScreen = () => {
   const { examination } = useExamination(subjectID!);
 
   const [state, setState] = useState<any>({});
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+  const [isModalOpen, setModalOpen] = useState<Boolean>(false);
 
-  console.log("Examination: ", examination);
+  const [loading, setLoading] = useState<Boolean>(false);
+
+  const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
 
   useEffect(() => {
     if (subjectQuiz?.designated) {
@@ -31,7 +38,7 @@ const QuizSetupScreen = () => {
         setState(res.data);
       });
     }
-  }, [subjectQuiz]);
+  }, [subjectQuiz, examination]);
 
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
@@ -176,14 +183,62 @@ const QuizSetupScreen = () => {
                     : "..."}
                 </span>
               </div>
-              <div className="flex">
-                <div className="mt-10 flex gap-3 items-center bg-blue-950 text-white px-6 py-3 rounded-md">
-                  <span>Change Visibility</span>
-                  <MdVisibilityOff
-                    size={20}
-                    className=" text-white transition-all duration-300"
-                  />
+
+              <div className="flex gap-3">
+                <div
+                  className={`mt-10 cursor-pointer flex gap-3 items-center ${
+                    examination?.startExam ? "bg-blue-950" : "bg-red-500"
+                  } text-white px-6 py-3 rounded-md`}
+                  onClick={() => {
+                    setLoading(true);
+
+                    examination?.startExam
+                      ? stopExamination(examination?._id)
+                          .then((res) => {
+                            console.log("stop: ", res);
+                            mutate(`api/view-subject-exam/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setLoading(false);
+                          })
+                      : startExamination(examination?._id)
+                          .then((res) => {
+                            console.log("start: ", res);
+                            mutate(`api/view-subject-exam/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setLoading(false);
+                          });
+                  }}
+                >
+                  {loading ? (
+                    "Laoding"
+                  ) : (
+                    <span>
+                      {examination?.startExam
+                        ? "Exam can Start "
+                        : "Change Visibility"}
+                    </span>
+                  )}
+                  {examination?.startExam ? (
+                    <MdVisibility
+                      size={20}
+                      className=" text-white transition-all duration-300"
+                    />
+                  ) : (
+                    <MdVisibilityOff
+                      size={20}
+                      className=" text-white transition-all duration-300"
+                    />
+                  )}
                 </div>
+                <Link
+                  to={`/examination-preview-details/${subjectID}/${examination?._id}`}
+                  className={`mt-10 cursor-pointer flex gap-3 items-center 
+                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
+                >
+                  {<span>Preview Questions</span>}
+                </Link>
               </div>
             </div>
           </div>
