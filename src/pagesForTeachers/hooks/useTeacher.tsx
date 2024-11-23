@@ -12,6 +12,7 @@ import {
   readTeacherSchedule,
   viewClassAcademicHistory,
   viewComplains,
+  viewExamination,
   viewPurchases,
   viewStudentGrade,
   viewTeacherDetail,
@@ -235,6 +236,18 @@ export const useComplain = (teacherID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useExamination = (subjectID: string) => {
+  const { data: examination } = useSWR(
+    `api/view-subject-exam/${subjectID}`,
+    () => {
+      return viewExamination(subjectID!).then((res) => {
+        return res.exam;
+      });
+    }
+  );
+  return { examination };
 };
 
 export const useStudentGrade = (studentID: string) => {

@@ -34,7 +34,7 @@ const QuizTestScreen = () => {
   };
 
   const handleSubmit = () => {
-    const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>
+    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
       q.answer.toLowerCase().trim()
     );
     let score = 0;
@@ -49,32 +49,32 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
-    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
-    const getQuizData = quizData?.quiz[1];
+    const markPerQuest = quizData?.quiz?.instruction?.mark;
+    const getQuizData = quizData?.quiz;
 
     const totalquest = getQuizData?.question?.length;
 
-    performanceTest(studentInfo?._id, quizID!, courseID, {
-      studentScore: score,
-      studentGrade: grade,
-      remark,
-      totalQuestions: totalquest,
-      markPerQuestion: markPerQuest,
-    }).then((res) => {
-      if (res.status === 201) {
-        toast.success("Quiz submitted successfully");
-        navigate(`/quiz-result/${quizID}`, {
-          state: {
-            correctAnswers,
-            studentAnswers: state,
-            score,
-            total: correctAnswers.length,
-          },
-        });
-      } else {
-        toast.error("Something went wrong");
-      }
-    });
+    // performanceTest(studentInfo?._id, quizID!, courseID, {
+    //   studentScore: score,
+    //   studentGrade: grade,
+    //   remark,
+    //   totalQuestions: totalquest,
+    //   markPerQuestion: markPerQuest,
+    // }).then((res) => {
+    //   if (res.status === 201) {
+    //     toast.success("Quiz submitted successfully");
+    //     navigate(`/quiz-result/${quizID}`, {
+    //       state: {
+    //         correctAnswers,
+    //         studentAnswers: state,
+    //         score,
+    //         total: correctAnswers.length,
+    //       },
+    //     });
+    //   } else {
+    //     toast.error("Something went wrong");
+    //   }
+    // });
   };
 
   const getRemark = (percentage: number) => {
@@ -95,7 +95,7 @@ const QuizTestScreen = () => {
     return "A";
   };
 
-  const myQuizData = quizData?.quiz[1];
+  const myQuizData: any = quizData?.quiz;
 
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
@@ -106,7 +106,11 @@ const QuizTestScreen = () => {
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
-      <LittleHeader name={`${quizData?.subjectTitle} Test Screen`} />
+      <LittleHeader
+        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
+          quizData?.status
+        } Screen`}
+      />
 
       {isQuizDone ? (
         <div className="flex justify-center items-center flex-col">
@@ -174,16 +178,25 @@ const QuizTestScreen = () => {
                           Choose your options carefully
                         </p>
                         {question?.options?.map((el: any, i: number) => (
-                          <div key={i} className="flex items-center gap-2 ml-4">
-                            <input
-                              className="radio radio-sm"
-                              type="radio"
-                              onChange={() => handleStateChange(index, el)}
-                              checked={state[index] === el}
-                            />
-                            <label>
-                              {typeof el === "string" ? el : JSON.stringify(el)}
-                            </label>
+                          <div>
+                            {el !== "" && (
+                              <div
+                                key={i}
+                                className="flex items-center gap-2 ml-4"
+                              >
+                                <input
+                                  className="radio radio-sm"
+                                  type="radio"
+                                  onChange={() => handleStateChange(index, el)}
+                                  checked={state[index] === el}
+                                />
+                                <label>
+                                  {typeof el === "string"
+                                    ? el
+                                    : JSON.stringify(el)}
+                                </label>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
