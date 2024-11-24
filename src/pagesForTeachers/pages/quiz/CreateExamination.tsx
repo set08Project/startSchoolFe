@@ -104,7 +104,7 @@ const CreateExamination = () => {
             </div>
             <div className="flex">
               <Button
-                name={fileData ? "Ready To Publish" : "Yet to be Uploaded"}
+                name={fileData ? "Ready To Publish" : "Yet to Upload"}
                 className={`text-white ${
                   fileData ? "bg-red-500" : "bg-neutral-950"
                 } uppercase text-[12px] ml-0 px-8 py-4`}

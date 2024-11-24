@@ -287,7 +287,7 @@ export const createExaminationData = async (
     console.log(data);
     return await axios
       .post(
-        `${"http://localhost:2244/api"}/create-subject-examination/${classID}/${subjectID}`,
+        `${URL}/create-subject-examination/${classID}/${subjectID}`,
         data,
         config
       )
