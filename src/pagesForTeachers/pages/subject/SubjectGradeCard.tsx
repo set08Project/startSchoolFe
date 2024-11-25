@@ -44,9 +44,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     subjectInfo?.quiz[subjectInfo?.quiz.length - 1]
   );
 
-  // console.log(subjectInfo?.quiz[subjectInfo?.quiz.length - 1]);
-  // console.log(oneStudentPerformance);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
@@ -77,7 +74,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         }
       });
     } catch (error: any) {
-      console.error();
       return error.stack;
     }
   };
@@ -94,6 +90,17 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   let result = reportData?.result.find((el: any) => {
     return el.subject === subjectInfo?.subjectTitle;
   });
+
+  const readResultData = (props: any) => {
+    let readData: any = oneStudentPerformance?.find((el: any) => {
+      return (
+        el.studentName ===
+        `${props?.studentFirstName} ${props?.studentLastName}`
+      );
+    });
+
+    return readData;
+  };
 
   return (
     <div
@@ -178,9 +185,21 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           className="w-[80px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
           placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
-          value={exam}
+          value={
+            readResultData(props)
+              ? (readResultData(props)?.performanceRating / 100) * 60
+              : exam
+          }
           onChange={(e: any) => {
-            setExam(e.target.value);
+            {
+              readResultData(props) ? (
+                <div>
+                  {(readResultData(props)?.performanceRating / 100) * 60}
+                </div>
+              ) : (
+                setExam(e.target.value)
+              );
+            }
           }}
         />
       </div>
