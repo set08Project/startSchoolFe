@@ -1,18 +1,5 @@
-import React, { useRef, useEffect, FC } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import {
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
-import {
-  useClassSubject,
-  useSchoolAnnouncement,
-  useStudentGrade,
-  useSujectInfo,
-  useTeacherDetail,
-  useTeacherInfo,
-} from "../../../pagesForTeachers/hooks/useTeacher";
+import React, { useRef, useEffect, FC, useState } from "react";
+
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -20,55 +7,31 @@ import {
 import lodash from "lodash";
 
 import moment from "moment";
-import { useProcessStudentGrades } from "../../hooks/specialCall";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useParams } from "react-router-dom";
+import {
+  useClassSubject,
+  useSchoolAnnouncement,
+  useStudentGrade,
+  useSujectInfo,
+  useTeacherDetail,
+} from "../../../pagesForTeachers/hooks/useTeacher";
+import { usePdf } from "@mikecousins/react-pdf";
 
-const PrintReportCard: React.FC = () => {
+const ReportCardDesignAdminScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const preprocessContent = () => {
-    const content = contentRef.current;
-    if (!content) return;
+  const { studentID } = useParams();
+  const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
 
-    // Traverse the DOM and replace "oklch" color functions with a fallback color
-    const elementsWithUnsupportedColors = content.querySelectorAll("*");
-    elementsWithUnsupportedColors.forEach((element: any) => {
-      const computedStyles = window.getComputedStyle(element);
-      if (computedStyles.color.includes("oklch")) {
-        element.style.color = "#000000"; // Replace with a fallback color
-      }
-    });
-  };
-
-  const downloadPDF = () => {
-    const input = contentRef.current;
-
-    if (!input) {
-      return;
-    }
-
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf: any = new jsPDF();
-        pdf.addImage(imgData, "PNG", 30, 10);
-        pdf.save("download.pdf");
-      })
-      .catch((error) => {
-        return error;
-      });
-  };
-
-  useEffect(() => {
-    preprocessContent();
-  }, []);
-
-  const { studentInfo } = useStudentInfo();
+  const { gradeData } = useStudentGrade(studentID!);
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
-    studentInfo?.schoolIDs
+    gradeData?.schoolIDs
   );
-  const { mainStudentAttendance } = useStudentAttendance(studentInfo?._id);
-
-  const { gradeData } = useStudentGrade(studentInfo?._id);
 
   let school: any = schoolAnnouncement;
 
@@ -80,13 +43,13 @@ const PrintReportCard: React.FC = () => {
   });
 
   const { oneClass: classDetails } = useReadOneClassInfo(
-    studentInfo?.presentClassID
+    gradeData?.presentClassID
   );
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
-  const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
-  const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
+  const { subjectData }: any = useClassSubject(gradeData?.presentClassID);
+  const { schoolInfo } = useSchoolSessionData(gradeData?.schoolIDs);
 
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
@@ -121,6 +84,8 @@ const PrintReportCard: React.FC = () => {
         `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
       );
     });
+
+    console.log(studentInfo);
 
     holdeAll.push(
       reportData?.result?.map((el: any) => {
@@ -190,7 +155,7 @@ const PrintReportCard: React.FC = () => {
   }, []);
 
   return (
-    <div ref={contentRef}>
+    <div>
       {/* <button onClick={downloadPDF}>Download PDF</button> */}
       <div>
         {/* Content you want to convert to PDF */}
@@ -568,7 +533,6 @@ const PrintReportCard: React.FC = () => {
                 </h1>
               </div>
             </main>
-
             <main className=" flex-col mt-5 ">
               <div className="my-5 px-20">
                 <hr />
@@ -594,7 +558,6 @@ const PrintReportCard: React.FC = () => {
                 </div>
               </div>
             </main>
-
             <main className="mt-10">
               <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
                 {grade?.result?.map((el: any, i: number) => (
@@ -611,69 +574,13 @@ const PrintReportCard: React.FC = () => {
               </div>
             </main>
 
-            <main className=" flex-col mt-5 ">
-              <div className="my-5 px-20">
-                <hr />
-              </div>
-              <div className="flex flex-col items-center">
-                <p className="font-medium">INSIGHT INTO TERM PERFORMANCE</p>
-
-                <div className="flex gap-4 mt-2">
-                  <div className="flex gap-1 items-center">
-                    <div className="w-4 h-4 bg-red-500 shadow-inner" />
-                    <p className="text-[12px] font-medium">1st Term</p>
-                  </div>
-                  <div className="flex gap-1 items-center">
-                    <div className="w-4 h-4 bg-green-500 shadow-inner" />
-                    <p className="text-[12px] font-medium">2nd Term</p>
-                  </div>
-                  <div className="flex gap-1 items-center">
-                    <div className="w-4 h-4 bg-black shadow-inner" />
-                    <p className="text-[12px] font-medium">3rd Term</p>
-                  </div>
-                </div>
-              </div>
-              <main className="mt-10">
-                <div className="bg-slate-50 h-[80px]  flex ">
-                  <div className="flex items-end gap-1 border-r px-3">
-                    <div
-                      className="h-[80px] bg-red-500 w-3"
-                      style={{ height: `30px` }}
-                    />
-                    <div
-                      className="h-[80px] bg-black w-3"
-                      style={{ height: `70px` }}
-                    />
-                    <div
-                      className="h-[80px] bg-green-500 w-3"
-                      style={{ height: `50px` }}
-                    />
-                  </div>
-                  <div className="flex items-end gap-1 border-r px-3">
-                    <div
-                      className="h-[80px] bg-red-500 w-3"
-                      style={{ height: `30px` }}
-                    />
-                    <div
-                      className="h-[80px] bg-black w-3"
-                      style={{ height: `70px` }}
-                    />
-                    <div
-                      className="h-[80px] bg-green-500 w-3"
-                      style={{ height: `50px` }}
-                    />
-                  </div>
-                </div>
-              </main>
-            </main>
-
             {/* Psycho */}
             <main className="mt-20">
               <p className="font-semibold uppercase text-[12px] mb-5">
                 Psychometric Test Grading
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+              <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
                 <div className="bg-slate-50 border min-h-20">
                   <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
                     Soft skill
@@ -883,7 +790,7 @@ const PrintReportCard: React.FC = () => {
   );
 };
 
-export default PrintReportCard;
+export default ReportCardDesignAdminScreen;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();

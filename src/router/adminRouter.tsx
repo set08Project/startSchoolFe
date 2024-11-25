@@ -39,6 +39,7 @@ import AllExpenditures from "../pages/page/expenditure/AllExpenditures";
 import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
 import SchemeDeatails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
 import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
+import ReportCardDesignAdminScreen from "../pages/page/ResultHistory/ViewingStudentRecportCard";
 
 const Expenditure = React.lazy(
   () => import("../pages/page/expenditure/expenditure")
@@ -140,6 +141,7 @@ export const adminRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+
       {
         path: "test-payment",
         element: (
@@ -190,6 +192,15 @@ export const adminRouter = createBrowserRouter([
                 ),
               },
             ],
+          },
+
+          {
+            path: "view-students-report-card/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ReportCardDesignAdminScreen />
+              </Suspense>
+            ),
           },
 
           {

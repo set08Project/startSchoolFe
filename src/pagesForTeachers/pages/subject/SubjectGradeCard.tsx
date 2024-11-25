@@ -185,20 +185,17 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           className="w-[80px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
           placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
-          value={
-            readResultData(props)
-              ? (readResultData(props)?.performanceRating / 100) * 60
-              : exam
-          }
+          value={exam}
           onChange={(e: any) => {
             {
-              readResultData(props) ? (
-                <div>
-                  {(readResultData(props)?.performanceRating / 100) * 60}
-                </div>
-              ) : (
-                setExam(e.target.value)
-              );
+              readResultData(props)
+                ? setExam(
+                    (
+                      (readResultData(props)?.performanceRating / 100) *
+                      60
+                    ).toString()
+                  )
+                : setExam(e.target.value);
             }
           }}
         />
