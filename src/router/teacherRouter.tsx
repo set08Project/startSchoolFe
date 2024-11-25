@@ -6,6 +6,7 @@ import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages
 import QuizDetails from "../pagesForTeachers/pages/quiz/QuizDetails";
 import CreateExamination from "../pagesForTeachers/pages/quiz/CreateExamination";
 import ExaminationPreviewScreen from "../pagesForTeachers/pages/quiz/ExaminationPreview";
+import ReportCardDesignScreen from "../pagesForTeachers/pages/CardTemplate/ReportCardDesignScreen";
 
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
@@ -132,6 +133,15 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ViewReport />
+          </Suspense>
+        ),
+      },
+      {
+        path: "teacher-student-report-card/:studentID",
+        index: true,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ReportCardDesignScreen />
           </Suspense>
         ),
       },

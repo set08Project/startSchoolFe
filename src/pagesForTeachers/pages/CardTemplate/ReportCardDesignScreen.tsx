@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, FC } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
+// import {
+//   useReadOneClassInfo,
+//   useStudentInfo,
+// } from "../../hooks/useStudentHook";
 import {
   useClassSubject,
   useSchoolAnnouncement,
@@ -12,7 +12,7 @@ import {
   useSujectInfo,
   useTeacherDetail,
   useTeacherInfo,
-} from "../../../pagesForTeachers/hooks/useTeacher";
+} from "../../hooks/useTeacher";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -20,9 +20,15 @@ import {
 import lodash from "lodash";
 
 import moment from "moment";
-import { useProcessStudentGrades } from "../../hooks/specialCall";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+import { useParams } from "react-router-dom";
+// import { useProcessStudentGrades } from "../../hooks/specialCall";
 
-const PrintReportCard: React.FC = () => {
+const ReportCardDesignScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const preprocessContent = () => {
@@ -62,13 +68,13 @@ const PrintReportCard: React.FC = () => {
     preprocessContent();
   }, []);
 
-  const { studentInfo } = useStudentInfo();
-  const { schoolAnnouncement }: any = useSchoolAnnouncement(
-    studentInfo?.schoolIDs
-  );
-  const { mainStudentAttendance } = useStudentAttendance(studentInfo?._id);
+  const { studentID } = useParams();
+  const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
 
-  const { gradeData } = useStudentGrade(studentInfo?._id);
+  const { gradeData } = useStudentGrade(studentID!);
+  const { schoolAnnouncement }: any = useSchoolAnnouncement(
+    gradeData?.schoolIDs
+  );
 
   let school: any = schoolAnnouncement;
 
@@ -80,13 +86,13 @@ const PrintReportCard: React.FC = () => {
   });
 
   const { oneClass: classDetails } = useReadOneClassInfo(
-    studentInfo?.presentClassID
+    gradeData?.presentClassID
   );
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
-  const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
-  const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
+  const { subjectData }: any = useClassSubject(gradeData?.presentClassID);
+  const { schoolInfo } = useSchoolSessionData(gradeData?.schoolIDs);
 
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
@@ -121,6 +127,8 @@ const PrintReportCard: React.FC = () => {
         `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
       );
     });
+
+    console.log(studentInfo);
 
     holdeAll.push(
       reportData?.result?.map((el: any) => {
@@ -568,7 +576,6 @@ const PrintReportCard: React.FC = () => {
                 </h1>
               </div>
             </main>
-
             <main className=" flex-col mt-5 ">
               <div className="my-5 px-20">
                 <hr />
@@ -594,7 +601,6 @@ const PrintReportCard: React.FC = () => {
                 </div>
               </div>
             </main>
-
             <main className="mt-10">
               <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
                 {grade?.result?.map((el: any, i: number) => (
@@ -610,7 +616,6 @@ const PrintReportCard: React.FC = () => {
                 ))}
               </div>
             </main>
-
             <main className=" flex-col mt-5 ">
               <div className="my-5 px-20">
                 <hr />
@@ -673,8 +678,8 @@ const PrintReportCard: React.FC = () => {
                 Psychometric Test Grading
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-                <div className="bg-slate-50 border min-h-20">
+              <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="bg-slate-50 border min-h-20 ">
                   <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
                     Soft skill
                   </p>
@@ -883,7 +888,7 @@ const PrintReportCard: React.FC = () => {
   );
 };
 
-export default PrintReportCard;
+export default ReportCardDesignScreen;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();
