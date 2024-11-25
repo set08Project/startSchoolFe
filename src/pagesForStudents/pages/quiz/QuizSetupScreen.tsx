@@ -32,8 +32,6 @@ const QuizSetupScreen = () => {
     setCompletedQuizzes((prev) => [...prev, quizId]);
   };
 
-  console.log("subject: ", subjectQuiz?.quiz);
-
   return (
     <div className="text-blue-950 relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
@@ -47,15 +45,7 @@ const QuizSetupScreen = () => {
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
               </div>
-              <div className="mt-4 text-center relative bottom-4">
-                {/* <button
-                  onClick={() => {}}
-                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
-                >
-                  <FaTrashAlt size={20} className="mr-1" />
-                  Delete
-                </button> */}
-              </div>
+              <div className="mt-4 text-center relative bottom-4"></div>
 
               <div className="flex justify-between items-center">
                 <div className="flex flex-col ">

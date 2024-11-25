@@ -8,6 +8,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import Button from "../../components/reUse/Button";
+import { useQuiz } from "../../hooks/useTeacher";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
@@ -19,15 +20,19 @@ const QuizSetupScreen = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-
+  const { quizData } = useQuiz(quizID);
   const students = oneStudentPerformance;
-  console.log(students);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Toaster position="top-center" reverseOrder={true} />
       <div className="ml-5 pt-2">
-        <LittleHeader name={` Students Test Results`} />
+        <LittleHeader
+          name={` Students ${quizData?.status
+            .charAt(0)
+            .toUpperCase()
+            .concat(quizData?.status.slice(1))} Results`}
+        />
       </div>
 
       <div className="container mx-auto px-4 py-8">
@@ -46,82 +51,88 @@ const QuizSetupScreen = () => {
                 No Test Results Submitted.
               </p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white rounded-lg shadow-md">
-                  <thead>
-                    <tr>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        S/N
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Name
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Attempts
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Student Score
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Remark
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Test Completed
-                      </th>
-                      <th className="py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                        Date
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students?.map((record: any, i: number) => (
-                      <motion.tr
-                        key={record._id}
-                        className="border-b hover:bg-gray-100 transition-colors duration-200"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {i + 1}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {record?.studentName}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {record.studentScore}/{record.totalQuestions}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          <div className="text-blue-700">
-                            ({Number(record.markPerQuestion)} Mark Per Question)
-                          </div>
-                          {record.studentScore * Number(record.markPerQuestion)}
-                          /
-                          {record.totalQuestions *
-                            Number(record.markPerQuestion)}
-                        </td>
+              <div className="flex flex-col overflow-auto">
+                <div className="w-[1500px] flex bg-white rounded-lg shadow-md">
+                  <div className=" w-[50px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    S/N
+                  </div>
+                  <div className="py-3 w-[300px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Student Name
+                  </div>
+                  <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Student Attempts
+                  </div>
 
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {record.remark}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {record.quizDone ? (
-                            <td className="py-4 px-6 text-sm text-green-700">
-                              Completed
-                            </td>
-                          ) : (
-                            <td className="py-4 px-6 text-sm text-red-700">
-                              Not Completed
-                            </td>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-700">
-                          {new Date(record.createdAt).toLocaleDateString()}
-                        </td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
+                  <div className="w-[250px] border-r py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Student Score
+                  </div>
+
+                  <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Student Grade
+                  </div>
+                  <div className="py-3 w-[250px] border-r  px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Remark
+                  </div>
+
+                  <div className="py-3 px-6 w-[180px] border-r bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Test Completed
+                  </div>
+                  <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Date
+                  </div>
+                </div>
+
+                <div className="w-[1500px]">
+                  {students?.map((record: any, i: number) => (
+                    <motion.tr
+                      key={record._id}
+                      className="w-[2000px] items-center border-b hover:bg-gray-100 transition-colors duration-200 flex "
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      <div className="w-[50px] py-4 px-6 text-sm text-gray-700">
+                        {i + 1}
+                      </div>
+                      <div className="py-4 w-[300px] border-r px-6 text-sm text-gray-700">
+                        {record?.studentName}
+                      </div>
+                      <div className="border-r w-[150px] py-4 px-6 text-sm text-gray-700">
+                        {record.studentScore}/{record.totalQuestions}
+                      </div>
+                      <div className="py-4 border-r w-[250px] px-6 text-sm text-gray-700">
+                        <div className="text-blue-700">
+                          ({Number(record.markPerQuestion)} Mark Per Question)
+                        </div>
+                        {record.studentScore * Number(record.markPerQuestion)}/
+                        {record.totalQuestions * Number(record.markPerQuestion)}
+                      </div>
+
+                      <div className="py-3 w-[150px] border-r px-6  text-left  font-medium  uppercase tracking-wider text-[30px]">
+                        {record?.studentGrade}
+                      </div>
+
+                      <div className="py-4 px-6 text-sm w-[250px] border-r text-gray-700">
+                        {record.remark}
+                      </div>
+
+                      <div className=" text-start py-4 w-[180px] border-r px-6 text-sm text-gray-700">
+                        {record.quizDone ? (
+                          <div className="py-4 px-6  text-sm text-green-700">
+                            Completed
+                          </div>
+                        ) : (
+                          <div className="py-4 px-6 text-sm text-red-700">
+                            Not Completed
+                          </div>
+                        )}
+                      </div>
+                      <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
+                        {new Date(record.createdAt).toLocaleDateString()}
+                      </div>
+                    </motion.tr>
+                  ))}
+                </div>
               </div>
             )}
           </motion.div>

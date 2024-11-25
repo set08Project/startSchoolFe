@@ -15,6 +15,7 @@ import {
   useStudentGrade,
   useSujectInfo,
   useTeacherInfo,
+  useSubjectPerformance,
 } from "../../hooks/useTeacher";
 import { createGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
@@ -22,6 +23,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useOneSubjectStudentPerfomance } from "../../hooks/useQuizHook";
 
 interface iProps {
   props?: any;
@@ -33,7 +35,17 @@ interface iProps {
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { subjectID } = useParams();
   const { teacherInfo } = useTeacherInfo();
+
   const { subjectInfo } = useSujectInfo(subjectID);
+  const { perform } = useSubjectPerformance(subjectID);
+
+  const { oneStudentPerformance } = useOneSubjectStudentPerfomance(
+    subjectID,
+    subjectInfo?.quiz[subjectInfo?.quiz.length - 1]
+  );
+
+  // console.log(subjectInfo?.quiz[subjectInfo?.quiz.length - 1]);
+  // console.log(oneStudentPerformance);
 
   const [loading, setLoading] = useState<boolean>(false);
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
@@ -29,52 +29,8 @@ const QuizTestScreen = () => {
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
       ...prev,
-      [questionIndex]: optionValue.toLowerCase().trim(),
+      [questionIndex]: optionValue.trim(),
     }));
-  };
-
-  const handleSubmit = () => {
-    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-      q.answer.toLowerCase().trim()
-    );
-    let score = 0;
-
-    correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]?.toLowerCase().trim()) {
-        score++;
-      }
-    });
-
-    const percentage = Math.ceil((score / correctAnswers.length) * 100);
-    let remark = getRemark(percentage);
-    let grade = getGrade(percentage);
-
-    const markPerQuest = quizData?.quiz?.instruction?.mark;
-    const getQuizData = quizData?.quiz;
-
-    const totalquest = getQuizData?.question?.length;
-
-    // performanceTest(studentInfo?._id, quizID!, courseID, {
-    //   studentScore: score,
-    //   studentGrade: grade,
-    //   remark,
-    //   totalQuestions: totalquest,
-    //   markPerQuestion: markPerQuest,
-    // }).then((res) => {
-    //   if (res.status === 201) {
-    //     toast.success("Quiz submitted successfully");
-    //     navigate(`/quiz-result/${quizID}`, {
-    //       state: {
-    //         correctAnswers,
-    //         studentAnswers: state,
-    //         score,
-    //         total: correctAnswers.length,
-    //       },
-    //     });
-    //   } else {
-    //     toast.error("Something went wrong");
-    //   }
-    // });
   };
 
   const getRemark = (percentage: number) => {
@@ -100,8 +56,80 @@ const QuizTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
-  const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
-  const timerInSeconds = timer * 3600;
+  const timer = parseInt(quizData?.quiz?.instruction?.duration);
+  let timerInSeconds = timer * 3600;
+
+  const handleSubmit = () => {
+    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+      q.answer.trim()
+    );
+    let score = 0;
+
+    correctAnswers.forEach((correctAnswer: string, index: number) => {
+      if (correctAnswer === state[index]?.trim()) {
+        score++;
+      }
+    });
+
+    const percentage = Math.ceil((score / correctAnswers.length) * 100);
+    let remark = getRemark(percentage);
+    let grade = getGrade(percentage);
+
+    const markPerQuest = quizData?.quiz?.instruction?.mark;
+    const getQuizData = quizData?.quiz;
+
+    const totalquest = getQuizData?.question?.length;
+
+    timerInSeconds = 0;
+
+    performanceTest(studentInfo?._id, quizID!, courseID, {
+      studentScore: score,
+      studentGrade: grade,
+      remark,
+      totalQuestions: totalquest,
+      markPerQuestion: markPerQuest,
+      status: quizData.status,
+    }).then((res) => {
+      if (res.status === 201) {
+        toast.success(
+          `${
+            quizData?.status?.charAt(0).toUpperCase() +
+            quizData?.status.slice(1)
+          } submitted successfully`
+        );
+        navigate(`/quiz-result/${quizID}`, {
+          state: {
+            correctAnswers,
+            studentAnswers: state,
+            score,
+            total: correctAnswers.length,
+          },
+        });
+      } else {
+        toast.error("Something went wrong");
+      }
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
+        event.preventDefault();
+        toast.error(
+          `This action can't be done, while ${
+            quizData?.status?.charAt(0).toUpperCase() +
+            quizData?.status.slice(1)
+          } is ongoing!`
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div>
@@ -142,7 +170,9 @@ const QuizTestScreen = () => {
                   }
                 }}
               />
-              <p className="font-bold">Push Play to start your Test</p>
+              <p className="font-bold">
+                Push Play to start your {quizData?.status}
+              </p>
             </div>
           )}
           {/* Timer */}
@@ -187,8 +217,10 @@ const QuizTestScreen = () => {
                                 <input
                                   className="radio radio-sm"
                                   type="radio"
-                                  onChange={() => handleStateChange(index, el)}
-                                  checked={state[index] === el}
+                                  onChange={() => {
+                                    handleStateChange(index, el);
+                                  }}
+                                  checked={state[index] === el.trim()}
                                 />
                                 <label>
                                   {typeof el === "string"
