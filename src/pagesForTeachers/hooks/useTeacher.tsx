@@ -17,6 +17,7 @@ import {
   viewStudentGrade,
   viewTeacherDetail,
   viewTeacherLessonNote,
+  getStudentSubjectPerformance,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -236,6 +237,18 @@ export const useComplain = (teacherID: string) => {
     }
   );
   return { complainData };
+};
+
+export const useSubjectPerformance = (subjectID: string) => {
+  const { data: perform } = useSWR(
+    `api/view-subject-quiz-performance/${subjectID}`,
+    () => {
+      return getStudentSubjectPerformance(subjectID!).then((res) => {
+        return res;
+      });
+    }
+  );
+  return { perform };
 };
 
 export const useExamination = (subjectID: string) => {
