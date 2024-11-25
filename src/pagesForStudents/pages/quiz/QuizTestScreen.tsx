@@ -57,16 +57,16 @@ const QuizTestScreen = () => {
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
   const timer = parseInt(quizData?.quiz?.instruction?.duration);
-  const timerInSeconds = timer * 3600;
+  let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {
     const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-      q.answer.toLowerCase().trim()
+      q.answer.trim()
     );
     let score = 0;
 
     correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]?.toLowerCase().trim()) {
+      if (correctAnswer === state[index]?.trim()) {
         score++;
       }
     });
@@ -80,6 +80,8 @@ const QuizTestScreen = () => {
 
     const totalquest = getQuizData?.question?.length;
 
+    timerInSeconds = 0;
+
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
       studentGrade: grade,
@@ -88,7 +90,6 @@ const QuizTestScreen = () => {
       markPerQuestion: markPerQuest,
       status: quizData.status,
     }).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         toast.success(
           `${
@@ -169,7 +170,9 @@ const QuizTestScreen = () => {
                   }
                 }}
               />
-              <p className="font-bold">Push Play to start your Test</p>
+              <p className="font-bold">
+                Push Play to start your {quizData?.status}
+              </p>
             </div>
           )}
           {/* Timer */}
