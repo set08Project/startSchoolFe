@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  getOneStudentExamSubjectPerformance,
   getOneStudentSubjectPerformance,
   getStudentPerformance,
   getStudentSubjectPerformance,
@@ -55,6 +56,28 @@ export const useOneSubjectStudentPerfomance = (
       }
     );
     return { oneStudentPerformance };
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const useOneExamSubjectStudentPerfomance = (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    const { data: oneStudentPerformanceExam } = useSWR(
+      `api/view-onesubject-exam-performance/${subjectID}/${quizID}`,
+      async () => {
+        return getOneStudentExamSubjectPerformance(subjectID, quizID).then(
+          (res) => {
+            return res?.data || [];
+          }
+        );
+      }
+    );
+    return { oneStudentPerformanceExam };
   } catch (error) {
     console.error();
     return error;

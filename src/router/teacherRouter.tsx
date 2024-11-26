@@ -7,6 +7,7 @@ import QuizDetails from "../pagesForTeachers/pages/quiz/QuizDetails";
 import CreateExamination from "../pagesForTeachers/pages/quiz/CreateExamination";
 import ExaminationPreviewScreen from "../pagesForTeachers/pages/quiz/ExaminationPreview";
 import ReportCardDesignScreen from "../pagesForTeachers/pages/CardTemplate/ReportCardDesignScreen";
+import ExamResultSetupScreen from "../pagesForTeachers/pages/quiz/ExamResultPerformance";
 
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
@@ -233,6 +234,14 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <QuizDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: "exam/details/:subjectID/:quizID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ExamResultSetupScreen />
           </Suspense>
         ),
       },

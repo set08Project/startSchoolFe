@@ -23,7 +23,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useOneSubjectStudentPerfomance } from "../../hooks/useQuizHook";
+import {
+  useOneExamSubjectStudentPerfomance,
+  useOneSubjectStudentPerfomance,
+} from "../../hooks/useQuizHook";
 
 interface iProps {
   props?: any;
@@ -39,10 +42,11 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { subjectInfo } = useSujectInfo(subjectID);
   const { perform } = useSubjectPerformance(subjectID);
 
-  const { oneStudentPerformance } = useOneSubjectStudentPerfomance(
-    subjectID,
-    subjectInfo?.quiz[subjectInfo?.quiz.length - 1]
-  );
+  const { oneStudentPerformanceExam: oneStudentPerformance } =
+    useOneExamSubjectStudentPerfomance(
+      subjectID,
+      subjectInfo?.examination[subjectInfo?.examination.length - 1]
+    );
 
   const [loading, setLoading] = useState<boolean>(false);
 

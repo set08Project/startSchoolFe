@@ -56,7 +56,7 @@ const QuizSetupScreen = () => {
                     {examination?.term} {examination?.subjectTitle}
                   </p>
                 </div>
-                <Link to={`/quiz/details/${examination?._id}`}>
+                <Link to={`/examination/details/${examination?._id}`}>
                   <MdPlayCircle
                     size={40}
                     className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"

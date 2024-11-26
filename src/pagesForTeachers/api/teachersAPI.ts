@@ -33,6 +33,22 @@ export const getStudentSubjectPerformance = async (subjectID: string) => {
   }
 };
 
+export const getOneStudentExamSubjectPerformance = async (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    return await axios
+      .get(`${URL}/view-onesubject-exam-performance/${subjectID}/${quizID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getOneStudentSubjectPerformance = async (
   subjectID: string,
   quizID: string
@@ -241,7 +257,9 @@ export const createQuiz = async (
 export const startExamination = async (examID: string) => {
   try {
     return await axios
-      .patch(`${URL}/start-subject-exam/${examID}`, { started: true })
+      .patch(`${URL}/start-subject-exam/${examID}`, {
+        started: true,
+      })
       .then((res: any) => {
         return res?.data;
       });
@@ -253,7 +271,9 @@ export const startExamination = async (examID: string) => {
 export const stopExamination = async (examID: string) => {
   try {
     return await axios
-      .patch(`${URL}/start-subject-exam/${examID}`, { started: false })
+      .patch(`${URL}/start-subject-exam/${examID}`, {
+        started: false,
+      })
       .then((res: any) => {
         return res?.data;
       });
@@ -293,6 +313,17 @@ export const createExaminationData = async (
       .then((res: any) => {
         return res?.data;
       });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const readExam = async (quizID: string) => {
+  try {
+    return await axios.get(`${URL}/view-exam/${quizID}`).then((res: any) => {
+      console.log("show exam: ", res);
+      return res?.data;
+    });
   } catch (error) {
     return error;
   }

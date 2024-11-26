@@ -18,12 +18,14 @@ import {
   viewTeacherDetail,
   viewTeacherLessonNote,
   getStudentSubjectPerformance,
+  readExam,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
   getSchoolEvent,
 } from "../../pages/api/schoolAPIs";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const localStorageProvider = () => {
   // When initializing, we restore the data from `localStorage` into SWR's internal cache:
@@ -157,6 +159,21 @@ export const useSujectQuiz = (subjectID: string) => {
     }
   );
   return { subjectQuiz };
+};
+
+const getExam = async (subjectID: string) => {
+  return await axios.get(`${URL}/view-exam/${subjectID}`).then((res) => {
+    return res.data;
+  });
+};
+
+export const useExam = (quizID: string) => {
+  const { data: examData } = useSWR(`api/view-exam/${quizID}`, () => {
+    return getExam(quizID!).then((res: any) => {
+      return res.data;
+    });
+  });
+  return { examData };
 };
 
 export const useQuiz = (quizID: string) => {
