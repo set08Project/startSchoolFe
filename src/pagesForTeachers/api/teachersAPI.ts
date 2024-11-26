@@ -20,6 +20,12 @@ export const getStudentPerformance = async (studentID: string) => {
   }
 };
 
+export const getExam = async (subjectID: string) => {
+  return await axios.get(`${URL}/view-exam/${subjectID}`).then((res) => {
+    return res.data;
+  });
+};
+
 export const getStudentSubjectPerformance = async (subjectID: string) => {
   try {
     return await axios

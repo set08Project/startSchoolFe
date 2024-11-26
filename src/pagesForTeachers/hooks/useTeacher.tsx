@@ -19,6 +19,7 @@ import {
   viewTeacherLessonNote,
   getStudentSubjectPerformance,
   readExam,
+  getExam,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -159,12 +160,6 @@ export const useSujectQuiz = (subjectID: string) => {
     }
   );
   return { subjectQuiz };
-};
-
-const getExam = async (subjectID: string) => {
-  return await axios.get(`${URL}/view-exam/${subjectID}`).then((res) => {
-    return res.data;
-  });
 };
 
 export const useExam = (quizID: string) => {
