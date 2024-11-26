@@ -23,6 +23,8 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
     });
   }, []);
 
+  console.log(subjectQuiz?.subjectClassID);
+  console.log(subjectQuiz?.classDetails);
   return (
     <div>
       <Button
@@ -48,7 +50,7 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
           formData.append("file", file);
 
           createExaminationData(
-            subjectQuiz?.subjectClassID!,
+            subjectQuiz?.classDetails!,
             subjectID!,
             formData
           )
