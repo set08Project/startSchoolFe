@@ -126,7 +126,7 @@ const QuizSetupScreen = () => {
                     {examination?.term} {examination?.subjectTitle}
                   </p>
                 </div>
-                <Link to={`/quiz/details/${subjectID}/${examination?._id}`}>
+                <Link to={`/exam/details/${subjectID}/${examination?._id}`}>
                   <MdPlayCircle
                     size={40}
                     className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"
@@ -195,7 +195,6 @@ const QuizSetupScreen = () => {
                     examination?.startExam
                       ? stopExamination(examination?._id)
                           .then((res) => {
-                            console.log("stop: ", res);
                             mutate(`api/view-subject-exam/${subjectID}`);
                           })
                           .finally(() => {
@@ -203,7 +202,6 @@ const QuizSetupScreen = () => {
                           })
                       : startExamination(examination?._id)
                           .then((res) => {
-                            console.log("start: ", res);
                             mutate(`api/view-subject-exam/${subjectID}`);
                           })
                           .finally(() => {

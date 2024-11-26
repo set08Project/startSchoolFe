@@ -9,11 +9,11 @@ import {
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import Button from "../../components/reUse/Button";
-import { useQuiz } from "../../hooks/useTeacher";
+import { useExam, useQuiz } from "../../hooks/useTeacher";
 
-const QuizSetupScreen = () => {
-  const { subjectID } = useParams();
-  const { quizID } = useParams();
+const ExamResultSetupScreen = () => {
+  const { subjectID, quizID } = useParams();
+
   const { oneStudentPerformance } = useOneExamSubjectStudentPerfomance(
     subjectID,
     quizID
@@ -21,10 +21,8 @@ const QuizSetupScreen = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { quizData } = useQuiz(quizID);
+  const { examData: quizData } = useExam(quizID);
   const students = oneStudentPerformance;
-
-  console.log("reading ", students);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -153,4 +151,4 @@ const QuizSetupScreen = () => {
   );
 };
 
-export default QuizSetupScreen;
+export default ExamResultSetupScreen;

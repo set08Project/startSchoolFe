@@ -113,6 +113,26 @@ export const viewPerformanceTest = async (studentID: string) => {
   }
 };
 
+export const performanceExamination = async (
+  studentID: string,
+  quizID: string,
+  subjectID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(
+        `${"http://localhost:2244/api"}/create-subject-exam-performance/${studentID}/${quizID}/${subjectID}`,
+        data
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const performanceTest = async (
   studentID: string,
   quizID: string,

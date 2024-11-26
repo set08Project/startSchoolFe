@@ -58,11 +58,9 @@ export const bulkUploadSchemeOfWork = async (data: any) => {
     return await axios
       .post(`${URL}/upload-schemes`, data, config)
       .then((res: any) => {
-        console.log("res", res);
         return res;
       });
   } catch (error: any) {
-    console.log("error", error.message);
     return error;
   }
 };
@@ -76,11 +74,9 @@ export const fetchSchemeOfWork = async (
     const response = await axios.get(
       `${URL}/schemes/${selectedClass}/${selectedSubject}/${selectTerm}`
     );
-    console.log(response);
-    console.log(response?.data);
+
     return response.data;
   } catch (error) {
-    console.error("Error fetching scheme of work:", error);
     return null;
   }
 };
@@ -88,8 +84,6 @@ export const fetchSchemeOfWork = async (
 export const allSchools = async () => {
   try {
     return await axios.get(`${URL}/view-all-school`).then((res: any) => {
-      // console.log(res);
-
       return res;
     });
   } catch (error: any) {
@@ -190,7 +184,6 @@ export const recordFeesPayment = async (
       });
   } catch (error: any) {
     console.error();
-    console.log(error.message);
     return error;
   }
 };
@@ -299,11 +292,9 @@ export const approveRegisterationStatus = async (email: string) => {
     return await axios
       .patch(`${URL}/approved-school-registration`, { email })
       .then((res: any) => {
-        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
-    console.log(error.message);
     return error;
   }
 };
@@ -313,11 +304,9 @@ export const approveRegisterationStatusUpdate = async (id: string) => {
     return await axios
       .patch(`${URL}/approved-school-registration/${id}`)
       .then((res: any) => {
-        console.log("res", res?.data);
         return res;
       });
   } catch (error: any) {
-    console.log(error.message);
     return error;
   }
 };
