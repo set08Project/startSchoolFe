@@ -48,7 +48,7 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
           formData.append("file", file);
 
           createExaminationData(
-            subjectQuiz?.subjectClassID!,
+            subjectQuiz?.classDetails!,
             subjectID!,
             formData
           )
