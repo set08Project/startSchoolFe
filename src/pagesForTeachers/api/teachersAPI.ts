@@ -284,7 +284,6 @@ export const createExaminationData = async (
       "content-type": "multipart/form-data",
     };
 
-    console.log(data);
     return await axios
       .post(
         `${URL}/create-subject-examination/${classID}/${subjectID}`,

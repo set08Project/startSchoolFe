@@ -23,8 +23,6 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
     });
   }, []);
 
-  console.log(subjectQuiz?.subjectClassID);
-  console.log(subjectQuiz?.classDetails);
   return (
     <div>
       <Button
