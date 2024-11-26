@@ -29,6 +29,8 @@ const ExaminationTestScreen = () => {
 
   const courseID = quizData?.subjectID;
 
+  console.log(quizData);
+
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
       ...prev,
