@@ -176,7 +176,15 @@ const ViewClassStudent: FC = () => {
                           />
                         </div>
                         <div className="w-[200px] border-r">
-                          {props?.studentFirstName} {props?.studentLastName}
+                          <p>
+                            {props?.studentFirstName} {props?.studentLastName}
+                          </p>
+                          <p>
+                            LoginID:{" "}
+                            <span className="font-semibold">
+                              {props?.enrollmentID}
+                            </span>
+                          </p>
                         </div>
 
                         <div className="w-[220px] border-r flex gap-4">

@@ -34,7 +34,7 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
         <div className="mt-6" />
         <p className="flex items-center gap-1">
           <FaStar className="ml-1 mb-1" />
-          <span>{teacherDetail?.staffRating}</span>
+          <span>{parseFloat(teacherDetail?.staffRating).toFixed(2)}</span>
         </p>
       </div>
     </div>
@@ -53,7 +53,7 @@ const ClassStudents: FC<iProps> = ({ props }) => {
       return a + b;
     }, 0) / pref?.length;
 
-  return <div className="">{rate ? rate : 0}%</div>;
+  return <div className="">{rate ? rate.toFixed(2) : 0}%</div>;
 };
 
 const ClassRoomScreen = () => {
