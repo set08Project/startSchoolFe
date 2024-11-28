@@ -85,7 +85,6 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
 
-  console.log(sortedStudents);
   return (
     <div>
       <div className="mt-4">
@@ -142,7 +141,16 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           />
                         </div>
                         <div className="w-[200px] border-r">
-                          {props?.studentFirstName} {props?.studentLastName}
+                          <p>
+                            {props?.studentFirstName} {props?.studentLastName}
+                          </p>
+
+                          <p>
+                            LoginID:{" "}
+                            <span className="font-semibold">
+                              {props?.enrollmentID}
+                            </span>
+                          </p>
                         </div>
 
                         <div className="w-[120px]">
