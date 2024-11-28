@@ -1,13 +1,39 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
-import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
-import QuizDetails from "../pagesForTeachers/pages/quiz/QuizDetails";
-import CreateExamination from "../pagesForTeachers/pages/quiz/CreateExamination";
-import ExaminationPreviewScreen from "../pagesForTeachers/pages/quiz/ExaminationPreview";
-import ReportCardDesignScreen from "../pagesForTeachers/pages/CardTemplate/ReportCardDesignScreen";
-import ExamResultSetupScreen from "../pagesForTeachers/pages/quiz/ExamResultPerformance";
+const SchemeOfWorkTable = React.lazy(
+  () =>
+    import(
+      "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork"
+    )
+);
+
+const SchemeDetails = React.lazy(
+  () =>
+    import(
+      "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails"
+    )
+);
+
+const QuizDetails = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/QuizDetails")
+);
+
+const CreateExamination = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/CreateExamination")
+);
+
+const ExaminationPreviewScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/ExaminationPreview")
+);
+
+const ReportCardDesignScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/CardTemplate/ReportCardDesignScreen")
+);
+
+const ExamResultSetupScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/quiz/ExamResultPerformance")
+);
 
 const EditLessonNote = React.lazy(
   () => import("../pagesForTeachers/pages/lessonNote/EditLessonNote")
