@@ -31,15 +31,40 @@ const SuccessPage = React.lazy(
 );
 
 const PrivateRouter = React.lazy(() => import("./PrivateRouter"));
-import SessionHistory from "../pages/page/ResultHistory/SessionHistory";
-import SuccessfulPaymentScreen from "../pages/page/payment/PaymentSuccessfulScreen";
-import DownloadTest from "../pages/page/payment/DownloadTest";
 
-import AllExpenditures from "../pages/page/expenditure/AllExpenditures";
-import SchemeOfWorkTable from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork";
-import SchemeDeatails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
-import SchemeDetails from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails";
-import ReportCardDesignAdminScreen from "../pages/page/ResultHistory/ViewingStudentRecportCard";
+const SessionHistory = React.lazy(
+  () => import("../pages/page/ResultHistory/SessionHistory")
+);
+
+const SuccessfulPaymentScreen = React.lazy(
+  () => import("../pages/page/payment/PaymentSuccessfulScreen")
+);
+
+const DownloadTest = React.lazy(
+  () => import("../pages/page/payment/DownloadTest")
+);
+
+const AllExpenditures = React.lazy(
+  () => import("../pages/page/expenditure/AllExpenditures")
+);
+
+const SchemeDetails = React.lazy(
+  () =>
+    import(
+      "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeDetails"
+    )
+);
+
+const SchemeOfWorkTable = React.lazy(
+  () =>
+    import(
+      "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/SchemeOfWork/SchemeOfWork"
+    )
+);
+
+const ReportCardDesignAdminScreen = React.lazy(
+  () => import("../pages/page/ResultHistory/ViewingStudentRecportCard")
+);
 
 const Expenditure = React.lazy(
   () => import("../pages/page/expenditure/expenditure")

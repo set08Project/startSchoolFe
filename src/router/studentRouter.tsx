@@ -2,12 +2,30 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
-import Correction from "../pagesForStudents/pages/CBT_SS3/Correction";
-import SchoolFeePaidScreen from "../pagesForStudents/schoolFee/SchoolFeePaidScreen";
-import DownloadTest from "../pagesForStudents/schoolFee/DownloadTest";
-import PrintReportCard from "../pagesForStudents/pages/CardTemplate/PrintReportCard";
-import Finances from "../pagesForStudents/pages/Finances/Finances";
-import ExaminationTestScreen from "../pagesForStudents/pages/quiz/ExaminationScreen";
+
+const Correction = React.lazy(
+  () => import("../pagesForStudents/pages/CBT_SS3/Correction")
+);
+
+const SchoolFeePaidScreen = React.lazy(
+  () => import("../pagesForStudents/schoolFee/SchoolFeePaidScreen")
+);
+
+const DownloadTest = React.lazy(
+  () => import("../pagesForStudents/schoolFee/DownloadTest")
+);
+
+const PrintReportCard = React.lazy(
+  () => import("../pagesForStudents/pages/CardTemplate/PrintReportCard")
+);
+
+const Finances = React.lazy(
+  () => import("../pagesForStudents/pages/Finances/Finances")
+);
+
+const ExaminationTestScreen = React.lazy(
+  () => import("../pagesForStudents/pages/quiz/ExaminationScreen")
+);
 
 const StudentProfile = React.lazy(
   () => import("../pagesForStudents/StudentProfile")

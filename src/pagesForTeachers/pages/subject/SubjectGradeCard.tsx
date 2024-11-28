@@ -58,30 +58,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [test4, setTest4] = useState("");
   const [exam, setExam] = useState("");
 
-  const makeGrade = () => {
-    try {
-      setLoading(true);
-      createGradeScore(teacherInfo?._id, props?._id, {
-        subject: subjectInfo?.subjectTitle,
-        test1: parseInt(test1),
-        test2: parseInt(test2),
-        test3: parseInt(test3),
-        test4: parseInt(test4),
-        exam: parseInt(exam),
-      }).then((res) => {
-        setLoading(false);
-        if (res.status === 201) {
-          mutate(`api/student-report-card/${props?._id}`);
-          toast.success("Grade added");
-        } else {
-          toast.error("Grade denied");
-        }
-      });
-    } catch (error: any) {
-      return error.stack;
-    }
-  };
-
   const { gradeData } = useStudentGrade(props?._id);
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
@@ -106,6 +82,30 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     return readData;
   };
 
+  const makeGrade = () => {
+    try {
+      setLoading(true);
+      createGradeScore(teacherInfo?._id, props?._id, {
+        subject: subjectInfo?.subjectTitle,
+        test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
+        test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
+        test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
+        test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
+        exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
+      }).then((res) => {
+        setLoading(false);
+        if (res.status === 201) {
+          mutate(`api/student-report-card/${props?._id}`);
+          toast.success("Grade added");
+        } else {
+          toast.error("Grade denied");
+        }
+      });
+    } catch (error: any) {
+      return error.stack;
+    }
+  };
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -128,7 +128,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.points} /{result?.score} -{" "}
+        {result?.mark} /{result?.score} -{" "}
         <span className="font-bold text-[12px]">{result?.grade}</span>
       </div>
       <div className="w-[100px] border-r">
