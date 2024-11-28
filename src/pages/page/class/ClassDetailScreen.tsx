@@ -129,7 +129,7 @@ const StaffDetail: FC<iProps> = ({ props }) => {
         </p>
         <p className="text-[12px] mt-2 flex items-center gap-1">
           <span className="font-bold text-[15px]">
-            {(teacherDetail?.staffRating).toFixed(2)}
+            {teacherDetail?.staffRating?.toFixed(2)}
           </span>{" "}
         </p>
       </p>

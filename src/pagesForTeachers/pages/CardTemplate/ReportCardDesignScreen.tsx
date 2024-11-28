@@ -197,6 +197,8 @@ const ReportCardDesignScreen: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  console.log(grade);
+
   return (
     <div ref={contentRef}>
       {/* <button onClick={downloadPDF}>Download PDF</button> */}
