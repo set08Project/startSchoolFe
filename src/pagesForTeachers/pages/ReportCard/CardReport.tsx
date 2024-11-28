@@ -385,7 +385,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <input
             className="w-16 h-10 border p-2  mr-16"
             placeholder={
-              gradeData?.reportCard[0].softSkill[0]?.[`communication`]
+              gradeData?.reportCard[0]?.softSkill[0]?.[`communication`]
             }
             value={communication}
             onChange={(e) => setCommunication(e.target.value)}
@@ -395,7 +395,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <label className="text-[9px] uppercase">Leadership</label>
           <input
             className="w-16 h-10 border p-2 mr-6"
-            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`leadership`]}
+            placeholder={gradeData?.reportCard[0]?.softSkill[0]?.[`leadership`]}
             value={leadership}
             onChange={(e) => setLeadership(e.target.value)}
           />
@@ -404,7 +404,9 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <label className="text-[9px] uppercase">Punctuality</label>
           <input
             className="w-16 h-10 border p-2 mr-8"
-            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`punctuality`]}
+            placeholder={
+              gradeData?.reportCard[0]?.softSkill[0]?.[`punctuality`]
+            }
             value={punctuality}
             onChange={(e) => setPunctuality(e.target.value)}
           />
@@ -413,7 +415,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <label className="text-[9px] uppercase">Empathy</label>
           <input
             className="w-16 h-10 border p-2 "
-            placeholder={gradeData?.reportCard[0].softSkill[0]?.[`empathy`]}
+            placeholder={gradeData?.reportCard[0]?.softSkill[0]?.[`empathy`]}
             value={empathy}
             onChange={(e) => setEmpathy(e.target.value)}
           />
@@ -426,7 +428,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <input
             className="w-16 h-10 border p-2 ml-2 mr-6"
             placeholder={
-              gradeData?.reportCard[0].peopleSkill[0]?.[`confidence`]
+              gradeData?.reportCard[0]?.peopleSkill[0]?.[`confidence`]
             }
             value={confidence}
             onChange={(e) => setConfidence(e.target.value)}
@@ -438,7 +440,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2 mr-14"
             value={presentational}
             placeholder={
-              gradeData?.reportCard[0].peopleSkill[0]?.[`presentational`]
+              gradeData?.reportCard[0]?.peopleSkill[0]?.[`presentational`]
             }
             onChange={(e) => setPresentational(e.target.value)}
           />
@@ -449,7 +451,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2 mr-10"
             value={hardworking}
             placeholder={
-              gradeData?.reportCard[0].peopleSkill[0]?.[`hardworking`]
+              gradeData?.reportCard[0]?.peopleSkill[0]?.[`hardworking`]
             }
             onChange={(e) => setHardworking(e.target.value)}
           />
@@ -459,7 +461,9 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <input
             className="w-16 h-10 border p-2 "
             value={resilient}
-            placeholder={gradeData?.reportCard[0].peopleSkill[0]?.[`resilient`]}
+            placeholder={
+              gradeData?.reportCard[0]?.peopleSkill[0]?.[`resilient`]
+            }
             onChange={(e) => setResilient(e.target.value)}
           />
         </div>
@@ -471,7 +475,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2 ml-2 mr-6"
             value={sportship}
             placeholder={
-              gradeData?.reportCard[0].physicalSkill[0]?.[`sportship`]
+              gradeData?.reportCard[0]?.physicalSkill[0]?.[`sportship`]
             }
             onChange={(e) => setSportship(e.target.value)}
           />
