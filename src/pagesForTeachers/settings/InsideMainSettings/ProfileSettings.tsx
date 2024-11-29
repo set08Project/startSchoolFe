@@ -18,6 +18,9 @@ const ProfileSettings = () => {
   const [address, setAddress] = useState<string>("");
   const [phonenum, setPhonenum] = useState<string>("");
 
+  const [signature, setSignature] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   // Teacher and School
   const { teacherInfo } = useTeacherInfo();
   const schoolID = teacherInfo?.schoolIDs;
@@ -188,6 +191,30 @@ const ProfileSettings = () => {
           </div>
         </div>
       </div>
+      <div className="mt-10 border p-5 uppercase">
+        {teacherInfo?.signature ? (
+          <img
+            className="w-[200px] h-[120px] border mb-10 flex justify-center items-center object-contain"
+            src={teacherInfo?.signature}
+          />
+        ) : (
+          <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
+            <p>NO SIGNATURE YET</p>
+          </div>
+        )}
+        <div>
+          {signature ? (
+            <button className=" bg-red-500 text-white px-[45px] py-4 rounded-md text-[12px]">
+              {loading ? "Loading..." : "upload Signature"}
+            </button>
+          ) : (
+            <label className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px]">
+              Update Signature
+            </label>
+          )}
+        </div>
+      </div>
+
       {/* Dropdown Modal For Editing */}
       {dropdown && (
         <div className="absolute w-full h-full flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm">
