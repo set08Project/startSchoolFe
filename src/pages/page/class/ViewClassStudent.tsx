@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pix from "../../../assets/pix.jpg";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
@@ -26,6 +27,9 @@ import {
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import crypto from "crypto";
 import { useStudentInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import { udatedStudentBulkInfo } from "../../../pagesForTeachers/api/teachersAPI";
+import { mutate } from "swr";
+import { MdClose } from "react-icons/md";
 
 interface iProps {
   props?: any;
@@ -128,6 +132,19 @@ const ViewClassStudent: FC = () => {
   const sortedStudents = allStudents?.sort((a, b) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
+  let el = classID;
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [toggleValue, setToggleValue] = useState<string>("");
+
+  const updated = (id: string) => {
+    setToggle(true);
+    setToggleValue(id);
+  };
+
+  const updatedOff = () => {
+    setToggle(false);
+    setToggleValue("");
+  };
 
   return (
     <div>
@@ -157,9 +174,9 @@ const ViewClassStudent: FC = () => {
 
           <div>
             {sortedStudents?.length > 0 ? (
-              <div className=" w-[2120px] overflow-hidden">
+              <div className="relative w-[2120px] overflow-hidden">
                 {sortedStudents?.map((props: any, i: number) => (
-                  <div>
+                  <div className="">
                     <div>
                       <div
                         key={props}
@@ -286,16 +303,27 @@ const ViewClassStudent: FC = () => {
                         <div className="w-[80px] border-r">
                           {Math.ceil(Math.random() * (5 - 1)) + 1} of 5
                         </div>
-                        <Link
-                          to={`/view-students/student-details/${props?._id}`}
-                          className="w-[180px] border-r"
-                        >
-                          <Button
-                            name="View Detail"
-                            className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                            onClick={() => {}}
-                          />
-                        </Link>
+                        <div className="w-[180px] border-r flex gap-1">
+                          <div className="w-[80px] relative">
+                            <Button
+                              name="Edit"
+                              className="pl-5 py-3 w-[92%] bg-blue-950 text-white  hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                updated(props?._id);
+                              }}
+                            />
+                          </div>
+                          <Link
+                            to={`student-details/:studentID`}
+                            className="w-[80px]"
+                          >
+                            <Button
+                              name="View"
+                              className="pl-5 py-3 w-[92%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                              onClick={() => {}}
+                            />
+                          </Link>
+                        </div>
                         {/* <Link
                           to={`/view-students-report-card/${props?._id}`}
                           className="w-[180px] border-r"
@@ -309,6 +337,37 @@ const ViewClassStudent: FC = () => {
 
                         <View props={props} />
                       </div>
+                    </div>
+
+                    <div>
+                      {toggle && toggleValue === props?._id && (
+                        <div className="absolute z-10 border backdrop-blur-sm top-2 right-96 h-[90%] w-[250px] overflow-auto">
+                          <div className="flex flex-col items-center justify-center px-4 py-1 mt-3">
+                            <MdClose
+                              size={13}
+                              onClick={() => {
+                                updatedOff();
+                              }}
+                              className="cursor-pointer text-[25px]"
+                            />
+                            <p className="mt-3 text-[15px] ">
+                              Updating{" "}
+                              <span className="font-semibold italic">
+                                {props?.studentFirstName}{" "}
+                                {props?.studentLastName}{" "}
+                              </span>
+                              Information
+                            </p>
+
+                            <EditStudentDetails
+                              el={el}
+                              props={props}
+                              setToggleValue={setToggleValue}
+                              setToggle={setToggle}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -331,6 +390,127 @@ const ViewClassStudent: FC = () => {
 };
 
 export default ViewClassStudent;
+
+const EditStudentDetails: FC<any> = ({
+  props,
+  el,
+  setToggleValue,
+  setToggle,
+}) => {
+  const [firstName, setFirstName] = useState(props?.studentFirstName);
+  const [lastName, setLastName] = useState(props?.studentLastName);
+  const [studentAddress, setStudentAddress] = useState(props?.studentAddress);
+  const [phone, setPhone] = useState(props?.phone);
+  const [parentEmail, setParentEmail] = useState(props?.parentEmail);
+  const [parentPhoneNumber, setParentPhoneNumber] = useState(
+    props?.parentPhoneNumber
+  );
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  return (
+    <div className="flex flex-col h-[] overflow-auto ">
+      <div className="flex flex-col mt-5">
+        <label className="text-[12px] font-semibold ">First Name</label>
+        <input
+          type="text"
+          className="text-[15px] w-full py-2 px-1 border rounded-md"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <label className="text-[12px] font-semibold ">Last Name</label>
+        <input
+          type="text"
+          className="text-[15px] w-full py-2 px-1 border rounded-md"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <label className="text-[12px] font-semibold ">Phone Number</label>
+        <input
+          type="text"
+          className="text-[15px] w-full py-2 px-1 border rounded-md"
+          placeholder="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <label className="text-[12px] font-semibold ">Parent Email</label>
+        <input
+          type="text"
+          className="text-[15px] w-full py-2 px-1 border rounded-md"
+          placeholder="Parent Email"
+          value={parentEmail}
+          onChange={(e) => setParentEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <label className="text-[12px] font-semibold ">
+          Parent Phone Number
+        </label>
+        <input
+          type="text"
+          className="text-[15px] w-full py-2 px-1 border rounded-md"
+          placeholder="Parent Phone"
+          value={parentPhoneNumber}
+          onChange={(e) => setParentPhoneNumber(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <label className="text-[12px] font-semibold ">Student Address</label>
+        <textarea
+          className="text-[15px] w-full py-2 px-1 border rounded-md resize-none min-h-[60px]"
+          placeholder="Student Address"
+          value={studentAddress}
+          onChange={(e) => setStudentAddress(e.target.value)}
+        />
+      </div>
+
+      <div className="mt-3 flex gap-2">
+        <Button
+          disabled={loading}
+          name={loading ? "Loading..." : "Update"}
+          className={`py-3 w-[92%] ${
+            loading
+              ? "bg-red-400 animate-pulse cursor-not-allowed"
+              : "bg-red-500"
+          } text-white  hover:bg-red-400 transition-all duration-300  `}
+          onClick={() => {
+            setLoading(true);
+            udatedStudentBulkInfo(props?._id, {
+              phone,
+              studentFirstName: firstName,
+              studentLastName: lastName,
+              parentEmail,
+              parentPhoneNumber,
+            })
+              .then((res) => {
+                if (res.status === 201) {
+                  mutate(`api/view-all-class-students/${el}`);
+                }
+              })
+              .finally(() => {
+                setLoading(false);
+                setToggle(false);
+                setToggleValue("");
+              });
+          }}
+        />
+      </div>
+    </div>
+  );
+};
 
 const View: FC<any> = ({ props }) => {
   const { gradeData } = useStudentGrade(props?._id!);
