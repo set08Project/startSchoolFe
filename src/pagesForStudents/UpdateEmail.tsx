@@ -34,16 +34,16 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
       studentInfo?._id,
       parentPhoneNumber
     ).then((res: any) => {
-      if (res?.status === 200) {
-        toast.success("Parent's email added/updated successfully");
-        // mutate(`api/view-student-info/${studentInfo?._id}`);
+      if (res?.status === 201) {
+        toast.success("Parent's phone number added/updated successfully");
+        mutate(`api/view-student-info/${studentInfo?._id}`);
 
         setTimeout(() => {
           setStated(false);
           setViewState(true);
         }, 1000);
       } else if (res?.status === 404 || !res?.status) {
-        toast.error("Couldn't update parent's email");
+        toast.error("Couldn't update parent's phone number");
       }
     });
   };
