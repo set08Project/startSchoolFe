@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { mutate } from "swr";
 import { useReadMyClassInfoData, useStudentInfo } from "./hooks/useStudentHook";
 import { useClassSubject } from "../pagesForTeachers/hooks/useTeacher";
-import { updateStudentParentEmail } from "./api/studentAPI";
+import { updateStudentParentNumber } from "./api/studentAPI";
 import Input from "../components/reUse/Input";
 import Button from "../components/reUse/Button";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -19,7 +19,7 @@ interface iProps {
 const UpdateEmail: FC<iProps> = ({ props }) => {
   const navigate = useNavigate();
   const [stated, setStated] = useState<boolean>(false);
-  const [parentEmail, setParentEmail] = useState<string>("");
+  const [parentPhoneNumber, setParentPhoneNumber] = useState<string>("");
 
   const { studentInfo } = useStudentInfo();
 
@@ -29,10 +29,10 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
   const onCreateAssignment = () => {
     setStated(true);
 
-    updateStudentParentEmail(
+    updateStudentParentNumber(
       studentInfo?.schoolIDs,
       studentInfo?._id,
-      parentEmail
+      parentPhoneNumber
     ).then((res: any) => {
       if (res?.status === 200) {
         toast.success("Parent's email added/updated successfully");
@@ -57,18 +57,18 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
         <div />
         <input
           type="checkbox"
-          checked={studentInfo?.parentEmail ? false : true}
+          checked={studentInfo?.parentPhoneNumber ? false : true}
           id="update_email"
           className="modal-toggle"
-          value={parentEmail}
+          value={parentPhoneNumber}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setParentEmail(e.target.value);
+            setParentPhoneNumber(e.target.value);
           }}
         />
         <div className="modal bgw text-blue-950 text-left">
           <div className="modal-box bg-gray-100 rounded-md">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Input Parent's Email</p>
+              <p className="font-bold">Input Parent's Phone Number</p>
 
               <label
                 htmlFor="update_email"
@@ -79,18 +79,18 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
             </div>
             <hr />
             <div className="mt-2 leading-tight text-[13px] font-medium">
-              Provide the email address of the parent or guardian associated
+              Provide the phone number of your parent or guardian associated
               with this student.
               <br />
               <br />
               <div className="flex gap-2  items-center">
                 <p>
-                  Parent's Email:{" "}
-                  <span className="font-medium">{parentEmail}</span>
+                  Parent's Phone Number:{" "}
+                  <span className="font-medium">{parentPhoneNumber}</span>
                 </p>
-                {parentEmail.length > 0 && (
+                {parentPhoneNumber.length > 0 && (
                   <div className="flex items-center font-bold">
-                    <span>Email provided</span>
+                    <span>Phone Number provided</span>
                     <MdCheck className="text-green-500 text-[25px] mb-1 " />
                   </div>
                 )}
@@ -101,15 +101,15 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
                 <div className="flex w-full gap-2 mb-10">
                   <div className="w-full">
                     <label className="font-medium text-[12px]">
-                      Parent's Email Address{" "}
+                      Parent's Phone Number{" "}
                       <span className="text-red-500">*</span>
                     </label>
 
                     <Input
                       className="w-[95%]"
-                      value={parentEmail}
+                      value={parentPhoneNumber}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setParentEmail(e.target.value)
+                        setParentPhoneNumber(e.target.value)
                       }
                     />
                   </div>
@@ -118,7 +118,7 @@ const UpdateEmail: FC<iProps> = ({ props }) => {
             </div>
 
             <div className="w-full flex justify-end transition-all duration-300">
-              {parentEmail !== "" ? (
+              {parentPhoneNumber !== "" ? (
                 <label
                   htmlFor="update_email"
                   className="bg-blue-950 text-white py-4 px-8 rounded-md flex items-center gap-2 cursor-pointer "
