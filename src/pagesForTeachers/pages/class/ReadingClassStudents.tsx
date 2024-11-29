@@ -15,6 +15,7 @@ import { useStudentInfoData } from "../../../pagesForStudents/hooks/useStudentHo
 import { MdClose, MdCloseFullscreen } from "react-icons/md";
 import { udatedStudentBulkInfo } from "../../api/teachersAPI";
 import { mutate } from "swr";
+import toast, { Toaster } from "react-hot-toast";
 
 interface iProps {
   props?: any;
@@ -104,6 +105,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
 
   return (
     <div>
+      <Toaster />
       <div className="mt-4">
         <div className=" py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
           <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
@@ -391,6 +393,7 @@ const EditStudentDetails: FC<any> = ({
             })
               .then((res) => {
                 if (res.status === 201) {
+                  toast.success("Student Information Updated");
                   mutate(`api/view-all-class-students/${el}`);
                 }
               })

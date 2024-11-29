@@ -180,7 +180,7 @@ const Layout: FC = () => {
         </div>
       </div>
 
-      {!studentInfo?.parentEmail && <UpdateEmail />}
+      {!studentInfo?.parentPhoneNumber && <UpdateEmail />}
 
       {schl?.freeMode ? null : (
         <div>
