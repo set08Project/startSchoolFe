@@ -9,6 +9,7 @@ import {
   changeSchoolPersonalName,
   changeSchoolPhone,
   deleteAllStudent,
+  updateSchoolSignature,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -27,6 +28,10 @@ const PersonalInfoScreen = () => {
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
   const [toggle3, setToggle3] = useState<boolean>(false);
+
+  const [loadingData, setLoadingData] = useState<boolean>(false);
+
+  const [signature, setSignature] = useState<string>("");
 
   const [firstName, setFirstName] = useState<string>(
     `${data?.name ? data?.name : ""}`
@@ -328,7 +333,7 @@ const PersonalInfoScreen = () => {
 
       {/* forms */}
       <div>
-        <div className="flex w-full justify-between h-[100px] relative mt-10 ">
+        <div className="flex w-full justify-between h-[70px] relative mt-10 ">
           {" "}
           <div>
             <div>Change School Name</div>
@@ -402,7 +407,7 @@ const PersonalInfoScreen = () => {
                       <div></div>
                     ) : (
                       <div>
-                        school Name:{" "}
+                  updateSchoolSignature      school Name:{" "}
                         <strong className="font-medium">
                           {data?.schoolName}
                         </strong>
@@ -410,6 +415,67 @@ const PersonalInfoScreen = () => {
                     )}
                   </div>
                 )} */}
+
+                <div className="mt-40  p-5 uppercase">
+                  {data?.signature ? (
+                    <img
+                      src={data?.signature}
+                      className="w-[200px] h-[120px] border mb-10 object-contain"
+                    />
+                  ) : (
+                    <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
+                      <p>NO SIGNATURE YET</p>
+                    </div>
+                  )}
+                  <div>
+                    {signature ? (
+                      <button
+                        className={`bg-red-500 ${
+                          loading
+                            ? "cursor-not-allowed bg-red-400 animate-pulse"
+                            : "cursor-pointer"
+                        } text-white px-[45px] py-4 rounded-md text-[12px]`}
+                        disabled={loading}
+                        onClick={() => {
+                          setLoading(true);
+                          const formData: any = new FormData();
+                          formData.append("avatar", signature);
+                          updateSchoolSignature(data?._id, formData)
+                            .then((res) => {
+                              if (res.status === 201) {
+                                toast.success("signature updated successfully");
+                                mutate(`api/api/view-school/${data?._id}`);
+                              } else {
+                                toast.error("signature updated Error");
+                              }
+                            })
+                            .finally(() => {
+                              setLoading(false);
+                            });
+                        }}
+                      >
+                        {loading ? "Loading..." : "upload Signature"}
+                      </button>
+                    ) : (
+                      <div>
+                        <label
+                          htmlFor="signature-upload"
+                          className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
+                        >
+                          Update Signature
+                        </label>
+                        <input
+                          className="hidden"
+                          type="file"
+                          id="signature-upload"
+                          onChange={(e: any) => {
+                            setSignature(e.target.files[0]);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
