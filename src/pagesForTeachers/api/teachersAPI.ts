@@ -216,6 +216,18 @@ export const readClassInfoStudent = async (classID: string) => {
   }
 };
 
+export const updateTeacherSignature = async (teacherID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/upload-staff-signature/${teacherID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readTeacherSchedule = async (teacherID: string) => {
   try {
     return await axios

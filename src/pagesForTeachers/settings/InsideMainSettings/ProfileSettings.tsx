@@ -4,6 +4,7 @@ import {
   updateTeacherFullName,
   updateTeacherGender,
   updateTeacherPhoneNum,
+  updateTeacherSignature,
 } from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import toast, { Toaster } from "react-hot-toast";
@@ -204,7 +205,14 @@ const ProfileSettings = () => {
         )}
         <div>
           {signature ? (
-            <button className=" bg-red-500 text-white px-[45px] py-4 rounded-md text-[12px]">
+            <button
+              className=" bg-red-500 text-white px-[45px] py-4 rounded-md text-[12px]"
+              disabled={loading}
+              onClick={() => {
+                setLoading(true);
+                updateTeacherSignature(teacherInfo?._id, "");
+              }}
+            >
               {loading ? "Loading..." : "upload Signature"}
             </button>
           ) : (
