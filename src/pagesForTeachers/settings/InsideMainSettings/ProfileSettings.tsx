@@ -4,12 +4,14 @@ import {
   updateTeacherFullName,
   updateTeacherGender,
   updateTeacherPhoneNum,
+  updateTeacherSignature,
 } from "../../api/teachersAPI";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import { CgClose } from "react-icons/cg";
+import { mutate } from "swr";
 
 const ProfileSettings = () => {
   const [dropdown, setDropdown] = useState<string | null>(null);
@@ -18,10 +20,15 @@ const ProfileSettings = () => {
   const [address, setAddress] = useState<string>("");
   const [phonenum, setPhonenum] = useState<string>("");
 
+  const [signature, setSignature] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   // Teacher and School
   const { teacherInfo } = useTeacherInfo();
   const schoolID = teacherInfo?.schoolIDs;
   const staffID = teacherInfo?._id;
+
+  console.log(teacherInfo?.signature);
 
   const handleNameChange = () => {
     try {
@@ -188,6 +195,67 @@ const ProfileSettings = () => {
           </div>
         </div>
       </div>
+      <div className="mt-10 border p-5 uppercase">
+        {teacherInfo?.signature ? (
+          <img
+            src={teacherInfo?.signature}
+            className="w-[200px] h-[120px] border mb-10 object-cover"
+          />
+        ) : (
+          <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
+            <p>NO SIGNATURE YET</p>
+          </div>
+        )}
+        <div>
+          {signature ? (
+            <button
+              className={`bg-red-500 ${
+                loading
+                  ? "cursor-not-allowed bg-red-400 animate-pulse"
+                  : "cursor-pointer"
+              } text-white px-[45px] py-4 rounded-md text-[12px]`}
+              disabled={loading}
+              onClick={() => {
+                setLoading(true);
+                const formData: any = new FormData();
+                formData.append("avatar", signature);
+                updateTeacherSignature(teacherInfo?._id, formData)
+                  .then((res) => {
+                    if (res.status === 201) {
+                      toast.success("signature updated successfully");
+                      mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
+                    } else {
+                      toast.error("signature updated Error");
+                    }
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }}
+            >
+              {loading ? "Loading..." : "upload Signature"}
+            </button>
+          ) : (
+            <div>
+              <label
+                htmlFor="signature-upload"
+                className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
+              >
+                Update Signature
+              </label>
+              <input
+                className="hidden"
+                type="file"
+                id="signature-upload"
+                onChange={(e: any) => {
+                  setSignature(e.target.files[0]);
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Dropdown Modal For Editing */}
       {dropdown && (
         <div className="absolute w-full h-full flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm">

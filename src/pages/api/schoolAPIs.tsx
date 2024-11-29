@@ -187,6 +187,19 @@ export const recordFeesPayment = async (
     return error;
   }
 };
+export const updateSchoolSignature = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/upload-school-signature/${schoolID}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
 
 export const updateClassName = async (
   schoolID: string,
