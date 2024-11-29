@@ -725,6 +725,19 @@ export const reportCardRemark = async (
   }
 };
 
+export const udatedStudentBulkInfo = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-student-bulk-info/${studentID}`, data)
+
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const psychoReportCardRemark = async (
   teacherID: string,
   studentID: string,
