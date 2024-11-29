@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
 import Button from "../../components/reUse/Button";
 import { CgClose } from "react-icons/cg";
+import { mutate } from "swr";
 
 const ProfileSettings = () => {
   const [dropdown, setDropdown] = useState<string | null>(null);
@@ -26,6 +27,8 @@ const ProfileSettings = () => {
   const { teacherInfo } = useTeacherInfo();
   const schoolID = teacherInfo?.schoolIDs;
   const staffID = teacherInfo?._id;
+
+  console.log(teacherInfo?.signature);
 
   const handleNameChange = () => {
     try {
@@ -195,8 +198,8 @@ const ProfileSettings = () => {
       <div className="mt-10 border p-5 uppercase">
         {teacherInfo?.signature ? (
           <img
-            className="w-[200px] h-[120px] border mb-10 flex justify-center items-center object-contain"
             src={teacherInfo?.signature}
+            className="w-[200px] h-[120px] border mb-10 object-cover"
           />
         ) : (
           <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
@@ -206,19 +209,49 @@ const ProfileSettings = () => {
         <div>
           {signature ? (
             <button
-              className=" bg-red-500 text-white px-[45px] py-4 rounded-md text-[12px]"
+              className={`bg-red-500 ${
+                loading
+                  ? "cursor-not-allowed bg-red-400 animate-pulse"
+                  : "cursor-pointer"
+              } text-white px-[45px] py-4 rounded-md text-[12px]`}
               disabled={loading}
               onClick={() => {
                 setLoading(true);
-                updateTeacherSignature(teacherInfo?._id, "");
+                const formData: any = new FormData();
+                formData.append("avatar", signature);
+                updateTeacherSignature(teacherInfo?._id, formData)
+                  .then((res) => {
+                    if (res.status === 201) {
+                      toast.success("signature updated successfully");
+                      mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
+                    } else {
+                      toast.error("signature updated Error");
+                    }
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
               }}
             >
               {loading ? "Loading..." : "upload Signature"}
             </button>
           ) : (
-            <label className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px]">
-              Update Signature
-            </label>
+            <div>
+              <label
+                htmlFor="signature-upload"
+                className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
+              >
+                Update Signature
+              </label>
+              <input
+                className="hidden"
+                type="file"
+                id="signature-upload"
+                onChange={(e: any) => {
+                  setSignature(e.target.files[0]);
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
