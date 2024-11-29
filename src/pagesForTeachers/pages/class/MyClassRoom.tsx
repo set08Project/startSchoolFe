@@ -1,9 +1,9 @@
 document.title = "class room Detail's Page";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { MdCheck, MdClose, MdDelete, MdHistory } from "react-icons/md";
+import { MdDelete, MdHistory } from "react-icons/md";
 import { FC, useEffect, useState } from "react";
-
+import { FaAddressBook } from "react-icons/fa";
 import {
   useClassSubject,
   useTeacherInfo,
@@ -34,8 +34,10 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
             >
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
-                <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                  <MdDelete className="hover:text-blue-900" />
+                <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-100 cursor-pointer flex justify-center items-center">
+                  <Link to={`/test-exam-grade/${props?._id}`}>
+                    <FaAddressBook className="hover:text-blue-900" />
+                  </Link>
                 </div>
               </div>
               <div className="flex">
