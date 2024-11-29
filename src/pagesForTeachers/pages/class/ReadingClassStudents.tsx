@@ -106,7 +106,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
     <div>
       <div className="mt-4">
         <div className=" py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-          <div className="text-[gray] w-[1720px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
+          <div className="text-[gray] w-[1920px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
             <div className="w-[50px] border-r">S/N</div>
             <div className="w-[100px] border-r">
               student
@@ -119,8 +119,9 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
 
             <div className="w-[100px] border-r">Student Class</div>
 
-            <div className="w-[150px] border-r">Gender</div>
-            <div className="w-[200px] border-r">Address </div>
+            <div className="w-[150px] border-r">Phone Number</div>
+            <div className="w-[300px] border-r">Address </div>
+            <div className="w-[100px] border-r">Gender </div>
 
             <div className="w-[200px] border-r">Performance Ratio</div>
 
@@ -139,7 +140,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
 
           <div>
             {sortedStudents?.length > 0 ? (
-              <div className="relative w-[1720px] overflow-hidden">
+              <div className="relative w-[1920px] overflow-hidden">
                 {sortedStudents?.map((props: any, i: number) => (
                   <div>
                     <div>
@@ -184,7 +185,12 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                         <div className="w-[150px] border-r  ">
                           {props?.phone ? props.phone : "no phone yet"}
                         </div>
-                        <div className="w-[200px] border-r  ">
+                        <div className="w-[300px] border-r  ">
+                          {props?.gender
+                            ? props.studentAddress
+                            : "no adddress added"}
+                        </div>
+                        <div className="w-[100px] border-r">
                           {props?.gender ? props.gender : "no gender added"}
                         </div>
                         <div className="w-[200px] border-r  ">
