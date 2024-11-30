@@ -412,6 +412,15 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
+            path: "scan-clocking",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewStaffScreen />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
             path: "view-staff",
             element: (
               <Suspense fallback={<LoadingScreen />}>

@@ -207,6 +207,13 @@ const HomeScreen = () => {
               Quick Action
             </p>
             <div>
+              <Link to="/scan">
+                <Button
+                  name="Scan Clocking"
+                  className="bg-slate-800 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                />
+              </Link>
+
               <Button
                 name="Push Announcement"
                 className="bg-black hover:bg-neutral-800 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
