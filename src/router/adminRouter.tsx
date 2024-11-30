@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import ClockingScreen from "../pages/page/clocking/ClockingScreen";
 
 const PersonalSetting = React.lazy(
   () => import("../pages/page/settings/PersonalSetting")
@@ -415,7 +416,7 @@ export const adminRouter = createBrowserRouter([
             path: "scan-clocking",
             element: (
               <Suspense fallback={<LoadingScreen />}>
-                <ViewStaffScreen />
+                <ClockingScreen />
               </Suspense>
             ),
           },
