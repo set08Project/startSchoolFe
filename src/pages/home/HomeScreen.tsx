@@ -192,7 +192,7 @@ const HomeScreen = () => {
     <div>
       <LittleHeader name={"Dashboard"} />
       <div className=" relative grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 ">
-        <div className="mt-44 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3   rounded-md h-[100%]">
+        <div className="mt-56 sm:mt-0 col-span-1 sm:col-span-2 md:col-span-3 rounded-md h-[100%]">
           <div className="w-full min-h-[130px] bg-blue-950 rounded-lg text-white p-3 mt-8">
             <p className="text-[20px] mb-2">Announcement/Event</p>
             <Announcement />
@@ -207,7 +207,7 @@ const HomeScreen = () => {
               Quick Action
             </p>
             <div>
-              <Link to="/scan-clocking">
+              <Link to="/scan-clocking ">
                 <Button
                   name="Scan Clocking"
                   className="bg-slate-800 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
