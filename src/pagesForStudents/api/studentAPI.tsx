@@ -6,6 +6,32 @@ const URL: string = "https://startschoolbe-1.onrender.com/api";
 
 // const URL: string = "https://server.justnext.com.ng/api";
 
+export const clockIn = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/student-clock-in/${schoolID}/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const clockOut = async (schoolID: string, studentID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/student-clock-out/${schoolID}/${studentID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getQuizRecord = async (studentID: string) => {
   try {
     return await axios
