@@ -159,51 +159,58 @@ const Sider = () => {
               onChange={(e) => setEnrollmentID(e.target.value)}
             />
             <Button
-              name="Clock-in/Clock-Out"
-              className="bg-red-500 text-white border-none font-medium py-4 px-4 text-[12px] uppercase leading-tight"
+              name={loading ? "clocking student..." : "Clock-in/Clock-Out"}
+              disabled={loading}
+              className={`${
+                loading
+                  ? "bg-red-400 cursor-not-allowed animate-pulse "
+                  : "bg-red-500"
+              } text-white border-none font-medium py-4 px-4 text-[12px] uppercase leading-tight`}
               onClick={() => {
                 setLoading(true);
 
-                findStudentWidthID(enrollmentID).then((res) => {
-                  if (res.status === 200) {
-                    console.log(res);
-                    if (!res.data?.data?.clockIn) {
-                      clockIn(
-                        res.data?.data?.schoolIDs,
-                        res.data?.data?._id
-                      ).then((res) => {
-                        if (res.status === 201) {
-                          toast.success(
-                            `${res.data?.studentFirstName}, has been clock in`
-                          );
-                        } else {
-                          toast.error(
-                            "student has been clocked in yet, Please try again!"
-                          );
-                        }
-                      });
+                findStudentWidthID(enrollmentID)
+                  .then((res) => {
+                    if (res.status === 200) {
+                      if (!res.data?.data?.clockIn) {
+                        clockIn(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock in`
+                            );
+                          } else {
+                            toast.error(
+                              "student has been clocked in yet, Please try again!"
+                            );
+                          }
+                        });
+                      } else {
+                        clockOut(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock out`
+                            );
+                          } else {
+                            toast.error(
+                              "student has been clocked out yet, Please try again!"
+                            );
+                          }
+                        });
+                      }
                     } else {
-                      clockOut(
-                        res.data?.data?.schoolIDs,
-                        res.data?.data?._id
-                      ).then((res) => {
-                        if (res.status === 201) {
-                          toast.success(
-                            `${res.data?.studentFirstName}, has been clock out`
-                          );
-                        } else {
-                          toast.error(
-                            "student has been clocked out yet, Please try again!"
-                          );
-                        }
-                      });
+                      toast.error("something went wrong");
                     }
-                  } else {
-                    toast.error("something went wrong");
-                  }
-                });
-
-                // handleDisplayStaff();
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                    setEnrollmentID("");
+                  });
               }}
             />
           </div>
