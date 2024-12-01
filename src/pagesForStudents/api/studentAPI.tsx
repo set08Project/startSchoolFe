@@ -27,6 +27,7 @@ export const clockOutWidthID = async (
     return await axios
       .patch(`${URL}/student-clock-out-with-id/${schoolID}`, { enrollmentID })
       .then((res) => {
+        console.log("Student clockOut: ", res);
         return res?.data;
       });
   } catch (error) {
@@ -34,12 +35,13 @@ export const clockOutWidthID = async (
     return error;
   }
 };
+
 export const findStudentWidthID = async (enrollmentID: string) => {
   try {
     return await axios
       .post(`${URL}/find-student`, { enrollmentID })
       .then((res) => {
-        return res?.data;
+        return { data: res?.data, status: res.status };
       });
   } catch (error) {
     console.error();

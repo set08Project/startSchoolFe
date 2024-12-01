@@ -31,6 +31,14 @@ import { useEffect, useState } from "react";
 import SecondaryScreen from "./SecondaryScreen";
 import Primary from "./Primary";
 import Input from "../reUse/Input";
+import {
+  clockInWithID,
+  findStudentWidthID,
+  clockOutWidthID,
+  clockIn,
+  clockOut,
+} from "../../../pagesForStudents/api/studentAPI";
+import toast, { Toaster } from "react-hot-toast";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -154,6 +162,47 @@ const Sider = () => {
               name="Clock-in/Clock-Out"
               className="bg-red-500 text-white border-none font-medium py-4 px-4 text-[12px] uppercase leading-tight"
               onClick={() => {
+                setLoading(true);
+
+                findStudentWidthID(enrollmentID).then((res) => {
+                  if (res.status === 200) {
+                    console.log(res);
+                    if (!res.data?.data?.clockIn) {
+                      clockIn(
+                        res.data?.data?.schoolIDs,
+                        res.data?.data?._id
+                      ).then((res) => {
+                        if (res.status === 201) {
+                          toast.success(
+                            `${res.data?.studentFirstName}, has been clock in`
+                          );
+                        } else {
+                          toast.error(
+                            "student has been clocked in yet, Please try again!"
+                          );
+                        }
+                      });
+                    } else {
+                      clockOut(
+                        res.data?.data?.schoolIDs,
+                        res.data?.data?._id
+                      ).then((res) => {
+                        if (res.status === 201) {
+                          toast.success(
+                            `${res.data?.studentFirstName}, has been clock out`
+                          );
+                        } else {
+                          toast.error(
+                            "student has been clocked out yet, Please try again!"
+                          );
+                        }
+                      });
+                    }
+                  } else {
+                    toast.error("something went wrong");
+                  }
+                });
+
                 // handleDisplayStaff();
               }}
             />
@@ -167,6 +216,7 @@ const Sider = () => {
 
       {/* Settings */}
       <div>
+        <Toaster />
         {schoolData?.data?.categoryType === "Secondary" ||
         schoolData?.data?.schoolTags[0]?.val === "Secondary School." ? (
           <SecondaryScreen />
