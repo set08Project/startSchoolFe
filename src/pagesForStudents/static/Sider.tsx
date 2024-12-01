@@ -198,6 +198,68 @@ const Sider = () => {
           {/* </NavLink> */}
         </div>
       </div>
+      <div className="mt-5 px-2  center flex flex-col border mx-2 rounded-md py-4">
+        <div className="mb- text-[13px] font-medium "></div>
+        <div className="flex w-full justify-center">
+          {/* <NavLink to="upgrade"> */}
+
+          <Button
+            icon={
+              payment && (
+                <ClipLoader
+                  color="white"
+                  size={10}
+                  className="absolute -mt-1 -ml-2"
+                />
+              )
+            }
+            name={
+              <div>
+                {studentInfo?.clockIn ? "Clock In" : "Clock Out"}
+
+                <br />
+                <p className="text-[12px]">
+                  (
+                  {studentInfo?.clockIn
+                    ? studentInfo?.clockInTime
+                    : studentInfo?.clockOutTime}
+                  )
+                </p>
+              </div>
+            }
+            className={`${
+              studentInfo?.clockIn ? "bg-green-500" : "bg-red-500"
+            }  hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2  px-5 leading-tight`}
+            onClick={() => {
+              // handleDisplayStaff();
+              setPayment(true);
+
+              schoolFeePayment({
+                email: studentInfo?.parentEmail,
+                amount:
+                  termRead === "1st Term"
+                    ? oneClass?.class1stFee
+                    : termRead === "2nd Term"
+                    ? oneClass?.class2ndFee
+                    : termRead === "3rd Term"
+                    ? oneClass?.class3rdFee
+                    : null,
+
+                subAccountCode:
+                  schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
+              }).then((res) => {
+                if (res.status === 200) {
+                  // dispatch(paymentRef(res?.data?.data?.data?.reference));
+                  location.replace(res?.data?.data?.data?.authorization_url);
+                  setPayment(false);
+                }
+              });
+            }}
+          />
+
+          {/* </NavLink> */}
+        </div>
+      </div>
 
       {/* Nav Links */}
       <div className="w-full flex justify-center">
