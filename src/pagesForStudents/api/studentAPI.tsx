@@ -34,6 +34,18 @@ export const clockOutWidthID = async (
     return error;
   }
 };
+export const findStudentWidthID = async (enrollmentID: string) => {
+  try {
+    return await axios
+      .post(`${URL}/find-student`, { enrollmentID })
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
 
 export const clockIn = async (schoolID: string, studentID: string) => {
   try {
