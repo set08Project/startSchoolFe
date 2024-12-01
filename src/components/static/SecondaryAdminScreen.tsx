@@ -37,7 +37,10 @@ const SecondaryAdminScreen = () => {
   return (
     <div>
       <div>
-        <div className="mt-10 px-2 flex flex-col h-[90%]">
+        <div className="my-5 mx-4">
+          <hr />
+        </div>
+        <div className="px-2 flex flex-col h-[90%]">
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
@@ -192,8 +195,8 @@ const SecondaryAdminScreen = () => {
             to="/settings"
             className={({ isActive }) =>
               isActive
-                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
-                : "duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
+                ? "mt-10 duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[4px] flex items-center justify-between "
+                : "mt-10 duration-500 transition-all p-2 rounded-sm  flex items-center justify-between hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[4px]"
             }
             onClick={handleToggleMenuFalse}
           >

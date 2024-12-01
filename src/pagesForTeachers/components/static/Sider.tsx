@@ -1,40 +1,18 @@
-import {
-  MdArticle,
-  MdBadge,
-  MdPeople,
-  MdQueryStats,
-  MdReport,
-  MdSchool,
-  MdSettings,
-} from "react-icons/md";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../reUse/Button";
-import { FaBarsProgress, FaPhotoFilm, FaStore } from "react-icons/fa6";
+
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeMenuState,
-  displayDelay,
-  displayStaffComp,
-} from "../../../global/reduxState";
+
 import pix from "../../../assets/pix.jpg";
-import Tooltip from "./Tooltip";
 import { useSchoolAnnouncement, useTeacherInfo } from "../../hooks/useTeacher";
-import {
-  useSchool,
-  useSchoolCookie,
-  useSchoolData,
-  useSchoolSessionData,
-} from "../../../pages/hook/useSchoolAuth";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
 import { readSchool } from "../../../pages/api/schoolAPIs";
 import { useEffect, useState } from "react";
 import SecondaryScreen from "./SecondaryScreen";
 import Primary from "./Primary";
-import Input from "../reUse/Input";
 import {
-  clockInWithID,
   findStudentWidthID,
-  clockOutWidthID,
   clockIn,
   clockOut,
 } from "../../../pagesForStudents/api/studentAPI";
@@ -148,7 +126,9 @@ const Sider = () => {
         </div>
       </div>
       <div className="mt-2 px-2 text- center flex flex-col border mx-2 rounded-md py-1">
-        <div className="mb-4 text-[13px] font-medium ">Clocking Students</div>
+        <div className="mb-4 text-[12px] font-medium uppercase">
+          Clocking Students
+        </div>
         <div className="flex w-full justify-center">
           {/* <NavLink to="upgrade"> */}
           <div className="flex flex-col">
