@@ -77,7 +77,10 @@ const SecondaryScreen = () => {
   };
   return (
     <div>
-      <div className="mt-16 px-2 flex flex-col h-[90%]">
+      <div className="my-6 mx-2">
+        <hr />
+      </div>
+      <div className=" px-2 flex flex-col h-[90%]">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>

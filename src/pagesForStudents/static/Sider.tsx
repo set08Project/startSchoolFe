@@ -198,6 +198,45 @@ const Sider = () => {
           {/* </NavLink> */}
         </div>
       </div>
+      <div className="mt-5 px-2  center flex flex-col border mx-2 rounded-md py-4">
+        <div className="mb- text-[13px] font-medium "></div>
+        <div className="flex w-full justify-center">
+          {/* <NavLink to="upgrade"> */}
+
+          <Button
+            icon={
+              payment && (
+                <ClipLoader
+                  color="white"
+                  size={10}
+                  className="absolute -mt-1 -ml-2"
+                />
+              )
+            }
+            name={
+              <div className="uppercase">
+                {/* <p className=""> */}
+                {studentInfo?.clockIn ? "Clock In" : "Clock Out"}
+                {/* </p> */}
+
+                <br />
+                <p className="text-[12px] normal-case">
+                  (
+                  {studentInfo?.clockIn
+                    ? studentInfo?.clockInTime
+                    : studentInfo?.clockOutTime}
+                  )
+                </p>
+              </div>
+            }
+            className={`${
+              studentInfo?.clockIn ? "bg-green-500" : "bg-red-500"
+            }  hover:bg-red-600 transition-all duration-300 text-white border-none font-medium py-2 pl-2 pr-3 leading-tight`}
+          />
+
+          {/* </NavLink> */}
+        </div>
+      </div>
 
       {/* Nav Links */}
       <div className="w-full flex justify-center">

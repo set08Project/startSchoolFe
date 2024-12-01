@@ -1,19 +1,3 @@
-import {
-  MdPeople,
-  MdQueryStats,
-  MdReport,
-  MdSchool,
-  MdSettings,
-  MdSignalCellularAlt,
-} from "react-icons/md";
-import { NavLink } from "react-router-dom";
-import {
-  FaBarsProgress,
-  FaMoneyBillTransfer,
-  FaNoteSticky,
-  FaSchool,
-  FaStore,
-} from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuState, changeStarting } from "../../global/reduxState";
 import {
@@ -23,13 +7,19 @@ import {
 } from "../../pages/hook/useSchoolAuth";
 import pix from "../../assets/pix.jpg";
 import StoreScreen from "./StoreScreen";
-import { FaPhotoVideo } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useEffect, useState } from "react";
 import { makePayment } from "../../pages/api/schoolAPIs";
 import Button from "../reUse/Button";
 import PrimaryAdminScreen from "./PrimaryAdminScreen";
 import SecondaryAdminScreen from "./SecondaryAdminScreen";
+import {
+  clockIn,
+  clockOut,
+  findStudentWidthID,
+} from "../../pagesForStudents/api/studentAPI";
+import toast, { Toaster } from "react-hot-toast";
+import { mutate } from "swr";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -88,6 +78,9 @@ const Sider = () => {
       dispatch(changeStarting(false));
     }
   }, []);
+
+  const [enrollmentID, setEnrollmentID] = useState<string>("");
+  const [loadings, setLoading] = useState<boolean>(false);
 
   return (
     <div
@@ -193,7 +186,7 @@ const Sider = () => {
       {/* top box */}
 
       {/* top box */}
-      <div className="mt-20 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
+      <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
           Encourage Parents to Purchase Learning Materials for thier child by
           having more items in your Library Store{" "}
@@ -203,7 +196,88 @@ const Sider = () => {
         </div>
       </div>
 
+      <div className="mt-2 px-2 center flex flex-col border mx-2 rounded-md py-1">
+        <div className="mb-4 text-[13px] uppercase font-medium">
+          Clocking Students
+        </div>
+        <div className="flex w-full justify-center">
+          <div className="flex flex-col">
+            <input
+              className="border rounded-md h-[45px] outline-none pl-2 w-[100%] "
+              placeholder="Student ID"
+              value={enrollmentID}
+              onChange={(e) => setEnrollmentID(e.target.value)}
+            />
+            <Button
+              name={loadings ? "clocking student..." : "Clock-in/Clock-Out"}
+              disabled={loadings}
+              className={`${
+                loadings
+                  ? "bg-red-400 cursor-not-allowed animate-pulse "
+                  : "bg-red-500"
+              } text-white mx-0 border-none font-medium py-4 px-2 text-[12px] uppercase leading-tight`}
+              onClick={() => {
+                setLoading(true);
+
+                findStudentWidthID(enrollmentID)
+                  .then((res) => {
+                    console.log(res);
+                    if (res.status === 201) {
+                      if (!res.data?.data?.clockIn) {
+                        clockIn(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            mutate(
+                              `api/view-student-info/${res.data?.data?._id}`
+                            );
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock in`
+                            );
+                          } else {
+                            toast.error(
+                              "student has been clocked in yet, Please try again!"
+                            );
+                          }
+                        });
+                      } else {
+                        clockOut(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            mutate(
+                              `api/view-student-info/${res.data?.data?._id}`
+                            );
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock out`
+                            );
+                          } else {
+                            toast.error(
+                              "student has been clocked out yet, Please try again!"
+                            );
+                          }
+                        });
+                      }
+                    } else {
+                      toast.error("something went wrong");
+                    }
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                    setEnrollmentID("");
+                  });
+              }}
+            />
+          </div>
+
+          {/* </NavLink> */}
+        </div>
+      </div>
+
       <div>
+        <Toaster />
         {data?.categoryType === "Secondary" ||
         data?.schoolTags[0]?.val === "Secondary School." ? (
           <SecondaryAdminScreen />
