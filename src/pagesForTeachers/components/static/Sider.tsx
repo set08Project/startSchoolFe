@@ -30,6 +30,7 @@ import { readSchool } from "../../../pages/api/schoolAPIs";
 import { useEffect, useState } from "react";
 import SecondaryScreen from "./SecondaryScreen";
 import Primary from "./Primary";
+import Input from "../reUse/Input";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,9 @@ const Sider = () => {
   }, [teacherInfo?.schoolIDs]);
 
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+
+  const [enrollmentID, setEnrollmentID] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div className="overflow-y-auto w-full border-r bg-white text-blue-900 flex flex-col text-[15px]">
@@ -112,7 +116,11 @@ const Sider = () => {
 
       {/* top box */}
 
-      <div className="mt-10 px-2 text- center flex flex-col border mx-2 rounded-md py-4">
+      <div className="my-6 mx-2">
+        <hr />
+      </div>
+
+      <div className="mt- px-2 text- center flex flex-col border mx-2 rounded-md py-1">
         <div className="mb-4 text-[13px] font-medium ">
           Mark students Attendance with the Button below{" "}
         </div>
@@ -127,6 +135,29 @@ const Sider = () => {
               }}
             />
           </Link>
+
+          {/* </NavLink> */}
+        </div>
+      </div>
+      <div className="mt-2 px-2 text- center flex flex-col border mx-2 rounded-md py-1">
+        <div className="mb-4 text-[13px] font-medium ">Clocking Students</div>
+        <div className="flex w-full justify-center">
+          {/* <NavLink to="upgrade"> */}
+          <div className="flex flex-col">
+            <input
+              className="border rounded-md h-[45px] outline-none mx-2 pl-2"
+              placeholder="Student ID"
+              value={enrollmentID}
+              onChange={(e) => setEnrollmentID(e.target.value)}
+            />
+            <Button
+              name="Clock-in/Clock-Out"
+              className="bg-red-500 text-white border-none font-medium py-4 px-4 text-[12px] uppercase leading-tight"
+              onClick={() => {
+                // handleDisplayStaff();
+              }}
+            />
+          </div>
 
           {/* </NavLink> */}
         </div>
