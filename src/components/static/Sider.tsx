@@ -19,6 +19,7 @@ import {
   findStudentWidthID,
 } from "../../pagesForStudents/api/studentAPI";
 import toast, { Toaster } from "react-hot-toast";
+import { mutate } from "swr";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -220,13 +221,17 @@ const Sider = () => {
 
                 findStudentWidthID(enrollmentID)
                   .then((res) => {
-                    if (res.status === 200) {
+                    console.log(res);
+                    if (res.status === 201) {
                       if (!res.data?.data?.clockIn) {
                         clockIn(
                           res.data?.data?.schoolIDs,
                           res.data?.data?._id
                         ).then((res) => {
                           if (res.status === 201) {
+                            mutate(
+                              `api/view-student-info/${res.data?.data?._id}`
+                            );
                             toast.success(
                               `${res.data?.studentFirstName}, has been clock in`
                             );
@@ -242,6 +247,9 @@ const Sider = () => {
                           res.data?.data?._id
                         ).then((res) => {
                           if (res.status === 201) {
+                            mutate(
+                              `api/view-student-info/${res.data?.data?._id}`
+                            );
                             toast.success(
                               `${res.data?.studentFirstName}, has been clock out`
                             );

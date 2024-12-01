@@ -214,11 +214,13 @@ const Sider = () => {
               )
             }
             name={
-              <div>
+              <div className="uppercase">
+                {/* <p className=""> */}
                 {studentInfo?.clockIn ? "Clock In" : "Clock Out"}
+                {/* </p> */}
 
                 <br />
-                <p className="text-[12px]">
+                <p className="text-[12px] normal-case">
                   (
                   {studentInfo?.clockIn
                     ? studentInfo?.clockInTime
@@ -229,32 +231,7 @@ const Sider = () => {
             }
             className={`${
               studentInfo?.clockIn ? "bg-green-500" : "bg-red-500"
-            }  hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2  px-5 leading-tight`}
-            onClick={() => {
-              // handleDisplayStaff();
-              setPayment(true);
-
-              schoolFeePayment({
-                email: studentInfo?.parentEmail,
-                amount:
-                  termRead === "1st Term"
-                    ? oneClass?.class1stFee
-                    : termRead === "2nd Term"
-                    ? oneClass?.class2ndFee
-                    : termRead === "3rd Term"
-                    ? oneClass?.class3rdFee
-                    : null,
-
-                subAccountCode:
-                  schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
-              }).then((res) => {
-                if (res.status === 200) {
-                  // dispatch(paymentRef(res?.data?.data?.data?.reference));
-                  location.replace(res?.data?.data?.data?.authorization_url);
-                  setPayment(false);
-                }
-              });
-            }}
+            }  hover:bg-red-600 transition-all duration-300 text-white border-none font-medium py-2 pl-2 pr-3 leading-tight`}
           />
 
           {/* </NavLink> */}
