@@ -101,6 +101,7 @@ const Sider = () => {
             />
           )}
         </div>
+
         <div className="ml-2">
           {/* TODO: Add tooltip */}
           <div className="break-words font-bold text-[16px]">
@@ -131,58 +132,58 @@ const Sider = () => {
           </p>
 
           {/* PICK */}
-
-          {data?.freeMode ? (
-            <div className="mt-3 px-1 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
-              <div className="mb-2 text-[12px] text-left font-medium w-[125px]">
-                You are seeing this, because you are on your First Free Term
-                Mode.
-                <br />
-                <p className="mt-1 font-bold">Thank you for coming on board!</p>
-              </div>
-            </div>
-          ) : (
-            <div>
-              {!termData?.plan && termData?.payRef === "" && (
-                <Button
-                  name={
-                    roll ? (
-                      <span className="ml-3">Processing...</span>
-                    ) : (
-                      "Renew Plan"
-                    )
-                  }
-                  icon={
-                    roll && (
-                      <ClipLoader
-                        size={10}
-                        color="white"
-                        className="absolute -mt-1 ml-1"
-                      />
-                    )
-                  }
-                  className="text-[14px] w-full uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
-                  onClick={() => {
-                    setRoll(true);
-                    makePayment(user?.id, data?.email)
-                      .then((res: any) => {
-                        if (res?.data?.status === 201) {
-                          location.replace(
-                            res?.data?.data?.data?.authorization_url
-                          );
-                        }
-                      })
-                      .then(() => {
-                        setRoll(false);
-                      });
-                  }}
-                />
-              )}
-            </div>
-          )}
         </div>
       </div>
-
+      <div className="mx-2">
+        {" "}
+        {data?.freeMode ? (
+          <div className="mt-3 py-2 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
+            <div className="mb-2 px-2 text-[12px] text-left font-medium ">
+              You are seeing this, because you are on your First Free Term Mode.
+              <br />
+              <p className="mt-1 font-bold ">Thank you for coming on board!</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {!termData?.plan && termData?.payRef === "" && (
+              <Button
+                name={
+                  roll ? (
+                    <span className="ml-3">Processing...</span>
+                  ) : (
+                    "Renew Plan"
+                  )
+                }
+                icon={
+                  roll && (
+                    <ClipLoader
+                      size={10}
+                      color="white"
+                      className="absolute -mt-1 ml-1"
+                    />
+                  )
+                }
+                className="text-[14px] w-full uppercase px-0 pr-2 font-bold bg-red-500 ml-0"
+                onClick={() => {
+                  setRoll(true);
+                  makePayment(user?.id, data?.email)
+                    .then((res: any) => {
+                      if (res?.data?.status === 201) {
+                        location.replace(
+                          res?.data?.data?.data?.authorization_url
+                        );
+                      }
+                    })
+                    .then(() => {
+                      setRoll(false);
+                    });
+                }}
+              />
+            )}
+          </div>
+        )}
+      </div>
       {/* top box */}
 
       {/* top box */}
@@ -197,13 +198,13 @@ const Sider = () => {
       </div>
 
       <div className="mt-2 px-2 center flex flex-col border mx-2 rounded-md py-1">
-        <div className="mb-4 text-[13px] uppercase font-medium">
+        <div className="mb-4 text-[14px] uppercase font-bold">
           Clocking Students
         </div>
         <div className="flex w-full justify-center">
           <div className="flex flex-col">
             <input
-              className="border rounded-md h-[45px] outline-none pl-2 w-[100%] "
+              className="border text-[14px] rounded-md h-[45px] outline-none pl-2 w "
               placeholder="Student ID"
               value={enrollmentID}
               onChange={(e) => setEnrollmentID(e.target.value)}
