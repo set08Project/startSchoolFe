@@ -1,6 +1,4 @@
-import React, { useRef, useEffect, FC } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import React, { useState, useRef, useEffect, FC } from "react";
 import {
   useReadOneClassInfo,
   useStudentInfo,
@@ -11,16 +9,13 @@ import {
   useStudentGrade,
   useSujectInfo,
   useTeacherDetail,
-  useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import {
-  useSchoolSessionData,
-  useStudentAttendance,
-} from "../../../pages/hook/useSchoolAuth";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
-
+import { usePDF } from "react-to-pdf";
 import moment from "moment";
-import { useProcessStudentGrades } from "../../hooks/specialCall";
+import toast, { Toaster } from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa6";
 
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -39,25 +34,6 @@ const PrintReportCard: React.FC = () => {
     });
   };
 
-  const downloadPDF = () => {
-    const input = contentRef.current;
-
-    if (!input) {
-      return;
-    }
-
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf: any = new jsPDF();
-        pdf.addImage(imgData, "PNG", 30, 10);
-        pdf.save("download.pdf");
-      })
-      .catch((error) => {
-        return error;
-      });
-  };
-
   useEffect(() => {
     preprocessContent();
   }, []);
@@ -66,7 +42,6 @@ const PrintReportCard: React.FC = () => {
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
-  const { mainStudentAttendance } = useStudentAttendance(studentInfo?._id);
 
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
@@ -189,11 +164,39 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { toPDF, targetRef }: any = usePDF({
+    filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
+      school?.presentSession
+    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+  });
   return (
     <div ref={contentRef}>
-      {/* <button onClick={downloadPDF}>Download PDF</button> */}
-      <div>
-        {/* Content you want to convert to PDF */}
+      <Toaster />
+      <button
+        disabled={loading}
+        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
+          loading && "cursor-not-allowed bg-slate-200 animate-pulse"
+        }`}
+        onClick={() => {
+          setLoading(true);
+          toPDF().finally(() => {
+            setLoading(false);
+            toast.success("Result downloaded.");
+          });
+        }}
+      >
+        {loading ? (
+          <div className="flex gap-2 items-center">
+            <FaSpinner className="animate-spin" />
+            <span>downloading...</span>
+          </div>
+        ) : (
+          "Print Result"
+        )}
+      </button>
+      <div ref={targetRef}>
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
@@ -838,7 +841,7 @@ const PrintReportCard: React.FC = () => {
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
                     <p className="font-semibold">
-                      {classDetails?.classTeacherName}
+                      {school?.name} {school.name2}
                     </p>
                     <p className="text-[10px]">Principal</p>
                     <div className="flex-1" />
@@ -847,7 +850,7 @@ const PrintReportCard: React.FC = () => {
 
                   <div className="w-[160px] h-[80px] border">
                     <img
-                      src={schoolInfo?.signature}
+                      src={school?.signature}
                       className="w-full h-full object-contain"
                     />
                   </div>
