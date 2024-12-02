@@ -171,6 +171,7 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  console.log(school);
   console.log(teacherDetail);
 
   const { toPDF, targetRef } = usePDF({
@@ -832,7 +833,7 @@ const PrintReportCard: React.FC = () => {
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
                     <p className="font-semibold">
-                      {classDetails?.classTeacherName}
+                      {school?.name} {school.name2}
                     </p>
                     <p className="text-[10px]">Principal</p>
                     <div className="flex-1" />
