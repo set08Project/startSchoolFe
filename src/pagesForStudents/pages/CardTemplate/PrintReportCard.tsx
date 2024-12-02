@@ -15,14 +15,10 @@ import {
   useTeacherDetail,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import {
-  useSchoolSessionData,
-  useStudentAttendance,
-} from "../../../pages/hook/useSchoolAuth";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
-import { useProcessStudentGrades } from "../../hooks/specialCall";
 
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -171,9 +167,6 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  console.log(school);
-  console.log(teacherDetail);
-
   const { toPDF, targetRef } = usePDF({
     filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
       school?.presentSession
@@ -188,7 +181,6 @@ const PrintReportCard: React.FC = () => {
         Print Result
       </button>
       <div ref={targetRef}>
-        {/* Content you want to convert to PDF */}
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
