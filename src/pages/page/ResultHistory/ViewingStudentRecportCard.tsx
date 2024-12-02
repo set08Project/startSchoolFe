@@ -20,10 +20,27 @@ import {
   useSujectInfo,
   useTeacherDetail,
 } from "../../../pagesForTeachers/hooks/useTeacher";
-import { usePdf } from "@mikecousins/react-pdf";
-
+import { usePDF } from "react-to-pdf";
 const ReportCardDesignAdminScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const preprocessContent = () => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    // Traverse the DOM and replace "oklch" color functions with a fallback color
+    const elementsWithUnsupportedColors = content.querySelectorAll("*");
+    elementsWithUnsupportedColors.forEach((element: any) => {
+      const computedStyles = window.getComputedStyle(element);
+      if (computedStyles.color.includes("oklch")) {
+        element.style.color = "#000000"; // Replace with a fallback color
+      }
+    });
+  };
+
+  useEffect(() => {
+    preprocessContent();
+  }, []);
 
   const { studentID } = useParams();
   const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
@@ -154,11 +171,21 @@ const ReportCardDesignAdminScreen: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  const { toPDF, targetRef } = usePDF({
+    filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
+      school?.presentSession
+    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+  });
+
   return (
-    <div>
-      {/* <button onClick={downloadPDF}>Download PDF</button> */}
-      <div>
-        {/* Content you want to convert to PDF */}
+    <div ref={contentRef}>
+      <button
+        className="text-[12px] tracking-widest  transistion-all duration-300  hover:bg-slate-100 px-8 py-2 rounded-md"
+        onClick={() => toPDF()}
+      >
+        Print Result
+      </button>
+      <div ref={targetRef}>
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
@@ -745,7 +772,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
                     <p className="font-semibold">
-                      {classDetails?.classTeacherName}
+                      {school?.name} {school.name2}
                     </p>
                     <p className="text-[10px]">Principal</p>
                     <div className="flex-1" />
@@ -754,7 +781,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
 
                   <div className="w-[160px] h-[80px] border">
                     <img
-                      src={schoolInfo?.signature}
+                      src={school?.signature}
                       className="w-full h-full object-contain"
                     />
                   </div>

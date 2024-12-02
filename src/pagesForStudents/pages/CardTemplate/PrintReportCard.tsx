@@ -1,8 +1,4 @@
 import React, { useRef, useEffect, FC } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-
-// import { jsPDF } from "jspdf";
 import {
   useReadOneClassInfo,
   useStudentInfo,
@@ -13,7 +9,6 @@ import {
   useStudentGrade,
   useSujectInfo,
   useTeacherDetail,
-  useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
