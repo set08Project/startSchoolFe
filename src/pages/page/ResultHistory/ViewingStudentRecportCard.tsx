@@ -21,6 +21,9 @@ import {
   useTeacherDetail,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { usePDF } from "react-to-pdf";
+import toast, { Toaster } from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa";
+
 const ReportCardDesignAdminScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -171,19 +174,38 @@ const ReportCardDesignAdminScreen: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const { toPDF, targetRef } = usePDF({
+  const { toPDF, targetRef }: any = usePDF({
     filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
       school?.presentSession
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <div ref={contentRef}>
+      <Toaster />
       <button
-        className="text-[12px] tracking-widest  transistion-all duration-300  hover:bg-slate-100 px-8 py-2 rounded-md"
-        onClick={() => toPDF()}
+        disabled={loading}
+        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
+          loading && "cursor-not-allowed bg-slate-200 animate-pulse"
+        }`}
+        onClick={() => {
+          setLoading(true);
+          toPDF().finally(() => {
+            setLoading(false);
+            toast.success("Result has been downloaded successfully.");
+          });
+        }}
       >
-        Print Result
+        {loading ? (
+          <div>
+            <FaSpinner className="animate-spin" />
+            <span>downloading...</span>
+          </div>
+        ) : (
+          "Print Result"
+        )}
       </button>
       <div ref={targetRef}>
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
