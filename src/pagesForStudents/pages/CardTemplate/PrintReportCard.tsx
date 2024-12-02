@@ -171,11 +171,17 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  console.log(teacherDetail);
+
+  const { toPDF, targetRef } = usePDF({
+    filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
+      school?.presentSession
+    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+  });
   return (
     <div ref={contentRef}>
       <button
-        className="bg-slate-100 px-8 py-2 rounded-md"
+        className="text-[12px] tracking-widest  transistion-all duration-300  hover:bg-slate-100 px-8 py-2 rounded-md"
         onClick={() => toPDF()}
       >
         Print Result
@@ -835,7 +841,7 @@ const PrintReportCard: React.FC = () => {
 
                   <div className="w-[160px] h-[80px] border">
                     <img
-                      src={schoolInfo?.signature}
+                      src={school?.signature}
                       className="w-full h-full object-contain"
                     />
                   </div>
