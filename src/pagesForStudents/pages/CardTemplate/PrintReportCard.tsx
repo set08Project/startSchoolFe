@@ -183,12 +183,12 @@ const PrintReportCard: React.FC = () => {
           setLoading(true);
           toPDF().finally(() => {
             setLoading(false);
-            toast.success("Result has been downloaded successfully.");
+            toast.success("Result downloaded.");
           });
         }}
       >
         {loading ? (
-          <div>
+          <div className="flex gap-2 items-center">
             <FaSpinner className="animate-spin" />
             <span>downloading...</span>
           </div>
