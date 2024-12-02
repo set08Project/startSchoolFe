@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, FC } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+
+// import { jsPDF } from "jspdf";
 import {
   useReadOneClassInfo,
   useStudentInfo,
@@ -189,10 +191,30 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  const generatePDF = async (elementToPrintId: string) => {
+    const element = document.getElementById(elementToPrintId);
+    if (!element) {
+      throw new Error(`Element with id ${elementToPrintId} not found`);
+    }
+    const canvas = await html2canvas(element, { scale: 2 });
+    const data = await canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      // format: [10000, 500],
+    });
+    const imgProperties = pdf.getImageProperties(data);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
+
+    pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("print.pdf");
+  };
+
   return (
     <div ref={contentRef}>
-      {/* <button onClick={downloadPDF}>Download PDF</button> */}
-      <div>
+      <button onClick={() => generatePDF("pdf")}>Download PDF</button>
+      <div id="pdf">
         {/* Content you want to convert to PDF */}
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
