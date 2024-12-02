@@ -20,7 +20,7 @@ import {
   useStudentAttendance,
 } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
-
+import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import { useProcessStudentGrades } from "../../hooks/specialCall";
 
@@ -41,25 +41,6 @@ const PrintReportCard: React.FC = () => {
     });
   };
 
-  const downloadPDF = () => {
-    const input = contentRef.current;
-
-    if (!input) {
-      return;
-    }
-
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf: any = new jsPDF();
-        pdf.addImage(imgData, "PNG", 30, 10);
-        pdf.save("download.pdf");
-      })
-      .catch((error) => {
-        return error;
-      });
-  };
-
   useEffect(() => {
     preprocessContent();
   }, []);
@@ -68,7 +49,6 @@ const PrintReportCard: React.FC = () => {
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
-  const { mainStudentAttendance } = useStudentAttendance(studentInfo?._id);
 
   const { gradeData } = useStudentGrade(studentInfo?._id);
 
@@ -191,30 +171,16 @@ const PrintReportCard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const generatePDF = async (elementToPrintId: string) => {
-    const element = document.getElementById(elementToPrintId);
-    if (!element) {
-      throw new Error(`Element with id ${elementToPrintId} not found`);
-    }
-    const canvas = await html2canvas(element, { scale: 2 });
-    const data = await canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      // format: [10000, 500],
-    });
-    const imgProperties = pdf.getImageProperties(data);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-
-    pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("print.pdf");
-  };
-
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   return (
     <div ref={contentRef}>
-      <button onClick={() => generatePDF("pdf")}>Download PDF</button>
-      <div id="pdf">
+      <button
+        className="bg-slate-100 px-8 py-2 rounded-md"
+        onClick={() => toPDF()}
+      >
+        Print Result
+      </button>
+      <div ref={targetRef}>
         {/* Content you want to convert to PDF */}
         <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
