@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { Fallback } from "../components/static/error/Fallbacks";
+import { ErrorBoundary } from "react-error-boundary";
 
 const SchemeOfWorkTable = React.lazy(
   () =>
@@ -168,7 +170,9 @@ export const teacherRouter = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<LoadingScreen />}>
-            <ReportCardDesignScreen />
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <ReportCardDesignScreen />
+            </ErrorBoundary>
           </Suspense>
         ),
       },

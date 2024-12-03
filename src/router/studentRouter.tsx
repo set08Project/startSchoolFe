@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
+import { Fallback } from "../components/static/error/Fallbacks";
+import { ErrorBoundary } from "react-error-boundary";
 
 const Correction = React.lazy(
   () => import("../pagesForStudents/pages/CBT_SS3/Correction")
@@ -145,7 +147,9 @@ export const studentRouter = createBrowserRouter([
         path: "/print-result",
         element: (
           <Suspense fallback={<LoadingScreen />}>
-            <PrintReportCard />
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <PrintReportCard />
+            </ErrorBoundary>
           </Suspense>
         ),
       },
