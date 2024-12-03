@@ -147,8 +147,9 @@ const TestGallary = React.lazy(
 const ViewStoreItems = React.lazy(
   () => import("../pages/page/store/ViewStoreItems")
 );
+import { ErrorBoundary } from "react-error-boundary";
+import { Fallback } from "../components/static/error/Fallbacks";
 
-import { ErrorBoubdary } from "react-error-boundary";
 export const adminRouter = createBrowserRouter([
   {
     path: "/",
@@ -225,9 +226,9 @@ export const adminRouter = createBrowserRouter([
             path: "view-students-report-card/:studentID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
-                <ErrorBoubdary>
+                <ErrorBoundary FallbackComponent={Fallback}>
                   <ReportCardDesignAdminScreen />
-                </ErrorBoubdary>
+                </ErrorBoundary>
               </Suspense>
             ),
           },
