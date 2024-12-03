@@ -3,10 +3,7 @@ import "./style.css";
 export const Fallback = ({ error, resetErrorBoundary }) => {
   const navigate = useNavigate();
   return (
-    <div
-      role="alert"
-      className="h-full w-full flex flex-col justify-center items-center"
-    >
+    <div className="h-full w-full flex flex-col justify-center items-center">
       <h1 className="text-[20px]">Something went wrong:</h1>
       {/* <p className="zoom-area">
         <b>CSS</b> animations to make a cool 404 page.{" "}
@@ -24,7 +21,7 @@ export const Fallback = ({ error, resetErrorBoundary }) => {
       </section>
       <div className="link-container">
         <button
-          className="btn bg-blue-950 text-white hover:bg-blue-900 transition-all duration-300 uppercase"
+          className="btn bg-[#594558] text-white hover:bg-[#835254] px-8 transition-all duration-300 uppercase"
           onClick={() => {
             navigate(-1);
           }}
