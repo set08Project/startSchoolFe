@@ -794,7 +794,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
                     <p className="font-semibold">
-                      {school?.name} {school.name2}
+                      {school?.name} {school?.name2}
                     </p>
                     <p className="text-[10px]">Principal</p>
                     <div className="flex-1" />
