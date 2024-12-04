@@ -6,12 +6,19 @@ import { ErrorBoundary } from "react-error-boundary";
 import LoadingScreen from "./components/static/LoadingScreen";
 import RouterScreen from "./router/RouterScreen";
 import PrivateRouter from "./router/PrivateRouter";
+import { Helmet } from "react-helmet";
 
 let persistor = persistStore(store);
 
 const App = () => {
+  const helmetContext: any = {};
   return (
-    <div>
+    <div className="bg-white">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>The Best School Management Platform</title>
+        {/* <link rel="canonical" href="http" /> */}
+      </Helmet>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ErrorBoundary fallback={<LoadingScreen />}>

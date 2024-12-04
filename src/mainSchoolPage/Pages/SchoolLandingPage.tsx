@@ -15,7 +15,7 @@ const SchoolLandingPage = () => {
       <WelcomePage />
       <Gallery />
       <Teachers />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

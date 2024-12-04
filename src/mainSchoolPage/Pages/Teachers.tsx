@@ -16,6 +16,7 @@ interface iProps {
 const Teacher: FC<iProps> = ({ props }) => {
   const { schoolSubjectTeacherDetail } = useSchoolTeacherDetail(props);
 
+  console.log(schoolSubjectTeacherDetail);
   return (
     <div className="rounded-[10px] h-[70vh] overflow-hidden relative">
       {/* <Teacher props={props} /> */}
@@ -38,7 +39,9 @@ const Teacher: FC<iProps> = ({ props }) => {
         <div className="text-start text-[12px] mb-3">
           Class Teacher:{" "}
           <span className="font-medium">
-            {schoolSubjectTeacherDetail?.classesAssigned}
+            {/* {schoolSubjectTeacherDetail?.classesAssigned?.map((el: any) => (
+              <div>{el}</div>
+            ))} */}
           </span>
         </div>
         <h1 className="text-start font-[300] text-blue-950 capitalize flex items-center">
@@ -63,7 +66,7 @@ const Teachers = () => {
   const data = lodash.shuffle(schoolInfo?.staff);
 
   return (
-    <div className="w-full min-h-[100vh] flex justify-center items-center">
+    <div className="w-full min-h-[100px] flex justify-center items-center">
       <div className="h-full w-[95%]">
         <div className="w-full flex justify-center items-center flex-col">
           <div className="text-[23px] mt-20 font-[600] uppercase xl:text-[35px]">
@@ -76,7 +79,7 @@ const Teachers = () => {
         </div>
         <div>
           {data?.length > 0 ? (
-            <div className="text-center grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="text-center grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
               {data?.map((props: any, i: number) => (
                 <div key={props?._id}>{i < 4 && <Teacher props={props} />}</div>
               ))}
@@ -84,7 +87,8 @@ const Teachers = () => {
           ) : (
             <div>no Teachers</div>
           )}
-        </div>
+        </div>{" "}
+        *
       </div>
     </div>
   );
