@@ -16,11 +16,10 @@ interface iProps {
 const Teacher: FC<iProps> = ({ props }) => {
   const { schoolSubjectTeacherDetail } = useSchoolTeacherDetail(props);
 
-  console.log(schoolSubjectTeacherDetail);
   return (
-    <div className="rounded-[10px] h-[70vh] overflow-hidden relative">
+    <div className="rounded-[10px] min-h-[70vh] overflow-hidden relative">
       {/* <Teacher props={props} /> */}
-      <div className="h-[80%] w-[90%] bg-slate-200 rounded-md overflow-hidden">
+      <div className="h-[500px] w-[90%] bg-slate-200 rounded-md overflow-hidden">
         <img
           src={
             schoolSubjectTeacherDetail?.avatar
@@ -38,10 +37,14 @@ const Teacher: FC<iProps> = ({ props }) => {
         </h1>
         <div className="text-start text-[12px] mb-3">
           Class Teacher:{" "}
-          <span className="font-medium">
-            {/* {schoolSubjectTeacherDetail?.classesAssigned?.map((el: any) => (
-              <div>{el}</div>
-            ))} */}
+          <span className="font-medium flex flex-wrap gap-2">
+            {schoolSubjectTeacherDetail?.classesAssigned?.map((el: any) => (
+              <div className="flex flex-wrap gap-2">
+                <div className="bg-blue-950 text-white rounded-md text-[12px] px-4 py-1 ">
+                  {el?.className}
+                </div>
+              </div>
+            ))}
           </span>
         </div>
         <h1 className="text-start font-[300] text-blue-950 capitalize flex items-center">
@@ -79,7 +82,7 @@ const Teachers = () => {
         </div>
         <div>
           {data?.length > 0 ? (
-            <div className="text-center grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <div className="text-center grid grid-cols-1 gap-1 md:grid-cols-2 xl:grid-cols-4 ">
               {data?.map((props: any, i: number) => (
                 <div key={props?._id}>{i < 4 && <Teacher props={props} />}</div>
               ))}
