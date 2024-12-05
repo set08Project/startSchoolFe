@@ -51,6 +51,8 @@ import Reports from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Repor
 import Settings from "../mainPage/TeamScreen/NextSuperAdmin/siderRoutePages/Settings";
 import Daisy from "../mainPage/TeamScreen/DaisyComponents/Daisy";
 import TeacherLayout from "../mainPage/TeamScreen/NextSuperAdmin/components/layout/TeacherLayout";
+import { ErrorBoundary } from "react-error-boundary";
+import { Fallback } from "../components/static/error/Fallbacks";
 const EnquiryForm = React.lazy(() => import("../pages/page/auth/EnquiryForm"));
 
 export const mainRouter = createBrowserRouter([
@@ -224,7 +226,9 @@ export const mainRouter = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<LoadingScreen />}>
-            <SchoolPageEntry />
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <SchoolPageEntry />
+            </ErrorBoundary>
           </Suspense>
         ),
       },

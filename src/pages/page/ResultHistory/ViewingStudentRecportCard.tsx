@@ -183,7 +183,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
-    <div ref={contentRef}>
+    <div ref={contentRef} className="">
       <Toaster />
       <button
         disabled={loading}
