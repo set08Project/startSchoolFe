@@ -197,7 +197,7 @@ const PrintReportCard: React.FC = () => {
         )}
       </button>
       <div ref={targetRef}>
-        <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
