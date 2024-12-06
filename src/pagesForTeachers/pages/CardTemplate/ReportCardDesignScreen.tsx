@@ -323,7 +323,7 @@ const ReportCardDesignScreen: React.FC = () => {
             </div>
             {/* end */}
 
-            <div className="h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
+            <div className="text-[12px] md:text-[15px] h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
               {school?.presentSession}
               <span className="mx-1">{school?.presentTerm}</span> Student Report
             </div>
