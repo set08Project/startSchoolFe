@@ -215,7 +215,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
         <main className="flex justify-center mt-10">
-          <div className="max-w-[1200px] p-4 overflow-auto border">
+          <div className="max-w-[1100px] p-4 overflow-auto border">
             <div className="flex items-center justify-between w-auto">
               <div className="border h-28 w-28 ">
                 {school?.avatar ? (
@@ -315,10 +315,10 @@ const ReportCardDesignAdminScreen: React.FC = () => {
               </div>
             </main>
             <main className="overflow-auto uppercase text-[12px]">
-              <section className=" min-w-[1300px] flex flex-col mt-4  ">
+              <section className=" min-w-[1050px] flex flex-col mt-4  ">
                 <main className="flex  bg-blue-50">
                   <div className="p-2 w-[40px]">S/N</div>
-                  <div className="p-2 w-[250px] border-x ">subject</div>
+                  <div className="p-2 w-[120px] border-x ">subject</div>
                   <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
                     <p className="text">CA</p>
                     <p className="text-[12px]">(40)</p>
@@ -344,10 +344,10 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                     <p className="text-[12px]">(100)</p>
                   </div>
 
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
                     <p className="text-[12px]">(100)</p>
-                  </div>
+                  </div> */}
                   <div className=" w-[78px] px-2 border-r flex flex-col justify-center items-center ">
                     <p className="text">COMM. Term Score</p>
                   </div>
@@ -360,7 +360,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Class AVG. Score</p>
                   </div>
-                  <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                  <div className=" w-[50px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Grade</p>
                   </div>
                   <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
@@ -373,11 +373,11 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                     .sortBy(grade?.result, "subject")
                     ?.map((el: any, i: number) => (
                       <section
-                        className=" min-w-[1300px] flex my-1 bg-blue-50 h-[40px] "
+                        className=" min-w-[1050px] flex my-1 bg-blue-50 h-[40px] "
                         key={i - el?._id}
                       >
                         <div className="p-2 w-[40px]">{i + 1}</div>
-                        <div className="p-2 w-[250px] border-x ">
+                        <div className="p-2 w-[120px] border-x ">
                           {el?.subject}
                         </div>
                         <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
@@ -414,7 +414,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                           <p className="text-[12px]">0</p>
                         </div>
 
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
                               el?.test2 +
@@ -422,7 +422,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                               el?.test4 +
                               el?.exam}
                           </p>
-                        </div>
+                        </div> */}
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
@@ -441,7 +441,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                         <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">67</p>
                         </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                        <div className=" w-[50px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text-[18px]">{el?.grade}</p>
                         </div>
                         <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">

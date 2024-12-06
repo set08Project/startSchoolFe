@@ -374,7 +374,7 @@ const PrintReportCard: React.FC = () => {
                 </div>
               </main>
               <main className="overflow-auto uppercase text-[12px]">
-                <section className=" min-w-[1180px] flex flex-col mt-4  ">
+                <section className=" min-w-[1100px] flex flex-col mt-4  ">
                   <main className="flex  bg-blue-50">
                     <div className="p-2 w-[40px]">S/N</div>
                     <div className="p-2 w-[180px] border-x ">subject</div>
@@ -432,7 +432,7 @@ const PrintReportCard: React.FC = () => {
                       .sortBy(grade?.result, "subject")
                       ?.map((el: any, i: number) => (
                         <section
-                          className=" min-w-[1180px] flex my-1 bg-blue-50 h-[40px] "
+                          className=" min-w-[1100px] flex my-1 bg-blue-50 h-[40px] "
                           key={i - el?._id}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
