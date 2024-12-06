@@ -188,7 +188,7 @@ const ReportCardDesignScreen: React.FC = () => {
   });
 
   return (
-    <div ref={contentRef}>
+    <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
       <button
         disabled={loading}
@@ -213,15 +213,38 @@ const ReportCardDesignScreen: React.FC = () => {
         )}
       </button>
       <div ref={targetRef}>
-        <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
         <main className="flex justify-center mt-10">
-          <div className="max-w-[1200px] p-4 overflow-auto border">
-            <div className="flex items-center justify-between w-auto">
+          <div className="relative max-w-[1200px] p-4 overflow-auto border">
+            <div
+              className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
+              style={{
+                lineHeight: "5.5em",
+                whiteSpace: "pre-wrap",
+                userSelect: "none",
+                pointerEvents: "none",
+                rotate: "30deg",
+              }}
+            >
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
+            </div>
+
+            {/* full */}
+            <div className="hidden md:flex items-center justify-between w-auto">
+              {/* logo */}
               <div className="border h-28 w-28 ">
                 {school?.avatar ? (
                   <img
@@ -234,6 +257,7 @@ const ReportCardDesignScreen: React.FC = () => {
                   </div>
                 )}
               </div>
+              {/* school info */}
               <div className="flex justify-center items-center flex-col">
                 <h1 className="font-bold uppercase text-[25px]">
                   {schoolName}
@@ -242,6 +266,7 @@ const ReportCardDesignScreen: React.FC = () => {
                   {schoolAddress}
                 </h1>
               </div>
+              {/* avatar */}
               <div className="border h-28 w-28 ">
                 {studentInfo?.avatar ? (
                   <img
@@ -255,7 +280,50 @@ const ReportCardDesignScreen: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
+            {/* Mobile */}
+            <div className="flex flex-col md:hidden ">
+              <div className="flex items-center justify-between w-auto">
+                {/* logo */}
+                <div className="border h-28 w-28 ">
+                  {school?.avatar ? (
+                    <img
+                      src={school?.avatar}
+                      className=" w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {school?.schoolName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+
+                {/* avatar */}
+                <div className="border h-28 w-28 ">
+                  {studentInfo?.avatar ? (
+                    <img
+                      src={studentInfo?.avatar}
+                      className="bg-blue-50 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {studentInfo?.studentFirstName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* school info */}
+              <div className="mt-5 flex justify-center items-center flex-col">
+                <h1 className="font-bold uppercase text-[25px]">
+                  {schoolName}
+                </h1>
+                <h1 className="text-[12px] font-semibold tracking-[0.6rem]">
+                  {schoolAddress}
+                </h1>
+              </div>
+            </div>
+            {/* end */}
+
+            <div className="text-[12px] md:text-[15px] h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
               {school?.presentSession}
               <span className="mx-1">{school?.presentTerm}</span> Student Report
             </div>
@@ -320,10 +388,10 @@ const ReportCardDesignScreen: React.FC = () => {
               </div>
             </main>
             <main className="overflow-auto uppercase text-[12px]">
-              <section className=" min-w-[1300px] flex flex-col mt-4  ">
+              <section className=" min-w-[1100px] flex flex-col mt-4  ">
                 <main className="flex  bg-blue-50">
                   <div className="p-2 w-[40px]">S/N</div>
-                  <div className="p-2 w-[250px] border-x ">subject</div>
+                  <div className="p-2 w-[150px] border-x ">subject</div>
                   <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
                     <p className="text">CA</p>
                     <p className="text-[12px]">(40)</p>
@@ -349,10 +417,11 @@ const ReportCardDesignScreen: React.FC = () => {
                     <p className="text-[12px]">(100)</p>
                   </div>
 
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
                     <p className="text-[12px]">(100)</p>
-                  </div>
+                  </div> */}
+
                   <div className=" w-[78px] px-2 border-r flex flex-col justify-center items-center ">
                     <p className="text">COMM. Term Score</p>
                   </div>
@@ -378,11 +447,11 @@ const ReportCardDesignScreen: React.FC = () => {
                     .sortBy(grade?.result, "subject")
                     ?.map((el: any, i: number) => (
                       <section
-                        className=" min-w-[1300px] flex my-1 bg-blue-50 h-[40px] "
+                        className=" min-w-[1100px] flex my-1 bg-blue-50 h-[40px] "
                         key={i - el?._id}
                       >
                         <div className="p-2 w-[40px]">{i + 1}</div>
-                        <div className="p-2 w-[250px] border-x ">
+                        <div className="p-2 w-[150px] border-x ">
                           {el?.subject}
                         </div>
                         <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
@@ -418,7 +487,7 @@ const ReportCardDesignScreen: React.FC = () => {
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">0</p>
                         </div>
-
+                        {/* 
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
@@ -427,7 +496,7 @@ const ReportCardDesignScreen: React.FC = () => {
                               el?.test4 +
                               el?.exam}
                           </p>
-                        </div>
+                        </div> */}
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
