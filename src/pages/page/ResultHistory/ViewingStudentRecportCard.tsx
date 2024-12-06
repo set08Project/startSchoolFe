@@ -183,7 +183,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
-    <div ref={contentRef} className="">
+    <div ref={contentRef} className="overflow-hidden">
       <Toaster />
       <button
         disabled={loading}
@@ -208,15 +208,38 @@ const ReportCardDesignAdminScreen: React.FC = () => {
         )}
       </button>
       <div ref={targetRef}>
-        <h1 className="text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
         <main className="flex justify-center mt-10">
-          <div className="max-w-[1100px] p-4 overflow-auto border">
-            <div className="flex items-center justify-between w-auto">
+          <div className="relative max-w-[1100px] p-4 overflow-auto border">
+            <div
+              className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
+              style={{
+                lineHeight: "5.5em",
+                whiteSpace: "pre-wrap",
+                userSelect: "none",
+                pointerEvents: "none",
+                rotate: "30deg",
+              }}
+            >
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
+            </div>
+
+            {/* full */}
+            <div className="hidden md:flex items-center justify-between w-auto">
+              {/* logo */}
               <div className="border h-28 w-28 ">
                 {school?.avatar ? (
                   <img
@@ -229,6 +252,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   </div>
                 )}
               </div>
+              {/* school info */}
               <div className="flex justify-center items-center flex-col">
                 <h1 className="font-bold uppercase text-[25px]">
                   {schoolName}
@@ -237,6 +261,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   {schoolAddress}
                 </h1>
               </div>
+              {/* avatar */}
               <div className="border h-28 w-28 ">
                 {studentInfo?.avatar ? (
                   <img
@@ -250,7 +275,50 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
+            {/* Mobile */}
+            <div className="flex flex-col md:hidden ">
+              <div className="flex items-center justify-between w-auto">
+                {/* logo */}
+                <div className="border h-28 w-28 ">
+                  {school?.avatar ? (
+                    <img
+                      src={school?.avatar}
+                      className=" w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {school?.schoolName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+
+                {/* avatar */}
+                <div className="border h-28 w-28 ">
+                  {studentInfo?.avatar ? (
+                    <img
+                      src={studentInfo?.avatar}
+                      className="bg-blue-50 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {studentInfo?.studentFirstName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* school info */}
+              <div className="mt-5 flex justify-center items-center flex-col">
+                <h1 className="font-bold uppercase text-[25px]">
+                  {schoolName}
+                </h1>
+                <h1 className="text-[12px] font-semibold tracking-[0.6rem]">
+                  {schoolAddress}
+                </h1>
+              </div>
+            </div>
+            {/* end */}
+
+            <div className="text-[10px] md:text-[12px] h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
               {school?.presentSession}
               <span className="mx-1">{school?.presentTerm}</span> Student Report
             </div>
