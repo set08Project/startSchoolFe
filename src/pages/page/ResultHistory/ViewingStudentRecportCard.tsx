@@ -373,7 +373,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                     .sortBy(grade?.result, "subject")
                     ?.map((el: any, i: number) => (
                       <section
-                        className=" min-w-[1050px] flex my-1 bg-blue-50 h-[40px] "
+                        className=" min-w-[1050px] flex my-1 bg-blue-50 min-h-[40px] py-1"
                         key={i - el?._id}
                       >
                         <div className="p-2 w-[40px]">{i + 1}</div>
@@ -444,7 +444,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                         <div className=" w-[50px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text-[18px]">{el?.grade}</p>
                         </div>
-                        <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
+                        <div className="w-[80px] text-center flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
                           <p
                             className={`
                           ${
