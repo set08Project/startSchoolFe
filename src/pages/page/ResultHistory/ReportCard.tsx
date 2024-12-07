@@ -28,7 +28,6 @@ import { adminReport, approveMainReport } from "../../api/schoolAPIs";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FaSpinner } from "react-icons/fa6";
-import { comment } from "../../../pagesForStudents/pages/CardTemplate/comment";
 
 interface iProps {
   props?: any;
@@ -218,13 +217,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           placeholder={`${
             result?.adminComment ? result?.adminComment : "Give a Remark"
           } `}
-          defaultValue={
-            result?.adminComment
-              ? result?.adminComment
-              : comment(result?.points)
-          }
+          defaultValue={result?.adminComment}
           value={stateValue}
-          // value={comment(result?.points)}
           onChange={(e) => {
             setStateValue(e.target.value);
           }}
