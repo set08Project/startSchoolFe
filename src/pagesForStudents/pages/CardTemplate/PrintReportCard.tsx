@@ -173,7 +173,6 @@ const PrintReportCard: React.FC = () => {
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
-  console.log(comment(61));
   return (
     <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
