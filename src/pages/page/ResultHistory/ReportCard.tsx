@@ -189,7 +189,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div
         className={`w-[${
-          subjectData?.classSubjects.length * 260
+          subjectData?.classSubjects.length * 290
         }px]  border-r items-center flex`}
       >
         <div className="flex gap-4 ">
@@ -201,7 +201,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
 
-      <div className="w-[100px] border-r">{result?.points}</div>
+      <div className="w-[100px] border-r ">{result?.points}</div>
 
       <div className="w-[100px] border-r">{result?.grade}</div>
 
@@ -217,7 +217,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           placeholder={`${
             result?.adminComment ? result?.adminComment : "Give a Remark"
           } `}
-          defaultValue={result?.adminComment ? result?.adminComment : ""}
+          defaultValue={result?.adminComment}
           value={stateValue}
           onChange={(e) => {
             setStateValue(e.target.value);
@@ -365,7 +365,7 @@ const ReportCardApproved = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${1700 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1500 + subjectData?.classSubjects.length * 300}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
@@ -374,7 +374,7 @@ const ReportCardApproved = () => {
           {/* 260px */}
           <div
             className={`w-[${
-              subjectData?.classSubjects.length * 260
+              subjectData?.classSubjects.length * 290
             }px] border-r`}
           >
             {/* <div>Subject Grade</div> */}
@@ -401,9 +401,9 @@ const ReportCardApproved = () => {
         </div>
 
         <div
-          className={` overflow-hidden`}
+          className={` overflow-hidde`}
           style={{
-            width: `${1700 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1500 + subjectData?.classSubjects.length * 300}px`,
           }}
         >
           {classStudents?.students?.length > 0 ? (

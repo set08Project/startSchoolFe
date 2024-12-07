@@ -16,6 +16,7 @@ import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
+import { comment } from "./comment";
 
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -171,6 +172,7 @@ const PrintReportCard: React.FC = () => {
       school?.presentSession
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
+
   return (
     <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
