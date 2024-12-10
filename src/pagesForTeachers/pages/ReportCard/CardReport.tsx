@@ -146,6 +146,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [attendance, setAttendace] = useState<string>("");
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
@@ -202,6 +203,16 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       <div className="w-[100px] border-r">{result?.points}</div>
 
       <div className="w-[100px] border-r">{result?.grade}</div>
+      <div className="w-[100px] border-r">
+        <input
+          type="text"
+          className="pl-2 w-[90%] h-[45px] border"
+          placeholder="70/100"
+          defaultValue={result?.attendance ? result?.attendance : ""}
+          value={attendance}
+          onChange={(e: any) => setAttendace(e.target.value)}
+        />
+      </div>
 
       <div className="w-[300px] border-r">
         <textarea
@@ -248,6 +259,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             setLoading(true);
             if (stateValue !== "") {
               reportCardRemark(teacherInfo?._id, props?._id, {
+                attendance,
                 teacherComment: stateValue,
               }).then((res: any) => {
                 setLoading(false);
@@ -651,7 +663,7 @@ const CardReport = () => {
             <div
               className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
               style={{
-                width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1300 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               <div className="w-[100px] border-r">Sequence</div>
@@ -679,6 +691,7 @@ const CardReport = () => {
 
               <div className="w-[100px] border-r">Total Points</div>
               <div className="w-[100px] border-r">Grade</div>
+              <div className="w-[100px] border-r">Attendance</div>
               <div className="w-[300px] border-r">Give Report/Remark</div>
 
               <div className="w-[180px] border-r">Submit Report</div>
@@ -687,7 +700,7 @@ const CardReport = () => {
             <div
               className={` overflow-hidden`}
               style={{
-                width: `${1200 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1300 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               {sortedStudents?.length > 0 ? (
