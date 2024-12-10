@@ -363,7 +363,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
-      <div className={`w-[100px] border-r font-bold`}>{i + 1}</div>
+      <div className={`w-[30px] border-r font-bold `}>{i + 1}</div>
       {/* name */}
       <div className="w-[250px] flex border-r">
         <div className="flex gap-2">
@@ -682,14 +682,16 @@ const CardReport = () => {
             </div>
           </div>
         ) : toggle1 ? (
-          <div>
+          <div className={` overflow-hidden`}>
             <div
-              className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
-              style={{
-                width: `${260 + subjectData?.classSubjects.length * 260}px`,
-              }}
+              className={` text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+              style={
+                {
+                  // width: `${260 + subjectData?.classSubjects.length * 260}px`,
+                }
+              }
             >
-              <div className="w-[100px] border-r">Sequence</div>
+              <div className="w-[30px] border-r">s/n</div>
               <div className="w-[250px] border-r">student Info</div>
 
               <div className="w-[420px] border-r px-1">
@@ -734,9 +736,11 @@ const CardReport = () => {
 
             <div
               className={` overflow-hidden`}
-              style={{
-                width: `${260 + subjectData?.classSubjects.length * 260}px`,
-              }}
+              style={
+                {
+                  // width: `${260 + subjectData?.classSubjects.length * 260}px`,
+                }
+              }
             >
               {sortedStudents?.length > 0 ? (
                 <div>
