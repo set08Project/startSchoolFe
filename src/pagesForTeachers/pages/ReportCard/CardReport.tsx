@@ -363,7 +363,7 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
-      <div className={`w-[100px] border-r font-bold`}>{i + 1}</div>
+      <div className={`w-[30px] border-r font-bold `}>{i + 1}</div>
       {/* name */}
       <div className="w-[250px] flex border-r">
         <div className="flex gap-2">
@@ -386,6 +386,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2  mr-16"
             placeholder={
               gradeData?.reportCard[0]?.softSkill[0]?.[`communication`]
+                ? gradeData?.reportCard[0]?.softSkill[0]?.[`communication`]
+                : "Over 10"
             }
             value={communication}
             onChange={(e) => setCommunication(e.target.value)}
@@ -395,7 +397,11 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <label className="text-[9px] uppercase">Leadership</label>
           <input
             className="w-16 h-10 border p-2 mr-6"
-            placeholder={gradeData?.reportCard[0]?.softSkill[0]?.[`leadership`]}
+            placeholder={
+              gradeData?.reportCard[0]?.softSkill[0]?.[`leadership`]
+                ? gradeData?.reportCard[0]?.softSkill[0]?.[`leadership`]
+                : "Over 10"
+            }
             value={leadership}
             onChange={(e) => setLeadership(e.target.value)}
           />
@@ -406,6 +412,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2 mr-8"
             placeholder={
               gradeData?.reportCard[0]?.softSkill[0]?.[`punctuality`]
+                ? gradeData?.reportCard[0]?.softSkill[0]?.[`punctuality`]
+                : "Over 10"
             }
             value={punctuality}
             onChange={(e) => setPunctuality(e.target.value)}
@@ -415,7 +423,11 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
           <label className="text-[9px] uppercase">Empathy</label>
           <input
             className="w-16 h-10 border p-2 "
-            placeholder={gradeData?.reportCard[0]?.softSkill[0]?.[`empathy`]}
+            placeholder={
+              gradeData?.reportCard[0]?.softSkill[0]?.[`empathy`]
+                ? gradeData?.reportCard[0]?.softSkill[0]?.[`empathy`]
+                : "Over 10"
+            }
             value={empathy}
             onChange={(e) => setEmpathy(e.target.value)}
           />
@@ -429,6 +441,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             className="w-16 h-10 border p-2 ml-2 mr-6"
             placeholder={
               gradeData?.reportCard[0]?.peopleSkill[0]?.[`confidence`]
+                ? gradeData?.reportCard[0]?.peopleSkill[0]?.[`confidence`]
+                : "over 10"
             }
             value={confidence}
             onChange={(e) => setConfidence(e.target.value)}
@@ -441,6 +455,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             value={presentational}
             placeholder={
               gradeData?.reportCard[0]?.peopleSkill[0]?.[`presentational`]
+                ? gradeData?.reportCard[0]?.peopleSkill[0]?.[`presentational`]
+                : "Over 10"
             }
             onChange={(e) => setPresentational(e.target.value)}
           />
@@ -452,6 +468,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             value={hardworking}
             placeholder={
               gradeData?.reportCard[0]?.peopleSkill[0]?.[`hardworking`]
+                ? gradeData?.reportCard[0]?.peopleSkill[0]?.[`hardworking`]
+                : "Over 10"
             }
             onChange={(e) => setHardworking(e.target.value)}
           />
@@ -463,6 +481,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             value={resilient}
             placeholder={
               gradeData?.reportCard[0]?.peopleSkill[0]?.[`resilient`]
+                ? gradeData?.reportCard[0]?.peopleSkill[0]?.[`resilient`]
+                : "Over 10"
             }
             onChange={(e) => setResilient(e.target.value)}
           />
@@ -476,6 +496,8 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
             value={sportship}
             placeholder={
               gradeData?.reportCard[0]?.physicalSkill[0]?.[`sportship`]
+                ? gradeData?.reportCard[0]?.physicalSkill[0]?.[`sportship`]
+                : "Over 10"
             }
             onChange={(e) => setSportship(e.target.value)}
           />
@@ -682,15 +704,17 @@ const CardReport = () => {
             </div>
           </div>
         ) : toggle1 ? (
-          <div>
+          <div className={`w-[1300px] overflow-hidden`}>
             <div
-              className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
-              style={{
-                width: `${260 + subjectData?.classSubjects.length * 260}px`,
-              }}
+              className={` overflow-auto text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+              style={
+                {
+                  // width: `${260 + subjectData?.classSubjects.length * 260}px`,
+                }
+              }
             >
-              <div className="w-[100px] border-r">Sequence</div>
-              <div className="w-[250px] border-r">student Info</div>
+              <div className="w-[30px] border-r">s/n</div>
+              <div className="w-[220px] border-r">student Info</div>
 
               <div className="w-[420px] border-r px-1">
                 <p className="font-semibold text-blue-950 text-[13px]">
@@ -734,9 +758,11 @@ const CardReport = () => {
 
             <div
               className={` overflow-hidden`}
-              style={{
-                width: `${260 + subjectData?.classSubjects.length * 260}px`,
-              }}
+              style={
+                {
+                  // width: `${260 + subjectData?.classSubjects.length * 260}px`,
+                }
+              }
             >
               {sortedStudents?.length > 0 ? (
                 <div>
