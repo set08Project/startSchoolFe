@@ -107,7 +107,7 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div className="w-[260px] border-">
-        <p className="pl-1 font-bold text-[15px]  ">
+        <p className="pl-1 font-bold text-[15px] capitalize ">
           {result?.subject ? result?.subject : "Have't Entered"}
         </p>
 
