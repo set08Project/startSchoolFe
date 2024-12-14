@@ -431,9 +431,9 @@ const ReportCardDesignScreen: React.FC = () => {
                   <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Class lowest Score</p>
                   </div>
-                  <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                  {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Class AVG. Score</p>
-                  </div>
+                  </div> */}
                   <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Grade</p>
                   </div>
@@ -512,9 +512,9 @@ const ReportCardDesignScreen: React.FC = () => {
                         <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">{resultMin[i]?.score}</p>
                         </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                        {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">67</p>
-                        </div>
+                        </div> */}
                         <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text-[18px]">{el?.grade}</p>
                         </div>
@@ -561,7 +561,7 @@ const ReportCardDesignScreen: React.FC = () => {
             {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-            <main className="grid grid-cols-1 sm:grid-cols-3 my-10">
+            <main className="grid grid-cols-1 sm:grid-cols-4 my-10">
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">
                   No. of subject taken
@@ -576,6 +576,14 @@ const ReportCardDesignScreen: React.FC = () => {
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
                   {numbPassed}
+                </h1>
+              </div>
+              <div className=" border p-2 ">
+                <h1 className="uppercase text-[12px] font-semibold">
+                  Attendance Performance
+                </h1>
+                <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                  {grade?.attendance}
                 </h1>
               </div>
               <div className=" border p-2 ">

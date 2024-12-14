@@ -555,7 +555,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
             {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-            <main className="grid grid-cols-1 sm:grid-cols-3 my-10">
+            <main className="grid grid-cols-1 sm:grid-cols-4 my-10">
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">
                   No. of subject taken
