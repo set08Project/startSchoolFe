@@ -7,6 +7,7 @@ import axios from "axios";
 
 const URL: string = "https://next-server-sdyl.onrender.com/api";
 const URL2: string = "https://next-server-sdyl.onrender.com";
+
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 // const URL2: string = "https://startschoolbe-1.onrender.com";
 
@@ -45,6 +46,7 @@ export const bulkUploadofStudent = async (schoolID: string, data: any) => {
     return await axios
       .post(`${URL}/create-bulk-student/${schoolID}`, data, config)
       .then((res: any) => {
+        console.log("click: ");
         return res;
       });
   } catch (error: any) {
