@@ -188,7 +188,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
 
       <div
         className={`w-[${
-          subjectData?.classSubjects.length * 260
+          subjectData?.classSubjects.length * 270
         }px] border-r items-center flex`}
       >
         <div className="flex gap-4">
@@ -665,7 +665,7 @@ const CardReport = () => {
             <div
               className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
               style={{
-                width: `${1300 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1420 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               <div className="w-[100px] border-r">Sequence</div>
@@ -676,11 +676,11 @@ const CardReport = () => {
               {/* 260px */}
               <div
                 className={`w-[${
-                  subjectData?.classSubjects.length * 260
+                  subjectData?.classSubjects.length * 270
                 }px] border-r`}
               >
                 {/* <div>Subject Grade</div> */}
-                <div className=" flex ">
+                <div className="flex">
                   <div className="flex gap-4">
                     {lodash
                       .sortBy(subjectData?.classSubjects, "subjectTitle")
@@ -702,7 +702,7 @@ const CardReport = () => {
             <div
               className={` overflow-hidden`}
               style={{
-                width: `${1300 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1420 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               {sortedStudents?.length > 0 ? (
@@ -719,7 +719,7 @@ const CardReport = () => {
             </div>
           </div>
         ) : toggle1 ? (
-          <div className={`w-[1300px] overflow-hidden`}>
+          <div className={`w-[1400px] overflow-hidden`}>
             <div
               className={` overflow-auto text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
               style={
