@@ -702,9 +702,15 @@ export const createGradeScore = async (
   data: {}
 ) => {
   try {
+    console.log(teacherID, studentID);
+
     return await axios
-      .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
+      .post(
+        `${"http://localhost:2244/api"}/create-report-card/${teacherID}/${studentID}`,
+        data
+      )
       .then((res: any) => {
+        console.log("read: ", res?.data);
         return res?.data;
       });
   } catch (error) {

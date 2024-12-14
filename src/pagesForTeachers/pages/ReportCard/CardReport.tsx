@@ -39,6 +39,7 @@ interface iProps {
   i?: number;
   stateValue?: string;
   teacherInfo?: any;
+  oneClass?: any;
 }
 
 const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
@@ -106,7 +107,7 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div className="w-[260px] border-">
-        <p className="pl-1 font-bold text-[15px]  ">
+        <p className="pl-1 font-bold text-[15px] capitalize ">
           {result?.subject ? result?.subject : "Have't Entered"}
         </p>
 
@@ -137,12 +138,11 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
   const { teacherInfo } = useTeacherInfo();
   const { gradeData } = useStudentGrade(props?._id);
-  const { oneClass } = useReadOneClassInfo(teacherInfo?.presentClassID);
 
-  const { subjectData } = useClassSubject(oneClass?._id);
+  const { subjectData } = useClassSubject(theClass?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -189,9 +189,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       <div
         className={`w-[${
           subjectData?.classSubjects.length * 260
-        }px]  border-r items-center flex`}
+        }px] border-r items-center flex`}
       >
-        <div className="flex gap-4 ">
+        <div className="flex gap-4">
           {lodash
             .sortBy(subjectData?.classSubjects, "subjectTitle")
             ?.map((el: any) => (
@@ -599,6 +599,8 @@ const CardReport = () => {
   const [toggle, setToggle] = useState<boolean>(true);
   const [toggle1, setToggle1] = useState<boolean>(false);
 
+  // console.log("class: ", oneClass);
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -707,7 +709,7 @@ const CardReport = () => {
                 <div>
                   {sortedStudents?.map((props: any, i: number) => (
                     <div key={props}>
-                      <MainStudentRow props={props} i={i} />
+                      <MainStudentRow props={props} i={i} oneClass={oneClass} />
                     </div>
                   ))}
                 </div>
