@@ -173,6 +173,8 @@ const PrintReportCard: React.FC = () => {
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
+  console.log(grade);
+
   return (
     <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
@@ -376,7 +378,7 @@ const PrintReportCard: React.FC = () => {
                 </div>
               </main>
               <main className="overflow-auto uppercase text-[12px]">
-                <section className=" min-w-[1100px] flex flex-col mt-4  ">
+                <section className=" min-w-[1150px] flex flex-col mt-4  ">
                   <main className="flex  bg-blue-50">
                     <div className="p-2 w-[40px]">S/N</div>
                     <div className="p-2 w-[180px] border-x ">subject</div>
@@ -418,9 +420,9 @@ const PrintReportCard: React.FC = () => {
                     <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Class lowest Score</p>
                     </div>
-                    <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                    {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Class AVG. Score</p>
-                    </div>
+                    </div> */}
                     <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Grade</p>
                     </div>
@@ -434,7 +436,7 @@ const PrintReportCard: React.FC = () => {
                       .sortBy(grade?.result, "subject")
                       ?.map((el: any, i: number) => (
                         <section
-                          className=" min-w-[1100px] flex my-1 bg-blue-50 h-[40px] "
+                          className=" min-w-[1150px] flex my-1 bg-blue-50 h-[40px] "
                           key={i - el?._id}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
@@ -499,9 +501,9 @@ const PrintReportCard: React.FC = () => {
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text">{resultMin[i]?.score}</p>
                           </div>
-                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                          {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text">67</p>
-                          </div>
+                          </div> */}
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text-[18px]">{el?.grade}</p>
                           </div>
@@ -548,7 +550,7 @@ const PrintReportCard: React.FC = () => {
               {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-              <main className="grid grid-cols-1 sm:grid-cols-3 my-10">
+              <main className="grid grid-cols-1 sm:grid-cols-4 my-10">
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
                     No. of subject taken
@@ -557,6 +559,7 @@ const PrintReportCard: React.FC = () => {
                     {grade?.result?.length}
                   </h1>
                 </div>
+
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
                     No. of subject passed
@@ -565,6 +568,15 @@ const PrintReportCard: React.FC = () => {
                     {numbPassed}
                   </h1>
                 </div>
+                <div className=" border p-2 ">
+                  <h1 className="uppercase text-[12px] font-semibold">
+                    Attendance Performance
+                  </h1>
+                  <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                    {grade?.attendance}
+                  </h1>
+                </div>
+
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
                     Percenatge score
