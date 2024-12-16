@@ -162,6 +162,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -237,7 +238,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             if (stateValue !== "") {
               adminReport(data?._id, props?._id, stateValue).then(
                 (res: any) => {
-                  console.log(res);
                   if (res.status === 201) {
                     mutate(`api/student-report-card/${props?._id}`);
                     toast.success("Report Card Report Noted");

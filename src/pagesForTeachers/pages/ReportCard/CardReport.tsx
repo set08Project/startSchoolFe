@@ -104,6 +104,8 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
       return data.subject === el?.subjectTitle;
     });
 
+  console.log(result);
+
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div className="w-[260px] border-">

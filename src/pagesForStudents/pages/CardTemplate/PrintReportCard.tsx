@@ -173,7 +173,7 @@ const PrintReportCard: React.FC = () => {
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
-  console.log(grade);
+  console.log(subjectData);
 
   return (
     <div ref={contentRef} className=" overflow-hidden">
@@ -915,6 +915,36 @@ const PrintReportCard: React.FC = () => {
               </main>
 
               {/* Comments */}
+
+              <div className=" grid text-[12px] mt-10">
+                <div className="border mr-3 p-2">
+                  <p className="font-semibold text-[18px] italic">
+                    General Class Comment
+                  </p>
+
+                  <p className="my-2  h-[120px] p-2 mb-5">
+                    {grade?.adminComment}
+                  </p>
+                  {/* <div className="flex w-full">
+                    <div className="flex-1 flex flex-col">
+                      <p className="font-semibold">
+                        {school?.name} {school?.name2}
+                      </p>
+                      <p className="text-[10px]">Principal</p>
+                      <div className="flex-1" />
+                      <p>{moment(grade?.createdAt).format("lll")}</p>
+                    </div>
+
+                    <div className="w-[160px] h-[80px] border">
+                      <img
+                        src={school?.signature}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div> */}
+                </div>
+              </div>
+
               <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
                 <div className="border mr-3 p-2">
                   <p>Principal's Comment</p>
