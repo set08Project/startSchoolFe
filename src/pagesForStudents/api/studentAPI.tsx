@@ -28,7 +28,6 @@ export const clockOutWidthID = async (
     return await axios
       .patch(`${URL}/student-clock-out-with-id/${schoolID}`, { enrollmentID })
       .then((res) => {
-        console.log("Student clockOut: ", res);
         return res?.data;
       });
   } catch (error) {
@@ -151,7 +150,6 @@ export const readClassInfo = async (className: string) => {
     return await axios
       .post(`${URL}/view-classroom-info-name/`, { className })
       .then((res: any) => {
-        console.log("This is res", res);
         return res?.data;
       });
   } catch (error) {
@@ -192,7 +190,7 @@ export const performanceExamination = async (
   try {
     return await axios
       .post(
-        `${"http://localhost:2244/api"}/create-subject-exam-performance/${studentID}/${quizID}/${subjectID}`,
+        `${URL}/create-subject-exam-performance/${studentID}/${quizID}/${subjectID}`,
         data
       )
       .then((res: any) => {

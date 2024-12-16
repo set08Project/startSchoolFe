@@ -46,7 +46,6 @@ export const bulkUploadofStudent = async (schoolID: string, data: any) => {
     return await axios
       .post(`${URL}/create-bulk-student/${schoolID}`, data, config)
       .then((res: any) => {
-        console.log("click: ");
         return res;
       });
   } catch (error: any) {

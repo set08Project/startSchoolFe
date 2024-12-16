@@ -75,7 +75,6 @@ export const getOneStudentSubjectPerformance = async (
 export const getStudentTestRecord = async (quizID: string) => {
   try {
     return await axios.get(`${URL}/quiz/${quizID}/record`).then((res) => {
-      console.log("res", res?.data?.data);
       return res?.data?.data;
     });
   } catch (error: any) {
@@ -342,7 +341,6 @@ export const createExaminationData = async (
 export const readExam = async (quizID: string) => {
   try {
     return await axios.get(`${URL}/view-exam/${quizID}`).then((res: any) => {
-      console.log("show exam: ", res);
       return res?.data;
     });
   } catch (error) {
@@ -702,15 +700,9 @@ export const createGradeScore = async (
   data: {}
 ) => {
   try {
-    console.log(teacherID, studentID);
-
     return await axios
-      .post(
-        `${"http://localhost:2244/api"}/create-report-card/${teacherID}/${studentID}`,
-        data
-      )
+      .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
-        console.log("read: ", res?.data);
         return res?.data;
       });
   } catch (error) {
