@@ -74,8 +74,8 @@ const Layout: FC = () => {
       // if (approved) {
       setLoading(true);
       createSchoolClassroom(data?._id, {
-        // className: validateClass(classRM.toUpperCase()),
-        className: classRM,
+        className: validateClass(classRM.toUpperCase()),
+        // className: classRM,
         class1stFee: num1,
         class2ndFee: num2,
         class3rdFee: num3,
@@ -167,9 +167,10 @@ const Layout: FC = () => {
                 }}
               >
                 <AddAnyItem
-                  select
+                  // select
                   upper
                   fee
+                  base
                   titleCall="Creating new classroom"
                   offFn={handleDisplaySubjectOff}
                   text="Place the name this would be generally called across the life-span of the school's existance!"

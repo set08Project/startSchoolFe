@@ -109,7 +109,7 @@ const AddAnyItem: FC<iProps> = ({
         <p className="mt-2 leading-tight text-[13px] font-medium">{text}</p>
 
         <div className="mt-10 w-full gap-2 flex items-center">
-          {base && (
+          {
             <div className="w-full">
               <label className="font-medium text-[12px]">
                 {startTitle} <span className="text-red-500">*</span>
@@ -125,9 +125,9 @@ const AddAnyItem: FC<iProps> = ({
                 }}
               />
             </div>
-          )}
+          }
 
-          {select && data.categoryType === "Nursery/Primary" ? (
+          {/* {select && data.categoryType === "Nursery/Primary" ? (
             <div className="w-full flex flex-col mb-10">
               <label className="font-medium text-[12px]">
                 {startTitle} <span className="text-red-500">*</span>
@@ -194,7 +194,7 @@ const AddAnyItem: FC<iProps> = ({
                 <option value={"SSS 3SCIENCE"}>SSS 3SCIENCE</option>
               </select>
             </div>
-          )}
+          )} */}
 
           {en && (
             <div className="w-full -mt-5">
