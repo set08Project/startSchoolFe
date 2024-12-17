@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { MdClose } from "react-icons/md";
 import Input from "../reUse/Input";
 import Button from "../reUse/Button";
@@ -42,6 +42,8 @@ interface iProps {
   upper?: boolean;
   date?: boolean;
   sub?: boolean;
+  base?: boolean;
+  select?: boolean;
   startDateTime?: any;
   startDateTimeFn?: any;
 }
@@ -73,13 +75,16 @@ const AddAnyItem: FC<iProps> = ({
   announce,
   sub,
   upper,
-
+  select,
   startDateTime,
   startDateTimeFn,
+  base,
 }) => {
   //
   const { schoolClassroom } = useSchoolClassRM();
   const { data } = useSchoolData();
+
+  const [classNameData, setClassNameData] = useState<string>("");
 
   return (
     <div className={`flex ${date ? "mt-32" : "mt-60"} justify-center`}>
@@ -104,21 +109,92 @@ const AddAnyItem: FC<iProps> = ({
         <p className="mt-2 leading-tight text-[13px] font-medium">{text}</p>
 
         <div className="mt-10 w-full gap-2 flex items-center">
-          <div className="w-full">
-            <label className="font-medium text-[12px]">
-              {startTitle} <span className="text-red-500">*</span>
-            </label>
-            <Input
-              placeholder={placeStart}
-              className={`mx-0 h-12 w-full ${
-                upper ? "uppercase" : "normal-case"
-              }`}
-              value={start.toUpperCase()}
-              onChange={(e: any) => {
-                setStart!(e.target.value);
-              }}
-            />
-          </div>
+          {base && (
+            <div className="w-full">
+              <label className="font-medium text-[12px]">
+                {startTitle} <span className="text-red-500">*</span>
+              </label>
+              <Input
+                placeholder={placeStart}
+                className={`mx-0 h-12 w-full ${
+                  upper ? "uppercase" : "normal-case"
+                }`}
+                value={start.toUpperCase()}
+                onChange={(e: any) => {
+                  setStart!(e.target.value);
+                }}
+              />
+            </div>
+          )}
+
+          {select && data.categoryType === "Nursery/Primary" ? (
+            <div className="w-full flex flex-col mb-10">
+              <label className="font-medium text-[12px]">
+                {startTitle} <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={classNameData}
+                onChange={(e: any) => {
+                  setClassNameData!(e.target.value);
+                  setStart(classNameData);
+                }}
+                className="select select-bordered w-full max-w-xs"
+              >
+                <option disabled selected>
+                  Pick a class?
+                </option>
+
+                <option value={"kindergarten"}>kindergarten</option>
+                <option value={"Nursery 1"}>Nursery 1</option>
+                <option value={"Nursery 2"}>Nursery 2</option>
+                <option value={"Basic 1"}>Basic 1</option>
+                <option value={"Basic 2"}>Basic 2</option>
+                <option value={"Basic 3"}>Basic 3</option>
+                <option value={"Basic 4"}>Basic 4</option>
+                <option value={"Basic 5"}>Basic 5</option>
+                <option value={"Basic 6"}>Basic 6</option>
+              </select>
+            </div>
+          ) : (
+            <div className="w-full flex flex-col mb-10">
+              <label className="font-medium text-[12px]">
+                {startTitle} <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={start.toUpperCase()}
+                onChange={(e: any) => {
+                  setStart!(e.target.value);
+                }}
+                className="select select-bordered w-full max-w-xs"
+              >
+                <option disabled selected>
+                  Pick a class?
+                </option>
+
+                <option value={"JSS 1A"}>JSS 1</option>
+                <option value={"JSS 1B"}>JSS 1</option>
+                <option value={"JSS 1C"}>JSS 1</option>
+                <option value={"JSS 2A"}>JSS 2</option>
+                <option value={"JSS 2B"}>JSS 2</option>
+                <option value={"JSS 2C"}>JSS 2</option>
+                <option value={"JSS 3A"}>JSS 3</option>
+                <option value={"JSS 3B"}>JSS 3</option>
+                <option value={"JSS 3C"}>JSS 3</option>
+
+                <option value={"SSS 1ART"}>SSS 1ART</option>
+                <option value={"SSS 1COMMERCIAL"}>SSS 1COMMERCIAL</option>
+                <option value={"SSS 1SCIENCE"}>SSS 1SCIENCE</option>
+
+                <option value={"SSS 2ART"}>SSS 2ART</option>
+                <option value={"SSS 2COMMERCIAL"}>SSS 2COMMERCIAL</option>
+                <option value={"SSS 2SCIENCE"}>SSS 2SCIENCE</option>
+
+                <option value={"SSS 3ART"}>SSS 3ART</option>
+                <option value={"SSS 3COMMERCIAL"}>SSS 3COMMERCIAL</option>
+                <option value={"SSS 3SCIENCE"}>SSS 3SCIENCE</option>
+              </select>
+            </div>
+          )}
 
           {en && (
             <div className="w-full -mt-5">

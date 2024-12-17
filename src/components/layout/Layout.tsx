@@ -49,7 +49,7 @@ const Layout: FC = () => {
   const handleCreateClassRoom = () => {
     const validateClass = (input: string): string => {
       const classPattern =
-        /^(JSS|SSS|KG|Nursery|kindergarten|Basic|Primary)\s[1-6][A-Z]$|^Nur\s[1-6]$|^Pry\s[1-6]$|^KG\s[1-6]$|^SSS\s[1-3](SCIENCE|ART|COMMERCIAL|TECHNICAL)$/;
+        /^(JSS|SSS|KG|Nursery|kindergarten|Basic|BASIC|Primary)\s[1-6][A-Z]$|^Nur\s[1-6]$|^Pry\s[1-6]$|^KG\s[1-6]$|^SSS\s[1-3](SCIENCE|ART|COMMERCIAL|TECHNICAL)$/;
 
       if (classPattern.test(input)) {
         setApproved(true);
@@ -71,28 +71,29 @@ const Layout: FC = () => {
     console.log(validateClass(classRM.toUpperCase()));
 
     try {
-      if (approved) {
-        setLoading(true);
-        createSchoolClassroom(data?._id, {
-          className: validateClass(classRM.toUpperCase()),
-          class1stFee: num1,
-          class2ndFee: num2,
-          class3rdFee: num3,
-        })
-          .then((res: any) => {
-            if (res.status === 201) {
-              mutate(`api/view-classrooms/`);
-              setLoading(false);
-              handleDisplaySubjectOff();
-            } else {
-              setLoading(false);
-              toast.error(`${res.response.data.message}`);
-            }
-          })
-          .finally(() => {
+      // if (approved) {
+      setLoading(true);
+      createSchoolClassroom(data?._id, {
+        // className: validateClass(classRM.toUpperCase()),
+        className: classRM,
+        class1stFee: num1,
+        class2ndFee: num2,
+        class3rdFee: num3,
+      })
+        .then((res: any) => {
+          if (res.status === 201) {
+            mutate(`api/view-classrooms/`);
             setLoading(false);
-          });
-      }
+            handleDisplaySubjectOff();
+          } else {
+            setLoading(false);
+            toast.error(`${res.response.data.message}`);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      // }
     } catch (error) {
       return error;
     }
@@ -166,6 +167,7 @@ const Layout: FC = () => {
                 }}
               >
                 <AddAnyItem
+                  select
                   upper
                   fee
                   titleCall="Creating new classroom"
