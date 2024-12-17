@@ -18,6 +18,9 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
 import { comment } from "./comment";
 
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -34,10 +37,6 @@ const PrintReportCard: React.FC = () => {
       }
     });
   };
-
-  useEffect(() => {
-    preprocessContent();
-  }, []);
 
   const { studentInfo } = useStudentInfo();
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
@@ -173,7 +172,37 @@ const PrintReportCard: React.FC = () => {
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
-  console.log(subjectData);
+  const handleDownloadPdf = async () => {
+    const element = contentRef.current;
+    if (!element) {
+      return;
+    }
+
+    const canvas = await html2canvas(element, {
+      scale: 2,
+    });
+    const data = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a4",
+    });
+
+    console.log(data);
+
+    const imgProperties = pdf.getImageProperties(data);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+
+    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
+
+    pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("examplepdf.pdf");
+  };
+
+  useEffect(() => {
+    preprocessContent();
+  }, []);
 
   return (
     <div ref={contentRef} className=" overflow-hidden">
@@ -185,6 +214,7 @@ const PrintReportCard: React.FC = () => {
         }`}
         onClick={() => {
           setLoading(true);
+
           toPDF().finally(() => {
             setLoading(false);
             toast.success("Result downloaded.");
