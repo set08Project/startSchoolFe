@@ -534,7 +534,6 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                           }
                           `}
                           >
-                            {el?.grade}
                             {el?.grade === "A1"
                               ? "Execellent"
                               : el?.grade === "B2" || el?.grade === "B3"
