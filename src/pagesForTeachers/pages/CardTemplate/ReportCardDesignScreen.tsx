@@ -522,33 +522,38 @@ const ReportCardDesignScreen: React.FC = () => {
                           <p
                             className={`
                           ${
-                            el?.grade === "A"
+                            el?.grade === "A1"
                               ? "text-green-600"
-                              : el?.grade === "B"
+                              : el?.grade === "B2" || el?.grade === "B3"
                               ? "text-purple-800"
-                              : el?.grade === "C"
+                              : el?.grade === "C4" ||
+                                el?.grade === "C5" ||
+                                el?.grade === "C6"
                               ? "text-gray-600"
-                              : el?.grade === "D"
+                              : el?.grade === "D7"
                               ? "text-purple-600"
-                              : el?.grade === "E"
+                              : el?.grade === "E8"
                               ? "Poor Pass"
-                              : el?.grade === "F"
+                              : el?.grade === "F9" || el?.grade === "F"
                               ? "text-red-500"
                               : null
                           }
                           `}
                           >
-                            {el?.grade === "A"
+                            {el?.grade}
+                            {el?.grade === "A1"
                               ? "Execellent"
-                              : el?.grade === "B"
+                              : el?.grade === "B2" || el?.grade === "B3"
                               ? "Very Good"
-                              : el?.grade === "C"
+                              : el?.grade === "C4" ||
+                                el?.grade === "C5" ||
+                                el?.grade === "C6"
                               ? "Credit"
-                              : el?.grade === "D"
+                              : el?.grade === "D7"
                               ? "Pass"
-                              : el?.grade === "E"
+                              : el?.grade === "E8"
                               ? "Poor Pass"
-                              : el?.grade === "F"
+                              : el?.grade === "F9" || el?.grade === "F"
                               ? "Fail"
                               : null}
                           </p>
