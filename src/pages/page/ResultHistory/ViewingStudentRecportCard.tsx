@@ -215,7 +215,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
         <main className="flex justify-center mt-10">
-          <div className="relative max-w-[1100px] p-4 overflow-auto border">
+          <div className="relative max-w-[1100px] p-4 overflow-hidden border">
             <div
               className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
               style={{

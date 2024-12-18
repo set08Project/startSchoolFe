@@ -238,7 +238,7 @@ const PrintReportCard: React.FC = () => {
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
         <div className="relative ">
           <main className="flex justify-center mt-10">
-            <div className="max-w-[1200px] p-4 overflow-auto border">
+            <div className="max-w-[1200px] p-4 overflow-hidden border">
               <div
                 className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
                 style={{
