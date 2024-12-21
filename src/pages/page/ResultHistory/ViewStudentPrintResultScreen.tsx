@@ -1,28 +1,31 @@
 import React, { useState, useRef, useEffect, FC } from "react";
 import {
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
-import {
   useClassSubject,
   useSchoolAnnouncement,
   useStudentGrade,
   useSujectInfo,
   useTeacherDetail,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
+
 import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
-import { comment } from "./comment";
-
+import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const PrintReportCardScreen: React.FC = () => {
+const AdminPrintReportCardScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const { studentID } = useParams();
+  const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
 
   const preprocessContent = () => {
     const content = contentRef.current;
@@ -38,7 +41,7 @@ const PrintReportCardScreen: React.FC = () => {
     });
   };
 
-  const { studentInfo } = useStudentInfo();
+  //   const { studentInfo } = useStudentInfo();
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
@@ -1036,7 +1039,7 @@ const PrintReportCardScreen: React.FC = () => {
   );
 };
 
-export default PrintReportCardScreen;
+export default AdminPrintReportCardScreen;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();

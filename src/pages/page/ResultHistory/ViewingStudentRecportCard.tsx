@@ -20,6 +20,8 @@ import {
   useSujectInfo,
   useTeacherDetail,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { Link } from "react-router-dom";
+
 import { usePDF } from "react-to-pdf";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
@@ -180,23 +182,22 @@ const ReportCardDesignAdminScreen: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  console.log("great: ", grade);
-
   return (
     <div ref={contentRef} className="overflow-hidden">
       <Toaster />
-      <button
-        disabled={loading}
+      <Link
+        to={`/download-students-report-card/${studentID}`}
+        // disabled={loading}
         className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
           loading && "cursor-not-allowed bg-slate-200 animate-pulse"
         }`}
-        onClick={() => {
-          setLoading(true);
-          toPDF().finally(() => {
-            setLoading(false);
-            toast.success("Result downloaded.");
-          });
-        }}
+        // onClick={() => {
+        //   setLoading(true);
+        //   toPDF().finally(() => {
+        //     setLoading(false);
+        //     toast.success("Result downloaded.");
+        //   });
+        // }}
       >
         {loading ? (
           <div className="flex gap-2 items-center">
@@ -204,9 +205,9 @@ const ReportCardDesignAdminScreen: React.FC = () => {
             <span>downloading...</span>
           </div>
         ) : (
-          "Print Result"
+          "Go to Download Result"
         )}
-      </button>
+      </Link>
       <div ref={targetRef}>
         <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
