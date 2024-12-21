@@ -3,6 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 
+const TeacherPrintReportCardScreen = React.lazy(
+  () => import("../pagesForTeachers/pages/CardTemplate/DownloadStudentReport")
+);
+
 const SchemeOfWorkTable = React.lazy(
   () =>
     import(
@@ -172,6 +176,17 @@ export const teacherRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             <ErrorBoundary FallbackComponent={Fallback}>
               <ReportCardDesignScreen />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+      {
+        path: "print-student-report-card/:studentID",
+        index: true,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <TeacherPrintReportCardScreen />
             </ErrorBoundary>
           </Suspense>
         ),
