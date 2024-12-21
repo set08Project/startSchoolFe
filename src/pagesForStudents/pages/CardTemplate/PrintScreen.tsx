@@ -716,7 +716,7 @@ const PrintReportCardScreen: React.FC = () => {
               </main>
 
               <main className="mt-10">
-                <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
+                <div className="bg-slate-50 flex-wrap h-[100px] flex items-end pb-2 ">
                   {grade?.result?.map((el: any, i: number) => (
                     <ChartPerformance
                       low={resultMin[i]?.score}
