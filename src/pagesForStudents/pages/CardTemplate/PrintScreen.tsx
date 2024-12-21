@@ -230,13 +230,13 @@ const PrintReportCardScreen: React.FC = () => {
       </button>
 
       <div ref={targetRef} className="overflow-auto w-[1280px]">
-        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+        <h1 className="text-[10px] md:text-[12px] text-center mt-5 uppercase font-medium mb-2 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
         <div className="relative ">
-          <main className="flex justify-center mt-10">
+          <main className="flex justify-center mt-2">
             <div className="max-w-[1200px] p-4 overflow-hidden border">
               <div
                 className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
@@ -344,7 +344,7 @@ const PrintReportCardScreen: React.FC = () => {
                 <span className="mx-1">{school?.presentTerm}</span> Student
                 Report
               </div>
-              <main className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mb-10">
+              <main className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mb-2">
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
                     Surname
@@ -583,7 +583,7 @@ const PrintReportCardScreen: React.FC = () => {
               {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-              <main className="grid grid-cols-1 sm:grid-cols-4 my-10">
+              <main className="grid grid-cols-1 sm:grid-cols-4 my-5">
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
                     No. of subject taken
@@ -731,7 +731,7 @@ const PrintReportCardScreen: React.FC = () => {
                 </div>
               </main>
 
-              <main className=" flex-col mt-5 ">
+              {/* <main className=" flex-col mt-5 ">
                 <div className="my-5 px-20">
                   <hr />
                 </div>
@@ -785,16 +785,16 @@ const PrintReportCardScreen: React.FC = () => {
                     </div>
                   </div>
                 </main>
-              </main>
+              </main> */}
 
               {/* Psycho */}
-              <main className="mt-20">
+              <main className="mt-10">
                 <p className="font-semibold uppercase text-[12px] mb-5">
                   Psychometric Test Grading
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-                  <div className="bg-slate-50 border min-h-20">
+                <div className="flex gap-4">
+                  <div className="flex-1 bg-slate-50 border min-h-20">
                     <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
                       Soft skill
                     </p>
@@ -855,7 +855,7 @@ const PrintReportCardScreen: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="bg-red-50 min-h-20 m-2">
+                  <div className="flex-1 bg-red-50 min-h-20 m-2">
                     <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
                       People Skill
                     </p>
@@ -916,7 +916,7 @@ const PrintReportCardScreen: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="bg-green-50 min-h-20 col-span-1 sm:col-span-3 xl:col-span-1 m-2 ">
+                  <div className="flex-1 bg-green-50 min-h-20 col-span-1 sm:col-span-3 xl:col-span-1 m-2 ">
                     <p className="p-4 uppercase font-semibold text-[12px] bg-black text-white">
                       Physical Skill
                     </p>
@@ -949,16 +949,16 @@ const PrintReportCardScreen: React.FC = () => {
 
               {/* Comments */}
 
-              <div className=" grid text-[12px] mt-10">
+              {/* <div className=" grid text-[12px] mt-10">
                 <div className="border mr-3 p-2">
                   <p className="font-semibold text-[18px] italic">
                     General Class Comment
                   </p>
 
-                  <p className="my-2  h-[120px] p-2 mb-5">
+                  <p className="my-2  h-[80px] p-2 mb-5">
                     {grade?.adminComment}
                   </p>
-                  {/* <div className="flex w-full">
+                  <div className="flex w-full">
                     <div className="flex-1 flex flex-col">
                       <p className="font-semibold">
                         {school?.name} {school?.name2}
@@ -974,9 +974,9 @@ const PrintReportCardScreen: React.FC = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                  </div> */}
+                  </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
                 <div className="border mr-3 p-2">
