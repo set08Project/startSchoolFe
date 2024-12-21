@@ -17,11 +17,11 @@ import moment from "moment";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
 import { comment } from "./comment";
-import { Link } from "react-router-dom";
+
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const PrintReportCard: React.FC = () => {
+const PrintReportCardScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const preprocessContent = () => {
@@ -169,7 +169,7 @@ const PrintReportCard: React.FC = () => {
   const { toPDF, targetRef }: any = usePDF({
     filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
       school?.presentSession
-    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+    }--${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
   const handleDownloadPdf = async () => {
@@ -181,13 +181,14 @@ const PrintReportCard: React.FC = () => {
     const canvas = await html2canvas(element, {
       scale: 2,
     });
+    console.log("printing download: ");
 
     const data = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF({
       orientation: "landscape",
       unit: "px",
-      format: "a3",
+      format: "a4",
     });
 
     const imgProperties = pdf.getImageProperties(data);
@@ -204,9 +205,9 @@ const PrintReportCard: React.FC = () => {
   }, []);
 
   return (
-    <div className=" overflow-hidden">
+    <div className="overflow-hidden">
       <Toaster />
-      {/* <button
+      <button
         disabled={loading}
         className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
           loading && "cursor-not-allowed bg-slate-200 animate-pulse"
@@ -214,7 +215,7 @@ const PrintReportCard: React.FC = () => {
         onClick={() => {
           setLoading(true);
 
-          handleDownloadPdf().finally(() => {
+          toPDF().finally(() => {
             setLoading(false);
             toast.success("Result downloaded.");
           });
@@ -226,38 +227,15 @@ const PrintReportCard: React.FC = () => {
             <span>downloading...</span>
           </div>
         ) : (
-          "Go to Download Result"
+          "Print Result"
         )}
-      </button> */}
-      <Link
-        to="/download-result"
-        // disabled={loading}
-        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
-          loading && "cursor-not-allowed bg-slate-200 animate-pulse"
-        }`}
-        // onClick={() => {
-        //   setLoading(true);
-
-        //   handleDownloadPdf().finally(() => {
-        //     setLoading(false);
-        //     toast.success("Result downloaded.");
-        //   });
-        // }}
-      >
-        {loading ? (
-          <div className="flex gap-2 items-center">
-            <FaSpinner className="animate-spin" />
-            <span>downloading...</span>
-          </div>
-        ) : (
-          "Go to Download Result"
-        )}
-      </Link>
+      </button>
       <div
         ref={targetRef}
         // ref={contentRef}
+        className="w-[1280px] overflow-auto"
       >
-        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+        <h1 className=" text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
@@ -1063,7 +1041,7 @@ const PrintReportCard: React.FC = () => {
   );
 };
 
-export default PrintReportCard;
+export default PrintReportCardScreen;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();

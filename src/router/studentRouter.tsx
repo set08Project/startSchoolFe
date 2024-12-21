@@ -5,6 +5,10 @@ import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 
+const PrintReportCardScreen = React.lazy(
+  () => import("../pagesForStudents/pages/CardTemplate/PrintScreen")
+);
+
 const Correction = React.lazy(
   () => import("../pagesForStudents/pages/CBT_SS3/Correction")
 );
@@ -140,6 +144,16 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <StudentDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/download-result",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <PrintReportCardScreen />
+            </ErrorBoundary>
           </Suspense>
         ),
       },
