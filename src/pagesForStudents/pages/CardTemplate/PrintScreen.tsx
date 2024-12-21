@@ -169,7 +169,7 @@ const PrintReportCardScreen: React.FC = () => {
   const { toPDF, targetRef }: any = usePDF({
     filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
       school?.presentSession
-    }--${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
   const handleDownloadPdf = async () => {
@@ -181,12 +181,10 @@ const PrintReportCardScreen: React.FC = () => {
     const canvas = await html2canvas(element, {
       scale: 2,
     });
-    console.log("printing download: ");
-
     const data = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF({
-      orientation: "landscape",
+      orientation: "portrait",
       unit: "px",
       format: "a4",
     });
@@ -197,7 +195,7 @@ const PrintReportCardScreen: React.FC = () => {
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
 
     pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`${Math.random() * 1000}-examplepdf.pdf`);
+    pdf.save("examplepdf.pdf");
   };
 
   useEffect(() => {
@@ -205,7 +203,7 @@ const PrintReportCardScreen: React.FC = () => {
   }, []);
 
   return (
-    <div className="overflow-hidden">
+    <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
       <button
         disabled={loading}
@@ -230,12 +228,9 @@ const PrintReportCardScreen: React.FC = () => {
           "Print Result"
         )}
       </button>
-      <div
-        ref={targetRef}
-        // ref={contentRef}
-        className="w-[1280px] overflow-auto"
-      >
-        <h1 className=" text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
+
+      <div ref={targetRef} className="overflow-auto w-[1280px]">
+        <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
