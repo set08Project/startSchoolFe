@@ -147,6 +147,10 @@ const TestGallary = React.lazy(
 const ViewStoreItems = React.lazy(
   () => import("../pages/page/store/ViewStoreItems")
 );
+
+const AdminPrintReportCardScreen = React.lazy(
+  () => import("../pages/page/ResultHistory/ViewStudentPrintResultScreen")
+);
 import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
 
@@ -228,6 +232,17 @@ export const adminRouter = createBrowserRouter([
               <Suspense fallback={<LoadingScreen />}>
                 <ErrorBoundary FallbackComponent={Fallback}>
                   <ReportCardDesignAdminScreen />
+                </ErrorBoundary>
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "download-students-report-card/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <AdminPrintReportCardScreen />
                 </ErrorBoundary>
               </Suspense>
             ),
