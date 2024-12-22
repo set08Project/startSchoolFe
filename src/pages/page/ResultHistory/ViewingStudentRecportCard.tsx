@@ -191,13 +191,6 @@ const ReportCardDesignAdminScreen: React.FC = () => {
         className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
           loading && "cursor-not-allowed bg-slate-200 animate-pulse"
         }`}
-        // onClick={() => {
-        //   setLoading(true);
-        //   toPDF().finally(() => {
-        //     setLoading(false);
-        //     toast.success("Result downloaded.");
-        //   });
-        // }}
       >
         {loading ? (
           <div className="flex gap-2 items-center">
