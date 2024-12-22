@@ -207,8 +207,8 @@ const PrintReportCardScreen: React.FC = () => {
       <Toaster />
       <button
         disabled={loading}
-        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
-          loading && "cursor-not-allowed bg-slate-200 animate-pulse"
+        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-red-100 px-8 py-2 rounded-md bg-red-50 ${
+          loading && "cursor-not-allowed bg-red-200 animate-pulse"
         }`}
         onClick={() => {
           setLoading(true);
