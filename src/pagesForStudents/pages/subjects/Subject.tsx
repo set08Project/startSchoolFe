@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import pix from "../../../assets/pix.jpg";
 
 import LittleHeader from "../../../components/layout/LittleHeader";
@@ -10,7 +10,6 @@ import {
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import { useSujectInfo } from "../../../pagesForTeachers/hooks/useTeacher";
-import { readClassInfo, readOneClassInfo } from "../../api/studentAPI";
 import { useClassSubjects } from "../../../pages/hook/useSchoolAuth";
 
 document.title = "view teacher subject";

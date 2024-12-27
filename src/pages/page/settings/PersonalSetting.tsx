@@ -69,7 +69,7 @@ const PersonalSetting: FC = () => {
               <div className="my-4 text-blue-950 text-[20px] font-[400] ">
                 {props.title}
               </div>
-              <div className="mb-6  text-[17px]  leading-6 text-blue-900">
+              <div className="mb-6  text-[17px] leading-6 text-blue-900">
                 {props.detail}
               </div>
 

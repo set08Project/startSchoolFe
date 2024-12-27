@@ -83,12 +83,12 @@ const StudentSocialSettings = () => {
         <div className="relative">
           <Toaster />
           <div className="border rounded-[4px] shadow-sm">
-            <div className="py-3 px-4 uppercase text-blue-950 font-medium text-[11px] md:text-[18px]">
+            <div className="py-3 px-4 uppercase text-blue-950 text-[16px] font-semibold md:text-[18px]">
               Socials
             </div>
             <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
               <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[14px] md:text-[18px]">
                   <img
                     src={FB}
                     alt=""
@@ -97,17 +97,17 @@ const StudentSocialSettings = () => {
                   facebook
                 </h3>
                 {studentInfo?.facebookAccount ? (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] font-[700] text-blue-500">
                     {studentInfo?.facebookAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] text-blue-500">
                     + add your facebook handle
                   </h1>
                 )}
               </div>
               <div
-                className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
+                className="md:py-1 md:px-3 px-4 py-[2px] border border-blue-950 rounded-md text-[14px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
                 onClick={() => {
                   setToggle("facebook");
                 }}
@@ -117,7 +117,7 @@ const StudentSocialSettings = () => {
             </div>
             <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
               <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[14px] md:text-[18px]">
                   <img
                     src={IG}
                     alt=""
@@ -126,17 +126,17 @@ const StudentSocialSettings = () => {
                   instagram
                 </h3>
                 {studentInfo?.instagramAccount ? (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
+                  <h1 className="text-[14px] md:text-[18px] font-[700] text-blue-500 md:ml-[5px]">
                     {studentInfo?.instagramAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] text-blue-500 md:ml-[5px]">
+                  <h1 className="text-[14px] md:text-[18px] text-blue-500 md:ml-[5px]">
                     + add your instagram handle
                   </h1>
                 )}
               </div>
               <div
-                className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
+                className="md:py-1 md:px-3 px-4 py-[2px] border border-blue-950 rounded-md text-[14px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
                 onClick={() => {
                   setToggle("instagram");
                 }}
@@ -146,7 +146,7 @@ const StudentSocialSettings = () => {
             </div>
             <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
               <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[14px] md:text-[18px]">
                   <img
                     src={X}
                     alt=""
@@ -155,17 +155,17 @@ const StudentSocialSettings = () => {
                   X
                 </h3>
                 {studentInfo?.xAccount ? (
-                  <h1 className="text-[9px] md:text-[18px] font-[700] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] font-[700] text-blue-500">
                     {studentInfo?.xAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] text-blue-500">
                     + add your X handle
                   </h1>
                 )}
               </div>
               <div
-                className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
+                className="md:py-1 md:px-3 px-4 py-[2px] border border-blue-950 rounded-md text-[14px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
                 onClick={() => {
                   setToggle("x");
                 }}
@@ -175,7 +175,7 @@ const StudentSocialSettings = () => {
             </div>
             <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
               <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[9px] md:text-[18px]">
+                <h3 className="font-normal w-[120px] flex items-center gap-2 text-[14px] md:text-[18px]">
                   <img
                     src={Linkden}
                     alt=""
@@ -184,17 +184,17 @@ const StudentSocialSettings = () => {
                   linkedIn
                 </h3>
                 {studentInfo?.linkedinAccount ? (
-                  <h1 className="text-[8px] md:text-[18px] font-[700] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] font-[700] text-blue-500">
                     {studentInfo?.linkedinAccount}
                   </h1>
                 ) : (
-                  <h1 className="text-[8px] md:text-[18px] text-blue-500">
+                  <h1 className="text-[14px] md:text-[18px] text-blue-500">
                     + add your linkedIn handle
                   </h1>
                 )}
               </div>
               <div
-                className="md:py-1 md:px-3 px-2 py-[2px] border border-blue-950 rounded-md text-[10px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
+                className="md:py-1 md:px-3 px-4 py-[2px] border border-blue-950 rounded-md text-[14px] md:text-[18px] font-medium cursor-pointer transition-all duration-300 hover:scale-105 ml-[3px]"
                 onClick={() => {
                   setToggle("linkedin");
                 }}
