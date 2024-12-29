@@ -5,12 +5,71 @@ import {
   updateAccount,
   updateAccountInfo,
   updateSchoolFeeAccountInfo,
+  updateSchoolPaymentOptions,
 } from "../../api/schoolAPIs";
 import { useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import LittleHeader from "../../../components/static/LittleHeader";
 
+document.title = "School's Profile settings";
 const ThemeScreen = () => {
+  const [pathName, setPathName] = useState<string>("accountDetails");
+
+  return (
+    <div className="w-full">
+      <main className="flex gap-4 items-center mb-2 w-[200%] ">
+        <div
+          className="cursor-pointer bg-black hover:bg-neutral-900 transition-all duration-300 text-white px-4 py-3 rounded-md"
+          onClick={() => {
+            setPathName("accountDetails");
+          }}
+        >
+          Account Details
+        </div>
+        <div
+          className="cursor-pointer bg-blue-950 hover:bg-blue-900 transition-all duration-300 text-white px-4 py-3 rounded-md"
+          onClick={() => {
+            setPathName("addPayments");
+          }}
+        >
+          Add Payments
+        </div>
+      </main>
+
+      {pathName === "accountDetails" ? (
+        <div className="sm:w-[350%] mb-2 font-semibold italic text-[12px]">
+          {" "}
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+          officia dolorem, consectetur, aspernatur obcaecati beatae error
+        </div>
+      ) : (
+        <div className="sm:w-[350%] mb-2 font-semibold italic text-[12px]">
+          {" "}
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor eum
+          eveniet atque expedita aut ex nihil maxime dolore perspiciatis
+          inventore.{" "}
+        </div>
+      )}
+      <div className=" sm:w-[350%]  rounded-lg border h-[550px] text-blue-950 ">
+        {/* <LittleHeader name={document.title} /> */}
+        <Toaster position="top-center" />
+
+        <div>
+          {pathName === "accountDetails" ? (
+            <AccountDetail />
+          ) : (
+            <AddMorePayments />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ThemeScreen;
+
+const AccountDetail = () => {
   const { data } = useSchoolData();
 
   const [accountName, setAccountName] = useState<string>(``);
@@ -127,9 +186,8 @@ const ThemeScreen = () => {
   const [toggle, setToggle] = useState<Boolean>(false);
 
   return (
-    <div className=" sm:w-[350%]  rounded-lg border  h-[550px] text-blue-950">
-      <Toaster position="top-center" />
-      <p className="text-[13px] p-4 font-medium ">
+    <div>
+      <p className="text-[15px] p-4 font-medium ">
         Please note that all online Payment, will be Paid to this Account detail
         provided below.
         <br />
@@ -144,7 +202,7 @@ const ThemeScreen = () => {
       </div>
 
       <div className="px-4 pt-5">
-        <label className="text-[12px] font-medium ">
+        <label className=" font-medium ">
           Please Fill in your School's Account Name
         </label>
         <Input
@@ -162,7 +220,7 @@ const ThemeScreen = () => {
         />
       </div>
       <div className="px-4 pt-0">
-        <label className="text-[12px] font-medium ">
+        <label className=" font-medium ">
           Please Fill in your School's Account Number
         </label>
         <Input
@@ -251,5 +309,87 @@ const ThemeScreen = () => {
   );
 };
 
-export default ThemeScreen;
-// w-full rounded-lg border grid col-span-3 min-h-[100px] text-blue-950
+const AddMorePayments = () => {
+  const { data } = useSchoolData();
+
+  const [paymentName, setPaymentName] = useState<string>(``);
+  const [paymentAmount, setPaymentAmount] = useState<string>("");
+
+  const [toggle, setToggle] = useState<Boolean>(false);
+
+  return (
+    <div>
+      <p className="text-[15px] p-4 font-medium ">
+        To manage and monitor payments across this platform
+        <br />
+        <br />
+      </p>
+
+      <div className="mx-5">
+        <hr />
+      </div>
+
+      <div className="px-4 pt-5">
+        <label className=" font-medium ">
+          Please Enter what to be paid for
+        </label>
+        <input
+          placeholder={"School Uniform"}
+          value={paymentName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setPaymentName(e.target.value);
+          }}
+          className="mb-8 ml-0 w-[95%] h-[45px] border pl-2 rounded-md outline-none"
+        />
+      </div>
+      <div className="px-4 pt-0">
+        <label className=" font-medium ">
+          Please Enter the Amount to be Paid
+        </label>
+        <input
+          placeholder={"21000"}
+          value={paymentAmount}
+          onChange={(e: any) => {
+            setPaymentAmount(e.target.value);
+          }}
+          className="mb-8 ml-0 w-[95%] h-[45px] border pl-2 rounded-md outline-none"
+        />
+      </div>
+
+      <div className="px-4 w-full">
+        <Button
+          disabled={!!toggle}
+          name={toggle ? "Processing" : "Add to Payment Log"}
+          icon={
+            toggle && (
+              <ClipLoader
+                size={15}
+                color="white"
+                className="absolute -ml-3 -mt-2"
+              />
+            )
+          }
+          className="bg-blue-950 mt-10 ml-0 py-4"
+          onClick={() => {
+            setToggle(true);
+
+            updateSchoolPaymentOptions(data?._id, {
+              paymentDetails: paymentName,
+              paymentAmount,
+            })
+              .then((res) => {
+                if (res.status === 201) {
+                  toast.success("payment options updated successfully");
+                }
+              })
+              .finally(() => {
+                setToggle(false);
+                setPaymentAmount("");
+                setPaymentName("");
+              });
+          }}
+        />
+      </div>
+    </div>
+  );
+};

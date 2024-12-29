@@ -26,7 +26,7 @@ const SettingScreen: FC = () => {
 
       title: "School's Account Settings",
       detail: "Provide personal details and how we can reach you.",
-      url: "/my-personal-info/theme-setting",
+      url: "/my-personal-info/main-account-setting",
       size: 35,
     },
     // {
@@ -108,6 +108,7 @@ const SettingScreen: FC = () => {
                       {props.detail}
                     </div>
                   </div>
+
                   {view && (
                     <div className="absolute top-0 left-0 backdrop-blur-md h-[99%] w-full rounded-lg flex items-center pt-[200px] flex-col">
                       <div className="w-[90%] lg:w-[700px] h-[300px] bg-white border rounded-md p-4 flex flex-col shadow-sm">
@@ -115,7 +116,7 @@ const SettingScreen: FC = () => {
                           <h2 className="font-semibold mb-2">
                             Security Measure
                           </h2>
-                          <p className="text-[12px]">
+                          <p className="text-[14px] md:text-[16px]">
                             You are about to enter a very sensitive area, as a
                             measure of security, You would be required to
                             provider your{" "}
@@ -127,7 +128,7 @@ const SettingScreen: FC = () => {
                         </div>
                         <div className="flex-1" />
                         <div className="flex-col flex">
-                          <label className="text-[12px] font-semibold mb-3">
+                          <label className="text-[14px] md:text-[16px] font-semibold mb-3">
                             Enter your Admin secret code
                           </label>
                           <Input
@@ -196,11 +197,6 @@ const SettingScreen: FC = () => {
       <div className="flex-1 " />
 
       <div className="flex justify-end gap-4">
-        {/* <Button
-          icon={}
-          name={"Give us Feedback"}
-          className=""
-        /> */}
         <label
           htmlFor="feedback"
           className="px-6 py-2 border-blue-950 border rounded-md m-2 overflow-hidden flex items-center justify-center text-blue-950 gap-2"

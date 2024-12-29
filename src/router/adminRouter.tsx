@@ -573,7 +573,7 @@ export const adminRouter = createBrowserRouter([
               },
               {
                 index: true,
-                path: "theme-setting",
+                path: "main-account-setting",
                 element: (
                   <Suspense fallback={<LoadingScreen />}>
                     <ThemeScreen />

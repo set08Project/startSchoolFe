@@ -33,6 +33,7 @@ import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
 import { readSchool } from "../../pages/api/schoolAPIs";
 import SecondaryStudentScreen from "./SecondaryStudentScreen";
 import PrimaryStudentScreen from "./PrimaryStudentScreen";
+import MakeOtherPayment from "../pages/report/MakeOtherPayment";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -194,7 +195,7 @@ const Sider = () => {
               });
             }}
           />
-          <Link to="/make-other-payments">
+          {/* <Link to="/make-other-payments">
             <Button
               icon={
                 payment && (
@@ -211,9 +212,10 @@ const Sider = () => {
                   <br />
                 </div>
               }
-              className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 text-white border-none font-medium py-3 text-[13px] w-[92%] px-5 leading-tight"
+              
             />
-          </Link>
+          </Link> */}
+          <MakeOtherPayment />
           {/* </NavLink> */}
         </div>
       </div>
@@ -223,15 +225,15 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            icon={
-              payment && (
-                <ClipLoader
-                  color="white"
-                  size={10}
-                  className="absolute -mt-1 -ml-2"
-                />
-              )
-            }
+            // icon={
+            //   payment && (
+            //     <ClipLoader
+            //       color="white"
+            //       size={10}
+            //       className="absolute -mt-1 -ml-2"
+            //     />
+            //   )
+            // }
             name={
               <div className="uppercase">
                 {studentInfo?.clockIn ? "Clock In" : "Clock Out"}

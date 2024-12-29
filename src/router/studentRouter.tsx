@@ -5,6 +5,10 @@ import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 
+const OtherPayments = React.lazy(
+  () => import("../pagesForTeachers/pages/makePayment/makePayment")
+);
+
 const PrintReportCardScreen = React.lazy(
   () => import("../pagesForStudents/pages/CardTemplate/PrintScreen")
 );
@@ -198,6 +202,14 @@ export const studentRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             {" "}
             <ViewStoreItems />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/make-other-payments",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <OtherPayments />
           </Suspense>
         ),
       },
