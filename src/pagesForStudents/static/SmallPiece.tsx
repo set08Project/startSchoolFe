@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
 import { FC, ReactNode, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IoMdImages } from "react-icons/io";
 import {
   changeMenuState,
@@ -109,7 +109,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
       </div>
 
       {but && (
-        <div className="w-full flex justify-center mt-3">
+        <div className="w-full flex flex-col justify-center mt-3">
           {/* <NavLink to="/upgrade" onClick={handleToggleMenuFalse}> */}
           <Button
             name={
@@ -119,8 +119,14 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
                 <p className="text-[12px]">(coming soon)</p>
               </div>
             }
-            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-9 leading-tight"
+            className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2 px-6 leading-tight tracking-wider text-[14px]"
           />
+          <Link to="/make-other-payments">
+            <Button
+              name={<div>Make Other Payments</div>}
+              className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 text-white border-none font-medium py-3 px-5 leading-tight w-[93%] tracking-wider -mt-0 text-[13px]"
+            />
+          </Link>
           {/* </NavLink> */}
         </div>
       )}

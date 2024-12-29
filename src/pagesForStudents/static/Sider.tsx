@@ -9,7 +9,7 @@ import {
   MdSettings,
   MdStadium,
 } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeMenuState,
@@ -33,6 +33,7 @@ import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
 import { readSchool } from "../../pages/api/schoolAPIs";
 import SecondaryStudentScreen from "./SecondaryStudentScreen";
 import PrimaryStudentScreen from "./PrimaryStudentScreen";
+import MakeOtherPayment from "../pages/report/MakeOtherPayment";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -145,7 +146,7 @@ const Sider = () => {
           Never stress yourself anymore with the quest of wanting to pay your
           child's schoolfees. You can do it here at your convience!{" "}
         </div>
-        <div className="flex w-full justify-center">
+        <div className="flex flex-col w-full justify-center">
           {/* <NavLink to="upgrade"> */}
 
           <Button
@@ -194,7 +195,27 @@ const Sider = () => {
               });
             }}
           />
-
+          {/* <Link to="/make-other-payments">
+            <Button
+              icon={
+                payment && (
+                  <ClipLoader
+                    color="white"
+                    size={10}
+                    className="absolute -mt-2 -ml-2 "
+                  />
+                )
+              }
+              name={
+                <div>
+                  Other Payments
+                  <br />
+                </div>
+              }
+              
+            />
+          </Link> */}
+          <MakeOtherPayment />
           {/* </NavLink> */}
         </div>
       </div>
@@ -204,20 +225,18 @@ const Sider = () => {
           {/* <NavLink to="upgrade"> */}
 
           <Button
-            icon={
-              payment && (
-                <ClipLoader
-                  color="white"
-                  size={10}
-                  className="absolute -mt-1 -ml-2"
-                />
-              )
-            }
+            // icon={
+            //   payment && (
+            //     <ClipLoader
+            //       color="white"
+            //       size={10}
+            //       className="absolute -mt-1 -ml-2"
+            //     />
+            //   )
+            // }
             name={
               <div className="uppercase">
-                {/* <p className=""> */}
                 {studentInfo?.clockIn ? "Clock In" : "Clock Out"}
-                {/* </p> */}
 
                 <br />
                 <p className="text-[12px] normal-case">

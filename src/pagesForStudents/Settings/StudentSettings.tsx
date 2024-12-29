@@ -61,7 +61,7 @@ const StudentSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3 text-[9px] md:text-[19px]">My Profile</h1>
+            <h1 className="mb-3 text-[14px] md:text-[19px]">My Profile</h1>
           </div>
           <div
             onClick={() => setActiveSection("My Socials")}
@@ -71,7 +71,7 @@ const StudentSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3 text-[9px] md:text-[19px]">My Socials</h1>
+            <h1 className="mb-3 text-[14px] md:text-[19px]">My Socials</h1>
           </div>
           <div
             onClick={() => setActiveSection("Password and Security")}
@@ -81,7 +81,7 @@ const StudentSettings = () => {
                 : "border-transparent"
             }`}
           >
-            <h1 className="mb-3 text-[9px] md:text-[19px]">
+            <h1 className="mb-3 text-[14px] md:text-[19px]">
               Password and Security
             </h1>
           </div>
@@ -90,7 +90,7 @@ const StudentSettings = () => {
         {/* SETTINGS DIVS */}
 
         {activeSection === "My Profile" && (
-          <div className="mt-5 min-h-[60vh] freshh">
+          <div className="mt-5 min-h-[60vh] ">
             <StudentProfileSettings />
           </div>
         )}

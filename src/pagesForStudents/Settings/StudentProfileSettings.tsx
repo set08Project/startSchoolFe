@@ -142,7 +142,7 @@ const StudentProfileSettings = () => {
             </h1>
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => {
               setToggle("firstName");
             }}
@@ -161,7 +161,7 @@ const StudentProfileSettings = () => {
             </h1>
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => {
               setToggle("lastName");
             }}
@@ -172,16 +172,16 @@ const StudentProfileSettings = () => {
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
             <h1 className="text-[13px] flex items-center gap-3 sm:text-[18px] md:text-[18px] font-medium">
-              <h3 className="font-bold w-full text-[11px] md:text-[18px] text-blue-950 ">
+              <h3 className="font-bold w-full text-[14px] md:text-[18px] text-blue-950 ">
                 Parent Email:
               </h3>
-              <div className="text-[11px] md:text-[17px]">
+              <div className="text-[14px] md:text-[17px]">
                 {studentInfo?.parentEmail}
               </div>
             </h1>
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => {
               setToggle("ParentEmail");
             }}
@@ -194,7 +194,7 @@ const StudentProfileSettings = () => {
             <h3 className="font-bold w-[50px] flex items-center gap-1 text-[13px] sm:text-[15px] md:text-[18px] mr-[5px] md:mr-[50px]">
               Email:
             </h3>
-            <div className="w-full xl:w-auto text-[11px] md:text-[18px] font-medium lowercase">
+            <div className="w-full xl:w-auto text-[14px] md:text-[18px] font-medium lowercase">
               {studentInfo?.email}
             </div>
           </div>
@@ -217,7 +217,7 @@ const StudentProfileSettings = () => {
             )}
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] sm:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => setToggle("gender")}
           >
             Edit
@@ -230,36 +230,36 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[70px] text-[11px] md:text-[18px] md:w-[30%]">
+            <h3 className="font-bold w-[70px] text-[14px] md:text-[18px] md:w-[30%]">
               Phone No:
             </h3>
             {studentInfo?.phone ? (
               <div>
-                <h1 className="text-[13px] sm:text-[17px] font-medium">
+                <h1 className="text-[14px] sm:text-[17px] font-medium">
                   {studentInfo?.phone}
                 </h1>
               </div>
             ) : (
-              <div className="text-[10px] md:text-[18px] text-blue-800 font-[600]">
+              <div className="text-[14px] md:text-[18px] text-blue-800 font-[600]">
                 + add your phone number
               </div>
             )}
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => setToggle("phone")}
           >
             Edit
           </div>
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
-          <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[70px] text-[11px] md:text-[18px] md:w-[30%]">
+          <div className="min-w-[80%]  flex justify-start items-center">
+            <h3 className="font-bold w-[70px] text-[14px] md:text-[18px] ">
               Parent No:
             </h3>
             {studentInfo?.parentPhoneNumber ? (
               <div>
-                <h1 className="text-[13px] sm:text-[17px] font-medium">
+                <h1 className="text-[14px] sm:text-[17px] font-medium">
                   {studentInfo?.parentPhoneNumber}
                 </h1>
               </div>
@@ -270,7 +270,7 @@ const StudentProfileSettings = () => {
             )}
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => setToggle("parentNumber")}
           >
             Edit
@@ -278,15 +278,15 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[70px] text-[11px] md:text-[18px] md:w-[30%]">
+            <h3 className="font-bold w-[70px] text-[14px] md:text-[18px] md:w-[30%]">
               Address:
             </h3>
-            <h1 className="w-[60%] sm:w-[70%] xl:w-auto md:break-words text-[11px] md:text-[17px] font-medium">
+            <h1 className="w-[60%] sm:w-[70%] xl:w-auto md:break-words text-[14px] md:text-[17px] font-medium">
               {studentInfo?.studentAddress}
             </h1>
           </div>
           <div
-            className="py-1 px-3 border border-blue-950 rounded-md text-[9px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => setToggle("Address")}
           >
             Edit
