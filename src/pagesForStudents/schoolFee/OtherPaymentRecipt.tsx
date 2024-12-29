@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GrDownload } from "react-icons/gr";
 import moment from "moment";
@@ -13,6 +13,7 @@ import {
   verifyPay,
 } from "../../pages/api/schoolAPIs";
 import { schoolPaymentEndPoint, verifyOtherPayment } from "../api/studentAPI";
+import { otherPayment } from "../../global/reduxState";
 
 const OtherPaymentRecipt: React.FC = () => {
   const navigate = useNavigate();
@@ -40,30 +41,27 @@ const OtherPaymentRecipt: React.FC = () => {
   const { search } = useLocation();
   const { studentInfo } = useStudentInfo();
   let [state, setState] = useState("");
-  console.log("great");
+  const dispatch = useDispatch();
+  const paymentName = useSelector((el: any) => el.otherPay);
+
   useEffect(() => {
     let x = setTimeout(() => {
       setState(search.split("reference=")[1]);
       if (search.split("reference=")[1] !== "" || null) {
         verifyOtherPayment(
           studentInfo?._id,
-          search.split("reference=")[1]
+          search.split("reference=")[1],
+          paymentName
         ).then((res) => {
-          console.log(res);
-          if (res.status === true) {
-            setObject(res?.data);
-            // schoolPaymentEndPoint(studentInfo?._id, {
-            //   date: moment(res?.data?.createdAt).format("lll"),
-            //   amount: res?.data?.amount / 100,
-            //   reference: res?.data?.reference,
-            //   purchasedID: res?.data.id,
-            // });
+          if (res.status === 200) {
+            dispatch(otherPayment(null));
+            setObject(res?.data?.data?.data);
           }
         });
       }
 
       clearTimeout(x);
-    }, 100);
+    }, 500);
   }, [state]);
 
   const downloadPDF = () => {

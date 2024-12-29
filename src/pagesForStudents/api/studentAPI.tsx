@@ -838,6 +838,7 @@ export const viewArticle = async (articleID: string, readerID: string) => {
 // Making other payment
 export const makeOtherPayment = async (data: any) => {
   try {
+    const URL: string = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/make-other-school-payment`, data)
       .then((res: any) => {
@@ -847,11 +848,17 @@ export const makeOtherPayment = async (data: any) => {
     return error;
   }
 };
-export const verifyOtherPayment = async (studentID: string, refID: string) => {
+export const verifyOtherPayment = async (
+  studentID: string,
+  refID: string,
+  paymentName: any
+) => {
   try {
-    // const URL: string = "http://localhost:2244/api";
+    const URL: string = "http://localhost:2244/api";
     return await axios
-      .get(`${URL}/verify-other-payment/${studentID}/${refID}`)
+      .post(`${URL}/verify-other-payment/${studentID}/${refID}`, {
+        paymentName,
+      })
       .then((res: any) => {
         return res;
       });

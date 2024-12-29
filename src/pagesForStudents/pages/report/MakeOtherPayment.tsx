@@ -13,6 +13,8 @@ import {
 import { useSchool, useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
 import { makeComplains, makeOtherPayment } from "../../api/studentAPI";
 import { FaSpinner } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { otherPayment } from "../../../global/reduxState";
 
 interface iProps {
   props?: any;
@@ -30,14 +32,19 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
 
   const [paymentName, setPaymentName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
+  const dispatch = useDispatch();
   const [payment, setPayment] = useState<string>("");
+
+  let xx = data?.paymentOptions?.filter(
+    (el: any) => el?.paymentDetails === paymentName
+  )[0]?.paymentAmount;
 
   const onInitiatePayment = () => {
     setLoading(true);
-    makeOtherPayment({ email: studentInfo?.email, paymentAmount: `${4000}` })
+    makeOtherPayment({ email: studentInfo?.email, paymentAmount: `${xx}` })
       .then((res) => {
         if (res?.data?.status === 201) {
+          dispatch(otherPayment(paymentName));
           window.location.assign(res?.data?.data?.data?.authorization_url);
           toast.success("Added Successfully...!");
         } else {
@@ -49,10 +56,6 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
         setLoading(false);
       });
   };
-
-  let xx = data?.paymentOptions?.filter(
-    (el: any) => el?.paymentDetails === paymentName
-  )[0]?.paymentAmount;
 
   return (
     <div className="">
@@ -107,9 +110,7 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                         setPaymentName(e.target.value);
                       }}
                     >
-                      <option disabled selected>
-                        Who shot first?
-                      </option>
+                      <option selected>Pick what to pay for</option>
                       {data?.paymentOptions?.map((el: any) => (
                         <option value={el.paymentDetails}>
                           {el.paymentDetails}
