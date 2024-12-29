@@ -11,7 +11,8 @@ import {
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import { useSchool, useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
-import { makeComplains } from "../../api/studentAPI";
+import { makeComplains, makeOtherPayment } from "../../api/studentAPI";
+import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
   props?: any;
@@ -28,25 +29,24 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
   // api/view-subject-assignment/${subjectID}
 
   const [paymentName, setPaymentName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [payment, setPayment] = useState<string>("");
 
-  const onCreateAssignment = () => {
-    makeComplains(studentInfo?._id, {
-      title: period,
-      importance: subject,
-    })
+  const onInitiatePayment = () => {
+    setLoading(true);
+    makeOtherPayment({ email: studentInfo?.email, paymentAmount: `${4000}` })
       .then((res) => {
-        if (res?.status === 201) {
-          mutate(`api/create-student-complain/${studentInfo?._id}`);
+        if (res?.data?.status === 201) {
+          window.location.assign(res?.data?.data?.data?.authorization_url);
           toast.success("Added Successfully...!");
         } else {
           toast.error(`${res?.response?.data?.message}`);
         }
       })
-      .then(() => {
-        setSubject("");
-        setPeriod("");
+
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -139,11 +139,14 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
             <div className="w-full flex justify-end transition-all duration-300 mt-10">
               {paymentName !== "" ? (
                 <label
-                  htmlFor="other_payments"
-                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer "
-                  onClick={onCreateAssignment}
+                  //   htmlFor="other_payments"
+                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer flex"
+                  onClick={onInitiatePayment}
                 >
-                  Proceed to Payment
+                  {loading && (
+                    <FaSpinner size={20} className="mr-4 animate-spin" />
+                  )}
+                  {loading ? "Loading..." : "Proceed to Payment"}
                 </label>
               ) : (
                 <Button

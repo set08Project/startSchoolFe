@@ -835,3 +835,27 @@ export const viewArticle = async (articleID: string, readerID: string) => {
     return error;
   }
 };
+// Making other payment
+export const makeOtherPayment = async (data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/make-other-school-payment`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+export const verifyOtherPayment = async (studentID: string, refID: string) => {
+  try {
+    // const URL: string = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/verify-other-payment/${studentID}/${refID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

@@ -12,9 +12,9 @@ import {
   updatePayInfo,
   verifyPay,
 } from "../../pages/api/schoolAPIs";
-import { schoolPaymentEndPoint } from "../api/studentAPI";
+import { schoolPaymentEndPoint, verifyOtherPayment } from "../api/studentAPI";
 
-const ConfirmPaymentRecipt: React.FC = () => {
+const OtherPaymentRecipt: React.FC = () => {
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
   const [object, setObject] = useState<any>({});
@@ -40,20 +40,24 @@ const ConfirmPaymentRecipt: React.FC = () => {
   const { search } = useLocation();
   const { studentInfo } = useStudentInfo();
   let [state, setState] = useState("");
-
+  console.log("great");
   useEffect(() => {
     let x = setTimeout(() => {
       setState(search.split("reference=")[1]);
       if (search.split("reference=")[1] !== "" || null) {
-        verifyPay(search.split("reference=")[1]).then((res) => {
+        verifyOtherPayment(
+          studentInfo?._id,
+          search.split("reference=")[1]
+        ).then((res) => {
+          console.log(res);
           if (res.status === true) {
             setObject(res?.data);
-            schoolPaymentEndPoint(studentInfo?._id, {
-              date: moment(res?.data?.createdAt).format("lll"),
-              amount: res?.data?.amount / 100,
-              reference: res?.data?.reference,
-              purchasedID: res?.data.id,
-            });
+            // schoolPaymentEndPoint(studentInfo?._id, {
+            //   date: moment(res?.data?.createdAt).format("lll"),
+            //   amount: res?.data?.amount / 100,
+            //   reference: res?.data?.reference,
+            //   purchasedID: res?.data.id,
+            // });
           }
         });
       }
@@ -208,4 +212,4 @@ const ConfirmPaymentRecipt: React.FC = () => {
   );
 };
 
-export default ConfirmPaymentRecipt;
+export default OtherPaymentRecipt;
