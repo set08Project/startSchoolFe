@@ -6,7 +6,15 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 
 const OtherPayments = React.lazy(
-  () => import("../pagesForTeachers/pages/makePayment/makePayment")
+  () => import("../pagesForStudents/schoolFee/OtherPaymentRecipt")
+);
+
+const OtherPaymentRecipt = React.lazy(
+  () => import("../pagesForStudents/schoolFee/DownloadTest")
+);
+
+const ConfirmPaymentRecipt = React.lazy(
+  () => import("../pagesForStudents/schoolFee/DownloadTest")
 );
 
 const PrintReportCardScreen = React.lazy(
@@ -438,7 +446,15 @@ export const studentRouter = createBrowserRouter([
     path: "/school-fee-payment",
     element: (
       <Suspense fallback={<LoadingScreen />}>
-        <DownloadTest />
+        <ConfirmPaymentRecipt />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/other-school-payment",
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <OtherPaymentRecipt />
       </Suspense>
     ),
   },
