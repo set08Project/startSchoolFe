@@ -20,6 +20,7 @@ import {
 } from "../../pagesForStudents/api/studentAPI";
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
+import MakeOtherPayment from "../../pages/page/payment/MakeOtherPayment";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -195,6 +196,9 @@ const Sider = () => {
         <div className="flex w-full justify-center">
           <StoreScreen />
         </div>
+        <div className="mt-2" />
+
+        <MakeOtherPayment />
       </div>
 
       <div className="mt-2 px-2 center flex flex-col border mx-2 rounded-md py-1">

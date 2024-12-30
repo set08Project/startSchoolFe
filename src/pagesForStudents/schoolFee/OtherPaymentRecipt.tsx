@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GrDownload } from "react-icons/gr";
 import moment from "moment";
@@ -12,7 +12,12 @@ import {
   updatePayInfo,
   verifyPay,
 } from "../../pages/api/schoolAPIs";
-import { schoolPaymentEndPoint, verifyOtherPayment } from "../api/studentAPI";
+import {
+  schoolPaymentEndPoint,
+  verifyOtherCashPayment,
+  verifyOtherPayment,
+} from "../api/studentAPI";
+import { otherPayment } from "../../global/reduxState";
 
 const OtherPaymentRecipt: React.FC = () => {
   const navigate = useNavigate();
@@ -40,31 +45,43 @@ const OtherPaymentRecipt: React.FC = () => {
   const { search } = useLocation();
   const { studentInfo } = useStudentInfo();
   let [state, setState] = useState("");
-  console.log("great");
+  const dispatch = useDispatch();
+  const read = useSelector((el: any) => el.otherPay);
+
   useEffect(() => {
     let x = setTimeout(() => {
-      setState(search.split("reference=")[1]);
-      if (search.split("reference=")[1] !== "" || null) {
-        verifyOtherPayment(
-          studentInfo?._id,
-          search.split("reference=")[1]
+      if (search) {
+        setState(search.split("reference=")[1]);
+        if (search.split("reference=")[1] !== "" || null) {
+          verifyOtherPayment(
+            studentInfo?._id || read?.studentID,
+            search.split("reference=")[1],
+            read?.paymentName
+          ).then((res) => {
+            if (res.status === 200) {
+              // dispatch(otherPayment(null));
+              setObject(res?.data?.data?.data);
+            }
+          });
+        }
+      } else {
+        verifyOtherCashPayment(
+          studentInfo?._id || read?.studentID,
+
+          { paymentName: read?.paymentName, paymentAmount: read?.paymentAmount }
         ).then((res) => {
-          console.log(res);
-          if (res.status === true) {
-            setObject(res?.data);
-            // schoolPaymentEndPoint(studentInfo?._id, {
-            //   date: moment(res?.data?.createdAt).format("lll"),
-            //   amount: res?.data?.amount / 100,
-            //   reference: res?.data?.reference,
-            //   purchasedID: res?.data.id,
-            // });
+          if (res.status === 200) {
+            // dispatch(otherPayment(null));
+            setObject(res?.data?.data);
           }
         });
       }
 
       clearTimeout(x);
-    }, 100);
+    }, 500);
   }, [state]);
+
+  console.log(read);
 
   const downloadPDF = () => {
     const input = contentRef.current;
@@ -105,10 +122,10 @@ const OtherPaymentRecipt: React.FC = () => {
             <div className="w-full mb-[25px] flex justify-between items-center">
               <div>
                 <h1 className="text-[25px] md:text-[28px] lg:text-[34px] font-bold">
-                  School Fee Reciept
+                  {read?.paymentName} Reciept
                 </h1>
                 <h4 className="font-medium italic">
-                  Your school fee
+                  Your {read?.paymentName}
                   <br />
                   <span className="text-green-500">payment confirmed</span>
                 </h4>
@@ -122,7 +139,9 @@ const OtherPaymentRecipt: React.FC = () => {
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Name</div>
                 <div className="font-bold text-end">
-                  {studentInfo?.studentFirstName} {studentInfo?.studentLastName}
+                  {read?.name
+                    ? read?.name
+                    : `${studentInfo?.studentFirstName} ${studentInfo?.studentLastName}`}
                 </div>
               </div>
               <div className="w-full mb-2 flex justify-between items-center">
@@ -132,13 +151,13 @@ const OtherPaymentRecipt: React.FC = () => {
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Payment Channel</div>
                 <div className="font-bold text-end  capitalize">
-                  {object?.channel}
+                  {read?.channel ? read?.channel : object?.channel}
                 </div>
               </div>
               <div className="w-full flex justify-between items-center">
                 <div>Currency</div>
                 <div className="font-bold text-end capitalize">
-                  {object?.currency}
+                  {read?.currency ? read?.currency : object?.currency}
                 </div>
               </div>
             </div>
@@ -159,18 +178,25 @@ const OtherPaymentRecipt: React.FC = () => {
             <div className="w-full my-[10px] flex items-center flex-col">
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Email</div>
-                <div className="font-bold text-end">{studentInfo?.email}</div>
+                <div className="font-bold text-end">
+                  {read?.email ? read?.email : studentInfo?.email}
+                </div>
               </div>
               <div className="w-full flex justify-between items-center">
                 <div>School Name</div>
                 <div className="font-bold text-end">
-                  {studentInfo?.schoolName}
+                  {read?.schoolName
+                    ? read?.schoolName
+                    : studentInfo?.schoolName}
                 </div>
               </div>
               <div className="w-full mt-[40px] flex justify-between items-center">
                 <div className="font-bold text-[22px] uppercase ">Amount</div>
                 <div className="font-bold text-[22px] text-green-500 text-end">
-                  ₦{(object?.amount / 100).toLocaleString()}
+                  ₦
+                  {read?.amount
+                    ? parseFloat(read?.amount).toLocaleString()
+                    : (object?.amount / 100).toLocaleString()}
                 </div>
               </div>
             </div>

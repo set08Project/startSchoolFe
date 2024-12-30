@@ -174,3 +174,8 @@
 .freshh {
   animation: settings 2s;
 }
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

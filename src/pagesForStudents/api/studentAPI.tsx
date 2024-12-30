@@ -847,13 +847,42 @@ export const makeOtherPayment = async (data: any) => {
     return error;
   }
 };
-export const verifyOtherPayment = async (studentID: string, refID: string) => {
+
+export const verifyOtherPayment = async (
+  studentID: string,
+  refID: string,
+  paymentName: any
+) => {
   try {
-    // const URL: string = "http://localhost:2244/api";
     return await axios
-      .get(`${URL}/verify-other-payment/${studentID}/${refID}`)
+      .post(`${URL}/verify-other-payment/${studentID}/${refID}`, {
+        paymentName,
+      })
       .then((res: any) => {
         return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const verifyOtherCashPayment = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/verify-other-cash-payment/${studentID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+export const getStudentByEnrollmentID = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-by-enrollment-id/${studentID}`)
+      .then((res: any) => {
+        return res.data.data;
       });
   } catch (error: any) {
     return error;
