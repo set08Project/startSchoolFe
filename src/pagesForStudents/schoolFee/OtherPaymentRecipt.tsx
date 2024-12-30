@@ -12,7 +12,11 @@ import {
   updatePayInfo,
   verifyPay,
 } from "../../pages/api/schoolAPIs";
-import { schoolPaymentEndPoint, verifyOtherPayment } from "../api/studentAPI";
+import {
+  schoolPaymentEndPoint,
+  verifyOtherCashPayment,
+  verifyOtherPayment,
+} from "../api/studentAPI";
 import { otherPayment } from "../../global/reduxState";
 
 const OtherPaymentRecipt: React.FC = () => {
@@ -46,16 +50,29 @@ const OtherPaymentRecipt: React.FC = () => {
 
   useEffect(() => {
     let x = setTimeout(() => {
-      setState(search.split("reference=")[1]);
-      if (search.split("reference=")[1] !== "" || null) {
-        verifyOtherPayment(
+      if (search) {
+        setState(search.split("reference=")[1]);
+        if (search.split("reference=")[1] !== "" || null) {
+          verifyOtherPayment(
+            studentInfo?._id || read?.studentID,
+            search.split("reference=")[1],
+            read?.paymentName
+          ).then((res) => {
+            if (res.status === 200) {
+              // dispatch(otherPayment(null));
+              setObject(res?.data?.data?.data);
+            }
+          });
+        }
+      } else {
+        verifyOtherCashPayment(
           studentInfo?._id || read?.studentID,
-          search.split("reference=")[1],
-          read?.paymentName
+
+          { paymentName: read?.paymentName, paymentAmount: read?.paymentAmount }
         ).then((res) => {
           if (res.status === 200) {
-            dispatch(otherPayment(null));
-            setObject(res?.data?.data?.data);
+            // dispatch(otherPayment(null));
+            setObject(res?.data?.data);
           }
         });
       }
@@ -63,6 +80,8 @@ const OtherPaymentRecipt: React.FC = () => {
       clearTimeout(x);
     }, 500);
   }, [state]);
+
+  console.log(read);
 
   const downloadPDF = () => {
     const input = contentRef.current;
@@ -132,13 +151,13 @@ const OtherPaymentRecipt: React.FC = () => {
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Payment Channel</div>
                 <div className="font-bold text-end  capitalize">
-                  {object?.channel}
+                  {read?.channel ? read?.channel : object?.channel}
                 </div>
               </div>
               <div className="w-full flex justify-between items-center">
                 <div>Currency</div>
                 <div className="font-bold text-end capitalize">
-                  {object?.currency}
+                  {read?.currency ? read?.currency : object?.currency}
                 </div>
               </div>
             </div>
@@ -174,7 +193,10 @@ const OtherPaymentRecipt: React.FC = () => {
               <div className="w-full mt-[40px] flex justify-between items-center">
                 <div className="font-bold text-[22px] uppercase ">Amount</div>
                 <div className="font-bold text-[22px] text-green-500 text-end">
-                  ₦{(object?.amount / 100).toLocaleString()}
+                  ₦
+                  {read?.amount
+                    ? parseFloat(read?.amount).toLocaleString()
+                    : (object?.amount / 100).toLocaleString()}
                 </div>
               </div>
             </div>

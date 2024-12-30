@@ -188,6 +188,9 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                           schoolName: data?.schoolName,
                           schoolAddress: data?.address,
                           schoolBankDetail: data?.bankDetails,
+                          currency: "NGN",
+                          channel: "cash",
+                          amount: xx,
                         })
                       );
                     }}

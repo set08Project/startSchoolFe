@@ -847,6 +847,7 @@ export const makeOtherPayment = async (data: any) => {
     return error;
   }
 };
+
 export const verifyOtherPayment = async (
   studentID: string,
   refID: string,
@@ -857,6 +858,18 @@ export const verifyOtherPayment = async (
       .post(`${URL}/verify-other-payment/${studentID}/${refID}`, {
         paymentName,
       })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const verifyOtherCashPayment = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/verify-other-cash-payment/${studentID}`, data)
       .then((res: any) => {
         return res;
       });
