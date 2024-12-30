@@ -5,6 +5,7 @@ import {
   getOneArticle,
   getOneStudentHistory,
   getSchoolArticle,
+  getStudentByEnrollmentID,
   getStudentPayRecord,
   lessonNotes,
   readClassInfo,
@@ -286,6 +287,24 @@ export const useStudentFeePayment = (studentID: string) => {
     );
 
     return { studentFeePayment };
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const useStudentEnrollmentID = (studentID: string) => {
+  try {
+    const { data: studentRecord } = useSWR(
+      `api/read-by-enrollment-id/${studentID}`,
+      () => {
+        return getStudentByEnrollmentID(studentID).then((res) => {
+          return res;
+        });
+      }
+    );
+
+    return { studentRecord };
   } catch (error) {
     console.error();
     return error;

@@ -148,6 +148,10 @@ const ViewStoreItems = React.lazy(
   () => import("../pages/page/store/ViewStoreItems")
 );
 
+const OtherPaymentRecipt = React.lazy(
+  () => import("../pagesForStudents/schoolFee/OtherPaymentRecipt")
+);
+
 const AdminPrintReportCardScreen = React.lazy(
   () => import("../pages/page/ResultHistory/ViewStudentPrintResultScreen")
 );
@@ -170,6 +174,15 @@ export const adminRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <SuccessPage />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "/other-school-payment",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <OtherPaymentRecipt />
           </Suspense>
         ),
       },

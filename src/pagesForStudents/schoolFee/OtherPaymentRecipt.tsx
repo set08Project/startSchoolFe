@@ -42,16 +42,16 @@ const OtherPaymentRecipt: React.FC = () => {
   const { studentInfo } = useStudentInfo();
   let [state, setState] = useState("");
   const dispatch = useDispatch();
-  const paymentName = useSelector((el: any) => el.otherPay);
+  const read = useSelector((el: any) => el.otherPay);
 
   useEffect(() => {
     let x = setTimeout(() => {
       setState(search.split("reference=")[1]);
       if (search.split("reference=")[1] !== "" || null) {
         verifyOtherPayment(
-          studentInfo?._id,
+          studentInfo?._id || read?.studentID,
           search.split("reference=")[1],
-          paymentName
+          read?.paymentName
         ).then((res) => {
           if (res.status === 200) {
             dispatch(otherPayment(null));
@@ -103,10 +103,10 @@ const OtherPaymentRecipt: React.FC = () => {
             <div className="w-full mb-[25px] flex justify-between items-center">
               <div>
                 <h1 className="text-[25px] md:text-[28px] lg:text-[34px] font-bold">
-                  School Fee Reciept
+                  {read?.paymentName} Reciept
                 </h1>
                 <h4 className="font-medium italic">
-                  Your school fee
+                  Your {read?.paymentName}
                   <br />
                   <span className="text-green-500">payment confirmed</span>
                 </h4>
@@ -120,7 +120,9 @@ const OtherPaymentRecipt: React.FC = () => {
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Name</div>
                 <div className="font-bold text-end">
-                  {studentInfo?.studentFirstName} {studentInfo?.studentLastName}
+                  {read?.name
+                    ? read?.name
+                    : `${studentInfo?.studentFirstName} ${studentInfo?.studentLastName}`}
                 </div>
               </div>
               <div className="w-full mb-2 flex justify-between items-center">
@@ -157,12 +159,16 @@ const OtherPaymentRecipt: React.FC = () => {
             <div className="w-full my-[10px] flex items-center flex-col">
               <div className="w-full mb-2 flex justify-between items-center">
                 <div>Email</div>
-                <div className="font-bold text-end">{studentInfo?.email}</div>
+                <div className="font-bold text-end">
+                  {read?.email ? read?.email : studentInfo?.email}
+                </div>
               </div>
               <div className="w-full flex justify-between items-center">
                 <div>School Name</div>
                 <div className="font-bold text-end">
-                  {studentInfo?.schoolName}
+                  {read?.schoolName
+                    ? read?.schoolName
+                    : studentInfo?.schoolName}
                 </div>
               </div>
               <div className="w-full mt-[40px] flex justify-between items-center">

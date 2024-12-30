@@ -1,39 +1,32 @@
 import { FC, useState } from "react";
 import Button from "../../../components/reUse/Button";
-import { MdCheck, MdClose, MdPayment } from "react-icons/md";
+import { MdClose, MdPayment } from "react-icons/md";
 import toast from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
-import { MdOutlineMarkChatRead } from "react-icons/md";
 
-import { mutate } from "swr";
-import {
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
-import { useSchool, useSchoolClassRM } from "../../../pages/hook/useSchoolAuth";
-import { makeComplains, makeOtherPayment } from "../../api/studentAPI";
+import { useSchoolData } from "../../../pages/hook/useSchoolAuth";
 import { FaSpinner } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { otherPayment } from "../../../global/reduxState";
+import { makeOtherPayment } from "../../../pagesForStudents/api/studentAPI";
+import { useStudentEnrollmentID } from "../../../pagesForStudents/hooks/useStudentHook";
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: any;
 }
 
 const MakeOtherPayment: FC<iProps> = ({ props }) => {
-  const [subject, setSubject] = useState<string>("");
-  const [period, setPeriod] = useState<string>("");
-
-  const { studentInfo } = useStudentInfo();
-  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
-
-  const { data } = useSchool(studentInfo?.schoolIDs);
-  // api/view-subject-assignment/${subjectID}
+  const { data } = useSchoolData();
 
   const [paymentName, setPaymentName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const [payment, setPayment] = useState<string>("");
+
+  const [studentName, setStudentName] = useState<string>("");
+  const [studentID, setStudentID] = useState<string>("");
+
+  const { studentRecord } = useStudentEnrollmentID(studentID);
 
   let xx = data?.paymentOptions?.filter(
     (el: any) => el?.paymentDetails === paymentName
@@ -41,10 +34,20 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
 
   const onInitiatePayment = () => {
     setLoading(true);
-    makeOtherPayment({ email: studentInfo?.email, paymentAmount: `${xx}` })
+    makeOtherPayment({ email: data?.email, paymentAmount: `${xx}` })
       .then((res) => {
         if (res?.data?.status === 201) {
-          dispatch(otherPayment({ paymentName }));
+          dispatch(
+            otherPayment({
+              paymentName,
+              studentID: studentRecord?._id,
+              name: `${studentRecord?.studentFirstName} ${studentRecord?.studentLastName}`,
+              email: studentRecord?.email,
+              schoolName: data?.schoolName,
+              schoolAddress: data?.address,
+              schoolBankDetail: data?.bankDetails,
+            })
+          );
           window.location.assign(res?.data?.data?.data?.authorization_url);
           toast.success("Added Successfully...!");
         } else {
@@ -97,14 +100,45 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
             </div>
             <div className="mt-10 w-full gap-2 flex flex-col items-center">
               <div className="w-full">
+                <div>
+                  <label className="font-medium text-[12px]">
+                    Student Info <span className="text-red-500"></span>
+                  </label>
+
+                  {/* // readSubject */}
+                  <div className="flex flex-col mb-4">
+                    <label
+                      htmlFor=""
+                      className="mb-1 text-[13px] font-semibold"
+                    ></label>
+                    <input
+                      className="border h-[45px] rounded-md max-w-[325px] outline-none text-[14px] pl-2 flex items-center font-semibold"
+                      placeholder="Enter Student Name"
+                      value={studentName}
+                      onChange={(e) => setStudentName(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col mb-4">
+                    <label className="font-medium text-[12px] mb-2">
+                      Student ID <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      className="border h-[45px] rounded-md max-w-[325px] outline-none text-[14px] pl-2 flex items-center font-semibold"
+                      placeholder="Enter Student ID"
+                      value={studentID}
+                      onChange={(e) => setStudentID(e.target.value)}
+                    />
+                  </div>
+                </div>
+
                 <div className="flex w-full gap-2 mb-5">
                   <div className="w-full flex flex-col">
                     <label className="font-medium text-[12px]">
-                      Payment Mode <span className="text-red-500">*</span>
+                      Payment Mode <span className="text-red-500 mb-1">*</span>
                     </label>
 
                     <select
-                      className="select select-bordered w-full max-w-xs"
+                      className="select select-bordered w-full max-w-xs mt-1"
                       value={paymentName}
                       onChange={(e) => {
                         setPaymentName(e.target.value);
@@ -138,17 +172,42 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
             </div>
 
             <div className="w-full flex justify-end transition-all duration-300 mt-10">
-              {paymentName !== "" ? (
-                <label
-                  //   htmlFor="other_payments"
-                  className="bg-blue-950 text-white py-4 px-8 rounded-md cursor-pointer flex"
-                  onClick={onInitiatePayment}
-                >
-                  {loading && (
-                    <FaSpinner size={20} className="mr-4 animate-spin" />
-                  )}
-                  {loading ? "Loading..." : "Proceed to Payment"}
-                </label>
+              {studentID !== "" ? (
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/other-school-payment"
+                    //   htmlFor="other_payments"
+                    className="bg-red-500 hover:bg-red-600 transition-all duration-300 text-white py-3 px-6 rounded-md cursor-pointer flex"
+                    onClick={() => {
+                      dispatch(
+                        otherPayment({
+                          paymentName,
+                          studentID: studentRecord?._id,
+                          name: `${studentRecord?.studentFirstName} ${studentRecord?.studentLastName}`,
+                          email: studentRecord?.email,
+                          schoolName: data?.schoolName,
+                          schoolAddress: data?.address,
+                          schoolBankDetail: data?.bankDetails,
+                        })
+                      );
+                    }}
+                  >
+                    {loading && (
+                      <FaSpinner size={20} className="mr-4 animate-spin" />
+                    )}
+                    {loading ? "Loading..." : "Proceed with Cash"}
+                  </Link>
+                  <label
+                    //   htmlFor="other_payments"
+                    className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 text-white py-3 px-6 rounded-md cursor-pointer flex"
+                    onClick={onInitiatePayment}
+                  >
+                    {loading && (
+                      <FaSpinner size={20} className="mr-4 animate-spin" />
+                    )}
+                    {loading ? "Loading..." : "Proceed with Card"}
+                  </label>
+                </div>
               ) : (
                 <Button
                   name="Can't Proceed"

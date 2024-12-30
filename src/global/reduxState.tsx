@@ -29,7 +29,7 @@ const initialState = {
   cartToggle: false,
   imageToggle: false,
   cart: [],
-  otherPay: "" || null,
+  otherPay: {} || null,
   monitorView: false,
   showStudent: false,
   sessionToggle: false,

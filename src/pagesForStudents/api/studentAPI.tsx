@@ -864,3 +864,14 @@ export const verifyOtherPayment = async (
     return error;
   }
 };
+export const getStudentByEnrollmentID = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/read-by-enrollment-id/${studentID}`)
+      .then((res: any) => {
+        return res.data.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
