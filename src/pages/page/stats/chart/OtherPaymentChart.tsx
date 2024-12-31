@@ -25,30 +25,42 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { FC } from "react";
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-  label: {
-    color: "hsl(var(--background))",
-  },
-} satisfies ChartConfig;
+import { useViewSessionTerm } from "@/pages/hook/useSchoolAuth";
 
 export const OtherPaymentChart: FC<any> = ({ data }) => {
+  const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
+
+  console.log(sessionTermData?.data?.paymentOptions);
+  const chartData1 = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+  ];
+
+  const result = _(sessionTermData?.data?.paymentOptions)
+    .groupBy("paymentDetails") // Group by month
+    .map((items, info) => ({
+      info,
+      amount: _.sumBy(items, "paymentAmount"), // Sum mobile values
+    }))
+    .value();
+
+  const chartData = [...result];
+
+  const chartConfig = {
+    amount: {
+      label: "amount",
+      color: "hsl(var(--chart-1))",
+    },
+
+    label: {
+      color: "hsl(var(--background))",
+    },
+  } satisfies ChartConfig;
+
   return (
     <Card className="border-0 shadow-none">
       <CardHeader>
@@ -69,7 +81,7 @@ export const OtherPaymentChart: FC<any> = ({ data }) => {
           >
             <CartesianGrid horizontal={false} />
             <YAxis
-              dataKey="month"
+              dataKey="info"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -77,26 +89,26 @@ export const OtherPaymentChart: FC<any> = ({ data }) => {
               tickFormatter={(value) => value.slice(0, 3)}
               hide
             />
-            <XAxis dataKey="desktop" type="number" hide />
+            <XAxis dataKey="amount" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              dataKey="desktop"
+              dataKey="amount"
               layout="vertical"
-              fill="var(--color-desktop)"
+              fill="var(--color-amount)"
               radius={4}
             >
               <LabelList
-                dataKey="month"
+                dataKey="info"
                 position="insideLeft"
                 offset={8}
                 className="fill-[--color-label]"
                 fontSize={12}
               />
               <LabelList
-                dataKey="desktop"
+                dataKey="amount"
                 position="right"
                 offset={8}
                 className="fill-foreground"
@@ -107,11 +119,9 @@ export const OtherPaymentChart: FC<any> = ({ data }) => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+        <div className="text-center  text-muted-foreground">
+          Showing Other payment made for {data?.presentTerm} -{" "}
+          {data?.presentSession} session
         </div>
       </CardFooter>
     </Card>

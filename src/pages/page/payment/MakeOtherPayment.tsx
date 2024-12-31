@@ -195,10 +195,10 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                       );
                     }}
                   >
-                    {loading && (
+                    {/* {loading && (
                       <FaSpinner size={20} className="mr-4 animate-spin" />
-                    )}
-                    {loading ? "Loading..." : "Proceed with Cash"}
+                    )} */}
+                    {"Proceed with Cash"}
                   </Link>
                   <label
                     //   htmlFor="other_payments"
