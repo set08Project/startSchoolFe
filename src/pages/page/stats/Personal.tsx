@@ -8,6 +8,8 @@ import {
 } from "../../hook/useSchoolAuth";
 import MaleFemaleTeacherScreen from "./MaleFemaleTeacherScreen";
 import { FaCheckDouble } from "react-icons/fa6";
+import { StudentChartScreen } from "./chart/ChartScreen";
+import { OtherPaymentChart } from "./chart/OtherPaymentChart";
 
 const Personal: FC = () => {
   const { data } = useSchoolData();
@@ -98,6 +100,8 @@ const Personal: FC = () => {
     .map((el: any) => {
       return el.studentID;
     });
+
+  // console.log(data);
 
   return (
     <div>
@@ -245,11 +249,9 @@ const Personal: FC = () => {
       </div>
       <div className="border-t my-5" />
       <div className="w-full">
-        <p>Chart</p>
-
-        <MaleFemaleTeacherScreen />
-
-        <p className="text-[12px]">Male vs Female</p>
+        {/* <MaleFemaleTeacherScreen /> */}
+        <StudentChartScreen data={data} />
+        <OtherPaymentChart data={data} />
       </div>
     </div>
   );

@@ -7,17 +7,12 @@ import { GrDownload } from "react-icons/gr";
 import moment from "moment";
 import { MdCheckCircleOutline, MdOutlinePayment } from "react-icons/md";
 import { useStudentInfo } from "../hooks/useStudentHook";
-import {
-  createReceipt,
-  updatePayInfo,
-  verifyPay,
-} from "../../pages/api/schoolAPIs";
+import { verifyPay } from "../../pages/api/schoolAPIs";
 import {
   schoolPaymentEndPoint,
   verifyOtherCashPayment,
   verifyOtherPayment,
 } from "../api/studentAPI";
-import { otherPayment } from "../../global/reduxState";
 
 const OtherPaymentRecipt: React.FC = () => {
   const navigate = useNavigate();
@@ -80,8 +75,6 @@ const OtherPaymentRecipt: React.FC = () => {
       clearTimeout(x);
     }, 500);
   }, [state]);
-
-  console.log(read);
 
   const downloadPDF = () => {
     const input = contentRef.current;
