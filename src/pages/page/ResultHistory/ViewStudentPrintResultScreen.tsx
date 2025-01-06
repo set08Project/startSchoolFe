@@ -164,7 +164,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const [loading, setLoading] = useState<boolean>(false);
