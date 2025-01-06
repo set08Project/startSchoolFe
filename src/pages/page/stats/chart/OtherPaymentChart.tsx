@@ -30,7 +30,6 @@ import { useViewSessionTerm } from "@/pages/hook/useSchoolAuth";
 export const OtherPaymentChart: FC<any> = ({ data }) => {
   const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
 
-  console.log(sessionTermData?.data?.paymentOptions);
   const chartData1 = [
     { month: "January", desktop: 186, mobile: 80 },
     { month: "February", desktop: 305, mobile: 200 },
