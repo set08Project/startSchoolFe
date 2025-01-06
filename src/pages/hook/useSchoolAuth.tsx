@@ -13,6 +13,7 @@ import {
   getSchoolStudentDetail,
   getSchoolStudents,
   purchasedStoreInfo,
+  readDailyExpense,
   readNoted,
   readSchool,
   readSchoolFee,
@@ -437,6 +438,24 @@ export const useFeeRecords = (schoolID: string) => {
 
     return {
       payments: recordPayment || [],
+    };
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const useDeailyExpense = (schoolID: string) => {
+  try {
+    const { data: dailyExpense } = useSWR(
+      `api/read-term-daily-expense/${schoolID}`,
+      async () => {
+        return await readDailyExpense(schoolID).then((res: any) => res?.data);
+      }
+    );
+
+    return {
+      dailyExpense,
     };
   } catch (error) {
     console.error();
