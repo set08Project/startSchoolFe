@@ -465,7 +465,7 @@ const PrintReportCardScreen: React.FC = () => {
                       .sortBy(grade?.result, "subject")
                       ?.map((el: any, i: number) => (
                         <section
-                          className=" min-w-[1150px] flex my-1 bg-blue-50 h-[30px] "
+                          className=" min-w-[1150px] flex my-1 bg-blue-50 min-h-[30px] "
                           key={i - el?._id}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
