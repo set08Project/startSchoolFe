@@ -155,46 +155,37 @@ const Personal: FC = () => {
             </p>
 
             <h1 className="text-[12px] font-medium">
-              {!null ? (
-                <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 justify-center gap-[0.30rem]">
-                  <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>1st Term School Fees Revenue </p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      ₦{read1?.toLocaleString()}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">
-                      Total Revenue
-                    </p>
-                  </div>
-
-                  <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>2nd Term School Fees Revenue</p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      ₦{read2?.toLocaleString()}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">
-                      Total Revenue
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 xl:col-span-1 border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>3rd Term School Fees Revenue</p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      ₦{read3?.toLocaleString()}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">
-                      Total Revenue
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center p-4">
-                  <FaCheckDouble size={20} />
-                  <p className="mt-3 text-[12px] font-medium">
-                    No Complain Entery Recorded yet
+              <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 justify-center gap-[0.30rem]">
+                <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>1st Term School Fees Revenue </p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    ₦{read1?.toLocaleString()}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">
+                    Total Revenue
                   </p>
                 </div>
-              )}
+
+                <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>2nd Term School Fees Revenue</p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    ₦{read2?.toLocaleString()}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">
+                    Total Revenue
+                  </p>
+                </div>
+
+                <div className="sm:col-span-2 xl:col-span-1 border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>3rd Term School Fees Revenue</p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    ₦{read3?.toLocaleString()}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">
+                    Total Revenue
+                  </p>
+                </div>
+              </div>
             </h1>
           </div>
 
@@ -205,44 +196,35 @@ const Personal: FC = () => {
             </p>
 
             <h1 className="text-[12px] font-medium">
-              {!null ? (
-                <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 justify-center gap-[0.30rem]">
-                  <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>1st Term </p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      {`${check?.length}/${students?.data?.students?.length}`}{" "}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">Paid</p>
-                  </div>
-
-                  <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>2nd Term</p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      {`${check1?.length}/${students?.data?.students?.length}`}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">
-                      Total Revenue
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2 xl:col-span-1 border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
-                    <p>3rd Term</p>
-                    <p className="font-bold mt-2 text-[14px] ">
-                      {`${check2?.length}/${students?.data?.students?.length}`}
-                    </p>
-                    <p className="leading-tight mt-2 text-center">
-                      Total Revenue
-                    </p>
-                  </div>
+              <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 justify-center gap-[0.30rem]">
+                <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>1st Term </p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    {`${check?.length}/${students?.data?.students?.length}`}{" "}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">Paid</p>
                 </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center p-4">
-                  <FaCheckDouble size={20} />
-                  <p className="mt-3 text-[12px] font-medium">
-                    No Complain Entery Recorded yet
+
+                <div className="border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>2nd Term</p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    {`${check1?.length}/${students?.data?.students?.length}`}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">
+                    Total Revenue
                   </p>
                 </div>
-              )}
+
+                <div className="sm:col-span-2 xl:col-span-1 border min-w-[90px]  min-h-[100px] rounded-md p-2 break-words flex flex-col items-center justify-center ">
+                  <p>3rd Term</p>
+                  <p className="font-bold mt-2 text-[14px] ">
+                    {`${check2?.length}/${students?.data?.students?.length}`}
+                  </p>
+                  <p className="leading-tight mt-2 text-center">
+                    Total Revenue
+                  </p>
+                </div>
+              </div>
             </h1>
           </div>
         </div>

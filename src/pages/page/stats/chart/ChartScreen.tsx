@@ -1,7 +1,6 @@
 "use client";
 
-import * as React from "react";
-import { TrendingUp } from "lucide-react";
+import React from "react";
 import { Label, Pie, PieChart } from "recharts";
 
 import {
@@ -19,8 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useSchoolData, useSchoolStudents } from "@/pages/hook/useSchoolAuth";
-import { Legend } from "chart.js";
+import { useSchoolStudents } from "@/pages/hook/useSchoolAuth";
 
 export const StudentChartScreen: React.FC<any> = ({ data }) => {
   const { students } = useSchoolStudents(data?._id);
@@ -55,9 +53,7 @@ export const StudentChartScreen: React.FC<any> = ({ data }) => {
     },
   } satisfies ChartConfig;
 
-  const totalStudents = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.students, 0);
-  }, []);
+  let xTotal = students?.data?.students?.length;
 
   return (
     <Card className="flex flex-col bg-transparent shadow-none border-0 rounded-md">
@@ -101,7 +97,7 @@ export const StudentChartScreen: React.FC<any> = ({ data }) => {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalStudents.toLocaleString()}
+                          {xTotal.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
