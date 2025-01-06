@@ -457,7 +457,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                           key={i - el?._id}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
-                          <div className="px-2 flex flex-col justify-center w-[180px] border-x text-[12px] font-semibold ">
+                          <div className="px-2 flex flex-col justify-center w-[180px] border-x text-[14px] tracking-wider font-semibold ">
                             {el?.subject}
                           </div>
                           <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
