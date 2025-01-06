@@ -469,7 +469,7 @@ const PrintReportCardScreen: React.FC = () => {
                           key={i - el?._id}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
-                          <div className="p-2 w-[180px] border-x text-[10px] font-bold flex items-center">
+                          <div className="p-2 w-[180px] border-x text-[12px] font-bold flex items-center">
                             {el?.subject}
                           </div>
                           <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
