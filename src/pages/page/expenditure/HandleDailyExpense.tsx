@@ -15,7 +15,7 @@ const HandleDailyExpense = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data } = useSchoolData();
-  // useDeailyExpense;
+
   const addExpenseEntry = async () => {
     setLoading;
     true;
@@ -27,12 +27,20 @@ const HandleDailyExpense = () => {
       paymentMode,
     })
       .then((res) => {
-        console.log(res);
-        toast.success("Expense created successfully");
-        mutate(`api/read-term-daily-expense/${data?._id}`);
+        if (res.status === 201) {
+          toast.success("Expense created successfully");
+          mutate(`api/read-term-daily-expense/${data?._id}`);
+        } else {
+          toast.error("something went wrong");
+        }
       })
       .finally(() => {
         setLoading(false);
+        setPaymentMode("");
+        setItem("");
+        setPaymentCategory("");
+        setDescription("");
+        setAmount("");
       });
   };
 
@@ -99,9 +107,7 @@ const HandleDailyExpense = () => {
                       setPaymentMode(e.target.value);
                     }}
                   >
-                    <option disabled selected>
-                      Expense Method
-                    </option>
+                    <option selected>Expense Method</option>
                     <option value="Cash">Cash</option>
                     <option value="Transfer">Transfer</option>
                   </select>
@@ -112,9 +118,7 @@ const HandleDailyExpense = () => {
                       setPaymentCategory(e.target.value);
                     }}
                   >
-                    <option disabled selected>
-                      Expense Category
-                    </option>
+                    <option selected>Expense Category</option>
                     <option value="Cloths">Cloths</option>
                     <option value="Stationaries">Stationaries</option>
                     <option value="Books">Books</option>
