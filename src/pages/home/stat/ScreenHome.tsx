@@ -10,7 +10,8 @@ import RecentPurcentScreen from "../screens/RecentPurchases";
 import { Link } from "react-router-dom";
 import ArticleHolderScreen from "../../../pagesForStudents/pages/screens/ArticleHolderScreen";
 import MainArticleHolderScreen from "../screens/ARticlaHolderScreen";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useDeailyExpense, useSchoolData } from "../../hook/useSchoolAuth";
+import { DailyExpenseChart } from "./DailyExpenseChart";
 
 const ScreenHome = () => {
   document.title = "School's Record and Stats";
@@ -19,6 +20,7 @@ const ScreenHome = () => {
 
   const readData = Array.from({ length: 2 });
   const { data } = useSchoolData();
+  const { dailyExpense } = useDeailyExpense(data?._id);
 
   useEffect(() => {
     // justRead();
@@ -34,8 +36,8 @@ const ScreenHome = () => {
         <div className="min-w-[250px] h-full flex flex-col rounded-md border p-4">
           <div className="mb-4 text-medium capitalize">School's Info</div>
           <Personal />
-
           <div className="flex-1 mt-10" />
+
           {/* <div className="text-[13px] font-medium mt-4">
             <div className="flex items-center gap-4">
               <div className="border-r pr-4 ">
@@ -141,8 +143,28 @@ const ScreenHome = () => {
           </div>
         </div>
 
-        <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3">
+        <div className="border rounded-md flex flex-col gap-2 w-full p-2 col-span-1 lg:col-span-3">
           {/* Appointment */}
+
+          <div className=" rounded-md w-full overflow-x-auto">
+            <div className="mb-4 text-medium capitalize">View Data Chart</div>
+
+            <div>
+              {readData?.length > 0 ? (
+                <div>
+                  {" "}
+                  <DailyExpenseChart dailyExpense={dailyExpense}  data={data} />{" "}
+                </div>
+              ) : (
+                <div className="flex flex-col w-full items-center">
+                  <MdPlaylistAddCheck size={30} />
+                  <p className="font-medium text-[13px]">
+                    No Expenses Record yet
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
 
           <div className=" rounded-md w-full overflow-x-auto">
             <div className="mb-4 text-medium capitalize">
@@ -176,7 +198,6 @@ const ScreenHome = () => {
               <Link to="/purchase-history">View All </Link>
             </span>
           </div>
-
           <div>
             <RecentPurcentScreen />{" "}
           </div>

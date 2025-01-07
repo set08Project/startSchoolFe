@@ -25,6 +25,7 @@ import { mutate } from "swr";
 import { GiPadlock } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
 import Input from "../../components/reUse/Input";
+import HandleDailyExpense from "../page/expenditure/HandleDailyExpense";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -207,12 +208,14 @@ const HomeScreen = () => {
               Quick Action
             </p>
             <div>
-              <Link to="/scan-clocking ">
+              {/* <Link to="/scan-clocking ">
                 <Button
                   name="Scan Clocking"
                   className="bg-slate-800 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
                 />
-              </Link>
+              </Link> */}
+
+              <HandleDailyExpense />
 
               <Button
                 name="Push Announcement"

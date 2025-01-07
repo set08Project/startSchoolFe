@@ -1462,3 +1462,29 @@ export const changeSchoolPersonalName = async (schoolID: string, data: any) => {
     return error;
   }
 };
+
+export const createDailyExpense = async (schoolID: string, data: any) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .post(`${URL}/create-term-daily-expense/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const readDailyExpense = async (schoolID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/read-term-daily-expense/${schoolID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
