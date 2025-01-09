@@ -147,7 +147,10 @@ const ScreenHome = () => {
           {/* Appointment */}
 
           <div className=" rounded-md w-full overflow-x-auto">
-            <div className="mb-4 text-medium capitalize">View Data Chart</div>
+            <div className="mb- text-medium capitalize">View Data Chart</div>
+            <p className="text-[13px] text-black/70 mb-5">
+              This will give us insight about our finances
+            </p>
 
             <div>
               {readData?.length > 0 ? (
