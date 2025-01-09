@@ -21,6 +21,7 @@ import _ from "lodash";
 
 export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
   const yy = dailyExpense?.data?.week;
+
   let result = Object.entries(yy).map(([key, values]: any) => ({
     month: key,
     amount: values
@@ -29,17 +30,18 @@ export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
       })
       .reduce((sum: any, num: any) => sum + num, 0),
   }));
-  let lastResult = Object.entries(yy).map(([key, values]: any) => ({
-    month: key,
-    amount: _.groupBy(
-      values.map((el: any) => {
-        return { amount: el.amount, day: el.day };
-      }),
-      "day"
-    ),
-  }));
 
-  console.log(lastResult);
+  // let lastResult = Object.entries(yy).map(([key, values]: any) => ({
+  //   month: key,
+  //   amount: _.groupBy(
+  //     values.map((el: any) => {
+  //       return { amount: el?.amount, day: el?.day };
+  //     }),
+  //     "day"
+  //   ),
+  // }));
+
+  // console.log(lastResult);
 
   const chartData = _.sortBy(result, "month");
   const chartConfig = {
