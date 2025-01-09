@@ -153,7 +153,10 @@ const ScreenHome = () => {
               {readData?.length > 0 ? (
                 <div>
                   {" "}
-                  <DailyExpenseChart dailyExpense={dailyExpense}  data={data} />{" "}
+                  <DailyExpenseChart
+                    dailyExpense={dailyExpense}
+                    data={data}
+                  />{" "}
                 </div>
               ) : (
                 <div className="flex flex-col w-full items-center">

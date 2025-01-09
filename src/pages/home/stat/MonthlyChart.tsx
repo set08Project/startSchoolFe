@@ -25,7 +25,7 @@ export const MonthlyChart: FC<any> = ({ dailyExpense, data }) => {
     month: key,
     amount: values
       .map((el: any) => {
-        return el.amount;
+        return el?.amount;
       })
       .reduce((sum: any, num: any) => sum + num, 0),
   }));
