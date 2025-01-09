@@ -104,8 +104,8 @@ export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Tracking expense made for this Term weeks
+        <div className="flex gap-2 font-medium leading-none capitalize">
+          Tracking expense made for this Term per weeks
           <TrendingUp className="h-4 w-4" />
         </div>
         {/* <div className="leading-none text-muted-foreground"></div> */}
