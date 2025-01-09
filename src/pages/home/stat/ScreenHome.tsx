@@ -26,6 +26,8 @@ const ScreenHome = () => {
     // justRead();
   }, []);
 
+  console.log(dailyExpense?.data?.allData);
+
   return (
     <div
       className={`${
@@ -153,7 +155,7 @@ const ScreenHome = () => {
             </p>
 
             <div>
-              {readData?.length > 0 ? (
+              {dailyExpense?.data?.allData?.length > 0 ? (
                 <div>
                   {" "}
                   <DailyExpenseChart
@@ -162,7 +164,7 @@ const ScreenHome = () => {
                   />{" "}
                 </div>
               ) : (
-                <div className="flex flex-col w-full items-center">
+                <div className="flex flex-col w-full mb-10 items-center">
                   <MdPlaylistAddCheck size={30} />
                   <p className="font-medium text-[13px]">
                     No Expenses Record yet
