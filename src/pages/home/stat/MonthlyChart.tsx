@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -20,8 +20,19 @@ import {
 import _ from "lodash";
 
 export const MonthlyChart: FC<any> = ({ dailyExpense, data }) => {
+  let result = [];
   const yy = dailyExpense?.data?.month;
-  let result = Object.entries(yy).map(([key, values]: any) => ({
+
+  let [readResult, setReadResult] = useState<Array<{}>>([]);
+
+  if (readResult.length <= 0) {
+    let x = setTimeout(() => {
+      setReadResult(Object.entries(yy));
+      clearTimeout(x);
+    }, 1000);
+  }
+
+  result = readResult.map(([key, values]: any) => ({
     month: key,
     amount: values
       .map((el: any) => {
@@ -74,9 +85,7 @@ export const MonthlyChart: FC<any> = ({ dailyExpense, data }) => {
           Tracking expense made for this Term
           <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          This will give us insight about our finances
-        </div>
+        {/* <div className="leading-none text-muted-foreground"></div> */}
       </CardFooter>
     </Card>
   );

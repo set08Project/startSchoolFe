@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -22,28 +22,49 @@ import _ from "lodash";
 export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
   const yy = dailyExpense?.data?.week;
 
-  let result = Object.entries(yy).map(([key, values]: any) => ({
-    month: key,
-    amount: values
-      .map((el: any) => {
-        return el.amount;
-      })
-      .reduce((sum: any, num: any) => sum + num, 0),
+  let [readResult, setReadResult] = useState<Array<{}>>([]);
+  let [readResultData, setReadResultData] = useState<Array<{}>>([]);
+  let [readResultChart, setReadResultChart] = useState<Array<{}>>([]);
+
+  if (readResult.length <= 0) {
+    let x = setTimeout(() => {
+      setReadResult(Object.entries(yy));
+      clearTimeout(x);
+    }, 1000);
+  }
+
+  let result1 = readResult.map(([key, values]: any) => ({
+    amount: values.map((el: any) => {
+      return { amount: el.amount, day: el.day };
+    }),
   }));
 
-  // let lastResult = Object.entries(yy).map(([key, values]: any) => ({
-  //   month: key,
-  //   amount: _.groupBy(
-  //     values.map((el: any) => {
-  //       return { amount: el?.amount, day: el?.day };
-  //     }),
-  //     "day"
-  //   ),
-  // }));
+  if (readResultData.length <= 0) {
+    let x = setTimeout(() => {
+      setReadResultData(Object.values(result1[0]));
+      clearTimeout(x);
+    }, 1000);
+  }
 
-  // console.log(lastResult);
+  if (readResultChart.length <= 0) {
+    let x = setTimeout(() => {
+      setReadResultChart(
+        Object.entries(_.groupBy(readResultData.flat(), "day")).map(
+          ([key, values]: any) => ({
+            ["Mon-Fri"]: key,
+            amount: values
+              .map((el: any) => {
+                return el.amount;
+              })
+              .reduce((sum: any, num: any) => sum + num, 0),
+          })
+        )
+      );
+      clearTimeout(x);
+    }, 1000);
+  }
 
-  const chartData = _.sortBy(result, "month");
+  const chartData = readResultChart;
   const chartConfig = {
     desktop: {
       label: "Desktop",
@@ -57,7 +78,7 @@ export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
   return (
     <Card className="shadow-none rounded-md">
       <CardHeader>
-        <CardTitle>Monthly Expenses made </CardTitle>
+        <CardTitle>Weekly Expenses made </CardTitle>
         <CardDescription>
           {data?.presentTerm} {data?.presentSession} session
         </CardDescription>
@@ -67,7 +88,7 @@ export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="Mon-Fri"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -84,12 +105,10 @@ export const WeeklyChart: FC<any> = ({ dailyExpense, data }) => {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Tracking expense made for this Term
+          Tracking expense made for this Term weeks
           <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          This will give us insight about our finances
-        </div>
+        {/* <div className="leading-none text-muted-foreground"></div> */}
       </CardFooter>
     </Card>
   );
