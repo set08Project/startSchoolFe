@@ -25,16 +25,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { FC } from "react";
-import { useViewSessionTerm } from "@/pages/hook/useSchoolAuth";
 
 export const OtherPaymentChart: FC<any> = ({ data, sessionTermData }) => {
-  // const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
-
   const result = _(sessionTermData?.data?.paymentOptions)
-    .groupBy("paymentDetails") // Group by month
+    .groupBy("paymentDetails")
     .map((items, info) => ({
       info,
-      amount: _.sumBy(items, "paymentAmount"), // Sum mobile values
+      amount: _.sumBy(items, "paymentAmount"),
     }))
     .value();
 

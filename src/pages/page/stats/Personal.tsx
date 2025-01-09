@@ -1,5 +1,5 @@
 import { FC } from "react";
-
+import { FaChartLine } from "react-icons/fa";
 // import _ from "lodash";
 import {
   useSchoolData,
@@ -101,8 +101,8 @@ const Personal: FC = () => {
     .map((el: any) => {
       return el.studentID;
     });
+
   const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
-  // console.log(data);
 
   return (
     <div>
@@ -239,7 +239,10 @@ const Personal: FC = () => {
         ) : (
           <div className="font-semibold text-black/50 capitalize mt-10">
             <hr />
-            <p className="mt-5">no record for other payment yet</p>
+            <div className="mt-5 flex flex-col items-center">
+              <FaChartLine className="text-[30px] mb-2" />
+              <p className="text-[13px]">no record for other payment yet</p>
+            </div>
           </div>
         )}
       </div>
