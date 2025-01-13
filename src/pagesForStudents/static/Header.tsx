@@ -213,7 +213,9 @@ const Header = () => {
                   {
                     title: `CBT (For SSS 3 Only)`,
                     icon: <MdQuiz />,
-                    to: "CBT",
+                    to: studentInfo?.classAssigned?.includes("SSS 3")
+                      ? "CBT"
+                      : "/",
                   },
                   {
                     title: "Lessons",
