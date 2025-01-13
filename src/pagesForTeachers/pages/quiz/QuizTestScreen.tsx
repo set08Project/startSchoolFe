@@ -95,8 +95,6 @@ const QuizTestScreen = () => {
   const { quizData } = useQuiz(quizID!);
   const [start, setStart] = useState<boolean>(false);
 
-  // console.log(quizData?.quiz[1].question);
-
   const handleStateChange = (questionValue: any, optionValue: any) => {
     setState((el: any) => ({
       ...el,

@@ -24,8 +24,6 @@ const QuizSetupScreen = () => {
   const { quizData } = useQuiz(quizID);
   const students = oneStudentPerformance;
 
-  console.log("reading ", students);
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Toaster position="top-center" reverseOrder={true} />

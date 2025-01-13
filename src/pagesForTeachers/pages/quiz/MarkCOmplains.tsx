@@ -45,7 +45,6 @@ const MakeComplains: FC<iProps> = ({ props }) => {
       importance: subject,
     })
       .then((res) => {
-        console.log(res);
         if (res?.status === 201) {
           mutate(`api/view-teacher-complain/${teacherInfo?._id}`);
           toast.success("Added Successfully...!");
@@ -67,7 +66,7 @@ const MakeComplains: FC<iProps> = ({ props }) => {
           htmlFor="mark_complains"
           className=" transition-all duration-300 cursor-pointer "
         >
-           <div className="flex">
+          <div className="flex">
             <div className="text-[20px] mr-[10px]">
               <MdOutlineMarkChatRead />
             </div>

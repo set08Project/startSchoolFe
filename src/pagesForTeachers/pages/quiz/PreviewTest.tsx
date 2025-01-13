@@ -27,7 +27,6 @@ const PreviewTest = () => {
     });
   }, []);
 
-  // console.log(state);
   const questionsLength: number = testQuestion[1]?.question?.length;
 
   return (
