@@ -10,6 +10,8 @@ import {
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import { useState, useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import _ from "lodash";
+import { GoGoal } from "react-icons/go";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
@@ -31,6 +33,8 @@ const QuizSetupScreen = () => {
   const handleQuizCompleted = (quizId: string) => {
     setCompletedQuizzes((prev) => [...prev, quizId]);
   };
+
+  let readQuiz = _.filter(subjectQuiz?.quiz, (el: any) => el.status === "quiz");
 
   return (
     <div className="text-blue-950 relative">
@@ -193,7 +197,7 @@ const QuizSetupScreen = () => {
 
       {subjectQuiz?.quiz?.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
-          {subjectQuiz?.quiz
+          {readQuiz
             ?.filter((quiz: any) => !completedQuizzes.includes(quiz._id))
             .map((props: any, i: number) => (
               <div key={i}>
@@ -224,35 +228,45 @@ const QuizSetupScreen = () => {
 
                   <div className="text-[12px] my-4">
                     <p className="font-medium mb-2">Top Performing Student</p>
-                    <div className="flex gap-2">
-                      <img
-                        src={pix}
-                        className="w-[50px] h-[50px] border rounded-xl object-cover"
-                      />
-                      <div>
-                        <p className="font-bold capitalize ">name</p>
-                        <p>point</p>
+                    {props?.performance?.length > 0 ? (
+                      <div className="flex gap-2">
+                        <img
+                          src={pix}
+                          alt="Student"
+                          className="w-[50px] h-[50px] border rounded-xl object-cover"
+                        />
+                        <div>
+                          <p className="font-bold capitalize">Name</p>
+                          <p>Points</p>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <GoGoal size={20} />
+                        <p className="font-semibold text-[12px]">
+                          No student has Attented this test yet.
+                        </p>
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-between text-[13px]">
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz?.question?.length}
+                        {props?.quiz[1]?.question?.length}
                       </span>
                     </div>
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz?.instruction?.mark}
+                        {props?.quiz[0]?.instruction?.mark}
                       </span>
                     </div>
                   </div>
                   <div className="text-[12px] mt-2 font-bold">
                     Instruction:{" "}
                     <span className="font-normal">
-                      {`${props?.quiz?.instruction?.instruction}`.slice(
+                      {`${props?.quiz[0]?.instruction?.instruction}`.slice(
                         0,
                         Math.ceil(Math.random() * (100 - 70)) + 70
                       )}
