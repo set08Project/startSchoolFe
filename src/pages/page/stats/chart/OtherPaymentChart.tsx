@@ -25,25 +25,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { FC } from "react";
-import { useViewSessionTerm } from "@/pages/hook/useSchoolAuth";
 
-export const OtherPaymentChart: FC<any> = ({ data }) => {
-  const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
-
-  const chartData1 = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ];
-
+export const OtherPaymentChart: FC<any> = ({ data, sessionTermData }) => {
   const result = _(sessionTermData?.data?.paymentOptions)
-    .groupBy("paymentDetails") // Group by month
+    .groupBy("paymentDetails")
     .map((items, info) => ({
       info,
-      amount: _.sumBy(items, "paymentAmount"), // Sum mobile values
+      amount: _.sumBy(items, "paymentAmount"),
     }))
     .value();
 

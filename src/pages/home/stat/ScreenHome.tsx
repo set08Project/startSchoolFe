@@ -12,7 +12,7 @@ import ArticleHolderScreen from "../../../pagesForStudents/pages/screens/Article
 import MainArticleHolderScreen from "../screens/ARticlaHolderScreen";
 import { useDeailyExpense, useSchoolData } from "../../hook/useSchoolAuth";
 import { DailyExpenseChart } from "./DailyExpenseChart";
-
+import { FaChartColumn } from "react-icons/fa6";
 const ScreenHome = () => {
   document.title = "School's Record and Stats";
 
@@ -153,7 +153,7 @@ const ScreenHome = () => {
             </p>
 
             <div>
-              {readData?.length > 0 ? (
+              {dailyExpense?.data?.allData?.length > 0 ? (
                 <div>
                   {" "}
                   <DailyExpenseChart
@@ -162,8 +162,8 @@ const ScreenHome = () => {
                   />{" "}
                 </div>
               ) : (
-                <div className="flex flex-col w-full items-center">
-                  <MdPlaylistAddCheck size={30} />
+                <div className="flex flex-col w-full mb-10 items-center">
+                  <FaChartColumn size={30} />
                   <p className="font-medium text-[13px]">
                     No Expenses Record yet
                   </p>

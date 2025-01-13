@@ -1,10 +1,11 @@
 import { FC } from "react";
-
+import { FaChartLine } from "react-icons/fa";
 // import _ from "lodash";
 import {
   useSchoolData,
   useSchoolSchoolFees,
   useSchoolStudents,
+  useViewSessionTerm,
 } from "../../hook/useSchoolAuth";
 import MaleFemaleTeacherScreen from "./MaleFemaleTeacherScreen";
 import { FaCheckDouble } from "react-icons/fa6";
@@ -101,7 +102,7 @@ const Personal: FC = () => {
       return el.studentID;
     });
 
-  // console.log(data);
+  const { sessionTermData } = useViewSessionTerm(data?.presentTermID);
 
   return (
     <div>
@@ -233,7 +234,17 @@ const Personal: FC = () => {
       <div className="w-full">
         {/* <MaleFemaleTeacherScreen /> */}
         <StudentChartScreen data={data} />
-        <OtherPaymentChart data={data} />
+        {sessionTermData?.data?.paymentOptions?.length > 0 ? (
+          <OtherPaymentChart data={data} sessionTermData={sessionTermData} />
+        ) : (
+          <div className="font-semibold text-black/50 capitalize mt-10">
+            <hr />
+            <div className="mt-5 flex flex-col items-center">
+              <FaChartLine className="text-[30px] mb-2" />
+              <p className="text-[13px]">no record for other payment yet</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import { FaSpinner } from "react-icons/fa";
 
 const PreviewTest = () => {
   const navigate = useNavigate();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
 
-  // const {} = useReadMyClassInfoData()
+  const [loading, setLoading] = useState<boolean>(false);
 
   const testQuestion = useSelector((state: any) => state.test);
   const dispatch = useDispatch();
@@ -82,23 +83,26 @@ const PreviewTest = () => {
       </div>
 
       <Button
-        name={"Publish Question"}
-        className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4"
+        name={loading ? "Uploading Question" : "Publish Question"}
+        icon={
+          loading && (
+            <FaSpinner className="text-white text-[20px] animate-spin" />
+          )
+        }
+        className="text-black border mt-20 bg-blue-950 uppercase text-[12px]px-8 py-4 transition-all duration-300 "
         onClick={() => {
-          createQuiz(
-            state?._id!,
-            subjectID!,
-            questionsLength,
-            testQuestion
-          ).then((res: any) => {
-            console.log("Create Quiz res", res);
-            if (res.status === 201) {
-              mutate(`api/view-subject-quiz/${subjectID}`);
-              dispatch(displayEmptyTest());
-
-              navigate(`/subjects/${subjectID}`);
-            }
-          });
+          setLoading(true);
+          createQuiz(state?._id!, subjectID!, questionsLength, testQuestion)
+            .then((res: any) => {
+              if (res.status === 201) {
+                mutate(`api/view-subject-quiz/${subjectID}`);
+                dispatch(displayEmptyTest());
+                navigate(`/subjects/${subjectID}`);
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         }}
       />
     </div>

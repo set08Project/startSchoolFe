@@ -27,11 +27,11 @@ const CreateQuiz = () => {
       
       "
       >
-        <div className=" col-span-3 min-h-[60vh]">
+        <div className=" col-span-3 min-h-[60vh] ">
           <PreviewTest />
         </div>
 
-        <div className="order-first mb-10 lg:sticky lg:order-last border col-span-2 h-[790px] top-20 p-4 rounded-lg flex flex-col">
+        <div className="order-first mb-10 lg:sticky lg:order-last border col-span-2 min-h-[590px] top-20 p-4 rounded-lg flex flex-col ">
           <div className="flex">
             <Button
               name={"Set Instruction"}
@@ -54,7 +54,7 @@ const CreateQuiz = () => {
           {toggle ? (
             <JustQuestionScreen />
           ) : (
-            <div className="h-full flex flex-col">
+            <div className="min-h-[100px] pb-4 flex flex-col ">
               <p className="my-2 font-medium capitalize border-b">
                 Set Test Instruction
               </p>
@@ -63,7 +63,7 @@ const CreateQuiz = () => {
                   <label className="text-[12px]">Enter Instruction</label>
                   <textarea
                     placeholder="Enter Instructions"
-                    className="ml-0 w-full border bg-gray-100 text-[12px] h-[200px] rounded-md resize-none outline-none p-2"
+                    className="ml-0 w-full border bg-gray-100 text-[12px] min-h-[100px] rounded-md resize-none outline-none p-2"
                     value={instruction}
                     onChange={(e) => {
                       setInstruction(e.target.value);
@@ -71,22 +71,22 @@ const CreateQuiz = () => {
                   />
                 </div>
                 <div className="mt-1 w-full flex gap-2">
-                  <div>
+                  <div className="flex-1">
                     <label className="text-[12px]">
-                      Enter Time/Duration(Hours))
+                      Enter Time/Duration(Hours)
                     </label>
 
                     <select
                       name="hour"
                       id="hour"
                       className="ml-2 border border-blue-950 
-                      px-2 rounded-md"
+                      px-2 rounded-md py-3 flex-1 w-[90%] mt-2 mr-2 "
                       value={duration}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setDuration(e.target.value);
                       }}
                     >
-                      <option value="1" selected>
+                      <option value="0" selected>
                         choose
                       </option>
                       <option value="1">1 Hour</option>
@@ -96,7 +96,7 @@ const CreateQuiz = () => {
                       <option value="5">5 Hours</option>
                     </select>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <label className="text-[12px]">
                       Enter Mark Per Question
                     </label>
@@ -112,7 +112,7 @@ const CreateQuiz = () => {
                 </div>
               </div>
 
-              <div className="flex-1" />
+              {/* <div className="flex-1" /> */}
               {testQuestion[0]?.binstruction?.instruction ? (
                 <Button
                   name={"add to Preview"}
