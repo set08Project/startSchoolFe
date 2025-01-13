@@ -16,7 +16,7 @@ const JustQuestionScreen = () => {
   const [questionSet, setQuestionSet] = useState<Array<{}>>([]);
   const [quest, setQuest] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
-  const [options, setOptions] = useState<Array<{}>>([{ 1: "" }]);
+  const [options, setOptions] = useState<Array<{}>>([{}]);
   const [editingId, setEditingId] = useState(null);
 
   const handleAddOption = (i: number) => {
@@ -55,9 +55,9 @@ const JustQuestionScreen = () => {
       </div>
 
       <p className="my-1 mx-0 text-[12px] font-medium ">
-        <Input
+        <input
           placeholder="Enter the Answer"
-          className="px-2 mx-0 w-full"
+          className="px-2 mx-0 w-full border outline-none h-[45px] pl-2 rounded-md text-[15px]"
           value={answer}
           onChange={(e) => {
             setAnswer(e.target.value);
@@ -70,7 +70,7 @@ const JustQuestionScreen = () => {
           <div key={i} className="flex gap-2 items-center my-3">
             <Input
               placeholder="Enter Options"
-              className="m-0"
+              className="m-0  outline-none h-[45px] pl-2 rounded-md"
               value={props}
               name={props}
               onChange={(e) => {
@@ -97,7 +97,7 @@ const JustQuestionScreen = () => {
         ))}
       </div>
 
-      <div className="flex-1" />
+      {/* <div className="flex-1" /> */}
 
       {/* <Button
         name={"Empty"}
@@ -123,7 +123,7 @@ const JustQuestionScreen = () => {
         />
       ) : (
         <Button
-          name={"add items to Preview"}
+          name={"Add Questions to Preview"}
           className="text-black border  bg-slate-400 uppercase text-[12px]px-8 py-4"
           onClick={() => {
             // setToggle(true);
