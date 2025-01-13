@@ -35,6 +35,7 @@ import { BsCash } from "react-icons/bs";
 
 const SecondaryStudentScreen = () => {
   const dispatch = useDispatch();
+  const { studentInfo } = useStudentInfo();
   const user = useSelector((state: any) => state.user);
   const showing = useSelector((state: any) => state.showStaffComp);
   const handleToggleMenuFalse = () => {
@@ -48,6 +49,7 @@ const SecondaryStudentScreen = () => {
   };
   const { data } = useSchoolData();
 
+  console.log(studentInfo?.classAssigned.includes("SSS 3"));
   return (
     <div>
       <div className="mt-8 px-2 flex text-[15px] flex-col h-[90%]">
@@ -126,20 +128,35 @@ const SecondaryStudentScreen = () => {
           <MdQuiz />
         </NavLink> */}
 
-        <NavLink
-          to="/CBT"
-          className={({ isActive }) =>
-            isActive
-              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
-          }
-          onClick={handleToggleMenuFalse}
-        >
-          <span>
-            CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
-          </span>
-          <MdQuiz />
-        </NavLink>
+        {studentInfo?.classAssigned.includes("SSS 3") ? (
+          <NavLink
+            // to="/CBT"
+            to={"/CBT"}
+            className={({ isActive }) =>
+              isActive
+                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+            }
+            onClick={handleToggleMenuFalse}
+          >
+            <span>
+              CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
+            </span>
+            <MdQuiz />
+          </NavLink>
+        ) : (
+          <div
+            // to="/CBT"
+            // to={studentInfo?.classAssigned === "SSS 3" && "/CBT"}
+            className={`duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between `}
+            onClick={handleToggleMenuFalse}
+          >
+            <span>
+              CBT <span className="text-[11px] font-bold">For SSS 3 Only</span>
+            </span>
+            <MdQuiz />
+          </div>
+        )}
 
         <NavLink
           to="/lesson"
