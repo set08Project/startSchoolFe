@@ -65,7 +65,7 @@ const ExaminationPreviewScreen = () => {
 
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
-  console.log(examination);
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />

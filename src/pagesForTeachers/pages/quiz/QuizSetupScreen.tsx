@@ -6,6 +6,7 @@ import { MdPlayCircle, MdVisibilityOff, MdVisibility } from "react-icons/md";
 import LittleHeader from "../../components/layout/LittleHeader";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import pix from "../../../assets/pix.jpg";
+import { GoGoal } from "react-icons/go";
 import {
   useExamination,
   useSubjectAssignment,
@@ -19,6 +20,7 @@ import {
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import { useStudentPerfomance } from "../../hooks/useQuizHook";
+import _ from "lodash";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
@@ -46,6 +48,8 @@ const QuizSetupScreen = () => {
   const assign: [] = subjectAssignment?.assignment;
 
   const combine: Array<any> = quiz?.concat(assign);
+
+  const readQuiz = _.filter(quiz, (el: any) => el.status === "quiz");
 
   const handleDelete = (id: string) => {
     setSelectedQuizId(id);
@@ -250,9 +254,9 @@ const QuizSetupScreen = () => {
       {combine?.length > 0 ? (
         <div>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
-            {quiz?.map((props: any, i: number) => (
+            {readQuiz?.map((props: any, i: number) => (
               <div key={props._id}>
-                <div className="border p-6 rounded-md h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div className="border p-6 rounded-sm min-h-[300px] flex flex-col relative overflow-hidden  hover:shadow-lg transition-shadow duration-300">
                   <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                     {i + 1}
                   </div>
@@ -293,45 +297,50 @@ const QuizSetupScreen = () => {
 
                   <div className="text-[12px] my-4">
                     <p className="font-medium mb-2">Top Performing Student</p>
-                    <div className="flex gap-2">
-                      <img
-                        src={pix}
-                        alt="Student"
-                        className="w-[50px] h-[50px] border rounded-xl object-cover"
-                      />
-                      <div>
-                        <p className="font-bold capitalize">Name</p>
-                        <p>Points</p>
+
+                    {props?.performance?.length > 0 ? (
+                      <div className="flex gap-2">
+                        <img
+                          src={pix}
+                          alt="Student"
+                          className="w-[50px] h-[50px] border rounded-xl object-cover"
+                        />
+                        <div>
+                          <p className="font-bold capitalize">Name</p>
+                          <p>Points</p>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <GoGoal size={20} />
+                        <p className="font-semibold text-[12px]">
+                          No student has Attented this test yet.
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex justify-between text-[13px]">
+                  <div className="flex mt-5 justify-between text-[13px] border-y py-4 mb-3">
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz?.question
-                          ? props?.quiz?.question.length
+                        {props?.quiz[1]?.question
+                          ? props?.quiz[1]?.question.length
                           : 0}
                       </span>
                     </div>
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz?.instruction
-                          ? props?.quiz?.instruction.mark
+                        {props?.quiz[0]?.instruction
+                          ? props?.quiz[0]?.instruction.mark
                           : 0}
                       </span>
                     </div>
                   </div>
                   <div className="text-[12px] mt-2 font-bold">
                     Instruction:{" "}
-                    <span className="font-normal">
-                      {props?.quiz?.instruction?.instruction
-                        ? `${props?.quiz?.instruction.instruction}`.slice(
-                            0,
-                            70
-                          ) + "..."
-                        : "..."}
+                    <span className="font-normal line-clamp-2">
+                      {props?.quiz[0]?.instruction.instruction}
                     </span>
                   </div>
                 </div>
