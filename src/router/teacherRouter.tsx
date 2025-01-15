@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
+import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
 
 const TeacherPrintReportCardScreen = React.lazy(
   () => import("../pagesForTeachers/pages/CardTemplate/DownloadStudentReport")
@@ -471,6 +472,16 @@ export const teacherRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             {" "}
             <WeekReport />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "view-weekly-report/:studentID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <ViewWeekReport />
           </Suspense>
         ),
       },

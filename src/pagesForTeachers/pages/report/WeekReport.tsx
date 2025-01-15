@@ -18,6 +18,7 @@ import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import _ from "lodash";
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: any;
@@ -297,6 +298,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
           }}
         />
       </div>
+      <div className="w-[180px] border-r py-3 text-white  hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center rounded-md bg-blue-950">
+        <Link to={`/view-weekly-report/${props?._id}`}>View Report</Link>
+      </div>
     </div>
   );
 };
@@ -333,33 +337,6 @@ const Remark: FC<iProps> = ({ id, data }) => {
   );
 };
 
-const AttendanceRatio: FC<iProps> = ({ props }) => {
-  const { mainStudentAttendance } = useStudentAttendance(props?._id);
-
-  return (
-    <div>
-      {(mainStudentAttendance?.data?.attendance?.filter(
-        (el: any) => el.present === true
-      ).length /
-        mainStudentAttendance?.data?.attendance?.length) *
-      100 ? (
-        <div>
-          {(
-            (mainStudentAttendance?.data?.attendance?.filter(
-              (el: any) => el.present === true
-            ).length /
-              mainStudentAttendance?.data?.attendance?.length) *
-            100
-          ).toFixed(2)}
-          %
-        </div>
-      ) : (
-        <div>0%</div>
-      )}
-    </div>
-  );
-};
-
 const WeekReport = () => {
   const { teacherInfo } = useTeacherInfo();
 
@@ -371,7 +348,7 @@ const WeekReport = () => {
   const { classStudents } = useClassStudent(oneClass?._id!);
 
   const allStudents = classStudents?.students;
-  const sortedStudents = allStudents?.sort((a, b) =>
+  const sortedStudents = allStudents?.sort((a: any, b: any) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
 
@@ -407,7 +384,7 @@ const WeekReport = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[2700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[2900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Today's Attendance</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
@@ -428,9 +405,10 @@ const WeekReport = () => {
           <div className="w-[300px] border-r">Give Report/Remark</div>
 
           <div className="w-[180px] border-r">Approve/Submit Report</div>
+          <div className="w-[180px] border-r">View Student Report</div>
         </div>
 
-        <div className=" w-[2700px] overflow-hidden">
+        <div className=" w-[2900px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (

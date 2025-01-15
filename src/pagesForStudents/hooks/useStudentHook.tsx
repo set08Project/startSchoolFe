@@ -72,7 +72,7 @@ export const useStudentInfo = () => {
   return { studentInfo };
 };
 
-export const useStudentInfoData = (studentID) => {
+export const useStudentInfoData = (studentID: string) => {
   const { data: studentInfoData } = useSWR(
     `api/view-student-info/${studentID}`,
     () => {
