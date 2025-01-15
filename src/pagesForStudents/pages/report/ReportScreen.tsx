@@ -1,9 +1,10 @@
 import ViewReportScreen from "./ViewReportScreen";
+import ViewWeekReport from "./WeeklyReport";
 
 const ReportScreen = () => {
   return (
     <div>
-      <ViewReportScreen />
+      <ViewWeekReport />
     </div>
   );
 };

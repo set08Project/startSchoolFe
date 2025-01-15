@@ -49,10 +49,9 @@ const SecondaryStudentScreen = () => {
   };
   const { data } = useSchoolData();
 
-  console.log(studentInfo?.classAssigned.includes("SSS 3"));
   return (
     <div>
-      <div className="mt-8 px-2 flex text-[15px] flex-col h-[90%]">
+      <div className="mt-8 px-2 flex text-[16px] flex-col h-[90%]">
         <NavLink
           to="/"
           className={({ isActive }) =>
