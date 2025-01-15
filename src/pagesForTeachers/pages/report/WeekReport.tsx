@@ -9,6 +9,7 @@ import {
   useClassStudent,
   useClassSubject,
   useSchoolAnnouncement,
+  useSchoolEvent,
   useSujectInfo,
   useTeacherInfo,
 } from "../../hooks/useTeacher";
@@ -16,6 +17,7 @@ import { readClassInfo, remark } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import _ from "lodash";
 
 interface iProps {
   props?: any;
@@ -49,6 +51,18 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
   const attendanceRecord = ["1", "2", "3", "4", "5"];
 
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+  const { schoolEvent } = useSchoolEvent(teacherInfo?.schoolIDs);
+
+  let event = schoolEvent?.events;
+  let annonce = schoolAnnouncement?.announcements;
+
+  let allEvent = event?.concat(annonce);
+
+  const mainEvent = _.sortBy(allEvent, (a: any, b: any) => {
+    return a?.updatedAt - b?.updatedAt;
+  });
+
+  console.log(mainEvent[0]);
 
   return (
     <div
@@ -226,10 +240,12 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
         {parseFloat(props?.classTermFee).toLocaleString()}
       </div>
 
-      <div className="w-[300px] border-r  ">
-        {schoolAnnouncement?.announcement?.length > 0
-          ? schoolAnnouncement?.announcement[0]
-          : "No Announcement"}
+      <div className="w-[300px] border-r capitalize ">
+        {mainEvent?.length > 0 ? (
+          <div>{mainEvent[0].details}</div>
+        ) : (
+          "No Announcement"
+        )}
       </div>
 
       {/* here */}
@@ -251,9 +267,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
           onClick={() => {
             setPayment(parseFloat(props?.classTermFee));
             setAnnouncement(
-              schoolAnnouncement?.announcement?.length > 0
-                ? schoolAnnouncement?.announcement[0]
-                : "No Announcement"
+              mainEvent?.length > 0 ? mainEvent[0] : "No Announcement"
             );
 
             if (stateValue !== "") {
