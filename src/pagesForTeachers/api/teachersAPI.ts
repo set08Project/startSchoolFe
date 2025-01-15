@@ -490,7 +490,7 @@ export const remark = async (
 ) => {
   try {
     return await axios
-      .post(`${URL}/create-remark/${teacherID}/${studentID}`, { remark: data })
+      .post(`${URL}/create-remark/${teacherID}/${studentID}`, data)
       .then((res: any) => {
         return res?.data;
       });

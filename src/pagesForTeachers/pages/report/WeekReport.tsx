@@ -5,7 +5,13 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import moment from "moment";
 import { FC, useEffect, useState } from "react";
 import { useStudentAttendance } from "../../../pages/hook/useSchoolAuth";
-import { useClassStudent, useTeacherInfo } from "../../hooks/useTeacher";
+import {
+  useClassStudent,
+  useClassSubject,
+  useSchoolAnnouncement,
+  useSujectInfo,
+  useTeacherInfo,
+} from "../../hooks/useTeacher";
 import { readClassInfo, remark } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,12 +22,33 @@ interface iProps {
   id?: string;
   data?: any;
   i?: number;
+  oneClass?: any;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
   const { teacherInfo } = useTeacherInfo();
   const [state, setState] = useState<any>({});
-  const [stateValue, setStateValue] = useState("");
+
+  const [stateValue, setStateValue] = useState<string>("");
+  const [best, setBest] = useState<string>("");
+  const [worst, setWorst] = useState<string>("");
+  const [classParticipation, setClassParticipation] = useState<string>("");
+  const [sportParticipation, setSportParticipation] = useState<string>("");
+
+  const [announcement, setAnnouncement] = useState<string>("");
+  const [payment, setPayment] = useState<number>(0);
+
+  const [attendanceRatio, setAttendanceRatio] = useState<string>("");
+  const [weekPerformanceRatio, setWeekPerformanceRatio] = useState<string>("");
+  const [topicFocus, setTopicFucus] = useState<string>("");
+  const [generalPerformace, setGeneralPerformace] = useState<string>("");
+
+  const { subjectData } = useClassSubject(oneClass?._id);
+
+  const performanceRecord = ["Excellent", "Good", "Poor"];
+  const attendanceRecord = ["1", "2", "3", "4", "5"];
+
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
 
   return (
     <div
@@ -32,7 +59,22 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       <Remark data={props} id={props?._id} />
 
       <div className="w-[100px] border-r">
-        <AttendanceRatio props={props} />
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md"
+          value={attendanceRatio}
+          onChange={(e) => {
+            setAttendanceRatio(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Attendance Data
+          </option>
+          {attendanceRecord?.map((el: any, i: number) => (
+            <option value={el} key={i}>
+              {el}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* name */}
@@ -40,7 +82,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
-            src={pix}
+            src={props?.avatar ? props?.avatar : pix}
           />
 
           <div className="w-[180px] ">
@@ -50,13 +92,151 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
 
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md"
+          value={generalPerformace}
+          onChange={(e) => {
+            setGeneralPerformace(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            General Performance Data
+          </option>
+          {attendanceRecord?.map((el: any, i: number) => (
+            <option value={el} key={i}>
+              {el}
+            </option>
+          ))}
+        </select>
+      </div>
+      {/* here */}
+
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md"
+          value={weekPerformanceRatio}
+          onChange={(e) => {
+            setWeekPerformanceRatio(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Choose Performance?
+          </option>
+          {performanceRecord?.map((el: any, i: number) => (
+            <option value={el} key={i}>
+              {el}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md select-primary"
+          value={best}
+          onChange={(e) => {
+            setBest(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Select a Subject?
+          </option>
+          {subjectData?.classSubjects?.map((el: any) => (
+            <option key={el?._id} value={el?.subjectTitle}>
+              {el?.subjectTitle}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md select-error"
+          value={worst}
+          onChange={(e) => {
+            setWorst(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Select a Subject?
+          </option>
+          {subjectData?.classSubjects?.map((el: any) => (
+            <option value={el?.subjectTitle} key={el?._id}>
+              {el?.subjectTitle}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="w-[100px] border-r  ">
         {props?.totalPerformance ? props?.totalPerformance : "0"}
       </div>
+
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md"
+          value={classParticipation}
+          onChange={(e) => {
+            setClassParticipation(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Choose Performance?
+          </option>
+          {performanceRecord?.map((el: any, i: number) => (
+            <option value={el} key={i}>
+              {el}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="w-[150px] border-r  ">
+        <select
+          className="w-[95%] select select-bordered max-w-xs rounded-md"
+          value={sportParticipation}
+          onChange={(e) => {
+            setSportParticipation(e.target.value);
+          }}
+        >
+          <option selected className="text-gray/70d">
+            Choose Performance?
+          </option>
+          {performanceRecord?.map((el: any, i: number) => (
+            <option value={el} key={i}>
+              {el}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="w-[250px] border-r  ">
+        <textarea
+          className="border w-[95%] h-[50px] p-1 text-[12pxs] outline-none resize-none rounded-md"
+          placeholder="Topics to focus study on, eg: Cell, Geometry..."
+          value={topicFocus}
+          onChange={(e) => {
+            setTopicFucus(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="w-[150px] border-r  ">
+        {parseFloat(props?.classTermFee).toLocaleString()}
+      </div>
+
+      <div className="w-[300px] border-r  ">
+        {schoolAnnouncement?.announcement?.length > 0
+          ? schoolAnnouncement?.announcement[0]
+          : "No Announcement"}
+      </div>
+
+      {/* here */}
       <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder="Give a Remark"
+          placeholder="Give a Remark now"
           value={stateValue}
           onChange={(e) => {
             setStateValue(e.target.value);
@@ -69,18 +249,34 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           name="Submit Report"
           className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
           onClick={() => {
+            setPayment(parseFloat(props?.classTermFee));
+            setAnnouncement(
+              schoolAnnouncement?.announcement?.length > 0
+                ? schoolAnnouncement?.announcement[0]
+                : "No Announcement"
+            );
+
             if (stateValue !== "") {
-              remark(teacherInfo?._id, props?._id, stateValue).then(
-                (res: any) => {
-                  if (res.status === 201) {
-                    mutate(``);
-                    toast.success("Report noted");
-                  } else {
-                    console.log(res);
-                    toast.error(`${res?.response?.data?.message}`);
-                  }
+              remark(teacherInfo?._id, props?._id, {
+                weekPerformanceRatio,
+                attendanceRatio,
+                best,
+                worst,
+                classParticipation,
+                sportParticipation,
+                topicFocus,
+                payment,
+                announcement,
+                remark: stateValue,
+                generalPerformace,
+              }).then((res: any) => {
+                if (res.status === 201) {
+                  mutate(``);
+                  toast.success("Report noted");
+                } else {
+                  toast.error(`${res?.response?.data?.message}`);
                 }
-              );
+              });
             } else {
               toast.error("Please give a REMARK");
             }
@@ -197,24 +393,35 @@ const WeekReport = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[1110px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[2700px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Today's Attendance</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
           <div className="w-[250px] border-r">student Info</div>
 
-          <div className="w-[100px] border-r">student Performance</div>
+          <div className="w-[150px] border-r">student General Performance</div>
+          <div className="w-[150px] border-r">Rate this week's Performance</div>
+          <div className="w-[150px] border-r">Best Performing Subject</div>
+          <div className="w-[150px] border-r">Worst Performing Subject</div>
+          <div className="w-[100px] border-r">Quiz Performance</div>
+          <div className="w-[150px] border-r">Class Participation</div>
+          <div className="w-[150px] border-r">Sport Participation</div>
+          <div className="w-[250px] border-r">Topic Study</div>
+          <div className="w-[150px] border-r">
+            Outstanding School-fee Payment
+          </div>
+          <div className="w-[300px] border-r">upcoming Event</div>
           <div className="w-[300px] border-r">Give Report/Remark</div>
 
-          <div className="w-[180px] border-r">View Detail</div>
+          <div className="w-[180px] border-r">Approve/Submit Report</div>
         </div>
 
-        <div className=" w-[1110px] overflow-hidden">
+        <div className=" w-[2700px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (
                 <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+                  <MainStudentRow props={props} i={i} oneClass={oneClass} />
                 </div>
               ))}
             </div>
