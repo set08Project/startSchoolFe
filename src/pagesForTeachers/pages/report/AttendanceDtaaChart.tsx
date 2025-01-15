@@ -19,16 +19,17 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export const AttendanceDataChart: React.FC<any> = ({
-  remarks,
-  studentInfoData,
-}) => {
-  console.log(remarks);
-  console.log(studentInfoData);
+export const AttendanceDataChart: React.FC<any> = ({ remarks }) => {
+  const att = parseInt(remarks?.data[0]?.attendanceRatio) * 20;
+  const lastAtt = parseInt(remarks?.data[1]?.attendanceRatio) * 20;
 
   const presentData = [
-    { record: "presence", present: 186, fill: "var(--color-xx)" },
-    { record: "absence", present: 305, fill: "var(--color-x)" },
+    { record: "presence", present: att + lastAtt, fill: "var(--color-xx)" },
+    {
+      record: "absence",
+      present: 200 - (att + lastAtt),
+      fill: "var(--color-x)",
+    },
   ];
 
   const chartConfig = {
@@ -116,7 +117,8 @@ export const AttendanceDataChart: React.FC<any> = ({
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {presentData[activeIndex].present.toLocaleString()}
+                          {/* {presentData[activeIndex].present.toLocaleString()} */}
+                          {((att + lastAtt) / 200) * 100}%
                         </tspan>
                         <tspan
                           x={viewBox.cx}

@@ -38,7 +38,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
   const [classParticipation, setClassParticipation] = useState<string>("");
   const [sportParticipation, setSportParticipation] = useState<string>("");
 
-  const [announcement, setAnnouncement] = useState<string>("");
+  const [announcement, setAnnouncement] = useState<{}>({});
   const [payment, setPayment] = useState<number>(0);
 
   const [attendanceRatio, setAttendanceRatio] = useState<string>("");
@@ -62,8 +62,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
   const mainEvent = _.sortBy(allEvent, (a: any, b: any) => {
     return a?.updatedAt - b?.updatedAt;
   });
-
-  console.log(mainEvent[0]);
 
   return (
     <div
@@ -271,7 +269,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass }) => {
               mainEvent?.length > 0 ? mainEvent[0] : "No Announcement"
             );
 
-            if (stateValue !== "") {
+            if (stateValue !== "" && announcement) {
               remark(teacherInfo?._id, props?._id, {
                 weekPerformanceRatio,
                 attendanceRatio,

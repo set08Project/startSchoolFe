@@ -17,9 +17,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { FC } from "react";
 
-export const StraightChart = () => {
-  const chartData = [{ month: "Attendance", lastWeek: 186, thisWeek: 80 }];
+export const StraightChart: FC<any> = ({ remarks }) => {
+  const att = parseInt(remarks?.data[0]?.attendanceRatio) * 20;
+  const lastAtt = parseInt(remarks?.data[1]?.attendanceRatio) * 20;
+
+  const chartData = [
+    { attendance: "Attendance", lastWeek: lastAtt, thisWeek: att },
+  ];
 
   const chartConfig = {
     lastWeek: {
@@ -34,7 +40,7 @@ export const StraightChart = () => {
   return (
     <Card className="border-0 shadow-none m-0 p-0 flex flex-col h-[400px]">
       <CardHeader>
-        <CardTitle className="m-0 p-0">Bar Chart - Multiple</CardTitle>
+        <CardTitle className="m-0 p-0">Attendance Chart -</CardTitle>
         <CardDescription>Last Week - This Week</CardDescription>
       </CardHeader>
       <CardContent>
@@ -42,7 +48,7 @@ export const StraightChart = () => {
           <BarChart accessibilityLayer data={chartData} className="">
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="attendance"
               tickLine={false}
               tickMargin={10}
               axisLine={false}

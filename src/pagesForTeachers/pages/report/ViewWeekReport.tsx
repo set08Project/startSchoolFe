@@ -9,6 +9,9 @@ import { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { AttendanceDataChart } from "./AttendanceDtaaChart";
 import { StraightChart } from "./StraightChart";
+import moment from "moment";
+import { AcademicPerformance } from "./AcademicPerformance";
+import { Participation } from "./Participation";
 
 const ViewWeekReport = () => {
   const { studentID } = useParams();
@@ -24,6 +27,17 @@ const ViewWeekReport = () => {
         name={`Viewing ${studentInfoData?.studentFirstName} Weekly Report`}
       />
 
+      <div>
+        <p className="font-semibold ml-3">Class Teacher Remarks</p>
+
+        <p className="my-5 max-w-2xl text-[18px] italic pl-3">
+          {remarks?.data[0]?.remark}
+        </p>
+      </div>
+
+      <p className="font-semibold ml-3 mt-8">
+        Data Presentation of Weekly Report
+      </p>
       <main>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
           <div className="border min-h-10 rounded-md p-4 m-2 flex flex-col">
@@ -32,7 +46,7 @@ const ViewWeekReport = () => {
             </p>
 
             <p className="mt-10 text-[30px] md:text-[40px] font-semibold">
-              ₦5,000
+              ₦{parseFloat(remarks?.data[0]?.payment).toLocaleString()}
             </p>
 
             <p className="text-[12px] text-blue-950 -mt-2">
@@ -44,7 +58,7 @@ const ViewWeekReport = () => {
 
             <div className="flex-1" />
             <div className="flex ">
-              <p className="text-[12px] rounded-sm py-1 px-6 text-white bg-orange-500">
+              <p className="text-[12px] rounded-sm py-1 px-6 text-white bg-orange-500 cursor-pointer">
                 Paid off Outstanding
               </p>
             </div>
@@ -70,32 +84,122 @@ const ViewWeekReport = () => {
           <div className="border min-h-10 rounded-md p-4 col-span-1 sm:col-span-3 lg:col-span-1 m-2">
             <div>
               <p>Special Announcement</p>
-              <p className="text-[12px] font-semibold ">
+              <p className="text-[12px] font-semibold leading-[1] opacity-40 font-light">
                 You are seeing this because it is very important
               </p>
 
-              <p className="text-[12px] font-semibold mt-8">Notice</p>
-              <p>Message Title</p>
-              <p className="text-[13px] text-black/60">Message Detail</p>
-              <p className="text-[13px] text-black/60 mt-6">Date</p>
-              <p className="text-[13px] text-black/60 mt-">Created</p>
+              <p className="text-[12px] font-semibold mt-8">
+                Notice Type:{" "}
+                <span className="uppercase">
+                  {remarks?.data[0]?.announcement?.status}
+                </span>
+              </p>
+              <p>{remarks?.data[0]?.announcement?.title}</p>
+              <p className="text-[13px] text-black/60">
+                {remarks?.data[0]?.announcement?.details}
+              </p>
+              <p className="text-[13px] text-black/60 mt-6">
+                {moment(remarks?.data[0]?.announcement?.date).format("LL")}
+              </p>
+              <p className="text-[12px] text-black/50 mt-">
+                Created At:{" "}
+                {moment(remarks?.data[0]?.announcement?.createdAt).format("LL")}
+              </p>
             </div>
           </div>
         </div>
       </main>
 
-      <section className="mt-10 ">
-        <main className="grid grid-cols-1 md:grid-cols-3">
+      <section className="mt-5 ">
+        <main className="grid grid-cols-1 lg:grid-cols-3">
           <div className="py-4 min-h-5 border rounded-md m-2 col-span-2 grid grid-cols-1 lg:grid-cols-2 ">
             <AttendanceDataChart
               studentInfoData={studentInfoData}
               remarks={remarks}
             />
             <div className="p-4 min-h-5 rounded-md m- ">
-              <StraightChart />
+              <StraightChart
+                studentInfoData={studentInfoData}
+                remarks={remarks}
+              />
             </div>
           </div>
-          <div className="p-4 min-h-5 border rounded-md m-2 ">1</div>
+          <div className="p-4 min-h-5 border rounded-md m-2 ">
+            <div className="flex flex-col">
+              <AcademicPerformance remarks={remarks} />
+            </div>
+          </div>
+        </main>
+      </section>
+
+      <section className="mt-5 ">
+        <main className="grid grid-cols-1 lg:grid-cols-3">
+          <div className="border rounded-md m-2 p-4 min-h-10">
+            <div>
+              <p className="text-[12px]">This Week Data</p>
+              <div className="flex flex-wrap items-center justify-between">
+                <div>
+                  <p className=" mt-6 text-[12px] text-green-800 font-semibold">
+                    Best Performing Subject
+                  </p>
+                  <p className=" px-8 py-2 bg-blue-950 text-white rounded-md">
+                    {remarks?.data[0].best}
+                  </p>
+                </div>
+                <div>
+                  <p className=" mt-6 text-[12px] text-red-800 font-semibold">
+                    Worst Performing Subject
+                  </p>
+                  <p className="px-8 py-2 bg-red-500 text-white rounded-md">
+                    {remarks?.data[0].worst}
+                  </p>
+                </div>
+              </div>
+              <div className=" mt-10 pt-2 border-t text-[12px] ">
+                <p>Last Week Data</p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between">
+                <div>
+                  <p className=" mt-6 text-[12px] text-green-800 font-semibold">
+                    Best Performing Subject
+                  </p>
+                  <p className=" px-8 py-2 bg-blue-950/80 text-white rounded-md">
+                    {remarks?.data[1].best}
+                  </p>
+                </div>
+                <div>
+                  <p className=" mt-6 text-[12px] text-red-800 font-semibold">
+                    Worst Performing Subject
+                  </p>
+                  <p className="px-8 py-2 bg-red-500/80 text-white rounded-md">
+                    {remarks?.data[1].worst}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="border rounded-md m-2 min-h-10">
+            <Participation remarks={remarks} />
+          </div>
+          <div className="border rounded-md m-2 p-4 min-h-10">
+            <p className="text-[18px] uppercase font-medium">Study Focus</p>
+            <p className="text-[12px]">
+              Topic to Focus studies on for the weekend
+            </p>
+
+            <div className="mt-10 flex flex-wrap uppercase">
+              {remarks?.data[0].topicFocus
+                .split(",")
+                .map((el: any, i: number) => (
+                  <div key={i} className="flex">
+                    <p className="m-2 text-[12px] px-4 py-2 text-white bg-blue-950 rounded-sm font-medium">
+                      {el}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          </div>
         </main>
       </section>
     </div>
