@@ -118,7 +118,9 @@ export const AcademicPerformance: FC<any> = ({ remarks }) => {
             ? "This is an improvement... Good work!"
             : wk < wkLast && wkLast < wkBefore
             ? "This is a consistent poor result... You have to work harder."
-            : "This is still room for improvement..."}
+            : wk < wkLast && wkLast === wkBefore
+            ? "This performance is really bad. You have to wake up and pay more attention to your studies, because it is dropping!"
+            : "There is still room for improvement..."}
         </p>
         <div className="flex gap-2 text-[12px] font-light leading-[1.5] tracking-wider">
           This gives an Insight of how you're performing within the last three
