@@ -187,7 +187,7 @@ const ViewWeekReport = () => {
             </p>
 
             <div className="mt-10 flex flex-wrap uppercase">
-              {remarks?.data[0].topicFocus
+              {remarks?.data[0]?.topicFocus
                 .split(",")
                 .map((el: any, i: number) => (
                   <div key={i} className="flex">
