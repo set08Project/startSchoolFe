@@ -48,7 +48,7 @@ export const AcademicPerformance: FC<any> = ({ remarks }) => {
   } satisfies ChartConfig;
   return (
     <Card className="border-0 shadow-none">
-      <CardHeader>
+      <CardHeader className="px-0">
         <CardTitle>General Academic Performance - Chart</CardTitle>
         <CardDescription>
           This Week, Last Week and the Week Before, Perfomance
@@ -103,8 +103,8 @@ export const AcademicPerformance: FC<any> = ({ remarks }) => {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <p className="mb-10 text-[16px] font-semibold text-blue-950">
+      <CardFooter className="px-0 flex-col items-start gap-2 text-sm">
+        <p className="my-5 text-[16px] font-semibold text-blue-950">
           {wk === 100
             ? "Awesome Performance this Week, Keep it up"
             : wk === wkLast &&
@@ -118,7 +118,9 @@ export const AcademicPerformance: FC<any> = ({ remarks }) => {
             ? "This is an improvement... Good work!"
             : wk < wkLast && wkLast < wkBefore
             ? "This is a consistent poor result... You have to work harder."
-            : "This is still room for improvement..."}
+            : wk < wkLast && wkLast === wkBefore
+            ? "This performance is really bad. You have to wake up and pay more attention to your studies, because it is dropping!"
+            : "There is still room for improvement..."}
         </p>
         <div className="flex gap-2 text-[12px] font-light leading-[1.5] tracking-wider">
           This gives an Insight of how you're performing within the last three

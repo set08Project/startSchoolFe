@@ -1,5 +1,6 @@
 import LittleHeader from "@/components/layout/LittleHeader";
 import {
+  useComplain,
   useStudentInfo,
   useStudentInfoData,
   useViewRemark,
@@ -15,7 +16,8 @@ const ViewWeekReport = () => {
   const { studentInfo } = useStudentInfo();
   const { studentInfoData } = useStudentInfoData(studentInfo?._id);
   const { remarks } = useViewRemark(studentInfo?._id);
-
+  const { complainData } = useComplain(studentInfo?._id);
+  let complain = complainData ? complainData[0] : null;
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -66,15 +68,27 @@ const ViewWeekReport = () => {
               <p>Most Recent Complain</p>
 
               <p className="text-[12px] mt-10">Your Complain Message:</p>
-              <p>message</p>
+              <p>
+                {complain?.title
+                  ? complain?.title
+                  : "You haven't made any complain"}
+              </p>
               <div className="flex-1" />
               <div className="flex items-end flex-col ">
                 <p className="text-[12px] font-semibold mt-5 ">
                   complain status
                 </p>
-                <p className="text-[12px] rounded-sm py-1 px-6 text-white bg-orange-500">
-                  Seen
-                </p>
+                {complain?.seen ? (
+                  <p className="text-[12px] rounded-sm py-1 px-6 text-white bg-orange-500">
+                    Seen
+                  </p>
+                ) : complain?.send && complain?.resolve ? (
+                  <p className="text-[12px] rounded-sm py-1 px-6 text-white bg-red-500">
+                    Resolved
+                  </p>
+                ) : (
+                  <p className="text-[12px]">Not yet open</p>
+                )}
               </div>
             </div>
           </div>
@@ -82,7 +96,7 @@ const ViewWeekReport = () => {
           <div className="border min-h-10 rounded-md p-4 col-span-1 sm:col-span-3 lg:col-span-1 m-2">
             <div>
               <p>Special Announcement</p>
-              <p className="text-[12px] font-semibold leading-[1] opacity-40 font-light">
+              <p className="text-[12px] leading-[1] opacity-40 font-light">
                 You are seeing this because it is very important
               </p>
 
@@ -140,7 +154,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-green-800 font-semibold">
                     Best Performing Subject
                   </p>
-                  <p className=" px-8 py-2 bg-blue-950 text-white rounded-md">
+                  <p className=" flex justify-center items-center text-[14px] px-6 py-2 bg-blue-950 text-white rounded-md">
                     {remarks?.data[0]?.best}
                   </p>
                 </div>
@@ -148,7 +162,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-red-800 font-semibold">
                     Worst Performing Subject
                   </p>
-                  <p className="px-8 py-2 bg-red-500 text-white rounded-md">
+                  <p className="flex justify-center items-center text-[14px] px-6 py-2 bg-red-500 text-white rounded-md">
                     {remarks?.data[0]?.worst}
                   </p>
                 </div>
@@ -162,7 +176,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-green-800 font-semibold">
                     Best Performing Subject
                   </p>
-                  <p className=" px-8 py-2 bg-blue-950/80 text-white rounded-md">
+                  <p className="flex justify-center items-center text-[14px] px-6 py-2 bg-blue-950/80 text-white rounded-md">
                     {remarks?.data[1]?.best}
                   </p>
                 </div>
@@ -170,7 +184,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-red-800 font-semibold">
                     Worst Performing Subject
                   </p>
-                  <p className="px-8 py-2 bg-red-500/80 text-white rounded-md">
+                  <p className="flex justify-center items-center text-[14px] px-6 py-2 bg-red-500/80 text-white rounded-md">
                     {remarks?.data[1]?.worst}
                   </p>
                 </div>
@@ -188,6 +202,7 @@ const ViewWeekReport = () => {
 
             <div className="mt-10 flex flex-wrap uppercase">
               {remarks?.data[0]?.topicFocus
+                ?.replace("and", ",")
                 .split(",")
                 .map((el: any, i: number) => (
                   <div key={i} className="flex">

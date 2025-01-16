@@ -84,27 +84,27 @@ export const Participation: FC<any> = ({ remarks }) => {
 
   const chartData = [
     {
-      month: "presentWeek",
+      month: "wk1",
       classParticipation: wkClass1,
       sportParticipation: wksport1,
     },
     {
-      month: "lastWeek",
+      month: "wk2",
       classParticipation: wkClass2,
       sportParticipation: wksport2,
     },
     {
-      month: "weekBefore",
+      month: "wk3",
       classParticipation: wkClass3,
       sportParticipation: wksport3,
     },
     {
-      month: "pastWeek",
+      month: "wk4",
       classParticipation: wkClass4,
       sportParticipation: wksport4,
     },
     {
-      month: "nextPastWeek",
+      month: "wk5",
       classParticipation: wkClass5,
       sportParticipation: wksport5,
     },
