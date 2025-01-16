@@ -21,64 +21,64 @@ import { FC } from "react";
 
 export const Participation: FC<any> = ({ remarks }) => {
   const wkClass1 =
-    remarks?.data[0].classParticipation === "Excellent"
+    remarks?.data[0]?.classParticipation === "Excellent"
       ? 100
-      : remarks?.data[0].classParticipation === "Good"
+      : remarks?.data[0]?.classParticipation === "Good"
       ? 50
       : 20;
   const wkClass2 =
-    remarks?.data[1].classParticipation === "Excellent"
+    remarks?.data[1]?.classParticipation === "Excellent"
       ? 100
-      : remarks?.data[1].classParticipation === "Good"
+      : remarks?.data[1]?.classParticipation === "Good"
       ? 50
       : 20;
   const wkClass3 =
-    remarks?.data[2].classParticipation === "Excellent"
+    remarks?.data[2]?.classParticipation === "Excellent"
       ? 100
-      : remarks?.data[2].classParticipation === "Good"
+      : remarks?.data[2]?.classParticipation === "Good"
       ? 50
       : 20;
   const wkClass4 =
-    remarks?.data[3].classParticipation === "Excellent"
+    remarks?.data[3]?.classParticipation === "Excellent"
       ? 100
-      : remarks?.data[3].classParticipation === "Good"
+      : remarks?.data[3]?.classParticipation === "Good"
       ? 50
       : 20;
   const wkClass5 =
-    remarks?.data[4].classParticipation === "Excellent"
+    remarks?.data[4]?.classParticipation === "Excellent"
       ? 100
-      : remarks?.data[4].classParticipation === "Good"
+      : remarks?.data[4]?.classParticipation === "Good"
       ? 50
       : 20;
 
   const wksport1 =
-    remarks?.data[0].sportParticipation === "Excellent"
+    remarks?.data[0]?.sportParticipation === "Excellent"
       ? 100
-      : remarks?.data[0].sportParticipation === "Good"
+      : remarks?.data[0]?.sportParticipation === "Good"
       ? 50
       : 20;
   const wksport2 =
-    remarks?.data[1].sportParticipation === "Excellent"
+    remarks?.data[1]?.sportParticipation === "Excellent"
       ? 100
-      : remarks?.data[1].sportParticipation === "Good"
+      : remarks?.data[1]?.sportParticipation === "Good"
       ? 50
       : 20;
   const wksport3 =
-    remarks?.data[2].sportParticipation === "Excellent"
+    remarks?.data[2]?.sportParticipation === "Excellent"
       ? 100
-      : remarks?.data[2].sportParticipation === "Good"
+      : remarks?.data[2]?.sportParticipation === "Good"
       ? 50
       : 20;
   const wksport4 =
-    remarks?.data[3].sportParticipation === "Excellent"
+    remarks?.data[3]?.sportParticipation === "Excellent"
       ? 100
-      : remarks?.data[3].sportParticipation === "Good"
+      : remarks?.data[3]?.sportParticipation === "Good"
       ? 50
       : 20;
   const wksport5 =
-    remarks?.data[4].sportParticipation === "Excellent"
+    remarks?.data[4]?.sportParticipation === "Excellent"
       ? 100
-      : remarks?.data[4].sportParticipation === "Good"
+      : remarks?.data[4]?.sportParticipation === "Good"
       ? 50
       : 20;
 
