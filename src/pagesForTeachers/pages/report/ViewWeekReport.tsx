@@ -20,7 +20,6 @@ const ViewWeekReport = () => {
   const { remarks } = useViewRemark(studentID);
   const { complainData } = useComplain(studentID);
 
-  console.log(complainData ? complainData[0] : null);
   let complain = complainData ? complainData[0] : null;
   return (
     <div>
@@ -158,7 +157,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-green-800 font-semibold">
                     Best Performing Subject
                   </p>
-                  <p className="text-[14px] px-6 py-2 bg-blue-950 text-white rounded-md">
+                  <p className="text-[14px] px-6 py-2 bg-blue-950 text-white rounded-md flex justify-center items-center">
                     {remarks?.data[0]?.best}
                   </p>
                 </div>
@@ -180,7 +179,7 @@ const ViewWeekReport = () => {
                   <p className=" mt-6 text-[12px] text-green-800 font-semibold">
                     Best Performing Subject
                   </p>
-                  <p className=" text-[14px] px-6 py-2 bg-blue-950/80 text-white rounded-md">
+                  <p className="flex justify-center items-center text-[14px] px-6 py-2 bg-blue-950/80 text-white rounded-md">
                     {remarks?.data[1]?.best}
                   </p>
                 </div>
