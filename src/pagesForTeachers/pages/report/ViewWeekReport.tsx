@@ -143,7 +143,7 @@ const ViewWeekReport = () => {
                     Best Performing Subject
                   </p>
                   <p className=" px-8 py-2 bg-blue-950 text-white rounded-md">
-                    {remarks?.data[0].best}
+                    {remarks?.data[0]?.best}
                   </p>
                 </div>
                 <div>
@@ -151,7 +151,7 @@ const ViewWeekReport = () => {
                     Worst Performing Subject
                   </p>
                   <p className="px-8 py-2 bg-red-500 text-white rounded-md">
-                    {remarks?.data[0].worst}
+                    {remarks?.data[0]?.worst}
                   </p>
                 </div>
               </div>
@@ -165,7 +165,7 @@ const ViewWeekReport = () => {
                     Best Performing Subject
                   </p>
                   <p className=" px-8 py-2 bg-blue-950/80 text-white rounded-md">
-                    {remarks?.data[1].best}
+                    {remarks?.data[1]?.best}
                   </p>
                 </div>
                 <div>
@@ -173,7 +173,7 @@ const ViewWeekReport = () => {
                     Worst Performing Subject
                   </p>
                   <p className="px-8 py-2 bg-red-500/80 text-white rounded-md">
-                    {remarks?.data[1].worst}
+                    {remarks?.data[1]?.worst}
                   </p>
                 </div>
               </div>
