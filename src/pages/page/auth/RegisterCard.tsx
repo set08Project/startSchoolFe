@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/mainLogo.png";
 const RegisterCard = () => {
   return (
-    <div className="w-full h-[94vh] flex items-center justify-center flex-col">
+    <div className="w-full mt-36 flex items-center justify-center flex-col">
       <div className=" p-4 border rounded-md flex flex-col items-center transition-all duration-300 w-[90%] md:w-[600px]">
         {" "}
         <Link to="/">

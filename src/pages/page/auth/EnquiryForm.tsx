@@ -74,9 +74,9 @@ const EnquiryForm = () => {
   }, [count]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-70px)]">
+    <div className="flex flex-col items-center justify-center -mt-24 mb-10 ">
       <div className=" w-full flex justify-center items-center">
-        <div className="lg:h-[89%] min-h-screend  lg:w-[55%] w-full shadow rounded-md flex justify-center items-center gap-3  flex-row-reverse overflow-hidden mx-10  lg:mx-0">
+        <div className="lg:h-[89%] min-h-screen lg:w-[55%] w-full shadow rounded-md flex justify-center items-center gap-3  flex-row-reverse overflow-hidden mx-10 lg:mx-0 ">
           {/* Image sider */}
           <div className="h-[53rem] w-[40%] lg:flex justify-end md:hidden lg:items-end hidden">
             <div
@@ -231,6 +231,7 @@ const EnquiryForm = () => {
                 <button
                   className="py-2 px-8 mt-4 rounded-md bg-blue-950 text-white font-bold"
                   onClick={() => {
+                    console.log("Thinking....");
                     updateRegisterationStatus({
                       email: schoolEmail,
                       schoolPhoneNumber,
@@ -239,6 +240,7 @@ const EnquiryForm = () => {
                       schoolLocation,
                       schoolOrganization,
                     }).then((res) => {
+                      console.log(res);
                       if (res?.data?.status === 201) {
                         dispatch(getEntryEmail(""));
                         toast.success("School registration successful!");

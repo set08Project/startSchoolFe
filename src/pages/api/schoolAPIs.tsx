@@ -14,6 +14,19 @@ const URL2: string = "https://startschoolbe-3.onrender.com";
 // const URL: string = "https://server.justnext.com.ng/api";
 // const URL2: string = "https://server.justnext.com.ng";
 
+export const deleteSchool = async (schoolID: string) => {
+  try {
+    const URL = "http://localhost:2244/api";
+    return await axios
+      .delete(`${URL}/delete-school/${schoolID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const updateSchoolPaymentOptions = async (
   schoolID: string,
   data: any
@@ -308,6 +321,7 @@ export const getSchool = async () => {
 
 export const updateRegisterationStatus = async (data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/school-request-registration`, data)
       .then((res: any) => {
