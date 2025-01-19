@@ -308,6 +308,7 @@ export const getSchool = async () => {
 
 export const updateRegisterationStatus = async (data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/school-request-registration`, data)
       .then((res: any) => {

@@ -9,7 +9,7 @@ import { viewTeacherDetail } from "../pagesForTeachers/api/teachersAPI";
 import { useSelector } from "react-redux";
 import { viewStduentDetail } from "../pagesForStudents/api/studentAPI";
 import ScrollToTop from "../components/static/ScrollToTop";
-
+``;
 const RouterScreen = () => {
   const userStatus = useSelector((state: any) => state.userStatus);
   const user = useSelector((state: any) => state.user);
