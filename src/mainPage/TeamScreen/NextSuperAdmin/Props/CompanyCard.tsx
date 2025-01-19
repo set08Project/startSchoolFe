@@ -1,7 +1,13 @@
 import { FC, useEffect, useState } from "react";
-import { approveRegisterationStatusUpdate } from "../../../../pages/api/schoolAPIs";
+import {
+  approveRegisterationStatusUpdate,
+  deleteSchool,
+} from "../../../../pages/api/schoolAPIs";
 import { useAllSchools } from "../../../../pages/hook/useSchoolAuth";
-import { FaSpinner } from "react-icons/fa6";
+import { FaDeleteLeft, FaSpinner } from "react-icons/fa6";
+import { MdClose, MdDeleteForever } from "react-icons/md";
+import { mutate } from "swr";
+import toast, { Toaster } from "react-hot-toast";
 
 interface iPropsCard {
   text?: string;
@@ -19,13 +25,13 @@ const CompanyCard: FC<iPropsCard> = ({
 }) => {
   const { allSchool } = useAllSchools();
 
-  useEffect(() => {}, []);
-
   const unverifiedSchools = allSchool?.filter((school: any) => !school?.verify);
 
   const verifiedSchools = allSchool?.filter((school: any) => school?.verify);
 
   const [toggle, setToggle] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [schoolMain, setSchoolMain] = useState<string>("");
 
   const renderSchoolRow = (school: any) => (
     <tr key={school?._id}>
@@ -98,11 +104,78 @@ const CompanyCard: FC<iPropsCard> = ({
           )}
         </button>
       </td>
+
+      <td>
+        <label htmlFor="my_modal_6" className="">
+          <div
+            className="flex items-center justify-center bg-red-500 text-white px-3 py-2 rounded-sm gap-2 cursor-pointer"
+            onClick={() => {
+              setSchoolMain(school?._id);
+            }}
+          >
+            <MdDeleteForever className="text-white text-[20px] " />
+            <span>Delete</span>
+          </div>
+        </label>
+
+        {/* Put this part before </body> tag */}
+        <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+        <div className="modal" role="dialog">
+          <div className="modal-box">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-red-500 border-b pb-5">
+                Are you sure you want to do this?
+              </h3>
+              <label
+                htmlFor="my_modal_6"
+                className="flex w-8 h-8 bg-red-400 rounded-full items-center justify-center cursor-pointer -mt-5"
+              >
+                <MdClose size={20} className="text-white" />
+              </label>
+            </div>
+            <p className="py-4">
+              By click the delete button below... You are doing to delete all
+              data pertaining to this school
+              <br />
+              <br />
+              <br />
+              <span className="uppercase font-semibold text-blue-950">
+                {" "}
+                is this an action you wish to carry out?
+              </span>
+            </p>
+
+            <div className="modal-action">
+              <label
+                htmlFor="my_modal_6"
+                className="btn btn-error text-white px-8"
+                onClick={() => {
+                  setLoading(true);
+                  deleteSchool(schoolMain)
+                    .then((res) => {
+                      if (res.status === 201) {
+                        mutate(`api/view-all-school`);
+                        toast.success("School Delete Successfully");
+                      }
+                    })
+                    .finally(() => {
+                      setLoading(false);
+                      setSchoolMain("");
+                    });
+                }}
+              >
+                Delete School
+              </label>
+            </div>
+          </div>
+        </div>
+      </td>
     </tr>
   );
 
   return (
     <div>
+      <Toaster />
       <p className="font-bold pl-5 text-xl">New School</p>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded p-2 overflow-y-auto mt-3">
         <div className="rounded-t mb-0 px-4 py-3 border-0">
@@ -203,6 +276,9 @@ const CompanyCard: FC<iPropsCard> = ({
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                   Verify
+                </th>
+                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                  Remove
                 </th>
               </tr>
             </thead>

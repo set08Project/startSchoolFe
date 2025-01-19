@@ -5,7 +5,7 @@ const AuthLayout = () => {
 
   return (
     <div className="text-blue-950 w-full min-h-screen flex flex-col ">
-      <div className={`${pathname === "/auth" ? "mt-10" : "mt-36"}`}>
+      <div className={`${pathname === "/auth" ? "mt-5" : "mt-12"}`}>
         <Outlet />
       </div>
 
@@ -15,6 +15,7 @@ const AuthLayout = () => {
         <div className="w-full pb-3 flex flex-col items-center">
           <div className="border-b w-[40%]  " />
         </div>
+
         <div className="text-[13px] mt-2">Built to support your school</div>
         <p className="font-medium text-[14px] mt-1">
           Innovating Education, Just for you!
