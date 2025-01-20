@@ -16,7 +16,6 @@ const URL2: string = "https://startschoolbe-3.onrender.com";
 
 export const deleteSchool = async (schoolID: string) => {
   try {
-    const URL = "http://localhost:2244/api";
     return await axios
       .delete(`${URL}/delete-school/${schoolID}`)
       .then((res: any) => {
@@ -321,7 +320,6 @@ export const getSchool = async () => {
 
 export const updateRegisterationStatus = async (data: {}) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/school-request-registration`, data)
       .then((res: any) => {
@@ -1479,7 +1477,6 @@ export const changeSchoolPersonalName = async (schoolID: string, data: any) => {
 
 export const createDailyExpense = async (schoolID: string, data: any) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-term-daily-expense/${schoolID}`, data)
       .then((res: any) => {
@@ -1492,7 +1489,6 @@ export const createDailyExpense = async (schoolID: string, data: any) => {
 
 export const readDailyExpense = async (schoolID: string) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/read-term-daily-expense/${schoolID}`)
       .then((res: any) => {
