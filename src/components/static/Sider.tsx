@@ -38,7 +38,7 @@ const Sider = () => {
   let obj: any = {};
 
   if (refID?.length > 0) {
-    for (let i = 0; i < refID.length; i++) {
+    for (let i = 0; i < refID?.length; i++) {
       obj = refID[0];
     }
   }
@@ -46,7 +46,7 @@ const Sider = () => {
   let termID: string = "";
 
   if (obj !== null) {
-    for (let i = 0; i < obj?.term?.reverse().length; i++) {
+    for (let i = 0; i < obj?.term?.reverse()?.length; i++) {
       termID = obj?.term[0];
     }
   }
@@ -106,7 +106,7 @@ const Sider = () => {
         <div className="ml-2">
           {/* TODO: Add tooltip */}
           <div className="break-words font-bold text-[16px]">
-            {data?.schoolName.length > 15 ? (
+            {data?.schoolName?.length > 15 ? (
               <p>{data?.schoolName.substring(0, 15)}...</p>
             ) : (
               // <Tooltip side={true} tip={data?.schoolName}>

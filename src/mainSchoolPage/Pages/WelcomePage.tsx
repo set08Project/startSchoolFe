@@ -16,10 +16,10 @@ const WelcomePage = () => {
 
   const { schoolInfo } = useSchoolDataByName(capitalizeWords(schoolName));
   return (
-    <div className="w-full min-h-[85vh] flex justify-center items-center">
+    <div className="w-full min-h-[85vh] flex justify-center items-center text-blue-950">
       <div className="h-full w-[95%]">
         <div className="w-full flex justify-center items-center mb-14 flex-col">
-          <div className="text-[25px] mt-[40px] uppercase font-[600] xl:text-[35px] mb-5">
+          <div className="text-[25px] mt-[40px] uppercase font-[600] xl:text-[35px] mb-5 ">
             Welcome to{" "}
             <span className="text-blue-950 font-[600]">
               {schoolInfo?.schoolName}
