@@ -23,7 +23,7 @@ const Gallery = () => {
   const data = lodash.shuffle(gallary?.data);
 
   return (
-    <div className="flex justify-center items-center mt-14">
+    <div className="flex justify-center items-center mt-14 text-blue-950">
       <div className=" flex justify-center items-center w-[90%]">
         <div className="w-[85%] flex justify-center items-center flex-col">
           <div className="text-[25px] font-bold text-blue-950">

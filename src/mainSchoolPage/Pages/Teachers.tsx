@@ -19,7 +19,7 @@ const Teacher: FC<iProps> = ({ props }) => {
   return (
     <div className="rounded-[10px] min-h-[70vh] overflow-hidden relative">
       {/* <Teacher props={props} /> */}
-      <div className="h-[500px] w-[90%] bg-slate-200 rounded-md overflow-hidden">
+      <div className="h-[500px] w-[98%] bg-slate-200 rounded-md overflow-hidden">
         <img
           src={
             schoolSubjectTeacherDetail?.avatar
@@ -69,7 +69,7 @@ const Teachers = () => {
   const data = lodash.shuffle(schoolInfo?.staff);
 
   return (
-    <div className="w-full min-h-[100px] flex justify-center items-center">
+    <div className="w-full min-h-[100px] flex justify-center items-center text-blue-950">
       <div className="h-full w-[95%]">
         <div className="w-full flex justify-center items-center flex-col">
           <div className="text-[23px] mt-20 font-[600] uppercase xl:text-[35px]">

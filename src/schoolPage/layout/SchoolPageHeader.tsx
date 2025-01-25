@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "../../components/reUse/Button";
 import { Link, useParams } from "react-router-dom";
 import { useSchoolDataByName } from "../../pages/hook/useSchoolAuth";
@@ -12,8 +11,6 @@ const SchoolPageHeader = () => {
     });
   }
   const { schoolInfo } = useSchoolDataByName(capitalizeWords(schoolName));
-
-  console.log(schoolInfo);
 
   return (
     <div className="z-40 bg-white fixed flex w-full justify-between items-center px-10 h-[90px] border-b">
