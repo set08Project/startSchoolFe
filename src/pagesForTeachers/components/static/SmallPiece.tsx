@@ -75,6 +75,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
     dispatch(displayImageToggle(true));
     const timer = setTimeout(() => {
       updateTeacherAvatar(teacherInfo?._id, formData).then((res) => {
+        console.log(res);
         mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
         if (res.status === 201) {
           toast.success("Image has been updated");

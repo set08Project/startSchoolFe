@@ -155,8 +155,13 @@ const OtherPaymentRecipt = React.lazy(
 const AdminPrintReportCardScreen = React.lazy(
   () => import("../pages/page/ResultHistory/ViewStudentPrintResultScreen")
 );
+
+const AdminSubjectGradeCard = React.lazy(
+  () => import("@/pages/page/subject/adminGradeExam")
+);
 import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
+import SubjectGradeCard from "@/pagesForTeachers/pages/subject/SubjectGradeCard";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -237,6 +242,15 @@ export const adminRouter = createBrowserRouter([
                 ),
               },
             ],
+          },
+
+          {
+            path: "admin-test-exam-grade/:subjectID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AdminSubjectGradeCard />
+              </Suspense>
+            ),
           },
 
           {
