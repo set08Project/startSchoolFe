@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IoMdImages } from "react-icons/io";
 import {
@@ -67,23 +67,28 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
     formData.append("avatar", file);
     setState(file);
 
-    if (state) {
-      dispatch(displayImageToggle(true));
-      const timer = setTimeout(() => {
-        updateStudentAvatar(studentInfo?._id, formData).then((res) => {
-          if (res.status === 201) {
-            mutate(`api/view-student-info/${studentInfo?._id}`);
-            toast.success("Image has been updated");
-            dispatch(displayImageToggle(false));
-          } else {
-            toast.error(`${res?.response?.data?.message}`);
-            dispatch(displayImageToggle(false));
-          }
-        });
-        clearTimeout(timer);
-      }, 50);
-    }
+    // if (state) {
+    dispatch(displayImageToggle(true));
+
+    const timer = setTimeout(() => {
+      updateStudentAvatar(studentInfo?._id, formData).then((res) => {
+        if (res.status === 201) {
+          mutate(`api/view-student-info/${studentInfo?._id}`);
+          toast.success("Image has been updated");
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        } else {
+          toast.error(`${res?.response?.data?.message}`);
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        }
+      });
+      clearTimeout(timer);
+    }, 50);
   };
+  // };
+
+  useEffect(() => {}, [state]);
 
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm  rounded-md p-1 overflow-y-auto  z-50">
@@ -92,6 +97,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
           propName === "navs" ? "smallph h-[500px] overflow-y-auto" : ""
         }`}
       >
+        {state ? "Now" : "No no"}
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
             key={i}
@@ -135,11 +141,11 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
         <label
           htmlFor="id"
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
-          onClick={() => {
-            handleMenu();
-          }}
+          content="Upload Avatar"
+          title="Upload Avatar"
+          onClick={() => {}}
         >
-          <label>Upload Avatar</label>
+          Upload Avatar
           <input
             id="id"
             className="hidden"

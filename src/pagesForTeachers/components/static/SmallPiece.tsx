@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
@@ -66,30 +66,31 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
-    console.log("start...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();
     formData.append("avatar", file);
     setState(file);
 
-    if (state) {
-      dispatch(displayImageToggle(true));
-      const timer = setTimeout(() => {
-        updateTeacherAvatar(teacherInfo?._id, formData).then((res) => {
-          mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
-          if (res.status === 201) {
-            toast.success("Image has been updated");
-            dispatch(displayImageToggle(false));
-          } else {
-            toast.error(`${res?.response?.data?.message}`);
-            dispatch(displayImageToggle(false));
-          }
-        });
-        clearTimeout(timer);
-      }, 50);
-    }
+    dispatch(displayImageToggle(true));
+    const timer = setTimeout(() => {
+      updateTeacherAvatar(teacherInfo?._id, formData).then((res) => {
+        mutate(`api/view-teacher-detail/${teacherInfo?._id}`);
+        if (res.status === 201) {
+          toast.success("Image has been updated");
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        } else {
+          toast.error(`${res?.response?.data?.message}`);
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        }
+      });
+      clearTimeout(timer);
+    }, 50);
   };
+
+  useEffect(() => {}, [state]);
 
   return (
     <div className="border w-[250px] bg-blue-50 shadow-sm min-h-48 rounded-md p-1">
@@ -128,10 +129,9 @@ const SmallPiece: FC<iProps> = ({ log, name, but }) => {
           className="text-[12px] font-medium py-3 duration-300 transition-all hover:bg-blue-950 p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between"
           onClick={() => {
             // dispatch(logoutState());
-            handleMenu();
           }}
         >
-          <label htmlFor="id">Upload Avatar</label>
+          Upload Avatar
           <input
             id="id"
             className="hidden"

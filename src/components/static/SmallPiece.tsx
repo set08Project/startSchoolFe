@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { MdLogout } from "react-icons/md";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../reUse/Button";
 import { IoMdImages } from "react-icons/io";
@@ -67,23 +67,25 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
     formData.append("avatar", file);
     setState(file);
 
-    if (state) {
-      dispatch(displayImageToggle(true));
-      const timer = setTimeout(() => {
-        updateAvatar(data?._id, formData).then((res) => {
-          mutate(`api/view-school/${data?._id}`);
-          if (res.status === 201) {
-            toast.success("Image has been updated");
-            dispatch(displayImageToggle(false));
-          } else {
-            toast.error(`${res?.response?.data?.message}`);
-            dispatch(displayImageToggle(false));
-          }
-        });
-        clearTimeout(timer);
-      }, 50);
-    }
+    dispatch(displayImageToggle(true));
+    const timer = setTimeout(() => {
+      updateAvatar(data?._id, formData).then((res) => {
+        mutate(`api/view-school/${data?._id}`);
+        if (res.status === 201) {
+          toast.success("Image has been updated");
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        } else {
+          toast.error(`${res?.response?.data?.message}`);
+          dispatch(displayImageToggle(false));
+          handleMenu();
+        }
+      });
+      clearTimeout(timer);
+    }, 50);
   };
+
+  useEffect(() => {}, [state]);
 
   return (
     <div
@@ -141,10 +143,10 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
           } p-2 rounded-md my-1 hover:text-white cursor-pointer flex items-center justify-between`}
           onClick={() => {
             // dispatch(logoutState());
-            handleMenu();
+            // handleMenu();
           }}
         >
-          <label htmlFor="id">Upload Avatar</label>
+          Upload Avatar
           <input
             id="id"
             className="hidden"
