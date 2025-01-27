@@ -323,7 +323,7 @@ const QuizSetupScreen = () => {
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz[1]?.question
+                        {props?.quiz && props?.quiz[1]?.question
                           ? props?.quiz[1]?.question.length
                           : 0}
                       </span>
@@ -331,7 +331,7 @@ const QuizSetupScreen = () => {
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz[0]?.instruction
+                        {props?.quiz && props?.quiz[0]?.instruction
                           ? props?.quiz[0]?.instruction.mark
                           : 0}
                       </span>
@@ -340,7 +340,7 @@ const QuizSetupScreen = () => {
                   <div className="text-[12px] mt-2 font-bold">
                     Instruction:{" "}
                     <span className="font-normal line-clamp-2">
-                      {props?.quiz[0]?.instruction.instruction}
+                      {props?.quiz && props?.quiz[0]?.instruction.instruction}
                     </span>
                   </div>
                 </div>
