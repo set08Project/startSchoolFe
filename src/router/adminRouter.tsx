@@ -157,11 +157,11 @@ const AdminPrintReportCardScreen = React.lazy(
 );
 
 const AdminSubjectGradeCard = React.lazy(
-  () => import("@/pages/page/subject/adminGradeExam")
+  () => import("../pages/page/subject/adminGradeExam")
 );
+
 import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
-import SubjectGradeCard from "@/pagesForTeachers/pages/subject/SubjectGradeCard";
 
 export const adminRouter = createBrowserRouter([
   {
