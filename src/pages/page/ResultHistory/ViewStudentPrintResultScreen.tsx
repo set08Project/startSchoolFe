@@ -376,12 +376,12 @@ const AdminPrintReportCardScreen: React.FC = () => {
                     {studentInfo?.classAssigned}
                   </h1>
                 </div>
-                <div className=" border p-2 ">
+                <div className=" border p-2">
                   <h1 className="uppercase text-[12px] font-semibold">
-                    Academic Session
+                    Class Teacher
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {school?.presentSession}
+                    {teacherDetail?.staffName}
                   </h1>
                 </div>
 
@@ -396,7 +396,20 @@ const AdminPrintReportCardScreen: React.FC = () => {
               </main>
               <main className="overflow-auto uppercase text-[12px]">
                 <section className=" min-w-[1150px] flex flex-col mt-4  ">
-                  <main className="flex  bg-blue-50">
+                  <main
+                    className="flex  bg-blue-50"
+                    style={{
+                      width: `${
+                        school?.presentTerm === "1st Term"
+                          ? "994px"
+                          : school?.presentTerm === "2nd Term"
+                          ? "1072px"
+                          : school?.presentTerm === "3rd Term"
+                          ? "1150px"
+                          : null
+                      }`,
+                    }}
+                  >
                     <div className="p-2 w-[40px]">S/N</div>
                     <div className="p-2 w-[180px] border-x ">subject</div>
                     <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
@@ -415,14 +428,22 @@ const AdminPrintReportCardScreen: React.FC = () => {
                       <p className="text">1st Term </p>
                       <p className="text-[12px]">(100)</p>
                     </div>
-                    <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                      <p className="text">2nd Term </p>
-                      <p className="text-[12px]">(100)</p>
-                    </div>
-                    <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                      <p className="text">3rd Term </p>
-                      <p className="text-[12px]">(100)</p>
-                    </div>
+                    {school?.presentTerm === "1st Term" ||
+                      (school?.presentTerm === "2nd Term" && (
+                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                          <p className="text">2nd Term </p>
+                          <p className="text-[12px]">(100)</p>
+                        </div>
+                      ))}
+
+                    {school?.presentTerm === "1st Term" ||
+                      school?.presentTerm === "2nd Term" ||
+                      (school?.presentTerm === "3rd Term" && (
+                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                          <p className="text">3rd Term </p>
+                          <p className="text-[12px]">(100)</p>
+                        </div>
+                      ))}
 
                     {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
@@ -455,6 +476,17 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         <section
                           className=" min-w-[1150px] flex my-1 bg-blue-50 min-h-[30px] "
                           key={i - el?._id}
+                          style={{
+                            width: `${
+                              school?.presentTerm === "1st Term"
+                                ? "994px"
+                                : school?.presentTerm === "2nd Term"
+                                ? "1072px"
+                                : school?.presentTerm === "3rd Term"
+                                ? "1150px"
+                                : null
+                            }`,
+                          }}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
                           <div className="px-2 flex flex-col justify-center w-[180px] border-x text-[14px] tracking-wider font-semibold ">
@@ -487,12 +519,20 @@ const AdminPrintReportCardScreen: React.FC = () => {
                                 el?.exam}
                             </p>
                           </div>
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">0</p>
-                          </div>
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">0</p>
-                          </div>
+                          {school?.presentTerm === "1st Term" ||
+                            (school?.presentTerm === "2nd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">0</p>
+                              </div>
+                            ))}
+
+                          {school?.presentTerm === "1st Term" ||
+                            school?.presentTerm === "2nd Term" ||
+                            (school?.presentTerm === "3rd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">0</p>
+                              </div>
+                            ))}
 
                           {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">

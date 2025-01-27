@@ -213,7 +213,20 @@ const ReportCardDesignScreen: React.FC = () => {
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
         <main className="flex justify-center mt-10">
-          <div className="relative max-w-[1200px] p-4 overflow-hidden border">
+          <div
+            className="relative max-w-[1200px] p-4 overflow-hidden border"
+            style={{
+              width: `${
+                school?.presentTerm === "1st Term"
+                  ? "994px"
+                  : school?.presentTerm === "2nd Term"
+                  ? "1072px"
+                  : school?.presentTerm === "3rd Term"
+                  ? "1150px"
+                  : null
+              }`,
+            }}
+          >
             <div
               className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
               style={{
@@ -379,10 +392,31 @@ const ReportCardDesignScreen: React.FC = () => {
                   {classDetails?.students?.length}
                 </h1>
               </div>
+              <div className=" border p-2">
+                <h1 className="uppercase text-[12px] font-semibold">
+                  Class Teacher
+                </h1>
+                <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                  {teacherDetail?.staffName}
+                </h1>
+              </div>
             </main>
             <main className="overflow-auto uppercase text-[12px]">
-              <section className=" min-w-[1100px] flex flex-col mt-4  ">
-                <main className="flex  bg-blue-50">
+              <section className="flex flex-col mt-4  ">
+                <main
+                  className="flex  bg-blue-50"
+                  style={{
+                    width: `${
+                      school?.presentTerm === "1st Term"
+                        ? "994px"
+                        : school?.presentTerm === "2nd Term"
+                        ? "1072px"
+                        : school?.presentTerm === "3rd Term"
+                        ? "1150px"
+                        : null
+                    }`,
+                  }}
+                >
                   <div className="p-2 w-[40px]">S/N</div>
                   <div className="p-2 w-[150px] border-x ">subject</div>
                   <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
@@ -401,14 +435,22 @@ const ReportCardDesignScreen: React.FC = () => {
                     <p className="text">1st Term </p>
                     <p className="text-[12px]">(100)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">2nd Term </p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">3rd Term </p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
+                  {school?.presentTerm === "1st Term" ||
+                    (school?.presentTerm === "2nd Term" && (
+                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        <p className="text">2nd Term </p>
+                        <p className="text-[12px]">(100)</p>
+                      </div>
+                    ))}
+
+                  {school?.presentTerm === "1st Term" ||
+                    school?.presentTerm === "2nd Term" ||
+                    (school?.presentTerm === "3rd Term" && (
+                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        <p className="text">3rd Term </p>
+                        <p className="text-[12px]">(100)</p>
+                      </div>
+                    ))}
 
                   {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
@@ -440,8 +482,19 @@ const ReportCardDesignScreen: React.FC = () => {
                     .sortBy(grade?.result, "subject")
                     ?.map((el: any, i: number) => (
                       <section
-                        className=" min-w-[1100px] flex my-1 bg-blue-50 h-[40px] "
+                        className="flex my-1 bg-blue-50 h-[40px] "
                         key={i - el?._id}
+                        style={{
+                          width: `${
+                            school?.presentTerm === "1st Term"
+                              ? "994px"
+                              : school?.presentTerm === "2nd Term"
+                              ? "1072px"
+                              : school?.presentTerm === "3rd Term"
+                              ? "1150px"
+                              : null
+                          }`,
+                        }}
                       >
                         <div className="p-2 w-[40px]">{i + 1}</div>
                         <div className="p-2 w-[150px] border-x ">
@@ -474,12 +527,20 @@ const ReportCardDesignScreen: React.FC = () => {
                               el?.exam}
                           </p>
                         </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">0</p>
-                        </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">0</p>
-                        </div>
+                        {school?.presentTerm === "1st Term" ||
+                          (school?.presentTerm === "2nd Term" && (
+                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">0</p>
+                            </div>
+                          ))}
+
+                        {school?.presentTerm === "1st Term" ||
+                          school?.presentTerm === "2nd Term" ||
+                          (school?.presentTerm === "3rd Term" && (
+                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">0</p>
+                            </div>
+                          ))}
                         {/* 
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
