@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
 import { FC, useState } from "react";
 import Input from "../../../components/reUse/Input";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import BeatLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
@@ -61,9 +61,12 @@ const ClassSubjectScreen: FC = () => {
             >
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
-                <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
+                <Link
+                  to={`/admin-test-exam-grade/${props._id}`}
+                  className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center"
+                >
                   <MdDelete className="hover:text-blue-900" />
-                </div>
+                </Link>
               </div>
               <div className="flex">
                 <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
