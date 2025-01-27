@@ -2,9 +2,8 @@ document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
-  useSchoolClassRM,
   useSchoolClassRMDetail,
   useSchoolData,
   useSchoolSessionData,
@@ -12,7 +11,6 @@ import {
   useViewSchoolClassRM,
 } from "../../hook/useSchoolAuth";
 
-// import { createGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -24,7 +22,6 @@ import {
   useStudentGrade,
   useSujectInfo,
   useTeacherInfo,
-  useSubjectPerformance,
 } from "@/pagesForTeachers/hooks/useTeacher";
 import { useOneExamSubjectStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
 import { createGradeScore } from "@/pagesForTeachers/api/teachersAPI";
@@ -34,14 +31,13 @@ interface iProps {
   id?: string;
   data?: any;
   i?: number;
+  teacherID?: number;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
   const { subjectID } = useParams();
-  const { teacherInfo } = useTeacherInfo();
 
   const { subjectInfo } = useSujectInfo(subjectID);
-  const { perform } = useSubjectPerformance(subjectID);
 
   const { oneStudentPerformanceExam: oneStudentPerformance } =
     useOneExamSubjectStudentPerfomance(
@@ -51,7 +47,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+  const { schoolInfo } = useSchoolSessionData(data?._id);
 
   const [test1, setTest1] = useState("");
   const [test2, setTest2] = useState("");
@@ -88,7 +84,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const makeGrade = () => {
     try {
       setLoading(true);
-      createGradeScore(teacherInfo?._id, props?._id, {
+      createGradeScore(teacherID.toString(), props?._id, {
         subject: subjectInfo?.subjectTitle,
         test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
@@ -281,8 +277,6 @@ const AdminSubjectGradeCard = () => {
     mutate(`api/view-classrooms/`);
   }, [teacherInfo, subjectInfo, viewClasses]);
 
-  console.log(sortedStudents);
-
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -326,7 +320,12 @@ const AdminSubjectGradeCard = () => {
             <div>
               {sortedStudents?.map((props: any, i: number) => (
                 <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+                  <MainStudentRow
+                    props={props}
+                    i={i}
+                    data={data}
+                    teacherID={oneClass?.teacherID}
+                  />
                 </div>
               ))}
             </div>
