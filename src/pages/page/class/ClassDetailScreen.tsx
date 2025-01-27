@@ -3,7 +3,7 @@ import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
-import { MdCheck, MdClose, MdDelete, MdSave } from "react-icons/md";
+import { MdCheck, MdClose, MdEditDocument, MdSave } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
 import { FC, useState } from "react";
@@ -65,7 +65,7 @@ const ClassSubjectScreen: FC = () => {
                   to={`/admin-test-exam-grade/${props._id}`}
                   className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center"
                 >
-                  <MdDelete className="hover:text-blue-900" />
+                  <MdEditDocument className="hover:text-blue-900" />
                 </Link>
               </div>
               <div className="flex">
