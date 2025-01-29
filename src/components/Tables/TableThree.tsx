@@ -1,29 +1,29 @@
-import { Package } from '../../types/package';
+// import { Package } from '../../types/package';
 
-const packageData: Package[] = [
+const packageData: any[] = [
   {
-    name: 'Free package',
+    name: "Free package",
     price: 0.0,
     invoiceDate: `Jan 13,2023`,
-    status: 'Paid',
+    status: "Paid",
   },
   {
-    name: 'Standard Package',
+    name: "Standard Package",
     price: 59.0,
     invoiceDate: `Jan 13,2023`,
-    status: 'Paid',
+    status: "Paid",
   },
   {
-    name: 'Business Package',
+    name: "Business Package",
     price: 99.0,
     invoiceDate: `Jan 13,2023`,
-    status: 'Unpaid',
+    status: "Unpaid",
   },
   {
-    name: 'Standard Package',
+    name: "Standard Package",
     price: 59.0,
     invoiceDate: `Jan 13,2023`,
-    status: 'Pending',
+    status: "Pending",
   },
 ];
 
@@ -65,11 +65,11 @@ const TableThree = () => {
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                      packageItem.status === 'Paid'
-                        ? 'bg-success text-success'
-                        : packageItem.status === 'Unpaid'
-                        ? 'bg-danger text-danger'
-                        : 'bg-warning text-warning'
+                      packageItem.status === "Paid"
+                        ? "bg-success text-success"
+                        : packageItem.status === "Unpaid"
+                        ? "bg-danger text-danger"
+                        : "bg-warning text-warning"
                     }`}
                   >
                     {packageItem.status}
