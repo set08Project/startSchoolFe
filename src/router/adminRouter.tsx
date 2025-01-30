@@ -160,6 +160,10 @@ const AdminSubjectGradeCard = React.lazy(
   () => import("../pages/page/subject/adminGradeExam")
 );
 
+const AnalyticScreen = React.lazy(
+  () => import("@/pages/page/analytics/AnalyticsScreen")
+);
+
 import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
 
@@ -425,6 +429,15 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ViewTeacherNoteByAdmin />
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "analytics",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <AnalyticScreen />
               </Suspense>
             ),
           },
