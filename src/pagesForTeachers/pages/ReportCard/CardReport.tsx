@@ -216,7 +216,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
         />
       </div>
 
-      <div className="w-[300px] border-r">
+      {/* <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
           placeholder={`${
@@ -232,7 +232,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
             setStateValue(e.target.value);
           }}
         />
-      </div>
+      </div> */}
 
       <div className="w-[180px] border-r relative">
         <Button
@@ -667,7 +667,7 @@ const CardReport = () => {
             <div
               className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
               style={{
-                width: `${1420 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1120 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               <div className="w-[100px] border-r">Sequence</div>
@@ -696,7 +696,7 @@ const CardReport = () => {
               <div className="w-[100px] border-r">Total Points</div>
               <div className="w-[100px] border-r">Grade</div>
               <div className="w-[100px] border-r">Attendance</div>
-              <div className="w-[300px] border-r">Give Report/Remark</div>
+              {/* <div className="w-[300px] border-r">Give Report/Remark</div> */}
 
               <div className="w-[180px] border-r">Submit Report</div>
             </div>
@@ -704,7 +704,7 @@ const CardReport = () => {
             <div
               className={` overflow-hidden`}
               style={{
-                width: `${1420 + subjectData?.classSubjects.length * 260}px`,
+                width: `${1120 + subjectData?.classSubjects.length * 260}px`,
               }}
             >
               {sortedStudents?.length > 0 ? (
