@@ -156,8 +156,12 @@ const AdminPrintReportCardScreen = React.lazy(
   () => import("../pages/page/ResultHistory/ViewStudentPrintResultScreen")
 );
 
-const AdminSubjectGradeCard = React.lazy(
-  () => import("../pages/page/subject/adminGradeExam")
+// const AdminSubjectGradeCard = React.lazy(
+//   () => import("../pages/page/subject/AdminGradeExam")
+// );
+
+const AdminSubjectGradeCardScreen = React.lazy(
+  () => import("@/pages/page/subject/AdminGradeScreen")
 );
 
 const AnalyticScreen = React.lazy(
@@ -252,10 +256,19 @@ export const adminRouter = createBrowserRouter([
             path: "admin-test-exam-grade/:subjectID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
-                <AdminSubjectGradeCard />
+                <AdminSubjectGradeCardScreen />
               </Suspense>
             ),
           },
+
+          // {
+          //   path: "admin-test-exam-grade/:subjectID",
+          //   element: (
+          //     <Suspense fallback={<LoadingScreen />}>
+          //       <AdminSubjectGradeCard />
+          //     </Suspense>
+          //   ),
+          // },
 
           {
             path: "view-students-report-card/:studentID",
