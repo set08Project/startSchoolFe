@@ -94,12 +94,12 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
       }).then((res) => {
         setLoading(false);
-        if (res.status === 201) {
-          mutate(`api/student-report-card/${props?._id}`);
-          toast.success("Grade added");
-        } else {
-          toast.error("Grade denied");
-        }
+        // if (res.status === 201) {
+        mutate(`api/student-report-card/${props?._id}`);
+        toast.success("Grade added");
+        // } else {
+        //   toast.error("Grade denied");
+        // }
       });
     } catch (error: any) {
       return error.stack;
