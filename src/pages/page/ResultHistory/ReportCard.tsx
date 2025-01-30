@@ -212,7 +212,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           : "No Comment Yet"}
       </div>
 
-      <div className="w-[300px] border-r">
+      {/* <div className="w-[300px] border-r">
         <textarea
           className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
           placeholder={`${
@@ -224,7 +224,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             setStateValue(e.target.value);
           }}
         />
-      </div>
+      </div> */}
 
       <div className="w-[180px] border-r">
         <Button
@@ -365,7 +365,7 @@ const ReportCardApproved = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${1500 + subjectData?.classSubjects.length * 300}px`,
+            width: `${1200 + subjectData?.classSubjects.length * 300}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
@@ -392,7 +392,7 @@ const ReportCardApproved = () => {
           <div className="w-[100px] border-r">Total Points</div>
           <div className="w-[100px] border-r">Grade</div>
           <div className="w-[300px] border-r">Class Teacher's Comment</div>
-          <div className="w-[300px] border-r">Give Report/Remark</div>
+          {/* <div className="w-[300px] border-r">Give Report/Remark</div> */}
 
           <div className="w-[180px] border-r">Submit Report</div>
           <div className="w-[180px] border-r">
@@ -403,7 +403,7 @@ const ReportCardApproved = () => {
         <div
           className={` overflow-hidde`}
           style={{
-            width: `${1500 + subjectData?.classSubjects.length * 300}px`,
+            width: `${1200 + subjectData?.classSubjects.length * 300}px`,
           }}
         >
           {classStudents?.students?.length > 0 ? (
