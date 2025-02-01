@@ -11,6 +11,7 @@ import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import { FaSpinner } from "react-icons/fa";
 
 const QuizTestScreen = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const QuizTestScreen = () => {
   const [start, setStart] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
   const [timeUp, setTimeUp] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
 
@@ -56,11 +58,12 @@ const QuizTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
-  const timer = parseInt(quizData?.quiz?.instruction?.duration);
+  const timer = parseFloat(quizData?.quiz[0]?.instruction?.duration);
   let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {
-    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+    setLoading(true);
+    const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>
       q.answer.trim()
     );
     let score = 0;
@@ -75,12 +78,14 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
-    const markPerQuest = quizData?.quiz?.instruction?.mark;
+    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
     const getQuizData = quizData?.quiz;
 
-    const totalquest = getQuizData?.question?.length;
+    const totalquest = getQuizData[1]?.question?.length;
 
     timerInSeconds = 0;
+
+    console.log(quizData);
 
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
@@ -89,26 +94,31 @@ const QuizTestScreen = () => {
       totalQuestions: totalquest,
       markPerQuestion: markPerQuest,
       status: quizData.status,
-    }).then((res) => {
-      if (res.status === 201) {
-        toast.success(
-          `${
-            quizData?.status?.charAt(0).toUpperCase() +
-            quizData?.status.slice(1)
-          } submitted successfully`
-        );
-        navigate(`/quiz-result/${quizID}`, {
-          state: {
-            correctAnswers,
-            studentAnswers: state,
-            score,
-            total: correctAnswers.length,
-          },
-        });
-      } else {
-        toast.error("Something went wrong");
-      }
-    });
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          toast.success(
+            `${
+              quizData?.status?.charAt(0).toUpperCase() +
+              quizData?.status.slice(1)
+            } submitted successfully`
+          );
+          navigate(`/quiz-result/${quizID}`, {
+            state: {
+              correctAnswers,
+              studentAnswers: state,
+              score,
+              total: correctAnswers.length,
+            },
+          });
+        } else {
+          toast.error("Something went wrong");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -131,15 +141,16 @@ const QuizTestScreen = () => {
     };
   }, []);
 
+  // ${quizData?.term && quizData?.term}
+
+  console.log(quizData);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
-          quizData?.status
-        } Screen`}
+        name={`
+        ${quizData?.subjectTitle} ${quizData?.status} Screen`}
       />
-
       {isQuizDone ? (
         <div className="flex justify-center items-center flex-col">
           <img
@@ -196,50 +207,58 @@ const QuizTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
-                  <div key={index}>
-                    <p className="text-[14px] font-bold mt-10">
-                      Question {index + 1}.
-                    </p>
-                    <div className="ml-4">
-                      <p className="text-[18px]">{question?.question}</p>
-                      <div className="ml-8">
-                        <p className="text-[12px] mt-5">
-                          Choose your options carefully
-                        </p>
-                        {question?.options?.map((el: any, i: number) => (
-                          <div>
-                            {el !== "" && (
-                              <div
-                                key={i}
-                                className="flex items-center gap-2 ml-4"
-                              >
-                                <input
-                                  className="radio radio-sm"
-                                  type="radio"
-                                  onChange={() => {
-                                    handleStateChange(index, el);
-                                  }}
-                                  checked={state[index] === el.trim()}
-                                />
-                                <label>
-                                  {typeof el === "string"
-                                    ? el
-                                    : JSON.stringify(el)}
-                                </label>
-                              </div>
-                            )}
-                          </div>
-                        ))}
+                {myQuizData[1]?.question?.map(
+                  (question: any, index: number) => (
+                    <div key={index}>
+                      <p className="text-[14px] font-bold mt-10">
+                        Question {index + 1}.
+                      </p>
+                      <div className="ml-4">
+                        <p className="text-[18px]">{question?.question}</p>
+                        <div className="ml-8">
+                          <p className="text-[12px] mt-5">
+                            Choose your options carefully
+                          </p>
+                          {question?.options?.map((el: any, i: number) => (
+                            <div>
+                              {el !== "" && (
+                                <div
+                                  key={i}
+                                  className="flex items-center gap-2 ml-4"
+                                >
+                                  <input
+                                    className="radio radio-sm"
+                                    type="radio"
+                                    onChange={() => {
+                                      handleStateChange(index, el);
+                                    }}
+                                    checked={state[index] === el.trim()}
+                                  />
+                                  <label>
+                                    {typeof el === "string"
+                                      ? el
+                                      : JSON.stringify(el)}
+                                  </label>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
 
                 <div>
                   <Button
-                    className="bg-blue-950 px-12 mt-14 py-4"
-                    name="Submit"
+                    className="bg-blue-950 px-12 mt-14 py-4 text-[20px]"
+                    name={loading ? "Processing..." : "Submit"}
+                    // disabled={loading}
+                    icon={
+                      loading && (
+                        <FaSpinner className="animate-spin text-[18px]" />
+                      )
+                    }
                     onClick={handleSubmit}
                   />
                 </div>
