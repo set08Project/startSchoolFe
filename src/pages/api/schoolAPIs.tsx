@@ -414,11 +414,9 @@ export const updateTimeTableSubject = async (
 ) => {
   try {
     return await axios
-      .patch(
-        `${URL}/update-time-table/${schoolID}/${classID}/${tableID}, {
+      .patch(`${URL}/update-time-table/${schoolID}/${classID}/${tableID}`, {
         subject: data,
-      }`
-      )
+      })
       .then((res: any) => {
         return res;
       });
