@@ -37,7 +37,7 @@ const ViewStoreItems = () => {
             className="absolute top-0 p-0 w-full min-h-[300px] pb-10
              rounded-md backdrop-blur-1"
             style={{
-              background: "rgba(, 0.2)",
+              background: "white",
               boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
               backdropFilter: "blur(5px)",
               border: "1px solid rgba(73, 154, 255, 0.3)",
