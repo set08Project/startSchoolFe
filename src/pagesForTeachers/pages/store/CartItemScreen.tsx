@@ -6,12 +6,15 @@ import {
   paymentRef,
   removeFromCart,
 } from "../../../global/reduxState";
-import { MdClose, MdExpandLess } from "react-icons/md";
+import { MdClose, MdDelete, MdExpandLess } from "react-icons/md";
 import Button from "../../../components/reUse/Button";
 import { useTeacherInfo } from "../../hooks/useTeacher";
 import { useSchool } from "../../../pages/hook/useSchoolAuth";
 import { useState } from "react";
 import { storePayment } from "../../../pages/api/schoolAPIs";
+import { IoAddSharp } from "react-icons/io5";
+import { FiMinus } from "react-icons/fi";
+import { UnLazyImage } from "@unlazy/react";
 
 const CartItemScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -42,118 +45,156 @@ const CartItemScreen = () => {
 
   return (
     <div className="flex w-full h-full flex-col items-center ">
-      <div className="flex w-full  justify-end  ">
-        <div>
-          <MdClose
-            size={30}
-            className="mr-10 my-5 cursor-pointer hover:text-red-600 hover:rotate-180 transition-all duration-300
+      <div className="flex w-full  justify-between  ">
+        <div className=" flex items-center justify-between px-3 w-full">
+          <div className="text-red-600 text-[12px]">
+            Using this store requires ₦500 charges for payment
+          </div>
+          <div>
+            <MdClose
+              size={30}
+              className="mr-10 my-5 cursor-pointer hover:text-red-600 hover:rotate-180 transition-all duration-300
           flex justify-center items-center rounded-full hover:bg-neutral-300
           "
-            onClick={changeView}
-          />
+              onClick={changeView}
+            />
+          </div>
         </div>
       </div>
 
-      <div
-        className="flex  transition-all duration-300 2xl:w-[70%] justify-end py-10 rounded-md mx-2 w-[98%]"
-        style={{
-          background: "rgba(255,255,255,0.3)",
-          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          backdropFilter: "blur(5px)",
-          border: "1px solid rgba(73, 154, 255, 0.3)",
-        }}
-      >
-        <div className="px-5 w-full grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="pr-2">
-            <p className="font-bold">Cart Total </p>
-            <p className="font-medium my-5 flex justify-between items-center">
-              <p>SubTotal</p>
-              <p className="font-bold">₦{cost.toLocaleString()}</p>
-            </p>
-            <p className="font-medium my-5 flex justify-between items-center">
-              <p>Extra Charges</p>
-              <p className="font-bold">₦500</p>
-            </p>
-            <div className="mt-10 border-t border-neutral" />
-
-            <p className="font-medium my-1 flex justify-between items-center">
-              <p>Total</p>
-              <p className="font-bold">₦{(cost + 500).toLocaleString()}</p>
-            </p>
-
-            <div className="w-full flex justify-center mt-10">
-              <Button
-                name={toggle ? "Processing..." : "Proceed to Pay"}
-                className="bg-blue-950 w-full mx-0 py-5"
-                onClick={() => {
-                  setToggle(true);
-
-                  storePayment({
-                    email: teacherInfo?.email,
-                    amount: cost + 500,
-                    subAccountCode: data?.bankDetails?.accountPaymentCode,
-                  }).then((res) => {
-                    console.log(res?.data?.data?.data?.reference);
-                    if (res) {
-                      dispatch(paymentRef(res?.data?.data?.data?.reference));
-                      location.replace(
-                        res?.data?.data?.data?.authorization_url
-                      );
-                    }
-                  });
-
-                  const x = setTimeout(() => {
-                    setToggle(false);
-                    clearTimeout(x);
-                  }, 4000);
-                }}
-              />
+      <div className=" w-full min-h-[50vh] flex justify-center">
+        <div className=" grid grid-rows-2 lg:grid-cols-6 px-4 gap-5 w-full">
+          {cart.length > 0 ? (
+            <div className="rounded-md shadow-lg border col-span-4">
+              <div className=" px-2 py-3">CART({cart.length})</div>
+              {cart?.map((props: any) => (
+                <div
+                  className=" w-full border-y py-3 px-2 grid grid-cols-5 gap-2 mb-3"
+                  key={props?._id}
+                >
+                  <div className=" col-span-4">
+                    <div className=" flex gap-5">
+                      <div className=" w-[30%]">
+                        <UnLazyImage
+                          alt={props?.title}
+                          thumbhash="1QcSHQRnh493V4dIh4eXh1h4kJUI"
+                          src={props?.avatar}
+                          autoSizes
+                          className="w-[140px] object-cover h-[120px] border rounded-lg ml-2"
+                        />
+                      </div>
+                      <div className=" w-[70%] text-wrap">
+                        <p className="font-bold text-[18px]">{props?.title}</p>
+                        <p className="leading-tight text-neutral-900 break-words overflow-hidden overflow-ellipsis">
+                          {props?.description}{" "}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex">
+                      <div
+                        className="gap-3 flex ml-2 mt-4 cursor-pointer p-2 hover:bg-slate-100 transition-all duration-300 rounded-md text-red-600 items-center"
+                        onClick={() => {
+                          dispatch(removeFromCart(props));
+                        }}
+                      >
+                        <div>
+                          <MdDelete size={20} />
+                        </div>
+                        <p className="mr-2 text-[12px] mt-1 font-semibold ">
+                          Remove Item
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" col-span-1 flex flex-col justify-center items-end gap-y-2">
+                    <div className="font-semibold">
+                      ₦{props?.cost?.toLocaleString()}
+                    </div>
+                    <div className="capitalize text-[12px]">no discount</div>
+                    <div className=" flex items-center">
+                      <div>
+                        <Button
+                          name={<FiMinus size={15} className=" mr-1" />}
+                          className=" bg-red-600 px-1 py-2"
+                          onClick={() => {
+                            dispatch(changeCartPick(props));
+                          }}
+                        />
+                      </div>
+                      <p className=" text-[18px]">{props?.QTY}</p>
+                      <div>
+                        <Button
+                          name={<IoAddSharp size={15} className=" mr-1" />}
+                          className=" bg-blue-950 px-1 py-2"
+                          onClick={() => {
+                            dispatch(addToCart(props));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-          {cart?.map((props: any) => (
-            <div className="col-span-2 h-[300px] pl-2 md:border-l border-neutral-500 w-full flex flex-col items-center ">
-              <div className="flex items-center w-full gap-2 border-b border-neutral py-5 ">
-                <MdClose
-                  onClick={() => {
-                    dispatch(removeFromCart(props));
-                  }}
-                />
-                <img
-                  className="w-[120px] h-[120px] border rounded-sm bg-red-500 ml-2 object-cover"
-                  src={props.avatar}
-                />
-                <div className="w-[45%] ">
-                  <p className="font-bold text-[18px]">{props?.title}</p>
-                  <p className="leading-tight text-neutral-900 text-[12px]">
-                    {props.description}{" "}
-                  </p>
+          ) : (
+            <div>Not Yet</div>
+          )}
+          <div className="col-span-2">
+            {cart.length > 0 ? (
+              <div className=" min-h-[210px] rounded-md shadow-md ">
+                <div className=" p-3">
+                  <div className=" py-2">CART SUMMARY</div>
+                  <div className=" flex border-y py-3 justify-between">
+                    <p>Subtotal</p>
+
+                    <p className="font-semibold">₦{cost.toLocaleString()}</p>
+                  </div>
+                  <div className=" flex border-y py-3 justify-between">
+                    <p>service Charge</p>
+
+                    <p>₦500</p>
+                  </div>
+                  {/* <div className="hover:scale-[102%]  transition-all duration-300 mt-6 flex justify-center items-center">
+                    <Button
+                      name={`Checkout ₦${cost.toLocaleString()}`}
+                      className=" bg-blue-950"
+                    />
+                  </div> */}
+                  <div className="w-full flex justify-center mt-10">
+                    <Button
+                      name={toggle ? "Processing..." : "Proceed to Pay"}
+                      className="bg-blue-950 w-full mx-0 py-5"
+                      onClick={() => {
+                        setToggle(true);
+
+                        storePayment({
+                          email: teacherInfo?.staffName,
+                          amount: cost + 500,
+                          subAccountCode: data?.bankDetails?.accountPaymentCode,
+                        }).then((res) => {
+                          if (res) {
+                            dispatch(
+                              paymentRef(res?.data?.data?.data?.reference)
+                            );
+                            location.replace(
+                              res?.data?.data?.data?.authorization_url
+                            );
+                          }
+                        });
+
+                        const x = setTimeout(() => {
+                          setToggle(false);
+                          clearTimeout(x);
+                        }, 4000);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="w-[15%] flex flex-col justify-center h-full items-center gap-3">
-                  <p
-                    className="bg-blue-950 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer"
-                    onClick={() => {
-                      dispatch(addToCart(props));
-                    }}
-                  >
-                    <MdExpandLess />
-                  </p>
-                  <p className="font-bold">{props?.QTY}</p>
-                  <p
-                    className="bg-orange-600 text-white rounded-md h-10 w-10 flex items-center justify-center font-bold cursor-pointer rotate-180"
-                    onClick={() => {
-                      dispatch(changeCartPick(props));
-                    }}
-                  >
-                    <MdExpandLess />
-                  </p>
-                </div>
-                <div className="w-[13%] flex justify-end font-bold text-[20px]">
-                  ₦{(props.QTY * props.cost).toLocaleString()}
-                </div>
-                <div></div>
               </div>
-            </div>
-          ))}{" "}
+            ) : (
+              <div></div>
+            )}
+          </div>
         </div>
       </div>
     </div>
