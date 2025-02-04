@@ -61,6 +61,8 @@ const QuizTestScreen = () => {
   const timer = parseFloat(quizData?.quiz[0]?.instruction?.duration);
   let timerInSeconds = timer * 3600;
 
+  console.log(quizData?.quiz[0]?.instruction?.duration);
+
   const handleSubmit = () => {
     setLoading(true);
     const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>

@@ -87,13 +87,14 @@ const CreateQuiz = () => {
                       }}
                     >
                       <option value="0" selected>
-                        choose
+                        choosen
                       </option>
-                      <option value="1">1 Hour</option>
-                      <option value="2">2 Hours</option>
-                      <option value="3">3 Hours</option>
-                      <option value="4">4 Hours</option>
-                      <option value="5">5 Hours</option>
+                      <option value="0.167">10 Minutes</option>
+                      <option value="0.333">20 Minutes</option>
+                      <option value="0.500">30 Minutes</option>
+                      <option value="0.667">40 Minutes</option>
+                      <option value="0.833">50 Minutes</option>
+                      <option value="1">60 Minutes</option>
                     </select>
                   </div>
                   <div className="flex-1">
