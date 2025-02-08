@@ -200,6 +200,40 @@ export const performanceExamination = async (
   }
 };
 
+export const performanceMidTest = async (
+  studentID: string,
+  quizID: string,
+  subjectID: string,
+  data: {}
+) => {
+  try {
+    const URL = "http:localhost:2244/api";
+    return await axios
+      .post(
+        `${URL}/create-subject-mid-test-performance/${studentID}/${quizID}/${subjectID}`,
+        data
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewMidTestStduent = async (subjectID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-subject-mid-test/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const performanceTest = async (
   studentID: string,
   quizID: string,
@@ -207,7 +241,7 @@ export const performanceTest = async (
   data: {}
 ) => {
   try {
-    const URL = "http://localhost:2244/api";
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(
         `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/${subjectID}`,

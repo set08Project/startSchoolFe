@@ -31,6 +31,7 @@ const PreviewMidTestScreen: FC<any> = ({
       setState(res.data);
     });
   }, []);
+  console.log("classes: ", state);
 
   return (
     <div>

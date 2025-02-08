@@ -35,10 +35,13 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     const hours = Math.floor(secs / 3600);
     const minutes = Math.floor((secs % 3600) / 60);
     const remainingSeconds = secs % 60;
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(remainingSeconds).padStart(2, "0")}`;
+    return `
+    ${String(hours).padStart(2, "0")}
+    :${String(minutes).padStart(2, "0")} : ${String(
+      parseInt(remainingSeconds.toString())
+    )}
+      
+      `;
   };
 
   const getColor = () => {

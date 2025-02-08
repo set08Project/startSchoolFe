@@ -15,6 +15,7 @@ import {
   studentSchoolFeePayment,
   viewClassTimetable,
   viewComplains,
+  viewMidTestStduent,
   viewPerformanceTest,
   viewPurchasedEndPoint,
   viewStduentDetail,
@@ -26,6 +27,7 @@ import {
   viewTermlyBudget,
   viewTermlyExpense,
 } from "../../pages/api/schoolAPIs";
+import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
 
 export const useStudentCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -35,6 +37,18 @@ export const useStudentCookie = () => {
     });
   });
   return { dataID: user?.id };
+};
+
+export const useMidTestStudent = (subjectID: string) => {
+  const { data: midTest } = useSWR(
+    `api/view-subject-mid-test/${subjectID}`,
+    () => {
+      return viewMidTestStduent(subjectID!).then((res) => {
+        return res.midTest;
+      });
+    }
+  );
+  return { midTest };
 };
 
 export const useTermBudget = (schoolID: string) => {
