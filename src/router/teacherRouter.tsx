@@ -4,6 +4,10 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
 
+const CreateMidTestScreen = React.lazy(
+  () => import("@/pagesForTeachers/pages/quiz/CreateMidTestScreen")
+);
+
 const TeacherPrintReportCardScreen = React.lazy(
   () => import("../pagesForTeachers/pages/CardTemplate/DownloadStudentReport")
 );
@@ -306,6 +310,15 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CreateQuiz />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "create-mid-test/:subjectID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateMidTestScreen />
           </Suspense>
         ),
       },

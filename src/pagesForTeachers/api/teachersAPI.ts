@@ -337,6 +337,30 @@ export const createExaminationData = async (
   }
 };
 
+export const createMidTestData = async (
+  classID: string,
+  subjectID: string,
+  data: any
+) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+
+    return await axios
+      .post(
+        `${URL}/create-subject-mid-test/${classID}/${subjectID}`,
+        data,
+        config
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readExam = async (quizID: string) => {
   try {
     return await axios.get(`${URL}/view-exam/${quizID}`).then((res: any) => {

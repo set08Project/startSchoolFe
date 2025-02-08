@@ -86,17 +86,22 @@ const QuizSetupScreen = () => {
 
           <div className="flex gap-2">
             <Link to={`/create-quiz/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-4 rounded-md text-[14px] text-center">
-                + Create Test
+              <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
+                + Create Pop Test
+              </p>
+            </Link>
+            <Link to={`/create-mid-test/${subjectID}`}>
+              <p className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
+                + Create Mid-Test
               </p>
             </Link>
             <Link to={`/create-examination/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-4 rounded-md text-[14px] text-center">
+              <p className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
                 + Create Exam
               </p>
             </Link>
             <Link to={`/test-exam-grade/${subjectID}`}>
-              <p className="font-medium cursor-pointer text-[14px] bg-orange-500 text-white px-6 py-4 rounded-md text-center">
+              <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-2 rounded-sm uppercase text-center">
                 + Record Report Card Scores
               </p>
             </Link>
