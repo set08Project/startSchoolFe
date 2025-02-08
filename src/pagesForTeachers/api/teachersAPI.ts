@@ -301,10 +301,56 @@ export const stopExamination = async (examID: string) => {
   }
 };
 
+export const startMidTest = async (midTestID: string) => {
+  try {
+    const URL = "http://localhost:2244/api";
+    console.log("readL : ", midTestID);
+    return await axios
+      .patch(`${URL}/start-subject-mid-test/${midTestID}`, {
+        started: true,
+      })
+      .then((res: any) => {
+        console.log(res);
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const stopMidTest = async (midTestID: string) => {
+  try {
+    const URL = "http://localhost:2244/api";
+    console.log("readL : ", midTestID);
+    return await axios
+      .patch(`${URL}/start-subject-mid-test/${midTestID}`, {
+        started: false,
+      })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const viewExamination = async (subjectID: string) => {
   try {
     return await axios
       .get(`${URL}/view-subject-exam/${subjectID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewMidTest = async (subjectID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-subject-mid-test/${subjectID}`)
       .then((res: any) => {
         return res?.data;
       });
@@ -326,6 +372,31 @@ export const createExaminationData = async (
     return await axios
       .post(
         `${URL}/create-subject-examination/${classID}/${subjectID}`,
+        data,
+        config
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createMidTestData = async (
+  classID: string,
+  subjectID: string,
+  data: any
+) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+    // const URL = "http://localhost:2244/api";
+
+    return await axios
+      .post(
+        `${URL}/create-subject-mid-test/${classID}/${subjectID}`,
         data,
         config
       )

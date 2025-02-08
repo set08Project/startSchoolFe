@@ -20,6 +20,7 @@ import {
   getStudentSubjectPerformance,
   readExam,
   getExam,
+  viewMidTest,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -273,6 +274,18 @@ export const useExamination = (subjectID: string) => {
     }
   );
   return { examination };
+};
+
+export const useMidTest = (subjectID: string) => {
+  const { data: midTest } = useSWR(
+    `api/view-subject-mid-test/${subjectID}`,
+    () => {
+      return viewMidTest(subjectID!).then((res) => {
+        return res.midTest;
+      });
+    }
+  );
+  return { midTest };
 };
 
 export const useStudentGrade = (studentID: string) => {

@@ -118,6 +118,7 @@ const ExaminationTestScreen = () => {
       })
       .finally(() => {
         setLoading(false);
+        localStorage.removeItem("countdown");
       });
   };
 

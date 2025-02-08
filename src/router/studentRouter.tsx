@@ -9,6 +9,10 @@ import { ErrorBoundary } from "react-error-boundary";
 //   () => import("../pagesForStudents/schoolFee/OtherPaymentRecipt")
 // );
 
+const MidTestScreen = React.lazy(
+  () => import("@/pagesForStudents/pages/quiz/MidTestScreen")
+);
+
 const OtherPaymentRecipt = React.lazy(
   () => import("../pagesForStudents/schoolFee/OtherPaymentRecipt")
 );
@@ -349,6 +353,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ExaminationTestScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/mid-test/details/:subjectID/:midTestID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MidTestScreen />
           </Suspense>
         ),
       },

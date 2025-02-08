@@ -9,6 +9,7 @@ import pix from "../../../assets/pix.jpg";
 import { GoGoal } from "react-icons/go";
 import {
   useExamination,
+  useMidTest,
   useSubjectAssignment,
   useSujectQuiz,
 } from "../../hooks/useTeacher";
@@ -16,7 +17,9 @@ import {
   deleteQuiz,
   readClassInfo,
   startExamination,
+  startMidTest,
   stopExamination,
+  stopMidTest,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import { useStudentPerfomance } from "../../hooks/useQuizHook";
@@ -26,11 +29,13 @@ const QuizSetupScreen = () => {
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
   const { examination } = useExamination(subjectID!);
+  const { midTest } = useMidTest(subjectID!);
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<Boolean>(false);
+  const [loadingTest, setLoadingTest] = useState<Boolean>(false);
 
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
 
@@ -40,7 +45,7 @@ const QuizSetupScreen = () => {
         setState(res.data);
       });
     }
-  }, [subjectQuiz, examination]);
+  }, [subjectQuiz, examination, midTest]);
 
   const { subjectAssignment } = useSubjectAssignment(state?._id!);
 
@@ -86,17 +91,22 @@ const QuizSetupScreen = () => {
 
           <div className="flex gap-2">
             <Link to={`/create-quiz/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-4 rounded-md text-[14px] text-center">
-                + Create Test
+              <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
+                + Create Pop Test
+              </p>
+            </Link>
+            <Link to={`/create-mid-test/${subjectID}`}>
+              <p className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
+                + Create Mid-Test
               </p>
             </Link>
             <Link to={`/create-examination/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-blue-950 text-white px-6 py-4 rounded-md text-[14px] text-center">
+              <p className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
                 + Create Exam
               </p>
             </Link>
             <Link to={`/test-exam-grade/${subjectID}`}>
-              <p className="font-medium cursor-pointer text-[14px] bg-orange-500 text-white px-6 py-4 rounded-md text-center">
+              <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-2 rounded-sm uppercase text-center">
                 + Record Report Card Scores
               </p>
             </Link>
@@ -236,6 +246,148 @@ const QuizSetupScreen = () => {
                 </div>
                 <Link
                   to={`/examination-preview-details/${subjectID}/${examination?._id}`}
+                  className={`mt-10 cursor-pointer flex gap-3 items-center 
+                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
+                >
+                  {<span>Preview Questions</span>}
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-10 bg-slate-50">
+        {midTest && (
+          <div>
+            <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
+                {1}
+              </div>
+              <div className="mt-4 text-center relative bottom-4">
+                <button
+                  onClick={() => {}}
+                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                >
+                  <FaTrashAlt size={20} className="mr-1" />
+                  Delete Mid-Test
+                </button>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col ">
+                  <p className="font-semibold italicmt-0 text-[12px]">
+                    {midTest?.session}
+                  </p>
+                  <p className="font-bold text-[20px]">
+                    {" "}
+                    {midTest?.subjectTitle}
+                  </p>
+                </div>
+                <Link to={`/exam/details/${subjectID}/${midTest?._id}`}>
+                  <MdPlayCircle
+                    size={40}
+                    className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"
+                  />
+                </Link>
+              </div>
+
+              <div className="flex flex-col mb-3">
+                <div className="flex">
+                  <p className="px-4 tracking-widest font-semibold capitalize py-1 rounded-md text-[12px] border bg-purple-200">
+                    {midTest?.term} mid Term Test
+                  </p>
+                </div>
+                <p className="font-semibold text-[12px] mt-2">
+                  {/* {new Date(midTest?.createdAt).toLocaleDateString()} */}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-[14px] my-5 italic">
+                  Students can't access this midTest Questions yet, <br />{" "}
+                  change the accessibility of students to take test!{" "}
+                </p>
+              </div>
+
+              <div className="flex-1" />
+
+              <div className="flex justify-between text-[13px]">
+                <div>
+                  Questions:{" "}
+                  <span className="font-bold">
+                    {midTest?.quiz?.question
+                      ? midTest?.quiz?.question.length
+                      : 0}
+                  </span>
+                </div>
+                <div>
+                  Mark/Question:{" "}
+                  <span className="font-bold">
+                    {midTest?.quiz?.instruction
+                      ? midTest?.quiz?.instruction.mark
+                      : 0}
+                  </span>
+                </div>
+              </div>
+              <div className="text-[14px] mt-2 font-bold">
+                Instruction:{" "}
+                <span className="font-normal line-clamp-3">
+                  {/* {midTest?.quiz?.instruction?.instruction
+                    ? `${midTest?.quiz?.instruction.instruction}`.slice(0, 70) +
+                      "..."
+                    : "..."} */}
+
+                  {midTest?.quiz?.instruction.instruction}
+                </span>
+              </div>
+
+              <div className="flex gap-3">
+                <div
+                  className={`mt-10 cursor-pointer flex gap-3 items-center ${
+                    midTest?.startMidTest ? "bg-purple-600" : "bg-red-500"
+                  } text-white font-semibold px-6 py-3 rounded-md`}
+                  onClick={() => {
+                    midTest?.startMidTest
+                      ? stopMidTest(midTest?._id)
+                          .then((res) => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setLoadingTest(false);
+                          })
+                      : startMidTest(midTest?._id)
+                          .then((res) => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setLoadingTest(false);
+                          });
+                  }}
+                >
+                  {loadingTest ? (
+                    "changing test"
+                  ) : (
+                    <span>
+                      {midTest?.startMidTest
+                        ? "Mid Test can Start "
+                        : "Change Visibility"}
+                    </span>
+                  )}
+                  {midTest?.startMidTest ? (
+                    <MdVisibility
+                      size={20}
+                      className=" text-white transition-all duration-300"
+                    />
+                  ) : (
+                    <MdVisibilityOff
+                      size={20}
+                      className=" text-white transition-all duration-300"
+                    />
+                  )}
+                </div>
+                <Link
+                  to={`/mid-test-preview-details/${subjectID}/${midTest?._id}`}
                   className={`mt-10 cursor-pointer flex gap-3 items-center 
                    bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
                 >

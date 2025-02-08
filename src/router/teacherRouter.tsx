@@ -4,6 +4,14 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
 
+const MidTestPreviewScreen = React.lazy(
+  () => import("@/pagesForTeachers/pages/quiz/MidTestPreviewScreen")
+);
+
+const CreateMidTestScreen = React.lazy(
+  () => import("@/pagesForTeachers/pages/quiz/CreateMidTestScreen")
+);
+
 const TeacherPrintReportCardScreen = React.lazy(
   () => import("../pagesForTeachers/pages/CardTemplate/DownloadStudentReport")
 );
@@ -292,6 +300,15 @@ export const teacherRouter = createBrowserRouter([
         ),
       },
       {
+        path: "mid-test-preview-details/:subjectID/:quizID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {/* <div>Start</div> */}
+            <MidTestPreviewScreen />
+          </Suspense>
+        ),
+      },
+      {
         path: "examination-preview-details/:subjectID/:quizID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
@@ -306,6 +323,15 @@ export const teacherRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <CreateQuiz />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "create-mid-test/:subjectID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <CreateMidTestScreen />
           </Suspense>
         ),
       },
