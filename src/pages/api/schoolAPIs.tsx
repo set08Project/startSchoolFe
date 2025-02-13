@@ -391,6 +391,26 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
   }
 };
 
+export const updateStudentRestrictMode = async (
+  schoolID: string,
+  studentID: string,
+  toggle: boolean
+) => {
+  try {
+    const URL = "localhost:2244/api";
+    return await axios
+      .patch(
+        `${"http://localhost:2244/api"}/restrict-view/${schoolID}/${studentID}`,
+        toggle
+      )
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const deleteTimeTableSubject = async (
   schoolID: string,
   tableID: string

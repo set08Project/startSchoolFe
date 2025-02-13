@@ -207,7 +207,6 @@ export const performanceMidTest = async (
   data: {}
 ) => {
   try {
-    const URL = "http:localhost:2244/api";
     return await axios
       .post(
         `${URL}/create-subject-mid-test-performance/${studentID}/${quizID}/${subjectID}`,
@@ -216,14 +215,28 @@ export const performanceMidTest = async (
       .then((res: any) => {
         return res?.data;
       });
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const viewStudentPerformanceMidTest = async (studentID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-student-mid-test-performance/${studentID}/`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    console.log(error);
     return error;
   }
 };
 
 export const viewMidTestStduent = async (subjectID: string) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/view-subject-mid-test/${subjectID}`)
       .then((res: any) => {
