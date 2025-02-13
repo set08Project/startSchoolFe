@@ -397,12 +397,9 @@ export const updateStudentRestrictMode = async (
   toggle: boolean
 ) => {
   try {
-    const URL = "localhost:2244/api";
+    // const URL = "localhost:2244/api";
     return await axios
-      .patch(
-        `${"http://localhost:2244/api"}/restrict-view/${schoolID}/${studentID}`,
-        toggle
-      )
+      .patch(`${URL}/restrict-view/${schoolID}/${studentID}`, toggle)
       .then((res: any) => {
         return res;
       });
