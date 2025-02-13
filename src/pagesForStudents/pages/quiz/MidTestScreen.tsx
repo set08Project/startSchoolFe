@@ -95,6 +95,7 @@ const MidTestScreen = () => {
     const totalquest = getQuizData?.question?.length;
 
     timerInSeconds = 0;
+    console.log("Hit");
 
     performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,

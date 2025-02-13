@@ -20,6 +20,7 @@ import {
 } from "../../hook/useSchoolAuth";
 import {
   updateSchoolFee,
+  updateStudentRestrictMode,
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
@@ -134,6 +135,7 @@ const ViewClassStudent: FC = () => {
   );
   let el = classID;
   const [toggle, setToggle] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [toggleValue, setToggleValue] = useState<string>("");
 
   const updated = (id: string) => {
@@ -171,6 +173,7 @@ const ViewClassStudent: FC = () => {
             <div className="w-[80px] border-r">Rate</div>
             <div className="w-[180px] border-r">View Detail</div>
             <div className="w-[180px] border-r">View Report Card</div>
+            <div className="w-[180px] border-r">Restrict Result</div>
           </div>
 
           <div>
@@ -325,18 +328,60 @@ const ViewClassStudent: FC = () => {
                             />
                           </Link>
                         </div>
-                        {/* <Link
-                          to={`/view-students-report-card/${props?._id}`}
-                          className="w-[180px] border-r"
-                        >
-                          <Button
-                            name="View Detail"
-                            className="py-3 w-[85%] bg-orange-500 text-white  hover:bg-orange-600 transition-all duration-300"
-                            onClick={() => {}}
-                          />
-                        </Link> */}
 
                         <View props={props} />
+                        <div className="w-[180px] border-r">
+                          <Button
+                            name={`${
+                              props?.viewReportCard
+                                ? `
+                              ${loading ? "updating..." : "Off-Restrict"}
+                              `
+                                : `${loading ? "updating..." : "Restriction"}`
+                            }`}
+                            className={` ${
+                              props?.viewReportCard
+                                ? "bg-red-500 text-white  hover:bg-red-600"
+                                : "bg-neutral-900 text-white  hover:bg-neutral-950"
+                            } py-3  w-[85%] transition-all duration-300`}
+                            onClick={() => {
+                              setLoading(true);
+                              if (props?.viewReportCard === true) {
+                                console.log("This is True");
+                                updateStudentRestrictMode(
+                                  data?._id,
+                                  props?._id,
+                                  false
+                                )
+                                  .then((res) => {
+                                    if (res.status === 201) {
+                                      toast.success("Restricted mode disabled");
+                                      mutate(`api/view-school/${data?._id}`);
+                                    }
+                                  })
+                                  .finally(() => {
+                                    setLoading(false);
+                                  });
+                              } else {
+                                console.log("This is False");
+                                updateStudentRestrictMode(
+                                  data?._id,
+                                  props?._id,
+                                  true
+                                )
+                                  .then((res) => {
+                                    if (res.status === 201) {
+                                      toast.success("Restricted mode disabled");
+                                      mutate(`api/view-school/${data?._id}`);
+                                    }
+                                  })
+                                  .finally(() => {
+                                    setLoading(false);
+                                  });
+                              }
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -539,7 +584,7 @@ const View: FC<any> = ({ props }) => {
         >
           <Button
             name="Report-card"
-            className="py-3 w-[85%] bg-orange-500 text-white  hover:bg-orange-600 transition-all duration-300"
+            className="py-3 w-[85%] mt-7 bg-orange-500 text-white  hover:bg-orange-600 transition-all duration-300"
             onClick={() => {}}
           />
         </Link>
@@ -547,7 +592,7 @@ const View: FC<any> = ({ props }) => {
         <div className="w-[180px] border-r">
           <Button
             name="Not Ready"
-            className="py-3 w-[85%] bg-red-500 text-white  hover:bg-red-600 transition-all duration-300"
+            className="py-3 w-[85%] mt-7 bg-red-500 text-white  hover:bg-red-600 transition-all duration-300"
           />
         </div>
       )}

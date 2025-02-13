@@ -23,7 +23,7 @@ const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
 
   const { studentInfo } = useStudentInfo();
-  document.title = `${studentInfo?.studentFirstName}'s Record and Stats`;
+  document.title = `${studentInfo?.studentFirstName}'s Mid-Term Record and Stats`;
 
   const { schoolInfo, loading }: any = useSchoolSessionData(
     studentInfo?.schoolIDs
@@ -96,25 +96,51 @@ const StudentDashboard = () => {
             <MakeActiveClass />
           </div>
 
-          <p
-            className={`capitalize font-medium ${
-              resultData?.approve ? "text-red-500" : "text-blue-950"
-            }`}
-          >
-            {resultData?.approve ? "ready now" : "not yet Ready"}
-          </p>
-          <div className="flex ">
-            {resultData?.approve ? (
-              <Link to={`/print-result`}>
-                <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
-                  view this term's report card
-                </div>
-              </Link>
-            ) : (
-              <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[11px] md:text-[17px]">
-                Term's report card(Not Ready)
+          <div className="flex gap-5 text-[12px]">
+            <div>
+              <p
+                className={`capitalize font-medium ${
+                  resultData?.approve ? "text-red-500" : "text-blue-950"
+                }`}
+              >
+                {resultData?.approve ? "ready now" : "not yet Ready"}
+              </p>
+              <div className="flex ">
+                {resultData?.approve ? (
+                  <Link to={`/print-result`}>
+                    <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
+                      view this term's report card
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[11px] md:text-[17px]">
+                    Term's report card(Not Ready)
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            <div>
+              <p
+                className={`capitalize font-medium ${
+                  resultData?.approve ? "text-red-500" : "text-blue-950"
+                }`}
+              >
+                {resultData?.approve ? "ready now" : "not yet Ready"}
+              </p>
+              <div className="flex ">
+                {resultData?.approve && studentInfo?.viewReportCard ? (
+                  <Link to={`/mid`}>
+                    <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
+                      view Mid term's report card
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[12px] md:text-[12px]">
+                    Mid Term's report card(Not Ready)
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="mt-5">

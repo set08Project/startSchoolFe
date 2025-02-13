@@ -20,6 +20,7 @@ import {
   viewPurchasedEndPoint,
   viewStduentDetail,
   viewStudentAttendance,
+  viewStudentPerformanceMidTest,
 } from "../api/studentAPI";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -37,6 +38,18 @@ export const useStudentCookie = () => {
     });
   });
   return { dataID: user?.id };
+};
+
+export const useMidTestStudentPerformance = (studentID: string) => {
+  const { data: midTestPerformace } = useSWR(
+    `view-student-mid-test-performance/${studentID}/`,
+    () => {
+      return viewStudentPerformanceMidTest(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { midTestPerformace };
 };
 
 export const useMidTestStudent = (subjectID: string) => {

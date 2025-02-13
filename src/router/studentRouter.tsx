@@ -4,10 +4,16 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
+// import MidTestReportScreen from "@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen";
 
 // const OtherPayments = React.lazy(
 //   () => import("../pagesForStudents/schoolFee/OtherPaymentRecipt")
 // );
+
+const MidTestReportScreen = React.lazy(
+  () =>
+    import("@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen")
+);
 
 const MidTestScreen = React.lazy(
   () => import("@/pagesForStudents/pages/quiz/MidTestScreen")
@@ -165,6 +171,16 @@ export const studentRouter = createBrowserRouter([
         ),
       },
       {
+        path: "/mid",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <MidTestReportScreen />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+      {
         path: "/download-result",
         element: (
           <Suspense fallback={<LoadingScreen />}>
@@ -174,6 +190,7 @@ export const studentRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+
       {
         path: "/print-result",
         element: (
