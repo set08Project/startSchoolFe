@@ -304,7 +304,6 @@ export const stopExamination = async (examID: string) => {
 export const startMidTest = async (midTestID: string) => {
   try {
     // const URL = "http://localhost:2244/api";
-    console.log("readL : ", midTestID);
     return await axios
       .patch(`${URL}/start-subject-mid-test/${midTestID}`, {
         started: true,
