@@ -15,10 +15,12 @@ import {
   studentSchoolFeePayment,
   viewClassTimetable,
   viewComplains,
+  viewMidTestStduent,
   viewPerformanceTest,
   viewPurchasedEndPoint,
   viewStduentDetail,
   viewStudentAttendance,
+  viewStudentPerformanceMidTest,
 } from "../api/studentAPI";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -26,6 +28,7 @@ import {
   viewTermlyBudget,
   viewTermlyExpense,
 } from "../../pages/api/schoolAPIs";
+import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
 
 export const useStudentCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -35,6 +38,30 @@ export const useStudentCookie = () => {
     });
   });
   return { dataID: user?.id };
+};
+
+export const useMidTestStudentPerformance = (studentID: string) => {
+  const { data: midTestPerformace } = useSWR(
+    `view-student-mid-test-performance/${studentID}/`,
+    () => {
+      return viewStudentPerformanceMidTest(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+  return { midTestPerformace };
+};
+
+export const useMidTestStudent = (subjectID: string) => {
+  const { data: midTest } = useSWR(
+    `api/view-subject-mid-test/${subjectID}`,
+    () => {
+      return viewMidTestStduent(subjectID!).then((res) => {
+        return res.midTest;
+      });
+    }
+  );
+  return { midTest };
 };
 
 export const useTermBudget = (schoolID: string) => {

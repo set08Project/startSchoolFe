@@ -21,6 +21,7 @@ const QuizResultScreen = () => {
     navigate(-2);
   };
 
+
   return (
     <div
       className={`min-h-screen flex flex-col bg-gray-100 transition-opacity duration-700 ${

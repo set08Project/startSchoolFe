@@ -2,29 +2,39 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
-import { performanceTest } from "../../api/studentAPI";
-import { useStudentInfo } from "../../hooks/useStudentHook";
+import {
+  useExam,
+  useMidTest,
+  useQuiz,
+} from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  performanceExamination,
+  performanceMidTest,
+  performanceTest,
+} from "../../api/studentAPI";
+import { useMidTestStudent, useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
 import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
 import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
-import { FaSpinner } from "react-icons/fa";
 
-const QuizTestScreen = () => {
+const MidTestScreen = () => {
   const navigate = useNavigate();
-  const { quizID } = useParams();
-  const { quizData } = useQuiz(quizID!);
+  const { midTestID, subjectID } = useParams();
+
+  //   const { quizData } = useQuiz(midTestID!);
+  const { midTest: quizData } = useMidTestStudent(subjectID!);
+  const { midTest } = useMidTest(midTestID!);
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
 
   const [state, setState] = useState<any>({});
   const [start, setStart] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
   const [timeUp, setTimeUp] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
 
@@ -56,16 +66,15 @@ const QuizTestScreen = () => {
   const myQuizData: any = quizData?.quiz;
 
   const isQuizDone = performance?.performance?.find(
-    (el: any) => el?.quizID === quizID && el?.quizDone
+    (el: any) => el?.quizID === midTestID && el?.quizDone
   );
-  const timer = parseFloat(quizData?.quiz[0]?.instruction?.duration);
-  let timerInSeconds = timer * 3600;
+  const timer = parseFloat(quizData?.quiz?.instruction?.duration);
 
-  console.log(quizData?.quiz[0]?.instruction?.duration);
+  let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {
     setLoading(true);
-    const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>
+    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
       q.answer.trim()
     );
     let score = 0;
@@ -80,16 +89,15 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
-    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
+    const markPerQuest = quizData?.quiz?.instruction?.mark;
     const getQuizData = quizData?.quiz;
 
-    const totalquest = getQuizData[1]?.question?.length;
+    const totalquest = getQuizData?.question?.length;
 
     timerInSeconds = 0;
+    console.log("Hit");
 
-    console.log(quizData);
-
-    performanceTest(studentInfo?._id, quizID!, courseID, {
+    performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,
       studentGrade: grade,
       remark,
@@ -98,7 +106,6 @@ const QuizTestScreen = () => {
       status: quizData.status,
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           toast.success(
             `${
@@ -106,7 +113,7 @@ const QuizTestScreen = () => {
               quizData?.status.slice(1)
             } submitted successfully`
           );
-          navigate(`/quiz-result/${quizID}`, {
+          navigate(`/quiz-result/${midTestID}`, {
             state: {
               correctAnswers,
               studentAnswers: state,
@@ -118,6 +125,7 @@ const QuizTestScreen = () => {
           toast.error("Something went wrong");
         }
       })
+
       .finally(() => {
         setLoading(false);
         localStorage.removeItem("countdown");
@@ -144,16 +152,15 @@ const QuizTestScreen = () => {
     };
   }, []);
 
-  // ${quizData?.term && quizData?.term}
-
-  console.log(quizData);
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`
-        ${quizData?.subjectTitle} ${quizData?.status} Screen`}
+        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
+          quizData?.status
+        } Screen`}
       />
+
       {isQuizDone ? (
         <div className="flex justify-center items-center flex-col">
           <img
@@ -210,58 +217,53 @@ const QuizTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData[1]?.question?.map(
-                  (question: any, index: number) => (
-                    <div key={index}>
-                      <p className="text-[14px] font-bold mt-10">
-                        Question {index + 1}.
-                      </p>
-                      <div className="ml-4">
-                        <p className="text-[18px]">{question?.question}</p>
-                        <div className="ml-8">
-                          <p className="text-[12px] mt-5">
-                            Choose your options carefully
-                          </p>
-                          {question?.options?.map((el: any, i: number) => (
-                            <div>
-                              {el !== "" && (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2 ml-4"
-                                >
-                                  <input
-                                    className="radio radio-sm"
-                                    type="radio"
-                                    onChange={() => {
-                                      handleStateChange(index, el);
-                                    }}
-                                    checked={state[index] === el.trim()}
-                                  />
-                                  <label>
-                                    {typeof el === "string"
-                                      ? el
-                                      : JSON.stringify(el)}
-                                  </label>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                {myQuizData?.question?.map((question: any, index: number) => (
+                  <div key={index}>
+                    <p className="text-[14px] font-bold mt-10">
+                      Question {index + 1}.
+                    </p>
+                    <div className="ml-4">
+                      <p className="text-[18px]">{question?.question}</p>
+                      <div className="ml-8">
+                        <p className="text-[12px] mt-5">
+                          Choose your options carefully
+                        </p>
+                        {question?.options?.map((el: any, i: number) => (
+                          <div>
+                            {el !== "" && (
+                              <div
+                                key={i}
+                                className="flex items-center gap-2 ml-4"
+                              >
+                                <input
+                                  className="radio radio-sm"
+                                  type="radio"
+                                  onChange={() => {
+                                    handleStateChange(index, el);
+                                  }}
+                                  checked={state[index] === el.trim()}
+                                />
+                                <label>
+                                  {typeof el === "string"
+                                    ? el
+                                    : JSON.stringify(el)}
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
 
                 <div>
                   <Button
-                    className="bg-blue-950 px-12 mt-14 py-4 text-[20px]"
-                    name={loading ? "Processing..." : "Submit"}
-                    // disabled={loading}
-                    icon={
-                      loading && (
-                        <FaSpinner className="animate-spin text-[18px]" />
-                      )
-                    }
+                    className={`bg-blue-950 px-12 mt-14 py-4 ${
+                      loading ? "cursor-not-allowed" : "cursor-pointer"
+                    } `}
+                    name={loading ? "Loading...." : "Submit"}
+                    disabled={loading}
                     onClick={handleSubmit}
                   />
                 </div>
@@ -274,4 +276,4 @@ const QuizTestScreen = () => {
   );
 };
 
-export default QuizTestScreen;
+export default MidTestScreen;
