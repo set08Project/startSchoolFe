@@ -1,10 +1,10 @@
 import axios from "axios";
 
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+// Working Locally
+const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL: string = "https://startschoolbe-3.onrender.com/api";
-
-// const URL: string = "https://server.justnext.com.ng/api";
+// Working Online
+// const URL: string = "https://startschoolbe-3.onrender.com/api";
 
 export const clockInWithID = async (schoolID: string, enrollmentID: string) => {
   try {
