@@ -26,6 +26,19 @@ export const deleteSchool = async (schoolID: string) => {
   }
 };
 
+export const analyticPayment = async (termID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-school-term/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const updateSchoolPaymentOptions = async (
   schoolID: string,
   data: any

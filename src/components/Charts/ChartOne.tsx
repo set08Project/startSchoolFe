@@ -122,7 +122,7 @@ interface ChartOneState {
   }[];
 }
 
-const ChartOne: React.FC = () => {
+const ChartOne: React.FC<any> = () => {
   const [state, setState] = useState<ChartOneState>({
     series: [
       {

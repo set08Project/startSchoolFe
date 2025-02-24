@@ -33,6 +33,7 @@ import {
   viewSessionTermHistory,
   viewStore,
   viewTermDetail,
+  analyticPayment,
 } from "../api/schoolAPIs";
 import {
   viewSchoolClassroom,
@@ -47,6 +48,16 @@ export const useSchoolRegister = (reader: any) => {
   });
 
   return { mutate };
+};
+
+export const useSchoolTermDetails = (termID: string) => {
+  const { data } = useSWR(`api/view-school-term/${termID}`, () => {
+    return analyticPayment(termID).then((res) => {
+      return res.data;
+    });
+  });
+
+  return { data };
 };
 
 export const useSchool = (schoolID: string) => {
