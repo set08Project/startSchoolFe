@@ -18,6 +18,7 @@ const PreviewMidTestScreen: FC<any> = ({
   duration,
   mark,
   file,
+  editorValue,
 }) => {
   const navigate = useNavigate();
   const { subjectID } = useParams();
@@ -56,6 +57,7 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("duration", duration);
           formData.append("mark", mark);
           formData.append("file", file);
+          formData.append("theory", editorValue);
 
           createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
             .then((res: any) => {

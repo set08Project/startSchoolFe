@@ -95,7 +95,6 @@ const MidTestScreen = () => {
     const totalquest = getQuizData?.question?.length;
 
     timerInSeconds = 0;
-    console.log("Hit");
 
     performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,
@@ -257,6 +256,19 @@ const MidTestScreen = () => {
                   </div>
                 ))}
 
+                <div className="border-r mt-10 w-full h-[10px] bg-red-30">
+                  <hr />
+                </div>
+                <div className="text-[16px] italic font-semibold">
+                  Section B{" "}
+                </div>
+
+                <div
+                  className="mt-5"
+                  dangerouslySetInnerHTML={{
+                    __html: `${myQuizData?.theory}`,
+                  }}
+                />
                 <div>
                   <Button
                     className={`bg-blue-950 px-12 mt-14 py-4 ${
