@@ -1,4 +1,5 @@
 import { ApexOptions } from "apexcharts";
+import _ from "lodash";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -83,20 +84,7 @@ const options: ApexOptions = {
   },
   xaxis: {
     type: "category",
-    categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-    ],
+    categories: [""],
     axisBorder: {
       show: false,
     },
@@ -122,17 +110,26 @@ interface ChartOneState {
   }[];
 }
 
-const ChartOne: React.FC = () => {
+const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
+  console.log(
+    store?.map((el) => {
+      return el?.amount;
+    })
+  );
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+        name: "Store",
+        data: store?.map((el) => el?.amount),
       },
 
       {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+        name: "SchoolFees",
+        data: schoolFee?.map((el) => el?.amount),
+      },
+      {
+        name: "Others",
+        data: others?.map((el) => el?.paymentAmount / 500),
       },
     ],
   });

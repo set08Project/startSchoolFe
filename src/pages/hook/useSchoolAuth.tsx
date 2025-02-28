@@ -1,6 +1,7 @@
 import useSWR, { mutate } from "swr";
 import {
   allSchools,
+  analyticPayment,
   classAttendance,
   getClassSubjects,
   getClassTimeTable,
@@ -49,10 +50,20 @@ export const useSchoolRegister = (reader: any) => {
   return { mutate };
 };
 
+export const useSchoolTermDetails = (termID: string) => {
+  const { data } = useSWR(`api/view-school-term/${termID}`, () => {
+    return analyticPayment(termID).then((res) => {
+      return res.data;
+    });
+  });
+
+  return { data };
+};
+
 export const useSchool = (schoolID: string) => {
   const { data } = useSWR(`api/view-school/${schoolID}`, () => {
     return readSchool(schoolID).then((res) => {
-      return res.data;
+      return res;
     });
   });
 

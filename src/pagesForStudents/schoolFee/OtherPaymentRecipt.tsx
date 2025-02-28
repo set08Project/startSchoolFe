@@ -44,8 +44,9 @@ const OtherPaymentRecipt: React.FC = () => {
   const read = useSelector((el: any) => el.otherPay);
 
   useEffect(() => {
+    console.log(read);
     let x = setTimeout(() => {
-      if (search) {
+      if (search !== "") {
         setState(search.split("reference=")[1]);
         if (search.split("reference=")[1] !== "" || null) {
           verifyOtherPayment(

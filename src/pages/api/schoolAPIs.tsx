@@ -4,9 +4,8 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // working locally
-
-const URL: string = "https://startschoolbe-3.onrender.com/api";
-const URL2: string = "https://startschoolbe-3.onrender.com";
+const URL: string = "https://startschoolbe-4.onrender.com/api";
+const URL2: string = "https://startschoolbe-4.onrender.com";
 
 // const URL: string = "https://startschoolbe-1.onrender.com/api";
 // const URL2: string = "https://startschoolbe-1.onrender.com";
@@ -320,8 +319,9 @@ export const getSchool = async () => {
 
 export const updateRegisterationStatus = async (data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
-      .patch(`${URL}/school-request-registration`, data)
+      .post(`${URL}/school-request-registration`, data)
       .then((res: any) => {
         return res;
       });
@@ -344,6 +344,7 @@ export const approveRegisterationStatus = async (email: string) => {
 
 export const approveRegisterationStatusUpdate = async (id: string) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/approved-school-registration/${id}`)
       .then((res: any) => {
@@ -394,12 +395,11 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
 export const updateStudentRestrictMode = async (
   schoolID: string,
   studentID: string,
-  toggle: boolean
+  data: boolean
 ) => {
   try {
-    // const URL = "localhost:2244/api";
     return await axios
-      .patch(`${URL}/restrict-view/${schoolID}/${studentID}`, toggle)
+      .patch(`${URL}/restrict-view/${schoolID}/${studentID}`, { toggle: data })
       .then((res: any) => {
         return res;
       });
@@ -559,6 +559,7 @@ export const registerSchool = async (data: any) => {
 
 export const loginSchool = async (data: {}) => {
   try {
+    const URL = "http://localhost:2244/api";
     return await axios
       .post(
         `${URL}/login-school`,
@@ -590,7 +591,7 @@ export const readSchool = async (schoolID: string) => {
     return await axios
       .get(`${URL}/view-school/${schoolID}`)
       .then((res: any) => {
-        return res?.data;
+        return res?.data?.data;
       });
   } catch (error) {
     return error;
@@ -1155,6 +1156,7 @@ export const verifyPayment3rd = async (schoolID: string, studentID: string) => {
 
 export const createNewSession = async (schoolID: string, data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-new-school-session/${schoolID}`, data)
       .then((res: any) => {
@@ -1330,8 +1332,22 @@ export const storePayment = async (data: {}) => {
   }
 };
 
+export const analyticPayment = async (termID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-school-term/${termID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const verifyPayment = async (refID: string) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/verify-payment/${refID}`)
       .then((res: any) => {

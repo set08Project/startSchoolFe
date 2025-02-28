@@ -13,36 +13,43 @@ import { purchasedEndPoint } from "../../api/studentAPI";
 import moment from "moment";
 import { displayCart, emptyCart, paymentRef } from "../../../global/reduxState";
 import { mutate } from "swr";
+import { useLocation } from "react-router-dom";
 
 const PurchaseHistory = () => {
   const dispatch = useDispatch();
   const data = Array.from({ length: 7 });
   const { studentInfo } = useStudentInfo();
   const { complainData } = useComplain(studentInfo?._id);
-  const ref = useSelector((state: any) => state.payRef);
+  const reff = useSelector((state: any) => state.payRef);
   const cart = useSelector((state: any) => state.cart);
 
   const { purchasedStore } = usePurchasedStore(studentInfo?._id);
+  const { search } = useLocation();
 
+  let ref = search.split("reference=")[1];
+  console.log(ref);
   useEffect(() => {
     if (ref !== "") {
       verifyPayment(ref).then((res) => {
+        console.log("reading: ", res?.data?.data?.data?.gateway_response);
         if (res?.data?.data?.data?.gateway_response === "Successful") {
-          if (cart.length > 0) {
-            purchasedEndPoint(studentInfo?._id, {
-              date: moment(res?.data?.data?.data?.createdAt).format("lll"),
-              cart,
-              reference: res?.data?.data?.data?.reference,
-              amount: res?.data?.data?.data?.amount / 100,
-              id: res?.data?.data?.data?.id,
-              delievered: false,
-            }).then(() => {
-              mutate(`api/view-purchase/${studentInfo?._id}`);
-              dispatch(paymentRef(null));
-              dispatch(emptyCart());
-              dispatch(displayCart(false));
-            });
-          }
+          // if (cart.length > 0) {
+          console.log("running: ");
+          purchasedEndPoint(studentInfo?._id, {
+            date: moment(res?.data?.data?.data?.createdAt).format("lll"),
+            cart,
+            reference: res?.data?.data?.data?.reference,
+            amount: res?.data?.data?.data?.amount / 100,
+            id: res?.data?.data?.data?.id,
+            delievered: false,
+          }).then((res) => {
+            console.log("", res);
+            mutate(`api/view-purchase/${studentInfo?._id}`);
+            // dispatch(paymentRef(null));
+            // dispatch(emptyCart());
+            // dispatch(displayCart(false));
+          });
+          // }
         }
       });
     }
