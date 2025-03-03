@@ -43,6 +43,8 @@ const OtherPaymentRecipt: React.FC = () => {
   const dispatch = useDispatch();
   const read = useSelector((el: any) => el.otherPay);
 
+  console.log(read);
+
   useEffect(() => {
     let x = setTimeout(() => {
       if (search) {
@@ -63,7 +65,7 @@ const OtherPaymentRecipt: React.FC = () => {
         verifyOtherCashPayment(
           studentInfo?._id || read?.studentID,
 
-          { paymentName: read?.paymentName, paymentAmount: read?.paymentAmount }
+          { paymentName: read?.paymentName, paymentAmount: read?.amount }
         ).then((res) => {
           if (res.status === 200) {
             // dispatch(otherPayment(null));

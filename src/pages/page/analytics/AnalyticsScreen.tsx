@@ -19,7 +19,7 @@ const AnalyticScreen: React.FC = () => {
 
   const otherPayment = _?.sumBy(
     termData?.data?.paymentOptions,
-    "paymentAmount"
+    (option: any) => Number(option.paymentAmount) || 0
   );
 
   const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
@@ -33,17 +33,12 @@ const AnalyticScreen: React.FC = () => {
     termData?.data?.paymentOptions
   );
 
-  // console.log(termData?.data?.paymentOptions);
-  // console.log(termData?.data?.storePayment);
-
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats
           title="Inflow[income]"
-          total={`₦${parseFloat(
-            `${otherPayment + schoolFeePayment + storePayment}`
-          ).toLocaleString()}`}
+          total={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
           rate=""
           levelUp
         >

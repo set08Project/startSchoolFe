@@ -24,12 +24,17 @@ import {
   verifyPayment3rd,
 } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
-import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaSpinner } from "react-icons/fa6";
+import PrintReciptScreen from "./PrintReceipt";
+import { MdClose } from "react-icons/md";
 
 interface iProps {
   props?: any;
@@ -116,7 +121,6 @@ const ViewStudent = () => {
     return result;
   };
 
-  // const {} = use
   const { data: UI } = useSchoolData();
   const { students } = useSchoolStudents(UI?._id);
   const [viewstudent1stfees, setViewStudent1stFees] = useState(false);
@@ -255,8 +259,10 @@ const ViewStudent = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
+  const [stateID, setStateID] = useState<string>("");
+  const [toggleView, setToggleView] = useState<boolean>(false);
   return (
-    <div className="">
+    <div className="relative">
       {/* header */}
       <div className="mb-0" />
       <LittleHeader name={"viewing all Students"} />
@@ -313,13 +319,14 @@ const ViewStudent = () => {
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
-        <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[2220px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
           <div className="w-[130px] border-r">Reg. Date</div>
 
           <div className="w-[270px] border-r">Session Fee</div>
+          <div className="w-[130px] border-r">Receipt</div>
           <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
@@ -336,7 +343,7 @@ const ViewStudent = () => {
           <div className="w-[180px] border-r">Student Action</div>
         </div>
 
-        <div className=" w-[1920px] overflow-hidden">
+        <div className=" w-[2220px] overflow-hidden">
           {filteredStudents?.length >= 0 ? (
             <div>
               {filteredStudents?.map((props: any, i: number) => {
@@ -642,6 +649,41 @@ const ViewStudent = () => {
                             </label>
                           </div>
                         </div>
+                        <div className="w-[130px] border-r">
+                          {stateID !== "" && toggleView && (
+                            <div className="text-white p-4 w-full h-screen bg-black/5 rounded-md absolute top-0 left-0">
+                              <Modal
+                                props={stateID}
+                                setToggleView={setToggleView}
+                                setStateID={setStateID}
+                              />{" "}
+                            </div>
+                          )}
+
+                          {UI?.presentTerm === "1st Term" &&
+                          props?.feesPaid1st ? (
+                            <button
+                              className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                setStateID(props?._id);
+                                setToggleView(true);
+                              }}
+                            >
+                              Get Receipt
+                            </button>
+                          ) : // <PrintReciptScreen props={props} />
+                          UI?.presentTerm === "2nd Term" &&
+                            props?.feesPaid2nd ? (
+                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                              Get Receipt
+                            </button>
+                          ) : UI?.presentTerm === "3rd Term" &&
+                            props?.feesPaid3rd ? (
+                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                              Get Receipt
+                            </button>
+                          ) : null}
+                        </div>
                         <div className="w-[100px] border-r">
                           {props?.gender}
                         </div>
@@ -796,3 +838,113 @@ const ViewStudent = () => {
 };
 
 export default ViewStudent;
+
+const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
+  const { studentInfoData } = useStudentInfoData(props);
+  const { data } = useSchoolData();
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    scrollToTop();
+  }, []);
+
+  console.log(studentInfoData);
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-center text-blue-950 mb-6">
+        {/* Delete Student */}
+      </h1>
+
+      <section
+      //   className=" w-full
+      // flex justify-center items-center h-full"
+      >
+        <div className="relative mt-20 max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-gray-200">
+          <div className="black cursor-pointer bg-gray-500 rounded-full absolute z-10">
+            <MdClose
+              size={30}
+              onClick={() => {
+                setToggleView(false);
+                setStateID("");
+              }}
+              className="text-black absolute z-10 cursor-pointer"
+            />
+          </div>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-700">
+              {studentInfoData?.schoolName}
+            </h2>
+            <p className="text-sm text-gray-500">{data?.address}</p>
+          </div>
+
+          <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+            <p className="text-lg font-semibold text-gray-700">
+              School Fee Receipt
+            </p>
+            <button className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+              Download
+            </button>
+          </div>
+
+          <div className="my-6 space-y-3 text-sm text-gray-600">
+            <p>
+              <span className="font-semibold text-gray-800 italic">
+                Received with Thanks from:
+              </span>{" "}
+              {studentInfoData?.studentFirstName}{" "}
+              {studentInfoData?.studentLastName}
+            </p>
+            <p>
+              <span className="font-semibold text-gray-800 italic">
+                StudentID:
+              </span>{" "}
+              {studentInfoData?.enrollmentID}
+            </p>
+            <div className="flex items-center gap-10">
+              <p>
+                <span className="font-semibold text-gray-800 italic">
+                  Class:
+                </span>{" "}
+                {studentInfoData?.classAssigned}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-800 italic">
+                  Term:
+                </span>{" "}
+                {data?.presentTerm}
+              </p>
+            </div>
+            <p>
+              <span className="font-semibold text-gray-800 italic">
+                Payment Date:
+              </span>{" "}
+              {moment(Date.now()).format("LLL")}
+            </p>
+            <p>
+              <span className="font-semibold text-gray-800 italic">
+                Amount Paid:
+              </span>{" "}
+              <span className="text-green-600 font-bold">
+                ₦{studentInfoData?.classTermFee.toLocaleString()}
+              </span>
+            </p>
+            <p>
+              <span className="font-semibold text-gray-800 italic">
+                Payment Method:
+              </span>{" "}
+              in-person
+            </p>
+          </div>
+
+          <div className="border-t border-dashed border-gray-300 my-6"></div>
+
+          <p className="text-center text-sm text-gray-500 italic">
+            Thank you for your payment!
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+};
