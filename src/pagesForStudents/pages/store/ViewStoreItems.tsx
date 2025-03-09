@@ -7,6 +7,7 @@ import StoreItems from "./StoreItems";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemScreen from "./CartItemScreen";
 import { displayCart } from "../../../global/reduxState";
+import { Toaster } from "react-hot-toast";
 
 const ViewStoreItems = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const ViewStoreItems = () => {
 
   return (
     <div className="text-blue-950 relative">
+      <Toaster />
       <LittleHeader name={"School's Store"} />
 
       <div className="my-20" />

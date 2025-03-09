@@ -63,7 +63,7 @@ export const useSchoolTermDetails = (termID: string) => {
 export const useSchool = (schoolID: string) => {
   const { data } = useSWR(`api/view-school/${schoolID}`, () => {
     return readSchool(schoolID).then((res) => {
-      return res.data;
+      return res;
     });
   });
 

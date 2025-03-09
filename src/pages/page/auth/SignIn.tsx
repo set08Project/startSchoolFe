@@ -35,16 +35,19 @@ const SignIn = () => {
     loginSchool(val)
       .then((res) => {
         if (res.status === 201) {
+          console.log(res);
           dispatch(loginState(res));
+
           dispatch(displayUserStatus(res.user));
+
           toast.success("login successful");
           setLoading(false);
 
           {
-            !loading && navigate("/dashboard");
+            // !loading && navigate("/dashboard");
           }
           const x = setTimeout(() => {
-            window.location.reload();
+            // window.location.reload();
             clearTimeout(x);
           }, 10);
         } else {
