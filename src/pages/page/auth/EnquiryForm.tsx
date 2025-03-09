@@ -220,7 +220,7 @@ const EnquiryForm = () => {
               </div>
               <div className="ml-5 h-[40%] w-full ">
                 <div className="bg-white w-full py-6 rounded-lg flex justify-between items-center lg:flex-row flex-col">
-                  <div className="w-full">
+                  <div className="w-full ">
                     <PhoneNumberInput
                       onChange={(phone: any) => {
                         setSchoolPhoneNumber(phone);

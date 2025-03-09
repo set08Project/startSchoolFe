@@ -192,7 +192,7 @@ export const adminRouter = createBrowserRouter([
       },
 
       {
-        path: "/other-school-payment",
+        path: "other-school-payment",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <OtherPaymentRecipt />

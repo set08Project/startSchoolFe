@@ -19,7 +19,11 @@ const AnalyticScreen: React.FC = () => {
 
   const otherPayment = _?.sumBy(
     termData?.data?.paymentOptions,
+<<<<<<< HEAD
     (option: any) => Number(option.paymentAmount) || 0
+=======
+    "paymentAmount"
+>>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
   );
 
   const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
@@ -33,12 +37,24 @@ const AnalyticScreen: React.FC = () => {
     termData?.data?.paymentOptions
   );
 
+<<<<<<< HEAD
+=======
+  // console.log(termData?.data?.paymentOptions);
+  // console.log(termData?.data?.storePayment);
+
+>>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats
           title="Inflow[income]"
+<<<<<<< HEAD
           total={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
+=======
+          total={`₦${parseFloat(
+            `${otherPayment + schoolFeePayment + storePayment}`
+          ).toLocaleString()}`}
+>>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
           rate=""
           levelUp
         >

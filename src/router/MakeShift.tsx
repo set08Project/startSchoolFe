@@ -20,6 +20,8 @@ const MakeShift = () => {
   const [state, setState] = useState<any>({} || "" || 0);
   const user = useSelector((state: any) => state.user);
 
+  console.log(user);
+
   useEffect(() => {
     let timer = setTimeout(() => {
       if (userStatus === "school-admin") {
