@@ -46,6 +46,7 @@ const CartItemScreen = () => {
 
   return (
     <div className="flex w-full h-full flex-col items-center ">
+      <Toaster />
       <div className="flex w-full  justify-between  ">
         <div className=" flex items-center justify-between px-3 w-full">
           <div className="text-red-600 text-[12px]">

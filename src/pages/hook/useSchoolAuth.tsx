@@ -1,7 +1,6 @@
 import useSWR, { mutate } from "swr";
 import {
   allSchools,
-  analyticPayment,
   classAttendance,
   getClassSubjects,
   getClassTimeTable,
@@ -34,6 +33,7 @@ import {
   viewSessionTermHistory,
   viewStore,
   viewTermDetail,
+  analyticPayment,
 } from "../api/schoolAPIs";
 import {
   viewSchoolClassroom,

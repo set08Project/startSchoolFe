@@ -110,12 +110,16 @@ interface ChartOneState {
   }[];
 }
 
+<<<<<<< HEAD
+const ChartOne: React.FC<any> = () => {
+=======
 const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
   console.log(
     store?.map((el) => {
       return el?.amount;
     })
   );
+>>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
   const [state, setState] = useState<ChartOneState>({
     series: [
       {

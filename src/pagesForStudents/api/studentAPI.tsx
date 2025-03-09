@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = "http://localhost:2244/api";
 
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
@@ -930,6 +931,7 @@ export const verifyOtherCashPayment = async (studentID: string, data: any) => {
     return error;
   }
 };
+
 export const getStudentByEnrollmentID = async (studentID: string) => {
   try {
     return await axios

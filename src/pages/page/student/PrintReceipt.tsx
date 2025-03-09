@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import Button from "../../../components/reUse/Button";
 import { MdClose, MdPayment } from "react-icons/md";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useSchoolData } from "../../../pages/hook/useSchoolAuth";
@@ -16,7 +16,7 @@ interface iProps {
   props?: any;
 }
 
-const MakeOtherPayment: FC<iProps> = ({ props }) => {
+const PrintReciptScreen: FC<iProps> = ({ props }) => {
   const { data } = useSchoolData();
 
   const [paymentName, setPaymentName] = useState<string>("");
@@ -62,28 +62,30 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
       });
   };
 
+  console.log(props);
+
   return (
     <div className="">
-      {/* <Toaster position="top-center" reverseOrder={true} /> */}
+      <Toaster position="top-center" reverseOrder={true} />
       <div className=" text-[13px]  font-medium">
         <label
           htmlFor="other_payments"
           className=" transition-all duration-300 cursor-pointer "
         >
           <div className="flex">
-            <div className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 text-white border-none font-medium py-4 text-[13px] w-full  px-5 leading-tight flex justify-center items-center rounded-md gap-2 ">
-              <MdPayment size={20} />
-              <div>Other Payments</div>
+            <div className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+              Get Receipt
             </div>
           </div>
         </label>
         <div className="" />
-        {/* Put this part before </body> tag */}
         <input type="checkbox" id="other_payments" className="modal-toggle" />
         <div className="modal rounded-md text-blue-950 text-left" role="dialog">
           <div className="modal-box bg-white rounded-md">
             <div className="flex items-center justify-between my-4 ">
-              <p className="font-bold">Making Payment for other things</p>
+              <p className="font-bold">
+                Making Payment for other things: {props?.firstName}
+              </p>
 
               <label
                 htmlFor="other_payments"
@@ -97,7 +99,7 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
               Make payments conveniently without stress using cash, cards,
               digital wallets, or bank transfers. Digital transactions simplify
               financial activities, while security measures ensure safe
-              payments!
+              payments!45
               <br />
             </div>
             <div className="mt-10 w-full gap-2 flex flex-col items-center">
@@ -215,7 +217,7 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                 </div>
               ) : (
                 <Button
-                  name="Can't Proceed"
+                  name="Can't Proceed Print"
                   className="bg-[lightgray] text-blue-950 mx-0 cursor-not-allowed"
                 />
               )}
@@ -231,4 +233,4 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
   );
 };
 
-export default MakeOtherPayment;
+export default PrintReciptScreen;
