@@ -839,102 +839,120 @@ const ViewStudent = () => {
 
 export default ViewStudent;
 
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
   const { studentInfoData } = useStudentInfoData(props);
   const { data } = useSchoolData();
-  useEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
 
-    scrollToTop();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  console.log(studentInfoData);
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-center text-blue-950 mb-6">
-        {/* Delete Student */}
-      </h1>
+  const handleDownloadPDF = () => {
+    const capture = document.getElementById("receipt-content");
+    if (capture) {
+      html2canvas(capture, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
+        pdf.save(`School_Fee_Receipt_${studentInfoData?.studentFirstName}.pdf`);
+      });
+    }
+  };
 
-      <section
-      //   className=" w-full
-      // flex justify-center items-center h-full"
-      >
-        <div className="relative mt-20 max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-gray-200">
-          <div className="black cursor-pointer bg-gray-500 rounded-full absolute z-10">
-            <MdClose
-              size={30}
-              onClick={() => {
-                setToggleView(false);
-                setStateID("");
-              }}
-              className="text-black absolute z-10 cursor-pointer"
-            />
-          </div>
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+      <div className="relative w-full max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-gray-200">
+        <button
+          className="absolute top-3 right-3 bg-gray-300 rounded-full p-1"
+          onClick={() => {
+            setToggleView(false);
+            setStateID("");
+          }}
+        >
+          <MdClose size={25} className="text-gray-700" />
+        </button>
+
+        <div id="receipt-content">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-700">
-              {studentInfoData?.schoolName}
+              {studentInfoData?.schoolName || "School Name"}
             </h2>
-            <p className="text-sm text-gray-500">{data?.address}</p>
+            <p className="text-sm text-gray-500">
+              {data?.address || "Address"}
+            </p>
           </div>
 
           <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
             <p className="text-lg font-semibold text-gray-700">
               School Fee Receipt
             </p>
-            <button className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+            >
               Download
             </button>
           </div>
 
           <div className="my-6 space-y-3 text-sm text-gray-600">
             <p>
-              <span className="font-semibold text-gray-800 italic">
-                Received with Thanks from:
+              <span className="font-semibold text-blue-950 italic">
+                Received from :
               </span>{" "}
               {studentInfoData?.studentFirstName}{" "}
               {studentInfoData?.studentLastName}
             </p>
             <p>
-              <span className="font-semibold text-gray-800 italic">
-                StudentID:
+              <span className="font-semibold text-blue-950 italic">
+                Parent / Gurdian email :
+              </span>{" "}
+              {studentInfoData?.parentEmail}
+            </p>
+            <p>
+              <span className="font-semibold text-blue-950 italic">
+                Student ID :
               </span>{" "}
               {studentInfoData?.enrollmentID}
             </p>
             <div className="flex items-center gap-10">
               <p>
-                <span className="font-semibold text-gray-800 italic">
-                  Class:
+                <span className="font-semibold text-blue-950 italic">
+                  Class :
                 </span>{" "}
                 {studentInfoData?.classAssigned}
               </p>
               <p>
-                <span className="font-semibold text-gray-800 italic">
-                  Term:
+                <span className="font-semibold text-blue-950 italic">
+                  Term :
                 </span>{" "}
                 {data?.presentTerm}
               </p>
             </div>
             <p>
-              <span className="font-semibold text-gray-800 italic">
-                Payment Date:
+              <span className="font-semibold text-blue-950 italic">
+                Payment Date :
               </span>{" "}
               {moment(Date.now()).format("LLL")}
             </p>
             <p>
-              <span className="font-semibold text-gray-800 italic">
-                Amount Paid:
+              <span className="font-semibold text-blue-950 italic">
+                Amount Paid :
               </span>{" "}
               <span className="text-green-600 font-bold">
-                ₦{studentInfoData?.classTermFee.toLocaleString()}
+                ₦
+                {studentInfoData?.classTermFee
+                  ? studentInfoData.classTermFee.toLocaleString()
+                  : "0"}
               </span>
             </p>
             <p>
-              <span className="font-semibold text-gray-800 italic">
-                Payment Method:
+              <span className="font-semibold text-blue-950 italic">
+                Payment Method :
               </span>{" "}
-              in-person
+              In-Person
             </p>
           </div>
 
@@ -944,7 +962,7 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
             Thank you for your payment!
           </p>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
