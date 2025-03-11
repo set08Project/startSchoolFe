@@ -28,7 +28,7 @@ import {
   viewTermlyBudget,
   viewTermlyExpense,
 } from "../../pages/api/schoolAPIs";
-import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
+// import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
 
 export const useStudentCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -47,8 +47,20 @@ export const useMidTestStudentPerformance = (studentID: string) => {
       return viewStudentPerformanceMidTest(studentID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("midTestPerformace")!) || null,
     }
   );
+  useEffect(() => {
+    if (midTestPerformace) {
+      localStorage.setItem(
+        "midTestPerformace",
+        JSON.stringify(midTestPerformace)
+      );
+    }
+  }, [midTestPerformace]);
   return { midTestPerformace };
 };
 
