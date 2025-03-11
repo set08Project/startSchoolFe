@@ -15,6 +15,7 @@ import { useState } from "react";
 import { FiMinus } from "react-icons/fi";
 import { IoAddSharp } from "react-icons/io5";
 import { UnLazyImage } from "@unlazy/react";
+import toast, { Toaster } from "react-hot-toast";
 
 const CartItemScreen = () => {
   const [toggle, setToggle] = useState<Boolean>(false);
@@ -45,6 +46,7 @@ const CartItemScreen = () => {
 
   return (
     <div className="flex w-full h-full flex-col items-center ">
+      <Toaster />
       <div className="flex w-full  justify-between  ">
         <div className=" flex items-center justify-between px-3 w-full">
           <div className="text-red-600 text-[12px]">
@@ -166,21 +168,28 @@ const CartItemScreen = () => {
                       className="bg-blue-950 w-full mx-0 py-5"
                       onClick={() => {
                         setToggle(true);
-
-                        storePayment({
-                          email: studentInfo?.parentEmail,
-                          amount: cost + 500,
-                          subAccountCode: data?.bankDetails?.accountPaymentCode,
-                        }).then((res) => {
-                          if (res) {
-                            dispatch(
-                              paymentRef(res?.data?.data?.data?.reference)
-                            );
-                            location.replace(
-                              res?.data?.data?.data?.authorization_url
-                            );
-                          }
-                        });
+                        if (studentInfo?.parentEmail) {
+                          storePayment({
+                            email: studentInfo?.parentEmail,
+                            amount: cost + 500,
+                            subAccountCode:
+                              data?.bankDetails?.accountPaymentCode,
+                          }).then((res) => {
+                            if (res) {
+                              dispatch(
+                                paymentRef(res?.data?.data?.data?.reference)
+                              );
+                              console.log(res);
+                              location.replace(
+                                res?.data?.data?.data?.authorization_url
+                              );
+                            }
+                          });
+                        } else {
+                          toast.error(
+                            "Please update Parent's email for permission"
+                          );
+                        }
 
                         const x = setTimeout(() => {
                           setToggle(false);

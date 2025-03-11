@@ -1,9 +1,18 @@
 import axios from "axios";
 
+<<<<<<< HEAD
 // Working Locally
 
 const URL: string =
   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+=======
+// const URL: string =
+// import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+
+// const URL: string = "http://localhost:2244/api";
+
+const URL: string = "https://startschoolbe-4.onrender.com/api";
+>>>>>>> 282d59d947bf7d9a65ae5ab7761783550a845811
 
 // Working Online
 // const URL: string = "https://startschoolbe-3.onrender.com/api";

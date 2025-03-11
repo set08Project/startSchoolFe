@@ -68,8 +68,6 @@ const Layout: FC = () => {
       }
     };
 
-    console.log(validateClass(classRM.toUpperCase()));
-
     try {
       // if (approved) {
       setLoading(true);
@@ -102,11 +100,12 @@ const Layout: FC = () => {
   return (
     <div className="flex w-[100%] ">
       <div
-        className={`md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50 ${
-          data?.categoryType === "Secondary"
-            ? "text-blue-900"
-            : "text-green-900"
-        } ${data?.categoryType === "Secondary" ? "bg-blue-950" : "bg-red-950"}`}
+        className={`md:flex w-[250px] h-[100vh] fixed hidden  transition-all duration-300 z-50 
+          ${
+            data?.categoryType === "Secondary"
+              ? "text-blue-900"
+              : "text-green-900"
+          }`}
       >
         <Sider />
       </div>
