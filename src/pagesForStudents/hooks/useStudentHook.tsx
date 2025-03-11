@@ -71,8 +71,16 @@ export const useMidTestStudent = (subjectID: string) => {
       return viewMidTestStduent(subjectID!).then((res) => {
         return res.midTest;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("midTest")!) || null,
     }
   );
+  useEffect(() => {
+    if (midTest) {
+      localStorage.setItem("midTest", JSON.stringify(midTest));
+    }
+  }, [midTest]);
   return { midTest };
 };
 
@@ -166,8 +174,17 @@ export const useClassLessonNote = (classID: string) => {
       return classLessonNotes(classID).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("classLessonNote")!) || null,
     }
   );
+  useEffect(() => {
+    if (classLessonNote) {
+      localStorage.setItem("classLessonNote", JSON.stringify(classLessonNote));
+    }
+  }, [classLessonNote]);
   return { classLessonNote };
 };
 
