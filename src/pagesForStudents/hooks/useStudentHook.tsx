@@ -289,9 +289,16 @@ export const useReadOneClassInfo = (classID: string) => {
       return await readOneClassInfo(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("oneClass")!) || null,
     }
   );
-
+  useEffect(() => {
+    if (oneClass) {
+      localStorage.setItem("oneClass", JSON.stringify(oneClass));
+    }
+  }, [oneClass]);
   return { oneClass };
 };
 
@@ -386,8 +393,14 @@ export const useClassTimeTableViewer = (classID: string) => {
       return viewClassTimetable(classID!).then((res) => {
         return res.data.timeTable;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("viewTimeTable")!) || null,
     }
   );
+  useEffect(() => {
+    localStorage.setItem("viewTimeTable", JSON.stringify(viewTimeTable));
+  }, [viewTimeTable]);
   return { viewTimeTable };
 };
 
