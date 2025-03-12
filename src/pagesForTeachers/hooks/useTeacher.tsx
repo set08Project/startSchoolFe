@@ -516,8 +516,16 @@ export const usePurchasedData = (staffID: string) => {
       return viewPurchases(staffID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("purchasedData")!) || null,
     }
   );
+  useEffect(() => {
+    if (purchasedData) {
+      localStorage.setItem("purchasedData", JSON.stringify(purchasedData));
+    }
+  }, [purchasedData]);
   return { purchasedData };
 };
 
@@ -528,7 +536,15 @@ export const useTeacherNote = (staffID: string) => {
       return viewTeacherLessonNote(staffID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("teacherNote")!) || null,
     }
   );
+  useEffect(() => {
+    if (teacherNote) {
+      localStorage.setItem("teacherNote", JSON.stringify(teacherNote));
+    }
+  }, [teacherNote]);
   return { teacherNote };
 };
