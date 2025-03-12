@@ -283,8 +283,16 @@ export const useAttendance = (classID: string) => {
       return classAttendance(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("attendance")!) || null,
     }
   );
+  useEffect(() => {
+    if (attendance) {
+      localStorage.setItem("attendance", JSON.stringify(attendance));
+    }
+  }, [attendance]);
   return { attendance };
 };
 
@@ -295,17 +303,40 @@ export const useSchoolAnnouncement = (schoolID: string) => {
       return getSchoolAnncoement(schoolID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolAnnouncement")!) || null,
     }
   );
+  useEffect(() => {
+    if (schoolAnnouncement) {
+      localStorage.setItem(
+        "schoolAnnouncement",
+        JSON.stringify(schoolAnnouncement)
+      );
+    }
+  }, [schoolAnnouncement]);
   return { schoolAnnouncement };
 };
 
 export const useSchoolEvent = (schoolID: string) => {
-  const { data: schoolEvent } = useSWR(`api/view-event/${schoolID}`, () => {
-    return getSchoolEvent(schoolID!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data: schoolEvent } = useSWR(
+    `api/view-event/${schoolID}`,
+    () => {
+      return getSchoolEvent(schoolID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolEvent")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (schoolEvent) {
+      localStorage.setItem("schoolEvent", JSON.stringify(schoolEvent));
+    }
+  }, [schoolEvent]);
   return { schoolEvent };
 };
 
@@ -316,8 +347,20 @@ export const useSubjectAssignment = (subjectID: string) => {
       return classAssignment(subjectID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("subjectAssignment")!) || null,
     }
   );
+  useEffect(() => {
+    if (subjectAssignment) {
+      localStorage.setItem(
+        "subjectAssignment",
+        JSON.stringify(subjectAssignment)
+      );
+    }
+  }, [subjectAssignment]);
   return { subjectAssignment };
 };
 
