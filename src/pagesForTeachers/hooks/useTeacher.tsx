@@ -223,26 +223,56 @@ export const useSujectQuiz = (subjectID: string) => {
       return readSubjectQuiz(subjectID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("subjectQuiz")!) || null,
     }
   );
+  useEffect(() => {
+    if (subjectQuiz) {
+      localStorage.setItem("subjectQuiz", JSON.stringify(subjectQuiz));
+    }
+  }, [subjectQuiz]);
   return { subjectQuiz };
 };
 
 export const useExam = (quizID: string) => {
-  const { data: examData } = useSWR(`api/view-exam/${quizID}`, () => {
-    return getExam(quizID!).then((res: any) => {
-      return res.data;
-    });
-  });
+  const { data: examData } = useSWR(
+    `api/view-exam/${quizID}`,
+    () => {
+      return getExam(quizID!).then((res: any) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("examData")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (examData) {
+      localStorage.setItem("examData", JSON.stringify(examData));
+    }
+  }, [examData]);
   return { examData };
 };
 
 export const useQuiz = (quizID: string) => {
-  const { data: quizData } = useSWR(`api/view-quiz/${quizID}`, () => {
-    return readQuiz(quizID!).then((res: any) => {
-      return res.data;
-    });
-  });
+  const { data: quizData } = useSWR(
+    `api/view-quiz/${quizID}`,
+    () => {
+      return readQuiz(quizID!).then((res: any) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("quizData")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (quizData) {
+      localStorage.setItem("quizData", JSON.stringify(quizData));
+    }
+  }, [quizData]);
   return { quizData };
 };
 
@@ -254,7 +284,6 @@ export const useAttendance = (classID: string) => {
         return res.data;
       });
     }
-    // { refreshInterval: 1000 }
   );
   return { attendance };
 };
