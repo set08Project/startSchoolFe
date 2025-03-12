@@ -466,11 +466,22 @@ export const useViewPerformance = (studentID: string) => {
 };
 
 export const useViewRemark = (studentID: string) => {
-  const { data: remarks } = useSWR(`api/view-remark/${studentID}`, () => {
-    return studentRemake(studentID!).then((res) => {
-      return res?.data;
-    });
-  });
+  const { data: remarks } = useSWR(
+    `api/view-remark/${studentID}`,
+    () => {
+      return studentRemake(studentID!).then((res) => {
+        return res?.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("remarks")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (remarks) {
+      localStorage.setItem("remarks", JSON.stringify(remarks));
+    }
+  }, [remarks]);
   return { remarks };
 };
 

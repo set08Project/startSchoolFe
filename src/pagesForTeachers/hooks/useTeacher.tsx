@@ -28,6 +28,7 @@ import {
 } from "../../pages/api/schoolAPIs";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useEffect } from "react";
 
 const localStorageProvider = () => {
   // When initializing, we restore the data from `localStorage` into SWR's internal cache:
@@ -59,8 +60,16 @@ export const useTeacherDetail = (teacherID: string) => {
       return viewTeacherDetail(teacherID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("teacherDetail")!) || null,
     }
   );
+  useEffect(() => {
+    if (teacherDetail) {
+      localStorage.setItem("teacherDetail", JSON.stringify(teacherDetail));
+    }
+  }, [teacherDetail]);
   return { teacherDetail };
 };
 
@@ -74,8 +83,16 @@ export const useTeacherInfo = () => {
       return viewTeacherDetail(dataID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("teacherInfo")!) || null,
     }
   );
+  useEffect(() => {
+    if (teacherInfo) {
+      localStorage.setItem("teacherInfo", JSON.stringify(teacherInfo));
+    }
+  }, [teacherInfo]);
   return { teacherInfo };
 };
 
@@ -86,8 +103,16 @@ export const useClassSubject = (classID: string) => {
       return readClassInfoSubject(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("subjectData")!) || null,
     }
   );
+  useEffect(() => {
+    if (subjectData) {
+      localStorage.setItem("subjectData", JSON.stringify(subjectData));
+    }
+  }, [subjectData]);
   return { subjectData };
 };
 
