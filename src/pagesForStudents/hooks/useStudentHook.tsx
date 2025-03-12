@@ -451,8 +451,17 @@ export const useViewPerformance = (studentID: string) => {
       return viewPerformanceTest(studentID!).then((res) => {
         return res?.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("performanceTest")!) || null,
     }
   );
+  useEffect(() => {
+    if (performanceTest) {
+      localStorage.setItem("performanceTest", JSON.stringify(performanceTest));
+    }
+  }, [performanceTest]);
   return { performanceTest };
 };
 
