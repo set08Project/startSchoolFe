@@ -105,11 +105,22 @@ export const useTermBudget = (schoolID: string) => {
 };
 
 export const useTermExpenses = (schoolID: string) => {
-  const { data: termlyExpense } = useSWR(`api/view-expense/${schoolID}`, () => {
-    return viewTermlyExpense(schoolID!).then((res: any) => {
-      return res.data;
-    });
-  });
+  const { data: termlyExpense } = useSWR(
+    `api/view-expense/${schoolID}`,
+    () => {
+      return viewTermlyExpense(schoolID!).then((res: any) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("termlyExpense")) || null,
+    }
+  );
+  useEffect(() => {
+    if (termlyExpense) {
+      localStorage.setItem("termlyExpense", JSON.stringify(termlyExpense));
+    }
+  }, [termlyExpense]);
   return { termlyExpense };
 };
 
@@ -122,8 +133,16 @@ export const useStudentInfo = () => {
       return viewStduentDetail(dataID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("studentInfo")!) || null,
     }
   );
+  useEffect(() => {
+    if (studentInfo) {
+      localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
+    }
+  });
   return { studentInfo };
 };
 
@@ -134,8 +153,17 @@ export const useStudentInfoData = (studentID: string) => {
       return viewStduentDetail(studentID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("studentInfoData")!) || null,
     }
   );
+  useEffect(() => {
+    if (studentInfoData) {
+      localStorage.setItem("studentInfoData", JSON.stringify(studentInfoData));
+    }
+  }, [studentInfoData]);
   return { studentInfoData };
 };
 
@@ -146,8 +174,20 @@ export const useStudentAttendant = (studentID: string) => {
       return viewStudentAttendance(studentID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("studentAttendance")!) || null,
     }
   );
+  useEffect(() => {
+    if (studentAttendance) {
+      localStorage.setItem(
+        "studentAttendance",
+        JSON.stringify(studentAttendance)
+      );
+    }
+  }, [studentAttendance]);
   return { studentAttendance };
 };
 
@@ -158,8 +198,20 @@ export const useAssignment = (classID: string) => {
       return classAssignment(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("classAssignments")!) || null,
     }
   );
+  useEffect(() => {
+    if (classAssignments) {
+      localStorage.setItem(
+        "classAssignments",
+        JSON.stringify(classAssignments)
+      );
+    }
+  }, [classAssignments]);
   return { classAssignments };
 };
 
