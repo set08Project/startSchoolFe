@@ -392,8 +392,16 @@ export const useComplain = (teacherID: string) => {
       return viewComplains(teacherID!).then((res) => {
         return res.data.complain;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("complainData")!) || null,
     }
   );
+  useEffect(() => {
+    if (complainData) {
+      localStorage.setItem("complainData", JSON.stringify(complainData));
+    }
+  }, [complainData]);
   return { complainData };
 };
 
@@ -404,8 +412,16 @@ export const useSubjectPerformance = (subjectID: string) => {
       return getStudentSubjectPerformance(subjectID!).then((res) => {
         return res;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("perform")) || null,
     }
   );
+  useEffect(() => {
+    if (perform) {
+      localStorage.setItem("perform", JSON.stringify(perform));
+    }
+  }, [perform]);
   return { perform };
 };
 
@@ -416,8 +432,16 @@ export const useExamination = (subjectID: string) => {
       return viewExamination(subjectID!).then((res) => {
         return res.exam;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("examination")!) || null,
     }
   );
+  useEffect(() => {
+    if (examination) {
+      localStorage.setItem("examination", JSON.stringify(examination));
+    }
+  }, [examination]);
   return { examination };
 };
 
@@ -428,8 +452,16 @@ export const useMidTest = (subjectID: string) => {
       return viewMidTest(subjectID!).then((res) => {
         return res.midTest;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("midTest")!) || null,
     }
   );
+  useEffect(() => {
+    if (midTest) {
+      localStorage.setItem("midTest", JSON.stringify(midTest));
+    }
+  }, [midTest]);
   return { midTest };
 };
 
@@ -440,8 +472,16 @@ export const useStudentGrade = (studentID: string) => {
       return viewStudentGrade(studentID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.stringify(localStorage.getItem("gradeData")!) || null,
     }
   );
+  useEffect(() => {
+    if (gradeData) {
+      localStorage.setItem("gradeData", JSON.stringify(gradeData));
+    }
+  }, [gradeData]);
   return { gradeData };
 };
 
@@ -452,8 +492,20 @@ export const useClassAcademicHistory = (classID: string) => {
       return viewClassAcademicHistory(classID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("classAcademicHistory")!) || null,
     }
   );
+  useEffect(() => {
+    if (classAcademicHistory) {
+      localStorage.setItem(
+        "classAcademicHistory",
+        JSON.stringify(classAcademicHistory)
+      );
+    }
+  }, [classAcademicHistory]);
   return { classAcademicHistory };
 };
 
