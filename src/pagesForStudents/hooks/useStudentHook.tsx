@@ -222,8 +222,17 @@ export const useLessonNote = (schoolID: string, staffID: string) => {
       return lessonNotes(schoolID, staffID).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("lessonNote")!) || null,
     }
   );
+  useEffect(() => {
+    if (lessonNote) {
+      localStorage.setItem("lessonNote", JSON.stringify(lessonNote));
+    }
+  }, [lessonNote]);
+
   return { lessonNote };
 };
 
