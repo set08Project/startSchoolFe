@@ -371,8 +371,16 @@ export const useLessonNote = (lessonID: string) => {
       return lessonNote(lessonID!).then((res) => {
         return res?.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("lessonNoteData")!) || null,
     }
   );
+  useEffect(() => {
+    if (lessonNoteData) {
+      localStorage.setItem("lessonNoteData", JSON.stringify(lessonNoteData));
+    }
+  }, [lessonNoteData]);
   mutate(`api/view-lesson-note-detail/${lessonID}`);
   return { lessonNoteData };
 };
