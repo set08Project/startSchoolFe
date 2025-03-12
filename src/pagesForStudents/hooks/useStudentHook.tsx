@@ -91,8 +91,16 @@ export const useTermBudget = (schoolID: string) => {
       return viewTermlyBudget(schoolID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("termBudget")!) || null,
     }
   );
+  useEffect(() => {
+    if (termBudget) {
+      localStorage.setItem("termBudget", JSON.stringify(termBudget));
+    }
+  }, [termBudget]);
   return { termBudget };
 };
 
@@ -233,8 +241,16 @@ export const useOneArticle = (studentID: string) => {
       return getOneArticle(studentID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("oneArticle")!) || null,
     }
   );
+  useEffect(() => {
+    if (oneArticle) {
+      localStorage.setItem("oneArticle", JSON.stringify(oneArticle));
+    }
+  }, [oneArticle]);
   return { oneArticle };
 };
 
@@ -245,8 +261,16 @@ export const useSchoolArticle = (schoolID: string) => {
       return getSchoolArticle(schoolID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("allArticle")!) || null,
     }
   );
+  useEffect(() => {
+    if (allArticle) {
+      localStorage.setItem("allArticle", JSON.stringify(allArticle));
+    }
+  }, [allArticle]);
   return { allArticle };
 };
 
@@ -257,8 +281,16 @@ export const useComplain = (studentID: string) => {
       return viewComplains(studentID!).then((res) => {
         return res.data.complain;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("complainData")!) || null,
     }
   );
+  useEffect(() => {
+    if (complainData) {
+      localStorage.setItem("complainData", JSON.stringify(complainData));
+    }
+  }, [complainData]);
   return { complainData };
 };
 
@@ -269,8 +301,20 @@ export const usePastQuestionHistory = (studentID: string) => {
       return getOneStudentHistory(studentID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("pastQuestionData")!) || null,
     }
   );
+  useEffect(() => {
+    if (pastQuestionData) {
+      localStorage.setItem(
+        "pastQuestionData",
+        JSON.stringify(pastQuestionData)
+      );
+    }
+  }, [pastQuestionData]);
   return { pastQuestionData };
 };
 
