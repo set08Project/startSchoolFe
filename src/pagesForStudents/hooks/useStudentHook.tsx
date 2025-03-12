@@ -411,8 +411,16 @@ export const usePurchasedStore = (studentID: string) => {
       return viewPurchasedEndPoint(studentID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("purchasedStore")!) || null,
     }
   );
+  useEffect(() => {
+    if (purchasedStore) {
+      localStorage.setItem("purchasedStore", JSON.stringify(purchasedStore));
+    }
+  }, [purchasedStore]);
   return { purchasedStore };
 };
 
@@ -423,8 +431,16 @@ export const useStudentSchoolFee = (studentID: string) => {
       return studentSchoolFeePayment(studentID!).then((res) => {
         return res?.data?.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("studentFees")!) || null,
     }
   );
+  useEffect(() => {
+    if (studentFees) {
+      localStorage.setItem("studentFees", JSON.stringify(studentFees));
+    }
+  }, [studentFees]);
   return { studentFees };
 };
 
