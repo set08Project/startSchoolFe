@@ -123,8 +123,14 @@ export const useClassTimeTable = (classID: string) => {
       return readClassInfoSubject(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("timetableData")!) || null,
     }
   );
+  useEffect(() => {
+    localStorage.setItem("timetableData", JSON.stringify(timetableData));
+  }, [timetableData]);
   return { timetableData };
 };
 
@@ -135,8 +141,17 @@ export const useTeacherSchedule = (teacherID: string) => {
       return readTeacherSchedule(teacherID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("teacherSchedule")!) || null,
     }
   );
+  useEffect(() => {
+    if (teacherSchedule) {
+      localStorage.setItem("teacherSchedule", JSON.stringify(teacherSchedule));
+    }
+  }, [teacherSchedule]);
   return { teacherSchedule };
 };
 
@@ -147,8 +162,17 @@ export const useTeacherStudent = (classID: string) => {
       return readTeacherSchedule(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("teacherSchedule")!) || null,
     }
   );
+  useEffect(() => {
+    if (teacherSchedule) {
+      localStorage.setItem("teacherSchedule", JSON.stringify(teacherSchedule));
+    }
+  }, [teacherSchedule]);
   return { teacherSchedule };
 };
 
@@ -159,8 +183,16 @@ export const useClassStudent = (classID: string) => {
       return readClassInfoStudent(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("classStudents")!) || null,
     }
   );
+  useEffect(() => {
+    if (classStudents) {
+      localStorage.setItem("classStudents", JSON.stringify(classStudents));
+    }
+  }, [classStudents]);
   return { classStudents };
 };
 
@@ -171,8 +203,16 @@ export const useSujectInfo = (subjectID: string) => {
       return readSubjectDetail(subjectID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("subjectInfo")!) || null,
     }
   );
+  useEffect(() => {
+    if (subjectInfo) {
+      localStorage.setItem("subjectInfo", JSON.stringify(subjectInfo));
+    }
+  }, [subjectInfo]);
   return { subjectInfo };
 };
 
