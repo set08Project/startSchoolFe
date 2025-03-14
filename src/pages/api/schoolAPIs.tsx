@@ -9,7 +9,6 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe-3.onrender.com/api";
 // const URL2: string = "https://startschoolbe-3.onrender.com";
 
-
 // const URL: string = "https://server.justnext.com.ng/api";
 // const URL2: string = "https://server.justnext.com.ng";
 
