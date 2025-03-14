@@ -162,7 +162,7 @@ const EditLessonNote = () => {
   useEffect(() => {
     mutate(`api/view-lesson-note-detail/${noteID}`);
     console.log("run again!!");
-
+    console.log("Readdata:", readData);
     let x = setTimeout(() => {
       mainInputData = [
         {
