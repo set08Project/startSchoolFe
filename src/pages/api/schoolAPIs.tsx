@@ -2,15 +2,12 @@ import axios from "axios";
 
 // working locally
 
-const URL2: string = import.meta.env.VITE_URL;
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // Working Online
-// const URL: string = "https://startschoolbe-3.onrender.com/api";
-// const URL2: string = "https://startschoolbe-3.onrender.com";
-
-// const URL: string = "https://server.justnext.com.ng/api";
-// const URL2: string = "https://server.justnext.com.ng";
+const URL: string = "https://startschoolbe-4.onrender.com/api";
+const URL2: string = "https://startschoolbe-4.onrender.com";
 
 export const deleteSchool = async (schoolID: string) => {
   try {
