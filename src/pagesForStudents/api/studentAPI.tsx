@@ -1,5 +1,10 @@
 import axios from "axios";
 
+// Working Locally
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+
+// Working Online
+// const URL: string = "https://startschoolbe-3.onrender.com/api";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "http://localhost:2244/api";
 
