@@ -109,10 +109,17 @@ export const useSchoolCookie = () => {
       return getSchoolCookie().then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("dataID")!) || null,
     }
     // { refreshInterval: 3000 }
   );
-
+  useEffect(() => {
+    if (dataID) {
+      localStorage.setItem("dataID", JSON.stringify(dataID));
+    }
+  }, [dataID]);
   return { dataID: user?.id };
 };
 
@@ -120,11 +127,22 @@ export const useSchoolData = () => {
   const { dataID } = useSchoolCookie();
   const user = useSelector((state: any) => state.user);
 
-  const { data, isLoading } = useSWR(`api/view-school/${user?.id}`, () => {
-    return readSchool(dataID!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data, isLoading } = useSWR(
+    `api/view-school/${user?.id}`,
+    () => {
+      return readSchool(dataID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("data", JSON.stringify(data));
+    }
+  }, [data]);
   return { data, isLoading };
 };
 
@@ -156,19 +174,39 @@ export const useSchoolClassRM = () => {
       return getSchoolClassroom(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolClassroom")!) || null,
     }
 
     // { refreshInterval: 2000 }
   );
+  useEffect(() => {
+    if (schoolClassroom) {
+      localStorage.setItem("schoolClassroom", JSON.stringify(schoolClassroom));
+    }
+  }, [schoolClassroom]);
   return { schoolClassroom, mutate };
 };
 
 export const useViewSchoolClassRM = (schoolID: string) => {
-  const { data: viewClasses } = useSWR(`api/view-classrooms/`, async () => {
-    return await viewSchoolClassroom(schoolID!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data: viewClasses } = useSWR(
+    `api/view-classrooms/`,
+    async () => {
+      return await viewSchoolClassroom(schoolID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("viewClasses")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (viewClasses) {
+      localStorage.setItem("viewClasses", JSON.stringify(viewClasses));
+    }
+  }, [viewClasses]);
   return { viewClasses };
 };
 
@@ -181,17 +219,37 @@ export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
       return updateClassroomTeacher(dataID!, classID, data).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolClassroom")!) || null,
     }
   );
+  useEffect(() => {
+    if (schoolClassroom) {
+      localStorage.setItem("schoolClassroom", JSON.stringify(schoolClassroom));
+    }
+  }, [schoolClassroom]);
   return { schoolClassroom };
 };
 
 export const useSchoolClassRMDetail = (classID: string) => {
-  const { data: classroom } = useSWR(`api/view-classrooms/${classID}`, () => {
-    return getClassroom(classID!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data: classroom } = useSWR(
+    `api/view-classrooms/${classID}`,
+    () => {
+      return getClassroom(classID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("classroom")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (classroom) {
+      localStorage.setItem("classroom", JSON.stringify(classroom));
+    }
+  }, [classroom]);
   return { classroom };
 };
 
@@ -203,18 +261,41 @@ export const useSchoolAnnouncement = () => {
       return getSchoolAnncoement(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolAnnouncement")!) || null,
     }
   );
+  useEffect(() => {
+    if (schoolAnnouncement) {
+      localStorage.setItem(
+        "schoolAnnouncement",
+        JSON.stringify(schoolAnnouncement)
+      );
+    }
+  }, [schoolAnnouncement]);
   return { schoolAnnouncement };
 };
 
 export const useSchoolEvent = () => {
   const { dataID } = useSchoolCookie();
-  const { data: schoolEvent } = useSWR(`api/view-event/${dataID}`, () => {
-    return getSchoolEvent(dataID!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data: schoolEvent } = useSWR(
+    `api/view-event/${dataID}`,
+    () => {
+      return getSchoolEvent(dataID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolEvent")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (schoolEvent) {
+      localStorage.setItem("schoolEvent", JSON.stringify(schoolEvent));
+    }
+  }, [schoolEvent]);
   return { schoolEvent };
 };
 
@@ -227,9 +308,17 @@ export const useSchoolTeacher = () => {
       return await viewSchoolTeacher(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolTeacher")!) || null,
     }
     // { refreshInterval: 3500 }
   );
+  useEffect(() => {
+    if (schoolTeacher) {
+      localStorage.setItem("schoolTeacher", JSON.stringify(schoolTeacher));
+    }
+  }, [schoolTeacher]);
   return { schoolTeacher };
 };
 
