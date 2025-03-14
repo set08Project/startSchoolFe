@@ -43,30 +43,60 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 export const useSchoolRegister = (reader: any) => {
-  const { mutate } = useSWR("api/register-school", () => {
-    registerSchool(reader);
-  });
-
+  const { mutate } = useSWR(
+    "api/register-school",
+    () => {
+      registerSchool(reader);
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("mutate")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (mutate) {
+      localStorage.setItem("mutate", JSON.stringify(mutate));
+    }
+  }, [mutate]);
   return { mutate };
 };
 
 export const useSchoolTermDetails = (termID: string) => {
-  const { data } = useSWR(`api/view-school-term/${termID}`, () => {
-    return analyticPayment(termID).then((res) => {
-      return res.data;
-    });
-  });
-
+  const { data } = useSWR(
+    `api/view-school-term/${termID}`,
+    () => {
+      return analyticPayment(termID).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("data", JSON.stringify(data));
+    }
+  }, [data]);
   return { data };
 };
 
 export const useSchool = (schoolID: string) => {
-  const { data } = useSWR(`api/view-school/${schoolID}`, () => {
-    return readSchool(schoolID).then((res) => {
-      return res;
-    });
-  });
-
+  const { data } = useSWR(
+    `api/view-school/${schoolID}`,
+    () => {
+      return readSchool(schoolID).then((res) => {
+        return res;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("data", JSON.stringify(data));
+    }
+  }, [data]);
   return { data };
 };
 
@@ -99,11 +129,22 @@ export const useSchoolData = () => {
 };
 
 export const useSchoolDataByName = (schoolName: string) => {
-  const { data: schoolInfo } = useSWR(`api/view-school/${schoolName}`, () => {
-    return viewSchoolByName(schoolName!).then((res) => {
-      return res.data;
-    });
-  });
+  const { data: schoolInfo } = useSWR(
+    `api/view-school/${schoolName}`,
+    () => {
+      return viewSchoolByName(schoolName!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolInfo")!) || null,
+    }
+  );
+  useEffect(() => {
+    if (schoolInfo) {
+      localStorage.setItem("schoolInfo", JSON.stringify(schoolInfo));
+    }
+  }, [schoolInfo]);
   return { schoolInfo };
 };
 
