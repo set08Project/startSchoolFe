@@ -1,3 +1,4 @@
+import { ExpensiveChartScreen } from "@/pages/page/analytics/PieChart";
 import { ApexOptions } from "apexcharts";
 import _ from "lodash";
 import React, { useState } from "react";
@@ -110,31 +111,27 @@ interface ChartOneState {
   }[];
 }
 
-<<<<<<< HEAD
-const ChartOne: React.FC<any> = () => {
-=======
-const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
-  console.log(
-    store?.map((el) => {
-      return el?.amount;
-    })
-  );
->>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
+const ChartOne: React.FC<any> = ({
+  others,
+  schoolFee,
+  store,
+  expensePayment,
+  data,
+}) => {
   const [state, setState] = useState<ChartOneState>({
     series: [
-      {
-        name: "Store",
-        data: store?.map((el) => el?.amount),
-      },
-
-      {
-        name: "SchoolFees",
-        data: schoolFee?.map((el) => el?.amount),
-      },
-      {
-        name: "Others",
-        data: others?.map((el) => el?.paymentAmount / 500),
-      },
+      // {
+      //   name: "Store",
+      //   data: store?.map((el) => el?.amount),
+      // },
+      // {
+      //   name: "SchoolFees",
+      //   data: schoolFee?.map((el) => el?.amount),
+      // },
+      // {
+      //   name: "Others",
+      //   data: others?.map((el) => el?.paymentAmount / 500),
+      // },
     ],
   });
 
@@ -148,15 +145,16 @@ const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
   return (
     <div className="p-4 col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <div className="flex min-w-47.5">
+        <div className="flex w-full flex-wrap gap-3 ">
+          <div className="flex  w-full">
             <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full ">
-              <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium  w-[110%]">
-                12.01.2025 - 26.01.2025
+              <p className="font-semibold text-primary ">Total Revenue</p>
+
+              <p className="text-blue-950 text-[20px] font-semibold  w-[110%]">
+                ₦{parseFloat(others + schoolFee + store).toLocaleString()}
               </p>
             </div>
           </div>
@@ -164,24 +162,31 @@ const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
             <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
-            <div className="w-full">
-              <p className="font-semibold text-black/20">Total Expanses</p>
-              <p className="text-sm font-medium w-[120%]">
-                12.01.2025 - 26.01.2025
+          </div>
+        </div>
+
+        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+          <div className="flex w-full">
+            <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
+              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
+            </span>
+            <div className="w-full ">
+              <p className="font-semibold text-primary ">Total Expense</p>
+              <p className="text-blue-950 text-[20px] font-semibold  w-[110%] ">
+                ₦{parseFloat(expensePayment).toLocaleString()}
               </p>
             </div>
+          </div>
+          <div className="flex min-w-47.5">
+            <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+            </span>
           </div>
         </div>
         <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
             <button className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
-              Day
-            </button>
-            <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-              Week
-            </button>
-            <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-              Month
+              Term
             </button>
           </div>
         </div>
@@ -189,11 +194,17 @@ const ChartOne: React.FC<any> = ({ others, schoolFee, store }) => {
 
       <div>
         <div id="chartOne" className="-ml-5">
-          <ReactApexChart
+          {/* <ReactApexChart
             options={options}
             series={state.series}
             type="area"
             height={350}
+          /> */}
+
+          <ExpensiveChartScreen
+            expense={expensePayment}
+            revenue={others + schoolFee + store}
+            data={data}
           />
         </div>
       </div>

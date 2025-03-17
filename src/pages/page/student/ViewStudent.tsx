@@ -863,8 +863,8 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-      <div className="relative w-full max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-gray-200">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/5  bg-opacity-30 z-50">
+      <div className="relative w-full max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-8 border border-gray-200">
         <button
           className="absolute top-3 right-3 bg-gray-300 rounded-full p-1"
           onClick={() => {
