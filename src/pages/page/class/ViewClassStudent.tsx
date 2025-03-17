@@ -32,6 +32,7 @@ import { udatedStudentBulkInfo } from "../../../pagesForTeachers/api/teachersAPI
 import { mutate } from "swr";
 import { MdClose } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa";
 interface iProps {
   props?: any;
   id?: string;
@@ -136,6 +137,7 @@ const ViewClassStudent: FC = () => {
   let el = classID;
   const [toggle, setToggle] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingValue, setLoadingValue] = useState<string>("");
   const [toggleValue, setToggleValue] = useState<string>("");
 
   const updated = (id: string) => {
@@ -189,7 +191,6 @@ const ViewClassStudent: FC = () => {
                         }`}
                       >
                         <div className="w-[50px] border-r">{i + 1}</div>
-
                         <div className="w-[90px] flex justify-center border-r">
                           <img
                             className="w-14 h-14 rounded-md border object-cover"
@@ -207,7 +208,6 @@ const ViewClassStudent: FC = () => {
                             </span>
                           </p>
                         </div>
-
                         <div className="w-[220px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
                             <label>1st Term</label>
@@ -285,11 +285,9 @@ const ViewClassStudent: FC = () => {
                         <div className="w-[100px] border-r">
                           <Remark data={props} id={classStudents?._id} />
                         </div>
-
                         <div className="w-[100px] border-r">
                           <AttendanceRatio props={props?._id} />
                         </div>
-
                         <div className="w-[100px] border-r  ">
                           {classStudents?.className}
                         </div>
@@ -330,15 +328,21 @@ const ViewClassStudent: FC = () => {
                         </div>
 
                         <View props={props} />
-                        <div className="w-[180px] border-r">
+                        <div className="w-[180px] border-r text-[10px]">
                           <Button
                             name={`${
-                              props?.viewReportCard
-                                ? `
-                              ${loading ? "updating..." : "Off-Restrict"}
-                              `
-                                : `${loading ? "updating..." : "Restriction"}`
+                              loading && loadingValue === props?._id
+                                ? ""
+                                : props?.viewReportCard
+                                ? "Free"
+                                : "Restrict"
                             }`}
+                            icon={
+                              loading &&
+                              loadingValue === props?._id && (
+                                <FaSpinner className="animate-spin text-[20px]" />
+                              )
+                            }
                             className={` ${
                               props?.viewReportCard
                                 ? "bg-red-500 text-white  hover:bg-red-600"
@@ -346,8 +350,8 @@ const ViewClassStudent: FC = () => {
                             } py-3  w-[85%] transition-all duration-300`}
                             onClick={() => {
                               setLoading(true);
+                              setLoadingValue(props?._id);
                               if (props?.viewReportCard === true) {
-                                console.log("This is True");
                                 updateStudentRestrictMode(
                                   data?._id,
                                   props?._id,
@@ -356,14 +360,15 @@ const ViewClassStudent: FC = () => {
                                   .then((res) => {
                                     if (res.status === 201) {
                                       toast.success("Restricted mode disabled");
-                                      mutate(`api/view-school/${data?._id}`);
+                                      mutate(
+                                        `api/view-all-class-students/${classID}`
+                                      );
                                     }
                                   })
                                   .finally(() => {
                                     setLoading(false);
                                   });
                               } else {
-                                console.log("This is False");
                                 updateStudentRestrictMode(
                                   data?._id,
                                   props?._id,
@@ -372,11 +377,14 @@ const ViewClassStudent: FC = () => {
                                   .then((res) => {
                                     if (res.status === 201) {
                                       toast.success("Restricted mode disabled");
-                                      mutate(`api/view-school/${data?._id}`);
+                                      mutate(
+                                        `api/view-all-class-students/${classID}`
+                                      );
                                     }
                                   })
                                   .finally(() => {
                                     setLoading(false);
+                                    setLoadingValue("");
                                   });
                               }
                             }}

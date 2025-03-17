@@ -1,5 +1,10 @@
 import axios from "axios";
 
+// Working Locally
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+
+// Working Online
+// const URL: string = "https://startschoolbe-3.onrender.com/api";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "http://localhost:2244/api";
 
@@ -780,6 +785,7 @@ export const viewPurchasedEndPoint = async (studentID: string) => {
 
 export const purchasedEndPoint = async (studentID: string, data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/purchase/${studentID}`, data)
       .then((res: any) => {
@@ -886,6 +892,7 @@ export const viewArticle = async (articleID: string, readerID: string) => {
 };
 // Making other payment
 export const makeOtherPayment = async (data: any) => {
+  // const URL: string = "http://localhost:2244/api";
   try {
     return await axios
       .post(`${URL}/make-other-school-payment`, data)
@@ -903,6 +910,8 @@ export const verifyOtherPayment = async (
   paymentName: any
 ) => {
   try {
+    // const urli: string = "http://localhost:2244/api";
+    // console.log(urli);
     return await axios
       .post(`${URL}/verify-other-payment/${studentID}/${refID}`, {
         paymentName,
@@ -917,6 +926,7 @@ export const verifyOtherPayment = async (
 
 export const verifyOtherCashPayment = async (studentID: string, data: any) => {
   try {
+    // const URL: string = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/verify-other-cash-payment/${studentID}`, data)
       .then((res: any) => {

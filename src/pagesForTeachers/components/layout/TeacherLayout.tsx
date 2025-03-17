@@ -101,7 +101,6 @@ const TeacherLayout: FC = () => {
             }}
           >
             <Outlet />
-
             {show && (
               //   <div className="relative  ">
               <div

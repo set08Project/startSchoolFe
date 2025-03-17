@@ -32,7 +32,16 @@ const AddSession = () => {
 
   const handleSubmit = () => {
     setStartToggle(true);
-    createNewSession(dataID, { year: start })
+
+    // createNewSession(data?._id, { year: start })
+    //   .then((res) => {
+    //     console.log("res: ", res);
+    //   })
+    //   .finally(() => {
+    //     setStartToggle(false);
+    //   });
+
+    createNewSession(data?._id, { year: start })
       .then((res) => {
         if (res.status === 201) {
           mutate(`api/view-school-session/${data?._id}`);
@@ -135,17 +144,21 @@ const AddSession = () => {
                       <ClipLoader size={20} color="white" className="mb-0" />
                     }
                     name={"creating Session"}
-                    className={` data?.categoryType === "Secondary"
+                    className={` ${
+                      data?.categoryType === "Secondary"
                         ? "bg-blue-950"
-                        : "bg-red-950" py-0 mx-0`}
+                        : "bg-red-950"
+                    } py-0 mx-0`}
                   />
                 </div>
               ) : (
                 <Button
                   name={"Proceed"}
-                  className={` data?.categoryType === "Secondary"
-                        ? "bg-blue-950"
-                        : "bg-red-950" mx-0`}
+                  className={` ${
+                    data?.categoryType === "Secondary"
+                      ? "bg-blue-950"
+                      : "bg-red-950"
+                  }`}
                   onClick={() => {
                     handleSubmit();
                   }}
