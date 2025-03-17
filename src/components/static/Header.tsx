@@ -169,7 +169,7 @@ const Header = () => {
 
       <div
         className={`absolute duration-300 transition-all ${
-          toggle ? "right-6 top-14  " : "right-6 -top-56  "
+          toggle ? "right-6 top-14  " : "right-6 -top-80  "
         }`}
       >
         <SmallPiece

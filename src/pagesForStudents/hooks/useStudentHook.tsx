@@ -118,8 +118,22 @@ export const useStudentAttendant = (studentID: string) => {
       return viewStudentAttendance(studentID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("studentAttendance")!) || null,
     }
   );
+
+  useEffect(() => {
+    if (studentAttendance) {
+      localStorage.setItem(
+        "studentAttendance",
+        JSON.stringify(studentAttendance)
+      );
+    }
+  }, [studentAttendance]);
+
   return { studentAttendance };
 };
 
@@ -216,8 +230,18 @@ export const useSchoolArticle = (schoolID: string) => {
       return getSchoolArticle(schoolID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("allArticle")!) || null,
     }
   );
+
+  useEffect(() => {
+    if (allArticle) {
+      localStorage.setItem("allArticle", JSON.stringify(allArticle));
+    }
+  }, [allArticle]);
+
   return { allArticle };
 };
 
@@ -228,8 +252,18 @@ export const useComplain = (studentID: string) => {
       return viewComplains(studentID!).then((res) => {
         return res.data.complain;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("complainData")!) || null,
     }
   );
+
+  useEffect(() => {
+    if (complainData) {
+      localStorage.setItem("complainData", JSON.stringify(complainData));
+    }
+  }, [complainData]);
+
   return { complainData };
 };
 
