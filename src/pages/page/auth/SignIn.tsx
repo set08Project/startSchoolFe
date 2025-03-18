@@ -44,14 +44,13 @@ const SignIn = () => {
           setLoading(false);
 
           {
-            // !loading && navigate("/dashboard");
+            !loading && navigate("/");
           }
           const x = setTimeout(() => {
-            // window.location.reload();
+            window.location.reload();
             clearTimeout(x);
           }, 10);
         } else {
-          console.log(res);
           if (res?.response?.data?.message === "Error finding school") {
             setLoading(false);
             toast.error("Error Finding School, Please Check your Connectivity");
