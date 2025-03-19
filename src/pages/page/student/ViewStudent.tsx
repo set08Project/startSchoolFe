@@ -956,7 +956,7 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
             <div className="border-t border-dashed border-gray-300 my-6" />
 
             <div className="my-6 space-y-3 text-sm text-gray-600">
-              <p className="flex">
+              <p className="flex flex-wrap">
                 <span className="font-semibold text-blue-950 italic w-[300px]">
                   Received from:
                 </span>{" "}
@@ -966,7 +966,7 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
                 </span>
               </p>
               <p className="flex">
-                <span className="font-semibold text-blue-950 italic w-[300px]">
+                <span className="font-semibold text-blue-950 italic max-w-[s00px]">
                   Parent / Gurdian email:
                 </span>{" "}
                 <span className="text-[16px] font-[500]">
