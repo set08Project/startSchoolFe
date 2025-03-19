@@ -14,7 +14,7 @@ import {
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
   // deleteAllStudent,
@@ -35,6 +35,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { FaSpinner } from "react-icons/fa6";
 import PrintReciptScreen from "./PrintReceipt";
 import { MdClose } from "react-icons/md";
+
+import { useReactToPrint } from "react-to-print";
 
 interface iProps {
   props?: any;
@@ -862,13 +864,16 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
     }
   };
 
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({ contentRef });
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/5  bg-opacity-30 z-50 ">
       <div className="relative w-full max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-8 border border-gray-200 overflow-hidden">
-        <div className="absolute text-[20px] font-[400] top-0 -left-60 text-blue-950 -z-1 -rotate-45 h-full ">
+        <div className="absolute text-[20px] font-[400] top-0 -left-60 text-blue-950/50 -z-1 -rotate-45 h-full ">
           {Array.from({ length: 20 }, (_, i: number) => {
             return (
-              <div className="flex gap-4 my-10 text-[25px] opacity-10" key={i}>
+              <div className="flex gap-4 my-10 text-[25px] opacity-5" key={i}>
                 <div className=" flex gap-4 tracking-widest ">
                   <p>School Fee Receipt</p>
                   <p>{studentInfoData?.schoolName || "School Name"}</p>
@@ -878,10 +883,10 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
             );
           })}
         </div>
-        <div className="absolute text-[20px] font-[400] -top-80 -right-40 text-blue-950 -z-1 -rotate-45 h-full ">
+        <div className="absolute text-[20px] font-[400] -top-80 -right-40 text-blue-950/50 -z-1 -rotate-45 h-full ">
           {Array.from({ length: 20 }, (_, i: number) => {
             return (
-              <div className="flex gap-4 my-10 text-[25px] opacity-10" key={i}>
+              <div className="flex gap-4 my-10 text-[25px] opacity-5" key={i}>
                 <div className=" flex gap-4 tracking-widest ">
                   <p>School Fee Receipt</p>
                   <p>{studentInfoData?.schoolName || "School Name"}</p>
@@ -914,138 +919,140 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
               >
                 Download Now
               </button>
+              {/* window.print(); */}
               <button
-                onClick={() => {
-                  window.print();
-                }}
+                onClick={() => handlePrint()}
                 className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
               >
                 Print
               </button>
             </div>
           </div>
-          <div className="border-t border-dashed border-gray-300 my-6" />
-          <div className="flex w-full justify-between mt-5">
-            <div className=" mt-5 mb-6">
-              <h2 className="text-2xl font-bold text-gray-700">
-                {studentInfoData?.schoolName || "School Name"}
-              </h2>
-              <p className="text-[16px] leading-4 text-gray-500 w-[300px]">
-                {data?.address || "Address"}
-              </p>
-              <p className="text-sm mt-3  text-gray-500 w-[300px] font-[300]">
-                {data?.phone || "Phono"}
-              </p>
-              <p className="text-sm   text-gray-500 w-[300px] font-[300]">
-                {data?.email || "email"}
-              </p>
-            </div>
-            <div>
-              <img
-                src={data?.avatar}
-                className="h-[120px] bg-blue-50 rounded-lg object-cover w-[150px]"
-              />
-            </div>
-          </div>
-          <div className="border-t border-dashed border-gray-300 my-6" />
 
-          <div className="my-6 space-y-3 text-sm text-gray-600">
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Received from:
-              </span>{" "}
-              <span className="text-[16px] font-[500]">
-                {studentInfoData?.studentFirstName}{" "}
-                {studentInfoData?.studentLastName}{" "}
-              </span>
-            </p>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Parent / Gurdian email:
-              </span>{" "}
-              <span className="text-[16px] font-[500]">
-                {studentInfoData?.parentEmail || "Email not Provided"}
-              </span>
-            </p>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Student ID :
-              </span>{" "}
-              <span className="text-[16px] font-[500]">
-                {" "}
-                {studentInfoData?.enrollmentID}
-              </span>
-            </p>
-            <div className="flex items-center gap-10">
+          <main ref={contentRef}>
+            <div className="border-t border-dashed border-gray-300 my-6" />
+            <div className="flex w-full justify-between mt-5">
+              <div className=" mt-5 mb-6">
+                <h2 className="text-2xl font-bold text-gray-700">
+                  {studentInfoData?.schoolName || "School Name"}
+                </h2>
+                <p className="text-[16px] leading-4 text-gray-500 w-[300px]">
+                  {data?.address || "Address"}
+                </p>
+                <p className="text-sm mt-3  text-gray-500 w-[300px] font-[300]">
+                  {data?.phone || "Phono"}
+                </p>
+                <p className="text-sm   text-gray-500 w-[300px] font-[300]">
+                  {data?.email || "email"}
+                </p>
+              </div>
+              <div>
+                <img
+                  src={data?.avatar}
+                  className="h-[120px] bg-blue-50 rounded-lg object-cover w-[150px]"
+                />
+              </div>
+            </div>
+            <div className="border-t border-dashed border-gray-300 my-6" />
+
+            <div className="my-6 space-y-3 text-sm text-gray-600">
               <p className="flex">
                 <span className="font-semibold text-blue-950 italic w-[300px]">
-                  Class :
+                  Received from:
+                </span>{" "}
+                <span className="text-[16px] font-[500]">
+                  {studentInfoData?.studentFirstName}{" "}
+                  {studentInfoData?.studentLastName}{" "}
+                </span>
+              </p>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Parent / Gurdian email:
+                </span>{" "}
+                <span className="text-[16px] font-[500]">
+                  {studentInfoData?.parentEmail || "Email not Provided"}
+                </span>
+              </p>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Student ID :
                 </span>{" "}
                 <span className="text-[16px] font-[500]">
                   {" "}
-                  {studentInfoData?.classAssigned}
+                  {studentInfoData?.enrollmentID}
                 </span>
               </p>
-              <br />
-            </div>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Term :
-              </span>{" "}
-              {data?.presentTerm}
-            </p>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Payment Date :
-              </span>{" "}
-              <span className="text-[16px] font-[500]">
-                {moment(Date.now()).format("LLL")}
-              </span>
-            </p>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Amount Paid :
-              </span>{" "}
-              <span className="text-green-600 font-bold">
+              <div className="flex items-center gap-10">
+                <p className="flex">
+                  <span className="font-semibold text-blue-950 italic w-[300px]">
+                    Class :
+                  </span>{" "}
+                  <span className="text-[16px] font-[500]">
+                    {" "}
+                    {studentInfoData?.classAssigned}
+                  </span>
+                </p>
+                <br />
+              </div>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Term :
+                </span>{" "}
+                {data?.presentTerm}
+              </p>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Payment Date :
+                </span>{" "}
                 <span className="text-[16px] font-[500]">
-                  ₦
-                  {studentInfoData?.classTermFee
-                    ? studentInfoData.classTermFee.toLocaleString()
-                    : "0"}
+                  {moment(Date.now()).format("LLL")}
                 </span>
-              </span>
-            </p>
-            <p className="flex">
-              <span className="font-semibold text-blue-950 italic w-[300px]">
-                Payment Method :
-              </span>{" "}
-              <span className="text-[16px] font-[500]"> In-Person</span>
-            </p>
-          </div>
+              </p>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Amount Paid :
+                </span>{" "}
+                <span className="text-green-600 font-bold">
+                  <span className="text-[16px] font-[500]">
+                    ₦
+                    {studentInfoData?.classTermFee
+                      ? studentInfoData.classTermFee.toLocaleString()
+                      : "0"}
+                  </span>
+                </span>
+              </p>
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Payment Method :
+                </span>{" "}
+                <span className="text-[16px] font-[500]"> In-Person</span>
+              </p>
+            </div>
 
-          <div className="border-t border-dashed border-gray-300 my-6" />
-          <div className="">
-            <p className="font-semibold text-blue-950 italic w-[300px] mb-2">
-              STATEMENT OF ACKNOWLEDGMENT:
-            </p>{" "}
-            <p className="text-blue-950 ">
-              This payment covers tuition fees otherwise known as{" "}
-              <strong>School-Fees</strong> for {data?.presentTerm} period.
-              Please retain this acknowledgment along with your receipt for
-              future reference.
-              <br />
-              Should you have any questions or require further clarification,
-              kindly contact the school office.
-              <br />
-              <br />
-              Thank you for your prompt payment and continued support.
-            </p>
-          </div>
-          <div className="border-t border-dashed border-gray-300 my-6" />
+            <div className="border-t border-dashed border-gray-300 my-6" />
+            <div className="">
+              <p className="font-semibold text-blue-950 italic w-[300px] mb-2">
+                STATEMENT OF ACKNOWLEDGMENT:
+              </p>{" "}
+              <p className="text-blue-950 ">
+                This payment covers tuition fees otherwise known as{" "}
+                <strong>School-Fees</strong> for {data?.presentTerm} period.
+                Please retain this acknowledgment along with your receipt for
+                future reference.
+                <br />
+                Should you have any questions or require further clarification,
+                kindly contact the school office.
+                <br />
+                <br />
+                Thank you for your prompt payment and continued support.
+              </p>
+            </div>
+            <div className="border-t border-dashed border-gray-300 my-6" />
 
-          <p className="text-center text-sm text-gray-500 italic">
-            Thank you for your payment!
-          </p>
+            <p className="text-center text-sm text-gray-500 italic">
+              Thank you for your payment!
+            </p>
+          </main>
         </div>
       </div>
     </div>
