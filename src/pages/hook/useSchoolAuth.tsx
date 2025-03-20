@@ -43,60 +43,30 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 export const useSchoolRegister = (reader: any) => {
-  const { mutate } = useSWR(
-    "api/register-school",
-    () => {
-      registerSchool(reader);
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("mutate")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (mutate) {
-      localStorage.setItem("mutate", JSON.stringify(mutate));
-    }
-  }, [mutate]);
+  const { mutate } = useSWR("api/register-school", () => {
+    registerSchool(reader);
+  });
+
   return { mutate };
 };
 
 export const useSchoolTermDetails = (termID: string) => {
-  const { data } = useSWR(
-    `api/view-school-term/${termID}`,
-    () => {
-      return analyticPayment(termID).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("data", JSON.stringify(data));
-    }
-  }, [data]);
+  const { data } = useSWR(`api/view-school-term/${termID}`, () => {
+    return analyticPayment(termID).then((res) => {
+      return res.data;
+    });
+  });
+
   return { data };
 };
 
 export const useSchool = (schoolID: string) => {
-  const { data } = useSWR(
-    `api/view-school/${schoolID}`,
-    () => {
-      return readSchool(schoolID).then((res) => {
-        return res;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("data", JSON.stringify(data));
-    }
-  }, [data]);
+  const { data } = useSWR(`api/view-school/${schoolID}`, () => {
+    return readSchool(schoolID).then((res) => {
+      return res;
+    });
+  });
+
   return { data };
 };
 
@@ -109,17 +79,11 @@ export const useSchoolCookie = () => {
       return getSchoolCookie().then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("dataID")!) || null,
     }
+
     // { refreshInterval: 3000 }
   );
-  useEffect(() => {
-    if (dataID) {
-      localStorage.setItem("dataID", JSON.stringify(dataID));
-    }
-  }, [dataID]);
+
   return { dataID: user?.id };
 };
 
@@ -127,42 +91,22 @@ export const useSchoolData = () => {
   const { dataID } = useSchoolCookie();
   const user = useSelector((state: any) => state.user);
 
-  const { data, isLoading } = useSWR(
-    `api/view-school/${user?.id}`,
-    () => {
-      return readSchool(dataID!).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("data")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("data", JSON.stringify(data));
-    }
-  }, [data]);
+  const { data, isLoading } = useSWR(`api/view-school/${user?.id}`, () => {
+    return readSchool(dataID!).then((res) => {
+      return res.data;
+    });
+  });
+
   return { data, isLoading };
 };
 
 export const useSchoolDataByName = (schoolName: string) => {
-  const { data: schoolInfo } = useSWR(
-    `api/view-school/${schoolName}`,
-    () => {
-      return viewSchoolByName(schoolName!).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("schoolInfo")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (schoolInfo) {
-      localStorage.setItem("schoolInfo", JSON.stringify(schoolInfo));
-    }
-  }, [schoolInfo]);
+  const { data: schoolInfo } = useSWR(`api/view-school/${schoolName}`, () => {
+    return viewSchoolByName(schoolName!).then((res) => {
+      return res.data;
+    });
+  });
+
   return { schoolInfo };
 };
 
@@ -174,39 +118,21 @@ export const useSchoolClassRM = () => {
       return getSchoolClassroom(dataID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("schoolClassroom")!) || null,
     }
 
     // { refreshInterval: 2000 }
   );
-  useEffect(() => {
-    if (schoolClassroom) {
-      localStorage.setItem("schoolClassroom", JSON.stringify(schoolClassroom));
-    }
-  }, [schoolClassroom]);
+
   return { schoolClassroom, mutate };
 };
 
 export const useViewSchoolClassRM = (schoolID: string) => {
-  const { data: viewClasses } = useSWR(
-    `api/view-classrooms/`,
-    async () => {
-      return await viewSchoolClassroom(schoolID!).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("viewClasses")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (viewClasses) {
-      localStorage.setItem("viewClasses", JSON.stringify(viewClasses));
-    }
-  }, [viewClasses]);
+  const { data: viewClasses } = useSWR(`api/view-classrooms/`, async () => {
+    return await viewSchoolClassroom(schoolID!).then((res) => {
+      return res.data;
+    });
+  });
+
   return { viewClasses };
 };
 
@@ -219,37 +145,19 @@ export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
       return updateClassroomTeacher(dataID!, classID, data).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("schoolClassroom")!) || null,
     }
   );
-  useEffect(() => {
-    if (schoolClassroom) {
-      localStorage.setItem("schoolClassroom", JSON.stringify(schoolClassroom));
-    }
-  }, [schoolClassroom]);
+
   return { schoolClassroom };
 };
 
 export const useSchoolClassRMDetail = (classID: string) => {
-  const { data: classroom } = useSWR(
-    `api/view-classrooms/${classID}`,
-    () => {
-      return getClassroom(classID!).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("classroom")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (classroom) {
-      localStorage.setItem("classroom", JSON.stringify(classroom));
-    }
-  }, [classroom]);
+  const { data: classroom } = useSWR(`api/view-classrooms/${classID}`, () => {
+    return getClassroom(classID!).then((res) => {
+      return res.data;
+    });
+  });
+
   return { classroom };
 };
 
@@ -261,41 +169,20 @@ export const useSchoolAnnouncement = () => {
       return getSchoolAnncoement(dataID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("schoolAnnouncement")!) || null,
     }
   );
-  useEffect(() => {
-    if (schoolAnnouncement) {
-      localStorage.setItem(
-        "schoolAnnouncement",
-        JSON.stringify(schoolAnnouncement)
-      );
-    }
-  }, [schoolAnnouncement]);
+
   return { schoolAnnouncement };
 };
 
 export const useSchoolEvent = () => {
   const { dataID } = useSchoolCookie();
-  const { data: schoolEvent } = useSWR(
-    `api/view-event/${dataID}`,
-    () => {
-      return getSchoolEvent(dataID!).then((res) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("schoolEvent")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (schoolEvent) {
-      localStorage.setItem("schoolEvent", JSON.stringify(schoolEvent));
-    }
-  }, [schoolEvent]);
+  const { data: schoolEvent } = useSWR(`api/view-event/${dataID}`, () => {
+    return getSchoolEvent(dataID!).then((res) => {
+      return res.data;
+    });
+  });
+
   return { schoolEvent };
 };
 
@@ -365,23 +252,11 @@ export const useClassTimeTable = (classID: string) => {
 };
 
 export const useSchoolStudents = (schoolID: string) => {
-  const { data: students } = useSWR(
-    `api/read-student/${schoolID}`,
-    () => {
-      return getSchoolStudents(schoolID!).then((res) => {
-        return res;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("students")!) || null,
-    }
-  );
-
-  useEffect(() => {
-    if (students) {
-      localStorage.setItem("students", JSON.stringify(students));
-    }
-  }, [students]);
+  const { data: students } = useSWR(`api/read-student/${schoolID}`, () => {
+    return getSchoolStudents(schoolID!).then((res) => {
+      return res;
+    });
+  });
 
   return { students };
 };
@@ -407,17 +282,8 @@ export const useTopSchoolStudent = (studentID: string) => {
       return topSchoolStudent(studentID!).then((res) => {
         return res;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("perform")!) || null,
     }
   );
-
-  useEffect(() => {
-    if (perform) {
-      localStorage.setItem("perform", JSON.stringify(perform));
-    }
-  }, [perform]);
 
   return { perform };
 };
@@ -449,23 +315,11 @@ export const useStudentAttendance = (studentID: string) => {
 };
 
 export const useNotes = (schoolID: string) => {
-  const { data: notes } = useSWR(
-    `api/view-lesson-notes/${schoolID}`,
-    () => {
-      return readNoted(schoolID!).then((res) => {
-        return res;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("notes")!) || null,
-    }
-  );
-
-  useEffect(() => {
-    if (notes) {
-      localStorage.setItem("notes", JSON.stringify(notes));
-    }
-  }, [notes]);
+  const { data: notes } = useSWR(`api/view-lesson-notes/${schoolID}`, () => {
+    return readNoted(schoolID!).then((res) => {
+      return res;
+    });
+  });
 
   return { notes };
 };
@@ -481,23 +335,11 @@ export const useStore = (schoolID: string) => {
 };
 
 export const useGallary = (schoolID: string) => {
-  const { data: gallary } = useSWR(
-    `api/view-gallary/${schoolID}`,
-    () => {
-      return viewGallary(schoolID!).then((res) => {
-        return res;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("gallary")!) || null,
-    }
-  );
-
-  useEffect(() => {
-    if (gallary) {
-      localStorage.setItem("gallary", JSON.stringify(gallary));
-    }
-  }, [gallary]);
+  const { data: gallary } = useSWR(`api/view-gallary/${schoolID}`, () => {
+    return viewGallary(schoolID!).then((res) => {
+      return res;
+    });
+  });
 
   return { gallary };
 };
@@ -545,18 +387,8 @@ export const useViewSessionTerm = (termID: string) => {
       return viewSessionTermHistory(termID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("sessionTermData")!) || null,
     }
   );
-
-  useEffect(() => {
-    if (sessionTermData) {
-      localStorage.setItem("sessionTermData", JSON.stringify(sessionTermData));
-    }
-  }, [sessionTermData]);
 
   return { sessionTermData };
 };
@@ -580,18 +412,8 @@ export const usePurchasedStoreInfo = (schoolID: string) => {
       return purchasedStoreInfo(schoolID!).then((res) => {
         return res?.data?.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("schoolPurchased")!) || null,
     }
   );
-
-  useEffect(() => {
-    if (schoolPurchased) {
-      localStorage.setItem("schoolPurchased", JSON.stringify(schoolPurchased));
-    }
-  }, [schoolPurchased]);
 
   return { schoolPurchased };
 };
@@ -657,17 +479,8 @@ export const useDeailyExpense = (schoolID: string) => {
       `api/read-term-daily-expense/${schoolID}`,
       async () => {
         return await readDailyExpense(schoolID).then((res: any) => res?.data);
-      },
-      {
-        fallbackData: JSON.parse(localStorage.getItem("dailyExpense")!) || null,
       }
     );
-
-    useEffect(() => {
-      if (dailyExpense) {
-        localStorage.setItem("dailyExpense", JSON.stringify(dailyExpense));
-      }
-    }, [dailyExpense]);
 
     return { dailyExpense };
   } catch (error) {

@@ -414,6 +414,24 @@ export const createMidTestData = async (
   }
 };
 
+export const deleteMidTestData = async (
+  teacherID: string,
+  subjectID: string,
+  midTestID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    // delete-mid-test/:teacherID/:subjectID/:midTestID"
+    return await axios
+      .delete(`${URL}/delete-mid-test/${teacherID}/${subjectID}/${midTestID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const readExam = async (quizID: string) => {
   try {
     return await axios.get(`${URL}/view-exam/${quizID}`).then((res: any) => {

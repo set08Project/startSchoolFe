@@ -12,8 +12,10 @@ import {
   useMidTest,
   useSubjectAssignment,
   useSujectQuiz,
+  useTeacherInfo,
 } from "../../hooks/useTeacher";
 import {
+  deleteMidTestData,
   deleteQuiz,
   readClassInfo,
   startExamination,
@@ -26,6 +28,7 @@ import { useStudentPerfomance } from "../../hooks/useQuizHook";
 import _ from "lodash";
 
 const QuizSetupScreen = () => {
+  const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
   const { examination } = useExamination(subjectID!);
@@ -266,7 +269,13 @@ const QuizSetupScreen = () => {
               </div>
               <div className="mt-4 text-center relative bottom-4">
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    deleteMidTestData(
+                      teacherInfo?._id,
+                      subjectID!,
+                      midTest?._id
+                    );
+                  }}
                   className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                 >
                   <FaTrashAlt size={20} className="mr-1" />
