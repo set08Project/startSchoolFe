@@ -312,7 +312,7 @@ export const useExamination = (subjectID: string) => {
 };
 
 export const useMidTest = (subjectID: string) => {
-  const { data: midTest } = useSWR(
+  const { data: midTest, mutate: midTestMutate } = useSWR(
     `api/view-subject-mid-test/${subjectID}`,
     () => {
       return viewMidTest(subjectID!).then((res) => {
@@ -321,7 +321,7 @@ export const useMidTest = (subjectID: string) => {
     }
   );
 
-  return { midTest };
+  return { midTest, midTestMutate };
 };
 
 export const useStudentGrade = (studentID: string) => {
