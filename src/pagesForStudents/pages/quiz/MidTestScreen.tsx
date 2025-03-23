@@ -112,7 +112,7 @@ const MidTestScreen = () => {
               quizData?.status.slice(1)
             } submitted successfully`
           );
-          navigate(`/quiz-result/${midTestID}`, {
+          navigate(`/confirm-quiz-take/${studentInfo?._id}`, {
             state: {
               correctAnswers,
               studentAnswers: state,

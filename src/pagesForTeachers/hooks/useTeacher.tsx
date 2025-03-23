@@ -21,6 +21,8 @@ import {
   readExam,
   getExam,
   viewMidTest,
+  getMidTestPerformance,
+  getMidTestPerformanceResut,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -337,6 +339,35 @@ export const useStudentGrade = (studentID: string) => {
   return { gradeData };
 };
 
+export const useMidTestResultPerformance = (quizID: string) => {
+  const { data: midTestPerformance } = useSWR(
+    `api/view-mid-test-performance/${quizID}`,
+    () => {
+      return getMidTestPerformance(quizID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { midTestPerformance };
+};
+
+export const useMidTestResultPerformanceData = (
+  subjectID: string,
+  quizID: string
+) => {
+  const { data: midTestPerformanceResult } = useSWR(
+    `api/view-mid-test-performance/${subjectID}/${quizID}`,
+    () => {
+      return getMidTestPerformanceResut(subjectID, quizID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { midTestPerformanceResult };
+};
+
 export const useClassAcademicHistory = (classID: string) => {
   const { data: classAcademicHistory } = useSWR(
     `api/view-class-result-history/${classID}`,
@@ -344,10 +375,6 @@ export const useClassAcademicHistory = (classID: string) => {
       return viewClassAcademicHistory(classID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("classAcademicHistory")!) || null,
     }
   );
 

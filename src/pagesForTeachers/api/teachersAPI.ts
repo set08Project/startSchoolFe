@@ -62,6 +62,40 @@ export const getOneStudentExamSubjectPerformance = async (
   }
 };
 
+export const getMidTestPerformanceResut = async (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(
+        `${URL}/view-one-subject-mid-test-performance/${subjectID}/${quizID}`
+      )
+      .then((res) => {
+        console.log("show me: ", res);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getMidTestPerformance = async (quizID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-mid-test-performance/${quizID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getOneStudentSubjectPerformance = async (
   subjectID: string,
   quizID: string
