@@ -76,6 +76,8 @@ const QuizSetupScreen = () => {
     }
   };
 
+  console.log(midTest?.performance);
+
   return (
     <div className="text-blue-950  relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
@@ -304,7 +306,7 @@ const QuizSetupScreen = () => {
                     {midTest?.subjectTitle}
                   </p>
                 </div>
-                <Link to={`/exam/details/${subjectID}/${midTest?._id}`}>
+                <Link to={`/mid-test/details/${subjectID}/${midTest?._id}`}>
                   <MdPlayCircle
                     size={40}
                     className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"
