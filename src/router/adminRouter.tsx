@@ -24,6 +24,7 @@ const ViewStudent = React.lazy(
 const ViewReport = React.lazy(() => import("../pages/page/report/ViewReport"));
 const HomeView = React.lazy(() => import("../pages/home/HomeView"));
 const HomeScreen = React.lazy(() => import("../pages/home/HomeScreen"));
+
 const Layout = React.lazy(() => import("../components/layout/Layout"));
 const MakeShift = React.lazy(() => import("./MakeShift"));
 

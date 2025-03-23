@@ -133,7 +133,7 @@ const CreateMidTestScreen = () => {
 
           <div className="h-full flex flex-col">
             <p className="my-2 font-medium capitalize border-b">
-              Set Examination Instruction
+              Set Mid-Test Instruction
             </p>
 
             <div>
