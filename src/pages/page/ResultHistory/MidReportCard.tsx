@@ -139,7 +139,14 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+interface iProps {
+  props?: any;
+  Data?: any;
+  id?: string;
+  i?: number;
+}
+
+const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
   const { classID } = useParams();
   const { data } = useSchoolData();
   const { gradeData } = useStudentGrade(props?._id);
@@ -162,6 +169,11 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
+
+  let resultValue = Data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  )?.performanceRating;
 
   return (
     <div
@@ -337,7 +349,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   );
 };
 
-const ReportCardApproved = () => {
+const MidReportCard = () => {
   const navigate = useNavigate();
   const { classID } = useParams();
 
@@ -357,7 +369,7 @@ const ReportCardApproved = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Admin's Report-card Remark and Approval"} />
+      <LittleHeader name={"Admin's Mid-Result Remark and Approval"} />
       <div className="mt-10" />
 
       <div className="flex w-full justify-end"></div>
@@ -475,4 +487,4 @@ const ReportCardApproved = () => {
   );
 };
 
-export default ReportCardApproved;
+export default MidReportCard;

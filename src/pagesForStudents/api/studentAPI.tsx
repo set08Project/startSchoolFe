@@ -93,11 +93,11 @@ export const getQuizRecord = async (studentID: string) => {
   }
 };
 
-export const viewStduentDetail: any = async (studentID: any) => {
+export const viewStduentDetail = async (studentID: string) => {
   try {
     return await axios
       .get(`${URL}/read-student-info/${studentID}`)
-      .then((res: any) => {
+      .then((res) => {
         return res?.data;
       });
   } catch (error) {

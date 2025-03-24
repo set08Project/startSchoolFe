@@ -83,8 +83,16 @@ const ClassReportCardReady = React.lazy(
   () => import("../pages/page/ResultHistory/ClassReportReady")
 );
 
+const ClassMidTermReady = React.lazy(
+  () => import("../pages/page/ResultHistory/ClassMidTermReady")
+);
+
 const ReportCardApproved = React.lazy(
   () => import("../pages/page/ResultHistory/ReportCard")
+);
+
+const MidReportCardApproved = React.lazy(
+  () => import("../pages/page/ResultHistory/MidReportCard")
 );
 
 const ResultDetailClass = React.lazy(
@@ -400,6 +408,15 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
+            path: "class-midresult-approve/:classID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <MidReportCardApproved />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
             path: "student-result/",
             element: (
               <Suspense fallback={<LoadingScreen />}>
@@ -423,6 +440,16 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ClassReportCardReady />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "class-report-mid-card",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ClassMidTermReady />
               </Suspense>
             ),
           },

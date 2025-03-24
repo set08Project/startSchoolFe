@@ -21,13 +21,13 @@ import {
   studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
-  verifyPayment1st,
+  // verifyPayment1st,
   viewComplains,
   viewGallary,
   viewPresentSession,
   viewSchoolByName,
   viewSchoolSession,
-  viewSchoolSessionTerm,
+  // viewSchoolSessionTerm,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewSessionTermHistory,
@@ -210,8 +210,16 @@ export const useSchoolSubject = () => {
       return viewSchoolSubjects(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolSubject")!) || null,
     }
   );
+  useEffect(() => {
+    if (schoolSubject) {
+      localStorage.setItem("schoolSubject", JSON.stringify(schoolSubject));
+    }
+  }, [schoolSubject]);
   return { schoolSubject };
 };
 

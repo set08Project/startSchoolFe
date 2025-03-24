@@ -108,12 +108,12 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
   };
 
   let resultValue = data?.find(
-    (el) =>
+    (el: any) =>
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   )?.performanceRating;
 
   const resultData = data?.find(
-    (el) =>
+    (el: any) =>
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   );
 
