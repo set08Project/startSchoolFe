@@ -337,7 +337,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   );
 };
 
-const ReportCardApproved = () => {
+const MidReportCard = () => {
   const navigate = useNavigate();
   const { classID } = useParams();
 
@@ -357,7 +357,7 @@ const ReportCardApproved = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Admin's Report-card Remark and Approval"} />
+      <LittleHeader name={"Admin's Mid-Result Remark and Approval"} />
       <div className="mt-10" />
 
       <div className="flex w-full justify-end"></div>
@@ -475,4 +475,4 @@ const ReportCardApproved = () => {
   );
 };
 
-export default ReportCardApproved;
+export default MidReportCard;

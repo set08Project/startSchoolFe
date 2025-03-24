@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 // working locally
 
@@ -9,21 +9,20 @@ const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "https://startschoolbe-4.onrender.com/api";
 // const URL2: string = "https://startschoolbe-4.onrender.com";
 
-export const deleteSchool = async (schoolID: string) => {
+export const deleteSchool = async (schoolID: string): Promise<any> => {
   try {
     return await axios
       .delete(`${URL}/delete-school/${schoolID}`)
-      .then((res: any) => {
+      .then((res: AxiosResponse) => {
         return res?.data;
       });
-  } catch (error: any) {
+  } catch (error) {
     return error;
   }
 };
 
 export const analyticPayment = async (termID: string) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/view-school-term/${termID}`)
       .then((res: any) => {
