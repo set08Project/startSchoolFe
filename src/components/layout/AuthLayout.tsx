@@ -4,10 +4,22 @@ const AuthLayout = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="text-blue-950 w-full min-h-screen flex flex-col ">
-      <div className={`${pathname === "/auth" ? "mt-5" : "mt-12"}`}>
+    <div
+      className="text-blue-950 w-full h-screen flex flex-col justify-center 
+    "
+    >
+      {/* <div className="mt-20" /> */}
+      <div
+        className={`
+          ${pathname === "/auth" ? "mt-5" : "mt-32"} 
+        flex `}
+      >
         <Outlet />
       </div>
+
+      {/* <div className="bg-red-50 h-full w-full flex justify-center">
+        <Outlet />
+      </div> */}
 
       <div className="flex-1" />
 

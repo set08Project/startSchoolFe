@@ -15,6 +15,7 @@ import { logout, updateAvatar } from "../../pages/api/schoolAPIs";
 import { useSchoolData } from "../../pages/hook/useSchoolAuth";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
+import { Countdown } from "./CountDown";
 
 interface iData {
   title?: string;
@@ -60,7 +61,6 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
   const [state, setState] = useState<string>("");
 
   const changeImage = (e: any) => {
-    console.log("updated...");
     const file = e.target.files[0];
 
     const formData: any = new FormData();
@@ -68,6 +68,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
     setState(file);
 
     dispatch(displayImageToggle(true));
+
     const timer = setTimeout(() => {
       updateAvatar(data?._id, formData).then((res) => {
         mutate(`api/view-school/${data?._id}`);
@@ -89,7 +90,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
 
   return (
     <div
-      className={`border  overflow-y-auto w-[250px] ${
+      className={`border overflow-y-auto w-[250px] text-blue-950  ${
         data?.categoryType === "Secondary" ? "bg-blue-50" : "bg-red-50"
       } shadow-sm min-h-48 rounded-md p-1 ${
         propName === "navs" ? "smallph h-[550px] overflow-y-auto" : ""
@@ -161,7 +162,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
 
       {log && (
         <div
-          className={`text-[12px] font-medium py-3 duration-300 transition-all ${
+          className={`text-[12px] text-blue-950 font-medium py-3 duration-300 transition-all ${
             data?.categoryType === "Secondary"
               ? "hover:bg-blue-950"
               : "hover:bg-red-950"
@@ -175,6 +176,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
               window.location.reload();
               navigate("/");
               clearTimeout(timer);
+              localStorage.claer();
             }, 200);
           }}
         >
@@ -186,7 +188,16 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
       )}
       <div className="mt-4" />
       <hr />
+
       <p className="p-2 text-center break-words text-[12px] font-bold uppercase ">
+        {data?.presentTerm === "1st Term" && (
+          <div className="mt-4 mb-2 px-2 text-center flex flex-col justify-center items-center border mx-2 rounded-md py-2">
+            <div className=" text-[13px] font-medium ">
+              <Countdown style1="14px" style2="12px" />
+            </div>
+          </div>
+        )}
+
         {data?.schoolName}
       </p>
     </div>

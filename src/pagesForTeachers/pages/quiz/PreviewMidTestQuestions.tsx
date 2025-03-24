@@ -59,8 +59,11 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("file", file);
           formData.append("theory", editorValue);
 
+          console.log("IDs: ", subjectQuiz?.classDetails!, subjectID!);
+
           createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
             .then((res: any) => {
+              console.log(res);
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);

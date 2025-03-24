@@ -145,7 +145,6 @@ const ScreenHome = () => {
 
         <div className="border rounded-md flex flex-col gap-2 w-full p-2 col-span-1 lg:col-span-3">
           {/* Appointment */}
-
           <div className=" rounded-md w-full overflow-x-auto">
             <div className="mb- text-medium capitalize">View Data Chart</div>
             <p className="text-[13px] text-black/70 mb-5">
@@ -171,7 +170,6 @@ const ScreenHome = () => {
               )}
             </div>
           </div>
-
           <div className=" rounded-md w-full overflow-x-auto">
             <div className="mb-4 text-medium capitalize">
               Top 5 Most Active Students

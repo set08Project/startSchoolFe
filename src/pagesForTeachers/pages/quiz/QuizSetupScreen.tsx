@@ -1,7 +1,7 @@
 // src/screens/QuizSetupScreen.js
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaTrashAlt, FaCheckDouble } from "react-icons/fa";
+import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
 import { MdPlayCircle, MdVisibilityOff, MdVisibility } from "react-icons/md";
 import LittleHeader from "../../components/layout/LittleHeader";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
@@ -12,8 +12,10 @@ import {
   useMidTest,
   useSubjectAssignment,
   useSujectQuiz,
+  useTeacherInfo,
 } from "../../hooks/useTeacher";
 import {
+  deleteMidTestData,
   deleteQuiz,
   readClassInfo,
   startExamination,
@@ -26,10 +28,11 @@ import { useStudentPerfomance } from "../../hooks/useQuizHook";
 import _ from "lodash";
 
 const QuizSetupScreen = () => {
+  const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
   const { examination } = useExamination(subjectID!);
-  const { midTest } = useMidTest(subjectID!);
+  const { midTest, midTestMutate } = useMidTest(subjectID!);
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
@@ -72,6 +75,8 @@ const QuizSetupScreen = () => {
       setSelectedQuizId(null);
     }
   };
+
+  console.log(midTest?.performance);
 
   return (
     <div className="text-blue-950  relative">
@@ -266,11 +271,28 @@ const QuizSetupScreen = () => {
               </div>
               <div className="mt-4 text-center relative bottom-4">
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    setLoading(true);
+                    deleteMidTestData(
+                      teacherInfo?._id,
+                      subjectID!,
+                      midTest?._id
+                    )
+                      .then(() => {
+                        midTestMutate();
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  }}
                   className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                 >
-                  <FaTrashAlt size={20} className="mr-1" />
-                  Delete Mid-Test
+                  {loading ? (
+                    <FaSpinner size={20} className="mr-1" />
+                  ) : (
+                    <FaTrashAlt size={20} className="mr-1" />
+                  )}
+                  {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
                 </button>
               </div>
 
@@ -284,7 +306,7 @@ const QuizSetupScreen = () => {
                     {midTest?.subjectTitle}
                   </p>
                 </div>
-                <Link to={`/exam/details/${subjectID}/${midTest?._id}`}>
+                <Link to={`/mid-test/details/${subjectID}/${midTest?._id}`}>
                   <MdPlayCircle
                     size={40}
                     className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"

@@ -21,6 +21,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
 import MakeOtherPayment from "../../pages/page/payment/MakeOtherPayment";
+import { Countdown } from "./CountDown";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -187,6 +188,14 @@ const Sider = () => {
       </div>
       {/* top box */}
 
+      {data?.presentTerm === "1st Term" && (
+        <div className="mt-4 px-2 text-center flex flex-col justify-center items-center border mx-2 rounded-md py-4">
+          <div className=" text-[13px] font-medium ">
+            <Countdown style1="16px" style2="14px" />
+          </div>
+        </div>
+      )}
+
       {/* top box */}
       <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
         <div className="mb-4 text-[13px] font-medium ">
@@ -200,7 +209,6 @@ const Sider = () => {
 
         <MakeOtherPayment />
       </div>
-
       <div className="mt-2 px-2 center flex flex-col border mx-2 rounded-md py-1">
         <div className="mb-4 text-[14px] uppercase font-bold">
           Clocking Students
@@ -280,7 +288,6 @@ const Sider = () => {
           {/* </NavLink> */}
         </div>
       </div>
-
       <div>
         <Toaster />
         {data?.categoryType === "Secondary" ||

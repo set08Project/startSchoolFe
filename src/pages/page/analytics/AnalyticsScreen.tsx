@@ -13,48 +13,49 @@ import {
   useSchoolTermDetails,
 } from "@/pages/hook/useSchoolAuth";
 import _ from "lodash";
+import { useTermExpenses } from "@/pagesForStudents/hooks/useStudentHook";
 const AnalyticScreen: React.FC = () => {
   const { data } = useSchoolData();
   const { data: termData } = useSchoolTermDetails(data?.presentTermID);
 
+  const { termlyExpense } = useTermExpenses(data?._id);
+
   const otherPayment = _?.sumBy(
     termData?.data?.paymentOptions,
-<<<<<<< HEAD
     (option: any) => Number(option.paymentAmount) || 0
-=======
-    "paymentAmount"
->>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
   );
 
   const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
 
   const expensePayment = _?.sumBy(termData?.data?.expensePayOut, "amount");
 
-  const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
+  // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
 
   let allData = termData?.data?.storePayment.concat(
     termData?.data?.schoolFeePayment,
     termData?.data?.paymentOptions
   );
+  const expenseData = termlyExpense?.data?.expense
+    ?.map((el: any) => {
+      return el?.amount ? el?.amount : 0;
+    })
+    .reduce((a: number, b: number) => {
+      return a + b;
+    }, 0);
+  const schoolFeePayment = termData?.data?.schoolFeePayment
+    ?.map((el: any) => {
+      return el?.amount ? el?.amount : 0;
+    })
+    .reduce((a: number, b: number) => {
+      return a + b;
+    }, 0);
 
-<<<<<<< HEAD
-=======
-  // console.log(termData?.data?.paymentOptions);
-  // console.log(termData?.data?.storePayment);
-
->>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 text-blue-950">
         <CardDataStats
           title="Inflow[income]"
-<<<<<<< HEAD
           total={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
-=======
-          total={`₦${parseFloat(
-            `${otherPayment + schoolFeePayment + storePayment}`
-          ).toLocaleString()}`}
->>>>>>> d3905a93a85af44d645fb1e8c89087740125ede3
           rate=""
           levelUp
         >
@@ -62,7 +63,7 @@ const AnalyticScreen: React.FC = () => {
         </CardDataStats>
         <CardDataStats
           title="Outflow[Expenses]"
-          total={`₦${parseFloat(`${expensePayment}`).toLocaleString()}`}
+          total={`₦${parseFloat(`${expenseData}`).toLocaleString()}`}
           rate=""
           levelUp
         >
@@ -88,9 +89,11 @@ const AnalyticScreen: React.FC = () => {
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne
-          schoolFee={termData?.data?.schoolFeePayment}
-          store={termData?.data?.storePayment}
-          others={termData?.data?.paymentOptions}
+          schoolFee={schoolFeePayment}
+          store={storePayment}
+          others={otherPayment}
+          expensePayment={expenseData}
+          data={data}
         />
         <ChartTwo />
 

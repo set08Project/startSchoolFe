@@ -5,7 +5,7 @@ import axios from "axios";
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 // const URL: string =
-// import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = "http://localhost:2244/api";
 
@@ -53,6 +53,40 @@ export const getOneStudentExamSubjectPerformance = async (
   try {
     return await axios
       .get(`${URL}/view-onesubject-exam-performance/${subjectID}/${quizID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getMidTestPerformanceResut = async (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(
+        `${URL}/view-one-subject-mid-test-performance/${subjectID}/${quizID}`
+      )
+      .then((res) => {
+        console.log("show me: ", res);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getMidTestPerformance = async (quizID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-mid-test-performance/${quizID}`)
       .then((res) => {
         return res?.data;
       });
@@ -406,6 +440,24 @@ export const createMidTestData = async (
         data,
         config
       )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const deleteMidTestData = async (
+  teacherID: string,
+  subjectID: string,
+  midTestID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    // delete-mid-test/:teacherID/:subjectID/:midTestID"
+    return await axios
+      .delete(`${URL}/delete-mid-test/${teacherID}/${subjectID}/${midTestID}`)
       .then((res: any) => {
         return res?.data;
       });

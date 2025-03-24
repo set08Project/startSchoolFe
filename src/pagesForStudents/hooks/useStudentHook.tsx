@@ -47,20 +47,9 @@ export const useMidTestStudentPerformance = (studentID: string) => {
       return viewStudentPerformanceMidTest(studentID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("midTestPerformace")!) || null,
     }
   );
-  useEffect(() => {
-    if (midTestPerformace) {
-      localStorage.setItem(
-        "midTestPerformace",
-        JSON.stringify(midTestPerformace)
-      );
-    }
-  }, [midTestPerformace]);
+
   return { midTestPerformace };
 };
 
@@ -71,16 +60,9 @@ export const useMidTestStudent = (subjectID: string) => {
       return viewMidTestStduent(subjectID!).then((res) => {
         return res.midTest;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("midTest")!) || null,
     }
   );
-  useEffect(() => {
-    if (midTest) {
-      localStorage.setItem("midTest", JSON.stringify(midTest));
-    }
-  }, [midTest]);
+
   return { midTest };
 };
 
@@ -91,36 +73,19 @@ export const useTermBudget = (schoolID: string) => {
       return viewTermlyBudget(schoolID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("termBudget")!) || null,
     }
   );
-  useEffect(() => {
-    if (termBudget) {
-      localStorage.setItem("termBudget", JSON.stringify(termBudget));
-    }
-  }, [termBudget]);
+
   return { termBudget };
 };
 
 export const useTermExpenses = (schoolID: string) => {
-  const { data: termlyExpense } = useSWR(
-    `api/view-expense/${schoolID}`,
-    () => {
-      return viewTermlyExpense(schoolID!).then((res: any) => {
-        return res.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("termlyExpense")) || null,
-    }
-  );
-  useEffect(() => {
-    if (termlyExpense) {
-      localStorage.setItem("termlyExpense", JSON.stringify(termlyExpense));
-    }
-  }, [termlyExpense]);
+  const { data: termlyExpense } = useSWR(`api/view-expense/${schoolID}`, () => {
+    return viewTermlyExpense(schoolID!).then((res: any) => {
+      return res.data;
+    });
+  });
+
   return { termlyExpense };
 };
 
@@ -133,16 +98,9 @@ export const useStudentInfo = () => {
       return viewStduentDetail(dataID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("studentInfo")!) || null,
     }
   );
-  useEffect(() => {
-    if (studentInfo) {
-      localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
-    }
-  });
+
   return { studentInfo };
 };
 
@@ -159,11 +117,7 @@ export const useStudentInfoData = (studentID: string) => {
         JSON.parse(localStorage.getItem("studentInfoData")!) || null,
     }
   );
-  useEffect(() => {
-    if (studentInfoData) {
-      localStorage.setItem("studentInfoData", JSON.stringify(studentInfoData));
-    }
-  }, [studentInfoData]);
+
   return { studentInfoData };
 };
 
@@ -174,20 +128,9 @@ export const useStudentAttendant = (studentID: string) => {
       return viewStudentAttendance(studentID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("studentAttendance")!) || null,
     }
   );
-  useEffect(() => {
-    if (studentAttendance) {
-      localStorage.setItem(
-        "studentAttendance",
-        JSON.stringify(studentAttendance)
-      );
-    }
-  }, [studentAttendance]);
+
   return { studentAttendance };
 };
 
@@ -198,20 +141,9 @@ export const useAssignment = (classID: string) => {
       return classAssignment(classID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("classAssignments")!) || null,
     }
   );
-  useEffect(() => {
-    if (classAssignments) {
-      localStorage.setItem(
-        "classAssignments",
-        JSON.stringify(classAssignments)
-      );
-    }
-  }, [classAssignments]);
+
   return { classAssignments };
 };
 
@@ -222,16 +154,8 @@ export const useLessonNote = (schoolID: string, staffID: string) => {
       return lessonNotes(schoolID, staffID).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("lessonNote")!) || null,
     }
   );
-  useEffect(() => {
-    if (lessonNote) {
-      localStorage.setItem("lessonNote", JSON.stringify(lessonNote));
-    }
-  }, [lessonNote]);
 
   return { lessonNote };
 };
@@ -243,17 +167,9 @@ export const useClassLessonNote = (classID: string) => {
       return classLessonNotes(classID).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("classLessonNote")!) || null,
     }
   );
-  useEffect(() => {
-    if (classLessonNote) {
-      localStorage.setItem("classLessonNote", JSON.stringify(classLessonNote));
-    }
-  }, [classLessonNote]);
+
   return { classLessonNote };
 };
 
@@ -261,23 +177,11 @@ export const useReadMyClassInfo = () => {
   const [state, setState] = useState<any>({});
   const { studentInfo } = useStudentInfo();
 
-  useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
-
   return { state };
 };
 
 export const useReadMyClassInfoData = (classAssigned: string) => {
   const [state, setState] = useState<any>({});
-
-  useEffect(() => {
-    readClassInfo(classAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
 
   return { state };
 };
@@ -289,16 +193,9 @@ export const useReadOneClassInfo = (classID: string) => {
       return await readOneClassInfo(classID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("oneClass")!) || null,
     }
   );
-  useEffect(() => {
-    if (oneClass) {
-      localStorage.setItem("oneClass", JSON.stringify(oneClass));
-    }
-  }, [oneClass]);
+
   return { oneClass };
 };
 
@@ -309,16 +206,9 @@ export const useOneArticle = (studentID: string) => {
       return getOneArticle(studentID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("oneArticle")!) || null,
     }
   );
-  useEffect(() => {
-    if (oneArticle) {
-      localStorage.setItem("oneArticle", JSON.stringify(oneArticle));
-    }
-  }, [oneArticle]);
+
   return { oneArticle };
 };
 
@@ -329,16 +219,9 @@ export const useSchoolArticle = (schoolID: string) => {
       return getSchoolArticle(schoolID!).then((res: any) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("allArticle")!) || null,
     }
   );
-  useEffect(() => {
-    if (allArticle) {
-      localStorage.setItem("allArticle", JSON.stringify(allArticle));
-    }
-  }, [allArticle]);
+
   return { allArticle };
 };
 
@@ -349,16 +232,9 @@ export const useComplain = (studentID: string) => {
       return viewComplains(studentID!).then((res) => {
         return res.data.complain;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("complainData")!) || null,
     }
   );
-  useEffect(() => {
-    if (complainData) {
-      localStorage.setItem("complainData", JSON.stringify(complainData));
-    }
-  }, [complainData]);
+
   return { complainData };
 };
 
@@ -369,20 +245,9 @@ export const usePastQuestionHistory = (studentID: string) => {
       return getOneStudentHistory(studentID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("pastQuestionData")!) || null,
     }
   );
-  useEffect(() => {
-    if (pastQuestionData) {
-      localStorage.setItem(
-        "pastQuestionData",
-        JSON.stringify(pastQuestionData)
-      );
-    }
-  }, [pastQuestionData]);
+
   return { pastQuestionData };
 };
 
@@ -393,14 +258,9 @@ export const useClassTimeTableViewer = (classID: string) => {
       return viewClassTimetable(classID!).then((res) => {
         return res.data.timeTable;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("viewTimeTable")!) || null,
     }
   );
-  useEffect(() => {
-    localStorage.setItem("viewTimeTable", JSON.stringify(viewTimeTable));
-  }, [viewTimeTable]);
+
   return { viewTimeTable };
 };
 
@@ -411,16 +271,9 @@ export const usePurchasedStore = (studentID: string) => {
       return viewPurchasedEndPoint(studentID!).then((res) => {
         return res.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("purchasedStore")!) || null,
     }
   );
-  useEffect(() => {
-    if (purchasedStore) {
-      localStorage.setItem("purchasedStore", JSON.stringify(purchasedStore));
-    }
-  }, [purchasedStore]);
+
   return { purchasedStore };
 };
 
@@ -431,16 +284,9 @@ export const useStudentSchoolFee = (studentID: string) => {
       return studentSchoolFeePayment(studentID!).then((res) => {
         return res?.data?.data;
       });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("studentFees")!) || null,
     }
   );
-  useEffect(() => {
-    if (studentFees) {
-      localStorage.setItem("studentFees", JSON.stringify(studentFees));
-    }
-  }, [studentFees]);
+
   return { studentFees };
 };
 
@@ -451,37 +297,19 @@ export const useViewPerformance = (studentID: string) => {
       return viewPerformanceTest(studentID!).then((res) => {
         return res?.data;
       });
-    },
-    {
-      fallbackData:
-        JSON.parse(localStorage.getItem("performanceTest")!) || null,
     }
   );
-  useEffect(() => {
-    if (performanceTest) {
-      localStorage.setItem("performanceTest", JSON.stringify(performanceTest));
-    }
-  }, [performanceTest]);
+
   return { performanceTest };
 };
 
 export const useViewRemark = (studentID: string) => {
-  const { data: remarks } = useSWR(
-    `api/view-remark/${studentID}`,
-    () => {
-      return studentRemake(studentID!).then((res) => {
-        return res?.data;
-      });
-    },
-    {
-      fallbackData: JSON.parse(localStorage.getItem("remarks")!) || null,
-    }
-  );
-  useEffect(() => {
-    if (remarks) {
-      localStorage.setItem("remarks", JSON.stringify(remarks));
-    }
-  }, [remarks]);
+  const { data: remarks } = useSWR(`api/view-remark/${studentID}`, () => {
+    return studentRemake(studentID!).then((res) => {
+      return res?.data;
+    });
+  });
+
   return { remarks };
 };
 
