@@ -2,12 +2,12 @@ import axios, { AxiosResponse } from "axios";
 
 // working locally
 
-const URL2: string = import.meta.env.VITE_URL;
-const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL2: string = import.meta.env.VITE_URL;
+// const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // Working Online
-// const URL: string = "https://startschoolbe-4.onrender.com/api";
-// const URL2: string = "https://startschoolbe-4.onrender.com";
+const URL: string = "https://startschoolbe-4.onrender.com/api";
+const URL2: string = "https://startschoolbe-4.onrender.com";
 
 export const deleteSchool = async (schoolID: string): Promise<any> => {
   try {
