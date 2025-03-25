@@ -1417,6 +1417,24 @@ export const adminReport = async (
   }
 };
 
+export const adminMidReport = async (
+  schoolID: string,
+  studentID: string,
+  adminComment: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/admin-mid-report-card/${schoolID}/${studentID}`, {
+        adminComment,
+      })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const approveMainReport = async (classID: string, data: string) => {
   try {
     return await axios

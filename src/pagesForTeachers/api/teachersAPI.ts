@@ -839,10 +839,39 @@ export const createGradeScore = async (
   }
 };
 
+export const createMidGradeScore = async (
+  teacherID: string,
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-mid-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        console.log("mid: ", res.data);
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const viewStudentGrade = async (studentID: string) => {
   try {
     return await axios
       .get(`${URL}/student-report-card/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewStudentMidGrade = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/student-mid-report-card/${studentID}`)
       .then((res: any) => {
         return res?.data;
       });
@@ -859,6 +888,22 @@ export const reportCardRemark = async (
   try {
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const midReportCardRemark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/teacher-mid-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
         return res?.data;
       });

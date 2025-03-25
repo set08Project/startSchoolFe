@@ -12,9 +12,11 @@ import {
   useClassStudent,
   useClassSubject,
   useStudentGrade,
+  useStudentMidGrade,
   useTeacherInfo,
 } from "../../hooks/useTeacher";
 import {
+  midReportCardRemark,
   psychoReportCardRemark,
   readClassInfo,
   remark,
@@ -104,8 +106,6 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
       return data.subject === el?.subjectTitle;
     });
 
-  console.log(result);
-
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div className="w-[260px] border-">
@@ -158,6 +158,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
       })`
     );
   });
+
+  console.log();
 
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
@@ -600,6 +602,7 @@ const CardReport = () => {
 
   const [toggle, setToggle] = useState<boolean>(true);
   const [toggle1, setToggle1] = useState<boolean>(false);
+  const [toggle2, setToggle2] = useState<boolean>(false);
 
   // console.log("class: ", oneClass);
 
@@ -641,22 +644,37 @@ const CardReport = () => {
             toggle ? "bg-red-500 text-white" : "bg-slate-200"
           } rounded-md px-6 py-2 duration-300 transition-all`}
           onClick={() => {
+            setToggle2(false);
             setToggle1(false);
             setToggle(true);
           }}
         >
           Teacher's Comments
         </button>
+
         <button
           className={`${
             toggle1 ? "bg-red-500 text-white" : "bg-slate-200"
           } rounded-md px-6 duration-300 transition-all py-2`}
           onClick={() => {
             setToggle1(true);
+            setToggle2(false);
             setToggle(false);
           }}
         >
           Psychometric
+        </button>
+        <button
+          className={`${
+            toggle2 ? "bg-purple-500 text-white" : "bg-slate-200"
+          } rounded-md px-6 duration-300 transition-all py-2`}
+          onClick={() => {
+            setToggle2(true);
+            setToggle1(false);
+            setToggle(false);
+          }}
+        >
+          Mid Test
         </button>
       </div>
 
@@ -794,6 +812,70 @@ const CardReport = () => {
               )}
             </div>
           </div>
+        ) : toggle2 ? (
+          <div>
+            <div
+              className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+              style={{
+                width: `${1120 + subjectData?.classSubjects.length * 260}px`,
+              }}
+            >
+              <div className="w-[100px] border-r">Sequence</div>
+              <div className="w-[250px] border-r">student Info</div>
+              <div className="w-[100px] border-r">
+                Student's Attendance Ratio now
+              </div>
+              {/* 260px */}
+              <div
+                className={`w-[${
+                  subjectData?.classSubjects.length * 200
+                }px] border-r`}
+              >
+                {/* <div>Subject Grade</div> */}
+                <div className="flex">
+                  <div className="flex gap-4">
+                    {lodash
+                      .sortBy(subjectData?.classSubjects, "subjectTitle")
+                      ?.map((props: any) => (
+                        <div>
+                          <SubjectMidMap props={props} />
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-[100px] border-r">Total Points</div>
+              <div className="w-[100px] border-r">Grade</div>
+              <div className="w-[100px] border-r">Attendance</div>
+              {/* <div className="w-[300px] border-r">Give Report/Remark</div> */}
+
+              <div className="w-[180px] border-r">Submit Report</div>
+            </div>
+
+            <div
+              className={` overflow-hidden`}
+              style={{
+                width: `${1120 + subjectData?.classSubjects.length * 200}px`,
+              }}
+            >
+              {sortedStudents?.length > 0 ? (
+                <div>
+                  {sortedStudents?.map((props: any, i: number) => (
+                    <div key={props}>
+                      <MidTestMainStudentRow
+                        props={props}
+                        i={i}
+                        oneClass={oneClass}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>No student yet</div>
+              )}
+            </div>
+          </div>
         ) : null}
       </div>
     </div>
@@ -801,3 +883,193 @@ const CardReport = () => {
 };
 
 export default CardReport;
+
+const MidTestMainStudentRow: FC<iProps> = ({
+  props,
+  i,
+  oneClass: theClass,
+}) => {
+  const { teacherInfo } = useTeacherInfo();
+  const { gradeData } = useStudentGrade(props?._id);
+  const { gradeMidData } = useStudentMidGrade(props?._id);
+
+  const { subjectData } = useClassSubject(theClass?._id);
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [attendance, setAttendace] = useState<string>("");
+
+  let result = gradeMidData?.reportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
+        schoolInfo![0]!?.presentTerm
+      })`
+    );
+  });
+
+  const reading = gradeMidData?.midReportCard.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+    );
+  });
+
+  const [stateValue, setStateValue] = useState(
+    `${reading?.classTeacherComment ? reading?.classTeacherComment : ""}`
+  );
+
+  return (
+    <div
+      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
+        i % 2 === 0 ? "bg-slate-50" : "bg-white"
+      }`}
+    >
+      <div className={`w-[100px] border-r font-bold`}>{i + 1}</div>
+      {/* name */}
+      <div className="w-[250px] flex border-r">
+        <div className="flex gap-2">
+          <img
+            className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
+            src={pix}
+          />
+
+          <div className="w-[180px] ">
+            {" "}
+            {props?.studentFirstName} {props?.studentLastName}
+          </div>
+        </div>
+      </div>
+      <div className="w-[100px] border-r">
+        <AttendanceRatio props={props} />
+      </div>
+
+      <div
+        className={`w-[${
+          subjectData?.classSubjects.length * 270
+        }px] border-r items-center flex`}
+      >
+        <div className="flex gap-4">
+          {lodash
+            .sortBy(subjectData?.classSubjects, "subjectTitle")
+            ?.map((el: any) => (
+              <div>
+                <SubjectMdScore
+                  props={props}
+                  el={el}
+                  gradeMidData={gradeMidData}
+                />
+              </div>
+            ))}
+        </div>
+      </div>
+
+      <div className="w-[100px] border-r">{reading?.points}</div>
+
+      <div className="w-[100px] border-r">{reading?.grade}</div>
+      <div className="w-[100px] border-r">
+        <input
+          type="text"
+          className="pl-2 w-[90%] h-[45px] border"
+          placeholder="70/100"
+          defaultValue={result?.attendance ? result?.attendance : ""}
+          value={attendance}
+          onChange={(e: any) => setAttendace(e.target.value)}
+        />
+      </div>
+
+      <div className="w-[180px] border-r relative">
+        <Button
+          name={
+            result?.classTeacherComment
+              ? "Update Comment"
+              : loading
+              ? "Loading"
+              : "Add Comment"
+          }
+          icon={
+            loading && (
+              <ClipLoader
+                color="white"
+                size={20}
+                className="absolute left-7 top-5"
+              />
+            )
+          }
+          className={`pl-4 py-3 w-[85%]  text-white ${
+            result?.classTeacherComment
+              ? "bg-black hover:bg-neutral-800 "
+              : "bg-red-500 hover:bg-red-600 "
+          } transition-all duration-300`}
+          onClick={() => {
+            console.log(stateValue);
+            setLoading(true);
+            if (stateValue !== "") {
+              midReportCardRemark(teacherInfo?._id, props?._id, {
+                attendance,
+                teacherComment: stateValue,
+              }).then((res: any) => {
+                setLoading(false);
+                if (res.status === 201) {
+                  mutate(`api/student-report-card/${props?._id}`);
+                  toast.success("Report Card Report Noted");
+                } else {
+                  setLoading(false);
+                  toast.error(`${res?.response?.data?.message}`);
+                }
+              });
+            } else {
+              toast.error("Please give a REMARK");
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const SubjectMdScore: FC<any> = ({ props, el, gradeMidData }) => {
+  const { gradeData } = useStudentGrade(props?._id);
+  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+  let result = gradeMidData?.midReportCard
+
+    .find((el: any) => {
+      return (
+        el.classInfo ===
+        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+      );
+    })
+    ?.result?.find((data: any) => {
+      return data.subject === el?.subjectTitle;
+    });
+
+  return (
+    <div className="w-[200px] border-r-2 border-blue-950 ">
+      <div className="w-[200px] border-">
+        <p className="pl-1 font-bold text-[15px] capitalize ">
+          {result?.subject ? result?.subject : "Have't Entered"}
+        </p>
+
+        <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
+          <p className="w-[35px] border-r">Score</p>
+          <p className="w-[35px] ">Total</p>
+          <p className="w-[35px] ">Grade</p>
+        </div>
+      </div>
+      <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
+        <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
+        <p className="w-[35px] font-bold border-r">
+          {result?.mark ? result?.mark : 0}
+        </p>
+        <p className="w-[35px] font-bold">
+          {result?.grade ? result?.grade : "Nill"}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const SubjectMidMap: FC<iProps> = ({ props }) => {
+  return <div className="w-[200px] border-r ">subject Offered</div>;
+};

@@ -21,9 +21,14 @@ import {
   useClassStudent,
   useClassSubject,
   useStudentGrade,
+  useStudentMidGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useNavigate, useParams } from "react-router-dom";
-import { adminReport, approveMainReport } from "../../api/schoolAPIs";
+import {
+  adminMidReport,
+  adminReport,
+  approveMainReport,
+} from "../../api/schoolAPIs";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -86,14 +91,14 @@ interface iProps {
 //   );
 // };
 
-const SubjectScore: FC<iProps> = ({ props, el }) => {
+const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   const { state } = useReadMyClassInfoData("JSS 1A");
   const { subjectData } = useClassSubject(state?._id);
 
-  let result = gradeData?.reportCard
+  let result = gradeMidData?.midReportCard
     .find((el: any) => {
       return (
         el.classInfo ===
@@ -107,26 +112,18 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div>
-        <div className="w-[260px] ">
+        <div className="w-[200px] ">
           <p className="pl-1 font-bold text-[12px]">
             {result?.subject ? result?.subject : "Have't Entered"}
           </p>
           <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-            <p className="w-[30px] border-r">1st</p>
-            <p className="w-[30px] border-r">2nd</p>
-            <p className="w-[30px] border-r">3rd</p>
-            <p className="w-[30px] border-r">4th</p>
-            <p className="w-[35px] border-r">Exam</p>
+            <p className="w-[35px] border-r">Score</p>
             <p className="w-[35px] ">Total</p>
             <p className="w-[35px] ">Grade</p>
           </div>
         </div>
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
           {result?.mark ? result?.mark : 0}
@@ -146,18 +143,19 @@ interface iProps {
   i?: number;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
+const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
   const { classID } = useParams();
   const { data } = useSchoolData();
   const { gradeData } = useStudentGrade(props?._id);
+  const { gradeMidData } = useStudentMidGrade(props?._id);
   const { oneClass } = useReadOneClassInfo(classID!);
-
+  const [loading, setLoading] = useState(false);
   const { subjectData } = useClassSubject(oneClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
 
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
-  let result = gradeData?.reportCard.find((el: any) => {
+  let result = gradeMidData?.midReportCard.find((el: any) => {
     return (
       el.classInfo ===
       `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
@@ -168,6 +166,10 @@ const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
 
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
+  );
+
+  const [stateValue1, setStateValue1] = useState(
+    `${result?.adminComment ? result?.adminComment : ""}`
   );
 
   let resultValue = Data?.find(
@@ -202,14 +204,14 @@ const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
 
       <div
         className={`w-[${
-          subjectData?.classSubjects.length * 290
+          subjectData?.classSubjects.length * 200
         }px]  border-r items-center flex`}
       >
         <div className="flex gap-4 ">
           {lodash
             .sortBy(subjectData?.classSubjects, "subjectTitle")
             ?.map((el: any) => (
-              <SubjectScore props={props} el={el} />
+              <SubjectScore props={props} el={el} gradeMidData={gradeMidData} />
             ))}
         </div>
       </div>
@@ -240,24 +242,28 @@ const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name={result?.adminComment ? "Update Comment" : "Add Comment"}
+          name={result?.approve ? "Result Approved " : "Approve Result"}
+          icon={loading && <FaSpinner className={`animate-spin `} />}
           className={`pl-4 py-3 w-[85%]  text-white ${
-            result?.adminComment
+            result?.approve
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
+            setLoading(false);
             if (stateValue !== "") {
-              adminReport(data?._id, props?._id, stateValue).then(
-                (res: any) => {
+              adminMidReport(data?._id, props?._id, stateValue1)
+                .then((res: any) => {
                   if (res.status === 201) {
-                    mutate(`api/student-report-card/${props?._id}`);
+                    mutate();
                     toast.success("Report Card Report Noted");
                   } else {
                     toast.error(`${res?.response?.data?.message}`);
                   }
-                }
-              );
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
             } else {
               toast.error("Please give a REMARK");
             }
@@ -266,7 +272,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, Data }) => {
       </div>
 
       <div className="w-[180px] border-r">
-        <p className="w-[35px] ">Approve</p>
+        <p className="w-[35px] ">
+          {result?.approve ? "Approved" : "Not Approved"}
+        </p>
       </div>
     </div>
   );
@@ -357,7 +365,7 @@ const MidReportCard = () => {
 
   const { state } = useReadMyClassInfoData(oneClass?.className);
 
-  const { classStudents } = useClassStudent(oneClass?._id!);
+  const { classStudents, mutate } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
   const [data, setData] = useState([]);
 
@@ -386,7 +394,7 @@ const MidReportCard = () => {
           {/* 260px */}
           <div
             className={`w-[${
-              subjectData?.classSubjects.length * 290
+              subjectData?.classSubjects.length * 200
             }px] border-r`}
           >
             {/* <div>Subject Grade</div> */}
@@ -422,7 +430,7 @@ const MidReportCard = () => {
             <div>
               {classStudents?.students?.map((props: any, i: number) => (
                 <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+                  <MainStudentRow props={props} i={i} mutate={mutate} />
                 </div>
               ))}
             </div>

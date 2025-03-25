@@ -18,7 +18,7 @@ import {
   useSubjectPerformance,
   useMidTestResultPerformance,
 } from "../../hooks/useTeacher";
-import { createGradeScore } from "../../api/teachersAPI";
+import { createGradeScore, createMidGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -61,6 +61,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
+  console.log("result LOOKUP: ", gradeData);
+
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
@@ -82,17 +84,26 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
 
     return readData;
   };
+  let resultValue = data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  )?.performanceRating;
+
+  const resultData = data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  );
 
   const makeGrade = () => {
     try {
       setLoading(true);
-      createGradeScore(teacherInfo?._id, props?._id, {
+      createMidGradeScore(teacherInfo?._id, props?._id, {
         subject: subjectInfo?.subjectTitle,
-        test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
+
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
         test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
         test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
-        exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
+        exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
       }).then((res) => {
         setLoading(false);
         // if (res.status === 201) {
@@ -106,16 +117,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
       return error.stack;
     }
   };
-
-  let resultValue = data?.find(
-    (el: any) =>
-      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
-  )?.performanceRating;
-
-  const resultData = data?.find(
-    (el: any) =>
-      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
-  );
 
   return (
     <div
@@ -139,7 +140,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.mark} /{result?.score} -{" "}
+        {resultData?.performanceRating ? resultData?.performanceRating : 0} /100
+        -{" "}
         <span className="font-bold text-[12px]">
           {resultData?.studentGrade}
         </span>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import img from "../../../assets/socials/Examsubmited.png";
 
-const FinalMidTestScreenReport = ({ studentName }) => {
+const FinalMidTestScreenReport = () => {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="w-96 p-6 text-center shadow-lg rounded-2xl bg-white">

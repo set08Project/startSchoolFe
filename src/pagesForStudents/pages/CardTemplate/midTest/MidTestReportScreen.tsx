@@ -24,11 +24,15 @@ import {
   useReadOneClassInfo,
   useStudentInfo,
 } from "@/pagesForStudents/hooks/useStudentHook";
-import { useSchoolSessionData } from "@/pages/hook/useSchoolAuth";
+import {
+  useSchoolDataByName,
+  useSchoolSessionData,
+} from "@/pages/hook/useSchoolAuth";
 import {
   useClassSubject,
   useSchoolAnnouncement,
   useStudentGrade,
+  useStudentMidGrade,
   useSujectInfo,
   useTeacherDetail,
 } from "@/pagesForTeachers/hooks/useTeacher";
@@ -51,6 +55,7 @@ const MidTestReportScreen: React.FC = () => {
   };
 
   const { studentInfo } = useStudentInfo();
+  const { gradeMidData } = useStudentMidGrade(studentInfo?._id);
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
@@ -210,6 +215,14 @@ const MidTestReportScreen: React.FC = () => {
     pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("examplepdf.pdf");
   };
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+  const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
+  let midResultData = gradeMidData?.midReportCard?.find((el: any) => {
+    return (
+      el?.classInfo ===
+      `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
+    );
+  });
 
   useEffect(() => {
     preprocessContent();
@@ -900,7 +913,7 @@ const MidTestReportScreen: React.FC = () => {
                   <p>Principal's Comment</p>
 
                   <p className="my-2 border h-[120px] p-2 mb-5">
-                    {grade?.adminComment}
+                    {midResultData?.adminComment}
                   </p>
                   <div className="flex w-full">
                     <div className="flex-1 flex flex-col">
@@ -925,7 +938,7 @@ const MidTestReportScreen: React.FC = () => {
 
                   <p className="my-2 border h-[120px] p-2 mb-5">
                     {" "}
-                    {grade?.classTeacherComment}
+                    {midResultData?.classTeacherComment}
                   </p>
                   <div className="flex w-full">
                     <div className="flex-1 flex flex-col">
@@ -934,7 +947,7 @@ const MidTestReportScreen: React.FC = () => {
                       </p>
                       <p className="text-[10px]">Class Teacher</p>
                       <div className="flex-1" />
-                      <p>{moment(grade?.createdAt).format("lll")}</p>
+                      <p>{moment(midResultData?.createdAt).format("lll")}</p>
                     </div>
                     <div className="w-[160px] h-[80px] border">
                       <img

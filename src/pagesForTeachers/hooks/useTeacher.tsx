@@ -23,6 +23,7 @@ import {
   viewMidTest,
   getMidTestPerformance,
   getMidTestPerformanceResut,
+  viewStudentMidGrade,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -145,7 +146,7 @@ export const useTeacherStudent = (classID: string) => {
 };
 
 export const useClassStudent = (classID: string) => {
-  const { data: classStudents } = useSWR(
+  const { data: classStudents, mutate } = useSWR(
     `api/view-all-class-students/${classID}`,
     () => {
       return readClassInfoStudent(classID!).then((res: any) => {
@@ -154,7 +155,7 @@ export const useClassStudent = (classID: string) => {
     }
   );
 
-  return { classStudents };
+  return { classStudents, mutate };
 };
 
 export const useSujectInfo = (subjectID: string) => {
@@ -337,6 +338,19 @@ export const useStudentGrade = (studentID: string) => {
   );
 
   return { gradeData };
+};
+
+export const useStudentMidGrade = (studentID: string) => {
+  const { data: gradeMidData } = useSWR(
+    `api/student-mid-report-card/${studentID}`,
+    () => {
+      return viewStudentMidGrade(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { gradeMidData };
 };
 
 export const useMidTestResultPerformance = (quizID: string) => {
