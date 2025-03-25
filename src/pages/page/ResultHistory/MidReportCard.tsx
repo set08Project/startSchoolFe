@@ -251,7 +251,7 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
           } transition-all duration-300`}
           onClick={() => {
             setLoading(false);
-            if (stateValue !== "") {
+            if (stateValue1 !== "") {
               adminMidReport(data?._id, props?._id, stateValue1)
                 .then((res: any) => {
                   if (res.status === 201) {
