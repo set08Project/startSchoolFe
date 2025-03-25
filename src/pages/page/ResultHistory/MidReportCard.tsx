@@ -177,6 +177,7 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   )?.performanceRating;
 
+  console.log("comment: ", result?.adminComment);
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -250,23 +251,20 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            setLoading(false);
-            if (stateValue1 !== "") {
-              adminMidReport(data?._id, props?._id, stateValue1)
-                .then((res: any) => {
-                  if (res.status === 201) {
-                    mutate();
-                    toast.success("Report Card Report Noted");
-                  } else {
-                    toast.error(`${res?.response?.data?.message}`);
-                  }
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            } else {
-              toast.error("Please give a REMARK");
-            }
+            setLoading(true);
+
+            adminMidReport(data?._id, props?._id, result?.adminComment)
+              .then((res: any) => {
+                if (res.status === 201) {
+                  mutate();
+                  toast.success("Report Card Report Noted");
+                } else {
+                  toast.error(`${res?.response?.data?.message}`);
+                }
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }}
         />
       </div>
