@@ -167,7 +167,9 @@ const MidTestScreen = () => {
         localStorage.removeItem("midTest");
       });
   };
-
+  const [readQuestion, setReadQuestion] = useState(
+    JSON.parse(localStorage.getItem("midTestQuestions")!)
+  );
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
@@ -184,18 +186,27 @@ const MidTestScreen = () => {
     window.addEventListener("keydown", handleKeyDown);
     localStorage.setItem("midTest", JSON.stringify({ score, state }));
 
+    const question = JSON.parse(localStorage.getItem("midTestQuestions")!);
+
+    if (question === null) {
+      localStorage.setItem(
+        "midTestQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
+    } else if (question?.length === 0) {
+      localStorage.setItem(
+        "midTestQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
+    }
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [state]);
+  }, [state, readQuestion, myQuizData]);
 
-  console.log(timer, score, timerInSeconds, state);
-
-  const [readQuestion, setReadQuestion] = useState(
-    lodash.shuffle(myQuizData?.question)
-  );
-  // ${quizData?.term && quizData?.term}
-  // ${quizData?.term && quizData?.term}
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -260,7 +271,7 @@ const MidTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
+                {readQuestion?.map((question: any, index: number) => (
                   <div key={index}>
                     <p className="text-[14px] font-bold mt-10">
                       Question {index + 1}.
