@@ -165,6 +165,7 @@ const MidTestScreen = () => {
         setLoading(false);
         localStorage.removeItem("countdown");
         localStorage.removeItem("midTest");
+        localStorage.removeItem("midTestQuestions");
       });
   };
   const [readQuestion, setReadQuestion] = useState(
