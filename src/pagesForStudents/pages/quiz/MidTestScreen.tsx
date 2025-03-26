@@ -146,6 +146,8 @@ const MidTestScreen = () => {
     };
   }, []);
 
+  const readQuestion = lodash.shuffle(myQuizData?.question);
+  // ${quizData?.term && quizData?.term}
   // ${quizData?.term && quizData?.term}
   return (
     <div>
@@ -211,7 +213,7 @@ const MidTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
+                {readQuestion?.map((question: any, index: number) => (
                   <div key={index}>
                     <p className="text-[14px] font-bold mt-10">
                       Question {index + 1}.
