@@ -448,6 +448,19 @@ export const createMidTestData = async (
   }
 };
 
+export const updateMidTestData = async (midTestID: string, data: {}) => {
+  try {
+    const URL = "http://localhost:2244/api";
+    return await axios
+      .patch(`${URL}/update-subject-mid-test/${midTestID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const deleteMidTestData = async (
   teacherID: string,
   subjectID: string,

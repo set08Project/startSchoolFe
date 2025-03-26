@@ -227,20 +227,6 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
           : "No Comment Yet"}
       </div>
 
-      {/* <div className="w-[300px] border-r">
-        <textarea
-          className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder={`${
-            result?.adminComment ? result?.adminComment : "Give a Remark"
-          } `}
-          defaultValue={result?.adminComment}
-          value={stateValue}
-          onChange={(e) => {
-            setStateValue(e.target.value);
-          }}
-        />
-      </div> */}
-
       <div className="w-[180px] border-r">
         <Button
           name={result?.approve ? "Result Approved " : "Approve Result"}

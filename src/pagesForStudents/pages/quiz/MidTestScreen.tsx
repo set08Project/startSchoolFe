@@ -2,16 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import {
-  useExam,
-  useMidTest,
-  useQuiz,
-} from "../../../pagesForTeachers/hooks/useTeacher";
-import {
-  performanceExamination,
-  performanceMidTest,
-  performanceTest,
-} from "../../api/studentAPI";
+import { useMidTest } from "../../../pagesForTeachers/hooks/useTeacher";
+import { performanceMidTest } from "../../api/studentAPI";
 import { useMidTestStudent, useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
 import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
@@ -19,6 +11,8 @@ import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import lodash from "lodash";
+import { useSchoolClassRMDetail } from "@/pages/hook/useSchoolAuth";
 
 const MidTestScreen = () => {
   const navigate = useNavigate();
@@ -29,6 +23,7 @@ const MidTestScreen = () => {
   const { midTest } = useMidTest(midTestID!);
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
+  const { classroom } = useSchoolClassRMDetail(studentInfo?.schoolIDs);
 
   const [state, setState] = useState<any>({});
   const [start, setStart] = useState<boolean>(false);
@@ -151,13 +146,13 @@ const MidTestScreen = () => {
     };
   }, []);
 
+  // ${quizData?.term && quizData?.term}
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
-          quizData?.status
-        } Screen`}
+        name={`
+          ${quizData?.subjectTitle} ${quizData?.status} Screen`}
       />
 
       {isQuizDone ? (
@@ -216,45 +211,47 @@ const MidTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
-                  <div key={index}>
-                    <p className="text-[14px] font-bold mt-10">
-                      Question {index + 1}.
-                    </p>
-                    <div className="ml-4">
-                      <p className="text-[18px]">{question?.question}</p>
-                      <div className="ml-8">
-                        <p className="text-[12px] mt-5">
-                          Choose your options carefully
-                        </p>
-                        {question?.options?.map((el: any, i: number) => (
-                          <div>
-                            {el !== "" && (
-                              <div
-                                key={i}
-                                className="flex items-center gap-2 ml-4"
-                              >
-                                <input
-                                  className="radio radio-sm"
-                                  type="radio"
-                                  onChange={() => {
-                                    handleStateChange(index, el);
-                                  }}
-                                  checked={state[index] === el.trim()}
-                                />
-                                <label>
-                                  {typeof el === "string"
-                                    ? el
-                                    : JSON.stringify(el)}
-                                </label>
-                              </div>
-                            )}
-                          </div>
-                        ))}
+                {lodash
+                  .shuffle(myQuizData?.question)
+                  ?.map((question: any, index: number) => (
+                    <div key={index}>
+                      <p className="text-[14px] font-bold mt-10">
+                        Question {index + 1}.
+                      </p>
+                      <div className="ml-4">
+                        <p className="text-[18px]">{question?.question}</p>
+                        <div className="ml-8">
+                          <p className="text-[12px] mt-5">
+                            Choose your options carefully
+                          </p>
+                          {question?.options?.map((el: any, i: number) => (
+                            <div>
+                              {el !== "" && (
+                                <div
+                                  key={i}
+                                  className="flex items-center gap-2 ml-4"
+                                >
+                                  <input
+                                    className="radio radio-sm"
+                                    type="radio"
+                                    onChange={() => {
+                                      handleStateChange(index, el);
+                                    }}
+                                    checked={state[index] === el.trim()}
+                                  />
+                                  <label>
+                                    {typeof el === "string"
+                                      ? el
+                                      : JSON.stringify(el)}
+                                  </label>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
                 <div className="border-r mt-10 w-full h-[10px] bg-red-30">
                   <hr />

@@ -2,7 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
-import { MdPlayCircle, MdVisibilityOff, MdVisibility } from "react-icons/md";
+import {
+  MdPlayCircle,
+  MdVisibilityOff,
+  MdVisibility,
+  MdClose,
+} from "react-icons/md";
 import LittleHeader from "../../components/layout/LittleHeader";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import pix from "../../../assets/pix.jpg";
@@ -22,10 +27,16 @@ import {
   startMidTest,
   stopExamination,
   stopMidTest,
+  updateMidTestData,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import { useStudentPerfomance } from "../../hooks/useQuizHook";
 import _ from "lodash";
+import { FaHandDots } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { displayDelay, displayStudent } from "@/global/reduxState";
+import Button from "@/components/reUse/Button";
+import toast, { Toaster } from "react-hot-toast";
 
 const QuizSetupScreen = () => {
   const { teacherInfo } = useTeacherInfo();
@@ -76,7 +87,11 @@ const QuizSetupScreen = () => {
     }
   };
 
-  console.log(midTest?.performance);
+  const [duration, setDuration] = useState(
+    midTest?.quiz?.instruction?.duration
+  );
+  const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
+  const [toggle, setToggle] = useState(false);
 
   return (
     <div className="text-blue-950  relative">
@@ -264,8 +279,9 @@ const QuizSetupScreen = () => {
 
       <div className="mt-10 bg-slate-50">
         {midTest && (
-          <div>
-            <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          <div className="relative">
+            <Toaster />
+            <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 ">
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
               </div>
@@ -363,59 +379,143 @@ const QuizSetupScreen = () => {
                   {midTest?.quiz?.instruction.instruction}
                 </span>
               </div>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-3">
+                  <div
+                    className={`mt-10 cursor-pointer flex gap-3 items-center ${
+                      midTest?.startMidTest ? "bg-purple-600" : "bg-red-500"
+                    } text-white font-semibold px-6 py-3 rounded-md`}
+                    onClick={() => {
+                      midTest?.startMidTest
+                        ? stopMidTest(midTest?._id)
+                            .then((res) => {
+                              mutate(`api/view-subject-mid-test/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingTest(false);
+                            })
+                        : startMidTest(midTest?._id)
+                            .then((res) => {
+                              mutate(`api/view-subject-mid-test/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingTest(false);
+                            });
+                    }}
+                  >
+                    {loadingTest ? (
+                      "changing test"
+                    ) : (
+                      <span>
+                        {midTest?.startMidTest
+                          ? "Mid Test can Start "
+                          : "Change Visibility"}
+                      </span>
+                    )}
+                    {midTest?.startMidTest ? (
+                      <MdVisibility
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    ) : (
+                      <MdVisibilityOff
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    )}
+                  </div>
 
-              <div className="flex gap-3">
+                  <Link
+                    to={`/mid-test-preview-details/${subjectID}/${midTest?._id}`}
+                    className={`mt-10 cursor-pointer flex gap-3 items-center 
+                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
+                  >
+                    {<span>Preview Questions</span>}
+                  </Link>
+                </div>
                 <div
-                  className={`mt-10 cursor-pointer flex gap-3 items-center ${
-                    midTest?.startMidTest ? "bg-purple-600" : "bg-red-500"
-                  } text-white font-semibold px-6 py-3 rounded-md`}
+                  className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
                   onClick={() => {
-                    midTest?.startMidTest
-                      ? stopMidTest(midTest?._id)
-                          .then((res) => {
-                            mutate(`api/view-subject-mid-test/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingTest(false);
-                          })
-                      : startMidTest(midTest?._id)
-                          .then((res) => {
-                            mutate(`api/view-subject-mid-test/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingTest(false);
-                          });
+                    setToggle(true);
                   }}
                 >
-                  {loadingTest ? (
-                    "changing test"
-                  ) : (
-                    <span>
-                      {midTest?.startMidTest
-                        ? "Mid Test can Start "
-                        : "Change Visibility"}
-                    </span>
-                  )}
-                  {midTest?.startMidTest ? (
-                    <MdVisibility
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  ) : (
-                    <MdVisibilityOff
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  )}
+                  <FaHandDots />
+                  <p className="uppercase text-[14px] text-red-500 font-medium">
+                    Make Edit
+                  </p>
                 </div>
-                <Link
-                  to={`/mid-test-preview-details/${subjectID}/${midTest?._id}`}
-                  className={`mt-10 cursor-pointer flex gap-3 items-center 
-                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
-                >
-                  {<span>Preview Questions</span>}
-                </Link>
               </div>
+              {toggle && (
+                <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
+                  <div className="flex">
+                    <div className="flex justify-end w-full mb-5">
+                      <MdClose
+                        className="text-[20px] cursor-pointer"
+                        onClick={() => setToggle(false)}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[14px] leading-1 border-b pb-5">
+                    Want to make some Edit on the Time to take the Test and the
+                    Duration
+                  </p>
+
+                  <div className="text-[12px] mt-10">
+                    <p>Set updated marks</p>
+                    <input
+                      className="border w-full h-[45px] rounded-md outline-none px-2"
+                      value={mark}
+                      onChange={(e: any) => setMark(e.target.value)}
+                      placeholder="update the Mark"
+                      defaultValue={midTest?.quiz?.instruction?.mark}
+                    />
+                  </div>
+                  <div className="flex flex-col mt-5">
+                    <label className="text-[12px]">Time/Duration(Hours)</label>
+                    <select
+                      className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
+                      name="hour"
+                      id="hour"
+                      // defaultValue={testQuestion[0]?.instruction?.duration}
+                      value={duration}
+                      defaultValue={midTest?.quiz?.instruction?.duration}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setDuration(e.target.value);
+                      }}
+                    >
+                      <option disabled selected>
+                        choose
+                      </option>
+
+                      <option value="0.167">10 Minutes</option>
+                      <option value="0.333">20 Minutes</option>
+                      <option value="0.500">30 Minutes</option>
+                      <option value="0.667">40 Minutes</option>
+                      <option value="0.833">50 Minutes</option>
+                      <option value="1.000">60 Minutes</option>
+                      <option value="1.500">90 Minutes</option>
+                    </select>
+                  </div>
+
+                  <Button
+                    name={"update"}
+                    className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
+                    onClick={() => {
+                      updateMidTestData(midTest?._id, {
+                        mark: parseInt(mark),
+                        duration,
+                      })
+                        .then((res) => {
+                          toast.success("Updated successfully");
+                          midTestMutate();
+                        })
+                        .finally(() => {
+                          setToggle(false);
+                        });
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
