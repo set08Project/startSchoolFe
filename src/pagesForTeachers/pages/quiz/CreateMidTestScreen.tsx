@@ -20,8 +20,8 @@ const CreateMidTestScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const [instruction, setInstruction] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
-  const [mark, setMark] = useState<string>("");
+  const [duration, setDuration] = useState<string>("0.084");
+  const [mark, setMark] = useState<string>("2");
 
   const [fileData, setFileData] = useState();
 
@@ -181,6 +181,7 @@ const CreateMidTestScreen = () => {
                       choose
                     </option>
 
+                    <option value="0.084">5 Minutes</option>
                     <option value="0.167">10 Minutes</option>
                     <option value="0.333">20 Minutes</option>
                     <option value="0.500">30 Minutes</option>

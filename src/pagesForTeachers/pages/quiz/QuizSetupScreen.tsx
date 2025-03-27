@@ -487,6 +487,7 @@ const QuizSetupScreen = () => {
                         choose
                       </option>
 
+                      <option value="0.084">5 Minutes</option>
                       <option value="0.167">10 Minutes</option>
                       <option value="0.333">20 Minutes</option>
                       <option value="0.500">30 Minutes</option>
