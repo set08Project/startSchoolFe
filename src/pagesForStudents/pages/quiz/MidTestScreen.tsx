@@ -26,7 +26,7 @@ const MidTestScreen = () => {
   const { classroom } = useSchoolClassRMDetail(studentInfo?.schoolIDs);
 
   const [state, setState] = useState<any>(
-    JSON.parse(localStorage.getItem("midTest")!).state || {}
+    JSON.parse(localStorage.getItem("midTest")!)?.state || {}
   );
   const [start, setStart] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -160,7 +160,6 @@ const MidTestScreen = () => {
           toast.error("Something went wrong");
         }
       })
-
       .finally(() => {
         setLoading(false);
         localStorage.removeItem("countdown");
@@ -171,6 +170,8 @@ const MidTestScreen = () => {
   const [readQuestion, setReadQuestion] = useState(
     JSON.parse(localStorage.getItem("midTestQuestions")!)
   );
+  let savedSeconds = JSON.parse(localStorage.getItem("countdown"));
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
@@ -203,10 +204,68 @@ const MidTestScreen = () => {
       setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
     }
 
+    if (timeUp) {
+      let autoSubmit = setTimeout(() => {
+        const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+          q.answer.trim()
+        );
+
+        correctAnswers?.forEach((correctAnswer: string, index: number) => {
+          if (correctAnswer === state[index]?.trim()) {
+            score++;
+          }
+        });
+
+        const percentage = Math.ceil((score / correctAnswers.length) * 100);
+
+        let remark = getRemark(percentage);
+        let grade = getGrade(percentage);
+        const markPerQuest = quizData?.quiz?.instruction?.mark;
+        const getQuizData = quizData?.quiz;
+        const totalquest = getQuizData?.question?.length;
+
+        performanceMidTest(studentInfo?._id, midTestID!, courseID, {
+          studentScore: score,
+          studentGrade: grade,
+          remark,
+          totalQuestions: totalquest,
+          markPerQuestion: markPerQuest,
+          status: quizData?.status,
+        })
+          .then((res) => {
+            if (res.status === 201) {
+              toast.success(
+                `${
+                  quizData?.status?.charAt(0).toUpperCase() +
+                  quizData?.statu?.slice(1)
+                } submitted successfully`
+              );
+              navigate(`/confirm-quiz-take/${studentInfo?._id}`, {
+                state: {
+                  correctAnswers,
+                  studentAnswers: state,
+                  score,
+                  total: correctAnswers.length,
+                },
+              });
+            } else {
+              toast.error("Something went wrong");
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+            localStorage.removeItem("countdown");
+            localStorage.removeItem("midTest");
+            localStorage.removeItem("midTestQuestions");
+          });
+        clearTimeout(autoSubmit);
+      }, 1000);
+    }
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [state, readQuestion, myQuizData]);
+  }, [state, readQuestion, myQuizData, timeUp]);
 
   return (
     <div>
