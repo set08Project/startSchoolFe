@@ -333,7 +333,7 @@ const MidTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {readQuestion?.map((question: any, index: number) => (
+                {myQuizData?.question?.map((question: any, index: number) => (
                   <div key={index}>
                     <p className="text-[14px] font-bold mt-10">
                       Question {index + 1}.
