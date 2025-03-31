@@ -4,7 +4,7 @@ export const Countdown: React.FC<{ style1?: string; style2?: string }> = ({
   style1,
   style2,
 }) => {
-  const targetDate = new Date("2025-03-28T00:00:00"); // Fixed date: March 28, 2025
+  const targetDate = new Date("2025-04-03T00:00:00"); // Fixed date: March 28, 2025
 
   const calculateTimeLeft = () => {
     const now = new Date();
