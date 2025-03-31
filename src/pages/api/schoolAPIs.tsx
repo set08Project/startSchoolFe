@@ -328,7 +328,7 @@ export const getSchool = async () => {
 export const updateRegisterationStatus = async (data: {}) => {
   try {
     return await axios
-      .patch(`${URL}/school-request-registration`, data)
+      .post(`${URL}/school-request-registration`, data)
       .then((res: any) => {
         return res;
       });

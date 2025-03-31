@@ -39,53 +39,6 @@ interface iProps {
   teacherInfo?: any;
 }
 
-// const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
-//   const { gradeData } = useStudentGrade(props?._id);
-//   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
-
-//   // SS 1A session: 2024/2025(Second Term)
-
-//   // let result = gradeData?.reportCard
-//   //   .find((el: any) => {
-//   //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
-//   //   })
-//   //   ?.result?.find((data: any) => {
-//   //     return data.subject === el?.subjectTitle;
-//   //   });
-
-//   let result = gradeData?.reportCard.find((el: any) => {
-//     return (
-//       el.classInfo ===
-//       `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
-//     );
-//   });
-
-//   return (
-//     <div className="w-[180px] border-r">
-//       <Button
-//         name="Add Comment"
-//         className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-//         onClick={() => {
-//           if (stateValue !== "") {
-//             reportCardRemark(teacherInfo?._id, props?._id, {
-//               teacherComment: stateValue,
-//             }).then((res: any) => {
-//               if (res.status === 201) {
-//                 mutate(`api/student-report-card/${props?._id}`);
-//                 toast.success("Report Card Report Noted");
-//               } else {
-//                 toast.error(`${res?.response?.data?.message}`);
-//               }
-//             });
-//           } else {
-//             toast.error("Please give a REMARK");
-//           }
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
@@ -212,31 +165,17 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           : "No Comment Yet"}
       </div>
 
-      {/* <div className="w-[300px] border-r">
-        <textarea
-          className="border rounded-sm w-[94%] p-1 text-[12px] h-14 resize-none mx-2"
-          placeholder={`${
-            result?.adminComment ? result?.adminComment : "Give a Remark"
-          } `}
-          defaultValue={result?.adminComment}
-          value={stateValue}
-          onChange={(e) => {
-            setStateValue(e.target.value);
-          }}
-        />
-      </div> */}
-
       <div className="w-[180px] border-r">
         <Button
-          name={result?.adminComment ? "Update Comment" : "Add Comment"}
+          name={result?.approve ? "Approve Result" : "Result Approved"}
           className={`pl-4 py-3 w-[85%]  text-white ${
-            result?.adminComment
+            result?.approve
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            if (stateValue !== "") {
-              adminReport(data?._id, props?._id, stateValue).then(
+            if (result?.adminComment !== "") {
+              adminReport(data?._id, props?._id, result?.adminComment).then(
                 (res: any) => {
                   if (res.status === 201) {
                     mutate(`api/student-report-card/${props?._id}`);
@@ -254,7 +193,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       </div>
 
       <div className="w-[180px] border-r">
-        <p className="w-[35px] ">Approve</p>
+        <p className="w-[115px] uppercase">
+          {result?.approve ? "Approved" : "Not yet Approve"}
+        </p>
       </div>
     </div>
   );

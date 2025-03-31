@@ -82,6 +82,7 @@ const CompanyCard: FC<iPropsCard> = ({
 
             approveRegisterationStatusUpdate(school?._id)
               .then((res) => {
+                console.log(res);
                 mutate(`api/view-all-school`);
               })
               .finally(() => {

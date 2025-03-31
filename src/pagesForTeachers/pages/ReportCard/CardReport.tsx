@@ -240,10 +240,10 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
         <Button
           name={
             result?.classTeacherComment
-              ? "Update Comment"
+              ? "Approve Result"
               : loading
               ? "Loading"
-              : "Add Comment"
+              : "Result Approved"
           }
           icon={
             loading && (
@@ -255,27 +255,32 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
             )
           }
           className={`pl-4 py-3 w-[85%]  text-white ${
-            result?.classTeacherComment
+            result?.attendance
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
+            console.log(
+              "result?.classTeacherComment: ",
+              result?.classTeacherComment
+            );
             setLoading(true);
-            if (stateValue !== "") {
+            if (result?.classTeacherComment !== "") {
               reportCardRemark(teacherInfo?._id, props?._id, {
                 attendance,
-                teacherComment: stateValue,
+                teacherComment: result?.classTeacherComment,
               }).then((res: any) => {
                 setLoading(false);
                 if (res.status === 201) {
                   mutate(`api/student-report-card/${props?._id}`);
-                  toast.success("Report Card Report Noted");
+                  toast.success("Report Card Approved");
                 } else {
                   toast.error(`${res?.response?.data?.message}`);
                 }
               });
             } else {
               toast.error("Please give a REMARK");
+              setLoading(false);
             }
           }}
         />
