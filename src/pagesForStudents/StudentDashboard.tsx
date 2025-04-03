@@ -58,8 +58,10 @@ const StudentDashboard = () => {
 
   let resultData = gradeData?.reportCard?.find((el: any) => {
     return (
-      el?.classInfo ===
-      `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
+      el?.classInfo.trim() ===
+      `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
+        oneClass?.presentTerm
+      })`
     );
   });
 
@@ -70,7 +72,13 @@ const StudentDashboard = () => {
     );
   });
 
-  console.log(studentInfo);
+  console.log("hmm", resultData);
+  console.log(
+    "hmm",
+    `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
+      oneClass?.presentTerm
+    })`
+  );
 
   return (
     <div className="text-blue-950 flex flex-col h-full">

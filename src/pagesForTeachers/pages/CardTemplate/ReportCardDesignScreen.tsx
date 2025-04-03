@@ -67,6 +67,8 @@ const ReportCardDesignScreen: React.FC = () => {
     );
   });
 
+  console.log("gret: ", grade);
+
   const { oneClass: classDetails } = useReadOneClassInfo(
     gradeData?.presentClassID
   );
@@ -103,14 +105,13 @@ const ReportCardDesignScreen: React.FC = () => {
 
   for (let i of subjectData?.students || []) {
     const { gradeData: details } = useStudentGrade(i);
+
     let reportData = details?.reportCard?.find((el: any) => {
       return (
         el.classInfo ===
         `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
       );
     });
-
-    console.log(studentInfo);
 
     holdeAll.push(
       reportData?.result?.map((el: any) => {
@@ -431,10 +432,12 @@ const ReportCardDesignScreen: React.FC = () => {
                     <p className="text">Total</p>
                     <p className="text-[12px]">(100)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">1st Term </p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
+                  {school?.presentTerm === "1st Term" && (
+                    <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                      <p className="text">1st Term </p>
+                      <p className="text-[12px]">(100)</p>
+                    </div>
+                  )}
                   {school?.presentTerm === "1st Term" ||
                     (school?.presentTerm === "2nd Term" && (
                       <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
@@ -480,68 +483,74 @@ const ReportCardDesignScreen: React.FC = () => {
                 <main className="flex flex-col mt-1">
                   {lodash
                     .sortBy(grade?.result, "subject")
-                    ?.map((el: any, i: number) => (
-                      <section
-                        className="flex my-1 bg-blue-50 h-[40px] "
-                        key={i - el?._id}
-                        style={{
-                          width: `${
-                            school?.presentTerm === "1st Term"
-                              ? "994px"
-                              : school?.presentTerm === "2nd Term"
-                              ? "1072px"
-                              : school?.presentTerm === "3rd Term"
-                              ? "1150px"
-                              : null
-                          }`,
-                        }}
-                      >
-                        <div className="p-2 w-[40px]">{i + 1}</div>
-                        <div className="p-2 w-[150px] border-x ">
-                          {el?.subject}
-                        </div>
-                        <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {el?.test1 + el?.test2 + el?.test3 + el?.test4}
-                          </p>
-                        </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">{el?.exam}</p>
-                        </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {el?.test1 +
-                              el?.test2 +
-                              el?.test3 +
-                              el?.test4 +
-                              el?.exam}
-                          </p>
-                        </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {" "}
-                            {el?.test1 +
-                              el?.test2 +
-                              el?.test3 +
-                              el?.test4 +
-                              el?.exam}
-                          </p>
-                        </div>
-                        {school?.presentTerm === "1st Term" ||
-                          (school?.presentTerm === "2nd Term" && (
+                    ?.map((el: any, i: number) => {
+                      grade;
+                      console.log(grade);
+                      return (
+                        <section
+                          className="flex my-1 bg-blue-50 h-[40px] "
+                          key={i - el?._id}
+                          style={{
+                            width: `${
+                              school?.presentTerm === "1st Term"
+                                ? "994px"
+                                : school?.presentTerm === "2nd Term"
+                                ? "1072px"
+                                : school?.presentTerm === "3rd Term"
+                                ? "1150px"
+                                : null
+                            }`,
+                          }}
+                        >
+                          <div className="p-2 w-[40px]">{i + 1}</div>
+                          <div className="p-2 w-[150px] border-x ">
+                            {el?.subject}
+                          </div>
+                          <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
+                            <p className="text-[12px]">
+                              {el?.test1 + el?.test2 + el?.test3 + el?.test4}
+                            </p>
+                          </div>
+                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                            <p className="text-[12px]">{el?.exam}</p>
+                          </div>
+                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                            <p className="text-[12px]">
+                              {el?.test1 +
+                                el?.test2 +
+                                el?.test3 +
+                                el?.test4 +
+                                el?.exam}
+                            </p>
+                          </div>
+                          {school?.presentTerm === "1st Term" && (
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">0</p>
+                              <p className="text-[12px]">
+                                {" "}
+                                {el?.test1 +
+                                  el?.test2 +
+                                  el?.test3 +
+                                  el?.test4 +
+                                  el?.exam}
+                              </p>
                             </div>
-                          ))}
+                          )}
 
-                        {school?.presentTerm === "1st Term" ||
-                          school?.presentTerm === "2nd Term" ||
-                          (school?.presentTerm === "3rd Term" && (
-                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">0</p>
-                            </div>
-                          ))}
-                        {/* 
+                          {school?.presentTerm === "1st Term" ||
+                            (school?.presentTerm === "2nd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">0</p>
+                              </div>
+                            ))}
+
+                          {school?.presentTerm === "1st Term" ||
+                            school?.presentTerm === "2nd Term" ||
+                            (school?.presentTerm === "3rd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">0</p>
+                              </div>
+                            ))}
+                          {/* 
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
@@ -551,30 +560,30 @@ const ReportCardDesignScreen: React.FC = () => {
                               el?.exam}
                           </p>
                         </div> */}
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {el?.test1 +
-                              el?.test2 +
-                              el?.test3 +
-                              el?.test4 +
-                              el?.exam}
-                          </p>
-                        </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                          <p className="text">{resultMax[i]?.score}</p>
-                        </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                          <p className="text">{resultMin[i]?.score}</p>
-                        </div>
-                        {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                            <p className="text-[12px]">
+                              {el?.test1 +
+                                el?.test2 +
+                                el?.test3 +
+                                el?.test4 +
+                                el?.exam}
+                            </p>
+                          </div>
+                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                            <p className="text">{resultMax[i]?.score}</p>
+                          </div>
+                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                            <p className="text">{resultMin[i]?.score}</p>
+                          </div>
+                          {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">67</p>
                         </div> */}
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                          <p className="text-[18px]">{el?.grade}</p>
-                        </div>
-                        <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
-                          <p
-                            className={`
+                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                            <p className="text-[18px]">{el?.grade}</p>
+                          </div>
+                          <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
+                            <p
+                              className={`
                           ${
                             el?.grade === "A1"
                               ? "text-green-600"
@@ -593,26 +602,27 @@ const ReportCardDesignScreen: React.FC = () => {
                               : null
                           }
                           `}
-                          >
-                            {el?.grade === "A1"
-                              ? "Execellent"
-                              : el?.grade === "B2" || el?.grade === "B3"
-                              ? "Very Good"
-                              : el?.grade === "C4" ||
-                                el?.grade === "C5" ||
-                                el?.grade === "C6"
-                              ? "Credit"
-                              : el?.grade === "D7"
-                              ? "Pass"
-                              : el?.grade === "E8"
-                              ? "Poor Pass"
-                              : el?.grade === "F9" || el?.grade === "F"
-                              ? "Fail"
-                              : null}
-                          </p>
-                        </div>
-                      </section>
-                    ))}
+                            >
+                              {el?.grade === "A1"
+                                ? "Execellent"
+                                : el?.grade === "B2" || el?.grade === "B3"
+                                ? "Very Good"
+                                : el?.grade === "C4" ||
+                                  el?.grade === "C5" ||
+                                  el?.grade === "C6"
+                                ? "Credit"
+                                : el?.grade === "D7"
+                                ? "Pass"
+                                : el?.grade === "E8"
+                                ? "Poor Pass"
+                                : el?.grade === "F9" || el?.grade === "F"
+                                ? "Fail"
+                                : null}
+                            </p>
+                          </div>
+                        </section>
+                      );
+                    })}
                 </main>
               </section>
             </main>
