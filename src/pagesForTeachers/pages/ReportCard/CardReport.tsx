@@ -163,7 +163,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
-  console.log("greate: ", result);
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${

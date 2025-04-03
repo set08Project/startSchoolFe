@@ -481,12 +481,13 @@ const PrintReportCard: React.FC = () => {
                       <p className="text">Total</p>
                       <p className="text-[12px]">(100)</p>
                     </div>
-                    {school?.presentTerm === "1st Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">1st Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    )}
+                    {school?.presentTerm === "1st Term" ||
+                      (school?.presentTerm === "3rd Term" && (
+                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                          <p className="text">1st Term </p>
+                          <p className="text-[12px]">(100)</p>
+                        </div>
+                      ))}
 
                     {school?.presentTerm === "1st Term" ||
                       (school?.presentTerm === "2nd Term" && (
@@ -576,18 +577,19 @@ const PrintReportCard: React.FC = () => {
                                 el?.exam}
                             </p>
                           </div>
-                          {school?.presentTerm === "1st Term" && (
-                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">
-                                {" "}
-                                {el?.test1 +
-                                  el?.test2 +
-                                  el?.test3 +
-                                  el?.test4 +
-                                  el?.exam}
-                              </p>
-                            </div>
-                          )}
+                          {school?.presentTerm === "1st Term" ||
+                            (school?.presentTerm === "3rd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">
+                                  {" "}
+                                  {el?.test1 +
+                                    el?.test2 +
+                                    el?.test3 +
+                                    el?.test4 +
+                                    el?.exam}
+                                </p>
+                              </div>
+                            ))}
 
                           {school?.presentTerm === "1st Term" ||
                             (school?.presentTerm === "2nd Term" && (
