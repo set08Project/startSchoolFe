@@ -184,7 +184,7 @@ const Layout: FC = () => {
 
       {schl?.freeMode ? null : (
         <div>
-          {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+          {termData?.plan && termData?.payRef && <BlockPaymentScreen />}
         </div>
       )}
     </div>
