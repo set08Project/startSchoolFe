@@ -167,27 +167,27 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name={result?.approve ? "Approve Result" : "Result Approved"}
+          name={!result?.approve ? "Approve Result" : "Result Approved"}
           className={`pl-4 py-3 w-[85%]  text-white ${
             result?.approve
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            if (result?.adminComment !== "") {
-              adminReport(data?._id, props?._id, result?.adminComment).then(
-                (res: any) => {
-                  if (res.status === 201) {
-                    mutate(`api/student-report-card/${props?._id}`);
-                    toast.success("Report Card Report Noted");
-                  } else {
-                    toast.error(`${res?.response?.data?.message}`);
-                  }
+            // if (result?.adminComment !== "") {
+            adminReport(data?._id, props?._id, result?.adminComment).then(
+              (res: any) => {
+                if (res.status === 201) {
+                  mutate(`api/student-report-card/${props?._id}`);
+                  toast.success("Report Card Report Noted");
+                } else {
+                  toast.error(`${res?.response?.data?.message}`);
                 }
-              );
-            } else {
-              toast.error("Please give a REMARK");
-            }
+              }
+            );
+            // } else {
+            //   toast.error("Please give a REMARK");
+            // }
           }}
         />
       </div>

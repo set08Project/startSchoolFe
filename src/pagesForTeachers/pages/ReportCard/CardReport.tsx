@@ -263,23 +263,24 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
               result?.classTeacherComment
             );
             setLoading(true);
-            if (result?.classTeacherComment !== "") {
-              reportCardRemark(teacherInfo?._id, props?._id, {
-                attendance,
-                teacherComment: result?.classTeacherComment,
-              }).then((res: any) => {
-                setLoading(false);
-                if (res.status === 201) {
-                  mutate(`api/student-report-card/${props?._id}`);
-                  toast.success("Report Card Approved");
-                } else {
-                  toast.error(`${res?.response?.data?.message}`);
-                }
-              });
-            } else {
-              toast.error("Please give a REMARK");
+            // if (result?.classTeacherComment !== "") {
+            reportCardRemark(teacherInfo?._id, props?._id, {
+              attendance,
+              teacherComment: result?.classTeacherComment,
+            }).then((res: any) => {
               setLoading(false);
-            }
+              if (res.status === 201) {
+                mutate(`api/student-report-card/${props?._id}`);
+                toast.success("Report Card Approved");
+              } else {
+                toast.error(`${res?.response?.data?.message}`);
+              }
+            });
+            // }
+            // else {
+            //   toast.error("Please give a REMARK");
+            //   setLoading(false);
+            // }
           }}
         />
       </div>
