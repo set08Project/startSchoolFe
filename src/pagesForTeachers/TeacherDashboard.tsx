@@ -197,11 +197,11 @@ const TeacherDashboard = () => {
         </div>
         {/* {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />} */}
 
-        {data?.freeMode ? null : (
+        {/* {data?.freeMode ? null : (
           <div>
             {termData?.plan && termData?.payRef && <BlockPaymentScreen />}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
