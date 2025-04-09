@@ -60,6 +60,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
+  // console.log(gradeData);
+
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
@@ -79,9 +81,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       );
     });
 
-    return readData;
+    return gradeData?.reportCard;
   };
-
   const makeGrade = () => {
     try {
       setLoading(true);
