@@ -177,7 +177,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <input
           className="w-[70px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
-          placeholder={`${result?.test4 !== undefined ? result?.test4 : 0}`}
+          placeholder={`${
+            result?.test4 !== undefined ? parseInt(result?.test4) : 0
+          }`}
           value={test4}
           onChange={(e: any) => {
             setTest4(e.target.value);
@@ -189,18 +191,30 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <input
           className="w-[80px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
-          placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
+          placeholder={`${
+            result?.exam !== undefined ? parseInt(result?.exam) : 0
+          }`}
           value={exam}
+          // onChange={(e: any) => {
+          //   {
+          //     readResultData(props)
+          //       ? setExam(
+          //           (
+          //             (readResultData(props)?.performanceRating / 100) *
+          //             60
+          //           ).toString()
+          //         )
+          //       : setExam(e.target.value);
+          //   }
+          // }}
           onChange={(e: any) => {
-            {
-              readResultData(props)
-                ? setExam(
-                    (
-                      (readResultData(props)?.performanceRating / 100) *
-                      60
-                    ).toString()
-                  )
-                : setExam(e.target.value);
+            const resultData = readResultData(props);
+            const performanceRating = resultData?.performanceRating;
+
+            if (performanceRating && !isNaN(performanceRating)) {
+              setExam(((performanceRating / 100) * 60).toString());
+            } else {
+              setExam(e.target.value);
             }
           }}
         />
