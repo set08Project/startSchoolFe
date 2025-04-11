@@ -70,7 +70,7 @@ const MidTestReportScreen: React.FC = () => {
       `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
     );
   });
-
+  // console.log(gradeMidData);
   const { oneClass: classDetails } = useReadOneClassInfo(
     studentInfo?.presentClassID
   );
@@ -85,23 +85,22 @@ const MidTestReportScreen: React.FC = () => {
   const schoolAddress = school?.address;
 
   let numbPassed =
-    grade?.result?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    gradeMidData?.midReportCard[0]?.result?.length -
+    lodash.filter(gradeMidData?.midReportCard[0]?.result, { grade: "F" })
+      ?.length;
 
   let commulationScore =
-    (grade?.result
+    (gradeMidData?.midReportCard[0]?.result
       ?.map((el: any) => {
-        return el.exam + el.test1 + el.test2 + el.test3 + el.test4;
+        return isNaN(el.exam) ? 0 : el.exam;
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (grade?.result?.length * 100)) *
+      (gradeMidData?.midReportCard[0]?.result?.length * 100)) *
     100;
 
   let holdeAll = [];
-
-  // }
 
   let result = {};
   let resultLow = {};
