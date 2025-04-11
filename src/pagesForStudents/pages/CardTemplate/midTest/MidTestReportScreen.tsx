@@ -106,8 +106,9 @@ const MidTestReportScreen: React.FC = () => {
   let resultLow = {};
 
   for (let i of subjectData?.students || []) {
-    const { gradeData: details } = useStudentGrade(i);
-    let reportData = details?.reportCard?.find((el: any) => {
+    const { gradeMidData: details } = useStudentMidGrade(i);
+
+    let reportData = details?.midReportCard?.find((el: any) => {
       return (
         el.classInfo ===
         `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
@@ -644,7 +645,7 @@ const MidTestReportScreen: React.FC = () => {
                     No. of subject taken
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {grade?.result?.length}
+                    {gradeMidData?.midReportCard[0]?.result?.length}
                   </h1>
                 </div>
 
@@ -661,7 +662,7 @@ const MidTestReportScreen: React.FC = () => {
                     Attendance Performance
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {grade?.attendance}
+                    {gradeMidData?.midReportCard[0]?.attendance || "95%"}
                   </h1>
                 </div>
 
