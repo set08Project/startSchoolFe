@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
+import FinalMidTestScreenReport from "@/pagesForStudents/pages/quiz/FinalMidTestScreenReport";
 // import MidTestReportScreen from "@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen";
 
 // const OtherPayments = React.lazy(
@@ -314,6 +315,15 @@ export const studentRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             {" "}
             <QuizResultScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/confirm-quiz-take/:studentID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            {" "}
+            <FinalMidTestScreenReport />
           </Suspense>
         ),
       },

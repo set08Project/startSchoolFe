@@ -206,7 +206,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
   }, []);
 
   return (
-    <div ref={contentRef} className=" overflow-hidden">
+    <div className=" overflow-hidden">
       <Toaster />
       <button
         disabled={loading}
@@ -231,15 +231,14 @@ const AdminPrintReportCardScreen: React.FC = () => {
           "Print Result"
         )}
       </button>
-
-      <div ref={targetRef} className="overflow-auto w-[1280px]">
+      <div className="overflow-auto w-[1280px]">
         <h1 className="text-[10px] md:text-[12px] text-center mt-5 uppercase font-medium mb-2 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
         <div className="relative ">
-          <main className="flex justify-center mt-2">
+          <main className="flex justify-center mt-2" ref={targetRef}>
             <div className="max-w-[1200px] p-4 overflow-hidden border">
               <div
                 className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
@@ -263,43 +262,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
               </div>
 
               {/* full */}
-              <div className="hidden md:flex items-center justify-between w-auto">
-                {/* logo */}
-                <div className="border h-28 w-28 ">
-                  {school?.avatar ? (
-                    <img
-                      src={school?.avatar}
-                      className=" w-full h-full object-contain"
-                    />
-                  ) : (
-                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
-                      {school?.schoolName?.charAt(0)}
-                    </div>
-                  )}
-                </div>
-                {/* school info */}
-                <div className="flex justify-center items-center flex-col">
-                  <h1 className="font-bold uppercase text-[25px]">
-                    {schoolName}
-                  </h1>
-                  <h1 className="text-[12px] font-semibold tracking-[0.6rem]">
-                    {schoolAddress}
-                  </h1>
-                </div>
-                {/* avatar */}
-                <div className="border h-28 w-28 ">
-                  {studentInfo?.avatar ? (
-                    <img
-                      src={studentInfo?.avatar}
-                      className="bg-blue-50 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
-                      {studentInfo?.studentFirstName?.charAt(0)}
-                    </div>
-                  )}
-                </div>
-              </div>
+
               {/* Mobile */}
               <div className="flex flex-col md:hidden ">
                 <div className="flex items-center justify-between w-auto">
@@ -424,10 +387,13 @@ const AdminPrintReportCardScreen: React.FC = () => {
                       <p className="text">Total</p>
                       <p className="text-[12px]">(100)</p>
                     </div>
-                    <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                      <p className="text">1st Term </p>
-                      <p className="text-[12px]">(100)</p>
-                    </div>
+                    {school?.presentTerm === "1st Term" ||
+                      (school?.presentTerm === "3rd Term" && (
+                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                          <p className="text">1st Term </p>
+                          <p className="text-[12px]">(100)</p>
+                        </div>
+                      ))}
                     {school?.presentTerm === "1st Term" ||
                       (school?.presentTerm === "2nd Term" && (
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
@@ -509,20 +475,30 @@ const AdminPrintReportCardScreen: React.FC = () => {
                                 el?.exam}
                             </p>
                           </div>
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">
-                              {" "}
-                              {el?.test1 +
-                                el?.test2 +
-                                el?.test3 +
-                                el?.test4 +
-                                el?.exam}
-                            </p>
-                          </div>
+                          {school?.presentTerm === "1st Term" ||
+                            (school?.presentTerm === "3rd Term" && (
+                              <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                                <p className="text-[12px]">
+                                  {" "}
+                                  {el?.test1 +
+                                    el?.test2 +
+                                    el?.test3 +
+                                    el?.test4 +
+                                    el?.exam}
+                                </p>
+                              </div>
+                            ))}
                           {school?.presentTerm === "1st Term" ||
                             (school?.presentTerm === "2nd Term" && (
                               <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                                <p className="text-[12px]">0</p>
+                                <p className="text-[12px]">
+                                  {" "}
+                                  {el?.test1 +
+                                    el?.test2 +
+                                    el?.test3 +
+                                    el?.test4 +
+                                    el?.exam}
+                                </p>
                               </div>
                             ))}
 

@@ -16,7 +16,10 @@ import PerformanceRecord from "./pages/screens/PerformanceRecord";
 import { Link } from "react-router-dom";
 
 import MakeComplains from "./pages/report/MarkCOmplains";
-import { useStudentGrade } from "../pagesForTeachers/hooks/useTeacher";
+import {
+  useStudentGrade,
+  useStudentMidGrade,
+} from "../pagesForTeachers/hooks/useTeacher";
 import ArticleHolderScreen from "./pages/screens/ArticleHolderScreen";
 
 const StudentDashboard = () => {
@@ -50,15 +53,32 @@ const StudentDashboard = () => {
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
   const { termData } = useViewTermDetail(termID);
   const { gradeData } = useStudentGrade(studentInfo?._id);
-
+  const { gradeMidData } = useStudentMidGrade(studentInfo?._id);
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
 
   let resultData = gradeData?.reportCard?.find((el: any) => {
+    return (
+      el?.classInfo.trim() ===
+      `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
+        oneClass?.presentTerm
+      })`
+    );
+  });
+
+  let midResultData = gradeMidData?.midReportCard?.find((el: any) => {
     return (
       el?.classInfo ===
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
     );
   });
+
+  console.log("hmm", resultData);
+  console.log(
+    "hmm",
+    `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
+      oneClass?.presentTerm
+    })`
+  );
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -125,10 +145,10 @@ const StudentDashboard = () => {
                   resultData?.approve ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {resultData?.approve ? "ready now" : "not yet Ready"}
+                {midResultData?.approve ? "ready now" : "not yet Ready"}
               </p>
               <div className="flex ">
-                {resultData?.approve && studentInfo?.viewReportCard ? (
+                {midResultData?.approve ? (
                   <Link to={`/mid`}>
                     <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view Mid term's report card

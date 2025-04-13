@@ -18,6 +18,7 @@ const PreviewMidTestScreen: FC<any> = ({
   duration,
   mark,
   file,
+  editorValue,
 }) => {
   const navigate = useNavigate();
   const { subjectID } = useParams();
@@ -56,9 +57,13 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("duration", duration);
           formData.append("mark", mark);
           formData.append("file", file);
+          formData.append("theory", editorValue);
+
+          console.log("IDs: ", subjectQuiz?.classDetails!, subjectID!);
 
           createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
             .then((res: any) => {
+              console.log(res);
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);

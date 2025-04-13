@@ -182,11 +182,11 @@ const Layout: FC = () => {
 
       {!studentInfo?.parentPhoneNumber && <UpdateEmail />}
 
-      {schl?.freeMode ? null : (
+      {/* {schl?.freeMode ? null : (
         <div>
-          {!termData?.plan && !!!termData?.payRef && <BlockPaymentScreen />}
+          {termData?.plan && termData?.payRef && <BlockPaymentScreen />}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

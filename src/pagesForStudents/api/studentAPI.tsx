@@ -1,6 +1,12 @@
 import axios from "axios";
 
+// Working Locally
 // const URL: string = import.meta.env.VITE_MAIN_URL;
+
+// Working Online
+// const URL: string = "https://startschoolbe-3.onrender.com/api";
+// const URL: string = import.meta.env.VITE_MAIN_URL;
+// const URL: string = "http://localhost:2244/api";
 
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
@@ -87,11 +93,11 @@ export const getQuizRecord = async (studentID: string) => {
   }
 };
 
-export const viewStduentDetail: any = async (studentID: any) => {
+export const viewStduentDetail = async (studentID: string) => {
   try {
     return await axios
       .get(`${URL}/read-student-info/${studentID}`)
-      .then((res: any) => {
+      .then((res) => {
         return res?.data;
       });
   } catch (error) {
@@ -930,6 +936,7 @@ export const verifyOtherCashPayment = async (studentID: string, data: any) => {
     return error;
   }
 };
+
 export const getStudentByEnrollmentID = async (studentID: string) => {
   try {
     return await axios

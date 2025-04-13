@@ -21,6 +21,9 @@ import {
   readExam,
   getExam,
   viewMidTest,
+  getMidTestPerformance,
+  getMidTestPerformanceResut,
+  viewStudentMidGrade,
 } from "../api/teachersAPI";
 import {
   getSchoolAnncoement,
@@ -28,6 +31,7 @@ import {
 } from "../../pages/api/schoolAPIs";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useEffect } from "react";
 
 const localStorageProvider = () => {
   // When initializing, we restore the data from `localStorage` into SWR's internal cache:
@@ -61,6 +65,7 @@ export const useTeacherDetail = (teacherID: string) => {
       });
     }
   );
+
   return { teacherDetail };
 };
 
@@ -76,6 +81,7 @@ export const useTeacherInfo = () => {
       });
     }
   );
+
   return { teacherInfo };
 };
 
@@ -88,6 +94,7 @@ export const useClassSubject = (classID: string) => {
       });
     }
   );
+
   return { subjectData };
 };
 
@@ -100,6 +107,7 @@ export const useClassTimeTable = (classID: string) => {
       });
     }
   );
+
   return { timetableData };
 };
 
@@ -110,8 +118,13 @@ export const useTeacherSchedule = (teacherID: string) => {
       return readTeacherSchedule(teacherID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("teacherSchedule")!) || null,
     }
   );
+
   return { teacherSchedule };
 };
 
@@ -122,13 +135,18 @@ export const useTeacherStudent = (classID: string) => {
       return readTeacherSchedule(classID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("teacherSchedule")!) || null,
     }
   );
+
   return { teacherSchedule };
 };
 
 export const useClassStudent = (classID: string) => {
-  const { data: classStudents } = useSWR(
+  const { data: classStudents, mutate } = useSWR(
     `api/view-all-class-students/${classID}`,
     () => {
       return readClassInfoStudent(classID!).then((res: any) => {
@@ -136,7 +154,8 @@ export const useClassStudent = (classID: string) => {
       });
     }
   );
-  return { classStudents };
+
+  return { classStudents, mutate };
 };
 
 export const useSujectInfo = (subjectID: string) => {
@@ -148,6 +167,7 @@ export const useSujectInfo = (subjectID: string) => {
       });
     }
   );
+
   return { subjectInfo };
 };
 
@@ -160,6 +180,7 @@ export const useSujectQuiz = (subjectID: string) => {
       });
     }
   );
+
   return { subjectQuiz };
 };
 
@@ -169,6 +190,7 @@ export const useExam = (quizID: string) => {
       return res.data;
     });
   });
+
   return { examData };
 };
 
@@ -178,6 +200,7 @@ export const useQuiz = (quizID: string) => {
       return res.data;
     });
   });
+
   return { quizData };
 };
 
@@ -189,8 +212,8 @@ export const useAttendance = (classID: string) => {
         return res.data;
       });
     }
-    // { refreshInterval: 1000 }
   );
+
   return { attendance };
 };
 
@@ -201,8 +224,13 @@ export const useSchoolAnnouncement = (schoolID: string) => {
       return getSchoolAnncoement(schoolID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolAnnouncement")!) || null,
     }
   );
+
   return { schoolAnnouncement };
 };
 
@@ -212,6 +240,7 @@ export const useSchoolEvent = (schoolID: string) => {
       return res.data;
     });
   });
+
   return { schoolEvent };
 };
 
@@ -222,8 +251,13 @@ export const useSubjectAssignment = (subjectID: string) => {
       return classAssignment(subjectID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("subjectAssignment")!) || null,
     }
   );
+
   return { subjectAssignment };
 };
 
@@ -236,6 +270,7 @@ export const useLessonNote = (lessonID: string) => {
       });
     }
   );
+
   mutate(`api/view-lesson-note-detail/${lessonID}`);
   return { lessonNoteData };
 };
@@ -249,6 +284,7 @@ export const useComplain = (teacherID: string) => {
       });
     }
   );
+
   return { complainData };
 };
 
@@ -261,6 +297,7 @@ export const useSubjectPerformance = (subjectID: string) => {
       });
     }
   );
+
   return { perform };
 };
 
@@ -273,19 +310,21 @@ export const useExamination = (subjectID: string) => {
       });
     }
   );
+
   return { examination };
 };
 
 export const useMidTest = (subjectID: string) => {
-  const { data: midTest } = useSWR(
+  const { data: midTest, mutate: midTestMutate } = useSWR(
     `api/view-subject-mid-test/${subjectID}`,
     () => {
       return viewMidTest(subjectID!).then((res) => {
-        return res.midTest;
+        return res?.midTest;
       });
     }
   );
-  return { midTest };
+
+  return { midTest, midTestMutate };
 };
 
 export const useStudentGrade = (studentID: string) => {
@@ -297,7 +336,50 @@ export const useStudentGrade = (studentID: string) => {
       });
     }
   );
+
   return { gradeData };
+};
+
+export const useStudentMidGrade = (studentID: string) => {
+  const { data: gradeMidData } = useSWR(
+    `api/student-mid-report-card/${studentID}`,
+    () => {
+      return viewStudentMidGrade(studentID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { gradeMidData };
+};
+
+export const useMidTestResultPerformance = (quizID: string) => {
+  const { data: midTestPerformance } = useSWR(
+    `api/view-mid-test-performance/${quizID}`,
+    () => {
+      return getMidTestPerformance(quizID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { midTestPerformance };
+};
+
+export const useMidTestResultPerformanceData = (
+  subjectID: string,
+  quizID: string
+) => {
+  const { data: midTestPerformanceResult } = useSWR(
+    `api/view-mid-test-performance/${subjectID}/${quizID}`,
+    () => {
+      return getMidTestPerformanceResut(subjectID, quizID!).then((res) => {
+        return res.data;
+      });
+    }
+  );
+
+  return { midTestPerformanceResult };
 };
 
 export const useClassAcademicHistory = (classID: string) => {
@@ -309,6 +391,7 @@ export const useClassAcademicHistory = (classID: string) => {
       });
     }
   );
+
   return { classAcademicHistory };
 };
 
@@ -321,6 +404,7 @@ export const usePurchasedData = (staffID: string) => {
       });
     }
   );
+
   return { purchasedData };
 };
 
@@ -333,5 +417,6 @@ export const useTeacherNote = (staffID: string) => {
       });
     }
   );
+
   return { teacherNote };
 };

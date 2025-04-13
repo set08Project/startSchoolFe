@@ -26,6 +26,7 @@ import { GiPadlock } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
 import Input from "../../components/reUse/Input";
 import HandleDailyExpense from "../page/expenditure/HandleDailyExpense";
+import { GrAction } from "react-icons/gr";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -203,10 +204,14 @@ const HomeScreen = () => {
 
         <div className="order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] md:sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
           <div className="py-0 col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 -mt-5">
-            <p className="font-medium text-[14px] mb-5">
+            <div className="font-[700] text-[14px] mb-5 flex justify-center items-center">
               {/* <GeneralDataScreen /> */}
-              Quick Action
-            </p>
+              <div>Quick Actions</div>
+              <div className="text-blue-950 text-[17px] ml-2">
+                <GrAction />
+              </div>
+            </div>
+
             <div>
               {/* <Link to="/scan-clocking ">
                 <Button
@@ -248,8 +253,15 @@ const HomeScreen = () => {
 
               <Link to="/class-report-card-ready">
                 <Button
-                  name="Prepare Result Card"
+                  name="Prepare Report-Card"
                   className="bg-neutral-700 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
+                />
+              </Link>
+
+              <Link to="/class-report-mid-card">
+                <Button
+                  name="Prepare MidTerm Report-Card"
+                  className="bg-yellow-700 hover:bg-yellow-500 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
                 />
               </Link>
 

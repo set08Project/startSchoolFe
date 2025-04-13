@@ -2,16 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
-import {
-  useExam,
-  useMidTest,
-  useQuiz,
-} from "../../../pagesForTeachers/hooks/useTeacher";
-import {
-  performanceExamination,
-  performanceMidTest,
-  performanceTest,
-} from "../../api/studentAPI";
+import { useMidTest } from "../../../pagesForTeachers/hooks/useTeacher";
+import { performanceMidTest } from "../../api/studentAPI";
 import { useMidTestStudent, useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
 import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
@@ -19,6 +11,8 @@ import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import lodash from "lodash";
+import { useSchoolClassRMDetail } from "@/pages/hook/useSchoolAuth";
 
 const MidTestScreen = () => {
   const navigate = useNavigate();
@@ -29,8 +23,11 @@ const MidTestScreen = () => {
   const { midTest } = useMidTest(midTestID!);
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
+  const { classroom } = useSchoolClassRMDetail(studentInfo?.schoolIDs);
 
-  const [state, setState] = useState<any>({});
+  const [state, setState] = useState<any>(
+    JSON.parse(localStorage.getItem("midTest")!)?.state || {}
+  );
   const [start, setStart] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
@@ -45,22 +42,61 @@ const MidTestScreen = () => {
     }));
   };
 
-  const getRemark = (percentage: number) => {
-    if (percentage <= 45) return "Very poor performance!";
-    if (percentage <= 55) return "A poor performance!";
-    if (percentage <= 65) return "Good performance, can do better!";
-    if (percentage <= 75) return "Good performance, keep it up!";
-    if (percentage <= 85) return "Very good performance!";
-    return "Excellent performance!";
+  const getRemark = (genPointScore: number) => {
+    return genPointScore >= 0 && genPointScore <= 5
+      ? "This is a very poor result."
+      : genPointScore >= 6 && genPointScore <= 11
+      ? "This result is poor; it's not satisfactory."
+      : genPointScore >= 11 && genPointScore <= 15
+      ? "Below average; needs significant improvement."
+      : genPointScore >= 16 && genPointScore <= 21
+      ? "Below average; more effort required."
+      : genPointScore >= 21 && genPointScore <= 25
+      ? "Fair but not satisfactory; strive harder."
+      : genPointScore >= 26 && genPointScore <= 31
+      ? "Fair performance; potential for improvement."
+      : genPointScore >= 31 && genPointScore <= 35
+      ? "Average; a steady effort is needed."
+      : genPointScore >= 36 && genPointScore <= 41
+      ? "Average; showing gradual improvement."
+      : genPointScore >= 41 && genPointScore <= 45
+      ? "Slightly above average; keep it up."
+      : genPointScore >= 46 && genPointScore <= 51
+      ? "Decent work; shows potential."
+      : genPointScore >= 51 && genPointScore <= 55
+      ? "Passable; satisfactory effort."
+      : genPointScore >= 56 && genPointScore <= 61
+      ? "Satisfactory; good progress."
+      : genPointScore >= 61 && genPointScore <= 65
+      ? "Good work; keep striving for excellence."
+      : genPointScore >= 66 && genPointScore <= 71
+      ? "Commendable effort; very good."
+      : genPointScore >= 71 && genPointScore <= 75
+      ? "Very good; consistent effort is visible."
+      : genPointScore >= 76 && genPointScore <= 81
+      ? "Excellent performance; well done!"
+      : genPointScore >= 81 && genPointScore <= 85
+      ? "Exceptional result; keep up the great work!"
+      : genPointScore >= 86 && genPointScore <= 91
+      ? "Outstanding achievement; impressive work!"
+      : genPointScore >= 91 && genPointScore <= 95
+      ? "Brilliant performance; you’re a star!"
+      : genPointScore >= 96 && genPointScore <= 100
+      ? "Outstanding achievement; impressive work!"
+      : ``;
   };
 
-  const getGrade = (percentage: number) => {
-    if (percentage <= 45) return "F";
-    if (percentage <= 55) return "E";
-    if (percentage <= 65) return "D";
-    if (percentage <= 75) return "C";
-    if (percentage <= 85) return "B";
-    return "A";
+  const getGrade = (exam: number) => {
+    if (exam >= 0 && exam <= 39) return "F9";
+    if (exam >= 39 && exam <= 44) return "E8";
+    if (exam >= 44 && exam <= 49) return "D7";
+    if (exam >= 49 && exam <= 54) return "C6";
+    if (exam >= 54 && exam <= 59) return "C5";
+    if (exam >= 59 && exam <= 64) return "C4";
+    if (exam >= 64 && exam <= 69) return "B3";
+    if (exam >= 69 && exam <= 74) return "B2";
+    if (exam >= 74 && exam <= 100) return "A1";
+    return null;
   };
 
   const myQuizData: any = quizData?.quiz;
@@ -71,13 +107,13 @@ const MidTestScreen = () => {
   const timer = parseFloat(quizData?.quiz?.instruction?.duration);
 
   let timerInSeconds = timer * 3600;
+  let score = 0;
 
   const handleSubmit = () => {
     setLoading(true);
     const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
       q.answer.trim()
     );
-    let score = 0;
 
     correctAnswers.forEach((correctAnswer: string, index: number) => {
       if (correctAnswer === state[index]?.trim()) {
@@ -95,7 +131,6 @@ const MidTestScreen = () => {
     const totalquest = getQuizData?.question?.length;
 
     timerInSeconds = 0;
-    console.log("Hit");
 
     performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,
@@ -113,7 +148,7 @@ const MidTestScreen = () => {
               quizData?.status.slice(1)
             } submitted successfully`
           );
-          navigate(`/quiz-result/${midTestID}`, {
+          navigate(`/confirm-quiz-take/${studentInfo?._id}`, {
             state: {
               correctAnswers,
               studentAnswers: state,
@@ -125,12 +160,18 @@ const MidTestScreen = () => {
           toast.error("Something went wrong");
         }
       })
-
       .finally(() => {
         setLoading(false);
         localStorage.removeItem("countdown");
+        localStorage.removeItem("midTest");
+        localStorage.removeItem("midTestQuestions");
+        setTimeUp(false);
       });
   };
+  const [readQuestion, setReadQuestion] = useState(
+    JSON.parse(localStorage.getItem("midTestQuestions")!)
+  );
+  let savedSeconds = JSON.parse(localStorage.getItem("countdown"));
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -146,19 +187,94 @@ const MidTestScreen = () => {
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    localStorage.setItem("midTest", JSON.stringify({ score, state }));
+
+    const question = JSON.parse(localStorage.getItem("midTestQuestions")!);
+
+    if (question === null) {
+      localStorage.setItem(
+        "midTestQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
+    } else if (question?.length === 0) {
+      localStorage.setItem(
+        "midTestQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
+    }
+
+    if (timeUp) {
+      let autoSubmit = setTimeout(() => {
+        const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+          q.answer.trim()
+        );
+
+        correctAnswers?.forEach((correctAnswer: string, index: number) => {
+          if (correctAnswer === state[index]?.trim()) {
+            score++;
+          }
+        });
+
+        const percentage = Math.ceil((score / correctAnswers.length) * 100);
+
+        let remark = getRemark(percentage);
+        let grade = getGrade(percentage);
+        const markPerQuest = quizData?.quiz?.instruction?.mark;
+        const getQuizData = quizData?.quiz;
+        const totalquest = getQuizData?.question?.length;
+
+        performanceMidTest(studentInfo?._id, midTestID!, courseID, {
+          studentScore: score,
+          studentGrade: grade,
+          remark,
+          totalQuestions: totalquest,
+          markPerQuestion: markPerQuest,
+          status: quizData?.status,
+        })
+          .then((res) => {
+            if (res.status === 201) {
+              toast.success(
+                `${
+                  quizData?.status?.charAt(0).toUpperCase() +
+                  quizData?.statu?.slice(1)
+                } submitted successfully`
+              );
+              navigate(`/confirm-quiz-take/${studentInfo?._id}`, {
+                state: {
+                  correctAnswers,
+                  studentAnswers: state,
+                  score,
+                  total: correctAnswers.length,
+                },
+              });
+            } else {
+              toast.error("Something went wrong");
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+            localStorage.removeItem("countdown");
+            localStorage.removeItem("midTest");
+            localStorage.removeItem("midTestQuestions");
+            setTimeUp(false);
+          });
+        clearTimeout(autoSubmit);
+      }, 1000);
+    }
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [state, readQuestion, myQuizData, timeUp]);
 
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
-          quizData?.status
-        } Screen`}
+        name={`
+          ${quizData?.subjectTitle} ${quizData?.status} Screen`}
       />
 
       {isQuizDone ? (
@@ -257,6 +373,19 @@ const MidTestScreen = () => {
                   </div>
                 ))}
 
+                <div className="border-r mt-10 w-full h-[10px] bg-red-30">
+                  <hr />
+                </div>
+                <div className="text-[16px] italic font-semibold">
+                  Section B{" "}
+                </div>
+
+                <div
+                  className="mt-5"
+                  dangerouslySetInnerHTML={{
+                    __html: `${myQuizData?.theory}`,
+                  }}
+                />
                 <div>
                   <Button
                     className={`bg-blue-950 px-12 mt-14 py-4 ${

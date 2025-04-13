@@ -1,11 +1,17 @@
 import axios from "axios";
 
+// Working Locally
+
+// const URL: string =
+//   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
-// const URL: string = "https://server.justnext.com.ng/api";
+// Working Online
+// const URL: string = "https://startschoolbe-3.onrender.com/api"
+// const URL = "http://localhost:2244/api
 
 export const getStudentPerformance = async (studentID: string) => {
   try {
@@ -46,6 +52,40 @@ export const getOneStudentExamSubjectPerformance = async (
   try {
     return await axios
       .get(`${URL}/view-onesubject-exam-performance/${subjectID}/${quizID}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getMidTestPerformanceResut = async (
+  subjectID: string,
+  quizID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(
+        `${URL}/view-one-subject-mid-test-performance/${subjectID}/${quizID}`
+      )
+      .then((res) => {
+        console.log("show me: ", res);
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
+export const getMidTestPerformance = async (quizID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-mid-test-performance/${quizID}`)
       .then((res) => {
         return res?.data;
       });
@@ -399,6 +439,36 @@ export const createMidTestData = async (
         data,
         config
       )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateMidTestData = async (midTestID: string, data: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-subject-mid-test/${midTestID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const deleteMidTestData = async (
+  teacherID: string,
+  subjectID: string,
+  midTestID: string
+) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    // delete-mid-test/:teacherID/:subjectID/:midTestID"
+    return await axios
+      .delete(`${URL}/delete-mid-test/${teacherID}/${subjectID}/${midTestID}`)
       .then((res: any) => {
         return res?.data;
       });
@@ -770,9 +840,27 @@ export const createGradeScore = async (
   data: {}
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createMidGradeScore = async (
+  teacherID: string,
+  studentID: string,
+  data: {}
+) => {
+  try {
+    return await axios
+      .post(`${URL}/create-mid-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        console.log("mid: ", res.data);
         return res?.data;
       });
   } catch (error) {
@@ -792,14 +880,43 @@ export const viewStudentGrade = async (studentID: string) => {
   }
 };
 
+export const viewStudentMidGrade = async (studentID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/student-mid-report-card/${studentID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const reportCardRemark = async (
   teacherID: string,
   studentID: string,
   data: any
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const midReportCardRemark = async (
+  teacherID: string,
+  studentID: string,
+  data: any
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/teacher-mid-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
         return res?.data;
       });
@@ -827,6 +944,7 @@ export const psychoReportCardRemark = async (
   data: any
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/update-psycho-report/${teacherID}/${studentID}`, data)
 

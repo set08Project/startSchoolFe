@@ -6,9 +6,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
-  useSchoolData,
   useSchoolSessionData,
-  useSchoolTermDetails,
   useStudentAttendance,
   useViewSchoolClassRM,
 } from "../../../pages/hook/useSchoolAuth";
@@ -18,9 +16,9 @@ import {
   useSujectInfo,
   useTeacherInfo,
   useSubjectPerformance,
-  useSchoolAnnouncement,
+  useMidTestResultPerformance,
 } from "../../hooks/useTeacher";
-import { createGradeScore } from "../../api/teachersAPI";
+import { createGradeScore, createMidGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -33,15 +31,15 @@ import {
 
 interface iProps {
   props?: any;
-  id?: string;
   data?: any;
+  id?: string;
   i?: number;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
-  const { subjectID } = useParams();
+const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
+  const { subjectID, quizID } = useParams();
   const { teacherInfo } = useTeacherInfo();
-  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+
   const { subjectInfo } = useSujectInfo(subjectID);
   const { perform } = useSubjectPerformance(subjectID);
 
@@ -63,12 +61,12 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-  console.log("school", schoolAnnouncement);
+  console.log("result LOOKUP: ", gradeData);
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
-      `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
+      `${subjectInfo?.designated} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
     );
   });
 
@@ -84,20 +82,28 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       );
     });
 
-    return gradeData?.reportCard;
+    return readData;
   };
+  let resultValue = data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  )?.performanceRating;
 
-  // console.log(result);
+  const resultData = data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  );
+
   const makeGrade = () => {
     try {
       setLoading(true);
-      createGradeScore(teacherInfo?._id, props?._id, {
+      createMidGradeScore(teacherInfo?._id, props?._id, {
         subject: subjectInfo?.subjectTitle,
-        test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
+
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
         test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
         test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
-        exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
+        exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
       }).then((res) => {
         setLoading(false);
         // if (res.status === 201) {
@@ -134,100 +140,36 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.mark} /{result?.score} -{" "}
-        <span className="font-bold text-[12px]">{result?.grade}</span>
+        {resultData?.performanceRating ? resultData?.performanceRating : 0} /100
+        -{" "}
+        <span className="font-bold text-[12px]">
+          {resultData?.studentGrade}
+        </span>
       </div>
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
-      </div>
-
-      <div className="w-[100px] border-r items-center flex">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test1 !== undefined ? result?.test1 : 0}`}
-          value={test1}
-          onChange={(e: any) => {
-            setTest1(e.target.value);
-          }}
-          defaultValue={20}
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test2 !== undefined ? result?.test2 : 0}`}
-          value={test2}
-          onChange={(e: any) => {
-            setTest2(e.target.value);
-          }}
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test3 !== undefined ? result?.test3 : 0}`}
-          value={test3}
-          onChange={(e: any) => {
-            setTest3(e.target.value);
-          }}
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${
-            result?.test4 !== undefined ? parseInt(result?.test4) : 0
-          }`}
-          value={test4}
-          onChange={(e: any) => {
-            setTest4(e.target.value);
-          }}
-        />
       </div>
 
       <div className="w-[100px] border-r  ">
         <input
           className="w-[80px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
-          placeholder={`${
-            result?.exam !== undefined ? parseInt(result?.exam) : 0
-          }`}
-          value={exam}
-          // onChange={(e: any) => {
-          //   {
-          //     readResultData(props)
-          //       ? setExam(
-          //           (
-          //             (readResultData(props)?.performanceRating / 100) *
-          //             60
-          //           ).toString()
-          //         )
-          //       : setExam(e.target.value);
-          //   }
-          // }}
+          placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
+          value={resultValue}
           onChange={(e: any) => {
-            const resultData = readResultData(props);
-            const performanceRating = resultData?.performanceRating;
-
-            if (performanceRating && !isNaN(performanceRating)) {
-              setExam(((performanceRating / 100) * 60).toString());
-            } else {
-              setExam(e.target.value);
+            {
+              readResultData(props)
+                ? setExam(resultValue)
+                : setExam(e.target.value);
             }
           }}
+          defaultChecked={resultValue}
+          readOnly
         />
       </div>
-
       <div className="w-[180px] border-r relative">
         <Button
-          name={loading ? "Loading" : "Add Score"}
+          name={loading ? "Loading" : "APPROVE"}
           icon={
             loading && (
               <ClipLoader
@@ -272,9 +214,9 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
   );
 };
 
-const SubjectGradeCard = () => {
+const MidTestSubjectGradeCard = () => {
   const { teacherInfo } = useTeacherInfo();
-  const { subjectID } = useParams();
+  const { subjectID, quizID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
 
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
@@ -288,7 +230,10 @@ const SubjectGradeCard = () => {
 
   const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
+  const { midTestPerformance } = useMidTestResultPerformance(quizID);
+
   const allStudents = classStudents?.students;
+
   const sortedStudents = allStudents?.sort((a, b) =>
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
@@ -308,40 +253,27 @@ const SubjectGradeCard = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[1300px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Grade</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
-          <div className="w-[100px] border-r">
-            1st Test <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">
-            2nd Test
-            <br /> Score
-          </div>
-          <div className="w-[100px] border-r">
-            3rd Test <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">
-            NoteBook
-            <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">Examination Score</div>
+          <div className="w-[100px] border-r">Mid Test Examination Score</div>
 
           <div className="w-[180px] border-r">Submit Report</div>
         </div>
 
-        <div className=" w-[1300px] overflow-hidden">
+        <div className=" w-[900px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (
                 <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+                  <MainStudentRow
+                    props={props}
+                    i={i}
+                    data={midTestPerformance?.performance}
+                  />
                 </div>
               ))}
             </div>
@@ -354,4 +286,4 @@ const SubjectGradeCard = () => {
   );
 };
 
-export default SubjectGradeCard;
+export default MidTestSubjectGradeCard;

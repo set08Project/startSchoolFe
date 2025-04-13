@@ -428,10 +428,13 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                     <p className="text">Total</p>
                     <p className="text-[12px]">(100)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">1st Term </p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
+                  {school?.presentTerm === "1st Term" ||
+                    (school?.presentTerm === "3rd Term" && (
+                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        <p className="text">1st Term </p>
+                        <p className="text-[12px]">(100)</p>
+                      </div>
+                    ))}
 
                   {school?.presentTerm === "1st Term" ||
                     (school?.presentTerm === "2nd Term" && (
@@ -497,11 +500,13 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                         <div className="p-2 w-[120px] border-x ">
                           {el?.subject}
                         </div>
-                        <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {el?.test1 + el?.test2 + el?.test3 + el?.test4}
-                          </p>
-                        </div>
+                        {
+                          <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
+                            <p className="text-[12px]">
+                              {el?.test1 + el?.test2 + el?.test3 + el?.test4}
+                            </p>
+                          </div>
+                        }
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">{el?.exam}</p>
                         </div>
@@ -514,20 +519,29 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                               el?.exam}
                           </p>
                         </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">
-                            {" "}
-                            {el?.test1 +
-                              el?.test2 +
-                              el?.test3 +
-                              el?.test4 +
-                              el?.exam}
-                          </p>
-                        </div>
+                        {school?.presentTerm === "1st Term" ||
+                          (school?.presentTerm === "3rd Term" && (
+                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">
+                                {" "}
+                                {el?.test1 +
+                                  el?.test2 +
+                                  el?.test3 +
+                                  el?.test4 +
+                                  el?.exam}
+                              </p>
+                            </div>
+                          ))}
                         {school?.presentTerm === "1st Term" ||
                           (school?.presentTerm === "2nd Term" && (
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">0</p>
+                              <p className="text-[12px]">
+                                {el?.test1 +
+                                  el?.test2 +
+                                  el?.test3 +
+                                  el?.test4 +
+                                  el?.exam}
+                              </p>
                             </div>
                           ))}
 

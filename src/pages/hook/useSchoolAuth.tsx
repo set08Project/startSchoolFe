@@ -1,7 +1,6 @@
 import useSWR, { mutate } from "swr";
 import {
   allSchools,
-  analyticPayment,
   classAttendance,
   getClassSubjects,
   getClassTimeTable,
@@ -22,18 +21,19 @@ import {
   studentAttendance,
   topSchoolStudent,
   updateClassroomTeacher,
-  verifyPayment1st,
+  // verifyPayment1st,
   viewComplains,
   viewGallary,
   viewPresentSession,
   viewSchoolByName,
   viewSchoolSession,
-  viewSchoolSessionTerm,
+  // viewSchoolSessionTerm,
   viewSchoolSubjects,
   viewSchoolTeacher,
   viewSessionTermHistory,
   viewStore,
   viewTermDetail,
+  analyticPayment,
 } from "../api/schoolAPIs";
 import {
   viewSchoolClassroom,
@@ -80,6 +80,7 @@ export const useSchoolCookie = () => {
         return res.data;
       });
     }
+
     // { refreshInterval: 3000 }
   );
 
@@ -95,6 +96,7 @@ export const useSchoolData = () => {
       return res.data;
     });
   });
+
   return { data, isLoading };
 };
 
@@ -104,6 +106,7 @@ export const useSchoolDataByName = (schoolName: string) => {
       return res.data;
     });
   });
+
   return { schoolInfo };
 };
 
@@ -119,6 +122,7 @@ export const useSchoolClassRM = () => {
 
     // { refreshInterval: 2000 }
   );
+
   return { schoolClassroom, mutate };
 };
 
@@ -128,6 +132,7 @@ export const useViewSchoolClassRM = (schoolID: string) => {
       return res.data;
     });
   });
+
   return { viewClasses };
 };
 
@@ -142,6 +147,7 @@ export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
       });
     }
   );
+
   return { schoolClassroom };
 };
 
@@ -151,6 +157,7 @@ export const useSchoolClassRMDetail = (classID: string) => {
       return res.data;
     });
   });
+
   return { classroom };
 };
 
@@ -164,6 +171,7 @@ export const useSchoolAnnouncement = () => {
       });
     }
   );
+
   return { schoolAnnouncement };
 };
 
@@ -174,6 +182,7 @@ export const useSchoolEvent = () => {
       return res.data;
     });
   });
+
   return { schoolEvent };
 };
 
@@ -201,8 +210,16 @@ export const useSchoolSubject = () => {
       return viewSchoolSubjects(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      fallbackData: JSON.parse(localStorage.getItem("schoolSubject")!) || null,
     }
   );
+  useEffect(() => {
+    if (schoolSubject) {
+      localStorage.setItem("schoolSubject", JSON.stringify(schoolSubject));
+    }
+  }, [schoolSubject]);
   return { schoolSubject };
 };
 
@@ -243,15 +260,11 @@ export const useClassTimeTable = (classID: string) => {
 };
 
 export const useSchoolStudents = (schoolID: string) => {
-  const { data: students } = useSWR(
-    `api/read-student/${schoolID}`,
-    () => {
-      return getSchoolStudents(schoolID!).then((res) => {
-        return res;
-      });
-    }
-    // { refreshInterval: 3500 }
-  );
+  const { data: students } = useSWR(`api/read-student/${schoolID}`, () => {
+    return getSchoolStudents(schoolID!).then((res) => {
+      return res;
+    });
+  });
 
   return { students };
 };
@@ -278,7 +291,6 @@ export const useTopSchoolStudent = (studentID: string) => {
         return res;
       });
     }
-    // { refreshInterval: 10000 }
   );
 
   return { perform };
@@ -385,6 +397,7 @@ export const useViewSessionTerm = (termID: string) => {
       });
     }
   );
+
   return { sessionTermData };
 };
 
@@ -409,6 +422,7 @@ export const usePurchasedStoreInfo = (schoolID: string) => {
       });
     }
   );
+
   return { schoolPurchased };
 };
 
@@ -419,8 +433,19 @@ export const useSchoolSchoolFees = (schoolID: string) => {
       return readSchoolFee(schoolID!).then((res) => {
         return res?.data?.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("schoolFeeRecord")!) || null,
     }
   );
+
+  useEffect(() => {
+    if (schoolFeeRecord) {
+      localStorage.setItem("schoolFeeRecord", JSON.stringify(schoolFeeRecord));
+    }
+  }, [schoolFeeRecord]);
+
   return { schoolFeeRecord };
 };
 
@@ -465,9 +490,7 @@ export const useDeailyExpense = (schoolID: string) => {
       }
     );
 
-    return {
-      dailyExpense,
-    };
+    return { dailyExpense };
   } catch (error) {
     console.error();
     return error;

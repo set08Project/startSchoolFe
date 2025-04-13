@@ -24,11 +24,15 @@ import {
   useReadOneClassInfo,
   useStudentInfo,
 } from "@/pagesForStudents/hooks/useStudentHook";
-import { useSchoolSessionData } from "@/pages/hook/useSchoolAuth";
+import {
+  useSchoolDataByName,
+  useSchoolSessionData,
+} from "@/pages/hook/useSchoolAuth";
 import {
   useClassSubject,
   useSchoolAnnouncement,
   useStudentGrade,
+  useStudentMidGrade,
   useSujectInfo,
   useTeacherDetail,
 } from "@/pagesForTeachers/hooks/useTeacher";
@@ -51,6 +55,7 @@ const MidTestReportScreen: React.FC = () => {
   };
 
   const { studentInfo } = useStudentInfo();
+  const { gradeMidData } = useStudentMidGrade(studentInfo?._id);
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
@@ -65,7 +70,7 @@ const MidTestReportScreen: React.FC = () => {
       `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
     );
   });
-
+  // console.log(gradeMidData);
   const { oneClass: classDetails } = useReadOneClassInfo(
     studentInfo?.presentClassID
   );
@@ -80,30 +85,30 @@ const MidTestReportScreen: React.FC = () => {
   const schoolAddress = school?.address;
 
   let numbPassed =
-    grade?.result?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    gradeMidData?.midReportCard[0]?.result?.length -
+    lodash.filter(gradeMidData?.midReportCard[0]?.result, { grade: "F" })
+      ?.length;
 
   let commulationScore =
-    (grade?.result
+    (gradeMidData?.midReportCard[0]?.result
       ?.map((el: any) => {
-        return el.exam + el.test1 + el.test2 + el.test3 + el.test4;
+        return isNaN(el.exam) ? 0 : el.exam;
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (grade?.result?.length * 100)) *
+      (gradeMidData?.midReportCard[0]?.result?.length * 100)) *
     100;
 
   let holdeAll = [];
-
-  // }
 
   let result = {};
   let resultLow = {};
 
   for (let i of subjectData?.students || []) {
-    const { gradeData: details } = useStudentGrade(i);
-    let reportData = details?.reportCard?.find((el: any) => {
+    const { gradeMidData: details } = useStudentMidGrade(i);
+
+    let reportData = details?.midReportCard?.find((el: any) => {
       return (
         el.classInfo ===
         `${studentInfo?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
@@ -210,6 +215,14 @@ const MidTestReportScreen: React.FC = () => {
     pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("examplepdf.pdf");
   };
+  const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
+  const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
+  let midResultData = gradeMidData?.midReportCard?.find((el: any) => {
+    return (
+      el?.classInfo ===
+      `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
+    );
+  });
 
   useEffect(() => {
     preprocessContent();
@@ -632,7 +645,7 @@ const MidTestReportScreen: React.FC = () => {
                     No. of subject taken
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {grade?.result?.length}
+                    {gradeMidData?.midReportCard[0]?.result?.length}
                   </h1>
                 </div>
 
@@ -649,7 +662,7 @@ const MidTestReportScreen: React.FC = () => {
                     Attendance Performance
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {grade?.attendance}
+                    {gradeMidData?.midReportCard[0]?.attendance || "95%"}
                   </h1>
                 </div>
 
@@ -900,7 +913,7 @@ const MidTestReportScreen: React.FC = () => {
                   <p>Principal's Comment</p>
 
                   <p className="my-2 border h-[120px] p-2 mb-5">
-                    {grade?.adminComment}
+                    {midResultData?.adminComment}
                   </p>
                   <div className="flex w-full">
                     <div className="flex-1 flex flex-col">
@@ -925,7 +938,7 @@ const MidTestReportScreen: React.FC = () => {
 
                   <p className="my-2 border h-[120px] p-2 mb-5">
                     {" "}
-                    {grade?.classTeacherComment}
+                    {midResultData?.classTeacherComment}
                   </p>
                   <div className="flex w-full">
                     <div className="flex-1 flex flex-col">
@@ -934,7 +947,7 @@ const MidTestReportScreen: React.FC = () => {
                       </p>
                       <p className="text-[10px]">Class Teacher</p>
                       <div className="flex-1" />
-                      <p>{moment(grade?.createdAt).format("lll")}</p>
+                      <p>{moment(midResultData?.createdAt).format("lll")}</p>
                     </div>
                     <div className="w-[160px] h-[80px] border">
                       <img

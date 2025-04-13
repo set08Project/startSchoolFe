@@ -69,6 +69,8 @@ const MidTestPreviewScreen = () => {
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
 
+  console.log(examination?.quiz?.theory);
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -140,6 +142,17 @@ const MidTestPreviewScreen = () => {
               )
             )}
 
+            <div className="border-r mt-10 w-full h-[10px] bg-red-30">
+              <hr />
+            </div>
+            <div className="text-[16px] italic font-semibold">Section B </div>
+
+            <div
+              className="mt-5"
+              dangerouslySetInnerHTML={{
+                __html: `${examination?.quiz?.theory}`,
+              }}
+            />
             <div>
               <Button
                 className="bg-blue-950 px-12 mt-14 py-4"

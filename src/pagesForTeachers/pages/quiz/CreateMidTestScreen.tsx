@@ -8,14 +8,20 @@ import { addTestInstruction } from "../../../global/reduxState";
 import PreviewExamination from "./PreviewExamination";
 import PreviewMidTestScreen from "./PreviewMidTestQuestions";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+
 const CreateMidTestScreen = () => {
+  const [editorValue, setEditorValue] = useState("");
+
   const dispatch = useDispatch();
   const testQuestion = useSelector((state: any) => state.test);
   const [toggle, setToggle] = useState<boolean>(false);
 
   const [instruction, setInstruction] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
-  const [mark, setMark] = useState<string>("");
+  const [duration, setDuration] = useState<string>("0.084");
+  const [mark, setMark] = useState<string>("2");
 
   const [fileData, setFileData] = useState();
 
@@ -23,6 +29,83 @@ const CreateMidTestScreen = () => {
     setFileData(e.target.files[0]);
   };
   document.title = "NEXT: Creating mid Test Questions";
+
+  //   {
+
+  //   clipboard: {
+  //     matchVisual: false,
+  //   },
+  // }
+
+  // {
+  //     modules: {
+  //       toolbar: '#toolbar'
+  //     },
+  //     formats: ["size", "bold", "script"], // Important
+  //   }
+
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Create a FormData object to send the image to the server
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        // Upload the image to your server or third-party service
+        const response = await axios.post("YOUR_IMAGE_UPLOAD_URL", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Assuming the response contains the URL of the uploaded image
+        const imageUrl = response.data.url; // Modify based on your server's response
+
+        // Insert image into the editor
+        // const range = this.quill.getSelection();
+        // this.quill.insertEmbed(range.index, "image", imageUrl);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
+    };
+  };
+
+  const toolbar = [
+    ["bold", "italic", "underline", "strike"],
+    [{ align: [] }],
+
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+
+    [{ size: ["small", false, "large", "huge"] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ["link", "image", "video"],
+    [{ color: [] }, { background: [] }],
+  ];
+
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: "1" }, { header: "2" }, { font: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline", "strike"],
+        ["link", "image"],
+        [{ align: [] }],
+      ],
+      // handlers: {
+      //   image: imageHandler, // Hook the custom image handler
+      // },
+    },
+  };
+
   return (
     <div>
       <LittleHeader name="Create Mid-Test Question Screen" />
@@ -50,8 +133,9 @@ const CreateMidTestScreen = () => {
 
           <div className="h-full flex flex-col">
             <p className="my-2 font-medium capitalize border-b">
-              Set Examination Instruction
+              Set Mid-Test Instruction
             </p>
+
             <div>
               <div className="mt-5 flex flex-col">
                 <label className="text-[12px]">Enter Instruction</label>
@@ -62,6 +146,22 @@ const CreateMidTestScreen = () => {
                   onChange={(e) => {
                     setInstruction(e.target.value);
                   }}
+                />
+              </div>
+              <div className="mt-5 flex flex-col">
+                <label className="mt-5 mb-2 text-[16px]">
+                  <strong className="font-[500]">Section B: </strong>for Theory
+                  Questions
+                </label>
+
+                <ReactQuill
+                  value={editorValue}
+                  onChange={(value) => {
+                    setEditorValue(value);
+                  }}
+                  modules={modules}
+                  theme="snow"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] min-h-[100px] rounded-md resize-none outline-none p-2"
                 />
               </div>
               <div className="mt-10 w-full flex gap-2">
@@ -81,6 +181,7 @@ const CreateMidTestScreen = () => {
                       choose
                     </option>
 
+                    <option value="0.084">5 Minutes</option>
                     <option value="0.167">10 Minutes</option>
                     <option value="0.333">20 Minutes</option>
                     <option value="0.500">30 Minutes</option>
@@ -128,6 +229,7 @@ const CreateMidTestScreen = () => {
             mark={mark}
             file={fileData}
             instruction={instruction}
+            editorValue={editorValue}
           />
         </div>
       </div>

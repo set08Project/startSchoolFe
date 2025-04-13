@@ -78,7 +78,7 @@ const ExaminationPreviewScreen = () => {
         <div className="sticky flex top-[70px] justify-end items-center">
           <div className="sticky min-w-[230px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
             <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
-              Test Count Down Timer <MdOutlineTimer />
+              Mid Test Count Down Timer <MdOutlineTimer />
             </h1>
             {activate && timerInSeconds ? (
               <div>

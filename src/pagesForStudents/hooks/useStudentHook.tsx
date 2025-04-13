@@ -28,7 +28,7 @@ import {
   viewTermlyBudget,
   viewTermlyExpense,
 } from "../../pages/api/schoolAPIs";
-import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
+// import { viewMidTest } from "@/pagesForTeachers/api/teachersAPI";
 
 export const useStudentCookie = () => {
   const user = useSelector((state: any) => state.user);
@@ -49,6 +49,7 @@ export const useMidTestStudentPerformance = (studentID: string) => {
       });
     }
   );
+
   return { midTestPerformace };
 };
 
@@ -61,6 +62,7 @@ export const useMidTestStudent = (subjectID: string) => {
       });
     }
   );
+
   return { midTest };
 };
 
@@ -73,6 +75,7 @@ export const useTermBudget = (schoolID: string) => {
       });
     }
   );
+
   return { termBudget };
 };
 
@@ -82,6 +85,7 @@ export const useTermExpenses = (schoolID: string) => {
       return res.data;
     });
   });
+
   return { termlyExpense };
 };
 
@@ -96,6 +100,7 @@ export const useStudentInfo = () => {
       });
     }
   );
+
   return { studentInfo };
 };
 
@@ -106,8 +111,13 @@ export const useStudentInfoData = (studentID: string) => {
       return viewStduentDetail(studentID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      fallbackData:
+        JSON.parse(localStorage.getItem("studentInfoData")!) || null,
     }
   );
+
   return { studentInfoData };
 };
 
@@ -120,6 +130,7 @@ export const useStudentAttendant = (studentID: string) => {
       });
     }
   );
+
   return { studentAttendance };
 };
 
@@ -132,6 +143,7 @@ export const useAssignment = (classID: string) => {
       });
     }
   );
+
   return { classAssignments };
 };
 
@@ -144,6 +156,7 @@ export const useLessonNote = (schoolID: string, staffID: string) => {
       });
     }
   );
+
   return { lessonNote };
 };
 
@@ -156,6 +169,7 @@ export const useClassLessonNote = (classID: string) => {
       });
     }
   );
+
   return { classLessonNote };
 };
 
@@ -163,23 +177,11 @@ export const useReadMyClassInfo = () => {
   const [state, setState] = useState<any>({});
   const { studentInfo } = useStudentInfo();
 
-  useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
-
   return { state };
 };
 
 export const useReadMyClassInfoData = (classAssigned: string) => {
   const [state, setState] = useState<any>({});
-
-  useEffect(() => {
-    readClassInfo(classAssigned).then((res: any) => {
-      setState(res.data);
-    });
-  }, []);
 
   return { state };
 };
@@ -206,6 +208,7 @@ export const useOneArticle = (studentID: string) => {
       });
     }
   );
+
   return { oneArticle };
 };
 
@@ -218,6 +221,7 @@ export const useSchoolArticle = (schoolID: string) => {
       });
     }
   );
+
   return { allArticle };
 };
 
@@ -230,6 +234,7 @@ export const useComplain = (studentID: string) => {
       });
     }
   );
+
   return { complainData };
 };
 
@@ -242,6 +247,7 @@ export const usePastQuestionHistory = (studentID: string) => {
       });
     }
   );
+
   return { pastQuestionData };
 };
 
@@ -254,6 +260,7 @@ export const useClassTimeTableViewer = (classID: string) => {
       });
     }
   );
+
   return { viewTimeTable };
 };
 
@@ -266,6 +273,7 @@ export const usePurchasedStore = (studentID: string) => {
       });
     }
   );
+
   return { purchasedStore };
 };
 
@@ -278,6 +286,7 @@ export const useStudentSchoolFee = (studentID: string) => {
       });
     }
   );
+
   return { studentFees };
 };
 
@@ -290,6 +299,7 @@ export const useViewPerformance = (studentID: string) => {
       });
     }
   );
+
   return { performanceTest };
 };
 
@@ -299,6 +309,7 @@ export const useViewRemark = (studentID: string) => {
       return res?.data;
     });
   });
+
   return { remarks };
 };
 

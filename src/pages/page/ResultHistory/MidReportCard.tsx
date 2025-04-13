@@ -21,9 +21,14 @@ import {
   useClassStudent,
   useClassSubject,
   useStudentGrade,
+  useStudentMidGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useNavigate, useParams } from "react-router-dom";
-import { adminReport, approveMainReport } from "../../api/schoolAPIs";
+import {
+  adminMidReport,
+  adminReport,
+  approveMainReport,
+} from "../../api/schoolAPIs";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -39,25 +44,65 @@ interface iProps {
   teacherInfo?: any;
 }
 
-const SubjectScore: FC<iProps> = ({ props, el }) => {
+// const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
+//   const { gradeData } = useStudentGrade(props?._id);
+//   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+
+//   // SS 1A session: 2024/2025(Second Term)
+
+//   // let result = gradeData?.reportCard
+//   //   .find((el: any) => {
+//   //     return el.classInfo ===  `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`;
+//   //   })
+//   //   ?.result?.find((data: any) => {
+//   //     return data.subject === el?.subjectTitle;
+//   //   });
+
+//   let result = gradeData?.reportCard.find((el: any) => {
+//     return (
+//       el.classInfo ===
+//       `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+//     );
+//   });
+
+//   return (
+//     <div className="w-[180px] border-r">
+//       <Button
+//         name="Add Comment"
+//         className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+//         onClick={() => {
+//           if (stateValue !== "") {
+//             reportCardRemark(teacherInfo?._id, props?._id, {
+//               teacherComment: stateValue,
+//             }).then((res: any) => {
+//               if (res.status === 201) {
+//                 mutate(`api/student-report-card/${props?._id}`);
+//                 toast.success("Report Card Report Noted");
+//               } else {
+//                 toast.error(`${res?.response?.data?.message}`);
+//               }
+//             });
+//           } else {
+//             toast.error("Please give a REMARK");
+//           }
+//         }}
+//       />
+//     </div>
+//   );
+// };
+
+const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
   const { gradeData } = useStudentGrade(props?._id);
-  const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
-  const { classID } = useParams();
-  const { oneClass } = useReadOneClassInfo(classID);
+
   const { state } = useReadMyClassInfoData("JSS 1A");
   const { subjectData } = useClassSubject(state?._id);
 
-  let result = gradeData?.reportCard
+  let result = gradeMidData?.midReportCard
     .find((el: any) => {
       return (
         el.classInfo ===
-        `${props?.classAssigned} session: ${
-          schoolInfo?.find((el) => el?.year === data?.presentSession)?.year
-        }(${
-          schoolInfo?.find((el) => el?.presentTerm === data?.presentTerm)
-            ?.presentTerm
-        })`
+        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
       );
     })
     ?.result?.find((data: any) => {
@@ -67,26 +112,18 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
       <div>
-        <div className="w-[260px] ">
+        <div className="w-[200px] ">
           <p className="pl-1 font-bold text-[12px]">
             {result?.subject ? result?.subject : "Have't Entered"}
           </p>
           <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-            <p className="w-[30px] border-r">1st</p>
-            <p className="w-[30px] border-r">2nd</p>
-            <p className="w-[30px] border-r">3rd</p>
-            <p className="w-[30px] border-r">4th</p>
-            <p className="w-[35px] border-r">Exam</p>
+            <p className="w-[35px] border-r">Score</p>
             <p className="w-[35px] ">Total</p>
             <p className="w-[35px] ">Grade</p>
           </div>
         </div>
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
           {result?.mark ? result?.mark : 0}
@@ -99,25 +136,30 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+interface iProps {
+  props?: any;
+  Data?: any;
+  id?: string;
+  i?: number;
+}
+
+const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
   const { classID } = useParams();
   const { data } = useSchoolData();
   const { gradeData } = useStudentGrade(props?._id);
+  const { gradeMidData } = useStudentMidGrade(props?._id);
   const { oneClass } = useReadOneClassInfo(classID!);
-
+  const [loading, setLoading] = useState(false);
   const { subjectData } = useClassSubject(oneClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
 
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
-  let result = gradeData?.reportCard.find((el: any) => {
+  let result = gradeMidData?.midReportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${
-        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)?.year
-      }(${
-        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)
-          ?.presentTerm
+      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
+        schoolInfo![0]!?.presentTerm
       })`
     );
   });
@@ -126,6 +168,16 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
+  const [stateValue1, setStateValue1] = useState(
+    `${result?.adminComment ? result?.adminComment : ""}`
+  );
+
+  let resultValue = Data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  )?.performanceRating;
+
+  console.log("comment: ", result?.adminComment);
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -153,14 +205,14 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div
         className={`w-[${
-          subjectData?.classSubjects.length * 290
+          subjectData?.classSubjects.length * 200
         }px]  border-r items-center flex`}
       >
         <div className="flex gap-4 ">
           {lodash
             .sortBy(subjectData?.classSubjects, "subjectTitle")
             ?.map((el: any) => (
-              <SubjectScore props={props} el={el} />
+              <SubjectScore props={props} el={el} gradeMidData={gradeMidData} />
             ))}
         </div>
       </div>
@@ -177,34 +229,35 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
       <div className="w-[180px] border-r">
         <Button
-          name={!result?.approve ? "Approve Result" : "Result Approved"}
+          name={result?.approve ? "Result Approved " : "Approve Result"}
+          icon={loading && <FaSpinner className={`animate-spin `} />}
           className={`pl-4 py-3 w-[85%]  text-white ${
             result?.approve
               ? "bg-black hover:bg-neutral-800 "
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            // if (result?.adminComment !== "") {
-            adminReport(data?._id, props?._id, result?.adminComment).then(
-              (res: any) => {
+            setLoading(true);
+
+            adminMidReport(data?._id, props?._id, result?.adminComment)
+              .then((res: any) => {
                 if (res.status === 201) {
-                  mutate(`api/student-report-card/${props?._id}`);
+                  mutate();
                   toast.success("Report Card Report Noted");
                 } else {
                   toast.error(`${res?.response?.data?.message}`);
                 }
-              }
-            );
-            // } else {
-            //   toast.error("Please give a REMARK");
-            // }
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }}
         />
       </div>
 
       <div className="w-[180px] border-r">
-        <p className="w-[115px] uppercase">
-          {result?.approve ? "Approved" : "Not yet Approve"}
+        <p className="w-[35px] ">
+          {result?.approve ? "Approved" : "Not Approved"}
         </p>
       </div>
     </div>
@@ -288,7 +341,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   );
 };
 
-const ReportCardApproved = () => {
+const MidReportCard = () => {
   const navigate = useNavigate();
   const { classID } = useParams();
 
@@ -296,7 +349,7 @@ const ReportCardApproved = () => {
 
   const { state } = useReadMyClassInfoData(oneClass?.className);
 
-  const { classStudents } = useClassStudent(oneClass?._id!);
+  const { classStudents, mutate } = useClassStudent(oneClass?._id!);
   const { subjectData } = useClassSubject(oneClass?._id);
   const [data, setData] = useState([]);
 
@@ -308,7 +361,7 @@ const ReportCardApproved = () => {
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={"Admin's Report-card Remark and Approval"} />
+      <LittleHeader name={"Admin's Mid-Result Remark and Approval"} />
       <div className="mt-10" />
 
       <div className="flex w-full justify-end"></div>
@@ -325,7 +378,7 @@ const ReportCardApproved = () => {
           {/* 260px */}
           <div
             className={`w-[${
-              subjectData?.classSubjects.length * 290
+              subjectData?.classSubjects.length * 200
             }px] border-r`}
           >
             {/* <div>Subject Grade</div> */}
@@ -361,7 +414,7 @@ const ReportCardApproved = () => {
             <div>
               {classStudents?.students?.map((props: any, i: number) => (
                 <div key={props}>
-                  <MainStudentRow props={props} i={i} />
+                  <MainStudentRow props={props} i={i} mutate={mutate} />
                 </div>
               ))}
             </div>
@@ -426,4 +479,4 @@ const ReportCardApproved = () => {
   );
 };
 
-export default ReportCardApproved;
+export default MidReportCard;

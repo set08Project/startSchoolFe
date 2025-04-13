@@ -14,7 +14,7 @@ import {
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   bulkUploadofStudent,
   // deleteAllStudent,
@@ -24,12 +24,19 @@ import {
   verifyPayment3rd,
 } from "../../api/schoolAPIs";
 import toast from "react-hot-toast";
-import { useStudentInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import {
+  useStudentInfo,
+  useStudentInfoData,
+} from "../../../pagesForStudents/hooks/useStudentHook";
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaSpinner } from "react-icons/fa6";
+import PrintReciptScreen from "./PrintReceipt";
+import { MdClose } from "react-icons/md";
+
+import { useReactToPrint } from "react-to-print";
 
 interface iProps {
   props?: any;
@@ -116,7 +123,6 @@ const ViewStudent = () => {
     return result;
   };
 
-  // const {} = use
   const { data: UI } = useSchoolData();
   const { students } = useSchoolStudents(UI?._id);
   const [viewstudent1stfees, setViewStudent1stFees] = useState(false);
@@ -255,8 +261,10 @@ const ViewStudent = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
+  const [stateID, setStateID] = useState<string>("");
+  const [toggleView, setToggleView] = useState<boolean>(false);
   return (
-    <div className="">
+    <div className="relative">
       {/* header */}
       <div className="mb-0" />
       <LittleHeader name={"viewing all Students"} />
@@ -313,13 +321,14 @@ const ViewStudent = () => {
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
-        <div className="text-[gray] w-[1920px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[2220px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
           <div className="w-[130px] border-r">Reg. Date</div>
 
           <div className="w-[270px] border-r">Session Fee</div>
+          <div className="w-[130px] border-r">Receipt</div>
           <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
@@ -336,7 +345,7 @@ const ViewStudent = () => {
           <div className="w-[180px] border-r">Student Action</div>
         </div>
 
-        <div className=" w-[1920px] overflow-hidden">
+        <div className=" w-[2220px] overflow-hidden">
           {filteredStudents?.length >= 0 ? (
             <div>
               {filteredStudents?.map((props: any, i: number) => {
@@ -642,6 +651,41 @@ const ViewStudent = () => {
                             </label>
                           </div>
                         </div>
+                        <div className="w-[130px] border-r">
+                          {stateID !== "" && toggleView && (
+                            <div className="text-white p-4 w-full h-screen bg-black/5 rounded-md absolute top-0 left-0">
+                              <Modal
+                                props={stateID}
+                                setToggleView={setToggleView}
+                                setStateID={setStateID}
+                              />{" "}
+                            </div>
+                          )}
+
+                          {UI?.presentTerm === "1st Term" &&
+                          props?.feesPaid1st ? (
+                            <button
+                              className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                setStateID(props?._id);
+                                setToggleView(true);
+                              }}
+                            >
+                              Get Receipt
+                            </button>
+                          ) : // <PrintReciptScreen props={props} />
+                          UI?.presentTerm === "2nd Term" &&
+                            props?.feesPaid2nd ? (
+                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                              Get Receipt
+                            </button>
+                          ) : UI?.presentTerm === "3rd Term" &&
+                            props?.feesPaid3rd ? (
+                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                              Get Receipt
+                            </button>
+                          ) : null}
+                        </div>
                         <div className="w-[100px] border-r">
                           {props?.gender}
                         </div>
@@ -796,3 +840,222 @@ const ViewStudent = () => {
 };
 
 export default ViewStudent;
+
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
+  const { studentInfoData } = useStudentInfoData(props);
+  const { data } = useSchoolData();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleDownloadPDF = () => {
+    const capture = document.getElementById("receipt-content");
+    if (capture) {
+      html2canvas(capture, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
+        pdf.save(`School_Fee_Receipt_${studentInfoData?.studentFirstName}.pdf`);
+      });
+    }
+  };
+
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({ contentRef });
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black/5  bg-opacity-30 z-50 "
+      ref={contentRef}
+    >
+      <div className="relative w-full max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-8 border border-gray-200 overflow-hidden">
+        <div className="absolute text-[20px] font-[400] top-0 -left-60 text-blue-950/50 -z-1 -rotate-45 h-full ">
+          {Array.from({ length: 20 }, (_, i: number) => {
+            return (
+              <div className="flex gap-4 my-10 text-[25px] opacity-5" key={i}>
+                <div className=" flex gap-4 tracking-widest ">
+                  <p>School Fee Receipt</p>
+                  <p>{studentInfoData?.schoolName || "School Name"}</p>
+                  {/* <p>School Fee Receipt</p> */}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="absolute text-[20px] font-[400] -top-80 -right-40 text-blue-950/50 -z-1 -rotate-45 h-full ">
+          {Array.from({ length: 20 }, (_, i: number) => {
+            return (
+              <div className="flex gap-4 my-10 text-[25px] opacity-5" key={i}>
+                <div className=" flex gap-4 tracking-widest ">
+                  <p>School Fee Receipt</p>
+                  <p>{studentInfoData?.schoolName || "School Name"}</p>
+                  {/* <p>School Fee Receipt</p> */}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <button
+          className="absolute top-3 right-3 bg-gray-300 rounded-full p-1"
+          onClick={() => {
+            setToggleView(false);
+            setStateID("");
+          }}
+        >
+          <MdClose size={25} className="text-gray-700" />
+        </button>
+
+        <div id="receipt-content">
+          <div className="mt-10 bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+            <p className="text-lg uppercase font-semibold text-gray-700">
+              School Fee Receipt
+            </p>
+            <div className="flex gap-2 absolute z-10 right-12">
+              <button
+                onClick={handleDownloadPDF}
+                className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300 "
+              >
+                Download Now
+              </button>
+              {/* window.print(); */}
+              <button
+                onClick={() => handlePrint()}
+                className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+              >
+                Print
+              </button>
+            </div>
+          </div>
+
+          <div className="border-t border-dashed border-gray-300 my-6" />
+          <div className="flex w-full justify-between mt-5">
+            <div className=" mt-5 mb-6">
+              <h2 className="text-2xl font-bold text-gray-700">
+                {studentInfoData?.schoolName || "School Name"}
+              </h2>
+              <p className="text-[16px] leading-4 text-gray-500 w-[300px]">
+                {data?.address || "Address"}
+              </p>
+              <p className="text-sm mt-3  text-gray-500 w-[300px] font-[300]">
+                {data?.phone || "Phono"}
+              </p>
+              <p className="text-sm   text-gray-500 w-[300px] font-[300]">
+                {data?.email || "email"}
+              </p>
+            </div>
+            <div>
+              <img
+                src={data?.avatar}
+                className="h-[120px] bg-blue-50 rounded-lg object-cover w-[150px]"
+              />
+            </div>
+          </div>
+          <div className="border-t border-dashed border-gray-300 my-6" />
+
+          <div className="my-6 space-y-3 text-sm text-gray-600">
+            <p className="flex flex-wrap">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Received from:
+              </span>{" "}
+              <span className="text-[16px] font-[500]">
+                {studentInfoData?.studentFirstName}{" "}
+                {studentInfoData?.studentLastName}{" "}
+              </span>
+            </p>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic max-w-[300px]">
+                Parent / Gurdian email:
+              </span>{" "}
+              <span className="text-[16px] font-[500]">
+                {studentInfoData?.parentEmail || "Email not Provided"}
+              </span>
+            </p>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Student ID :
+              </span>{" "}
+              <span className="text-[16px] font-[500]">
+                {" "}
+                {studentInfoData?.enrollmentID}
+              </span>
+            </p>
+            <div className="flex items-center gap-10">
+              <p className="flex">
+                <span className="font-semibold text-blue-950 italic w-[300px]">
+                  Class :
+                </span>{" "}
+                <span className="text-[16px] font-[500]">
+                  {" "}
+                  {studentInfoData?.classAssigned}
+                </span>
+              </p>
+              <br />
+            </div>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Term :
+              </span>{" "}
+              {data?.presentTerm}
+            </p>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Payment Date :
+              </span>{" "}
+              <span className="text-[16px] font-[500]">
+                {moment(Date.now()).format("LLL")}
+              </span>
+            </p>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Amount Paid :
+              </span>{" "}
+              <span className="text-green-600 font-bold">
+                <span className="text-[16px] font-[500]">
+                  ₦
+                  {studentInfoData?.classTermFee
+                    ? studentInfoData.classTermFee.toLocaleString()
+                    : "0"}
+                </span>
+              </span>
+            </p>
+            <p className="flex">
+              <span className="font-semibold text-blue-950 italic w-[300px]">
+                Payment Method :
+              </span>{" "}
+              <span className="text-[16px] font-[500]"> In-Person</span>
+            </p>
+          </div>
+
+          <div className="border-t border-dashed border-gray-300 my-6" />
+          <div className="">
+            <p className="font-semibold text-blue-950 italic w-[300px] mb-2">
+              STATEMENT OF ACKNOWLEDGMENT:
+            </p>{" "}
+            <p className="text-blue-950 ">
+              This payment covers tuition fees otherwise known as{" "}
+              <strong>School-Fees</strong> for {data?.presentTerm} period.
+              Please retain this acknowledgment along with your receipt for
+              future reference.
+              <br />
+              Should you have any questions or require further clarification,
+              kindly contact the school office.
+              <br />
+              <br />
+              Thank you for your prompt payment and continued support.
+            </p>
+          </div>
+          <div className="border-t border-dashed border-gray-300 my-6" />
+
+          <p className="text-center text-sm text-gray-500 italic">
+            Thank you for your payment!
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
