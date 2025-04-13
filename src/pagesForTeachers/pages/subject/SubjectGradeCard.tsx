@@ -6,7 +6,9 @@ import { FC, useCallback, useEffect, useState } from "react";
 import {
   useSchoolClassRM,
   useSchoolClassRMDetail,
+  useSchoolData,
   useSchoolSessionData,
+  useSchoolTermDetails,
   useStudentAttendance,
   useViewSchoolClassRM,
 } from "../../../pages/hook/useSchoolAuth";
@@ -16,6 +18,7 @@ import {
   useSujectInfo,
   useTeacherInfo,
   useSubjectPerformance,
+  useSchoolAnnouncement,
 } from "../../hooks/useTeacher";
 import { createGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
@@ -38,7 +41,7 @@ interface iProps {
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { subjectID } = useParams();
   const { teacherInfo } = useTeacherInfo();
-
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   const { subjectInfo } = useSujectInfo(subjectID);
   const { perform } = useSubjectPerformance(subjectID);
 
@@ -60,12 +63,12 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-  // console.log(gradeData);
+
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
-      `${subjectInfo?.designated} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+      `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
     );
   });
 
@@ -83,6 +86,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
     return gradeData?.reportCard;
   };
+
   const makeGrade = () => {
     try {
       setLoading(true);

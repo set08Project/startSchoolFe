@@ -41,8 +41,10 @@ interface iProps {
 
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
+  const { data } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
-
+  const { classID } = useParams();
+  const { oneClass } = useReadOneClassInfo(classID);
   const { state } = useReadMyClassInfoData("JSS 1A");
   const { subjectData } = useClassSubject(state?._id);
 
@@ -50,7 +52,12 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     .find((el: any) => {
       return (
         el.classInfo ===
-        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+        `${props?.classAssigned} session: ${
+          schoolInfo?.find((el) => el?.year === data?.presentSession)?.year
+        }(${
+          schoolInfo?.find((el) => el?.presentTerm === data?.presentTerm)
+            ?.presentTerm
+        })`
       );
     })
     ?.result?.find((data: any) => {
@@ -106,8 +113,11 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   let result = gradeData?.reportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-        schoolInfo![0]!?.presentTerm
+      `${props?.classAssigned} session: ${
+        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)?.year
+      }(${
+        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)
+          ?.presentTerm
       })`
     );
   });

@@ -11,6 +11,7 @@ import {
 import {
   useClassStudent,
   useClassSubject,
+  useSchoolAnnouncement,
   useStudentGrade,
   useStudentMidGrade,
   useTeacherInfo,
@@ -94,12 +95,21 @@ const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+  const { schoolAnnouncement } = useSchoolAnnouncement(props?.schoolIDs);
 
   let result = gradeData?.reportCard
     .find((el: any) => {
       return (
         el.classInfo ===
-        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+        `${props?.classAssigned} session: ${
+          schoolInfo?.find(
+            (el) => el?.year === schoolAnnouncement?.presentSession
+          )?.year
+        }(${
+          schoolInfo?.find(
+            (el) => el?.presentTerm === schoolAnnouncement?.presentTerm
+          )?.presentTerm
+        })`
       );
     })
     ?.result?.find((data: any) => {
@@ -143,18 +153,24 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
 const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
   const { teacherInfo } = useTeacherInfo();
   const { gradeData } = useStudentGrade(props?._id);
-
   const { subjectData } = useClassSubject(theClass?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [attendance, setAttendace] = useState<string>("");
 
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   let result = gradeData?.reportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-        schoolInfo![0]!?.presentTerm
+      `${props?.classAssigned} session: ${
+        schoolInfo?.find(
+          (el) => el?.year === schoolAnnouncement?.presentSession
+        )?.year
+      }(${
+        schoolInfo?.find(
+          (el) => el?.presentTerm === schoolAnnouncement?.presentTerm
+        )?.presentTerm
       })`
     );
   });
@@ -358,21 +374,37 @@ const MainStudentPsycho: FC<iProps> = ({ props, i }) => {
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [confidence, setConfidence] = useState<string>("");
-  const [communication, setCommunication] = useState<string>("");
-  const [leadership, setLeadership] = useState<string>("");
-  const [punctuality, setPunctuality] = useState<string>("");
-  const [empathy, setEmpathy] = useState<string>("");
-  const [presentational, setPresentational] = useState<string>("");
-  const [hardworking, setHardworking] = useState<string>("");
-  const [resilient, setResilient] = useState<string>("");
-  const [sportship, setSportship] = useState<string>("");
+  const [confidence, setConfidence] = useState<string>("10");
+  const [communication, setCommunication] = useState<string>("10");
+  const [leadership, setLeadership] = useState<string>("10");
+  const [punctuality, setPunctuality] = useState<string>("10");
+  const [empathy, setEmpathy] = useState<string>("10");
+  const [presentational, setPresentational] = useState<string>("10");
+  const [hardworking, setHardworking] = useState<string>("10");
+  const [resilient, setResilient] = useState<string>("10");
+  const [sportship, setSportship] = useState<string>("10");
+
+  // let result = gradeData?.reportCard.find((el: any) => {
+  //   return (
+  //     el.classInfo ===
+  //     `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
+  //       schoolInfo![0]!?.presentTerm
+  //     })`
+  //   );
+  // });
+
+  const { schoolAnnouncement: data } = useSchoolAnnouncement(
+    teacherInfo?.schoolIDs
+  );
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-        schoolInfo![0]!?.presentTerm
+      `${props?.classAssigned} session: ${
+        schoolInfo?.find((el) => el?.year === data?.presentSession)?.year
+      }(${
+        schoolInfo?.find((el) => el?.presentTerm === data?.presentTerm)
+          ?.presentTerm
       })`
     );
   });

@@ -12,7 +12,10 @@ import axios from "axios";
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
 // Working Online
-// const URL: string = "https://startschoolbe-3.onrender.com/api";
+
+// const URL: string = "https://startschoolbe-3.onrender.com/api"
+// const URL = "http://localhost:2244/api
+
 
 export const getStudentPerformance = async (studentID: string) => {
   try {
@@ -899,6 +902,7 @@ export const reportCardRemark = async (
   data: any
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
@@ -944,6 +948,7 @@ export const psychoReportCardRemark = async (
   data: any
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/update-psycho-report/${teacherID}/${studentID}`, data)
 
