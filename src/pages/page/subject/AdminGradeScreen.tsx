@@ -49,6 +49,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
 
   const { schoolInfo } = useSchoolSessionData(data?._id);
 
+  console.clear();
+  console.log(data);
+
   const [test1, setTest1] = useState("");
   const [test2, setTest2] = useState("");
   const [test3, setTest3] = useState("");
@@ -61,8 +64,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
     return (
       el.classInfo ===
       `${subjectInfo?.designated} session: ${
-        schoolInfo && schoolInfo[0]?.year
-      }(${schoolInfo && schoolInfo[0]?.presentTerm})`
+        schoolInfo &&
+        schoolInfo?.find((el) => el.year === data?.presentSession)?.year
+      }(${
+        schoolInfo &&
+        schoolInfo?.find((el) => el.presentTerm === data?.presentTerm)
+          ?.presentTerm
+      })`
     );
   });
 
