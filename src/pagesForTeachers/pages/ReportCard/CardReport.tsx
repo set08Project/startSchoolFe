@@ -274,10 +274,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            console.log(
-              "result?.classTeacherComment: ",
-              result?.classTeacherComment
-            );
             setLoading(true);
             // if (result?.classTeacherComment !== "") {
             reportCardRemark(teacherInfo?._id, props?._id, {
@@ -639,8 +635,6 @@ const CardReport = () => {
   const [toggle, setToggle] = useState<boolean>(true);
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
-
-  // console.log("class: ", oneClass);
 
   return (
     <div className="">
@@ -1038,7 +1032,6 @@ const MidTestMainStudentRow: FC<iProps> = ({
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            console.log(stateValue);
             setLoading(true);
             if (stateValue !== "") {
               midReportCardRemark(teacherInfo?._id, props?._id, {

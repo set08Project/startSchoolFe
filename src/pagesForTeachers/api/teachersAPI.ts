@@ -16,7 +16,6 @@ const URL: string = "https://startschoolbe-4.onrender.com/api";
 // const URL: string = "https://startschoolbe-3.onrender.com/api"
 // const URL = "http://localhost:2244/api
 
-
 export const getStudentPerformance = async (studentID: string) => {
   try {
     return await axios
@@ -902,7 +901,6 @@ export const reportCardRemark = async (
   data: any
 ) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/teacher-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
