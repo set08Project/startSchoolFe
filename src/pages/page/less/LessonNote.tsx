@@ -18,7 +18,7 @@ import { GoDotFill } from "react-icons/go";
 
 const AdminLessonNote = () => {
   const { data } = useSchoolData();
-  const { notes } = useNotes(data?._id);
+  const { timetbale: notes } = useNotes(data?._id);
 
   const [id, setID] = useState<string>("");
   const [obj, setObj] = useState<any>({});

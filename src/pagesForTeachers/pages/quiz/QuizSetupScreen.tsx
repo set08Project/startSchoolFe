@@ -295,7 +295,7 @@ const QuizSetupScreen = () => {
                       midTest?._id
                     )
                       .then(() => {
-                        midTestMutate();
+                        midTestMutate(`api/view-subject-mid-test/${subjectID}`);
                       })
                       .finally(() => {
                         setLoading(false);
@@ -508,7 +508,9 @@ const QuizSetupScreen = () => {
                       })
                         .then((res) => {
                           toast.success("Updated successfully");
-                          midTestMutate();
+                          midTestMutate(
+                            `api/view-subject-mid-test/${subjectID}`
+                          );
                         })
                         .finally(() => {
                           setToggle(false);

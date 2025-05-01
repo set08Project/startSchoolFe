@@ -863,7 +863,7 @@ export const useMidTest = (subjectID: string) => {
   );
 
   const handleUpdate = async (newData: any) => {
-    mutate(newData, false);
+    midTestMutate(newData, false);
   };
 
   return { midTest, midTestMutate: handleUpdate };
