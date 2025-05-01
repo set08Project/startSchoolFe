@@ -15,7 +15,7 @@ const Announcement = () => {
     autoplaySpeed: 5000,
     pauseOnHover: true,
   };
-  const { schoolAnnouncement } = useSchoolAnnouncement();
+  const { schoolAnnouncement, mutate } = useSchoolAnnouncement();
   const { schoolEvent } = useSchoolEvent();
 
   let announce = schoolAnnouncement?.announcements?.slice(0, 5);
@@ -26,7 +26,7 @@ const Announcement = () => {
 
   const data: any = lodash.shuffle(value)?.slice(0, 5);
   const data1: any = Array.from({ length: 2 });
-
+  // mutate(`api/view-announcement/${dataID}`, announcementData, false);
   return (
     <div className="w-90% mx-7">
       {data1?.length > 0 ? (

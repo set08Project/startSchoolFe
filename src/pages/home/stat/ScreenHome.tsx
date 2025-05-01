@@ -38,7 +38,7 @@ const ScreenHome = () => {
           <Personal />
           <div className="flex-1 mt-10" />
 
-          {/* <div className="text-[13px] font-medium mt-4">
+          <div className="text-[13px] font-medium mt-4">
             <div className="flex items-center gap-4">
               <div className="border-r pr-4 ">
                 {state ? (
@@ -88,7 +88,7 @@ const ScreenHome = () => {
                 )}
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
 
         <div className="min-w-[300px] overflow-hidden h-full flex flex-col rounded-md border p-4">
@@ -143,8 +143,7 @@ const ScreenHome = () => {
           </div>
         </div>
 
-        <div className="border rounded-md flex flex-col gap-2 w-full p-2 col-span-1 lg:col-span-3">
-          {/* Appointment */}
+        {/* <div className="border rounded-md flex flex-col gap-2 w-full p-2 col-span-1 lg:col-span-3">
           <div className=" rounded-md w-full overflow-x-auto">
             <div className="mb- text-medium capitalize">View Data Chart</div>
             <p className="text-[13px] text-black/70 mb-5">
@@ -189,11 +188,11 @@ const ScreenHome = () => {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="border rounded-md flex gap-2 w-full p-2 col-span-1 lg:col-span-3 mt-5 overflow-x-auto">
-        {/* Appointment */}
+        {/* store part */}
 
         <div className=" rounded-md w-full">
           <div className="mb-4 text-medium capitalize">

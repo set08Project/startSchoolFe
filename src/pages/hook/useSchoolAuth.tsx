@@ -34,6 +34,7 @@ import {
   viewStore,
   viewTermDetail,
   analyticPayment,
+  viewStudentHistory,
 } from "../api/schoolAPIs";
 import {
   viewSchoolClassroom,
@@ -51,66 +52,247 @@ export const useSchoolRegister = (reader: any) => {
 };
 
 export const useSchoolTermDetails = (termID: string) => {
-  const { data } = useSWR(`api/view-school-term/${termID}`, () => {
-    return analyticPayment(termID).then((res) => {
-      return res.data;
-    });
-  });
+  const x = `api/view-school-term/${termID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data } = useSWR(
+    x,
+    () => {
+      return analyticPayment(termID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { data };
 };
 
 export const useSchool = (schoolID: string) => {
-  const { data } = useSWR(`api/view-school/${schoolID}`, () => {
-    return readSchool(schoolID).then((res) => {
-      return res;
-    });
-  });
+  const x = `api/view-school/${schoolID}/main-data`;
 
-  return { data };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data, mutate } = useSWR(
+    x,
+    () => {
+      return readSchool(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { data, mutate: handleUpdate };
 };
 
+// check this out
 export const useSchoolCookie = () => {
   const user = useSelector((state: any) => state.user);
 
-  const { data: dataID } = useSWR(
+  const x = `api/read-school-cookie/`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: dataID, mutate } = useSWR(
     `api/read-school-cookie/`,
     () => {
       return getSchoolCookie().then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
-
-    // { refreshInterval: 3000 }
   );
 
-  return { dataID: user?.id };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { dataID: user?.id, mutate: handleUpdate };
 };
 
 export const useSchoolData = () => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+
   const { dataID } = useSchoolCookie();
   const user = useSelector((state: any) => state.user);
+  const x = `api/view-school/${user?.id}/seconded-data`;
 
-  const { data, isLoading } = useSWR(`api/view-school/${user?.id}`, () => {
-    return readSchool(dataID!).then((res) => {
-      return res.data;
-    });
-  });
+  const hasCache =
+    sessionStorage.getItem(`api/view-school/${user?.id}/seconded-data`) !==
+    "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      `api/view-school/${user?.id}/seconded-data`,
+      "false"
+    );
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+  const { data, isLoading } = useSWR(
+    x,
+    () => {
+      return readSchool(dataID!).then((res) => {
+        return res.data;
+      });
+    },
+
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { data, isLoading };
 };
 
 export const useSchoolDataByName = (schoolName: string) => {
-  const { data: schoolInfo } = useSWR(`api/view-school/${schoolName}`, () => {
-    return viewSchoolByName(schoolName!).then((res) => {
-      return res.data;
-    });
-  });
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school/${schoolName}/reading-from-school-name`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+  const { data: schoolInfo } = useSWR(
+    x,
+    () => {
+      return viewSchoolByName(schoolName!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { schoolInfo };
 };
 
 export const useSchoolClassRM = () => {
+  const x = `api/view-classrooms/`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { dataID } = useSchoolCookie();
   const { data: schoolClassroom, mutate } = useSWR(
     `api/view-classrooms/`,
@@ -118,20 +300,59 @@ export const useSchoolClassRM = () => {
       return getSchoolClassroom(dataID!).then((res) => {
         return res.data;
       });
-    }
+    },
 
-    // { refreshInterval: 2000 }
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
   );
 
-  return { schoolClassroom, mutate };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { schoolClassroom, mutate: handleUpdate };
 };
 
 export const useViewSchoolClassRM = (schoolID: string) => {
-  const { data: viewClasses } = useSWR(`api/view-classrooms/`, async () => {
-    return await viewSchoolClassroom(schoolID!).then((res) => {
-      return res.data;
-    });
-  });
+  const x = `api/view-classrooms/`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+  const { data: viewClasses } = useSWR(
+    `api/view-classrooms/`,
+    async () => {
+      return await viewSchoolClassroom(schoolID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { viewClasses };
 };
@@ -139,183 +360,607 @@ export const useViewSchoolClassRM = (schoolID: string) => {
 export const useSchoolClassRMTeacherUpdate = (classID: string, data: {}) => {
   const { dataID } = useSchoolCookie();
   const user = useSelector((state: any) => state.user);
-  const { data: schoolClassroom } = useSWR(
+
+  const x = `api/update-classrooms-teacher/${user?.id}/${classID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: schoolClassroom, mutate } = useSWR(
     `api/update-classrooms-teacher/${user?.id}/${classID}`,
     () => {
       return updateClassroomTeacher(dataID!, classID, data).then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
-  return { schoolClassroom };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { schoolClassroom, mutate: handleUpdate };
 };
 
 export const useSchoolClassRMDetail = (classID: string) => {
-  const { data: classroom } = useSWR(`api/view-classrooms/${classID}`, () => {
-    return getClassroom(classID!).then((res) => {
-      return res.data;
-    });
-  });
+  const x = `api/view-classrooms/${classID}`;
 
-  return { classroom };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: classroom, mutate } = useSWR(
+    `api/view-classrooms/${classID}`,
+    () => {
+      return getClassroom(classID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { classroom, mutate: handleUpdate };
 };
 
 export const useSchoolAnnouncement = () => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+
   const { dataID } = useSchoolCookie();
-  const { data: schoolAnnouncement } = useSWR(
-    `api/view-announcement/${dataID}`,
+
+  const x = `api/view-announcement/${dataID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const {
+    data: schoolAnnouncement,
+    mutate,
+    error,
+    isValidating,
+  } = useSWR(
+    x,
     () => {
       return getSchoolAnncoement(dataID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
-  return { schoolAnnouncement };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return {
+    schoolAnnouncement,
+    mutate: handleUpdate,
+    isLoading: !schoolAnnouncement && !error && isValidating,
+    error,
+  };
 };
 
 export const useSchoolEvent = () => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
   const { dataID } = useSchoolCookie();
-  const { data: schoolEvent } = useSWR(`api/view-event/${dataID}`, () => {
-    return getSchoolEvent(dataID!).then((res) => {
-      return res.data;
-    });
-  });
+  const x = `api/view-event/${dataID}`;
 
-  return { schoolEvent };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: schoolEvent, mutate } = useSWR(
+    x,
+    () => {
+      return getSchoolEvent(dataID!).then((res) => {
+        return res.data;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+  return { schoolEvent, mutate: handleUpdate };
 };
 
 export const useSchoolTeacher = () => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
   const { dataID } = useSchoolCookie();
+  const x = `api/view-school-teacher/${dataID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const { data: schoolTeacher } = useSWR(
-    `api/view-school-teacher/${dataID}`,
+    x,
     async () => {
       return await viewSchoolTeacher(dataID!).then((res) => {
         return res.data;
       });
+    },
+
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
-    // { refreshInterval: 3500 }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
   return { schoolTeacher };
 };
 
 export const useSchoolSubject = () => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
   const { dataID } = useSchoolCookie();
+  const x = `api/view-school-subject/${dataID}`;
 
-  const { data: schoolSubject } = useSWR(
-    `api/view-school-subject/${dataID}`,
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+  const { data: schoolSubject, mutate } = useSWR(
+    x,
     () => {
       return viewSchoolSubjects(dataID!).then((res) => {
         return res.data;
       });
     },
     {
-      fallbackData: JSON.parse(localStorage.getItem("schoolSubject")!) || null,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
-  useEffect(() => {
-    if (schoolSubject) {
-      localStorage.setItem("schoolSubject", JSON.stringify(schoolSubject));
-    }
-  }, [schoolSubject]);
-  return { schoolSubject };
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { schoolSubject, mutate: handleUpdate };
 };
 
 export const useSchoolTeacherDetail = (teacherID: string) => {
-  const { data: schoolSubjectTeacherDetail } = useSWR(
+  const x = `api/view-school-subject-teacher/${teacherID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: schoolSubjectTeacherDetail, mutate } = useSWR(
     `api/view-school-subject-teacher/${teacherID}`,
     () => {
       return viewTeacherDetail(teacherID!).then((res: any) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
-  return { schoolSubjectTeacherDetail };
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { schoolSubjectTeacherDetail, mutate: handleUpdate };
 };
 
 export const useClassSubjects = (classID: string) => {
-  const { data: readSubject } = useSWR(`api/view-class-info/${classID}`, () => {
-    return getClassSubjects(classID!).then((res) => {
-      return res?.data?.classSubjects;
-    });
-  });
+  const x = `api/view-class-info/${classID}`;
 
-  return { readSubject };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: readSubject, mutate } = useSWR(
+    `api/view-class-info/${classID}`,
+    () => {
+      return getClassSubjects(classID!).then((res) => {
+        return res?.data?.classSubjects;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { readSubject, mutate: handleUpdate };
 };
 
 export const useClassTimeTable = (classID: string) => {
-  const { data: timetbale } = useSWR(
+  const x = `api/view-time-table/${classID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: timetbale, mutate } = useSWR(
     `api/view-time-table/${classID}`,
     () => {
       return getClassTimeTable(classID!).then((res) => {
         return res;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
-    // { refreshInterval: 10000 }
   );
 
-  return { timetbale };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { timetbale, mutate: handleUpdate };
 };
 
 export const useSchoolStudents = (schoolID: string) => {
-  const { data: students } = useSWR(`api/read-student/${schoolID}`, () => {
-    return getSchoolStudents(schoolID!).then((res) => {
-      return res;
-    });
-  });
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/read-student/${schoolID}`;
+  const hasCache = sessionStorage.getItem(x) !== "false";
 
-  return { students };
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: students, mutate } = useSWR(
+    x,
+    () => {
+      return getSchoolStudents(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { students, mutate: handleUpdate };
 };
 
 export const useSchoolStudentDetail = (studentID: string) => {
-  const { data: studentDetails } = useSWR(
-    `api/read-student-info/${studentID}`,
+  const x = `api/read-student-info/${studentID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: studentDetails, mutate } = useSWR(
+    x,
     () => {
       return getSchoolStudentDetail(studentID!).then((res) => {
         return res;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
-    // { refreshInterval: 10000 }
   );
 
-  return { studentDetails };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { studentDetails, mutate: handleUpdate };
 };
 
 export const useTopSchoolStudent = (studentID: string) => {
-  const { data: perform } = useSWR(
-    `api/view-school-top-student/${studentID}`,
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-top-student/${studentID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: perform, mutate } = useSWR(
+    x,
     () => {
       return topSchoolStudent(studentID!).then((res) => {
         return res;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
-  return { perform };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { perform, mutate: handleUpdate };
 };
 
 export const useClassAttendance = (classID: string) => {
-  const { data: mainAttendance } = useSWR(
+  const x = `api/view-class-attendance/${classID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: mainAttendance, mutate } = useSWR(
     `api/view-class-attendance/${classID}`,
     () => {
       return classAttendance(classID!).then((res) => {
         return res;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
-  return { mainAttendance };
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+  return { mainAttendance, mutate: handleUpdate };
 };
 
 export const useStudentAttendance = (studentID: string) => {
+  const x = `api/view-lesson-notes/${studentID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: mainStudentAttendance } = useSWR(
-    `api/view-student-attendance/${studentID}`,
+    x,
     () => {
       return studentAttendance(studentID!).then((res) => {
         return res;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
@@ -323,138 +968,499 @@ export const useStudentAttendance = (studentID: string) => {
 };
 
 export const useNotes = (schoolID: string) => {
-  const { data: notes } = useSWR(`api/view-lesson-notes/${schoolID}`, () => {
-    return readNoted(schoolID!).then((res) => {
-      return res;
-    });
-  });
+  const x = `api/view-lesson-notes/${schoolID}`;
 
-  return { notes };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: timetbale, mutate } = useSWR(
+    `api/view-lesson-notes/${schoolID}`,
+    () => {
+      return readNoted(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { timetbale, mutate: handleUpdate };
 };
 
 export const useStore = (schoolID: string) => {
-  const { data: store } = useSWR(`api/view-store/${schoolID}`, () => {
-    return viewStore(schoolID!).then((res) => {
-      return res;
-    });
-  });
+  const x = `api/view-store/${schoolID}`;
 
-  return { store };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: store, mutate } = useSWR(
+    `api/view-store/${schoolID}`,
+    () => {
+      return viewStore(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { store, mutate: handleUpdate };
 };
 
 export const useGallary = (schoolID: string) => {
-  const { data: gallary } = useSWR(`api/view-gallary/${schoolID}`, () => {
-    return viewGallary(schoolID!).then((res) => {
-      return res;
-    });
-  });
+  const x = `api/view-gallary/${schoolID}`;
 
-  return { gallary };
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: gallary, mutate } = useSWR(
+    `api/view-gallary/${schoolID}`,
+    () => {
+      return viewGallary(schoolID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { gallary, mutate: handleUpdate };
+};
+
+export const useViewStudentHistory = (studentID: string) => {
+  const x = `api/view-student-historical-result/${studentID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: studentResults, mutate } = useSWR(
+    x,
+    () => {
+      return viewStudentHistory(studentID!).then((res) => {
+        return res;
+      });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { studentResults, mutate: handleUpdate };
 };
 
 export const useSchoolSessionData = (schoolID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-session/${schoolID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: schoolInfo, isLoading: loading } = useSWR(
-    `api/view-school-session/${schoolID}`,
+    x,
     () => {
-      return viewSchoolSession(schoolID).then((res: any) => {
+      return viewSchoolSession(schoolID!).then((res: any) => {
         return res?.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
   return { schoolInfo, loading };
 };
 
 export const useComplain = (schoolID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-complain/${schoolID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: complainData } = useSWR(
-    `api/view-school-complain/${schoolID}`,
+    x,
     () => {
       return viewComplains(schoolID!).then((res) => {
         return res.data.complain;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
   return { complainData };
 };
 
 export const useViewSingleSession = (sessionID: string) => {
-  const { data: sessionData } = useSWR(
+  const x = `api/view-present-school-session/${sessionID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const { data: sessionData, mutate } = useSWR(
     `api/view-present-school-session/${sessionID}`,
     () => {
       return viewPresentSession(sessionID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
-  return { sessionData };
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { sessionData, mutate: handleUpdate };
 };
 
 export const useViewSessionTerm = (termID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-session/${termID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: sessionTermData } = useSWR(
-    `api/view-school-session/${termID}`,
+    x,
     () => {
       return viewSessionTermHistory(termID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { sessionTermData };
 };
 
 export const useViewTermDetail = (termID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-term-detail/${termID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: termData } = useSWR(
-    `api/view-school-term-detail/${termID}`,
+    x,
     () => {
       return viewTermDetail(termID!).then((res) => {
         return res.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
   return { termData };
 };
 
 export const usePurchasedStoreInfo = (schoolID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/view-school-purchase/${schoolID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: schoolPurchased } = useSWR(
-    `api/view-school-purchase/${schoolID}`,
+    x,
     () => {
       return purchasedStoreInfo(schoolID!).then((res) => {
         return res?.data?.data;
       });
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { schoolPurchased };
 };
 
 export const useSchoolSchoolFees = (schoolID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
+  const x = `api/update-school-school-fee-comfirm/${schoolID}`;
+
+  const hasCache = sessionStorage.getItem(x) !== "false";
+
+  useEffect(() => {
+    sessionStorage.setItem(x, "false");
+
+    const handleBeforeUnload = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const { data: schoolFeeRecord } = useSWR(
-    `api/update-school-school-fee-comfirm/${schoolID}`,
+    x,
     () => {
       return readSchoolFee(schoolID!).then((res) => {
         return res?.data?.data;
       });
     },
+
     {
-      fallbackData:
-        JSON.parse(localStorage.getItem("schoolFeeRecord")!) || null,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      revalidateOnMount: hasCache,
     }
   );
 
-  useEffect(() => {
-    if (schoolFeeRecord) {
-      localStorage.setItem("schoolFeeRecord", JSON.stringify(schoolFeeRecord));
-    }
-  }, [schoolFeeRecord]);
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
 
   return { schoolFeeRecord };
 };
 
 export const useAllSchools = () => {
-  const { data: allSchool } = useSWR(`api/view-all-school`, async () => {
-    return await allSchools().then((res: any) => {
-      return res?.data?.data;
-    });
-  });
+  const { data: allSchool } = useSWR(
+    `api/view-all-school`,
+    async () => {
+      return await allSchools().then((res: any) => {
+        return res?.data?.data;
+      });
+    },
+
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      // revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
   return { allSchool };
 };
 
@@ -462,18 +1468,46 @@ export const useAllSchools = () => {
 
 export const useFeeRecords = (schoolID: string) => {
   try {
-    const { data: recordPayment } = useSWR(
+    const x = `api/getall-fee-records/${schoolID}`;
+
+    const hasCache = sessionStorage.getItem(x) !== "false";
+
+    useEffect(() => {
+      sessionStorage.setItem(x, "false");
+
+      const handleBeforeUnload = () => {
+        sessionStorage.clear();
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }, []);
+
+    const { data: recordPayment, mutate } = useSWR(
       `api/getall-fee-records/${schoolID}`,
-      async () => {
-        return await getRecords(schoolID).then(
+      () => {
+        return getRecords(schoolID!).then(
           (res: any) => res?.data?.recordPayments || []
         );
       },
-      { refreshInterval: 2000 }
+      {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        refreshInterval: 0,
+        revalidateOnMount: hasCache,
+      }
     );
+
+    const handleUpdate = async (newData: any) => {
+      mutate(newData, false);
+    };
 
     return {
       payments: recordPayment || [],
+      mutate: handleUpdate,
     };
   } catch (error) {
     console.error();
@@ -482,13 +1516,45 @@ export const useFeeRecords = (schoolID: string) => {
 };
 
 export const useDeailyExpense = (schoolID: string) => {
+  // const hasCache = (key: string): boolean => {
+  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
+  //   return cache.some((entry: [string, any]) => entry[0] === key);
+  // };
   try {
+    const x = `api/read-term-daily-expense/${schoolID}`;
+
+    const hasCache = sessionStorage.getItem(x) !== "false";
+
+    useEffect(() => {
+      sessionStorage.setItem(x, "false");
+
+      const handleBeforeUnload = () => {
+        sessionStorage.clear();
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }, []);
+
     const { data: dailyExpense } = useSWR(
-      `api/read-term-daily-expense/${schoolID}`,
+      x,
       async () => {
-        return await readDailyExpense(schoolID).then((res: any) => res?.data);
+        return await readDailyExpense(schoolID!).then((res: any) => res?.data);
+      },
+      {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        refreshInterval: 0,
+        revalidateOnMount: hasCache,
       }
     );
+
+    const handleUpdate = async (newData: any) => {
+      mutate(newData, false);
+    };
 
     return { dailyExpense };
   } catch (error) {

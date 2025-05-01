@@ -9,6 +9,36 @@ import axios, { AxiosResponse } from "axios";
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 const URL2: string = "https://startschoolbe-4.onrender.com";
 
+export const createStudentHistory = async (
+  schoolID: string,
+  studentID: string,
+  data: any
+): Promise<any> => {
+  try {
+    return await axios
+      .post(`${URL}/create-result-history/${schoolID}/${studentID}`, data)
+      .then((res: AxiosResponse) => {
+        console.log("data: ", res);
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const viewStudentHistory = async (studentID: string): Promise<any> => {
+  try {
+    return await axios
+      .get(`${URL}/view-student-result-history/${studentID}`)
+      .then((res: AxiosResponse) => {
+        console.log("data: ", res);
+        return res?.data?.data?.historicalResult;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const deleteSchool = async (schoolID: string): Promise<any> => {
   try {
     return await axios
@@ -365,6 +395,19 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
   try {
     return await axios
       .delete(`${URL}/delete-student/${schoolID}/${studentID}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const outGoneStudent = async (schoolID: string, studentID: string) => {
+  try {
+    const URL = "localhost:2244/api";
+    return await axios
+      .post(`${URL}/create-out-gone-student/${schoolID}/${studentID}`, null)
       .then((res: any) => {
         return res;
       });

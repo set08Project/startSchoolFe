@@ -31,6 +31,9 @@ const AnalyticScreen: React.FC = () => {
 
   // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
 
+  console.clear();
+  console.log("termData", termData?.data?.schoolFeePayment);
+
   let allData = termData?.data?.storePayment.concat(
     termData?.data?.schoolFeePayment,
     termData?.data?.paymentOptions

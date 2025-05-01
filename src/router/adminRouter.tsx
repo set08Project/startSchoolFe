@@ -179,6 +179,8 @@ const AnalyticScreen = React.lazy(
 
 import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
+import ViewAllStudentResult from "@/pages/page/resultOption/ViewAllResults";
+import StudentResultsDetail from "@/pages/page/resultOption/InputStudentsScore";
 
 export const adminRouter = createBrowserRouter([
   {
@@ -499,6 +501,24 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ViewReport />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "view-student-result-history",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ViewAllStudentResult />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "view-student-result-history/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <StudentResultsDetail />
               </Suspense>
             ),
           },

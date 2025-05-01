@@ -166,6 +166,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
             handleMenu();
             const timer = setTimeout(() => {
               navigate("/");
+              localStorage.clear();
               window.location.reload();
               clearTimeout(timer);
             }, 0);

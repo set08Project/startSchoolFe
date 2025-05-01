@@ -176,7 +176,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
               window.location.reload();
               navigate("/");
               clearTimeout(timer);
-              localStorage.claer();
+              localStorage.clear();
             }, 200);
           }}
         >

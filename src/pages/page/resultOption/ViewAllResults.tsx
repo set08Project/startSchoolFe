@@ -34,7 +34,6 @@ import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI"
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaSpinner } from "react-icons/fa6";
-import PrintReciptScreen from "./PrintReceipt";
 import { MdClose } from "react-icons/md";
 
 import { useReactToPrint } from "react-to-print";
@@ -104,7 +103,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
   );
 };
 
-const ViewStudent = () => {
+const ViewAllStudentResult = () => {
   const dispatch = useDispatch();
   const [searchStudents, setSearchStudents] = useState("");
   const [showButton, setShowButton] = useState(true);
@@ -322,14 +321,12 @@ const ViewStudent = () => {
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
-        <div className="text-[gray] w-[2220px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1520px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
           <div className="w-[130px] border-r">Reg. Date</div>
 
-          <div className="w-[270px] border-r">Session Fee</div>
-          <div className="w-[130px] border-r">Receipt</div>
           <div className="w-[100px] border-r">Gender</div>
 
           <div className="w-[100px] border-r">student Class</div>
@@ -337,16 +334,12 @@ const ViewStudent = () => {
           <div className="w-[150px] border-r">Parent Contact</div>
           <div className="w-[200px] border-r">Address </div>
 
-          <div className="w-[100px] border-r">Today's Attendance</div>
-          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-          <div className="w-[200px] border-r">Performance Rating</div>
-
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">View Detail</div>
-          <div className="w-[180px] border-r">Student Action</div>
+          <div className="w-[180px] border-r">Add Student Results</div>
         </div>
 
-        <div className=" w-[2220px] overflow-hidden">
+        <div className=" w-[1520px] overflow-hidden">
           {filteredStudents?.length >= 0 ? (
             <div>
               {filteredStudents?.map((props: any, i: number) => {
@@ -377,316 +370,6 @@ const ViewStudent = () => {
                           {moment(props?.createdAt).format("ll")}
                         </div>
 
-                        <div className="w-[270px] border-r flex gap-4">
-                          <div className="flex flex-col items-center">
-                            <label>1st Term</label>
-
-                            <label htmlFor="my_modal_6 relative">
-                              <label
-                                htmlFor="my_modal_6"
-                                // className={`btn text-[12px] font-medium text-white `}
-                              >
-                                {/* First term toggle commented */}
-                                {/* <label
-                                htmlFor="my_modal_6"
-                                className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
-                                onClick={() => {
-                                  setID(props?._id);
-                                }}
-                              /> */}
-                                <input
-                                  type="checkbox"
-                                  className={`
-                                -z-20 
-                            toggle toggle-sm mt-2 ${
-                              props?.feesPaid1st
-                                ? "bg-blue-950 border-blue-950"
-                                : "bg-neutral-500 border-neutral-500"
-                            }
-                            `}
-                                  checked={props?.feesPaid1st}
-                                  onClick={() => {
-                                    schoolPaymentEndPoint(props?._id, {
-                                      date: moment(Date.now()).format("lll"),
-                                      amount: props?.classTermFee,
-                                      reference: "paid in cash",
-                                      confirm: true,
-                                      purchasedID: uuid().slice(0, 7),
-                                    }).then((res) => {
-                                      if (res.status === 201) {
-                                        toast.success(
-                                          "SchoolFee has been registered paid but not confirmed yet"
-                                        );
-                                      } else {
-                                        toast.error(
-                                          `Has been paid but not confirmed yet`
-                                        );
-                                      }
-                                    });
-                                  }}
-                                />
-                              </label>
-
-                              {/* Put this part before </body> tag */}
-                              <input
-                                type="checkbox"
-                                id="my_modal_6"
-                                className="modal-toggle"
-                              />
-                              {/* Payment Modal */}
-                              <div className="modal" role="dialog">
-                                <div className="modal-box bg-white">
-                                  <h3 className="font-bold text-lg">
-                                    Confirm this payment
-                                  </h3>
-                                  <p className="py-4">
-                                    Are you sure you want to confirm this
-                                    payment?
-                                    <br />
-                                  </p>
-                                  <div className="modal-action">
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                      onClick={() => {
-                                        handleToggleCheckbox1st(ID);
-                                      }}
-                                    >
-                                      Yes
-                                    </label>
-
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                      onClick={() => {}}
-                                    >
-                                      No
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </label>
-                          </div>{" "}
-                          <div className="flex flex-col items-center">
-                            <label>2nd Term</label>
-
-                            <label htmlFor="my_modal_6 relative ">
-                              <label htmlFor="my_modal_6">
-                                {/* Second Term Toggle Comment */}
-                                {/* <label
-                                htmlFor="my_modal_6"
-                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
-                                onClick={() => {
-                                  setID(props?._id);
-                                }}
-                              /> */}
-                                <input
-                                  type="checkbox"
-                                  className={`
-                                -z-20
-                            toggle toggle-sm mt-2  ${
-                              props?.feesPaid2nd
-                                ? "bg-blue-950 border-blue-950"
-                                : "bg-neutral-500 border-neutral-500"
-                            }
-                            `}
-                                  onChange={() => {}}
-                                  checked={props?.feesPaid2nd}
-                                  onClick={() => {
-                                    schoolPaymentEndPoint(props?._id, {
-                                      date: moment(Date.now()).format("lll"),
-                                      amount: props?.classTermFee,
-                                      reference: "paid in cash",
-                                      confirm: true,
-                                      purchasedID: uuid().slice(0, 7),
-                                    }).then((res) => {
-                                      if (res.status === 201) {
-                                        toast.success(
-                                          "SchoolFee has been registered paid but not confirmed yet"
-                                        );
-                                      } else {
-                                        toast.error(
-                                          `Has been paid but not confirmed yet`
-                                        );
-                                      }
-                                    });
-                                  }}
-                                />
-                              </label>
-
-                              {/* Put this part before </body> tag */}
-                              <input
-                                type="checkbox"
-                                id="my_modal_6"
-                                className="modal-toggle"
-                              />
-                              <div className="modal" role="dialog">
-                                <div className="modal-box">
-                                  <h3 className="font-bold text-lg">
-                                    Confirm 2nd Term school-fees payment
-                                  </h3>
-                                  <p className="py-4">
-                                    Are you sure you want to confirm this
-                                    payment?
-                                    <br />
-                                  </p>
-                                  <div className="modal-action">
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                      onClick={() => {
-                                        handleToggleCheckbox2nd(ID);
-                                      }}
-                                    >
-                                      Yes
-                                    </label>
-
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                      onClick={() => {}}
-                                    >
-                                      No
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </label>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <label>3rd Term</label>
-                            {/* <input
-                            type="checkbox"
-                            className={`
-                            toggle toggle-sm mt-2  ${
-                              props?.feesPaid3rd
-                                ? "bg-blue-950 border-blue-950"
-                                : "bg-neutral-500 border-neutral-500"
-                            }
-                            `}
-                            onChange={() => handleToggleCheckbox3rd(props?._id)}
-                            checked={props?.feesPaid4rd}
-                          /> */}
-
-                            <label htmlFor="my_modal_6 relative ">
-                              <label htmlFor="my_modal_6">
-                                {/* 3rd Term toggle Comment */}
-                                {/* <label
-                                htmlFor="my_modal_6"
-                                className="absolute z-80 bg-transparent hover:bg-transparent border-0 btn"
-                                onClick={() => {
-                                  setID(props?._id);
-                                }}
-                              /> */}
-                                <input
-                                  type="checkbox"
-                                  className={`
-                                -z-20
-                            toggle toggle-sm mt-2  ${
-                              props?.feesPaid3rd
-                                ? "bg-blue-950 border-blue-950"
-                                : "bg-neutral-500 border-neutral-500"
-                            }
-                            `}
-                                  onChange={() => {}}
-                                  checked={props?.feesPaid3rd}
-                                  onClick={() => {
-                                    schoolPaymentEndPoint(props?._id, {
-                                      date: moment(Date.now()).format("lll"),
-                                      amount: props?.classTermFee,
-                                      reference: "paid in cash",
-                                      confirm: true,
-                                      purchasedID: uuid().slice(0, 7),
-                                    }).then((res) => {
-                                      if (res.status === 201) {
-                                        toast.success(
-                                          "SchoolFee has been registered paid but not confirmed yet"
-                                        );
-                                      } else {
-                                        toast.error(
-                                          `Has been paid but not confirmed yet`
-                                        );
-                                      }
-                                    });
-                                  }}
-                                />
-                              </label>
-
-                              {/* Put this part before </body> tag */}
-                              <input
-                                type="checkbox"
-                                id="my_modal_6"
-                                className="modal-toggle"
-                              />
-                              <div className="modal" role="dialog">
-                                <div className="modal-box">
-                                  <h3 className="font-bold text-lg">
-                                    Confirm 3rd Term school-fees payment
-                                  </h3>
-                                  <p className="py-4">
-                                    Are you sure you want to confirm this
-                                    payment?
-                                    <br />
-                                  </p>
-                                  <div className="modal-action">
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-green-500 text-white hover:bg-green-600 "
-                                      onClick={() => {
-                                        handleToggleCheckbox3rd(ID);
-                                      }}
-                                    >
-                                      Yes
-                                    </label>
-
-                                    <label
-                                      htmlFor="my_modal_6"
-                                      className="btn px-8 bg-red-500 text-white hover:bg-red-600 "
-                                      onClick={() => {}}
-                                    >
-                                      No
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </label>
-                          </div>
-                        </div>
-                        <div className="w-[130px] border-r">
-                          {stateID !== "" && toggleView && (
-                            <div className="text-white p-4 w-full h-screen bg-black/5 rounded-md absolute top-0 left-0">
-                              <Modal
-                                props={stateID}
-                                setToggleView={setToggleView}
-                                setStateID={setStateID}
-                              />{" "}
-                            </div>
-                          )}
-
-                          {UI?.presentTerm === "1st Term" &&
-                          props?.feesPaid1st ? (
-                            <button
-                              className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
-                              onClick={() => {
-                                setStateID(props?._id);
-                                setToggleView(true);
-                              }}
-                            >
-                              Get Receipt
-                            </button>
-                          ) : // <PrintReciptScreen props={props} />
-                          UI?.presentTerm === "2nd Term" &&
-                            props?.feesPaid2nd ? (
-                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
-                              Get Receipt
-                            </button>
-                          ) : UI?.presentTerm === "3rd Term" &&
-                            props?.feesPaid3rd ? (
-                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
-                              Get Receipt
-                            </button>
-                          ) : null}
-                        </div>
                         <div className="w-[100px] border-r">
                           {props?.gender}
                         </div>
@@ -702,15 +385,7 @@ const ViewStudent = () => {
                             ? props?.studentAddress
                             : "Not yet Added"}
                         </div>
-                        <Remark data={props} id={props?._id} />
-                        <div className="w-[100px] border-r">
-                          <AttendanceRatio props={props} />
-                        </div>
-                        <div className="w-[200px] border-r  ">
-                          {props?.totalPerformance
-                            ? props?.totalPerformance
-                            : "0"}
-                        </div>
+
                         <div className="w-[80px] border-r">3 of 5</div>
                         <Link
                           to={`student-details/${props?._id}`}
@@ -730,15 +405,14 @@ const ViewStudent = () => {
                             valueStored.push(props?._id);
                           }}
                         >
-                          <div>
-                            <label
-                              htmlFor="my_modal_delete"
-                              className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
-                            >
-                              Delete Student
+                          <Link
+                            to={`/view-student-result-history/${props?._id}`}
+                          >
+                            <label className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center">
+                              Add Results
                             </label>
-                          </div>
-                          <input
+                          </Link>
+                          {/* <input
                             type="checkbox"
                             id="my_modal_delete"
                             className="modal-toggle"
@@ -822,7 +496,7 @@ const ViewStudent = () => {
                                 )}
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -840,7 +514,7 @@ const ViewStudent = () => {
   );
 };
 
-export default ViewStudent;
+export default ViewAllStudentResult;
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

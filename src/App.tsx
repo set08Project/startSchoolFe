@@ -7,12 +7,15 @@ import LoadingScreen from "./components/static/LoadingScreen";
 import RouterScreen from "./router/RouterScreen";
 import PrivateRouter from "./router/PrivateRouter";
 import { Helmet } from "react-helmet";
+// import { SWRConfig } from "swr";
+// import { swrConfig } from "./pages/hook/persistHook";
 
 let persistor = persistStore(store);
 
 const App = () => {
   const helmetContext: any = {};
   return (
+    // <SWRConfig value={swrConfig}>
     <div className="bg-white">
       <Helmet>
         <meta charSet="utf-8" />
@@ -27,6 +30,7 @@ const App = () => {
         </PersistGate>
       </Provider>
     </div>
+    // </SWRConfig>
   );
 };
 

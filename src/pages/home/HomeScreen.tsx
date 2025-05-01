@@ -211,15 +211,14 @@ const HomeScreen = () => {
                 <GrAction />
               </div>
             </div>
-
-            <div>
-              {/* <Link to="/scan-clocking ">
+            {/* <Link to="/scan-clocking ">
                 <Button
                   name="Scan Clocking"
                   className="bg-slate-800 hover:bg-neutral-900 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
                 />
               </Link> */}
 
+            <div>
               <HandleDailyExpense />
 
               <Button
@@ -272,25 +271,19 @@ const HomeScreen = () => {
                 />
               </Link>
 
-              {/* <Link to="/expenditures"> */}
               <Button
                 name="Expenditures"
                 className="bg-green-600 hover:bg-green-700 transition-all duration-300 text-[13px] w-[95%] py-2 mb-2"
-                // onClick={handleDisplayNotice}
                 onClick={() => {
                   setView(true);
                   goToTop();
                 }}
               />
-              {/* </Link> */}
             </div>
           </div>
 
           <div className="hidden sm:block col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 top-16 mt-4">
-            <p className="font-medium text-[14px] mb-5">
-              {/* <GeneralDataScreen /> */}
-              Subjects
-            </p>
+            <p className="font-medium text-[14px] mb-5">Subjects</p>
             <div className="font-medium text-[12px] h-[280px]  overflow-y-auto ">
               {schoolSubject?.subjects?.map((props: any) => (
                 <div key={props?._id} className="my-1">
