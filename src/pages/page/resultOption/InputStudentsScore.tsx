@@ -56,13 +56,7 @@ const SubjectScore: FC<iProps> = ({ props }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
-  const { gradeData } = useStudentGrade(props?._id);
-
-  const { oneClass } = useReadOneClassInfo(props?.presentClassID);
-
-  const { session, term } = useParams();
-
+const MainStudentRow: FC<iProps> = ({ props, i }) => {
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -73,8 +67,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
         <p className="text-[18px]">{props?.classInfo}</p>
 
         <div>
-          <p className="font-[400] -mt-1">
-            {props?.term}/{props?.session}
+          <p className="gap-1 flex items-center  font-[400] -mt-1 text-[10px]">
+            {props?.term} <div className="h-1 w-1 rounded-full bg-blue-950" />{" "}
+            {props?.session}
           </p>
         </div>
       </div>
@@ -220,7 +215,6 @@ const StudentResultsDetail = () => {
   const [showForm, setShowForm] = useState(false);
   // const [resultArray, setResultArray] = useState([]);
   const [resultArray1, setResultArray1] = useState([]);
-  console.clear();
 
   const [formData, setFormData] = useState({
     classInfo: "",
@@ -550,7 +544,14 @@ const EnterResult: React.FC<any> = ({
 
     setResultArray((prev) => [...prev, updatedFormData]);
     createStudentHistory(schoolInfo, studentID, updatedFormData).then((res) => {
-      // mutate();
+      // mutate(`api/view-student-historical-result/${studentID}`);
+      mutate(
+        async (currentData: any) => {
+          const updatedData = [...(currentData || []), updatedFormData];
+          return updatedData;
+        },
+        { revalidate: true }
+      );
     });
     setShowForm(false);
   };

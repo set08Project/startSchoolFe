@@ -1113,7 +1113,6 @@ export const useViewStudentHistory = (studentID: string) => {
     x,
     () => {
       return viewStudentHistory(studentID!).then((res) => {
-        console.log("KLL: ", res);
         return res;
       });
     },
