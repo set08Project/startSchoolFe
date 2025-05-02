@@ -40,7 +40,7 @@ import {
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FaCompressAlt, FaPhotoVideo } from "react-icons/fa";
+import { FaAddressBook, FaCompressAlt, FaPhotoVideo } from "react-icons/fa";
 import AddSessionTerm from "./AddSessionTerm";
 import { Link } from "react-router-dom";
 
@@ -270,6 +270,11 @@ const Header = () => {
                   title: "History",
                   icon: <MdDataExploration />,
                   to: "result-history",
+                },
+                {
+                  title: "Result History",
+                  icon: <FaAddressBook />,
+                  to: "view-student-result-history",
                 },
                 {
                   title: "Settings",
