@@ -31,7 +31,6 @@ export const viewStudentHistory = async (studentID: string): Promise<any> => {
     return await axios
       .get(`${URL}/view-student-result-history/${studentID}`)
       .then((res: AxiosResponse) => {
-        console.log("data: ", res);
         return res?.data?.data?.historicalResult;
       });
   } catch (error) {

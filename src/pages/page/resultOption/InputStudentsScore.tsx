@@ -63,7 +63,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
 
   const { session, term } = useParams();
 
-  console.log("props: ", props);
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -221,6 +220,7 @@ const StudentResultsDetail = () => {
   const [showForm, setShowForm] = useState(false);
   // const [resultArray, setResultArray] = useState([]);
   const [resultArray1, setResultArray1] = useState([]);
+  console.clear();
 
   const [formData, setFormData] = useState({
     classInfo: "",
@@ -242,9 +242,6 @@ const StudentResultsDetail = () => {
       },
     ],
   });
-
-  console.log("viewing: ", resultArray);
-  console.log("viewing: ", resultArray && resultArray[0]?.results?.length);
 
   return (
     <div className="">
@@ -320,18 +317,19 @@ const StudentResultsDetail = () => {
         >
           {resultArray?.length > 0 ? (
             <div>
-              {resultArray?.map((props: any, i: number) => {
-                return (
-                  <div key={i}>
-                    <MainStudentRow
-                      props={props}
-                      i={i}
-                      //   getClass={getResult?.className}
-                    />
-                    {}
-                  </div>
-                );
-              })}
+              {resultArray &&
+                resultArray?.map((props: any, i: number) => {
+                  return (
+                    <div key={i}>
+                      <MainStudentRow
+                        props={props}
+                        i={i}
+                        //   getClass={getResult?.className}
+                      />
+                      {}
+                    </div>
+                  );
+                })}
             </div>
           ) : (
             <div className="flex items-center justify-center flex-col w-[20%] font-semibold">
@@ -552,10 +550,9 @@ const EnterResult: React.FC<any> = ({
 
     setResultArray((prev) => [...prev, updatedFormData]);
     createStudentHistory(schoolInfo, studentID, updatedFormData).then((res) => {
-      console.log(res);
-      mutate(`api/view-student-historical-result/${studentID}`);
+      // mutate();
     });
-    // setShowForm(false);
+    setShowForm(false);
   };
 
   return (
