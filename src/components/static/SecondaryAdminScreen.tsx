@@ -18,7 +18,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuState, changeStarting } from "../../global/reduxState";
 
-import { FaPhotoVideo } from "react-icons/fa";
+import { FaAddressBook, FaPhotoVideo } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 const SecondaryAdminScreen = () => {
@@ -200,6 +200,18 @@ const SecondaryAdminScreen = () => {
           >
             Operation History
             <MdSignalCellularAlt />
+          </NavLink>
+          <NavLink
+            to="/view-student-result-history/"
+            className={({ isActive }) =>
+              isActive
+                ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+                : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+            }
+            onClick={handleToggleMenuFalse}
+          >
+            Results History
+            <FaAddressBook />
           </NavLink>
 
           <div className="flex-1" />
