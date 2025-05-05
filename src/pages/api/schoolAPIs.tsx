@@ -43,7 +43,7 @@ export const deleteStudentHistory = async (
   resultID: string
 ): Promise<any> => {
   try {
-    const URL = "http://localhost:2244/api";
+   
     return await axios
       .delete(`${URL}/delete-student-result-history/${studentID}/${resultID}`)
       .then((res: AxiosResponse) => {
