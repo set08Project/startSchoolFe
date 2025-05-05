@@ -35,7 +35,7 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
   const dispatch = useDispatch();
   const [payment, setPayment] = useState<string>("");
 
-  let xx = data?.paymentOptions?.filter(
+  let xx = data?.data?.paymentOptions?.filter(
     (el: any) => el?.paymentDetails === paymentName
   )[0]?.paymentAmount;
 
@@ -111,7 +111,7 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                       }}
                     >
                       <option selected>Pick what to pay for</option>
-                      {data?.paymentOptions?.map((el: any) => (
+                      {data?.data?.paymentOptions?.map((el: any) => (
                         <option value={el.paymentDetails}>
                           {el.paymentDetails}
                         </option>

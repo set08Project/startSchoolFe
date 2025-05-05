@@ -133,8 +133,8 @@ const StudentDashboard = () => {
                     </div>
                   </Link>
                 ) : (
-                  <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[11px] md:text-[17px]">
-                    Term's report card(Not Ready)
+                  <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[12px] md:text-[12px]">
+                    Term's report card (Not Ready)
                   </div>
                 )}
               </div>
@@ -156,7 +156,7 @@ const StudentDashboard = () => {
                   </Link>
                 ) : (
                   <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[12px] md:text-[12px]">
-                    Mid Term's report card(Not Ready)
+                    Mid Term's report card (Not Ready)
                   </div>
                 )}
               </div>

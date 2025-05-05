@@ -34,6 +34,7 @@ import { readSchool } from "../../pages/api/schoolAPIs";
 import SecondaryStudentScreen from "./SecondaryStudentScreen";
 import PrimaryStudentScreen from "./PrimaryStudentScreen";
 import MakeOtherPayment from "../pages/report/MakeOtherPayment";
+import toast, { Toaster } from "react-hot-toast";
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -83,6 +84,7 @@ const Sider = () => {
 
   return (
     <div className="overflow-y-auto w-full border-r bg-white text-blue-900 flex flex-col ">
+      <Toaster />
       <div className="w-full flex px-2 mt-6 ">
         <div className=" w-16 h-16 object-cover flex border rounded-full items-center justify-center ">
           {toggleImage ? (
@@ -171,28 +173,33 @@ const Sider = () => {
             className="bg-black hover:bg-neutral-800 transition-all duration-300 text-white border-none font-medium py-2  px-5 leading-tight"
             onClick={() => {
               // handleDisplayStaff();
-              setPayment(true);
+              if (studentInfo?.parentEmail) {
+                setPayment(true);
 
-              schoolFeePayment({
-                email: studentInfo?.parentEmail,
-                amount:
-                  termRead === "1st Term"
-                    ? oneClass?.class1stFee
-                    : termRead === "2nd Term"
-                    ? oneClass?.class2ndFee
-                    : termRead === "3rd Term"
-                    ? oneClass?.class3rdFee
-                    : null,
+                schoolFeePayment({
+                  email: studentInfo?.parentEmail,
+                  amount:
+                    termRead === "1st Term"
+                      ? oneClass?.class1stFee
+                      : termRead === "2nd Term"
+                      ? oneClass?.class2ndFee
+                      : termRead === "3rd Term"
+                      ? oneClass?.class3rdFee
+                      : null,
 
-                subAccountCode:
-                  schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
-              }).then((res) => {
-                if (res.status === 200) {
-                  // dispatch(paymentRef(res?.data?.data?.data?.reference));
-                  location.replace(res?.data?.data?.data?.authorization_url);
-                  setPayment(false);
-                }
-              });
+                  subAccountCode:
+                    schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
+                }).then((res) => {
+                  if (res.status === 200) {
+                    // dispatch(paymentRef(res?.data?.data?.data?.reference));
+                    // console.log(res);
+                    location.replace(res?.data?.data?.data?.authorization_url);
+                    setPayment(false);
+                  }
+                });
+              } else {
+                toast.error("parent email hasn't provided yet");
+              }
             }}
           />
           {/* <Link to="/make-other-payments">
@@ -202,7 +209,7 @@ const Sider = () => {
                   <ClipLoader
                     color="white"
                     size={10}
-                    className="absolute -mt-2 -ml-2 "
+                    className="absolute -mt-2 -ml-2"
                   />
                 )
               }

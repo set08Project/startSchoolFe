@@ -175,9 +175,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     >
       <div className={`w-[40px] border-r font-bold`}>{i + 1}</div>
       {/* name */}
-      <div className="w-[150px] flex border-r">
+      <div className="w-[220px] flex border-r">
         <div className="flex gap-2">
-          <div className="w-[180px] break-words">
+          <div className="w-[220px] break-words ">
             {" "}
             {props?.studentLastName} {props?.studentFirstName}
           </div>
@@ -342,7 +342,9 @@ const BroadSheetReportCardApproved = () => {
   };
 
   const { toPDF, targetRef }: any = usePDF({
-    filename: `build--${moment(Date.now()).format("lll")}.pdf`,
+    filename: `broadsheet-${oneClass?.className}-${moment(Date.now()).format(
+      "lll"
+    )}.pdf`,
     page: {
       orientation: "landscape", // Ensure landscape orientation
       // unit: "px", // Use pixels for dimensions

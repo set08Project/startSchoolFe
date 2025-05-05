@@ -12,7 +12,7 @@ const SchoolFeesHistoryScreen = () => {
   const dispatch = useDispatch();
   const { data } = useSchoolData();
 
-  const { schoolFeeRecord } = useSchoolSchoolFees(data?._id);
+  const { schoolFeeRecord, mutate } = useSchoolSchoolFees(data?._id);
 
   const [stateArray, setStateArray] = useState<string[]>([]);
 
@@ -175,8 +175,43 @@ const SchoolFeesHistoryScreen = () => {
                         className={`checkbox ${
                           props?.confirm ? "checkbox-success" : "checkbox-error"
                         }`}
+                        // onClick={() => {
+                        //   updateSchoolFee(props?._id).then((res) => {});
+                        //   mutate();
+                        // }}
+
                         onClick={() => {
-                          updateSchoolFee(props?._id).then((res) => {});
+                          updateSchoolFee(props?._id)
+                            .then((res) => {
+                              // Optionally handle the response if needed
+                              console.log(
+                                "School fee updated successfully:",
+                                res
+                              );
+                            })
+                            .then(() => {
+                              // mutate(
+                              //   async (currentData: any) => {
+                              //     // Update the cache with the new data
+                              //     const updatedData = (currentData || []).map(
+                              //       (item: any) => {
+                              //         if (item._id === props?._id) {
+                              //           return { ...item, confirm: true }; // Update the `confirm` status
+                              //         }
+                              //         return item;
+                              //       }
+                              //     );
+                              //     return updatedData;
+                              //   },
+                              // { revalidate: true }
+                              // );
+                            })
+                            .catch((error) => {
+                              console.error(
+                                "Error updating school fee:",
+                                error
+                              );
+                            });
                         }}
                       />
                     </div>

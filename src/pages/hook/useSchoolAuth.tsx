@@ -1417,7 +1417,7 @@ export const useSchoolSchoolFees = (schoolID: string) => {
     };
   }, []);
 
-  const { data: schoolFeeRecord } = useSWR(
+  const { data: schoolFeeRecord, mutate } = useSWR(
     x,
     () => {
       return readSchoolFee(schoolID!).then((res) => {
@@ -1437,7 +1437,7 @@ export const useSchoolSchoolFees = (schoolID: string) => {
     mutate(newData, false);
   };
 
-  return { schoolFeeRecord };
+  return { schoolFeeRecord, mutate: handleUpdate };
 };
 
 export const useAllSchools = () => {
