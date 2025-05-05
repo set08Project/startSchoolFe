@@ -179,7 +179,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <div className="flex gap-2">
           <div className="w-[180px] break-words">
             {" "}
-            {props?.studentFirstName} {props?.studentLastName}
+            {props?.studentLastName} {props?.studentFirstName}
           </div>
         </div>
       </div>
