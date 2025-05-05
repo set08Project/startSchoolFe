@@ -249,7 +249,7 @@ const ViewStudent = () => {
   };
 
   const sortedStudents = students?.data?.students?.sort((a: any, b: any) =>
-    a.studentFirstName?.localeCompare(b.studentFirstName)
+    a.studentLastName?.localeCompare(b.studentLastName)
   );
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +258,7 @@ const ViewStudent = () => {
 
   const filteredStudents = sortedStudents?.filter((student: any) => {
     const fullName =
-      `${student?.studentFirstName} ${student?.studentLastName} ${student?.classAssigned}`.toLowerCase();
+      `${student?.studentLastName} ${student?.studentFirstName} ${student?.classAssigned}`.toLowerCase();
     return fullName.includes(searchStudents.toLowerCase());
   });
 
@@ -368,7 +368,7 @@ const ViewStudent = () => {
                           />
                         </div>
                         <div className="w-[200px] border-r gap-2 font-bold">
-                          {props?.studentFirstName} {props?.studentLastName}
+                          {props?.studentLastName} {props?.studentFirstName}
                           <div className="text-slate-500 font-medium">
                             RegID: {props?.enrollmentID}
                           </div>

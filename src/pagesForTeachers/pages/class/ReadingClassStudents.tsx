@@ -87,7 +87,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
   let el = props;
   const allStudents = classStudents?.students;
   const sortedStudents = allStudents?.sort((a, b) =>
-    a.studentFirstName?.localeCompare(b.studentFirstName)
+    a.studentLastName?.localeCompare(b.studentLastName)
   );
 
   const [toggle, setToggle] = useState<boolean>(false);
@@ -162,7 +162,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                         </div>
                         <div className="w-[200px] border-r">
                           <p>
-                            {props?.studentFirstName} {props?.studentLastName}
+                            {props?.studentLastName} {props?.studentFirstName}
                           </p>
 
                           <p>

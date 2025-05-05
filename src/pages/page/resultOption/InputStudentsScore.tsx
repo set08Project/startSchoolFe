@@ -57,6 +57,7 @@ const SubjectScore: FC<iProps> = ({ props }) => {
 };
 
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
+  const { studentID } = useParams();
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -128,7 +129,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           //   valueStored.push(props?._id);
         }}
       >
-        <Link to={`/view-student-result-history/${props?._id}`}>
+        <Link
+          to={`/print-students-historical-report-card/${studentID}/${props?._id}`}
+        >
           <label className="py-3 px-1 w-[85%] border rounded-md bg-blue-950 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center">
             Print Result
           </label>
@@ -401,21 +404,21 @@ const EnterResult: React.FC<any> = ({
       const grade =
         totalScore >= 0 && totalScore <= 39
           ? "F9"
-          : totalScore >= 40 && totalScore <= 44
+          : totalScore >= 39 && totalScore <= 44
           ? "E8"
-          : totalScore >= 45 && totalScore <= 49
+          : totalScore >= 44 && totalScore <= 49
           ? "D7"
-          : totalScore >= 50 && totalScore <= 54
+          : totalScore >= 49 && totalScore <= 54
           ? "C6"
-          : totalScore >= 55 && totalScore <= 59
+          : totalScore >= 54 && totalScore <= 59
           ? "C5"
-          : totalScore >= 60 && totalScore <= 64
+          : totalScore >= 59 && totalScore <= 64
           ? "C4"
-          : totalScore >= 65 && totalScore <= 69
+          : totalScore >= 64 && totalScore <= 69
           ? "B3"
-          : totalScore >= 70 && totalScore <= 74
+          : totalScore >= 69 && totalScore <= 74
           ? "B2"
-          : totalScore >= 75 && totalScore <= 100
+          : totalScore >= 74 && totalScore <= 100
           ? "A1"
           : null;
 

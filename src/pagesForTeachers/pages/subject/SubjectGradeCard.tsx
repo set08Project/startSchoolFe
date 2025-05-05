@@ -63,8 +63,6 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-
-
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
@@ -128,7 +126,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
           <div className="w-[180px] ">
             {" "}
-            {props?.studentFirstName} {props?.studentLastName}
+            {props?.studentLastName} {props?.studentFirstName}
           </div>
         </div>
       </div>
@@ -289,7 +287,7 @@ const SubjectGradeCard = () => {
   const { classStudents } = useClassStudent(oneClass?._id!);
   const allStudents = classStudents?.students;
   const sortedStudents = allStudents?.sort((a, b) =>
-    a.studentFirstName?.localeCompare(b.studentFirstName)
+    a.studentLastName?.localeCompare(b.studentLastName)
   );
 
   useEffect(() => {

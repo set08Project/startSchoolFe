@@ -130,7 +130,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
 
           <div className="w-[180px] ">
             {" "}
-            {props?.studentFirstName} {props?.studentLastName}
+            {props?.studentLastName} {props?.studentFirstName}
           </div>
         </div>
       </div>
@@ -278,7 +278,7 @@ const AdminSubjectGradeCardScreen = () => {
   const { classStudents } = useClassStudent(oneClass?._id!);
   const allStudents = classStudents?.students;
   const sortedStudents = allStudents?.sort((a, b) =>
-    a.studentFirstName?.localeCompare(b.studentFirstName)
+    a.studentLastName?.localeCompare(b.studentLastName)
   );
 
   useEffect(() => {

@@ -131,8 +131,9 @@ const ViewClassStudent: FC = () => {
   const { classStudents } = useClassStudent(classID!);
   const { data } = useSchoolData();
   const allStudents = classStudents?.students;
-  const sortedStudents = allStudents?.sort((a, b) =>
-    a.studentFirstName?.localeCompare(b.studentFirstName)
+
+  const sortedStudents = classStudents?.students?.sort((a: any, b: any) =>
+    a.studentLastName?.localeCompare(b.studentLastName)
   );
   let el = classID;
   const [toggle, setToggle] = useState<boolean>(false);
@@ -199,7 +200,7 @@ const ViewClassStudent: FC = () => {
                         </div>
                         <div className="w-[200px] border-r">
                           <p>
-                            {props?.studentFirstName} {props?.studentLastName}
+                            {props?.studentLastName} {props?.studentFirstName}
                           </p>
                           <p>
                             LoginID:{" "}

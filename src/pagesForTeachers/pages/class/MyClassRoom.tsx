@@ -110,14 +110,16 @@ const MyClassRoomScreen = () => {
   //     setClassInfo(res?.data);
   //   });
   // }, []);
+  const [myClassID, setMyCLassID] = useState<string>("");
 
+  useEffect(() => {}, [myClassID]);
   return (
     <div className="text-blue-950">
       <LittleHeader name="My ClassRoom Details" />
       <div>Class: {oneClass?.className}</div>
 
       <select
-        className="select select-bordered  w-full max-w-xs mb-10 mt-2"
+        className="select select-bordered  w-full max-w-xs mb-6 mt-2"
         value={state}
         onChange={(e: any) => {
           setState(e.target.value);
@@ -133,8 +135,14 @@ const MyClassRoomScreen = () => {
           </option>
         )}
       </select>
-
-      <div className="w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between overflow-hidden ">
+      <br />
+      <Link
+        to={`/class-result-broad-sheet/${state}`}
+        className="text-[12px] ml-2 bg-orange-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
+      >
+        View class Broad sheet
+      </Link>
+      <div className="w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between overflow-hidden mt-2">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Total Number of Students</div>
           <div className="text-[35px] font-medium">

@@ -181,7 +181,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../components/static/error/Fallbacks";
 import ViewAllStudentResult from "@/pages/page/resultOption/ViewAllResults";
 import StudentResultsDetail from "@/pages/page/resultOption/InputStudentsScore";
+import PrintReportCardDesignAdminScreen from "@/pages/page/resultOption/PrintStudentHistoryResult";
 
+const BroadSheetReportCardApproved = React.lazy(
+  () => import("@/pages/page/ResultHistory/BoardSheet")
+);
 export const adminRouter = createBrowserRouter([
   {
     path: "/",
@@ -287,6 +291,17 @@ export const adminRouter = createBrowserRouter([
               <Suspense fallback={<LoadingScreen />}>
                 <ErrorBoundary FallbackComponent={Fallback}>
                   <ReportCardDesignAdminScreen />
+                </ErrorBoundary>
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "print-students-historical-report-card/:studentID/:id",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <PrintReportCardDesignAdminScreen />
                 </ErrorBoundary>
               </Suspense>
             ),
@@ -405,6 +420,15 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ReportCardApproved />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
+            path: "class-broad-sheet-result-approve/:classID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <BroadSheetReportCardApproved />
               </Suspense>
             ),
           },

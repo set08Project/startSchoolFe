@@ -263,6 +263,12 @@ const ClassDetailScreen = () => {
       >
         Edit className
       </span>
+      <Link
+        to={`/class-broad-sheet-result-approve/${classID}`}
+        className="text-[12px] ml-2 bg-orange-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"
+      >
+        View class Broad sheet
+      </Link>
       <div>
         {/* <div>Updating ClassName</div> */}
 
