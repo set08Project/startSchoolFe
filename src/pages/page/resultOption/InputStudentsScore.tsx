@@ -25,7 +25,10 @@ import {
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { FaCheckDouble } from "react-icons/fa6";
-import { createStudentHistory } from "@/pages/api/schoolAPIs";
+import {
+  createStudentHistory,
+  deleteStudentHistory,
+} from "@/pages/api/schoolAPIs";
 
 interface iProps {
   props?: any;
@@ -36,6 +39,7 @@ interface iProps {
   stateValue?: string;
   teacherInfo?: any;
   getClass?: any;
+  mutate?: any;
 }
 
 const SubjectScore: FC<iProps> = ({ props }) => {
@@ -56,7 +60,7 @@ const SubjectScore: FC<iProps> = ({ props }) => {
   );
 };
 
-const MainStudentRow: FC<iProps> = ({ props, i }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, mutate }) => {
   const { studentID } = useParams();
   return (
     <div
@@ -143,7 +147,23 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           //   valueStored.push(props?._id);
         }}
       >
-        <label className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center">
+        <label
+          className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center"
+          onClick={() => {
+            deleteStudentHistory(studentID, props?._id).then((res) => {
+              mutate(
+                async (currentData: any) => {
+                  // Filter out the deleted result from the current data
+                  const updatedData = (currentData || []).filter(
+                    (item: any) => item._id !== props?._id
+                  );
+                  return updatedData;
+                },
+                { revalidate: true } // Revalidate to ensure the cache is updated
+              );
+            });
+          }}
+        >
           Delete Result
         </label>
       </div>
@@ -321,6 +341,7 @@ const StudentResultsDetail = () => {
                       <MainStudentRow
                         props={props}
                         i={i}
+                        mutate={mutate}
                         //   getClass={getResult?.className}
                       />
                       {}

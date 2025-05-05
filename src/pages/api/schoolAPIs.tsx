@@ -38,6 +38,22 @@ export const viewStudentHistory = async (studentID: string): Promise<any> => {
   }
 };
 
+export const deleteStudentHistory = async (
+  studentID: string,
+  resultID: string
+): Promise<any> => {
+  try {
+    const URL = "http://localhost:2244/api";
+    return await axios
+      .delete(`${URL}/delete-student-result-history/${studentID}/${resultID}`)
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const deleteSchool = async (schoolID: string): Promise<any> => {
   try {
     return await axios
