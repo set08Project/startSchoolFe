@@ -22,11 +22,30 @@ import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const AdminPrintReportCardScreen: React.FC = () => {
+const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const { studentID } = useParams();
-  const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
+  console.log("reading:  ", studentInfo);
 
+  const { schoolAnnouncement }: any = useSchoolAnnouncement(
+    studentInfo?.schoolIDs
+  );
+  const { gradeData } = useStudentGrade(studentInfo?._id);
+  const { oneClass: classDetails } = useReadOneClassInfo(
+    studentInfo?.presentClassID
+  );
+  const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
+  const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
+
+  // Derived data
+  const schoolName = schoolAnnouncement?.schoolName!;
+  const schoolAddress = schoolAnnouncement?.address;
+
+  let grade = gradeData?.reportCard?.find((el: any) => {
+    return (
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
+    );
+  });
   const preprocessContent = () => {
     const content = contentRef.current;
     if (!content) return;
@@ -42,32 +61,10 @@ const AdminPrintReportCardScreen: React.FC = () => {
   };
 
   //   const { studentInfo } = useStudentInfo();
-  const { schoolAnnouncement }: any = useSchoolAnnouncement(
-    studentInfo?.schoolIDs
-  );
-
-  const { gradeData } = useStudentGrade(studentInfo?._id);
 
   let school: any = schoolAnnouncement;
 
-  let grade = gradeData?.reportCard?.find((el: any) => {
-    return (
-      el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
-    );
-  });
-
-  const { oneClass: classDetails } = useReadOneClassInfo(
-    studentInfo?.presentClassID
-  );
-
-  const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
-
-  const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
-
-  const schoolName = school?.schoolName!;
-  const schoolAddress = school?.address;
 
   let numbPassed =
     grade?.result?.length -
@@ -953,7 +950,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
   );
 };
 
-export default AdminPrintReportCardScreen;
+export default ReportCardScreenDone;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();

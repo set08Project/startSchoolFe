@@ -4,8 +4,8 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
 
-const BroadSheetReportCardApproved = React.lazy(
-  () => import("@/pages/page/ResultHistory/BoardSheet")
+const TeacherBroadSheetReportCardApproved = React.lazy(
+  () => import("@/pagesForTeachers/pages/ReportCard/TeacherClassBroadSheet")
 );
 
 const MidTestSubjectGradeCard = React.lazy(
@@ -249,7 +249,7 @@ export const teacherRouter = createBrowserRouter([
         path: "class-result-broad-sheet/:classID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
-            <BroadSheetReportCardApproved />
+            <TeacherBroadSheetReportCardApproved />
           </Suspense>
         ),
       },

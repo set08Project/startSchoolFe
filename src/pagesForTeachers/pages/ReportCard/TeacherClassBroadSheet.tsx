@@ -23,7 +23,7 @@ import {
   useStudentGrade,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { useNavigate, useParams } from "react-router-dom";
-import { adminReport, approveMainReport } from "../../api/schoolAPIs";
+
 import { Margin, Resolution, usePDF } from "react-to-pdf";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -287,7 +287,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
 };
 
 import jsPDF from "jspdf";
-const BroadSheetReportCardApproved = () => {
+const TeacherBroadSheetReportCardApproved = () => {
   const navigate = useNavigate();
   const { classID } = useParams();
 
@@ -495,4 +495,4 @@ const BroadSheetReportCardApproved = () => {
   );
 };
 
-export default BroadSheetReportCardApproved;
+export default TeacherBroadSheetReportCardApproved;

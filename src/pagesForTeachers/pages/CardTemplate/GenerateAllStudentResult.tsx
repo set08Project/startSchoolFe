@@ -22,10 +22,10 @@ import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const AdminPrintReportCardScreen: React.FC = () => {
+const GenerateAllResult: React.FC<any> = ({ student: studentInfo }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const { studentID } = useParams();
-  const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
+  //   const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
 
   const preprocessContent = () => {
     const content = contentRef.current;
@@ -206,7 +206,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
   }, []);
 
   return (
-    <div className=" overflow-hidden">
+    <div ref={contentRef} className=" overflow-hidden">
       <Toaster />
       <button
         disabled={loading}
@@ -231,14 +231,15 @@ const AdminPrintReportCardScreen: React.FC = () => {
           "Print Result"
         )}
       </button>
-      <div className="overflow-auto w-[1280px]">
+
+      <div ref={targetRef} className="overflow-auto w-[1280px]">
         <h1 className="text-[10px] md:text-[12px] text-center mt-5 uppercase font-medium mb-2 italic">
           {studentInfo?.classAssigned} {school?.presentSession}
           <span className="mx-1">{school?.presentTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
         <div className="relative ">
-          <main className="flex justify-center mt-2" ref={targetRef}>
+          <main className="flex justify-center mt-2">
             <div className="max-w-[1200px] p-4 overflow-hidden border">
               <div
                 className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
@@ -262,7 +263,43 @@ const AdminPrintReportCardScreen: React.FC = () => {
               </div>
 
               {/* full */}
-
+              <div className="hidden md:flex items-center justify-between w-auto">
+                {/* logo */}
+                <div className="border h-28 w-28 ">
+                  {school?.avatar ? (
+                    <img
+                      src={school?.avatar}
+                      className=" w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {school?.schoolName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                {/* school info */}
+                <div className="flex justify-center items-center flex-col">
+                  <h1 className="font-bold uppercase text-[25px]">
+                    {schoolName}
+                  </h1>
+                  <h1 className="text-[12px] font-semibold tracking-[0.6rem]">
+                    {schoolAddress}
+                  </h1>
+                </div>
+                {/* avatar */}
+                <div className="border h-28 w-28 ">
+                  {studentInfo?.avatar ? (
+                    <img
+                      src={studentInfo?.avatar}
+                      className="bg-blue-50 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="bg-blue-50 font-semibold uppercase text-[30px] w-full h-full flex justify-center items-center">
+                      {studentInfo?.studentFirstName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
+              </div>
               {/* Mobile */}
               <div className="flex flex-col md:hidden ">
                 <div className="flex items-center justify-between w-auto">
@@ -440,7 +477,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                       .sortBy(grade?.result, "subject")
                       ?.map((el: any, i: number) => (
                         <section
-                          className=" min-w-[1150px] flex my-1 bg-blue-50 min-h-[30px] "
+                          className="flex my-1 bg-blue-50 min-h-[25px] "
                           key={i - el?._id}
                           style={{
                             width: `${
@@ -455,7 +492,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                           }}
                         >
                           <div className="p-2 w-[40px]">{i + 1}</div>
-                          <div className="px-2 flex flex-col justify-center w-[180px] border-x text-[14px] tracking-wider font-semibold ">
+                          <div className="p-2 w-[180px] border-x text-[14px] tracking-wider font-semibold flex items-center">
                             {el?.subject}
                           </div>
                           <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
@@ -492,7 +529,6 @@ const AdminPrintReportCardScreen: React.FC = () => {
                             (school?.presentTerm === "2nd Term" && (
                               <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                                 <p className="text-[12px]">
-                                  {" "}
                                   {el?.test1 +
                                     el?.test2 +
                                     el?.test3 +
@@ -693,8 +729,8 @@ const AdminPrintReportCardScreen: React.FC = () => {
                 </div>
               </main>
 
-              <main className=" flex-col mt-2 ">
-                <div className="my-2 px-20">
+              <main className=" flex-col mt-5 ">
+                <div className="my-1 px-20">
                   <hr />
                 </div>
                 <div className="flex flex-col items-center">
@@ -702,7 +738,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                     ACADEMIC PERFORMANCE INSIGHT/SUBJECT
                   </p>
 
-                  <div className="flex gap-4 mt-2">
+                  <div className="flex gap-4 mt-1">
                     <div className="flex gap-1 items-center">
                       <div className="w-4 h-4 bg-red-500 shadow-inner" />
                       <p className="text-[12px] font-medium">Class Lowest</p>
@@ -735,14 +771,70 @@ const AdminPrintReportCardScreen: React.FC = () => {
                 </div>
               </main>
 
+              {/* <main className=" flex-col mt-5 ">
+                <div className="my-5 px-20">
+                  <hr />
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="font-medium">INSIGHT INTO TERM PERFORMANCE</p>
+
+                  <div className="flex gap-4 mt-2">
+                    <div className="flex gap-1 items-center">
+                      <div className="w-4 h-4 bg-red-500 shadow-inner" />
+                      <p className="text-[12px] font-medium">1st Term</p>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-4 h-4 bg-green-500 shadow-inner" />
+                      <p className="text-[12px] font-medium">2nd Term</p>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-4 h-4 bg-black shadow-inner" />
+                      <p className="text-[12px] font-medium">3rd Term</p>
+                    </div>
+                  </div>
+                </div>
+                <main className="mt-10">
+                  <div className="bg-slate-50 h-[80px]  flex ">
+                    <div className="flex items-end gap-1 border-r px-3">
+                      <div
+                        className="h-[80px] bg-red-500 w-3"
+                        style={{ height: `30px` }}
+                      />
+                      <div
+                        className="h-[80px] bg-black w-3"
+                        style={{ height: `70px` }}
+                      />
+                      <div
+                        className="h-[80px] bg-green-500 w-3"
+                        style={{ height: `50px` }}
+                      />
+                    </div>
+                    <div className="flex items-end gap-1 border-r px-3">
+                      <div
+                        className="h-[80px] bg-red-500 w-3"
+                        style={{ height: `30px` }}
+                      />
+                      <div
+                        className="h-[80px] bg-black w-3"
+                        style={{ height: `70px` }}
+                      />
+                      <div
+                        className="h-[80px] bg-green-500 w-3"
+                        style={{ height: `50px` }}
+                      />
+                    </div>
+                  </div>
+                </main>
+              </main> */}
+
               {/* Psycho */}
               <main className="mt-2">
-                <p className="font-semibold uppercase text-[12px] mb-2">
+                <p className="font-semibold uppercase text-[12px] mb-1">
                   Psychometric Test Grading
                 </p>
 
                 <div className="flex gap-4">
-                  <div className="flex-1 bg-slate-50 border min-h-20">
+                  <div className="flex-1 bg-slate-50 border min-h-10">
                     <p className="p-2 uppercase font-semibold text-[12px] bg-black text-white">
                       Soft skill
                     </p>
@@ -758,7 +850,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         1
                       </p>
@@ -769,7 +861,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.softSkill[0]?.communication}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         2
                       </p>
@@ -780,7 +872,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.softSkill[0]?.leadership}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         3
                       </p>
@@ -791,7 +883,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.softSkill[0]?.punctuality}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         4
                       </p>
@@ -807,7 +899,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                     <p className="p-2 uppercase font-semibold text-[12px] bg-black text-white">
                       People Skill
                     </p>
-                    <div className="px-2 w-full border-b h-[30px]  flex items-center text-[12px] uppercase border-x">
+                    <div className="px-2 w-full border-b h-[30px] flex items-center text-[12px] uppercase border-x">
                       <p className="w-[30px] h-full border-r flex items-center">
                         S/N
                       </p>
@@ -830,7 +922,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.peopleSkill[0]?.confidence}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         2
                       </p>
@@ -841,7 +933,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.peopleSkill[0]?.hardworking}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         3
                       </p>
@@ -852,7 +944,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                         {grade?.peopleSkill[0]?.presentational}
                       </p>
                     </div>
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center pl-2">
                         4
                       </p>
@@ -868,7 +960,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                     <p className="p-2 uppercase font-semibold text-[12px] bg-black text-white">
                       Physical Skill
                     </p>
-                    <div className="px-2 w-full border-b border-x h-[30px]  flex items-center text-[12px] uppercase ">
+                    <div className="px-2 w-full border-b border-x h-[30px] flex items-center text-[12px] uppercase ">
                       <p className="w-[30px] h-full border-r flex items-center">
                         S/N
                       </p>
@@ -880,7 +972,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="px-2 w-full h-[30px]  flex items-center text-[12px] uppercase border-b border-x">
+                    <div className="px-2 w-full h-[30px] flex items-center text-[12px] uppercase border-b border-x">
                       <p className="w-[30px] h-full border-r flex items-center">
                         1
                       </p>
@@ -895,9 +987,40 @@ const AdminPrintReportCardScreen: React.FC = () => {
                 </div>
               </main>
 
-              <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-2">
+              {/* Comments */}
+
+              {/* <div className=" grid text-[12px] mt-10">
                 <div className="border mr-3 p-2">
-                  <p className="font-semibold">Principal's Comment</p>
+                  <p className="font-semibold text-[18px] italic">
+                    General Class Comment
+                  </p>
+
+                  <p className="my-2  h-[80px] p-2 mb-5">
+                    {grade?.adminComment}
+                  </p>
+                  <div className="flex w-full">
+                    <div className="flex-1 flex flex-col">
+                      <p className="font-semibold">
+                        {school?.name} {school?.name2}
+                      </p>
+                      <p className="text-[10px]">Principal</p>
+                      <div className="flex-1" />
+                      <p>{moment(grade?.createdAt).format("lll")}</p>
+                    </div>
+
+                    <div className="w-[160px] h-[80px] border">
+                      <img
+                        src={school?.signature}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+
+              <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
+                <div className="border mr-3 p-2">
+                  <p>Principal's Comment</p>
 
                   <p className="my-2 border min-h-[40px] p-2 mb-5">
                     {grade?.adminComment}
@@ -921,7 +1044,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                   </div>
                 </div>
                 <div className="border mr-3 p-2">
-                  <p className="font-semibold">Class Teacher's Comment</p>
+                  <p>Class Teacher's Comment</p>
 
                   <p className="my-2 border min-h-[40px] p-2 mb-5">
                     {" "}
@@ -953,7 +1076,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
   );
 };
 
-export default AdminPrintReportCardScreen;
+export default GenerateAllResult;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();

@@ -603,8 +603,13 @@ export const adminRouter = createBrowserRouter([
             index: true,
             path: "class-room/class-details/:classID",
             element: (
+              // <Suspense fallback={<LoadingScreen />}>
+              //   <ClassDetailScreen />
+              // </Suspense>
               <Suspense fallback={<LoadingScreen />}>
-                <ClassDetailScreen />
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <ClassDetailScreen />
+                </ErrorBoundary>
               </Suspense>
             ),
           },

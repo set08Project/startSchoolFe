@@ -6,7 +6,7 @@ import pix from "../../../assets/pix.jpg";
 import { MdCheck, MdClose, MdEditDocument, MdSave } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { displaySession } from "../../../global/reduxState";
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { Link, useParams } from "react-router-dom";
 
@@ -25,12 +25,22 @@ import {
   updateClassName,
   updateClassroomTeacher,
 } from "../../api/schoolAPIs";
-import { useTeacherDetail } from "../../../pagesForTeachers/hooks/useTeacher";
+import {
+  useClassStudent,
+  useTeacherDetail,
+} from "../../../pagesForTeachers/hooks/useTeacher";
 import ClassModel from "./ClassModel";
 import ViewClassStudent from "./ViewClassStudent";
 import { mutate } from "swr";
 import TimeTableScreen from "../../../pagesForTeachers/pages/class/TimeTableScreen";
 import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import AdminPrintReportCardScreen from "../ResultHistory/ViewStudentPrintResultScreen";
+import ReportCardScreenDone from "./ResultCardDone";
+// import { usePDF } from "@react-pdf/renderer";
+import moment from "moment";
+import { usePDF } from "react-to-pdf";
 
 // import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
@@ -244,6 +254,210 @@ const ClassDetailScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [className, setClassName] = useState<string>("");
 
+  const { classStudents } = useClassStudent(classID!);
+
+  const allStudents = classStudents?.students;
+
+  const sortedStudents = classStudents?.students?.sort((a: any, b: any) =>
+    a.studentLastName?.localeCompare(b.studentLastName)
+  );
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  const printAllStudents = async () => {
+    if (!classStudents?.students || classStudents?.students?.length === 0) {
+      toast.error("No students found in this class.");
+      return;
+    }
+
+    for (const student of classStudents?.students) {
+      const input = reportRef.current;
+      if (!input) continue;
+
+      // Generate the report card for each student
+      const canvas = await html2canvas(input, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("landscape", "px", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(
+        `${student?.studentFirstName}-${student?.studentLastName}-report-card.pdf`
+      );
+    }
+
+    toast.success("All students' report cards have been downloaded.");
+  };
+  const printRef = useRef(null);
+
+  const { toPDF, targetRef }: any = usePDF({
+    filename: `${classroom?.className}-${moment(Date.now()).format("lll")}.pdf`,
+    page: {
+      orientation: "portrait", // Ensure landscape orientation
+      // unit: "px", // Use pixels for dimensions
+      // format: [2820, 1080],
+      //  // Set custom dimensions (e.g., full HD resolution)
+    },
+  });
+  const [loadingState, setLoadingState] = useState<boolean>(false);
+  const handlePrintAll = () => {
+    // window.print(); // If printing the full page
+    // OR if using react-to-print:
+    // const print = useReactToPrint({ content: () => printRef.current });
+    // print();
+
+    setLoadingState(true);
+
+    toPDF().finally(() => {
+      setLoadingState(false);
+      toast.success("Result downloaded.");
+    });
+  };
+
+  const handlePrint1 = () => {
+    const target = targetRef.current;
+
+    if (!target) {
+      toast.error("No content to print.");
+      return;
+    }
+
+    // Save the original styles of the body and target
+    const originalBodyStyles = document.body.style.cssText;
+    const originalTargetStyles = target.style.cssText;
+
+    // Apply styles to hide all other elements and focus on the target
+    document.body.style.cssText = `
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: white;
+    margin: 0;
+    padding: 0;
+    height: auto;
+  `;
+    target.style.cssText = `
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: white;
+    z-index: 9999;
+  `;
+
+    // Hide all other elements except the target
+    Array.from(document.body.children).forEach((child) => {
+      if (child !== target) {
+        (child as HTMLElement).style.display = "none";
+      }
+    });
+
+    // Trigger the print dialog
+    window.print();
+
+    // Restore the original styles of the body and target
+    document.body.style.cssText = originalBodyStyles;
+    target.style.cssText = originalTargetStyles;
+
+    // Restore visibility of other elements
+    Array.from(document.body.children).forEach((child) => {
+      if (child !== target) {
+        (child as HTMLElement).style.display = "";
+      }
+    });
+  };
+  // const printAllStudents = async () => {
+  //   if (!classStudents?.students || classStudents?.students?.length === 0) {
+  //     toast.error("No students found in this class.");
+  //     return;
+  //   }
+
+  //   await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for content to render
+
+  //   const input = targetRef.current;
+  //   if (!input) {
+  //     toast.error("No content to print.");
+  //     return;
+  //   }
+
+  //   const canvas = await html2canvas(input, { scale: 2 });
+  //   const imgData = canvas.toDataURL("image/png");
+  //   const pdf = new jsPDF("landscape", "px", "a4");
+  //   const pdfWidth = pdf.internal.pageSize.getWidth();
+  //   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+  //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  //   pdf.save("class-report.pdf");
+  // };
+  const handlePrint = async () => {
+    const target = targetRef.current;
+
+    if (!target) {
+      toast.error("No content to print.");
+      return;
+    }
+
+    setLoadingState(true);
+
+    try {
+      console.log("Target Ref Content:", target);
+
+      // Wait for content to render
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      // Generate the canvas
+      const canvas = await html2canvas(target, {
+        scale: 2, // Improve rendering quality
+        useCORS: true, // Handle cross-origin issues
+        backgroundColor: "#ffffff", // Ensure a white background
+      });
+
+      // Debug the generated image
+      console.log("Canvas Data URL:", canvas.toDataURL());
+
+      // Convert canvas to image data
+      const imgData = canvas.toDataURL("image/png");
+
+      // Create a new PDF
+      const pdf = new jsPDF("landscape", "px", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // Add the image to the PDF
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      // Save the PDF
+      pdf.save("class-report.pdf");
+
+      toast.success("PDF downloaded successfully.");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingState(false);
+    }
+  };
+
+  const handlePrintAllAgain = async () => {
+    if (!classStudents?.students || classStudents?.students?.length === 0) {
+      toast.error("No students found in this class.");
+      return;
+    }
+
+    setLoadingState(true);
+
+    try {
+      await toPDF(targetRef.current);
+      toast.success("PDF downloaded successfully.");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingState(false);
+    }
+  };
+
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -270,8 +484,6 @@ const ClassDetailScreen = () => {
         View class Broad sheet
       </Link>
       <div>
-        {/* <div>Updating ClassName</div> */}
-
         {toggle ? (
           <div
             className="absolute top-[9%] z-10 
@@ -689,6 +901,33 @@ const ClassDetailScreen = () => {
           <ViewClassStudent />
         </div>
       </div>
+      <div className="my-4">view All Result for Printing</div>
+      <button
+        onClick={() => {
+          setLoadingState(!loadingState);
+        }}
+        style={{
+          padding: "8px 16px",
+          color: "#fff",
+          borderRadius: "4px",
+          border: "none",
+          cursor: "pointer",
+        }}
+        className="mb-5 bg-blue-950"
+      >
+        🖨️ {loadingState ? "Viewing Student" : "Print All Results"}
+      </button>
+
+      {loadingState && (
+        <div ref={targetRef} style={{ height: "100%" }}>
+          {classStudents?.students.map((student) => (
+            <div key={student._id} className="result-card my-5">
+              {/* <div>{student?.studentFirstName}</div> */}
+              <ReportCardScreenDone student={student} />
+            </div>
+          ))}
+        </div>
+      )}
       {/* timetable */}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <div className="flex items-center w-full justify-between">

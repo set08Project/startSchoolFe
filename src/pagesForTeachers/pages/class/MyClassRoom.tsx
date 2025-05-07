@@ -5,6 +5,7 @@ import { MdDelete, MdHistory } from "react-icons/md";
 import { FC, useEffect, useState } from "react";
 import { FaAddressBook } from "react-icons/fa";
 import {
+  useClassStudent,
   useClassSubject,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
@@ -13,8 +14,11 @@ import TimeTableScreen from "./TimeTableScreen";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import { usePDF } from "react-to-pdf";
+import moment from "moment";
+import GenerateAllResult from "../CardTemplate/GenerateAllStudentResult";
 
 interface iProps {
   props?: string;
@@ -98,7 +102,7 @@ const StaffDetail: FC<iProps> = ({ props }) => {
 const MyClassRoomScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const [classInfo, setClassInfo] = useState<any>();
-
+  const { classID } = useParams();
   const [state, setState] = useState<string>(
     teacherInfo?.classesAssigned[0]?.classID
   );
@@ -111,8 +115,16 @@ const MyClassRoomScreen = () => {
   //   });
   // }, []);
   const [myClassID, setMyCLassID] = useState<string>("");
+  const [loadingState, setLoadingState] = useState<boolean>(false);
+
+  const { toPDF, targetRef }: any = usePDF({
+    filename: `-${moment(Date.now()).format("lll")}.pdf`,
+  });
 
   useEffect(() => {}, [myClassID]);
+
+  const { classStudents } = useClassStudent(oneClass?._id);
+
   return (
     <div className="text-blue-950">
       <LittleHeader name="My ClassRoom Details" />
@@ -219,6 +231,33 @@ const MyClassRoomScreen = () => {
           </div>
         </div>
       </div>
+      <div className="my-4">view All Result for Printing</div>
+      <button
+        onClick={() => {
+          setLoadingState(!loadingState);
+        }}
+        style={{
+          padding: "8px 16px",
+          color: "#fff",
+          borderRadius: "4px",
+          border: "none",
+          cursor: "pointer",
+        }}
+        className="mb-5 bg-blue-950"
+      >
+        🖨️ {loadingState ? "Viewing Student" : "Print All Results"}
+      </button>
+
+      {loadingState && (
+        <div ref={targetRef} style={{ height: "100%" }}>
+          {classStudents?.students.map((student) => (
+            <div key={student._id} className="result-card my-5">
+              {/* <div>{student?.studentFirstName}</div> */}
+              <GenerateAllResult student={student} />
+            </div>
+          ))}
+        </div>
+      )}
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <div className="flex items-center w-full justify-between">
           <div>
