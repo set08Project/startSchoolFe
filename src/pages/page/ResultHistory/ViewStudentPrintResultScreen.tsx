@@ -993,7 +993,7 @@ const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
         />
       </div>
       <p className="text-[8px] mt-1 font-semibold text-center">
-        {subject.slice(0, 20)}
+        {subject?.slice(0, 20)}
       </p>
     </div>
   );
