@@ -24,7 +24,6 @@ import jsPDF from "jspdf";
 
 const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  console.log("reading:  ", studentInfo);
 
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
@@ -67,8 +66,15 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
 
   let numbPassed =
-    grade?.result?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    lodash.sortBy(
+      grade?.result?.filter((el: any) => {
+        if (studentInfo?.classAssigned === "JSS 1A") {
+          return el?.subject !== "Diction";
+        }
+        return true;
+      }),
+      "subject"
+    )?.length - lodash.filter(grade?.result, { grade: "F" })?.length;
 
   let commulationScore =
     (grade?.result
@@ -434,7 +440,15 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
 
                   <main className="flex flex-col mt-1">
                     {lodash
-                      .sortBy(grade?.result, "subject")
+                      .sortBy(
+                        grade?.result?.filter((el: any) => {
+                          if (studentInfo?.classAssigned === "JSS 1A") {
+                            return el?.subject !== "Diction";
+                          }
+                          return true;
+                        }),
+                        "subject"
+                      )
                       ?.map((el: any, i: number) => (
                         <section
                           className=" min-w-[1150px] flex my-1 bg-blue-50 min-h-[30px] "
@@ -590,7 +604,17 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
                     No. of subject taken
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {grade?.result?.length}
+                    {
+                      lodash.sortBy(
+                        grade?.result?.filter((el: any) => {
+                          if (studentInfo?.classAssigned === "JSS 1A") {
+                            return el?.subject !== "Diction";
+                          }
+                          return true;
+                        }),
+                        "subject"
+                      )?.length
+                    }
                   </h1>
                 </div>
 
