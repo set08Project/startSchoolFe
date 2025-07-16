@@ -10,8 +10,6 @@ import { Navigate } from "react-router-dom";
 const PrivateRouter: FC<PropsWithChildren> = ({ children }) => {
   const stateToken = useSelector((state: any) => state.user);
 
-  console.log(stateToken);
-
   useEffect(() => {
     openServerAPI();
   }, []);

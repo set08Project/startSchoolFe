@@ -65,17 +65,17 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     });
 
   return (
-    <div className="w-[260px] border-r-2 border-blue-950 ">
+    <div className="w-[200px] border-r-2 border-blue-950 ">
       <div>
         <div className="w-[260px] ">
           <p className="pl-1 font-bold text-[12px]">
             {result?.subject ? result?.subject : "Have't Entered"}
           </p>
           <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-            <p className="w-[30px] border-r">1st</p>
+            {/* <p className="w-[30px] border-r">1st</p>
             <p className="w-[30px] border-r">2nd</p>
-            <p className="w-[30px] border-r">3rd</p>
-            <p className="w-[30px] border-r">4th</p>
+            <p className="w-[30px] border-r">3rd</p> */}
+            <p className="w-[30px] border-r">Test</p>
             <p className="w-[35px] border-r">Exam</p>
             <p className="w-[35px] ">Total</p>
             <p className="w-[35px] ">Grade</p>
@@ -84,9 +84,9 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
         <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
+        {/* <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
         <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p> */}
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
           {result?.mark ? result?.mark : 0}
@@ -272,7 +272,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const SubjectMap: FC<iProps> = ({ props }) => {
   return (
-    <div className="w-[260px] border-r ">
+    <div className="w-[200px] border-r ">
       <p>Subject Offered</p>
       {/* <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p> */}
       {/* <div className="pl-1 flex gap-1 mt-2 text-[10px] ">

@@ -32,7 +32,6 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
     (el: any) => el?.paymentDetails === paymentName
   )[0]?.paymentAmount;
 
-  console.log(xx);
 
   const onInitiatePayment = () => {
     setLoading(true);

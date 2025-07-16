@@ -17,7 +17,7 @@ import {
   useStudentInfoData,
 } from "../../../pagesForStudents/hooks/useStudentHook";
 import lodash from "lodash";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   useClassAcademicHistory,
   useClassSubject,
@@ -215,6 +215,9 @@ const StudentResultsDetail = () => {
   const { termID, ID, term, session, studentID } = useParams();
   const { studentResults: resultArray, mutate } =
     useViewStudentHistory(studentID);
+    const {pathname} = useLocation()
+
+
 
   const { sessionTermData } = useViewSessionTerm(termID);
   document.title = `Viewing Historical Result Query`;
@@ -358,7 +361,7 @@ const StudentResultsDetail = () => {
         </div>
       </div>
 
-      {!showForm && (
+      {!showForm && !pathname.includes("viewing") && (
         <div className="flex">
           <p
             className="font-[400] border rounded-md mt-4 px-4 py-2 bg-blue-950 text-white cursor-pointer hover:bg-blue-800 uppercase text-[12px] "

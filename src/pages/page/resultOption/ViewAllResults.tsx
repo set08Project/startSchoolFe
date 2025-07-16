@@ -388,7 +388,7 @@ const ViewAllStudentResult = () => {
 
                         <div className="w-[80px] border-r">3 of 5</div>
                         <Link
-                          to={`student-details/${props?._id}`}
+                          to={`/viewing-student-result-history/${props?._id}`}
                           className="w-[180px] border-r"
                         >
                           <Button

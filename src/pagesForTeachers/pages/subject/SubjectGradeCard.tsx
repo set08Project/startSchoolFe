@@ -138,7 +138,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         <AttendanceRatio props={props} />
       </div>
 
-      <div className="w-[100px] border-r items-center flex">
+      {/* <div className="w-[100px] border-r items-center flex">
         <input
           className="w-[70px] h-8 outline-none border rounded-md px-2 "
           //   type="number"
@@ -173,7 +173,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
             setTest3(e.target.value);
           }}
         />
-      </div>
+      </div> */}
 
       <div className="w-[100px] border-r">
         <input
@@ -305,13 +305,13 @@ const SubjectGradeCard = () => {
 
       <div className="flex w-full justify-end"></div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[1300px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1000px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Grade</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
-          <div className="w-[100px] border-r">
+          {/* <div className="w-[100px] border-r">
             1st Test <br />
             Score
           </div>
@@ -322,9 +322,9 @@ const SubjectGradeCard = () => {
           <div className="w-[100px] border-r">
             3rd Test <br />
             Score
-          </div>
+          </div> */}
           <div className="w-[100px] border-r">
-            NoteBook
+            Test
             <br />
             Score
           </div>
@@ -333,7 +333,7 @@ const SubjectGradeCard = () => {
           <div className="w-[180px] border-r">Submit Report</div>
         </div>
 
-        <div className=" w-[1300px] overflow-hidden">
+        <div className=" w-[1000px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (

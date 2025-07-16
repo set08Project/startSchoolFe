@@ -539,6 +539,15 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
+            path: "viewing-student-result-history/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <StudentResultsDetail />
+              </Suspense>
+            ),
+          },
+          {
+            index: true,
             path: "view-student-result-history/:studentID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
@@ -548,7 +557,7 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
-            path: "view-students",
+            path: "view-students/:studentID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ViewStudent />
