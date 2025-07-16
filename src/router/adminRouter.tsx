@@ -557,7 +557,7 @@ export const adminRouter = createBrowserRouter([
           },
           {
             index: true,
-            path: "view-students/:studentID",
+            path: "view-students",
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ViewStudent />
