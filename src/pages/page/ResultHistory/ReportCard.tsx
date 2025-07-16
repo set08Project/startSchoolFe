@@ -83,10 +83,10 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
         </div>
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
-        {/* <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p> */}
+        {/* <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
+        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p> */}
+        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
           {result?.mark ? result?.mark : 0}

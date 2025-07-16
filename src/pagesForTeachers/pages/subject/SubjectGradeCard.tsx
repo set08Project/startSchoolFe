@@ -131,7 +131,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.mark} /{result?.score} -{" "}
+        {result?.mark}  -{" "}
         <span className="font-bold text-[12px]">{result?.grade}</span>
       </div>
       <div className="w-[100px] border-r">

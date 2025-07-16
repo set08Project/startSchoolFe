@@ -64,6 +64,14 @@ const ReportCardDesignAdminScreen: React.FC = () => {
     );
   });
 
+
+
+console.log("Extracted Points:", "pointsArray");
+
+const [pointsArray, setPointsArray] = useState(gradeData?.reportCard?.map(item => item.points));
+
+
+
   const { oneClass: classDetails } = useReadOneClassInfo(
     gradeData?.presentClassID
   );
@@ -426,32 +434,34 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   </div>
                   <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Total</p>
-                    <p className="text-[12px]">(100)</p>
+                    <p className="text-[12px]"> {school?.presentTerm === "3rd Term" ? "(300)":"(100)"}</p>
                   </div>
-                  {school?.presentTerm === "1st Term" ||
-                    (school?.presentTerm === "3rd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">1st Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))}
+                  {/* Always show 1st Term if current term is 1st, 2nd, or 3rd */}
+{(school?.presentTerm === "1st Term" || 
+  school?.presentTerm === "2nd Term" || 
+  school?.presentTerm === "3rd Term") && (
+  <div className="w-[78px] border-r flex flex-col justify-center items-center">
+    <p className="text">1st Term</p>
+    <p className="text-[12px]">(100)</p>
+  </div>
+)}
 
-                  {school?.presentTerm === "1st Term" ||
-                    (school?.presentTerm === "2nd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">2nd Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))}
+{/* Show 2nd Term only if current term is 2nd or 3rd */}
+{(school?.presentTerm === "2nd Term" || 
+  school?.presentTerm === "3rd Term") && (
+  <div className="w-[78px] border-r flex flex-col justify-center items-center">
+    <p className="text">2nd Term</p>
+    <p className="text-[12px]">(100)</p>
+  </div>
+)}
 
-                  {school?.presentTerm === "1st Term" ||
-                    school?.presentTerm === "2nd Term" ||
-                    (school?.presentTerm === "3rd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">3rd Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))}
+{/* Show 3rd Term only if current term is 3rd */}
+{school?.presentTerm === "3rd Term" && (
+  <div className="w-[78px] border-r flex flex-col justify-center items-center">
+    <p className="text">3rd Term</p>
+    <p className="text-[12px]">(100)</p>
+  </div>
+)}
 
                   {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
@@ -512,46 +522,60 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                         </div>
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
-                            {el?.test1 +
+                            {/* {el?.test1 +
+                              el?.test2 +
+                              el?.test3 +
+                              el?.test4 +
+                              el?.exam} */}
+                              {school?.presentTerm === "3rd Term"?pointsArray?.reduce((a,b) => a+b) :el?.test1 +
                               el?.test2 +
                               el?.test3 +
                               el?.test4 +
                               el?.exam}
                           </p>
                         </div>
-                        {school?.presentTerm === "1st Term" ||
-                          (school?.presentTerm === "3rd Term" && (
+                        {
+                        (school?.presentTerm === "1st Term" || 
+  school?.presentTerm === "2nd Term" || 
+  school?.presentTerm === "3rd Term") &&   (
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                               <p className="text-[12px]">
                                 {" "}
-                                {el?.test1 +
+                                {/* {el?.test1 +
                                   el?.test2 +
                                   el?.test3 +
                                   el?.test4 +
-                                  el?.exam}
+                                  el?.exam} */}
+                                  {pointsArray[0]}
                               </p>
                             </div>
-                          ))}
-                        {school?.presentTerm === "1st Term" ||
-                          (school?.presentTerm === "2nd Term" && (
+                          )}
+                        {school?.presentTerm === "2nd Term" || 
+  school?.presentTerm === "3rd Term" && (
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                               <p className="text-[12px]">
-                                {el?.test1 +
+                                {/* {el?.test1 +
                                   el?.test2 +
                                   el?.test3 +
                                   el?.test4 +
-                                  el?.exam}
+                                  el?.exam} */}
+                                  {pointsArray[1]}
                               </p>
                             </div>
-                          ))}
+                          )}
 
-                        {school?.presentTerm === "1st Term" ||
-                          school?.presentTerm === "2nd Term" ||
-                          (school?.presentTerm === "3rd Term" && (
+                        {school?.presentTerm === "3rd Term" && (
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">0</p>
+                              <p className="text-[12px]">
+                                {/* {el?.test1 +
+                                  el?.test2 +
+                                  el?.test3 +
+                                  el?.test4 +
+                                  el?.exam} */}
+                                  {pointsArray[2]}
+                                  </p>
                             </div>
-                          ))}
+                          )}
 
                         {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
@@ -660,7 +684,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   Percenatge score
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {commulationScore.toFixed(2)}%
+                  {school?.presentTerm === "3rd Term"?(pointsArray?.reduce((a,b) => a+b)/3).toFixed(2) : commulationScore.toFixed(2)}%
                 </h1>
               </div>
             </main>
