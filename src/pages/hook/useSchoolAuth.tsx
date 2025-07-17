@@ -793,7 +793,7 @@ export const useSchoolStudents = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -1120,7 +1120,7 @@ export const useViewStudentHistory = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 

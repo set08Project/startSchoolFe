@@ -28,6 +28,7 @@ export const createStudentHistory = async (
 
 export const viewStudentHistory = async (studentID: string): Promise<any> => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/view-student-result-history/${studentID}`)
       .then((res: AxiosResponse) => {
@@ -43,7 +44,6 @@ export const deleteStudentHistory = async (
   resultID: string
 ): Promise<any> => {
   try {
-   
     return await axios
       .delete(`${URL}/delete-student-result-history/${studentID}/${resultID}`)
       .then((res: AxiosResponse) => {
@@ -1463,6 +1463,7 @@ export const adminReport = async (
   adminComment: string
 ) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/admin-report-card/${schoolID}/${studentID}`, {
         adminComment,

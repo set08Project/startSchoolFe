@@ -229,6 +229,7 @@ const StudentResultsDetail = () => {
   const { classAcademicHistory } = useClassAcademicHistory(getResult?._id);
   const { subjectData } = useClassSubject(classAcademicHistory?._id);
   const { studentInfoData } = useStudentInfoData(studentID);
+
   let data = lodash.groupBy(classAcademicHistory?.classHistory, "session");
   const dataX = Object.values(data).flat();
 

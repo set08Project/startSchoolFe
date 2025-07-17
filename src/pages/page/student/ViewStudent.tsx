@@ -677,12 +677,24 @@ const ViewStudent = () => {
                           ) : // <PrintReciptScreen props={props} />
                           UI?.presentTerm === "2nd Term" &&
                             props?.feesPaid2nd ? (
-                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                            <button
+                              className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                setStateID(props?._id);
+                                setToggleView(true);
+                              }}
+                            >
                               Get Receipt
                             </button>
                           ) : UI?.presentTerm === "3rd Term" &&
                             props?.feesPaid3rd ? (
-                            <button className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                            <button
+                              className="bg-blue-950 text-white  px-4 py-2 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                setStateID(props?._id);
+                                setToggleView(true);
+                              }}
+                            >
                               Get Receipt
                             </button>
                           ) : null}
@@ -870,10 +882,14 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black/5  bg-opacity-30 z-50 "
+      className="cursor-pointer fixed inset-0 flex items-center justify-center bg-black/5  bg-opacity-5 z-50 "
       ref={contentRef}
+      onClick={() => setToggleView(false)}
     >
-      <div className="relative w-full max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-8 border border-gray-200 overflow-hidden">
+      <div
+        className=" relative w-full max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-8 border border-gray-200 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="absolute text-[20px] font-[400] top-0 -left-60 text-blue-950/50 -z-1 -rotate-45 h-full ">
           {Array.from({ length: 20 }, (_, i: number) => {
             return (
@@ -928,7 +944,7 @@ const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
                 onClick={() => handlePrint()}
                 className="bg-blue-950 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-900 transition-all duration-300"
               >
-                Print
+                Print/Send
               </button>
             </div>
           </div>
