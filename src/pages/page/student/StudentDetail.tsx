@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { readClassInfo } from "../../../pagesForTeachers/api/teachersAPI";
 import { changeStudentClass } from "../../api/schoolAPIs";
+import StudentProfile from "./StudentProfile";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
@@ -40,17 +41,13 @@ const StudentDetail = () => {
     });
   }, []);
 
-  console.log(studentDetails?.data);
-
   return (
     <div>
       <LittleHeader name="Student Details" back />
-
       <div className="font-semibold mb-3">
         {studentDetails?.data?.studentLastName}{" "}
         {studentDetails?.data?.studentFirstName}
       </div>
-
       <div className=" flex-wrap w-full text-blue-950 min-h-[90px] rounded-lg border flex justify-between relative">
         <div className="bg-blue-950 text-white w-[160px] md:w-[300px] px-4 py-2 rounded-lg ">
           <div>Performance Ratio</div>
@@ -127,6 +124,8 @@ const StudentDetail = () => {
       </div>
 
       <div className="my-6 border-t" />
+      <StudentProfile />
+      <div className="my-6 border-t" />
       {/* class subject */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Present Class Details </p>
@@ -202,7 +201,6 @@ const StudentDetail = () => {
           </div>
         )}
       </div>
-
       <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>student's Performance Detail</p>
         <p className="text-[13px] flex items-center font-medium">
@@ -232,9 +230,7 @@ const StudentDetail = () => {
           </div>
         </div>
       </div>
-
       {/* Attendance */}
-
       <div className="mt-6 w-full min-h-[60px] py-5 bg-slate-50 rounded-lg border  px-4 ">
         <p className="mb-2">
           Attendance Heatmap:{" "}
