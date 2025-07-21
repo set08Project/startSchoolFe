@@ -215,9 +215,7 @@ const StudentResultsDetail = () => {
   const { termID, ID, term, session, studentID } = useParams();
   const { studentResults: resultArray, mutate } =
     useViewStudentHistory(studentID);
-    const {pathname} = useLocation()
-
-
+  const { pathname } = useLocation();
 
   const { sessionTermData } = useViewSessionTerm(termID);
   document.title = `Viewing Historical Result Query`;
@@ -264,12 +262,17 @@ const StudentResultsDetail = () => {
     ],
   });
 
+  // const {pathname} = useLocation()
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
       {/* header */}
       <div className="mb-0" />
-      <LittleHeader name={`Viewing Student's Historical Result Query`} />
+      {!pathname?.includes("view-students/student-details") && (
+        <LittleHeader name={`Viewing Student's Historical Result Query`} />
+      )}
+
       <div>
         Quering{" "}
         <span className="font-[600] italic">
@@ -362,16 +365,18 @@ const StudentResultsDetail = () => {
         </div>
       </div>
 
-      {!showForm && !pathname.includes("viewing") && (
-        <div className="flex">
-          <p
-            className="font-[400] border rounded-md mt-4 px-4 py-2 bg-blue-950 text-white cursor-pointer hover:bg-blue-800 uppercase text-[12px] "
-            onClick={() => setShowForm(true)}
-          >
-            Click To Add
-          </p>
-        </div>
-      )}
+      {!showForm &&
+        !pathname.includes("viewing") &&
+        !pathname?.includes("view-students/student-details") && (
+          <div className="flex">
+            <p
+              className="font-[400] border rounded-md mt-4 px-4 py-2 bg-blue-950 text-white cursor-pointer hover:bg-blue-800 uppercase text-[12px] "
+              onClick={() => setShowForm(true)}
+            >
+              Click To Add
+            </p>
+          </div>
+        )}
       {showForm && (
         <EnterResult
           setShowForm={setShowForm}

@@ -2,7 +2,7 @@ import moment from "moment";
 // import pix from "../assets/Child2.jpg";
 // import { useStudentInfo, useStudentInfoData } from "./hooks/useStudentHook";
 import { Link, useParams } from "react-router-dom";
-import pic from "../../../assets/Child1.jpg";
+import pic from "../../../assets/pix.jpg";
 import { MdEmail } from "react-icons/md";
 import { HiPhoto } from "react-icons/hi2";
 import { BsPerson, BsPhone } from "react-icons/bs";
@@ -19,7 +19,11 @@ import { useState, useEffect, useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import { useStudentInfo } from "@/pagesForStudents/hooks/useStudentHook";
-import { useClassSubjects, useSchoolData, useSchoolStudentDetail } from "@/pages/hook/useSchoolAuth";
+import {
+  useClassSubjects,
+  useSchoolData,
+  useSchoolStudentDetail,
+} from "@/pages/hook/useSchoolAuth";
 import { readClassInfo } from "@/pagesForTeachers/api/teachersAPI";
 import { updateStudentAvatar } from "@/pagesForStudents/api/studentAPI";
 
@@ -27,29 +31,16 @@ const StudentProfile = () => {
   const [state, setState] = useState<string>("");
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  
- const { studentID } = useParams();
 
- const { studentDetails } = useSchoolStudentDetail(studentID!);
-//   const student = useStudentInfo().studentInfo;
-const  student = studentDetails?.data
+  const { studentID } = useParams();
+
+  const { studentDetails } = useSchoolStudentDetail(studentID!);
+  //   const student = useStudentInfo().studentInfo;
+  const student = studentDetails?.data;
   const studentInfo = useStudentInfo()?.studentInfo;
 
-const {data} = useSchoolData()
-console.log(data)
-
-  const fetchSubjects = async (classID: string) => {
-    setLoading(true);
-    try {
-      const res = await readClassInfo(classID);
-      // console.log("Fetched subjects:", res);
-      setSubjects(res.subjects);
-    } catch (error) {
-      console.error("Failed to fetch subjects:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data } = useSchoolData();
+  console.log(data);
 
   const changeImage = (e: any) => {
     // console.log("start...");
@@ -75,20 +66,51 @@ console.log(data)
     }
   };
 
-  const { readSubject } = useClassSubjects(studentInfo?.presentClassID);
+  const [formData, setFormData] = useState({
+    studentFirstName: student?.studentFirstName || "",
+    studentLastName: student?.studentLastName || "",
+    email: student?.email || "",
+    phone: student?.phone || "",
+    gender: student?.gender || "",
+    parentEmail: student?.parentEmail || "",
+    parentPhoneNumber: student?.parentPhoneNumber || "",
+    studentAddress: student?.studentAddress || "",
+    admissionYear: student?.admissionYear || "",
+    admissionNumber: student?.admissionNumber || "",
+    classAssinged: student?.classAssinged || "",
+    graduationYear: student?.graduationYear || "",
+    leaveYear: student?.leaveYear || "",
+    stateOrigin: student?.stateOrigin || "",
+    LGA: student?.LGA || "",
+    BOD: student?.BOD || "",
+    personalPhone: student?.personalPhone || "",
+    performanceRemark: student?.performanceRemark || "",
+  });
 
-console.log(student)
+  console.log(formData);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    console.log("Form Data:", formData);
+    alert("Form submitted successfully! Check console for data.");
+  };
+
   return (
     <div>
       <div className="freshh">
         <div>
           <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
             <div className="flex items-center gap-4">
-              <div className="text-[24px] text-blue-850">
-                <div className="text-[12px] md:text-[29px]">
-                  Welcome To your Profile,
-                </div>
-                <span className="font-bold text-blue-950">
+              <div className="text-[20px] text-blue-850 flex gap-2">
+                Welcome To your Profile,
+                <span className="font-bold text-blue-950 capitalize">
                   {student?.studentFirstName}
                 </span>
               </div>
@@ -103,9 +125,6 @@ console.log(student)
         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           <div className="min-h-[87vh] ">
             <div className="mb-8">
-              <h1 className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
-                Profile Image:
-              </h1>
               {loading ? (
                 <div className="mb-2 h-[320px] md:h-[300px] w-[90%] md:w-[80%] object-cover rounded-lg border flex justify-center items-center">
                   <ClipLoader color="#172554" size={30} />
@@ -114,15 +133,15 @@ console.log(student)
                 <img
                   src={student?.avatar ? student?.avatar : pic}
                   alt="profile-image"
-                  className="mb-2 border h-[320px] md:h-[300px] w-[90%] md:w-[80%] object-cover rounded-lg"
+                  className="mb-2 border h-[320px] md:h-[300px] w-[100%] md:w-[100%] object-cover rounded-lg"
                 />
               )}
 
-              <div className="ml-7 flex gap-2 text-blue-800 items-center ">
-                <HiPhoto className="cursor-pointer hover:scale-105 transition-all duration-300" />
+              <div className="ml- flex gap-2 text-blue-950 items-center ">
+                <HiPhoto className="cursor-pointer hover:text-blue-900 transition-all duration-300" />
                 <label
                   htmlFor="id"
-                  className="cursor-pointer hover:scale-105 transition-all duration-300"
+                  className="cursor-pointer hover:text-blue-900 font-[500] transition-all duration-300"
                 >
                   Change Profile Image
                 </label>
@@ -142,17 +161,27 @@ console.log(student)
                 <p className="mb-1 flex items-center gap-1">
                   <BsPerson /> First Name:
                 </p>
-                <h1 className="text-[18px] font-semibold  text-left">
-                  {student?.studentFirstName}
-                </h1>
+                {/* <h1 className="text-[18px] font-semibold capitalize text-left"></h1> */}
+                <input
+                  value={formData.studentFirstName}
+                  defaultValue={student?.studentFirstName}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="studentFirstName"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1">
                   <BsPerson /> First LastName:
                 </p>
-                <h1 className="text-[18px] font-semibold text-left">
-                  {student?.studentLastName}
-                </h1>
+
+                <input
+                  value={formData?.studentLastName}
+                  defaultValue={student?.studentLastName}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="studentLastName"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1">
@@ -163,40 +192,57 @@ console.log(student)
                     + add your gender
                   </h1>
                 ) : (
-                  <h1 className="text-[18px] font-semibold  text-left">
-                    {student?.gender}
-                  </h1>
+                  <input
+                    value={formData?.gender}
+                    defaultValue={student?.gender}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="gender"
+                    onChange={handleInputChange}
+                  />
                 )}
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
                   <MdEmail /> My Email Address:
                 </p>
-                <h1 className="md:text-[18px] font-semibold lowercase text-[11px]  text-left">
-                  {student?.email}
-                </h1>
+                <input
+                  value={formData?.email}
+                  defaultValue={student?.email}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="email"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
                   <MdEmail /> Parent Email Address:
                 </p>
-                <h1 className="md:text-[18px] font-semibold lowercase text-[11px]  text-left">
-                  {student?.parentEmail}
-                </h1>
+                <input
+                  value={formData?.parentEmail}
+                  defaultValue={student?.parentEmail}
+                  className="outline-none bg-transparent text-[18px] font-semibold "
+                  name="parentEmail"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
                   <BsPhone />
                   My Phone Number:
                 </p>
-                {studentInfo?.phone === "" ? (
+                {student?.phone === "" ? (
                   <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
                     + add your phone number
                   </h1>
                 ) : (
-                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px] text-left">
-                    {studentInfo?.phone}
-                  </h1>
+                  <input
+                    value={formData?.phone}
+                    defaultValue={student?.phone}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="phone"
+                    placeholder="Enter Phone Number"
+                    onChange={handleInputChange}
+                  />
                 )}
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
@@ -204,23 +250,33 @@ console.log(student)
                   <BsPhone />
                   Parent Phone Number:
                 </p>
-                {studentInfo?.parentPhoneNumber === "" ? (
+                {student?.parentPhoneNumber === "" ? (
                   <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
                     + add parent phone number
                   </h1>
                 ) : (
-                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px] text-left">
-                    {studentInfo?.parentPhoneNumber}
-                  </h1>
+                  <input
+                    value={formData?.parentPhoneNumber}
+                    defaultValue={student?.parentPhoneNumber}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="parentPhoneNumber"
+                    placeholder="Enter parent phone Number"
+                    onChange={handleInputChange}
+                  />
                 )}
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1">
                   <FaAddressBook /> Home Address:
                 </p>
-                <h1 className="text-[11px] md:text-[18px] font-semibold  text-left">
-                  {student?.studentAddress}
-                </h1>
+                <input
+                  value={formData?.studentAddress}
+                  defaultValue={student?.studentAddress}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="studentAddress"
+                  placeholder="Enter student Address"
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
           </div>
@@ -249,24 +305,27 @@ console.log(student)
               </div>
               <div className="font-bold rounded-lg flex justify-start items-center text-green-600">
                 {data?.presentTerm === "1st Term" ? (
-                  student?.feesPaid1st && "Yes"
+                  student?.feesPaid1st ? (
+                    "Yes"
+                  ) : (
+                    <span className="text-red-400">No</span>
+                  )
                 ) : data?.presentTerm === "2nd Term" ? (
-                  student?.feesPaid2nd && "Yes"
+                  student?.feesPaid2nd ? (
+                    "Yes"
+                  ) : (
+                    <span className="text-red-400">No</span>
+                  )
                 ) : data?.presentTerm === "3rd Term" ? (
-                  student?.feesPaid3rd && "Yes"
-                ) : (
-                  <p className="text-red-500">No</p>
-                )}
+                  student?.feesPaid3rd ? (
+                    "Yes"
+                  ) : (
+                    <span className="text-red-400">No</span>
+                  )
+                ) : null}
               </div>
             </div>
-            <div className="mb-3 md:mb-5">
-              <div className="mb-2 font-medium text-[17px] text-gray-600 uppercase">
-                Role:
-              </div>
-              <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                Student
-              </div>
-            </div>
+
             <div className="mb-3 md:mb-5">
               <div className="mb-2 font-medium md:text-[17px] text-[11px] text-gray-600 uppercase">
                 School EnrollmentID:
@@ -288,7 +347,14 @@ console.log(student)
                 Admission Year:
               </div>
               <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                {student?.admissionYear || "No Entry Yet"}
+                <input
+                  value={formData?.admissionYear}
+                  defaultValue={student?.admissionYear}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="admissionYear"
+                  placeholder="No Entry Yet"
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
             <div className="mb-5">
@@ -296,7 +362,14 @@ console.log(student)
                 Admission Number:
               </div>
               <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                {student?.admissionNumber || "No Entry Yet"}
+                <input
+                  value={formData?.admissionNumber}
+                  defaultValue={student?.admissionNumber}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="admissionNumber"
+                  placeholder="No Entry Yet"
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
 
@@ -356,14 +429,23 @@ console.log(student)
                 </h3>
               </div>
             </div>
+
+            <div className="flex w-full justify-center">
+              <div
+                className="mt-5 capitalize border rounded-md px-8 py-3 text-white bg-blue-950 font-[500] cursor-pointer transition-all duration-300 hover:bg-blue-900"
+                onClick={handleSubmit}
+              >
+                update Info
+              </div>
+            </div>
           </div>
           {/* Section 3 */}
           <div className="min-h-[87vh] transition-all duration-300 lg:col-span-2 xl:col-auto lg:flex justify-between items-start xl:block">
             <div className="mb-10 lg:w-[47%] xl:w-auto">
               <div className="mb-3 font-medium text-[17px] text-gray-600 uppercase">
-                My Current Class:
+                Current Class:
               </div>
-              <div className="font-[700]">{studentInfo?.classAssigned}</div>
+              <div className="font-[700]">{student?.classAssigned}</div>
             </div>
 
             <div className="lg:w-[47%] xl:w-auto h-[500px] w-[330px]">
@@ -372,7 +454,14 @@ console.log(student)
                   Graduation Year:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.graduationYear || "No Entry Yet"}
+                  <input
+                    value={formData?.graduationYear}
+                    defaultValue={student?.graduationYear}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="graduationYear"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
               <div className="mb-5">
@@ -380,7 +469,14 @@ console.log(student)
                   Leave Year:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.leaveYear || "No Entry Yet"}
+                  <input
+                    value={formData?.leaveYear}
+                    defaultValue={student?.leaveYear}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="leaveYear"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
 
@@ -389,7 +485,14 @@ console.log(student)
                   State of Origin:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.stateOrigin || "No Entry Yet"}
+                  <input
+                    value={formData?.stateOrigin}
+                    defaultValue={student?.stateOrigin}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="stateOrigin"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
               <div className="mb-5">
@@ -397,7 +500,14 @@ console.log(student)
                   LGA:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.LGA || "No Entry Yet"}
+                  <input
+                    value={formData?.LGA}
+                    defaultValue={student?.LGA}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="LGA"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
 
@@ -406,7 +516,14 @@ console.log(student)
                   Date of Birth:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.BOD || "No Entry Yet"}
+                  <input
+                    value={formData?.BOD}
+                    defaultValue={student?.BOD}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="BOD"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
               <div className="mb-5">
@@ -414,7 +531,29 @@ console.log(student)
                   Personal Number:
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
-                  {student?.personalPhone || "No Entry Yet"}
+                  <input
+                    value={formData?.personalPhone}
+                    defaultValue={student?.personalPhone}
+                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                    name="personalPhone"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className="mb-5">
+                <div className="mb-2 font-medium text-[11px] md:text-[17px] text-gray-600 uppercase">
+                  Student Performance Remark:
+                </div>
+                <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
+                  <textarea
+                    value={formData?.performanceRemark}
+                    defaultValue={student?.performanceRemark}
+                    className="outline-none bg-transparent resize-none h-[200px] text-[18px] font-semibold capitalize "
+                    name="performanceRemark"
+                    placeholder="No Entry Yet"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
             </div>

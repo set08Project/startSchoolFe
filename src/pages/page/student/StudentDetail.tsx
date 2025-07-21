@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { readClassInfo } from "../../../pagesForTeachers/api/teachersAPI";
 import { changeStudentClass } from "../../api/schoolAPIs";
 import StudentProfile from "./StudentProfile";
+import StudentResultsDetail from "../resultOption/InputStudentsScore";
 
 const StudentDetail = () => {
   const { studentID } = useParams();
@@ -39,7 +40,7 @@ const StudentDetail = () => {
     readClassInfo(studentDetails?.data?.classAssigned).then((res: any) => {
       setClassHolder(res?.data?.classSubjects);
     });
-  }, []);
+  }, [studentDetails]);
 
   return (
     <div>
@@ -126,6 +127,8 @@ const StudentDetail = () => {
       <div className="my-6 border-t" />
       <StudentProfile />
       <div className="my-6 border-t" />
+      <StudentResultsDetail />
+      <div className="my-6 border-t" />
       {/* class subject */}
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Present Class Details </p>
@@ -136,7 +139,7 @@ const StudentDetail = () => {
           </span>
         </p>
 
-        <div className="mt-5 text-[13px] font-medium">Subjects Offer</div>
+        <div className="mt-5 text-[13px] font-medium">Subjects </div>
 
         {classHolder?.length > 0 ? (
           <div>
