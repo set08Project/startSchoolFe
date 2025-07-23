@@ -843,7 +843,7 @@ export const createGradeScore = async (
   data: {}
 ) => {
   try {
-    // const URL = "http://localhost:2244/api";
+    const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
       .then((res: any) => {
