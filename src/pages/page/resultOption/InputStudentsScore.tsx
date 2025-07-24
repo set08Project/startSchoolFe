@@ -62,6 +62,8 @@ const SubjectScore: FC<iProps> = ({ props }) => {
 
 const MainStudentRow: FC<iProps> = ({ props, i, mutate }) => {
   const { studentID } = useParams();
+  console.log("props", props);
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
@@ -69,7 +71,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, mutate }) => {
       }`}
     >
       <div className={`w-[150px] border-r font-semibold flex flex-col`}>
-        <p className="text-[18px]">{props?.classInfo}</p>
+        <p className="text-[18px]">{props?.classInfo.split(" session:")[0]}</p>
 
         <div>
           <p className="gap-1 flex items-center  font-[400] -mt-1 text-[10px]">
