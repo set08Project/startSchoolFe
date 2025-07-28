@@ -183,6 +183,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
+  console.log("reading", result);
+
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -949,9 +951,8 @@ const MidTestMainStudentRow: FC<iProps> = ({
     );
   });
 
-  const [stateValue, setStateValue] = useState(
-    `${reading?.classTeacherComment ? reading?.classTeacherComment : ""}`
-  );
+  const [stateValue, setStateValue] = useState();
+  `${reading?.classTeacherComment ? reading?.classTeacherComment : ""}`;
 
   return (
     <div
@@ -977,7 +978,6 @@ const MidTestMainStudentRow: FC<iProps> = ({
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
       </div>
-
       <div
         className={`w-[${
           subjectData?.classSubjects.length * 270
@@ -997,9 +997,7 @@ const MidTestMainStudentRow: FC<iProps> = ({
             ))}
         </div>
       </div>
-
       <div className="w-[100px] border-r">{reading?.points}</div>
-
       <div className="w-[100px] border-r">{reading?.grade}</div>
       <div className="w-[100px] border-r">
         <input
@@ -1011,7 +1009,6 @@ const MidTestMainStudentRow: FC<iProps> = ({
           onChange={(e: any) => setAttendace(e.target.value)}
         />
       </div>
-
       <div className="w-[180px] border-r relative">
         <Button
           name={
