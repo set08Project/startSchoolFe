@@ -1445,6 +1445,7 @@ export const readSchoolFee = async (schoolID: string) => {
 
 export const updateSchoolFee = async (schoolFeeID: string) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/update-school-school-fee/${schoolFeeID}`, {
         confirm: true,
