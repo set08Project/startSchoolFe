@@ -1758,11 +1758,9 @@ const PrintReportCard: React.FC = () => {
                                   el?.test3 +
                                   el?.test4 +
                                   el?.exam} */}
-                              {
-                                st1?.result?.find(
-                                  (e) => e.subject === el?.subject
-                                )?.points||0
-                              }
+                              {st1?.result?.find(
+                                (e) => e.subject === el?.subject
+                              )?.points || 0}
                               {/* {pointsArray[0]} */}
                               {/*  */}
                             </p>
@@ -1778,11 +1776,9 @@ const PrintReportCard: React.FC = () => {
                                   el?.test4 +
                                   el?.exam} */}
                                 {/* {pointsArray[1]} */}
-                                {
-                                  st2?.result?.find(
-                                    (e) => e.subject === el?.subject
-                                  )?.points||0
-                                }
+                                {st2?.result?.find(
+                                  (e) => e.subject === el?.subject
+                                )?.points || 0}
                               </p>
                             </div>
                           ))}
@@ -1795,11 +1791,9 @@ const PrintReportCard: React.FC = () => {
                                   el?.test3 +
                                   el?.test4 +
                                   el?.exam} */}
-                              {
-                                st3?.result?.find(
-                                  (e) => e.subject === el?.subject
-                                )?.points||0
-                              }
+                              {st3?.result?.find(
+                                (e) => e.subject === el?.subject
+                              )?.points || 0}
                             </p>
                           </div>
                         )}
@@ -1911,10 +1905,21 @@ const PrintReportCard: React.FC = () => {
                   Percenatge score
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {school?.presentTerm === "3rd Term"
-                    ? (pointsArray?.reduce((a, b) => a + b) / 3).toFixed(2)
-                    : commulationScore.toFixed(2)}
-                  %
+                  {studentInfo?.classAssigned === "CRECHE" ? (
+                    <p>
+                      {school?.presentTerm === "3rd Term"
+                        ? pointsArray?.reduce((a, b) => a + b).toFixed(2)
+                        : commulationScore.toFixed(2)}
+                      %
+                    </p>
+                  ) : (
+                    <p>
+                      {school?.presentTerm === "3rd Term"
+                        ? (pointsArray?.reduce((a, b) => a + b) / 3).toFixed(2)
+                        : commulationScore.toFixed(2)}
+                      %
+                    </p>
+                  )}
                 </h1>
               </div>
             </main>
@@ -2262,7 +2267,10 @@ const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
-      el.classInfo === `${subjectInfo?.designated} session: ${schoolInfo[0]?.year||"2024/2025"}(${schoolInfo[0]?.presentTerm||"3rd Term"})`
+      el.classInfo ===
+      `${subjectInfo?.designated} session: ${
+        schoolInfo[0]?.year || "2024/2025"
+      }(${schoolInfo[0]?.presentTerm || "3rd Term"})`
     );
   });
 
@@ -2297,4 +2305,4 @@ const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
       </p>
     </div>
   );
-};
+}; 
