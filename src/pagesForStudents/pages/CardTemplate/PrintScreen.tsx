@@ -1181,6 +1181,40 @@ const PrintReportCardScreen: React.FC = () => {
   };
 
   //   const { studentInfo } = useStudentInfo();
+  // const { schoolAnnouncement }: any = useSchoolAnnouncement(
+  //   studentInfo?.schoolIDs
+  // );
+
+  // const { gradeData } = useStudentGrade(studentInfo?._id);
+
+  // let school: any = schoolAnnouncement;
+
+  // let grade = gradeData?.reportCard?.find((el: any) => {
+  //   return (
+  //     el.classInfo ===
+  //     `${studentInfo?.classAssigned} session: ${
+  //       school?.presentSession || "2024/2025"
+  //     }(${school?.presentTerm || "3rd Term"})`
+  //   );
+  // });
+
+  // const { oneClass: classDetails } = useReadOneClassInfo(
+  //   studentInfo?.presentClassID
+  // );
+
+  // const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
+
+  // const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
+  // const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
+
+  // const schoolName = school?.schoolName!;
+  // const schoolAddress = school?.address;
+
+  // let numbPassed =
+  //   grade?.result?.length -
+  //   lodash.filter(grade?.result, { grade: "F" })?.length;
+
+  // const { studentInfo } = useStudentInfo();
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
@@ -1192,7 +1226,7 @@ const PrintReportCardScreen: React.FC = () => {
   let grade = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession||"2024/2025"}(${school?.presentTerm||"3rd Term"})`
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
     );
   });
 
@@ -1207,7 +1241,6 @@ const PrintReportCardScreen: React.FC = () => {
 
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
-
   let numbPassed =
     grade?.result?.length -
     lodash.filter(grade?.result, { grade: "F" })?.length;
@@ -1222,6 +1255,8 @@ const PrintReportCardScreen: React.FC = () => {
       }, 0) /
       (grade?.result?.length * 100)) *
     100;
+
+  console.log(commulationScore);
 
   let holdeAll = [];
 
@@ -1287,10 +1322,6 @@ const PrintReportCardScreen: React.FC = () => {
     "subject"
   );
 
- 
-  
-  
-  
   console.log("Extracted Points:", "pointsArray");
 
   const [pointsArray, setPointsArray] = useState(
@@ -1314,7 +1345,6 @@ const PrintReportCardScreen: React.FC = () => {
       el.classInfo ===
       `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
   );
-  
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -1878,8 +1908,9 @@ const PrintReportCardScreen: React.FC = () => {
                   <h1 className="uppercase text-[12px] font-semibold">
                     Percenatge score
                   </h1>
-                  <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {studentInfo?.classAssigned === "CRECHE" ? (
+
+                  {/* <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                    {studentInfo?.classAssigned === "CRECHE"  ? (
                       <p>
                         {school?.presentTerm === "3rd Term"
                           ? pointsArray?.reduce((a, b) => a + b).toFixed(2)
@@ -1896,6 +1927,10 @@ const PrintReportCardScreen: React.FC = () => {
                         %
                       </p>
                     )}
+                  </h1> */}
+
+                  <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                    {commulationScore.toFixed(2)}%
                   </h1>
                 </div>
               </main>
