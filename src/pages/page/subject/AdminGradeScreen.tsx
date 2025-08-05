@@ -52,11 +52,11 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
   console.clear();
   console.log(data);
 
-  const [test1, setTest1] = useState("");
-  const [test2, setTest2] = useState("");
-  const [test3, setTest3] = useState("");
-  const [test4, setTest4] = useState("");
-  const [exam, setExam] = useState("");
+  const [test1, setTest1] = useState("0");
+  const [test2, setTest2] = useState("0");
+  const [test3, setTest3] = useState("0");
+  const [test4, setTest4] = useState("0");
+  const [exam, setExam] = useState("0");
 
   const { gradeData } = useStudentGrade(props?._id);
 
