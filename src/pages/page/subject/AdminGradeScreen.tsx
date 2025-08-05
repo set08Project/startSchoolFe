@@ -49,8 +49,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
 
   const { schoolInfo } = useSchoolSessionData(data?._id);
 
-  console.clear();
-  console.log(data);
+  // console.clear();
+  // console.log(data);
 
   const [test1, setTest1] = useState("0");
   const [test2, setTest2] = useState("0");
@@ -94,15 +94,25 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
       setLoading(true);
       createGradeScore(teacherID.toString(), props?._id, {
         subject: subjectInfo?.subjectTitle,
-        test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
-        test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
-        test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
+        // test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
+        test1: 0,
+        test2: 0,
+        test3: 0,
         test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
         exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
       }).then((res) => {
         setLoading(false);
         if (res.status === 201) {
           mutate(`api/student-report-card/${props?._id}`);
+          console.log({
+            subject: subjectInfo?.subjectTitle,
+            // test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
+            test1: 0,
+            test2: 0,
+            test3: 0,
+            test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
+            exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
+          });
           toast.success("Grade added");
         } else {
           toast.error("Grade denied");
@@ -112,6 +122,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
       return error.stack;
     }
   };
+
+  console.log(result);
 
   return (
     <div
@@ -135,13 +147,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         </div>
       </div>
       <div className="w-[100px] border-r pl-2">
-        {result?.mark}  -{" "}
+        {result?.mark} -{" "}
         <span className="font-bold text-[12px]">{result?.grade}</span>
       </div>
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
       </div>
-{/* 
+      {/* 
       <div className="w-[100px] border-r items-center flex">
         <input
           className="w-[70px] h-8 outline-none border rounded-md px-2 "

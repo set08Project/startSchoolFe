@@ -120,7 +120,11 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     <div className="w-[200px] border-r-2 border-blue-950 ">
       <div className="w-[260px] border-">
         <p className="pl-1 font-bold text-[15px] capitalize ">
-          {result?.subject ? result?.subject : "Have't Entered"}
+          {result?.subject
+            ? result?.subject.length > 21
+              ? result?.subject.slice(0, 21).concat("...")
+              : result?.subject
+            : "Have't Entered"}
         </p>
 
         <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
@@ -137,7 +141,7 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
         {/* <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p> */}
         {/* <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
         <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p>*/}
-        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p> 
+        <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
           {result?.mark ? result?.mark : 0}
@@ -178,6 +182,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
   const [stateValue, setStateValue] = useState(
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
+
+  console.log("reading", result);
 
   return (
     <div
@@ -945,9 +951,8 @@ const MidTestMainStudentRow: FC<iProps> = ({
     );
   });
 
-  const [stateValue, setStateValue] = useState(
-    `${reading?.classTeacherComment ? reading?.classTeacherComment : ""}`
-  );
+  const [stateValue, setStateValue] = useState();
+  `${reading?.classTeacherComment ? reading?.classTeacherComment : ""}`;
 
   return (
     <div
@@ -973,7 +978,6 @@ const MidTestMainStudentRow: FC<iProps> = ({
       <div className="w-[100px] border-r">
         <AttendanceRatio props={props} />
       </div>
-
       <div
         className={`w-[${
           subjectData?.classSubjects.length * 270
@@ -993,9 +997,7 @@ const MidTestMainStudentRow: FC<iProps> = ({
             ))}
         </div>
       </div>
-
       <div className="w-[100px] border-r">{reading?.points}</div>
-
       <div className="w-[100px] border-r">{reading?.grade}</div>
       <div className="w-[100px] border-r">
         <input
@@ -1007,7 +1009,6 @@ const MidTestMainStudentRow: FC<iProps> = ({
           onChange={(e: any) => setAttendace(e.target.value)}
         />
       </div>
-
       <div className="w-[180px] border-r relative">
         <Button
           name={

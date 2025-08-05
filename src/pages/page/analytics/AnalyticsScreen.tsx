@@ -52,6 +52,8 @@ const AnalyticScreen: React.FC = () => {
     .reduce((a: number, b: number) => {
       return a + b;
     }, 0);
+  
+  console.log("data: ", termData);
 
   return (
     <>
@@ -83,7 +85,7 @@ const AnalyticScreen: React.FC = () => {
         <CardDataStats
           title="School Fees[Paid]"
           total={`₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`}
-          rate="1006"
+          rate={`${termData?.data?.schoolFeePayment?.length}`}
           levelDown
         >
           <BsPeopleFill size={30} />
