@@ -1253,10 +1253,15 @@ const PrintReportCardScreen: React.FC = () => {
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (grade?.result?.length * 100)) *
+      (grade?.result
+        ?.map((el) => {
+          return el.subject !== null;
+        })
+        ?.filter(Boolean)?.length *
+        100)) *
     100;
 
-  console.log(commulationScore);
+ 
 
   let holdeAll = [];
 
