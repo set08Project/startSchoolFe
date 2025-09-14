@@ -10,12 +10,12 @@ import axios from "axios";
 
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
-const URLII: string = "https://server.justnext.com.ng/api";
+// const URLII: string = "https://server.justnext.com.ng/api";
 
-export const clockInWithID = async (schoolID: string, enrollmentID: string) => {
+export const getSubjects = async () => {
   try {
     return await axios
-      .patch(`${URL}/student-clock-in-with-id/${schoolID}`, { enrollmentID })
+      .get(`${URL}/teach-subject/`, )
       .then((res) => {
         return res?.data;
       });

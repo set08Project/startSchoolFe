@@ -3,45 +3,52 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Progress } from "../components/ui/progress";
 import { Clock, Users, Star, Play } from "lucide-react";
+import moment from "moment";
 
 interface CourseCardProps {
   id: string;
   title: string;
   instructor: string;
   duration: string;
+  createdAt: string;
   students: number;
   rating: number;
   progress?: number;
-  image: string;
+  totalLessons?: number;
+  subjectImage: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   onStart: () => void;
 }
 
-const CourseCard = ({ 
-  title, 
-  instructor, 
-  duration, 
-  students, 
-  rating, 
-  progress = 0, 
-  image,
+const CourseCard = ({
+  title,
+  instructor,
+  duration,
+  createdAt,
+  totalLessons,
+  students,
+  rating,
+  progress = 0,
+  subjectImage,
   level,
-  onStart 
+  onStart,
 }: CourseCardProps) => {
-  
-
   return (
-    <Card className="overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 group cursor-pointer"
-          onClick={onStart}>
+    <Card
+      className="overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 group cursor-pointer"
+      onClick={onStart}
+    >
       <div className="relative aspect-video overflow-hidden">
-        <img 
-          src={image} 
+        <img
+          src={subjectImage}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-4 left-4">
-          <Badge className={`bg-white/60 text-black font-medium backdrop-blur-xl}`}>
+          <Badge
+            className={`bg-white/60 text-black font-medium backdrop-blur-xl}`}
+          >
             {level}
           </Badge>
         </div>
@@ -51,31 +58,29 @@ const CourseCard = ({
           </div>
         </div>
       </div>
-      
+
       <div className="p-6">
         <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
           {title}
         </h3>
-        
-        <p className="text-muted-foreground text-sm mb-4">
-          by {instructor}
-        </p>
-        
+
+        <p className="text-muted-foreground text-sm mb-4">by: NEXT Teach</p>
+
         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
-            <span>{duration}</span>
+            <span>{moment(createdAt).fromNow()}</span>
           </div>
           <div className="flex items-center gap-1">
             <Users className="h-4 w-4" />
-            <span>{students.toLocaleString()}</span>
+            <span>{totalLessons} Topics</span>
           </div>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <Star className="h-4 w-4 fill-current text-warning" />
             <span>{rating}</span>
-          </div>
+          </div> */}
         </div>
-        
+
         {progress > 0 && (
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
@@ -85,8 +90,8 @@ const CourseCard = ({
             <Progress value={progress} className="h-2" />
           </div>
         )}
-        
-        <Button 
+
+        <Button
           onClick={onStart}
           className="w-full"
           variant={progress > 0 ? "secondary" : "default"}
