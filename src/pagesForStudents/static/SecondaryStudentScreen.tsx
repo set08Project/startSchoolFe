@@ -113,8 +113,8 @@ const SecondaryStudentScreen = () => {
           My Financials
           <BsCash />
         </NavLink>
-
-        {/* <NavLink
+        {/* 
+        <NavLink
           to="/lesson"
           className={({ isActive }) =>
             isActive
@@ -126,6 +126,19 @@ const SecondaryStudentScreen = () => {
           Practice Quiz
           <MdQuiz />
         </NavLink> */}
+
+        <NavLink
+          to="/learning"
+          className={({ isActive }) =>
+            isActive
+              ? "duration-500 transition-all p-2 rounded-sm bg-blue-100 text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+              : "duration-500 transition-all p-2 rounded-sm hover:bg-blue-100 hover:text-black cursor-pointer font-medium my-[3px] flex items-center justify-between "
+          }
+          onClick={handleToggleMenuFalse}
+        >
+          NEXT Teach
+          <MdQuiz />
+        </NavLink>
 
         {studentInfo?.classAssigned.includes("SSS 3") ? (
           <NavLink

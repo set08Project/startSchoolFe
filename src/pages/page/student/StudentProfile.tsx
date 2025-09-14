@@ -40,7 +40,7 @@ const StudentProfile = () => {
   const studentInfo = useStudentInfo()?.studentInfo;
 
   const { data } = useSchoolData();
-  console.log(data);
+
 
   const changeImage = (e: any) => {
     // console.log("start...");
@@ -163,8 +163,9 @@ const StudentProfile = () => {
                 </p>
                 {/* <h1 className="text-[18px] font-semibold capitalize text-left"></h1> */}
                 <input
-                  value={formData.studentFirstName}
-                  defaultValue={student?.studentFirstName}
+                  value={
+                    formData.studentFirstName || student?.studentFirstName || ""
+                  }
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="studentFirstName"
                   onChange={handleInputChange}
@@ -176,8 +177,9 @@ const StudentProfile = () => {
                 </p>
 
                 <input
-                  value={formData?.studentLastName}
-                  defaultValue={student?.studentLastName}
+                  value={
+                    formData.studentLastName || student?.studentLastName || ""
+                  }
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="studentLastName"
                   onChange={handleInputChange}
@@ -193,8 +195,7 @@ const StudentProfile = () => {
                   </h1>
                 ) : (
                   <input
-                    value={formData?.gender}
-                    defaultValue={student?.gender}
+                    value={formData.gender || student?.gender || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="gender"
                     onChange={handleInputChange}
@@ -206,8 +207,7 @@ const StudentProfile = () => {
                   <MdEmail /> My Email Address:
                 </p>
                 <input
-                  value={formData?.email}
-                  defaultValue={student?.email}
+                  value={formData.email || student?.email || ""}
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="email"
                   onChange={handleInputChange}
@@ -218,8 +218,7 @@ const StudentProfile = () => {
                   <MdEmail /> Parent Email Address:
                 </p>
                 <input
-                  value={formData?.parentEmail}
-                  defaultValue={student?.parentEmail}
+                  value={formData.parentEmail || student?.parentEmail || ""}
                   className="outline-none bg-transparent text-[18px] font-semibold "
                   name="parentEmail"
                   onChange={handleInputChange}
@@ -236,8 +235,7 @@ const StudentProfile = () => {
                   </h1>
                 ) : (
                   <input
-                    value={formData?.phone}
-                    defaultValue={student?.phone}
+                    value={formData.phone || student?.phone || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="phone"
                     placeholder="Enter Phone Number"
@@ -256,8 +254,11 @@ const StudentProfile = () => {
                   </h1>
                 ) : (
                   <input
-                    value={formData?.parentPhoneNumber}
-                    defaultValue={student?.parentPhoneNumber}
+                    value={
+                      formData.parentPhoneNumber ||
+                      student?.parentPhoneNumber ||
+                      ""
+                    }
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="parentPhoneNumber"
                     placeholder="Enter parent phone Number"
@@ -270,8 +271,9 @@ const StudentProfile = () => {
                   <FaAddressBook /> Home Address:
                 </p>
                 <input
-                  value={formData?.studentAddress}
-                  defaultValue={student?.studentAddress}
+                  value={
+                    formData.studentAddress || student?.studentAddress || ""
+                  }
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="studentAddress"
                   placeholder="Enter student Address"
@@ -348,8 +350,7 @@ const StudentProfile = () => {
               </div>
               <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                 <input
-                  value={formData?.admissionYear}
-                  defaultValue={student?.admissionYear}
+                  value={formData.admissionYear || student?.admissionYear || ""}
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="admissionYear"
                   placeholder="No Entry Yet"
@@ -363,8 +364,9 @@ const StudentProfile = () => {
               </div>
               <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                 <input
-                  value={formData?.admissionNumber}
-                  defaultValue={student?.admissionNumber}
+                  value={
+                    formData.admissionNumber || student?.admissionNumber || ""
+                  }
                   className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                   name="admissionNumber"
                   placeholder="No Entry Yet"
@@ -455,8 +457,9 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.graduationYear}
-                    defaultValue={student?.graduationYear}
+                    value={
+                      formData.admissionYear || student?.admissionYear || ""
+                    }
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="graduationYear"
                     placeholder="No Entry Yet"
@@ -470,8 +473,7 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.leaveYear}
-                    defaultValue={student?.leaveYear}
+                    value={formData.leaveYear || student?.leaveYear || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="leaveYear"
                     placeholder="No Entry Yet"
@@ -486,8 +488,7 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.stateOrigin}
-                    defaultValue={student?.stateOrigin}
+                    value={formData.stateOrigin || student?.stateOrigin || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="stateOrigin"
                     placeholder="No Entry Yet"
@@ -501,8 +502,7 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.LGA}
-                    defaultValue={student?.LGA}
+                    value={formData.LGA || student?.LGA || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="LGA"
                     placeholder="No Entry Yet"
@@ -517,8 +517,7 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.BOD}
-                    defaultValue={student?.BOD}
+                    value={formData.BOD || student?.BOD || ""}
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="BOD"
                     placeholder="No Entry Yet"
@@ -532,8 +531,9 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
-                    value={formData?.personalPhone}
-                    defaultValue={student?.personalPhone}
+                    value={
+                      formData.personalPhone || student?.personalPhone || ""
+                    }
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="personalPhone"
                     placeholder="No Entry Yet"
@@ -547,8 +547,11 @@ const StudentProfile = () => {
                 </div>
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <textarea
-                    value={formData?.performanceRemark}
-                    defaultValue={student?.performanceRemark}
+                    value={
+                      formData.performanceRemark ||
+                      student?.performanceRemark ||
+                      ""
+                    }
                     className="outline-none bg-transparent resize-none h-[200px] text-[18px] font-semibold capitalize "
                     name="performanceRemark"
                     placeholder="No Entry Yet"

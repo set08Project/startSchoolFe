@@ -5,6 +5,8 @@ import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import FinalMidTestScreenReport from "@/pagesForStudents/pages/quiz/FinalMidTestScreenReport";
+import CourseDetail from "@/pagesForStudents/screen/CourseDetail";
+import LearnScreen from "@/pagesForStudents/pages/learning/LearnScreen";
 // import MidTestReportScreen from "@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen";
 
 // const OtherPayments = React.lazy(
@@ -187,6 +189,28 @@ export const studentRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             <ErrorBoundary FallbackComponent={Fallback}>
               <PrintReportCardScreen />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "/learning",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <LearnScreen />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "/learning/:courseID",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <CourseDetail />
             </ErrorBoundary>
           </Suspense>
         ),

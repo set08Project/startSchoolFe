@@ -36,6 +36,8 @@ const StudentDetail = () => {
 
   const { schoolClassroom } = useSchoolClassRM();
 
+  // console.log("sec: ", studentDetails);
+
   useEffect(() => {
     readClassInfo(studentDetails?.data?.classAssigned).then((res: any) => {
       setClassHolder(res?.data?.classSubjects);
@@ -107,6 +109,7 @@ const StudentDetail = () => {
                 );
               })}
             </select>
+
             <Button
               name="Change Class"
               className="bg-blue-950 mx-0"
