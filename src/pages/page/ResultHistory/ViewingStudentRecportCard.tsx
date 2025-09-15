@@ -456,13 +456,13 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                     <p className="text">Exam</p>
                     <p className="text-[12px]">(60)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Total</p>
                     <p className="text-[12px]">
                       {" "}
                       {school?.presentTerm === "3rd Term" ? "(300)" : "(100)"}
                     </p>
-                  </div>
+                  </div> */}
                   {/* Always show 1st Term if current term is 1st, 2nd, or 3rd */}
                   {(school?.presentTerm === "1st Term" ||
                     school?.presentTerm === "2nd Term" ||
@@ -547,7 +547,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">{el?.exam}</p>
                         </div>
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {st1?.result?.find((e) => e.subject === el?.subject)
                               ?.points +
@@ -558,7 +558,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                                 (e) => e.subject === el?.subject
                               )?.points}
                           </p>
-                        </div>
+                        </div> */}
                         {(school?.presentTerm === "1st Term" ||
                           school?.presentTerm === "2nd Term" ||
                           school?.presentTerm === "3rd Term") && (
@@ -611,7 +611,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                                 st3?.result?.find(
                                   (e) => e.subject === el?.subject
                                 )?.points
-                              }
+                              }{" "}
                             </p>
                           </div>
                         )}
