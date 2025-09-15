@@ -1,4 +1,3 @@
-import React from "react";
 import CardDataStats from "../../../components/CardDataStats";
 import ChartOne from "../../../components/Charts/ChartOne";
 import ChartThree from "../../../components/Charts/ChartThree";
@@ -8,13 +7,332 @@ import TableOne from "../../../components/Tables/TableOne";
 import { BsCashCoin, BsPeopleFill } from "react-icons/bs";
 import { FaCcMastercard } from "react-icons/fa6";
 import { FaStore } from "react-icons/fa";
+
+import _ from "lodash";
+
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  BookOpen,
+  Calculator,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  ResponsiveContainer,
+} from "recharts";
 import {
   useSchoolData,
   useSchoolTermDetails,
 } from "@/pages/hook/useSchoolAuth";
-import _ from "lodash";
 import { useTermExpenses } from "@/pagesForStudents/hooks/useStudentHook";
+import LittleHeader from "@/components/static/LittleHeader";
+// import schoolHeaderImage from "@/assets/school-header.jpg";
+
+// Mock data for the dashboard
+const monthlyData = [
+  { month: "Jan", income: 45000, expenses: 38000 },
+  { month: "Feb", income: 52000, expenses: 41000 },
+  { month: "Mar", income: 48000, expenses: 39000 },
+  { month: "Apr", income: 55000, expenses: 42000 },
+  { month: "May", income: 51000, expenses: 40000 },
+  { month: "Jun", income: 58000, expenses: 44000 },
+];
+
+const expenseCategories = [
+  { name: "Staff Salaries", value: 35000, color: "hsl(220 70% 50%)" },
+  { name: "Utilities", value: 8000, color: "hsl(160 70% 50%)" },
+  { name: "Supplies", value: 6000, color: "hsl(35 90% 55%)" },
+  { name: "Maintenance", value: 4000, color: "hsl(0 70% 55%)" },
+  { name: "Other", value: 3000, color: "hsl(270 70% 50%)" },
+];
+
+const recentTransactions = [
+  {
+    id: 1,
+    description: "Tuition Fee - Grade 12A",
+    amount: 1200,
+    type: "income",
+    date: "2024-01-15",
+  },
+  {
+    id: 2,
+    description: "Teacher Salary - Mathematics Dept",
+    amount: -3500,
+    type: "expense",
+    date: "2024-01-14",
+  },
+  {
+    id: 3,
+    description: "Library Books Purchase",
+    amount: -450,
+    type: "expense",
+    date: "2024-01-13",
+  },
+  {
+    id: 4,
+    description: "Registration Fees",
+    amount: 800,
+    type: "income",
+    date: "2024-01-12",
+  },
+  {
+    id: 5,
+    description: "Electricity Bill",
+    amount: -320,
+    type: "expense",
+    date: "2024-01-11",
+  },
+];
+
+const MetricCard: React.FC<{
+  title: string;
+  value: string;
+  change: string;
+  icon: React.ReactNode;
+  variant: "primary" | "income" | "expense" | "neutral";
+}> = ({ title, value, change, icon, variant }) => {
+  const getVariantClass = () => {
+    switch (variant) {
+      case "income":
+        return "metric-card-income";
+      case "expense":
+        return "metric-card-expense";
+      case "primary":
+        return "metric-card-primary";
+      default:
+        return "card-gradient";
+    }
+  };
+
+  return (
+    <Card className={`${getVariantClass()} animate-fade-in`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium opacity-90">
+          {title}
+        </CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent className="mx-2 mb-2">
+        <div className="text-2xl font-bold">{value}</div>
+        <p className="text-xs opacity-80 mt-1">{change}</p>
+      </CardContent>
+    </Card>
+  );
+};
+
 const AnalyticScreen: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-background p-2">
+      {/* Header */}
+      {/* <AnalyticScreenData /> */}
+      <LittleHeader name="Analytics Screen" />
+      <div
+        className="relative mb-8 rounded-xl overflow-hidden bg-blue-950"
+        style={{
+          backgroundImage: `linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(59, 130, 246, 0.8)), `,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="p-8 text-white text-left">
+          <h1 className="text-4xl font-medium mb-2 text-left uppercase">
+            School Financial Dashboard
+          </h1>
+          <p className="text-lg opacity-90">
+            Comprehensive expense and income tracking for educational excellence
+          </p>
+        </div>
+      </div>
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <MetricCard
+          title="Total Income"
+          value="$58,000"
+          change="+12% from last month"
+          icon={<TrendingUp className="h-5 w-5 " />}
+          variant="income"
+        />
+        <MetricCard
+          title="Total Expenses"
+          value="$44,000"
+          change="+8% from last month"
+          icon={<TrendingDown className="h-5 w-5" />}
+          variant="expense"
+        />
+        <MetricCard
+          title="Net Balance"
+          value="$14,000"
+          change="+22% from last month"
+          icon={<DollarSign className="h-5 w-5" />}
+          variant="primary"
+        />
+        <MetricCard
+          title="Total Students"
+          value="1,247"
+          change="+3% from last month"
+          icon={<Users className="h-5 w-5" />}
+          variant="neutral"
+        />
+      </div>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Income vs Expenses Trend */}
+        <Card className="card-gradient animate-slide-up">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-primary" />
+              Income vs Expenses Trend
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={monthlyData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--border))"
+                />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="income"
+                  stroke="hsl(var(--success))"
+                  strokeWidth={3}
+                  dot={{ fill: "hsl(var(--success))", strokeWidth: 2, r: 4 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="expenses"
+                  stroke="hsl(var(--destructive))"
+                  strokeWidth={3}
+                  dot={{
+                    fill: "hsl(var(--destructive))",
+                    strokeWidth: 2,
+                    r: 4,
+                  }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Expense Categories */}
+        <Card className="card-gradient animate-slide-up">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-primary" />
+              Expense Categories
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={expenseCategories}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                >
+                  {expenseCategories.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                  formatter={(value) => [
+                    `$${value.toLocaleString()}`,
+                    "Amount",
+                  ]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+      {/* Recent Transactions */}
+      <Card className="card-gradient animate-slide-up">
+        <CardHeader>
+          <CardTitle>Recent Transactions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {recentTransactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="flex items-center justify-between p-4 bg-muted/30 rounded-lg smooth-transition hover:bg-muted/50"
+              >
+                <div className="flex items-center space-x-3">
+                  <div
+                    className={`p-2 rounded-full ${
+                      transaction.type === "income"
+                        ? "bg-success-light text-success"
+                        : "bg-destructive-light text-destructive"
+                    }`}
+                  >
+                    {transaction.type === "income" ? (
+                      <TrendingUp className="h-4 w-4" />
+                    ) : (
+                      <TrendingDown className="h-4 w-4" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium">{transaction.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {transaction.date}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className={`font-semibold ${
+                    transaction.type === "income"
+                      ? "text-success"
+                      : "text-destructive"
+                  }`}
+                >
+                  ${Math.abs(transaction.amount).toLocaleString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AnalyticScreen;
+
+const AnalyticScreenData: React.FC = () => {
   const { data } = useSchoolData();
   const { data: termData } = useSchoolTermDetails(data?.presentTermID);
 
@@ -52,7 +370,7 @@ const AnalyticScreen: React.FC = () => {
     .reduce((a: number, b: number) => {
       return a + b;
     }, 0);
-  
+
   console.log("data: ", termData);
 
   return (
@@ -108,5 +426,3 @@ const AnalyticScreen: React.FC = () => {
     </>
   );
 };
-
-export default AnalyticScreen;
