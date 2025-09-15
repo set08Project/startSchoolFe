@@ -3,14 +3,14 @@ import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useIsMobile } from "../../hooks/use-mobile";
+import { cn } from "../../lib/utils";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Separator } from "../../components/ui/separator";
+import { Sheet, SheetContent } from "../../components/ui/sheet";
+import { Skeleton } from "../../components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -117,7 +117,7 @@ const SidebarProvider = React.forwardRef<
             } as React.CSSProperties
           }
           className={cn("group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar", className)}
-          ref={ref}
+          ref={typeof ref === "string" ? undefined : ref}
           {...props}
         >
           {children}
@@ -142,7 +142,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         className={cn("flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground", className)}
-        ref={ref}
+        ref={typeof ref === "string" ? undefined : ref}
         {...props}
       >
         {children}
@@ -172,7 +172,7 @@ const Sidebar = React.forwardRef<
 
   return (
     <div
-      ref={ref}
+      ref={typeof ref === "string" ? undefined : ref}
       className="group peer hidden text-sidebar-foreground md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
@@ -222,7 +222,7 @@ const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.C
 
     return (
       <Button
-        ref={ref}
+        ref={typeof ref === "string" ? undefined : ref}
         data-sidebar="trigger"
         variant="ghost"
         size="icon"
@@ -247,7 +247,7 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<"bu
 
     return (
       <button
-        ref={ref}
+        ref={typeof ref === "string" ? undefined : ref}
         data-sidebar="rail"
         aria-label="Toggle Sidebar"
         tabIndex={-1}
@@ -272,7 +272,7 @@ SidebarRail.displayName = "SidebarRail";
 const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<"main">>(({ className, ...props }, ref) => {
   return (
     <main
-      ref={ref}
+      ref={typeof ref === "string" ? undefined : ref}
       className={cn(
         "relative flex min-h-svh flex-1 flex-col bg-background",
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
@@ -288,7 +288,7 @@ const SidebarInput = React.forwardRef<React.ElementRef<typeof Input>, React.Comp
   ({ className, ...props }, ref) => {
     return (
       <Input
-        ref={ref}
+        ref={typeof ref === "string" ? undefined : ref}
         data-sidebar="input"
         className={cn(
           "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
@@ -315,7 +315,7 @@ const SidebarSeparator = React.forwardRef<React.ElementRef<typeof Separator>, Re
   ({ className, ...props }, ref) => {
     return (
       <Separator
-        ref={ref}
+        ref={typeof ref === "string" ? undefined : ref}
         data-sidebar="separator"
         className={cn("mx-2 w-auto bg-sidebar-border", className)}
         {...props}
@@ -352,29 +352,30 @@ const SidebarGroup = React.forwardRef<HTMLDivElement, React.ComponentProps<"div"
 });
 SidebarGroup.displayName = "SidebarGroup";
 
-const SidebarGroupLabel = React.forwardRef<HTMLDivElement, React.ComponentProps<"div"> & { asChild?: boolean }>(
-  ({ className, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "div";
+const SidebarGroupLabel = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div"> & { asChild?: boolean }
+>(({ className,  asChild = false, ...props }, ref) => {
+  const Comp:any = asChild ? Slot : "div";
 
-    return (
-      <Comp
-        ref={ref}
-        data-sidebar="group-label"
-        className={cn(
-          "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-          "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
-);
+  return (
+    <Comp
+      ref={ref}
+      data-sidebar="group-label"
+      className={cn(
+        "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+        className
+      )}
+      {...props}
+    />
+  );
+});
 SidebarGroupLabel.displayName = "SidebarGroupLabel";
 
 const SidebarGroupAction = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button"> & { asChild?: boolean }>(
   ({ className, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
+    const Comp:any = asChild ? Slot : "button";
 
     return (
       <Comp
@@ -394,9 +395,9 @@ const SidebarGroupAction = React.forwardRef<HTMLButtonElement, React.ComponentPr
 );
 SidebarGroupAction.displayName = "SidebarGroupAction";
 
-const SidebarGroupContent = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} data-sidebar="group-content" className={cn("w-full text-sm", className)} {...props} />
+const SidebarGroupContent = React.forwardRef<HTMLDivElement, React.ComponentProps<"div"> & { ref?: React.Ref<HTMLDivElement> }>(
+  ({ className, ref, ...props }, forwardedRef) => (
+    <div ref={ref ?? forwardedRef} data-sidebar="group-content" className={cn("w-full text-sm", className)} {...props} />
   ),
 );
 SidebarGroupContent.displayName = "SidebarGroupContent";
@@ -441,7 +442,7 @@ const SidebarMenuButton = React.forwardRef<
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(({ asChild = false, isActive = false, variant = "default", size = "default", tooltip, className, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button";
+  const Comp:any = asChild ? Slot : "button";
   const { isMobile, state } = useSidebar();
 
   const button = (
@@ -481,7 +482,7 @@ const SidebarMenuAction = React.forwardRef<
     showOnHover?: boolean;
   }
 >(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button";
+  const Comp:any = asChild ? Slot : "button";
 
   return (
     <Comp
@@ -581,7 +582,7 @@ SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
 const SidebarMenuSubButton = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<"a"> & {
+  Omit<React.ComponentProps<"a">, "ref"> & {
     asChild?: boolean;
     size?: "sm" | "md";
     isActive?: boolean;
@@ -589,9 +590,12 @@ const SidebarMenuSubButton = React.forwardRef<
 >(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
   const Comp = asChild ? Slot : "a";
 
+  // Only pass ref if it's not a string (React does not support string refs in function components)
+  const refProp = typeof ref === "string" ? undefined : ref;
+
   return (
     <Comp
-      ref={ref}
+      ref={refProp}
       data-sidebar="menu-sub-button"
       data-size={size}
       data-active={isActive}

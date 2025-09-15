@@ -1,1 +1,0 @@
-import{aC as a,r as o,bN as i,j as e,bO as n}from"./index-CpMs4x3j.js";const x=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{i()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(n,{to:"/"})})};export{x as default};

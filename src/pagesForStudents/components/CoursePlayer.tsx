@@ -16,6 +16,13 @@ import {
   BookOpen
 } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
+import { useParams } from "react-router-dom";
+import {
+  useOneReadTeachSubjectsTopic,
+  useOneReadTeachSubjectsTopicQuiz,
+  useReadTeachSubjectsTopic,
+} from "../hooks/subjectHooks";
+import _ from "lodash";
 
 interface Topic {
   id: string;
@@ -61,7 +68,15 @@ interface TestResult {
 }
 
 const CoursePlayer = () => {
-  const [selectedTopic, setSelectedTopic] = useState<string>("1");
+  const { courseID } = useParams();
+  const { data } = useReadTeachSubjectsTopic(courseID!);
+
+  const [selectedTopic, setSelectedTopic] = useState<string>(
+    data?.topics[0]?._id
+  );
+  const { data: topicData } = useOneReadTeachSubjectsTopic(selectedTopic);
+  const { data: quizData } = useOneReadTeachSubjectsTopicQuiz(selectedTopic);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<
@@ -71,24 +86,24 @@ const CoursePlayer = () => {
   const [testStarted, setTestStarted] = useState(false);
 
   const course: Course = {
-    "id": "react-fundamentals",
-    "title": "React Fundamentals",
-    "description":
+    id: "react-fundamentals",
+    title: "React Fundamentals",
+    description:
       "Master the essentials of React development from components to state management",
-    "instructor": "Sarah Johnson",
-    "totalLessons": 12,
-    "completedLessons": 7,
+    instructor: "Sarah Johnson",
+    totalLessons: 12,
+    completedLessons: 7,
     topics: [
       {
-        "id": "1",
-        "title": "Introduction to React",
-        "duration": "15:30",
-        "video":
+        id: "1",
+        title: "Introduction to React",
+        duration: "15:30",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": true,
-        "description":
+        completed: true,
+        description:
           "Learn the basics of React library, its history, and why it's used for building user interfaces. Understand the virtual DOM and React's component-based architecture.",
-        "keyPoints": [
+        keyPoints: [
           "What is React?",
           "Virtual DOM concept",
           "Component-based architecture",
@@ -96,15 +111,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "2",
-        "title": "Components and JSX",
-        "video":
+        id: "2",
+        title: "Components and JSX",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "duration": "22:45",
-        "completed": true,
-        "description":
+        duration: "22:45",
+        completed: true,
+        description:
           "Dive deep into React components and JSX syntax. Learn how to create functional and class components, and understand JSX rules and best practices.",
-        "keyPoints": [
+        keyPoints: [
           "Functional vs Class Components",
           "JSX syntax and rules",
           "Component composition",
@@ -112,15 +127,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "3",
-        "title": "Props and State",
-        "duration": "18:20",
-        "video":
+        id: "3",
+        title: "Props and State",
+        duration: "18:20",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": true,
-        "description":
+        completed: true,
+        description:
           "Master the fundamental concepts of props for passing data between components and state for managing component data that changes over time.",
-        "keyPoints": [
+        keyPoints: [
           "Understanding Props",
           "State management",
           "Props vs State",
@@ -128,15 +143,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "4",
-        "title": "Event Handling",
-        "duration": "16:10",
-        "video":
+        id: "4",
+        title: "Event Handling",
+        duration: "16:10",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": true,
-        "description":
+        completed: true,
+        description:
           "Learn how to handle user interactions in React applications. Understand event objects, event binding, and best practices for event handling.",
-        "keyPoints": [
+        keyPoints: [
           "Event handling in React",
           "Event binding",
           "Synthetic events",
@@ -144,15 +159,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "5",
-        "title": "Conditional Rendering",
-        "video":
+        id: "5",
+        title: "Conditional Rendering",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "duration": "12:30",
-        "completed": true,
-        "description":
+        duration: "12:30",
+        completed: true,
+        description:
           "Explore different techniques for conditionally rendering components and elements based on application state and user interactions.",
-        "keyPoints": [
+        keyPoints: [
           "if/else in JSX",
           "Ternary operators",
           "Logical && operator",
@@ -160,15 +175,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "6",
-        "title": "Lists and Keys",
-        "duration": "14:45",
-        "video":
+        id: "6",
+        title: "Lists and Keys",
+        duration: "14:45",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": true,
-        "description":
+        completed: true,
+        description:
           "Understand how to render lists of data efficiently in React and the importance of keys for optimal performance and avoiding common pitfalls.",
-        "keyPoints": [
+        keyPoints: [
           "Rendering lists with map()",
           "Importance of keys",
           "Key selection strategies",
@@ -176,15 +191,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "7",
-        "title": "Forms in React",
-        "duration": "20:15",
-        "video":
+        id: "7",
+        title: "Forms in React",
+        duration: "20:15",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": true,
-        "description":
+        completed: true,
+        description:
           "Master form handling in React including controlled components, form validation, and managing form state effectively.",
-        "keyPoints": [
+        keyPoints: [
           "Controlled vs Uncontrolled components",
           "Form validation",
           "Handling multiple inputs",
@@ -192,15 +207,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "8",
-        "title": "React Hooks - useState",
-        "duration": "25:00",
-        "video":
+        id: "8",
+        title: "React Hooks - useState",
+        duration: "25:00",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": false,
-        "description":
+        completed: false,
+        description:
           "Deep dive into the useState hook, React's primary tool for managing state in functional components. Learn patterns and best practices.",
-        "keyPoints": [
+        keyPoints: [
           "useState hook basics",
           "State updates",
           "Functional updates",
@@ -208,15 +223,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "9",
-        "title": "React Hooks - useEffect",
-        "duration": "28:30",
-        "video":
+        id: "9",
+        title: "React Hooks - useEffect",
+        duration: "28:30",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": false,
-        "description":
+        completed: false,
+        description:
           "Master the useEffect hook for handling side effects, API calls, subscriptions, and cleanup in functional components.",
-        "keyPoints": [
+        keyPoints: [
           "useEffect basics",
           "Dependency arrays",
           "Cleanup functions",
@@ -224,15 +239,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "10",
-        "title": "Custom Hooks",
-        "duration": "19:45",
-        "video":
+        id: "10",
+        title: "Custom Hooks",
+        duration: "19:45",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": false,
-        "description":
+        completed: false,
+        description:
           "Learn to create reusable custom hooks to extract component logic and share stateful logic between components.",
-        "keyPoints": [
+        keyPoints: [
           "Creating custom hooks",
           "Hook composition",
           "Reusable logic patterns",
@@ -240,15 +255,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "11",
-        "title": "Context API",
-        "duration": "24:20",
-        "video":
+        id: "11",
+        title: "Context API",
+        duration: "24:20",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": false,
-        "description":
+        completed: false,
+        description:
           "Understand React's Context API for prop drilling solutions and global state management in React applications.",
-        "keyPoints": [
+        keyPoints: [
           "Context creation",
           "Provider and Consumer",
           "useContext hook",
@@ -256,15 +271,15 @@ const CoursePlayer = () => {
         ],
       },
       {
-        "id": "12",
-        "title": "Performance Optimization",
-        "duration": "26:15",
-        "video":
+        id: "12",
+        title: "Performance Optimization",
+        duration: "26:15",
+        video:
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "completed": false,
-        "description":
+        completed: false,
+        description:
           "Learn techniques to optimize React application performance including memoization, code splitting, and profiling tools.",
-        "keyPoints": [
+        keyPoints: [
           "React.memo",
           "useMemo and useCallback",
           "Code splitting",
@@ -274,113 +289,117 @@ const CoursePlayer = () => {
     ],
   };
 
-  const currentTopic = course.topics.find(
-    (topic) => topic.id === selectedTopic
+  const currentTopic = data?.topics?.find(
+    (topic: { _id: string }) => topic._id === selectedTopic
   );
   const progressPercentage =
     (course.completedLessons / course.totalLessons) * 100;
 
   // MCQ questions for each topic
-  const getMCQQuestions = (topicId: string): MCQQuestion[] => {
-    const questionsByTopic: Record<string, MCQQuestion[]> = {
-      "1": [
-        {
-          id: "1-1",
-          question: "What is React primarily used for?",
-          options: [
-            "Backend development",
-            "Building user interfaces",
-            "Database management",
-            "Server configuration",
-          ],
-          correctAnswer: 1,
-          explanation:
-            "React is a JavaScript library primarily used for building user interfaces, especially for web applications.",
-        },
-        {
-          id: "1-2",
-          question: "What is the Virtual DOM in React?",
-          options: [
-            "A real DOM element",
-            "A JavaScript representation of the real DOM",
-            "A database",
-            "A server component",
-          ],
-          correctAnswer: 1,
-          explanation:
-            "The Virtual DOM is a JavaScript representation of the real DOM that React uses to optimize rendering performance.",
-        },
-      ],
-      "2": [
-        {
-          id: "2-1",
-          question: "What does JSX stand for?",
-          options: [
-            "JavaScript XML",
-            "JavaScript Extension",
-            "Java Syntax Extension",
-            "JavaScript Execute",
-          ],
-          correctAnswer: 0,
-          explanation:
-            "JSX stands for JavaScript XML, allowing you to write HTML-like syntax in JavaScript.",
-        },
-        {
-          id: "2-2",
-          question: "Which is correct JSX syntax?",
-          options: [
-            "<div class='container'>",
-            "<div className='container'>",
-            "<div Class='container'>",
-            "<div classname='container'>",
-          ],
-          correctAnswer: 1,
-          explanation:
-            "In JSX, you use 'className' instead of 'class' because 'class' is a reserved keyword in JavaScript.",
-        },
-      ],
-      "3": [
-        {
-          id: "3-1",
-          question: "How do you pass data to a child component?",
-          options: [
-            "Through state",
-            "Through props",
-            "Through methods",
-            "Through refs",
-          ],
-          correctAnswer: 1,
-          explanation:
-            "Props (properties) are used to pass data from parent components to child components in React.",
-        },
-        {
-          id: "3-2",
-          question: "What is state in React?",
-          options: [
-            "Static data",
-            "Data that can change over time",
-            "External API data",
-            "CSS styling",
-          ],
-          correctAnswer: 1,
-          explanation:
-            "State is data that can change over time and causes the component to re-render when updated.",
-        },
-      ],
-    };
+  // const getMCQQuestions = (topicId: string): MCQQuestion[] => {
+  //   const questionsByTopic: Record<string, MCQQuestion[]> = {
+  //     "1": [
+  //       {
+  //         id: "1-1",
+  //         question: "What is React primarily used for?",
+  //         options: [
+  //           "Backend development",
+  //           "Building user interfaces",
+  //           "Database management",
+  //           "Server configuration",
+  //         ],
+  //         correctAnswer: 1,
+  //         explanation:
+  //           "React is a JavaScript library primarily used for building user interfaces, especially for web applications.",
+  //       },
+  //       {
+  //         id: "1-2",
+  //         question: "What is the Virtual DOM in React?",
+  //         options: [
+  //           "A real DOM element",
+  //           "A JavaScript representation of the real DOM",
+  //           "A database",
+  //           "A server component",
+  //         ],
+  //         correctAnswer: 1,
+  //         explanation:
+  //           "The Virtual DOM is a JavaScript representation of the real DOM that React uses to optimize rendering performance.",
+  //       },
+  //     ],
+  //     "2": [
+  //       {
+  //         id: "2-1",
+  //         question: "What does JSX stand for?",
+  //         options: [
+  //           "JavaScript XML",
+  //           "JavaScript Extension",
+  //           "Java Syntax Extension",
+  //           "JavaScript Execute",
+  //         ],
+  //         correctAnswer: 0,
+  //         explanation:
+  //           "JSX stands for JavaScript XML, allowing you to write HTML-like syntax in JavaScript.",
+  //       },
+  //       {
+  //         id: "2-2",
+  //         question: "Which is correct JSX syntax?",
+  //         options: [
+  //           "<div class='container'>",
+  //           "<div className='container'>",
+  //           "<div Class='container'>",
+  //           "<div classname='container'>",
+  //         ],
+  //         correctAnswer: 1,
+  //         explanation:
+  //           "In JSX, you use 'className' instead of 'class' because 'class' is a reserved keyword in JavaScript.",
+  //       },
+  //     ],
+  //     "3": [
+  //       {
+  //         id: "3-1",
+  //         question: "How do you pass data to a child component?",
+  //         options: [
+  //           "Through state",
+  //           "Through props",
+  //           "Through methods",
+  //           "Through refs",
+  //         ],
+  //         correctAnswer: 1,
+  //         explanation:
+  //           "Props (properties) are used to pass data from parent components to child components in React.",
+  //       },
+  //       {
+  //         id: "3-2",
+  //         question: "What is state in React?",
+  //         options: [
+  //           "Static data",
+  //           "Data that can change over time",
+  //           "External API data",
+  //           "CSS styling",
+  //         ],
+  //         correctAnswer: 1,
+  //         explanation:
+  //           "State is data that can change over time and causes the component to re-render when updated.",
+  //       },
+  //     ],
+  //   };
 
-    return (
-      questionsByTopic[topicId] || [
-        {
-          id: `${topicId}-1`,
-          question: `Sample question for ${currentTopic?.title}`,
-          options: ["Option A", "Option B", "Option C", "Option D"],
-          correctAnswer: 0,
-          explanation: "This is a sample question for this topic.",
-        },
-      ]
-    );
-  };
+  //   return (
+  //     questionsByTopic[topicId] || [
+  //       {
+  //         id: `${topicId}-1`,
+  //         question: `Sample question for ${currentTopic?.title}`,
+  //         options: ["Option A", "Option B", "Option C", "Option D"],
+  //         correctAnswer: 0,
+  //         explanation: "This is a sample question for this topic.",
+  //       },
+  //     ]
+  //   );
+  // };
+
+  const [getMCQQuestions, setGetMCQQuestions] = useState(quizData);
+  const [timeRemaining, setTimeRemaining] = useState(4 * 60); // 4 minutes in seconds
+  const [timerActive, setTimerActive] = useState(false);
 
   // Update MCQ questions when topic changes
   useEffect(() => {
@@ -388,7 +407,34 @@ const CoursePlayer = () => {
     setSelectedAnswers({});
     setShowResults(false);
     setTestStarted(false);
+    setTimerActive(false);
+    setTimeRemaining(4 * 60);
   }, [selectedTopic]);
+
+  // Timer effect
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (timerActive && timeRemaining > 0) {
+      timer = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            setTimerActive(false);
+            finishTest();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [timerActive, timeRemaining]);
+
+  // Format time remaining
+  const formatTimeRemaining = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   // Get topic-specific test results
   const getTopicTestResults = (): TestResult[] => {
@@ -399,15 +445,20 @@ const CoursePlayer = () => {
   };
 
   const startTest = () => {
-    const questions = getMCQQuestions(selectedTopic);
+    // Randomly select 20 questions
+    const randomQuestions = _.shuffle(quizData)?.slice(0, 20);
+    setGetMCQQuestions(randomQuestions);
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setShowResults(false);
     setTestStarted(true);
+    setTimerActive(true);
+    setTimeRemaining(4 * 60);
   };
 
   const finishTest = () => {
-    const questions = getMCQQuestions(selectedTopic);
+    setTimerActive(false);
+    const questions = getMCQQuestions;
     const correctAnswers = questions.filter(
       (q) => selectedAnswers[q.id] === q.correctAnswer
     ).length;
@@ -420,6 +471,13 @@ const CoursePlayer = () => {
     else if (score >= 70) grade = "C";
     else if (score >= 60) grade = "D";
 
+    const timeSpent = `${Math.floor((4 * 60 - timeRemaining) / 60)}:${(
+      (4 * 60 - timeRemaining) %
+      60
+    )
+      .toString()
+      .padStart(2, "0")}`;
+
     const result: TestResult = {
       id: Date.now().toString(),
       topicId: selectedTopic,
@@ -430,7 +488,7 @@ const CoursePlayer = () => {
       totalQuestions: questions.length,
       correctAnswers,
       wrongAnswers,
-      timeSpent: "5:30", // Mock time - in real app you'd track actual time
+      timeSpent: timeSpent, // Actual time spent on the test
     };
 
     const existingResults = JSON.parse(
@@ -455,13 +513,13 @@ const CoursePlayer = () => {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="h-5 w-5 text-primary" />
-            <Badge variant="secondary">Course</Badge>
+            <Badge variant="secondary">Subject Details</Badge>
           </div>
           <h1 className="text-3xl font-medium mt-8 mb-2 uppercase text-left">
-            {course.title}
+            {topicData?.title}
           </h1>
           <p className="text-muted-foreground mb-4 text-[18px]">
-            {course.description}
+            {topicData?.description}
           </p>
           <div className="flex items-center text-[20px] text-muted-foreground">
             <span className="mr-2 font-semibold">
@@ -486,7 +544,7 @@ const CoursePlayer = () => {
             <Card className="overflow-hidden shadow-medium">
               <div className="mb-8">
                 <VideoPlayer
-                  videoUrl={currentTopic?.videoUrl || currentTopic?.video || ""}
+                  videoUrl={currentTopic?.video}
                   title={currentTopic?.title || ""}
                 />
               </div>
@@ -592,24 +650,36 @@ const CoursePlayer = () => {
                           topic
                         </p>
                         <Button onClick={startTest} size="lg">
-                          Start Test ({getMCQQuestions(selectedTopic).length}{" "}
-                          Questions)
+                          Test your learnings ({20} Questions)
                         </Button>
                       </div>
                     ) : !showResults ? (
                       <div className="space-y-6">
                         <div className="flex items-center justify-between">
                           <h3 className="text-lg font-semibold">
-                            Question {currentQuestionIndex + 1} of{" "}
-                            {getMCQQuestions(selectedTopic).length}
+                            Question {currentQuestionIndex + 1} of {20}
                           </h3>
-                          <Badge variant="outline">{currentTopic?.title}</Badge>
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={`font-bold ${
+                                timeRemaining <= 60
+                                  ? "text-red-500 animate-pulse"
+                                  : ""
+                              }`}
+                            >
+                              Time Remaining:{" "}
+                              {formatTimeRemaining(timeRemaining)}
+                            </div>
+                            <Badge variant="outline">
+                              {currentTopic?.title}
+                            </Badge>
+                          </div>
                         </div>
 
                         <Progress
                           value={
                             ((currentQuestionIndex + 1) /
-                              getMCQQuestions(selectedTopic).length) *
+                              getMCQQuestions.length) *
                             100
                           }
                           className="h-2"
@@ -617,43 +687,36 @@ const CoursePlayer = () => {
 
                         <div className="space-y-4">
                           <h4 className="text-base font-medium">
-                            {
-                              getMCQQuestions(selectedTopic)[
-                                currentQuestionIndex
-                              ]?.question
-                            }
+                            {getMCQQuestions[currentQuestionIndex]?.question}
                           </h4>
 
                           <div className="space-y-2">
-                            {getMCQQuestions(selectedTopic)[
-                              currentQuestionIndex
-                            ]?.options.map((option, index) => (
-                              <button
-                                key={index}
-                                onClick={() =>
-                                  setSelectedAnswers((prev) => ({
-                                    ...prev,
-                                    [getMCQQuestions(selectedTopic)[
-                                      currentQuestionIndex
-                                    ].id]: index,
-                                  }))
-                                }
-                                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                                  selectedAnswers[
-                                    getMCQQuestions(selectedTopic)[
-                                      currentQuestionIndex
-                                    ].id
-                                  ] === index
-                                    ? "border-primary bg-primary-soft"
-                                    : "border-border hover:border-primary/50"
-                                }`}
-                              >
-                                <span className="font-medium mr-3">
-                                  {String.fromCharCode(65 + index)}.
-                                </span>
-                                {option}
-                              </button>
-                            ))}
+                            {getMCQQuestions[currentQuestionIndex]?.options.map(
+                              (option, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() =>
+                                    setSelectedAnswers((prev) => ({
+                                      ...prev,
+                                      [getMCQQuestions[currentQuestionIndex]
+                                        .id]: index,
+                                    }))
+                                  }
+                                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                                    selectedAnswers[
+                                      getMCQQuestions[currentQuestionIndex].id
+                                    ] === index
+                                      ? "border-primary bg-primary-soft"
+                                      : "border-border hover:border-primary/50"
+                                  }`}
+                                >
+                                  <span className="font-medium mr-3">
+                                    {String.fromCharCode(65 + index)}.
+                                  </span>
+                                  {option}
+                                </button>
+                              )
+                            )}
                           </div>
                         </div>
 
@@ -671,7 +734,7 @@ const CoursePlayer = () => {
                           </Button>
 
                           {currentQuestionIndex ===
-                          getMCQQuestions(selectedTopic).length - 1 ? (
+                          getMCQQuestions.length - 1 ? (
                             <Button onClick={finishTest}>Finish Test</Button>
                           ) : (
                             <Button
@@ -680,9 +743,7 @@ const CoursePlayer = () => {
                               }
                               disabled={
                                 selectedAnswers[
-                                  getMCQQuestions(selectedTopic)[
-                                    currentQuestionIndex
-                                  ].id
+                                  getMCQQuestions[currentQuestionIndex].id
                                 ] === undefined
                               }
                             >
@@ -698,11 +759,11 @@ const CoursePlayer = () => {
                           <div className="text-center flex flex-col ">
                             <div className="text-3xl font-bold text-primary">
                               {Math.round(
-                                (getMCQQuestions(selectedTopic).filter(
+                                (getMCQQuestions.filter(
                                   (q) =>
                                     selectedAnswers[q.id] === q.correctAnswer
                                 ).length /
-                                  getMCQQuestions(selectedTopic).length) *
+                                  getMCQQuestions.length) *
                                   100
                               )}
                               %
@@ -942,14 +1003,14 @@ const CoursePlayer = () => {
           <div className="lg:col-span-1">
             <Card className="shadow-medium">
               <div className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Course Content</h3>
+                <h3 className="text-lg font-semibold mb-4">Subject Topics</h3>
                 <div className="space-y-2">
-                  {course.topics.map((topic, index) => (
+                  {data?.topics.map((topic: any, index: any) => (
                     <button
-                      key={topic.id}
-                      onClick={() => setSelectedTopic(topic.id)}
+                      key={topic._id}
+                      onClick={() => setSelectedTopic(topic._id)}
                       className={`w-full text-left p-4 rounded-lg border-2 transition-all hover:shadow-soft ${
-                        selectedTopic === topic.id
+                        selectedTopic === topic._id
                           ? "border-primary bg-primary-soft"
                           : "border-border hover:border-primary/50"
                       }`}

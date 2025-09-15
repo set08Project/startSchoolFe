@@ -15,6 +15,19 @@ interface VideoPlayerProps {
   onVideoEnd?: () => void;
 }
 
+const isYouTubeUrl = (url: string): boolean => {
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+  return youtubeRegex.test(url);
+};
+
+const getYouTubeVideoId = (url: string): string => {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&\s]+)/
+  );
+  return match ? match[1] : "";
+};
+
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
   title,
@@ -26,6 +39,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(true);
+
+  const isYouTube = isYouTubeUrl(videoUrl);
+  const youtubeVideoId = isYouTube ? getYouTubeVideoId(videoUrl) : "";
 
   useEffect(() => {
     const video = videoRef.current;
@@ -105,6 +121,20 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
+
+  if (isYouTube) {
+    return (
+      <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
+        <iframe
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=0&rel=0&modestbranding=1`}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
 
   return (
     <div

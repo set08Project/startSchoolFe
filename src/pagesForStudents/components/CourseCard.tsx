@@ -32,7 +32,7 @@ const CourseCard = ({
   subjectImage,
   level,
   onStart,
-}: CourseCardProps) => {
+}: any) => {
   return (
     <Card
       className="overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 group cursor-pointer"

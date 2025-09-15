@@ -1,1 +1,0 @@
-import{j as e,co as x}from"./index-CpMs4x3j.js";const o=({icon:t,name:s,className:r,...i})=>e.jsxs("button",{...i,className:x("px-6 py-2 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white",r),children:[e.jsx("div",{className:"mr-2 text-[30px] text-white ",children:t}),e.jsx("div",{className:"text-white",children:s})]});export{o as B};

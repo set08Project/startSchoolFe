@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import SearchBar from "@/components/SearchBar";
-import CourseCard from "@/components/CourseCard";
-import heroImage from "@/assets/hero-education.jpg";
-import reactCourse from "@/assets/course-react.jpg";
-import jsCourse from "@/assets/course-javascript.jpg";
-import cssCourse from "@/assets/course-css.jpg";
-import { 
-  BookOpen, 
-  Users, 
-  Award, 
+
+import SearchBar from "../components/SearchBar";
+import CourseCard from "../components/CourseCard";
+
+import heroImage from "../assets/hero-education.jpg";
+import reactCourse from "../assets/course-react.jpg";
+import jsCourse from "../assets/course-javascript.jpg";
+import cssCourse from "../assets/course-css.jpg";
+import {
+  BookOpen,
+  Users,
+  Award,
   TrendingUp,
   ArrowRight,
-  PlayCircle 
+  PlayCircle,
 } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
 
 const Index = () => {
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);

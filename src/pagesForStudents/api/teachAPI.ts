@@ -25,3 +25,45 @@ export const getSubjects = async () => {
     return error;
   }
 };
+
+export const getSubjectsTopic = async (id: string) => {
+  try {
+    return await axios
+      .get(`${URL}/get-teach-subject-topic/${id}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+
+    return error;
+  }
+};
+
+export const getOneSubjectsTopic = async (id: string) => {
+  try {
+    return await axios
+      .get(`${URL}/get-one-teach-subject-topic/${id}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+
+    return error;
+  }
+};
+
+export const getOneSubjectsTopicQuiz = async (id: string) => {
+  try {
+    return await axios
+      .get(`${URL}/get-teach-subject-topic-quiz/${id}`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+
+    return error;
+  }
+};
