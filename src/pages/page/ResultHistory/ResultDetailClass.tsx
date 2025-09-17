@@ -2,6 +2,7 @@ document.title = "View  Result History";
 import pix from "../../../assets/pix.jpg";
 import LittleHeader from "../../../components/static/LittleHeader";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -78,7 +79,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
 
   const { subjectData } = useClassSubject(oneClass?._id);
 
-  const { session, term } = useParams();
+  const { session, term, id } = useParams();
 
   let result = gradeData?.reportCard.find((el: any) => {
     return (
@@ -151,12 +152,20 @@ const MainStudentRow: FC<iProps> = ({ props, i, getClass }) => {
             .sortBy(subjectData?.classSubjects, "subjectTitle")
             ?.map((el: any, i: number) => (
               <SubjectScore props={props} el={el} key={i} />
+              // <div>Great</div>
             ))}
         </div>
       </div>
       <div className="w-2 border-r"></div>
       <div className="w-[300px] border-r">{result?.classTeacherComment}</div>
       <div className="w-[300px] border-r">{result?.adminComment}</div>
+      <div className="w-[150px] border-r">
+        <Link to={`/view-students-report-card-historical/${props?._id}`}>
+          <button className="rounded-md bg-blue-950 text-white px-10 py-3 text-[12px] leading-5 tracking-widest cursor-pointer hover:bg-blue-900 transition-all duration-300 uppercase">
+            Print
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
@@ -243,7 +252,7 @@ const ResultDetailClass = () => {
         <div
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
           style={{
-            width: `${1372 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1472 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           <div className="w-[100px] border-r">Sequence</div>
@@ -278,12 +287,13 @@ const ResultDetailClass = () => {
           <div className="w-[300px] border-r">
             Principal's Teacher's Comment
           </div>
+          <div className="w-[150px] border-r">Print</div>
         </div>
 
         <div
           className={` overflow-hidden w-[2000px] `}
           style={{
-            width: `${1372 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1472 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
           {readStudent?.resultHistory?.length > 0 ? (

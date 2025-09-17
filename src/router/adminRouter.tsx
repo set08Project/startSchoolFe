@@ -68,6 +68,10 @@ const ReportCardDesignAdminScreen = React.lazy(
   () => import("../pages/page/ResultHistory/ViewingStudentRecportCard")
 );
 
+const ViewHistoricalResult = React.lazy(
+  () => import("../pages/page/ResultHistory/ViewHistoricalResult")
+);
+
 const Expenditure = React.lazy(
   () => import("../pages/page/expenditure/expenditure")
 );
@@ -291,6 +295,17 @@ export const adminRouter = createBrowserRouter([
               <Suspense fallback={<LoadingScreen />}>
                 <ErrorBoundary FallbackComponent={Fallback}>
                   <ReportCardDesignAdminScreen />
+                </ErrorBoundary>
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "view-students-report-card-historical/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <ViewHistoricalResult />
                 </ErrorBoundary>
               </Suspense>
             ),

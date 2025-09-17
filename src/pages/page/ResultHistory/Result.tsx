@@ -29,7 +29,7 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
         <div className="mt-6" />
         <p className="flex items-center gap-1">
           <FaStar className="ml-1 mb-1" />
-          <span>{teacherDetail?.staffRating}</span>
+          <span>{(teacherDetail?.staffRating).toFixed(2)}</span>
         </p>
       </div>
     </div>
@@ -118,11 +118,19 @@ const Result = () => {
 
                     <div className="w-[150px] border-r pl-4 text-green-600 text-bold">
                       {sessionTermData?.data?.presentTerm === "1st Term"
-                        ? Math.floor(
-                            (props?.schoolFeesHistory?.length /
-                              props?.students?.length) *
-                              100
+                        ? isNaN(
+                            Math.floor(
+                              (props?.schoolFeesHistory?.length /
+                                props?.students?.length) *
+                                100
+                            )
                           )
+                          ? 0
+                          : Math.floor(
+                              (props?.schoolFeesHistory?.length /
+                                props?.students?.length) *
+                                100
+                            )
                         : sessionTermData?.data?.presentTerm === "2nd Term"
                         ? isNaN(
                             Math.floor(

@@ -3,7 +3,6 @@ import React, { useRef, useEffect, FC, useState } from "react";
 import {
   useSchoolSessionData,
   useStudentAttendance,
-  useViewStudentHistory,
 } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
 
@@ -27,25 +26,29 @@ import { usePDF } from "react-to-pdf";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 
-const PrintReportCardDesignAdminScreen: React.FC = () => {
+const ViewHistoricalResult: React.FC = () => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const preprocessContent = () => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    // Traverse the DOM and replace "oklch" color functions with a fallback color
+    const elementsWithUnsupportedColors = content.querySelectorAll("*");
+    elementsWithUnsupportedColors.forEach((element: any) => {
+      const computedStyles = window.getComputedStyle(element);
+      if (computedStyles.color.includes("oklch")) {
+        element.style.color = "#000000"; // Replace with a fallback color
+      }
+    });
+  };
+
   useEffect(() => {
     preprocessContent();
   }, []);
 
-  const { studentID, id } = useParams();
+  const { studentID } = useParams();
   const { studentInfoData: studentInfo } = useStudentInfoData(studentID);
-  const { studentResults } = useViewStudentHistory(studentID);
-
-
-  console.clear();
-  console.log("reading ID: ", id, "studentID: ", studentID, studentResults);
-  console.log(
-    "res: ",
-    studentResults?.find((el) => el?._id === id)
-  );
-  console.log("studentInfo: ", studentInfo);
-
-  const data = studentResults?.find((el) => el?._id === id);
 
   const { gradeData } = useStudentGrade(studentID!);
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
@@ -61,6 +64,34 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
     );
   });
 
+  console.log("Extracted Points:", gradeData?.reportCard);
+//   console.log(subjectData?.students);
+  console.log("get: ", studentInfo);
+
+  // const [pointsArray, setPointsArray] = useState(
+  //   gradeData?.reportCard?.map((item) => item.points)
+  // );
+
+  const st1 = gradeData?.reportCard.find(
+    (el) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(1st Term)`
+  );
+
+
+
+  const st2 = gradeData?.reportCard.find(
+    (el) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(2nd Term)`
+  );
+
+  const st3 = gradeData?.reportCard.find(
+    (el) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
+  );
+
   const { oneClass: classDetails } = useReadOneClassInfo(
     gradeData?.presentClassID
   );
@@ -71,31 +102,34 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
   const { schoolInfo } = useSchoolSessionData(gradeData?.schoolIDs);
 
   const schoolName = school?.schoolName!;
+
   const schoolAddress = school?.address;
 
   let numbPassed =
-    data?.results?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    gradeData?.reportCard[0]?.result?.length -
+    lodash.filter(gradeData?.reportCard[0]?.result, { grade: "F" })?.length;
 
   let commulationScore =
-    (data?.results
+    (gradeData?.reportCard[0]?.result
       ?.map((el: any) => {
-        return parseInt(el.exam) + parseInt(el.test1);
+        return el.exam + el.test1 + el.test2 + el.test3 + el.test4;
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (data?.results?.length * 100)) *
+      (gradeData?.reportCard[0]?.result
+        ?.map((el) => {
+          return el.subject !== null;
+        })
+        ?.filter(Boolean)?.length *
+        100)) *
     100;
 
   let holdeAll = [];
 
-  console.log(
-    data?.results?.map((el: any) => {
-      return parseInt(el.exam) + parseInt(el.test1);
-    })
-  );
   // }
+
+  console.log("any: ", st1)
 
   let result = {};
   let resultLow = {};
@@ -176,57 +210,32 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const preprocessContent = () => {
-    const content = contentRef.current;
-    if (!content) return;
-
-    // Traverse the DOM and replace "oklch" color functions with a fallback color
-    const elementsWithUnsupportedColors = content.querySelectorAll("*");
-    elementsWithUnsupportedColors.forEach((element: any) => {
-      const computedStyles = window.getComputedStyle(element);
-      if (computedStyles.color.includes("oklch")) {
-        element.style.color = "#000000"; // Replace with a fallback color
-      }
-    });
-  };
-
   const { toPDF, targetRef }: any = usePDF({
-    filename: `build--${moment(Date.now()).format("lll")}.pdf`,
-    page: {
-      //   orientation: "landscape", // Ensure landscape orientation
-      // unit: "px", // Use pixels for dimensions
-      // format: [2820, 1080],
-      //  // Set custom dimensions (e.g., full HD resolution)
-    },
+    filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
+      school?.presentSession
+    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingView, setLoadingView] = useState<boolean>(false);
+
+  // console.log(pointsArray);
 
   return (
     <div ref={contentRef} className="overflow-hidden">
       <Toaster />
-      <button
-        disabled={loading}
-        className={`text-[12px] tracking-widest transistion-all duration-300 mb-2 hover:bg-red-100 px-8 py-2 rounded-md bg-red-50 ${
-          loading && "cursor-not-allowed bg-red-200 animate-pulse"
+      <div
+        // to={`/download-students-report-card/${studentID}`}
+        // disabled={loading}
+        className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md ${
+          loading && "cursor-not-allowed bg-slate-200 animate-pulse"
         }`}
         onClick={() => {
           setLoading(true);
-          setLoadingView(true);
 
-          const x = setTimeout(() => {
-            toPDF().finally(() => {
-              setLoading(false);
-
-              setLoadingView(false);
-              clearTimeout(x);
-
-              toast.success("Result downloaded.");
-            });
-          }, 2000);
+          toPDF().finally(() => {
+            setLoading(false);
+            toast.success("Result downloaded.");
+          });
         }}
       >
         {loading ? (
@@ -237,22 +246,11 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
         ) : (
           "Print Result"
         )}
-      </button>
-      <div className="flex w-full justify-end"></div>
-      <div
-        ref={targetRef}
-        style={{
-          width: `${loadingView ? `${"1070"}px` : ""} `, // Full width for PDF
-          height: "100%", // Full height for PDF
-          // overflow: "hidden", // Prevent content overflow
-        }}
-        className={`${
-          !loadingView ? "border rounded-md overflow-y-hidden" : ""
-        }`}
-      >
+      </div>
+      <div ref={targetRef}>
         <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
-          {data?.classInfo} {data?.session}
-          <span className="mx-1">{data?.term}</span> Student Report
+          <span className="mx-1">{gradeData?.reportCard[0]?.classInfo}</span>{" "}
+          Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
 
@@ -332,9 +330,9 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
             </div>
             {/* Mobile */}
             <div className="flex flex-col md:hidden ">
-              <div className="flex items-center justify-between w-auto ">
+              <div className="flex items-center justify-between w-auto">
                 {/* logo */}
-                {/* <div className="border h-28 w-28 ">
+                <div className="border h-28 w-28 ">
                   {school?.avatar ? (
                     <img
                       src={school?.avatar}
@@ -345,10 +343,10 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       {school?.schoolName?.charAt(0)}
                     </div>
                   )}
-                </div> */}
+                </div>
 
                 {/* avatar */}
-                {/* <div className="border h-28 w-28 ">
+                <div className="border h-28 w-28 ">
                   {studentInfo?.avatar ? (
                     <img
                       src={studentInfo?.avatar}
@@ -359,34 +357,27 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       {studentInfo?.studentFirstName?.charAt(0)}
                     </div>
                   )}
-                </div> */}
+                </div>
               </div>
               {/* school info */}
-              {/* <div className="mt-5 flex justify-center items-center flex-col">
+              <div className="mt-5 flex justify-center items-center flex-col">
                 <h1 className="font-bold uppercase text-[25px]">
                   {schoolName}
                 </h1>
                 <h1 className="text-[12px] font-semibold tracking-[0.6rem]">
                   {schoolAddress}
                 </h1>
-              </div> */}
+              </div>
             </div>
             {/* end */}
 
             <div className="text-[12px] md:text-[15px] h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
-              {data?.session}
-              <span className="mx-1">{data?.term}</span> Student Report
+              <span className="mx-1">
+                {gradeData?.reportCard[0]?.classInfo}
+              </span>{" "}
+              Student Report
             </div>
-            <main
-              className={`${
-                !loadingView
-                  ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
-                  : "grid-cols-6 grid"
-              } mb-10`}
-              style={{
-                width: `${loadingView ? `${"1070"}px` : ""} `,
-              }}
-            >
+            <main className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mb-10">
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">Surname</h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
@@ -410,7 +401,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">Class</h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {studentInfo?.classAssigned}
+                  {gradeData?.reportCard[0]?.classInfo?.split("session:")[0]}{" "}
                 </h1>
               </div>
               <div className=" border p-2 ">
@@ -418,7 +409,11 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                   Academic Session
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {data?.session}
+                  {
+                    gradeData?.reportCard[0]?.classInfo
+                      ?.split("session: ")[1]
+                      ?.split("(")[0]
+                  }
                 </h1>
               </div>
               <div className=" border p-2 ">
@@ -442,7 +437,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                   Class Population
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {/* {classDetails?.students?.length} */}
+                  {classDetails?.students?.length}
                 </h1>
               </div>
 
@@ -481,38 +476,14 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                     <p className="text">Exam</p>
                     <p className="text-[12px]">(60)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Total</p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
-                  {/* {school?.presentTerm === "1st Term" ||
-                    (school?.presentTerm === "3rd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">1st Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))}
-
-                  {school?.presentTerm === "1st Term" ||
-                    (school?.presentTerm === "2nd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">2nd Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))}
-
-                  {school?.presentTerm === "1st Term" ||
-                    school?.presentTerm === "2nd Term" ||
-                    (school?.presentTerm === "3rd Term" && (
-                      <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                        <p className="text">3rd Term </p>
-                        <p className="text-[12px]">(100)</p>
-                      </div>
-                    ))} */}
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">Term Grade </p>
-                    <p className="text-[12px]">(100)</p>
-                  </div>
+                    <p className="text-[12px]">
+                      {" "}
+                      {school?.presentTerm === "3rd Term" ? "(300)" : "(100)"}
+                    </p>
+                  </div> */}
+                  {/* Always show 1st Term if current term is 1st, 2nd, or 3rd */}
 
                   {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Average</p>
@@ -521,12 +492,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                   <div className=" w-[78px] px-2 border-r flex flex-col justify-center items-center ">
                     <p className="text">COMM. Term Score</p>
                   </div>
-                  <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                    <p className="text">Class Highest Score</p>
-                  </div>
-                  <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                    <p className="text">Class lowest Score</p>
-                  </div>
+
                   {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Class AVG. Score</p>
                   </div> */}
@@ -540,7 +506,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
 
                 <main className="flex flex-col mt-1">
                   {lodash
-                    .sortBy(data?.results, "subject")
+                    .sortBy(gradeData?.reportCard[0].result, "subject")
                     ?.map((el: any, i: number) => (
                       <section
                         className="flex my-1 bg-blue-50 min-h-[40px] py-1"
@@ -563,47 +529,25 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                         </div>
                         {
                           <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">{el?.test1}</p>
+                            <p className="text-[12px]">
+                              {el?.test1 + el?.test2 + el?.test3 + el?.test4}
+                            </p>
                           </div>
                         }
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">{el?.exam}</p>
                         </div>
+
                         <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">{el?.mark}</p>
+                          <p className="text-[12px]">
+                            {el?.test1 +
+                              el?.test2 +
+                              el?.test3 +
+                              el?.test4 +
+                              el?.exam}
+                          </p>
                         </div>
-                        {/* {school?.presentTerm === "1st Term" ||
-                          (school?.presentTerm === "3rd Term" && (
-                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]"> {""}</p>
-                            </div>
-                          ))}
-                        {school?.presentTerm === "1st Term" ||
-                          (school?.presentTerm === "2nd Term" && (
-                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">{el?.exam}</p>
-                            </div>
-                          ))} */}{" "}
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text">{el?.mark}</p>
-                          {/* <p className="text-[12px]">(100)</p> */}
-                        </div>
-                        {/* {school?.presentTerm === "1st Term" ||
-                          school?.presentTerm === "2nd Term" ||
-                          (school?.presentTerm === "3rd Term" && (
-                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                              <p className="text-[12px]">0k</p>
-                            </div>
-                          ))} */}
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                          <p className="text-[12px]">{el?.exam}</p>
-                        </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                          <p className="text">{resultMax[i]?.score}</p>
-                        </div>
-                        <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                          <p className="text">{resultMin[i]?.score}</p>
-                        </div>
+
                         {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">67</p>
                         </div> */}
@@ -657,22 +601,13 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
             {/* <main className="overflow-auto uppercase text-[12px]">
              
             </main> */}
-            <main
-              className={`${
-                !loadingView
-                  ? "grid grid-cols-1 sm:grid-cols-4 my-10"
-                  : "grid-cols-4 grid"
-              } mb-10`}
-              style={{
-                width: `${loadingView ? `${"1070"}px` : ""} `,
-              }}
-            >
+            <main className="grid grid-cols-1 sm:grid-cols-4 my-10">
               <div className=" border p-2 ">
                 <h1 className="uppercase text-[12px] font-semibold">
                   No. of subject taken
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {data?.results?.length}
+                  {gradeData?.reportCard[0].result?.length}
                 </h1>
               </div>
               <div className=" border p-2 ">
@@ -696,6 +631,9 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                   Percenatge score
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
+                  {/* {school?.presentTerm === "3rd Term"
+                    ? (pointsArray?.reduce((a, b) => a + b) / 3).toFixed(2)
+                    :  */}
                   {commulationScore.toFixed(2)}%
                 </h1>
               </div>
@@ -796,20 +734,22 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
             </main>
             <main className="mt-10">
               <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
-                {data?.results?.map((el: any, i: number) => (
+                {grade?.result?.map((el: any, i: number) => (
                   <ChartPerformance
                     low={resultMin[i]?.score}
                     max={resultMax[i]?.score}
                     key={i}
                     subject={el?.subject}
-                    score={el?.test1 + el.exam}
+                    score={
+                      el?.test1 + el.test2 + el?.test3 + el.test4 + el.exam
+                    }
                   />
                 ))}
               </div>
             </main>
 
             {/* Psycho */}
-            {/* <main className="mt-20">
+            <main className="mt-20">
               <p className="font-semibold uppercase text-[12px] mb-5">
                 Psychometric Test Grading
               </p>
@@ -839,7 +779,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       communication
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.softSkill[0]?.communication}
+                      {gradeData?.reportCard[0]?.softSkill[0]?.communication}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -850,7 +790,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       leadership
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.softSkill[0]?.leadership}
+                      {gradeData?.reportCard[0]?.softSkill[0]?.leadership}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -861,7 +801,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       punctuality
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.softSkill[0]?.punctuality}
+                      {gradeData?.reportCard[0]?.softSkill[0]?.punctuality}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -872,7 +812,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       empathy
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.softSkill[0]?.empathy}
+                      {gradeData?.reportCard[0]?.softSkill[0]?.empathy}
                     </p>
                   </div>
                 </div>
@@ -900,7 +840,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       Confidence
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.peopleSkill[0]?.confidence}
+                      {gradeData?.reportCard[0]?.peopleSkill[0]?.confidence}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -911,7 +851,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       hardworking
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.peopleSkill[0]?.hardworking}
+                      {gradeData?.reportCard[0]?.peopleSkill[0]?.hardworking}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -922,7 +862,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       presentational
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.peopleSkill[0]?.presentational}
+                      {gradeData?.reportCard[0]?.peopleSkill[0]?.presentational}
                     </p>
                   </div>
                   <div className="px-2 w-full h-[45px] flex items-center text-[12px] uppercase border-b border-x">
@@ -933,7 +873,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       resilient
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.peopleSkill[0]?.resilient}
+                      {gradeData?.reportCard[0]?.peopleSkill[0]?.resilient}
                     </p>
                   </div>
                 </div>
@@ -961,12 +901,12 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                       sportship
                     </p>
                     <p className="w-[60px] h-full ml-2 flex items-center">
-                      {grade?.physicalSkill[0]?.sportship}
+                      {gradeData?.reportCard[0]?.physicalSkill[0]?.sportship}
                     </p>
                   </div>
                 </div>
               </div>
-            </main> */}
+            </main>
 
             {/* Comments */}
             <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
@@ -974,7 +914,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                 <p>Principal's Comment</p>
 
                 <p className="my-2 border h-[120px] p-2 mb-5">
-                  {data?.adminComment}
+                  {gradeData?.reportCard[0]?.adminComment}
                 </p>
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
@@ -983,7 +923,11 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                     </p>
                     <p className="text-[10px]">Principal</p>
                     <div className="flex-1" />
-                    <p>{moment(grade?.createdAt).format("lll")}</p>
+                    <p>
+                      {moment(gradeData?.reportCard[0]?.createdAt).format(
+                        "lll"
+                      )}
+                    </p>
                   </div>
 
                   <div className="w-[160px] h-[80px] border">
@@ -999,14 +943,18 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
 
                 <p className="my-2 border h-[120px] p-2 mb-5">
                   {" "}
-                  {data?.classTeacherComment}
+                  {gradeData?.reportCard[0]?.classTeacherComment}
                 </p>
                 <div className="flex w-full">
                   <div className="flex-1 flex flex-col">
                     <p className="font-semibold">{teacherDetail?.staffName}</p>
                     <p className="text-[10px]">Class Teacher</p>
                     <div className="flex-1" />
-                    <p>{moment(grade?.createdAt).format("lll")}</p>
+                    <p>
+                      {moment(gradeData?.reportCard[0]?.createdAt).format(
+                        "lll"
+                      )}
+                    </p>
                   </div>
                   <div className="w-[160px] h-[80px] border">
                     <img
@@ -1024,7 +972,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
   );
 };
 
-export default PrintReportCardDesignAdminScreen;
+export default ViewHistoricalResult;
 
 const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { studentInfo } = useStudentInfo();
@@ -1033,6 +981,8 @@ const ChartPerformance: FC<any> = ({ subject, score, low, max }) => {
   const { subjectData } = useClassSubject(studentInfo?.presentClassID);
   const { subjectInfo } = useSujectInfo("subjectID");
   // const {  } = useClassStudent(studentInfo?.presentClassID);
+
+
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
