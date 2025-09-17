@@ -43,6 +43,48 @@ import LittleHeader from "@/components/static/LittleHeader";
 // import schoolHeaderImage from "@/assets/school-header.jpg";
 
 // Mock data for the dashboard
+const getMonthlyData = (expenses: any[], incomes: any[]) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Initialize monthly totals
+  const monthlyTotals = months.map((month) => ({
+    month,
+    income: 0,
+    expenses: 0,
+  }));
+
+  // Process expenses
+  expenses?.forEach((expense: any) => {
+    if (expense?.amount && expense?.createdAt) {
+      const month = new Date(expense.createdAt).getMonth();
+      monthlyTotals[month].expenses += Number(expense.amount);
+    }
+  });
+
+  // Process incomes
+  incomes?.forEach((income: any) => {
+    if (income?.paymentAmount && income?.createdAt) {
+      const month = new Date(income.createdAt).getMonth();
+      monthlyTotals[month].income += Number(income.paymentAmount);
+    }
+  });
+
+  return monthlyTotals;
+};
+
 const monthlyData = [
   { month: "Jan", income: 45000, expenses: 38000 },
   { month: "Feb", income: 52000, expenses: 41000 },
@@ -50,6 +92,12 @@ const monthlyData = [
   { month: "Apr", income: 55000, expenses: 42000 },
   { month: "May", income: 51000, expenses: 40000 },
   { month: "Jun", income: 58000, expenses: 44000 },
+  { month: "Jul", income: 45000, expenses: 38000 },
+  { month: "Aug", income: 52000, expenses: 41000 },
+  { month: "Sep", income: 48000, expenses: 39000 },
+  { month: "Oct", income: 55000, expenses: 42000 },
+  { month: "Nov", income: 51000, expenses: 40000 },
+  { month: "Dec", income: 58000, expenses: 44000 },
 ];
 
 const expenseCategories = [
@@ -59,6 +107,40 @@ const expenseCategories = [
   { name: "Maintenance", value: 4000, color: "hsl(0 70% 55%)" },
   { name: "Other", value: 3000, color: "hsl(270 70% 50%)" },
 ];
+
+const getExpenseCategories = (expenses: any[]) => {
+  // Define category colors
+  const categoryColors = {
+    "Staff Salaries": "hsl(220 70% 50%)",
+    Utilities: "hsl(160 70% 50%)",
+    Supplies: "hsl(35 90% 55%)",
+    Maintenance: "hsl(0 70% 55%)",
+    Transport: "hsl(270 70% 50%)",
+    Infrastructure: "hsl(180 70% 50%)",
+    Academic: "hsl(120 70% 50%)",
+    Other: "hsl(300 70% 50%)",
+  };
+
+  // Group expenses by category and sum their values
+  const categorizedExpenses = expenses?.reduce((acc: any, expense: any) => {
+    const category = expense?.category || "Other";
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+    acc[category] += Number(expense?.amount) || 0;
+    return acc;
+  }, {});
+
+  // Transform into required format
+  return Object.entries(categorizedExpenses || {}).map(([name, value]) => ({
+    name,
+    value: Number(value),
+    color:
+      categoryColors[name as keyof typeof categoryColors] || "hsl(270 70% 50%)",
+  }));
+};
+
+// This will be calculated inside the component
 
 const recentTransactions = [
   {
@@ -119,9 +201,9 @@ const MetricCard: React.FC<{
   };
 
   return (
-    <Card className={`${getVariantClass()} animate-fade-in`}>
+    <Card className={`${getVariantClass()} animate-fade-in text-blue-950`}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium opacity-90">
+        <CardTitle className="text-sm font-medium opacity-70 !-ml-3">
           {title}
         </CardTitle>
         {icon}
@@ -135,10 +217,59 @@ const MetricCard: React.FC<{
 };
 
 const AnalyticScreen: React.FC = () => {
+  const { data } = useSchoolData();
+  const { data: termData } = useSchoolTermDetails(data?.presentTermID);
+
+  const { termlyExpense } = useTermExpenses(data?._id);
+
+  const otherPayment = _?.sumBy(
+    termData?.data?.paymentOptions,
+    (option: any) => Number(option.paymentAmount) || 0
+  );
+
+  const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
+
+  const expensePayment = _?.sumBy(termData?.data?.expensePayOut, "amount");
+
+  // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
+
+  let allData = termData?.data?.storePayment.concat(
+    termData?.data?.schoolFeePayment,
+    termData?.data?.paymentOptions
+  );
+
+  const expenseData = termlyExpense?.data?.expense
+    ?.map((el: any) => {
+      return el?.amount ? el?.amount : 0;
+    })
+    .reduce((a: number, b: number) => {
+      return a + b;
+    }, 0);
+
+  const schoolFeePayment = termData?.data?.schoolFeePayment
+    ?.map((el: any) => {
+      return el?.amount ? el?.amount : 0;
+    })
+    .reduce((a: number, b: number) => {
+      return a + b;
+    }, 0);
+
+  const monthlyData = getMonthlyData(
+    termlyExpense?.data?.expense,
+    termData?.data?.paymentOptions
+  );
+
+  const expenseCategoriesII = getExpenseCategories(
+    termlyExpense?.data?.expense
+  );
+
+  console.log("monthlyData: ", monthlyData);
+  console.log("expenseCategories: ", expenseCategories);
+
   return (
-    <div className="min-h-screen bg-background p-2">
+    <div className="min-h-screen bg-background p-2 text-blue-950">
       {/* Header */}
-      {/* <AnalyticScreenData /> */}
+
       <LittleHeader name="Analytics Screen" />
       <div
         className="relative mb-8 rounded-xl overflow-hidden bg-blue-950"
@@ -157,33 +288,37 @@ const AnalyticScreen: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* <AnalyticScreenData /> */}
+
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/*  */}
         <MetricCard
           title="Total Income"
-          value="$58,000"
+          value={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
           change="+12% from last month"
-          icon={<TrendingUp className="h-5 w-5 " />}
+          icon={<BsCashCoin className="h-5 w-5 " />}
           variant="income"
         />
         <MetricCard
           title="Total Expenses"
-          value="$44,000"
+          value={`₦${parseFloat(`${expenseData}`).toLocaleString()}`}
           change="+8% from last month"
-          icon={<TrendingDown className="h-5 w-5" />}
+          icon={<FaCcMastercard className="h-5 w-5" />}
           variant="expense"
         />
         <MetricCard
-          title="Net Balance"
-          value="$14,000"
+          title="Net Balance/Store"
+          value={`₦${parseFloat(`${storePayment}`).toLocaleString()}`}
           change="+22% from last month"
-          icon={<DollarSign className="h-5 w-5" />}
+          icon={<FaStore className="h-5 w-5" />}
           variant="primary"
         />
         <MetricCard
-          title="Total Students"
-          value="1,247"
-          change="+3% from last month"
+          title="Total SchoolFees"
+          value={`₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`}
+          change={`${termData?.data?.schoolFeePayment?.length} +3% from last month`}
           icon={<Users className="h-5 w-5" />}
           variant="neutral"
         />
@@ -349,9 +484,6 @@ const AnalyticScreenData: React.FC = () => {
 
   // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
 
-  console.clear();
-  console.log("termData", termData?.data?.schoolFeePayment);
-
   let allData = termData?.data?.storePayment.concat(
     termData?.data?.schoolFeePayment,
     termData?.data?.paymentOptions
@@ -370,8 +502,6 @@ const AnalyticScreenData: React.FC = () => {
     .reduce((a: number, b: number) => {
       return a + b;
     }, 0);
-
-  console.log("data: ", termData);
 
   return (
     <>
@@ -411,18 +541,18 @@ const AnalyticScreenData: React.FC = () => {
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne
+        {/* <ChartOne
           schoolFee={schoolFeePayment}
           store={storePayment}
           others={otherPayment}
           expensePayment={expenseData}
           data={data}
-        />
-        <ChartTwo />
+        /> */}
+        {/* <ChartTwo /> */}
 
         <div className="col-span-12 xl:col-span-12">{/* <TableOne /> */}</div>
-        {/* <ChatCard /> */}
       </div>
+      {/* <ChatCard /> */}
     </>
   );
 };

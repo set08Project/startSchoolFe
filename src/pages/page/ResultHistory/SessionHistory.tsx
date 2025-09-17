@@ -78,41 +78,45 @@ const Fee: FC<iProps> = ({ props }) => {
         <div>
           <p className="text-[10px] uppercase">Paid</p>
           <p className="text-[12px] font-bold text-green-500">
-            {(sessionTermData?.data?.classResult
-              .map((el: any) => {
-                return el?.schoolFeesHistory?.length;
-              })
-              ?.reduce((a: number, b: number) => {
-                return a + b;
-              }) /
-              sessionTermData?.data?.classResult
+            {(
+              (sessionTermData?.data?.classResult
                 .map((el: any) => {
-                  return el.students.length;
+                  return el?.schoolFeesHistory?.length;
                 })
                 ?.reduce((a: number, b: number) => {
                   return a + b;
-                })) *
-              100}
+                }) /
+                sessionTermData?.data?.classResult
+                  .map((el: any) => {
+                    return el.students.length;
+                  })
+                  ?.reduce((a: number, b: number) => {
+                    return a + b;
+                  })) *
+              100
+            ).toFixed(2)}
             %
           </p>
 
           <p className="text-[10px] mt-2 uppercase">unPaid</p>
           <p className="text-[12px] font-bold text-red-500">
-            {(sessionTermData?.data?.classResult
-              .map((el: any) => {
-                return el.students.length - el?.schoolFeesHistory?.length;
-              })
-              ?.reduce((a: number, b: number) => {
-                return a + b;
-              }) /
-              sessionTermData?.data?.classResult
+            {(
+              (sessionTermData?.data?.classResult
                 .map((el: any) => {
-                  return el.students.length;
+                  return el.students.length - el?.schoolFeesHistory?.length;
                 })
                 ?.reduce((a: number, b: number) => {
                   return a + b;
-                })) *
-              100}
+                }) /
+                sessionTermData?.data?.classResult
+                  .map((el: any) => {
+                    return el.students.length;
+                  })
+                  ?.reduce((a: number, b: number) => {
+                    return a + b;
+                  })) *
+              100
+            ).toFixed(2)}
             %
           </p>
         </div>
@@ -132,7 +136,7 @@ const SessionHistory = () => {
   const { data: schoolData } = useSchoolData();
   const { schoolInfo } = useSchoolSessionData(schoolData?._id);
 
-  console.log(schoolInfo);
+
 
   return (
     <div className="">

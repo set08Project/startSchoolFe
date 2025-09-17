@@ -113,11 +113,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, mutate }) => {
       <div className="w-[100px] border-r">{props?.totalPoints}</div>
       <div className="w-[100px] border-r text-[18px]">{props?.mainGrade}</div>
 
-      <div
-        className={`w-[${
-          props?.results.length * 260
-        }px]  border-r items-center flex`}
-      >
+      <div className={`  border-r items-center flex`}>
         <div className="flex gap-4 ">
           {lodash
             .sortBy(props?.results, "subject")
@@ -266,6 +262,16 @@ const StudentResultsDetail = () => {
 
   // const {pathname} = useLocation()
 
+  console.log(resultArray ? resultArray[0]?.results?.length : 4 * 260);
+  console.log("length: ", resultArray[0]?.results?.length);
+  console.log("subjectData: ", subjectData);
+  console.log(
+    "length: ",
+    `${
+      1372 + (resultArray ? resultArray[0]?.results?.length * 260 : 4 * 260)
+    }px`
+  );
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -296,7 +302,10 @@ const StudentResultsDetail = () => {
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4  min-w-[2000px]`}
           style={{
             width: `${
-              1372 + resultArray ? resultArray[0]?.results?.length : 4 * 260
+              // 1372 +
+              // resultArray ? resultArray[0]?.results?.length * 260 :
+              // 4 * 260
+              1392 + resultArray[0]?.results?.length * 260
             }px`,
           }}
         >
@@ -309,15 +318,18 @@ const StudentResultsDetail = () => {
 
           <div className="w-[100px] border-r">Total Points</div>
           <div className="w-[100px] border-r">Grade</div>
-          {/* 260px */}
-          <div
-            className={`w-[${
-              resultArray ? resultArray[0]?.results?.length : 4 * 260
-            }px] border-r`}
-          >
-            <div className=" flex flex-col">
-              <div className="mb-2 font-bold text-blue-950">Grades</div>
-              <div className="flex gap-4">
+
+          <div className={` border-r`}>
+            <div
+              className=" flex flex-col "
+              style={
+                {
+                  // width: `${resultArray[0]?.results?.length * 260}px`,
+                }
+              }
+            >
+              <div className="mb-2 font-bold  text-blue-950">Grades</div>
+              <div className="flex gap-4  ">
                 {lodash
                   .sortBy(resultArray && resultArray[0]?.results, "subject")
                   ?.map((props: any, i: number) => (
@@ -326,7 +338,6 @@ const StudentResultsDetail = () => {
               </div>
             </div>
           </div>
-          <div className="w-2 "></div>
           <div className="w-[300px] border-r">Class Teacher's Comment</div>
           <div className="w-[300px] border-r">
             Principal's Teacher's Comment
@@ -336,9 +347,9 @@ const StudentResultsDetail = () => {
         </div>
 
         <div
-          className={` overflow-hidden w-[2000px] `}
+          className={`overflow-hidden w-[2000px] `}
           style={{
-            width: `${1372 + subjectData?.classSubjects.length * 260}px`,
+            width: `${1372 + resultArray[0]?.results?.length * 260}px`,
           }}
         >
           {resultArray?.length > 0 ? (
