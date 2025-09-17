@@ -262,15 +262,6 @@ const StudentResultsDetail = () => {
 
   // const {pathname} = useLocation()
 
-  console.log(resultArray ? resultArray[0]?.results?.length : 4 * 260);
-  console.log("length: ", resultArray[0]?.results?.length);
-  console.log("subjectData: ", subjectData);
-  console.log(
-    "length: ",
-    `${
-      1372 + (resultArray ? resultArray[0]?.results?.length * 260 : 4 * 260)
-    }px`
-  );
 
   return (
     <div className="">
@@ -302,10 +293,10 @@ const StudentResultsDetail = () => {
           className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4  min-w-[2000px]`}
           style={{
             width: `${
-              // 1372 +
-              // resultArray ? resultArray[0]?.results?.length * 260 :
-              // 4 * 260
-              1392 + resultArray[0]?.results?.length * 260
+              1372 +
+              (resultArray && resultArray[0]?.results?.length > 0
+                ? resultArray[0].results.length * 260
+                : 4 * 260)
             }px`,
           }}
         >
@@ -349,7 +340,12 @@ const StudentResultsDetail = () => {
         <div
           className={`overflow-hidden w-[2000px] `}
           style={{
-            width: `${1372 + resultArray[0]?.results?.length * 260}px`,
+            width: `${
+              1372 +
+              (resultArray && resultArray[0]?.results?.length > 0
+                ? resultArray[0].results.length * 260
+                : 4 * 260)
+            }px`,
           }}
         >
           {resultArray?.length > 0 ? (
