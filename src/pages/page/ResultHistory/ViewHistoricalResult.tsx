@@ -455,48 +455,28 @@ const ViewHistoricalResult: React.FC = () => {
                 <main
                   className="flex  bg-blue-50"
                   style={{
-                    width: `${
-                      school?.presentTerm === "1st Term"
-                        ? "994px"
-                        : school?.presentTerm === "2nd Term"
-                        ? "1072px"
-                        : school?.presentTerm === "3rd Term"
-                        ? "1150px"
-                        : null
-                    }`,
+                    width: "100%",
                   }}
                 >
                   <div className="p-2 w-[40px]">S/N</div>
-                  <div className="p-2 w-[120px] border-x ">subject</div>
-                  <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
+                  <div className="p-2 w-[220px] border-x ">subject</div>
+                  <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                     <p className="text">CA</p>
                     <p className="text-[12px]">(40)</p>
                   </div>
-                  <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                  <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                     <p className="text">Exam</p>
                     <p className="text-[12px]">(60)</p>
                   </div>
-                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">Total</p>
-                    <p className="text-[12px]">
-                      {" "}
-                      {school?.presentTerm === "3rd Term" ? "(300)" : "(100)"}
-                    </p>
-                  </div> */}
-                  {/* Always show 1st Term if current term is 1st, 2nd, or 3rd */}
 
-                  {/* <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                    <p className="text">Average</p>
-                    <p className="text-[12px]">(100)</p>
-                  </div> */}
-                  <div className=" w-[78px] px-2 border-r flex flex-col justify-center items-center ">
+                  <div className=" w-[100px] px-2 border-r flex flex-col justify-center items-center ">
                     <p className="text">COMM. Term Score</p>
                   </div>
 
                   {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Class AVG. Score</p>
                   </div> */}
-                  <div className=" w-[50px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                  <div className=" w-[100px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                     <p className="text">Grade</p>
                   </div>
                   <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
@@ -512,33 +492,25 @@ const ViewHistoricalResult: React.FC = () => {
                         className="flex my-1 bg-blue-50 min-h-[40px] py-1"
                         key={i - el?._id}
                         style={{
-                          width: `${
-                            school?.presentTerm === "1st Term"
-                              ? "994px"
-                              : school?.presentTerm === "2nd Term"
-                              ? "1072px"
-                              : school?.presentTerm === "3rd Term"
-                              ? "1150px"
-                              : null
-                          }`,
+                          width: "100%",
                         }}
                       >
                         <div className="p-2 w-[40px]">{i + 1}</div>
-                        <div className="p-2 w-[120px] border-x ">
+                        <div className="p-2 w-[220px] border-x ">
                           {el?.subject}
                         </div>
                         {
-                          <div className=" w-[58px] border-r flex flex-col justify-center items-center ">
+                          <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">
                               {el?.test1 + el?.test2 + el?.test3 + el?.test4}
                             </p>
                           </div>
                         }
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">{el?.exam}</p>
                         </div>
 
-                        <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                        <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                           <p className="text-[12px]">
                             {el?.test1 +
                               el?.test2 +
@@ -551,7 +523,7 @@ const ViewHistoricalResult: React.FC = () => {
                         {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text">67</p>
                         </div> */}
-                        <div className=" w-[50px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                        <div className=" w-[100px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                           <p className="text-[18px]">{el?.grade}</p>
                         </div>
                         <div className="w-[80px] text-center flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-center items-center">
