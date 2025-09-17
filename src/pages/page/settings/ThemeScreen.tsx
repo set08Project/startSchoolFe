@@ -2,15 +2,17 @@ import { useState } from "react";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
 import {
+  removeOptions,
   updateAccount,
   updateAccountInfo,
   updateSchoolFeeAccountInfo,
   updateSchoolPaymentOptions,
 } from "../../api/schoolAPIs";
-import { useSchoolData } from "../../hook/useSchoolAuth";
+import { useSchool, useSchoolData } from "../../hook/useSchoolAuth";
 import toast, { Toaster } from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import LittleHeader from "../../../components/static/LittleHeader";
+import { MdClose } from "react-icons/md";
 
 document.title = "School's Profile settings";
 const ThemeScreen = () => {
@@ -311,7 +313,7 @@ const AccountDetail = () => {
 
 const AddMorePayments = () => {
   const { data } = useSchoolData();
-
+  const { data: paymentData } = useSchool(data?._id);
   const [paymentName, setPaymentName] = useState<string>(``);
   const [paymentAmount, setPaymentAmount] = useState<string>("");
 
@@ -389,6 +391,25 @@ const AddMorePayments = () => {
               });
           }}
         />
+      </div>
+
+      <div className="flex flex-wrap gap-2 mx-4 mt-8">
+        {paymentData?.data?.paymentOptions?.map((el: any) => (
+          <div key={el?._id} className="">
+            <div className="bg-orange-500 text-white text-[15px] px-4 py-2 rounded-full flex gap-2 justify-between items-center">
+              <p>{el?.paymentDetails}</p>
+
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  removeOptions(data?._id, el?.id);
+                }}
+              >
+                <MdClose />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

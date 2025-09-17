@@ -9,6 +9,23 @@ import axios, { AxiosResponse } from "axios";
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 const URL2: string = "https://startschoolbe-4.onrender.com";
 
+export const removeOptions = async (
+  schoolID: string,
+  refID: string,
+ 
+): Promise<any> => {
+  try {
+    return await axios
+      .patch(`${URL}/remove-payment-option/${schoolID}/${refID}`,)
+      .then((res: AxiosResponse) => {
+        console.log("data: ", res);
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const createStudentHistory = async (
   schoolID: string,
   studentID: string,
