@@ -454,7 +454,7 @@ const AnalyticScreen: React.FC = () => {
                       : "text-destructive"
                   }`}
                 >
-                  ${Math.abs(transaction.amount).toLocaleString()}
+                  ₦{Math.abs(transaction.amount).toLocaleString()}
                 </span>
               </div>
             ))}
