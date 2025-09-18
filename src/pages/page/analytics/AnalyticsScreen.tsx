@@ -40,6 +40,7 @@ import {
 } from "@/pages/hook/useSchoolAuth";
 import { useTermExpenses } from "@/pagesForStudents/hooks/useStudentHook";
 import LittleHeader from "@/components/static/LittleHeader";
+import moment from "moment";
 // import schoolHeaderImage from "@/assets/school-header.jpg";
 
 // Mock data for the dashboard
@@ -263,8 +264,12 @@ const AnalyticScreen: React.FC = () => {
     termlyExpense?.data?.expense
   );
 
-  console.log("monthlyData: ", monthlyData);
-  console.log("expenseCategories: ", expenseCategories);
+  // Concatenate and sort all data by createdAt in descending order
+  const sortedData = _?.orderBy(
+    allData?.concat(termlyExpense?.data?.expense || []) || [],
+    ["createdAt"],
+    ["desc"]
+  );
 
   return (
     <div className="min-h-screen bg-background p-2 text-blue-950">
@@ -417,44 +422,68 @@ const AnalyticScreen: React.FC = () => {
       {/* Recent Transactions */}
       <Card className="card-gradient animate-slide-up">
         <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+          <CardTitle>Top 10 Recent Transactions</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {recentTransactions.map((transaction) => (
+            {/* sortedData?.slice(0, 10) recentTransactions*/}
+            {sortedData?.slice(0, 10).map((transaction: any, i: number) => (
               <div
-                key={transaction.id}
+                key={i}
                 className="flex items-center justify-between p-4 bg-muted/30 rounded-lg smooth-transition hover:bg-muted/50"
               >
                 <div className="flex items-center space-x-3">
                   <div
                     className={`p-2 rounded-full ${
-                      transaction.type === "income"
+                      transaction.paymentMode === "cash" ||
+                      transaction.reference === "paid in cash"
                         ? "bg-success-light text-success"
                         : "bg-destructive-light text-destructive"
                     }`}
                   >
-                    {transaction.type === "income" ? (
+                    {transaction.paymentMode === "cash" ||
+                    transaction.reference === "paid in cash" ? (
                       <TrendingUp className="h-4 w-4" />
                     ) : (
                       <TrendingDown className="h-4 w-4" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium">{transaction.description}</p>
+                    <p className="font-medium">
+                      {transaction.paymentDetails ||
+                        transaction.item ||
+                        "School Fees"}{" "}
+                      -{" "}
+                      {transaction?.paymentMode === "cash" ||
+                      transaction?.reference === "paid in cash" ? (
+                        <span className="text-green-500 font-semibold text-[12px] uppercase ">
+                          Inflow
+                        </span>
+                      ) : (
+                        <span className="text-red-500 font-semibold text-[12px] uppercase ">
+                          Outflow
+                        </span>
+                      )}
+                    </p>
                     <p className="text-sm text-muted-foreground">
-                      {transaction.date}
+                      {moment(transaction.createAt).format("DD-MM-YYY")}
                     </p>
                   </div>
                 </div>
                 <span
                   className={`font-semibold ${
-                    transaction.type === "income"
+                    transaction.paymentMode === "cash" ||
+                    transaction.reference === "paid in cash"
                       ? "text-success"
                       : "text-destructive"
                   }`}
                 >
-                  ₦{Math.abs(transaction.amount).toLocaleString()}
+                  ₦
+                  {Math.abs(
+                    transaction.amount ||
+                      transaction.amount ||
+                      parseInt(transaction.paymentAmount)
+                  ).toLocaleString()}
                 </span>
               </div>
             ))}

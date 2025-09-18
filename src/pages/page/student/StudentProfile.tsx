@@ -6,7 +6,7 @@ import pic from "../../../assets/pix.jpg";
 import { MdEmail } from "react-icons/md";
 import { HiPhoto } from "react-icons/hi2";
 import { BsPerson, BsPhone } from "react-icons/bs";
-import { FaAddressBook } from "react-icons/fa6";
+import { FaAddressBook, FaSpinner } from "react-icons/fa6";
 import IG from "../../../assets/ig.png";
 import FB from "../../../assets/fb.png";
 import Linkden from "../../../assets/linkden.png";
@@ -26,6 +26,7 @@ import {
 } from "@/pages/hook/useSchoolAuth";
 import { readClassInfo } from "@/pagesForTeachers/api/teachersAPI";
 import { updateStudentAvatar } from "@/pagesForStudents/api/studentAPI";
+import { updateStudentBulkInfo } from "@/pages/api/schoolAPIs";
 
 const StudentProfile = () => {
   const [state, setState] = useState<string>("");
@@ -40,7 +41,6 @@ const StudentProfile = () => {
   const studentInfo = useStudentInfo()?.studentInfo;
 
   const { data } = useSchoolData();
-
 
   const changeImage = (e: any) => {
     // console.log("start...");
@@ -67,27 +67,50 @@ const StudentProfile = () => {
   };
 
   const [formData, setFormData] = useState({
-    studentFirstName: student?.studentFirstName || "",
-    studentLastName: student?.studentLastName || "",
-    email: student?.email || "",
-    phone: student?.phone || "",
-    gender: student?.gender || "",
-    parentEmail: student?.parentEmail || "",
-    parentPhoneNumber: student?.parentPhoneNumber || "",
-    studentAddress: student?.studentAddress || "",
-    admissionYear: student?.admissionYear || "",
-    admissionNumber: student?.admissionNumber || "",
-    classAssinged: student?.classAssinged || "",
-    graduationYear: student?.graduationYear || "",
-    leaveYear: student?.leaveYear || "",
-    stateOrigin: student?.stateOrigin || "",
-    LGA: student?.LGA || "",
-    BOD: student?.BOD || "",
-    personalPhone: student?.personalPhone || "",
-    performanceRemark: student?.performanceRemark || "",
+    studentFirstName: "",
+    studentLastName: "",
+    email: "",
+    phone: "",
+    gender: "",
+    parentEmail: "",
+    parentPhoneNumber: "",
+    studentAddress: "",
+    admissionYear: "",
+    admissionNumber: "",
+    classAssinged: "",
+    graduationYear: "",
+    leaveYear: "",
+    stateOrigin: "",
+    LGA: "",
+    BOD: "",
+    personalPhone: "",
+    performanceRemark: "",
   });
 
-  console.log(formData);
+  useEffect(() => {
+    if (student) {
+      setFormData({
+        studentFirstName: student.studentFirstName || "",
+        studentLastName: student.studentLastName || "",
+        email: student.email || "",
+        phone: student.phone || "",
+        gender: student.gender || "",
+        parentEmail: student.parentEmail || "",
+        parentPhoneNumber: student.parentPhoneNumber || "",
+        studentAddress: student.studentAddress || "",
+        admissionYear: student.admissionYear || "",
+        admissionNumber: student.admissionNumber || "",
+        classAssinged: student.classAssinged || "",
+        graduationYear: student.graduationYear || "",
+        leaveYear: student.leaveYear || "",
+        stateOrigin: student.stateOrigin || "",
+        LGA: student.LGA || "",
+        BOD: student.BOD || "",
+        personalPhone: student.personalPhone || "",
+        performanceRemark: student.performanceRemark || "",
+      });
+    }
+  }, [student]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -98,8 +121,12 @@ const StudentProfile = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Form Data:", formData);
-    alert("Form submitted successfully! Check console for data.");
+    setLoading(true);
+    updateStudentBulkInfo(student?._id, formData).then((res) => {
+      mutate(`api/view-student-detail/${student?._id}`);
+      toast.success("Student Information Updated Successfully");
+      setLoading(false);
+    });
   };
 
   return (
@@ -437,7 +464,13 @@ const StudentProfile = () => {
                 className="mt-5 capitalize border rounded-md px-8 py-3 text-white bg-blue-950 font-[500] cursor-pointer transition-all duration-300 hover:bg-blue-900"
                 onClick={handleSubmit}
               >
-                update Info
+                {loading ? (
+                  <div className="flex gap-2 items-center">
+                    <FaSpinner className="animate-spin mr-2" /> Loading...
+                  </div>
+                ) : (
+                  "update Info"
+                )}
               </div>
             </div>
           </div>
@@ -458,7 +491,7 @@ const StudentProfile = () => {
                 <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                   <input
                     value={
-                      formData.admissionYear || student?.admissionYear || ""
+                      formData.graduationYear || student?.graduationYear || ""
                     }
                     className="outline-none bg-transparent text-[18px] font-semibold capitalize "
                     name="graduationYear"

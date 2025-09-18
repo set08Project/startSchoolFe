@@ -448,6 +448,19 @@ export const outGoneStudent = async (schoolID: string, studentID: string) => {
   }
 };
 
+export const updateStudentBulkInfo = async (studentID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-main-student-bulk-info/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const deleteAllStudent = async (schoolID: string) => {
   try {
     return await axios
