@@ -271,6 +271,8 @@ const AnalyticScreen: React.FC = () => {
     ["desc"]
   );
 
+  console.log("sort:: ", expensePayment);
+
   return (
     <div className="min-h-screen bg-background p-2 text-blue-950">
       {/* Header */}
@@ -308,7 +310,7 @@ const AnalyticScreen: React.FC = () => {
         />
         <MetricCard
           title="Total Expenses"
-          value={`₦${parseFloat(`${expenseData}`).toLocaleString()}`}
+          value={`₦${parseFloat(`${expensePayment}`).toLocaleString()}`}
           change="+8% from last month"
           icon={<FaCcMastercard className="h-5 w-5" />}
           variant="expense"
@@ -436,12 +438,14 @@ const AnalyticScreen: React.FC = () => {
                   <div
                     className={`p-2 rounded-full ${
                       transaction.paymentMode === "cash" ||
+                      transaction.paymentMode === "online" ||
                       transaction.reference === "paid in cash"
                         ? "bg-success-light text-success"
                         : "bg-destructive-light text-destructive"
                     }`}
                   >
                     {transaction.paymentMode === "cash" ||
+                    transaction.paymentMode === "online" ||
                     transaction.reference === "paid in cash" ? (
                       <TrendingUp className="h-4 w-4" />
                     ) : (
@@ -455,6 +459,7 @@ const AnalyticScreen: React.FC = () => {
                         "School Fees"}{" "}
                       -{" "}
                       {transaction?.paymentMode === "cash" ||
+                      transaction?.paymentMode === "online" ||
                       transaction?.reference === "paid in cash" ? (
                         <span className="text-green-500 font-semibold text-[12px] uppercase ">
                           Inflow
@@ -473,6 +478,7 @@ const AnalyticScreen: React.FC = () => {
                 <span
                   className={`font-semibold ${
                     transaction.paymentMode === "cash" ||
+                    transaction.paymentMode === "online" ||
                     transaction.reference === "paid in cash"
                       ? "text-success"
                       : "text-destructive"

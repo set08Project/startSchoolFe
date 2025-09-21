@@ -43,10 +43,9 @@ const OtherPaymentRecipt: React.FC = () => {
   const dispatch = useDispatch();
   const read = useSelector((el: any) => el.otherPay);
 
-  console.log(read);
 
   useEffect(() => {
-    console.log(read);
+   
     let x = setTimeout(() => {
       if (search !== "") {
         setState(search.split("reference=")[1]);
@@ -59,10 +58,12 @@ const OtherPaymentRecipt: React.FC = () => {
             if (res.status === 200) {
               // dispatch(otherPayment(null));
               setObject(res?.data?.data?.data);
+              console.log("read: ", res);
             }
           });
         }
       } else {
+        console.log("Na here!");
         verifyOtherCashPayment(
           studentInfo?._id || read?.studentID,
 
@@ -71,6 +72,7 @@ const OtherPaymentRecipt: React.FC = () => {
           if (res.status === 200) {
             // dispatch(otherPayment(null));
             setObject(res?.data?.data);
+            console.log("read: ", res);
           }
         });
       }

@@ -193,6 +193,9 @@ const MakeOtherPayment: FC<iProps> = ({ props }) => {
                           channel: "cash",
                           amount: xx,
                         })
+                        // .then(() => {
+                        //   console.log("good")
+                        // })
                       );
                     }}
                   >
