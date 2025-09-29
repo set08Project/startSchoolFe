@@ -35,7 +35,7 @@ const PhoneNumberInput = ({ onChange }) => {
         defaultCountry="NG"
         value={value}
         onChange={handlePhoneChange}
-        className="w-full p-3 outline-none border border-gray-300 rounded-md focus:ring-2 focus:border-blue-500 text-sm h-full focus:outline-none focus:ring-blue-500 focus:bg-red-200"
+        className="w-full p-3 !outline-none border border-gray-300 rounded-md focus:ring-2 focus:border-blue-500 text-sm h-full focus:outline-none focus:ring-blue-500 focus:bg-red-200 "
         placeholder="Enter your phone number "
       />
     </div>

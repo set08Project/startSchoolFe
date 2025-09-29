@@ -188,13 +188,13 @@ const Sider = () => {
       </div>
       {/* top box */}
 
-      {data?.presentTerm === "1st Term" && (
+      {/* {data?.presentTerm === "1st Term" && (
         <div className="mt-4 px-2 text-center flex flex-col justify-center items-center border mx-2 rounded-md py-4">
           <div className=" text-[13px] font-medium ">
             <Countdown style1="16px" style2="14px" />
           </div>
         </div>
-      )}
+      )} */}
 
       {/* top box */}
       <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-4">

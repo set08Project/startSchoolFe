@@ -74,9 +74,9 @@ const EnquiryForm = () => {
   }, [count]);
 
   return (
-    <div className="flex flex-col items-center justify-center -mt-24 mb-10 ">
-      <div className=" w-full flex justify-center items-center">
-        <div className="lg:h-[89%] min-h-screen lg:w-[55%] w-full shadow rounded-md flex justify-center items-center gap-3  flex-row-reverse overflow-hidden mx-10 lg:mx-0 ">
+    <div className="flex flex-col w-full items-center justify-center -mt-24 mb-10 ">
+      <div className=" w-full flex justify-center items-center lg:w-[55%]">
+        <div className="lg:min-h-[89%] min-h-screen w-full shadow rounded-md flex justify-center items-center gap-3  flex-row-reverse overflow-hidden mx-10 lg:mx-0 ">
           {/* Image sider */}
           <div className="h-[53rem] w-[40%] lg:flex justify-end md:hidden lg:items-end hidden">
             <div
@@ -96,7 +96,7 @@ const EnquiryForm = () => {
           {/* data form */}
           <div className=" pb-3 ml-5 h-full lg:w-[70%] w-full flex justify-center items-center flex-col gap-2">
             <div className="lg:w-[96%] md:w-[80%] lg:h-[18%] h-[12%] text-wrap">
-              <p className="lg:text-[29px] md:text-[20px] text-[13px] ml-8 md:ml-0 text-black font-bold leading-tight  pt-4 overflow-hidden overflow-ellipsis break-words ">
+              <p className="lg:text-[29px] md:text-[20px] text-[18px] ml-8 md:ml-0 text-black font-bold leading-tight  pt-4 overflow-hidden overflow-ellipsis break-words ">
                 Digitize your school in minutes with NEXT's Integrated Platform
               </p>
             </div>
@@ -106,7 +106,7 @@ const EnquiryForm = () => {
                   htmlFor="input-field"
                   className="text-[18px] mb-5  font-semibold text-gray-700 pl-2"
                 >
-                  School Email:{" "}
+                  School4 Email:{" "}
                   <strong>
                     {schoolGoogleEmail ? schoolGoogleEmail : schoolEmail}
                   </strong>
@@ -117,12 +117,12 @@ const EnquiryForm = () => {
                   htmlFor="input-field"
                   className="text-[14px] font-semibold text-gray-700 pl-2"
                 >
-                  Enter School Name:
+                  Enter School Name
                 </label>
                 <Input
                   type="text"
                   id="input-field"
-                  className="pl-4 mt-2 w-[90%] rounded"
+                  className="pl- mt-2 w-[90%] rounded"
                   placeholder="Enter Your School Name..."
                   value={schoolName}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,7 +140,7 @@ const EnquiryForm = () => {
                 <Input
                   type="text"
                   id="input-field"
-                  className="pl-4 mt-2 w-[90%] rounded"
+                  className="pl- mt-2 w-[90%] rounded"
                   placeholder="Enter Your School Location..."
                   value={schoolLocation}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
