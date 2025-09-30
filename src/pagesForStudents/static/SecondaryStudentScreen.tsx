@@ -140,7 +140,8 @@ const SecondaryStudentScreen = () => {
           <MdQuiz />
         </NavLink>
 
-        {studentInfo?.classAssigned.includes("SSS 3") ? (
+        {/* {studentInfo?.classAssigned.includes("SSS 3") ? ( */}
+        {studentInfo ? (
           <NavLink
             // to="/CBT"
             to={"/CBT"}
