@@ -9,6 +9,18 @@ import axios from "axios";
 
 // const URL: string = "http://localhost:2244/api";
 
+export const viewMidTestAPI = async (subjectID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/view-subject-mid-test/${subjectID}`)
+      .then((res: any) => {
+        return res.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 const URL: string = "https://startschoolbe-4.onrender.com/api";
 
 // Working Online

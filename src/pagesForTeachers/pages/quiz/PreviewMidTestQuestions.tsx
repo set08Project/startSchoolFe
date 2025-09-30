@@ -9,7 +9,7 @@ import { displayEmptyTest } from "../../../global/reduxState";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, FC } from "react";
 import { useSujectQuiz } from "../../hooks/useTeacher";
-import { mutate } from "swr";
+import { useMidTest } from "../../hooks/useMidTest";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
@@ -23,6 +23,7 @@ const PreviewMidTestScreen: FC<any> = ({
   const navigate = useNavigate();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
+  const { midTest, midTestLoading, mutate } = useMidTest(subjectID!);
 
   const [state, setState] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,13 +60,11 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("file", file);
           formData.append("theory", editorValue);
 
-          console.log("IDs: ", subjectQuiz?.classDetails!, subjectID!);
-
           createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
             .then((res: any) => {
-              console.log(res);
               if (res.status === 201) {
-                mutate(`api/view-subject-quiz/${subjectID}`);
+                // This will trigger an immediate revalidation of the mid test data
+                mutate();
                 navigate(`/subjects/${subjectID}`);
               }
             })

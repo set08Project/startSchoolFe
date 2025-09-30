@@ -45,9 +45,9 @@ const MidTestResultPerformance = () => {
       <div className="ml-5 pt-2 flex justify-between items-center">
         <LittleHeader
           name={` Students ${quizData?.status
-            .charAt(0)
-            .toUpperCase()
-            .concat(quizData?.status.slice(1))} Results`}
+            ?.charAt(0)
+            ?.toUpperCase()
+            ?.concat(quizData?.status.slice(1))} Results`}
         />
 
         <Link

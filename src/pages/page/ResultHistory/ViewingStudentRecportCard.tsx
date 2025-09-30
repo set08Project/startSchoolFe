@@ -573,7 +573,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                               {
                                 st1?.result?.find(
                                   (e) => e.subject === el?.subject
-                                )?.points
+                                )?.mark
                               }
                               {/* {pointsArray[0]} */}
                               {/*  */}

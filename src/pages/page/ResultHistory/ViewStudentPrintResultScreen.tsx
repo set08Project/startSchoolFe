@@ -591,7 +591,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                                 {
                                   st1.result?.find(
                                     (e) => e.subject === el?.subject
-                                  )?.points
+                                  )?.mark
                                 }
                                 {/* {pointsArray[0]} */}
                                 {/*  */}
@@ -611,7 +611,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                                   {
                                     st2.result?.find(
                                       (e) => e.subject === el?.subject
-                                    )?.points
+                                    )?.mark
                                   }
                                 </p>
                               </div>
@@ -628,7 +628,7 @@ const AdminPrintReportCardScreen: React.FC = () => {
                                 {
                                   st3.result?.find(
                                     (e) => e.subject === el?.subject
-                                  )?.points
+                                  )?.mark
                                 }
                               </p>
                             </div>

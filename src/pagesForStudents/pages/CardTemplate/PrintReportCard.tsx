@@ -617,7 +617,7 @@ const PrintReportCard: React.FC = () => {
                                                                el?.exam} */}
                                  {st1?.result?.find(
                                    (e) => e.subject === el?.subject
-                                 )?.points || 0}
+                                 )?.mark || 0}
                                  {/* {pointsArray[0]} */}
                                  {/*  */}
                                </p>
@@ -635,7 +635,7 @@ const PrintReportCard: React.FC = () => {
                                    {/* {pointsArray[1]} */}
                                    {st2?.result?.find(
                                      (e) => e.subject === el?.subject
-                                   )?.points || 0}
+                                   )?.mark || 0}
                                  </p>
                                </div>
                              ))}
@@ -650,7 +650,7 @@ const PrintReportCard: React.FC = () => {
                                                                el?.exam} */}
                                  {st3?.result?.find(
                                    (e) => e.subject === el?.subject
-                                 )?.points || 0}
+                                 )?.mark || 0}
                                </p>
                              </div>
                            )}

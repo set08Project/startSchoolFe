@@ -595,7 +595,7 @@ const TeacherPrintReportCardScreen: React.FC = () => {
                                 {
                                   st1?.result?.find(
                                     (e) => e.subject === el?.subject
-                                  )?.points
+                                  )?.mark
                                 }
                                 {/* {pointsArray[0]} */}
                                 {/*  */}
@@ -615,7 +615,7 @@ const TeacherPrintReportCardScreen: React.FC = () => {
                                   {
                                     st2.result?.find(
                                       (e) => e.subject === el?.subject
-                                    )?.points
+                                    )?.mark
                                   }
                                 </p>
                               </div>
@@ -632,7 +632,7 @@ const TeacherPrintReportCardScreen: React.FC = () => {
                                 {
                                   st3.result?.find(
                                     (e) => e.subject === el?.subject
-                                  )?.points
+                                  )?.mark
                                 }
                               </p>
                             </div>

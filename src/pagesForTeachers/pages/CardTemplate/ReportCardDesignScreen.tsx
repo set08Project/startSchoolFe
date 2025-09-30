@@ -575,7 +575,7 @@ return (
                             {
                               st1?.result?.find(
                                 (e) => e.subject === el?.subject
-                              )?.points
+                              )?.mark
                             }
                             {/* {pointsArray[0]} */}
                             {/*  */}
@@ -595,7 +595,7 @@ return (
                               {
                                 st2?.result?.find(
                                   (e) => e.subject === el?.subject
-                                )?.points
+                                )?.mark
                               }
                             </p>
                           </div>
@@ -612,7 +612,7 @@ return (
                             {
                               st3?.result?.find(
                                 (e) => e.subject === el?.subject
-                              )?.points
+                              )?.mark
                             }
                           </p>
                         </div>

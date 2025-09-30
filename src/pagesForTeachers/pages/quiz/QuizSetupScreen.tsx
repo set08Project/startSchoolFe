@@ -37,12 +37,15 @@ import { useDispatch } from "react-redux";
 import { displayDelay, displayStudent } from "@/global/reduxState";
 import Button from "@/components/reUse/Button";
 import toast, { Toaster } from "react-hot-toast";
+import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
 
 const QuizSetupScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
-  const { examination } = useExamination(subjectID!);
+  const { data: examination, mutate: emaxMutate } = useExaminationQuiz(
+    subjectID!
+  );
   const { midTest, midTestMutate } = useMidTest(subjectID!);
 
   const [state, setState] = useState<any>({});
@@ -78,7 +81,9 @@ const QuizSetupScreen = () => {
   const confirmDelete = async () => {
     if (selectedQuizId) {
       try {
-        await deleteQuiz(selectedQuizId);
+        await deleteQuiz(selectedQuizId).then(() => {
+          mutate(`api/view-subject-quiz/${subjectID}`);
+        });
       } catch (error) {
         console.error("Failed to delete item:", error);
       }
@@ -295,7 +300,7 @@ const QuizSetupScreen = () => {
                       midTest?._id
                     )
                       .then(() => {
-                        midTestMutate(`api/view-subject-mid-test/${subjectID}`);
+                        mutate(`api/view-subject-mid-test/${subjectID}`);
                       })
                       .finally(() => {
                         setLoading(false);
@@ -637,7 +642,8 @@ const QuizSetupScreen = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="font-bold mt-0 text-[20px]">
-                      {props?.subjectTitle}{" "}
+                      {props?.subjectTitle}
+                      {""}
                       {props?.quiz ? "Quiz" : "Assignment"}
                     </p>
                   </div>

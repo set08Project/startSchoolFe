@@ -1738,7 +1738,7 @@ const PrintReportCardScreen: React.FC = () => {
                           <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">{el?.exam}</p>
                           </div>
-                        
+
                           {(school?.presentTerm === "1st Term" ||
                             school?.presentTerm === "2nd Term" ||
                             school?.presentTerm === "3rd Term") && (
@@ -1752,7 +1752,7 @@ const PrintReportCardScreen: React.FC = () => {
                                                 el?.exam} */}
                                 {st1?.result?.find(
                                   (e) => e.subject === el?.subject
-                                )?.points || 0}
+                                )?.mark || 0}
                                 {/* {pointsArray[0]} */}
                                 {/*  */}
                               </p>
@@ -1770,7 +1770,7 @@ const PrintReportCardScreen: React.FC = () => {
                                   {/* {pointsArray[1]} */}
                                   {st2?.result?.find(
                                     (e) => e.subject === el?.subject
-                                  )?.points || 0}
+                                  )?.mark || 0}
                                 </p>
                               </div>
                             ))}
@@ -1785,7 +1785,7 @@ const PrintReportCardScreen: React.FC = () => {
                                                 el?.exam} */}
                                 {st3?.result?.find(
                                   (e) => e.subject === el?.subject
-                                )?.points || 0}
+                                )?.mark || 0}
                               </p>
                             </div>
                           )}
