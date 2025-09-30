@@ -141,7 +141,7 @@ const Sider = () => {
         {data?.freeMode ? (
           <div className="mt-3 py-2 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
             <div className="mb-2 px-2 text-[12px] text-left font-medium ">
-              You are seeing this, because you are on your First Free Term Mode.
+              We are using this space to Appreciate you for considering us over many.
               <br />
               <p className="mt-1 font-bold ">Thank you for coming on board!</p>
             </div>
