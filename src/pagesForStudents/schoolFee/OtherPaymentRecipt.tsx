@@ -13,6 +13,7 @@ import {
   verifyOtherCashPayment,
   verifyOtherPayment,
 } from "../api/studentAPI";
+import { otherPayment } from "@/global/reduxState";
 
 const OtherPaymentRecipt: React.FC = () => {
   const navigate = useNavigate();
@@ -43,43 +44,110 @@ const OtherPaymentRecipt: React.FC = () => {
   const dispatch = useDispatch();
   const read = useSelector((el: any) => el.otherPay);
 
+  // useEffect(() => {
+  //  console.log(studentInfo?._id);
+  //   let x = setTimeout(() => {
+  //     if (search !== "") {
+  //       setState(search.split("reference=")[1]);
+  //       if (search.split("reference=")[1] !== "" || null) {
+  //         verifyOtherPayment(
+  //           studentInfo?._id || read?.studentID,
+  //           search.split("reference=")[1],
+  //           read?.paymentName
+  //         ).then((res) => {
+  //           if (res.status === 200) {
+  //             // dispatch(otherPayment(null));
+  //             setObject(res?.data?.data?.data);
+  //             console.log("read: ", res);
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       console.log("Na here!");
+  //       verifyOtherCashPayment(
+  //         studentInfo?._id || read?.studentID,
+
+  //         { paymentName: read?.paymentName, paymentAmount: read?.amount }
+  //       ).then((res) => {
+  //         if (res.status === 200) {
+  //           // dispatch(otherPayment(null));
+  //           setObject(res?.data?.data);
+  //           console.log("read: ", res);
+  //         }
+  //       });
+  //     }
+
+  //     clearTimeout(x);
+  //   }, 500);
+  // }, [state]);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
-   console.log(studentInfo?._id);
-    let x = setTimeout(() => {
-      if (search !== "") {
-        setState(search.split("reference=")[1]);
-        if (search.split("reference=")[1] !== "" || null) {
-          verifyOtherPayment(
-            studentInfo?._id || read?.studentID,
-            search.split("reference=")[1],
-            read?.paymentName
-          ).then((res) => {
-            if (res.status === 200) {
-              // dispatch(otherPayment(null));
-              setObject(res?.data?.data?.data);
-              console.log("read: ", res);
-            }
-          });
+    const verifyPayment = async () => {
+      try {
+        setIsVerifying(true);
+        // setVerificationError(null);
+
+        // Extract reference from URL if it exists
+        const reference = search ? search.split("reference=")[1] : null;
+        const studentId = studentInfo?._id || read?.studentID;
+
+        if (!studentId) {
+          throw new Error("Student ID not found");
         }
-      } else {
-        console.log("Na here!");
-        verifyOtherCashPayment(
-          studentInfo?._id || read?.studentID,
 
-          { paymentName: read?.paymentName, paymentAmount: read?.amount }
-        ).then((res) => {
-          if (res.status === 200) {
-            // dispatch(otherPayment(null));
-            setObject(res?.data?.data);
-            console.log("read: ", res);
+        if (reference) {
+          // Online payment verification
+          if (!read?.paymentName) {
+            throw new Error("Payment name is required");
           }
-        });
-      }
 
-      clearTimeout(x);
-    }, 500);
-  }, [state]);
+          const res = await verifyOtherPayment(
+            studentId,
+            reference,
+            read.paymentName
+          );
+
+          if (res?.status === 200) {
+            setObject(res?.data?.data?.data);
+            dispatch(otherPayment(null)); // Clear payment data after successful verification
+          } else {
+            throw new Error("Payment verification failed");
+          }
+        } else {
+          // Cash payment verification
+          if (!read?.paymentName || !read?.amount) {
+            throw new Error("Payment details are incomplete");
+          }
+
+          const res = await verifyOtherCashPayment(studentId, {
+            paymentName: read.paymentName,
+            paymentAmount: read.amount,
+          });
+
+          if (res?.status === 200) {
+            setObject(res?.data?.data);
+            dispatch(otherPayment(null)); // Clear payment data after successful verification
+          } else {
+            throw new Error("Cash payment verification failed");
+          }
+        }
+      } catch (error: any) {
+        // setVerificationError(error?.message || "Verification failed");
+        console.error("Payment verification error:", error);
+      } finally {
+        setIsVerifying(false);
+      }
+    };
+
+    // Only verify if we have either a reference or payment details
+    const hasReference = !!search;
+    const hasPaymentDetails = !!(read?.paymentName && read?.amount);
+
+    if (hasReference || hasPaymentDetails) {
+      verifyPayment();
+    }
+  }, [search, studentInfo?._id, read]);
 
   const downloadPDF = () => {
     const input = contentRef.current;
