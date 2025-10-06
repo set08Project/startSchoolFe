@@ -230,7 +230,7 @@ const AnalyticScreen: React.FC = () => {
 
   const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
 
-  const expensePayment = _?.sumBy(termData?.data?.expensePayOut, "amount");
+  const expensePayment = _?.sumBy(termlyExpense?.data?.expense, "amount");
 
   // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
 
@@ -271,7 +271,7 @@ const AnalyticScreen: React.FC = () => {
     ["desc"]
   );
 
-  console.log("sort:: ", expensePayment);
+
 
   return (
     <div className="min-h-screen bg-background p-2 text-blue-950">

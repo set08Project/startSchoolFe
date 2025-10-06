@@ -45,7 +45,7 @@ const OtherPaymentRecipt: React.FC = () => {
 
 
   useEffect(() => {
-   
+   console.log(studentInfo?._id);
     let x = setTimeout(() => {
       if (search !== "") {
         setState(search.split("reference=")[1]);
