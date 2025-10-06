@@ -180,8 +180,9 @@ const Sider = () => {
                   email: studentInfo?.parentEmail,
                   amount:
                     termRead === "1st Term"
-                      ? oneClass?.class1stFee
-                      : termRead === "2nd Term"
+                      ? 20000
+                      : // oneClass?.class1stFee
+                      termRead === "2nd Term"
                       ? oneClass?.class2ndFee
                       : termRead === "3rd Term"
                       ? oneClass?.class3rdFee

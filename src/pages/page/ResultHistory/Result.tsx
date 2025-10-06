@@ -29,7 +29,7 @@ const TeacherDetails: FC<iProps> = ({ props }) => {
         <div className="mt-6" />
         <p className="flex items-center gap-1">
           <FaStar className="ml-1 mb-1" />
-          <span>{(teacherDetail?.staffRating).toFixed(2)}</span>
+          <span>{teacherDetail?.staffRating?.toFixed(2)}</span>
         </p>
       </div>
     </div>

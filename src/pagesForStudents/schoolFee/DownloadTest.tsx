@@ -47,7 +47,10 @@ const ConfirmPaymentRecipt: React.FC = () => {
       if (search.split("reference=")[1] !== "" || null) {
         verifyPay(search.split("reference=")[1]).then((res) => {
           if (res.status === true) {
+            console.log("res dataII: ", res?.data?.amount);
             setObject(res?.data);
+           
+
             schoolPaymentEndPoint(studentInfo?._id, {
               date: moment(res?.data?.createdAt).format("lll"),
               amount: res?.data?.amount / 100,
@@ -191,7 +194,7 @@ const ConfirmPaymentRecipt: React.FC = () => {
                   if (res.status) {
                     schoolPaymentEndPoint(studentInfo?._id, {
                       date: moment(res?.data?.createdAt).format("lll"),
-                      amount: res?.data?.amount / 1000,
+                      amount: res?.data?.amount / 100,
                       reference: res?.data?.reference,
                       purchasedID: res?.data.id,
                     });
