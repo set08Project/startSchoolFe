@@ -149,6 +149,51 @@ export const bulkUploadofStudent = async (schoolID: string, data: any) => {
   }
 };
 
+export const bulkUploadofSubject = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-bulk-subject/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-bulk-classroom/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const bulkUploadofTeachers = async (schoolID: string, data: any) => {
+  try {
+    const config: any = {
+      "Content-Type": "multipart/form-data",
+    };
+    return await axios
+      .post(`${URL}/create-school-teacher-bulk/${schoolID}`, data, config)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const bulkUploadSchemeOfWork = async (data: any) => {
   try {
     const config: any = {

@@ -4,6 +4,7 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import pix from "../../../assets/pix.jpg";
 import {
   useSchoolCookie,
+  useSchoolData,
   useSchoolSubject,
   useSchoolTeacher,
   useSchoolTeacherDetail,
@@ -14,12 +15,14 @@ import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
 import {
+  bulkUploadofSubject,
   deletSubject,
   removeTeacherSubject,
   updateSchoolSubjectTeacher,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import Input from "../../../components/reUse/Input";
+import { FaSpinner } from "react-icons/fa6";
 
 interface iProps {
   props?: any;
@@ -62,7 +65,7 @@ const ViewSubjects = () => {
   const [subjectTeacher, setSubjectTeacher] = useState("");
   const [searchSubject, setSearchSubject] = useState("");
   const { dataID } = useSchoolCookie();
-
+const { data } = useSchoolData();
   const { schoolTeacher } = useSchoolTeacher();
 
   const onTeacherSubject = (subjectID: string) => {
@@ -93,6 +96,24 @@ const ViewSubjects = () => {
       `${subject?.subjectTitle} ${subject?.designated}`.toLowerCase();
     return subjectName.includes(searchSubject.toLowerCase());
   });
+  const [file, setFile] = useState<File | null>(null);
+  const [toggle, setToggle] = useState(false);
+
+  
+  const handleBulkClassroom = () => {
+    setToggle(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    bulkUploadofSubject(data?._id, formData)
+      .then(() => {
+        toast.success("Students Have Been Successfully Imported");
+        mutate(`api/view-school-subject/${data?._id}`);
+      })
+      .finally(() => {
+        setToggle(false);
+      });
+  };
 
   return (
     <div>
@@ -107,6 +128,41 @@ const ViewSubjects = () => {
           value={searchSubject}
           onChange={handleSubjectSearch}
         />
+
+
+        {file ? (
+                  <Button
+                    name={
+                      toggle ? (
+                        <div className="flex items-center gap-2 duration-300 transition-all">
+                          <FaSpinner className="animate-spin text-[18px]" />
+                          <span>Uploading Data</span>
+                        </div>
+                      ) : (
+                        "Add file to Student"
+                      )
+                    }
+                    className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
+                    onClick={handleBulkClassroom}
+                  />
+                ) : (
+                  <label
+                    htmlFor="file"
+                    className="uppercase lg:text-[12px]font-medium bg-neutral-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[11px]"
+                  >
+                    upload file for Bulk Entry
+                    <input
+                      id="file"
+                      type="file"
+                      accept=".csv"
+                      className="hidden"
+                      hidden
+                      onChange={(e: any) => {
+                        setFile(e.target.files[0]);
+                      }}
+                    />
+                  </label>
+                )}
       </div>
       <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
         <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">

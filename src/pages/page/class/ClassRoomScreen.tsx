@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { displayClass } from "../../../global/reduxState";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { FaStar } from "react-icons/fa6";
+import { FaSpinner, FaStar } from "react-icons/fa6";
 import { useSchoolClassRM, useSchoolData } from "../../hook/useSchoolAuth";
 import { FC, useState } from "react";
 import {
@@ -15,6 +15,8 @@ import {
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import lodash from "lodash";
 import Input from "../../../components/reUse/Input";
+import toast from "react-hot-toast";
+import { bulkUploadofClassroom } from "@/pages/api/schoolAPIs";
 
 interface iProps {
   props?: any;
@@ -58,7 +60,7 @@ const ClassStudents: FC<iProps> = ({ props }) => {
 
 const ClassRoomScreen = () => {
   const dispatch = useDispatch();
-  const { schoolClassroom } = useSchoolClassRM();
+  const { schoolClassroom, mutate } = useSchoolClassRM();
 
   const classroom = useSelector((state: any) => state?.classroomToggled);
   const { data } = useSchoolData();
@@ -72,6 +74,24 @@ const ClassRoomScreen = () => {
       });
     }
   };
+const [file, setFile] = useState();
+const [toggle, setToggle] = useState<boolean>(false);
+
+
+  const handleBulkClassroom = () => {
+    setToggle(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    bulkUploadofClassroom(data?._id, formData)
+      .then(() => {
+        toast.success("Class data Have Been Successfully Imported");
+        mutate(`api/view-classrooms`);
+      })
+      .finally(() => {
+        setToggle(false);
+      });
+  };
 
   return (
     <div className="">
@@ -82,6 +102,39 @@ const ClassRoomScreen = () => {
       <div className="mt-10" />
 
       <div className="flex w-full justify-end items-start">
+        {file ? (
+          <Button
+            name={
+              toggle ? (
+                <div className="flex items-center gap-2 duration-300 transition-all">
+                  <FaSpinner className="animate-spin text-[18px]" />
+                  <span>Uploading Data</span>
+                </div>
+              ) : (
+                "Add file to Student"
+              )
+            }
+            className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
+            onClick={handleBulkClassroom}
+          />
+        ) : (
+          <label
+            htmlFor="file"
+            className="uppercase lg:text-[12px]font-medium bg-neutral-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[11px]"
+          >
+            upload file for Bulk Entry
+            <input
+              id="file"
+              type="file"
+              accept=".csv"
+              className="hidden"
+              hidden
+              onChange={(e: any) => {
+                setFile(e.target.files[0]);
+              }}
+            />
+          </label>
+        )}
         <Button
           name="Add new ClassRoom"
           className={`uppercase text-[12px] font-medium ${

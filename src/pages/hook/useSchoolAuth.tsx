@@ -589,7 +589,7 @@ export const useSchoolTeacher = () => {
     mutate(newData, false);
   };
 
-  return { schoolTeacher };
+  return { schoolTeacher, mutate: handleUpdate };
 };
 
 export const useSchoolSubject = () => {
