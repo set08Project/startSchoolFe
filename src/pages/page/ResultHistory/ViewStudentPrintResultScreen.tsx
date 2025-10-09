@@ -69,9 +69,13 @@ const AdminPrintReportCardScreen: React.FC = () => {
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
 
+  // let numbPassed =
+  //   grade?.result?.length -
+  //   lodash.filter(grade?.result, { grade: "F" })?.length;
   let numbPassed =
-    grade?.result?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    grade?.result?.filter(
+      (el: any) => el?.grade && el?.grade !== "F" && el?.grade !== "F9"
+    )?.length || 0;
 
   let commulationScore =
     (grade?.result

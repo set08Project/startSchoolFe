@@ -47,7 +47,7 @@ const SubjectScore: FC<iProps> = ({ props }) => {
     <div className="w-[200px] border-r-2 border-blue-950 ">
       <p>{props?.subject}</p>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        <p className="w-[40px] border-r">{props?.test1 ? props?.test1 : 0}</p>
+        <p className="w-[40px] border-r">{props?.test4 ? props?.test4 : 0}</p>
         <p className="w-[45px] border-r">{props?.exam ? props?.exam : 0}</p>
         <p className="w-[45px] font-bold border-r">
           {props?.mark ? props?.mark : 0}
@@ -275,13 +275,13 @@ const StudentResultsDetail = () => {
       <div>
         Quering{" "}
         <span className="font-[600] italic">
-          {studentInfoData?.studentFirstName}
+          {studentInfoData?.studentFirstName} {" "}
           {studentInfoData?.studentLastName}
         </span>{" "}
         historical Results
       </div>
       <p className="text-[22px] text-black/40 font-[600]">
-        <span className="text-[18px] font-[400]">EnrollmentID:</span>{" "}
+        <span className="text-[18px] font-[400]">EnrollmentID:</span>
         {studentInfoData?.enrollmentID}
       </p>
 

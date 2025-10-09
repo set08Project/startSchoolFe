@@ -6,8 +6,9 @@ import axios from "axios";
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 // const URL: string =
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
-
-// const URL: string = "http://localhost:2244/api";
+  
+  // const URL: string = "http://localhost:2244/api";
+  const URL: string = "https://startschoolbe-4.onrender.com/api";
 
 export const viewMidTestAPI = async (subjectID: string) => {
   try {
@@ -21,7 +22,6 @@ export const viewMidTestAPI = async (subjectID: string) => {
   }
 };
 
-const URL: string = "https://startschoolbe-4.onrender.com/api";
 
 // Working Online
 
