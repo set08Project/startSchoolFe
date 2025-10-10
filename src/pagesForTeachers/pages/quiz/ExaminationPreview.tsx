@@ -38,30 +38,7 @@ const ExaminationPreviewScreen = () => {
   };
   // const percentage = Math.ceil((score / correctAnswers.length) * 100);
 
-  const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
   const getQuizData = quizData?.quiz[1];
-
-  const totalquest = getQuizData?.question?.length;
-
-  const getRemark = (percentage: number) => {
-    if (percentage <= 45) return "Very poor performance!";
-    if (percentage <= 55) return "A poor performance!";
-    if (percentage <= 65) return "Good performance, can do better!";
-    if (percentage <= 75) return "Good performance, keep it up!";
-    if (percentage <= 85) return "Very good performance!";
-    return "Excellent performance!";
-  };
-
-  const getGrade = (percentage: number) => {
-    if (percentage <= 45) return "F";
-    if (percentage <= 55) return "E";
-    if (percentage <= 65) return "D";
-    if (percentage <= 75) return "C";
-    if (percentage <= 85) return "B";
-    return "A";
-  };
-
-  const myQuizData = quizData?.quiz[1];
 
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
@@ -136,6 +113,20 @@ const ExaminationPreviewScreen = () => {
                 </div>
               )
             )}
+
+            <div className="border-r mt-10 w-full h-[10px] bg-red-30">
+              <hr />
+            </div>
+            <div className="text-[16px] italic font-semibold">Section B </div>
+
+            <p
+              className="mt-5 text-blue-950 text-[16px"
+              dangerouslySetInnerHTML={{
+                __html: `${examination?.quiz?.theory}`,
+              }}
+            />
+
+            {/* <p>{examination?.quiz?.theory}</p> */}
 
             <div>
               <Button

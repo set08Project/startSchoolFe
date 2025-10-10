@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTestInstruction } from "../../../global/reduxState";
 import PreviewExamination from "./PreviewExamination";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 const CreateExamination = () => {
   const dispatch = useDispatch();
   const testQuestion = useSelector((state: any) => state.test);
@@ -22,6 +25,21 @@ const CreateExamination = () => {
     setFileData(e.target.files[0]);
   };
 
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: "1" }, { header: "2" }, { font: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline", "strike"],
+        ["link", "image"],
+        [{ align: [] }],
+      ],
+      // handlers: {
+      //   image: imageHandler, // Hook the custom image handler
+      // },
+    },
+  };
+const [editorValue, setEditorValue] = useState("");
   return (
     <div>
       <LittleHeader name="Create Examination Question Screen" />
@@ -53,16 +71,34 @@ const CreateExamination = () => {
             </p>
             <div>
               <div className="mt-5 flex flex-col">
-                <label className="text-[12px]">Enter Instruction</label>
+                <label className="text-[16px] mb-2">Enter Instruction</label>
                 <textarea
                   placeholder="Enter Instructions"
-                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] h-[200px] rounded-md resize-none outline-none p-2"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[16px] h-[200px] rounded-md resize-none outline-none p-2"
                   value={instruction}
                   onChange={(e) => {
                     setInstruction(e.target.value);
                   }}
                 />
               </div>
+
+              <div className="mt-5 flex flex-col">
+                <label className="mt-5 mb-2 text-[16px]">
+                  <strong className="font-[500]">Section B: </strong>for Theory
+                  Questions
+                </label>
+
+                <ReactQuill
+                  value={editorValue}
+                  onChange={(value) => {
+                    setEditorValue(value);
+                  }}
+                  modules={modules}
+                  theme="snow"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] min-h-[100px] rounded-md resize-none outline-none p-2"
+                />
+              </div>
+
               <div className="mt-10 w-full flex gap-2">
                 <div className="flex flex-col">
                   <label className="text-[12px]">Time/Duration(Hours)</label>
@@ -124,6 +160,7 @@ const CreateExamination = () => {
             mark={mark}
             file={fileData}
             instruction={instruction}
+            editorValue={editorValue}
           />
         </div>
       </div>
@@ -132,3 +169,4 @@ const CreateExamination = () => {
 };
 
 export default CreateExamination;
+// const [editorValue, setEditorValue] = useState("");

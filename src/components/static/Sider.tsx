@@ -154,7 +154,7 @@ const Sider = () => {
                   roll ? (
                     <span className="ml-3">Processing...</span>
                   ) : (
-                    "Renew Plan"
+                    "Please Renew your Plan"
                   )
                 }
                 icon={

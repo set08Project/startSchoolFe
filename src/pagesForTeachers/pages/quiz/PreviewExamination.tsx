@@ -9,7 +9,13 @@ import { mutate } from "swr";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
-const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
+const PreviewExamination: FC<any> = ({
+  instruction,
+  duration,
+  mark,
+  file,
+  editorValue,
+}) => {
   const navigate = useNavigate();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
@@ -46,6 +52,7 @@ const PreviewExamination: FC<any> = ({ instruction, duration, mark, file }) => {
           formData.append("duration", duration);
           formData.append("mark", mark);
           formData.append("file", file);
+          formData.append("theory", editorValue);
 
           createExaminationData(
             subjectQuiz?.classDetails!,

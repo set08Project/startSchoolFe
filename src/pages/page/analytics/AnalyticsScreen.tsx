@@ -297,7 +297,7 @@ const AnalyticScreen: React.FC = () => {
     allData?.concat(termlyExpense?.data?.expense || []) || [],
     ["createdAt"],
     ["desc"]
-  );
+  ).reverse();
 
   console.log("sortedData: ", sortedData);
 

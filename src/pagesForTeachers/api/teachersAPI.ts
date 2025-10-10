@@ -474,14 +474,29 @@ export const updateMidTestData = async (midTestID: string, data: {}) => {
   }
 };
 
+export const deleteExamination = async (
+  teacherID: string,
+  subjectID: string,
+  examID: string
+) => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-exam/${teacherID}/${subjectID}/${examID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const deleteMidTestData = async (
   teacherID: string,
   subjectID: string,
   midTestID: string
 ) => {
   try {
-    // const URL = "http://localhost:2244/api";
-    // delete-mid-test/:teacherID/:subjectID/:midTestID"
+
     return await axios
       .delete(`${URL}/delete-mid-test/${teacherID}/${subjectID}/${midTestID}`)
       .then((res: any) => {

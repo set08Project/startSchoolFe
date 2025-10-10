@@ -20,6 +20,7 @@ import {
   useTeacherInfo,
 } from "../../hooks/useTeacher";
 import {
+  deleteExamination,
   deleteMidTestData,
   deleteQuiz,
   readClassInfo,
@@ -43,7 +44,7 @@ const QuizSetupScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
-  const { data: examination, mutate: emaxMutate } = useExaminationQuiz(
+  const { data: examination, mutate: examMutate } = useExaminationQuiz(
     subjectID!
   );
   const { midTest, midTestMutate } = useMidTest(subjectID!);
@@ -52,6 +53,7 @@ const QuizSetupScreen = () => {
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<Boolean>(false);
+  const [loadingExam, setLoadingExam] = useState<Boolean>(false);
   const [loadingTest, setLoadingTest] = useState<Boolean>(false);
 
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
@@ -98,6 +100,8 @@ const QuizSetupScreen = () => {
   const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
   const [toggle, setToggle] = useState(false);
 
+  console.log("examination: ", examination);
+  console.log("midTest: : ", midTest);
   return (
     <div className="text-blue-950  relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
@@ -140,7 +144,7 @@ const QuizSetupScreen = () => {
       </div>
 
       <div>
-        {examination && (
+        {examination?.exam && (
           <div>
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
@@ -148,11 +152,30 @@ const QuizSetupScreen = () => {
               </div>
               <div className="mt-4 text-center relative bottom-4">
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    setLoading(true);
+                    deleteExamination(
+                      teacherInfo?._id,
+                      subjectID!,
+                      examination?.exam?._id
+                    )
+                      .then(() => {
+                        examMutate(`api/api/view-subject-exam/${subjectID}`);
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  }}
                   className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                 >
-                  <FaTrashAlt size={20} className="mr-1" />
-                  Delete
+                  {loading ? (
+                    <FaSpinner size={20} className="mr-1" />
+                  ) : (
+                    <FaTrashAlt size={20} className="mr-1" />
+                  )}
+                  {loading
+                    ? " Deleting Examination Question"
+                    : " Delete Examination Question"}
                 </button>
               </div>
 
@@ -197,16 +220,16 @@ const QuizSetupScreen = () => {
                 <div>
                   Questions:{" "}
                   <span className="font-bold">
-                    {examination?.quiz?.question
-                      ? examination?.quiz?.question.length
+                    {examination?.exam?.quiz?.question
+                      ? examination?.exam?.quiz?.question.length
                       : 0}
                   </span>
                 </div>
                 <div>
                   Mark/Question:{" "}
                   <span className="font-bold">
-                    {examination?.quiz?.instruction
-                      ? examination?.quiz?.instruction.mark
+                    {examination?.exam?.quiz?.instruction
+                      ? examination?.exam?.quiz?.instruction.mark
                       : 0}
                   </span>
                 </div>
@@ -214,8 +237,8 @@ const QuizSetupScreen = () => {
               <div className="text-[12px] mt-2 font-bold">
                 Instruction:{" "}
                 <span className="font-normal">
-                  {examination?.quiz?.instruction?.instruction
-                    ? `${examination?.quiz?.instruction.instruction}`.slice(
+                  {examination?.exam?.quiz?.instruction?.instruction
+                    ? `${examination?.exam?.quiz?.instruction.instruction}`.slice(
                         0,
                         70
                       ) + "..."
@@ -226,29 +249,31 @@ const QuizSetupScreen = () => {
               <div className="flex gap-3">
                 <div
                   className={`mt-10 cursor-pointer flex gap-3 items-center ${
-                    examination?.startExam ? "bg-blue-950" : "bg-red-500"
+                    examination?.exam?.startExam ? "bg-blue-950" : "bg-red-500"
                   } text-white px-6 py-3 rounded-md`}
                   onClick={() => {
-                    setLoading(true);
+                    setLoadingExam(true);
 
-                    examination?.startExam
-                      ? stopExamination(examination?._id)
+                    examination?.exam?.startExam
+                      ? stopExamination(examination?.exam?._id)
                           .then((res) => {
-                            mutate(`api/view-subject-exam/${subjectID}`);
+                            console.log("res: ", res);
+                            examMutate(`api/view-subject-exam/${subjectID}`);
                           })
                           .finally(() => {
-                            setLoading(false);
+                            setLoadingExam(false);
                           })
-                      : startExamination(examination?._id)
+                      : startExamination(examination?.exam?._id)
                           .then((res) => {
-                            mutate(`api/view-subject-exam/${subjectID}`);
+                            console.log("res: ", res);
+                            examMutate(`api/view-subject-exam/${subjectID}`);
                           })
                           .finally(() => {
-                            setLoading(false);
+                            setLoadingExam(false);
                           });
                   }}
                 >
-                  {loading ? (
+                  {loadingExam ? (
                     "Laoding"
                   ) : (
                     <span>
