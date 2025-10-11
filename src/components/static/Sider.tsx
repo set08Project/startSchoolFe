@@ -22,6 +22,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { mutate } from "swr";
 import MakeOtherPayment from "../../pages/page/payment/MakeOtherPayment";
 import { Countdown } from "./CountDown";
+import Achievements from "./AchievementCOmponent";
+import QueueAdmin from './QueueAdmin';
 
 const Sider = () => {
   const dispatch = useDispatch();
@@ -83,6 +85,33 @@ const Sider = () => {
 
   const [enrollmentID, setEnrollmentID] = useState<string>("");
   const [loadings, setLoading] = useState<boolean>(false);
+  const [showQueueAdmin, setShowQueueAdmin] = useState(false);
+  const [queuedCount, setQueuedCount] = useState<number>(0);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const { getAllQueued } = await import('@/lib/offlineQueue');
+        const all = await getAllQueued();
+        if (mounted) setQueuedCount(all.length || 0);
+      } catch (err) {}
+    })();
+
+    try {
+      const bc = new BroadcastChannel('ss-queue');
+      bc.addEventListener('message', async (ev) => {
+        const d = ev.data;
+        if (d && (d.type === 'processed' || d.type === 'failed')) {
+          const { getAllQueued } = await import('@/lib/offlineQueue');
+          const all = await getAllQueued();
+          if (mounted) setQueuedCount(all.length || 0);
+        }
+      });
+    } catch (err) {}
+
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div
@@ -141,7 +170,8 @@ const Sider = () => {
         {data?.freeMode ? (
           <div className="mt-3 py-2 text-center flex flex-col border mx-0 rounded-md py-1 bg-blue-50">
             <div className="mb-2 px-2 text-[12px] text-left font-medium ">
-              We are using this space to Appreciate you for considering us over many.
+              We are using this space to Appreciate you for considering us over
+              many.
               <br />
               <p className="mt-1 font-bold ">Thank you for coming on board!</p>
             </div>
@@ -188,13 +218,15 @@ const Sider = () => {
       </div>
       {/* top box */}
 
-      {/* {data?.presentTerm === "1st Term" && (
+      {/* {
         <div className="mt-4 px-2 text-center flex flex-col justify-center items-center border mx-2 rounded-md py-4">
           <div className=" text-[13px] font-medium ">
             <Countdown style1="16px" style2="14px" />
           </div>
         </div>
-      )} */}
+      } */}
+      <div className="mt-3"/>
+      <Achievements />
 
       {/* top box */}
       <div className="mt-10 px-2 text-center flex flex-col border mx-2 rounded-md py-4">
@@ -290,6 +322,12 @@ const Sider = () => {
       </div>
       <div>
         <Toaster />
+        <div className="mt-2 flex items-center gap-2">
+          <button onClick={() => setShowQueueAdmin(true)} className="px-3 py-2 bg-neutral-100 rounded flex items-center gap-2">
+            Queued Requests
+            {queuedCount > 0 && <span className="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">{queuedCount}</span>}
+          </button>
+        </div>
         {data?.categoryType === "Secondary" ||
         data?.schoolTags[0]?.val === "Secondary School." ? (
           <SecondaryAdminScreen />
@@ -297,6 +335,7 @@ const Sider = () => {
           <PrimaryAdminScreen />
         )}
       </div>
+      {showQueueAdmin && <QueueAdmin onClose={() => setShowQueueAdmin(false)} />}
     </div>
   );
 };

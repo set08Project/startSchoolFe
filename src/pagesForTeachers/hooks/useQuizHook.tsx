@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  getExamSubjectPerformance,
   getOneStudentExamSubjectPerformance,
   getOneStudentSubjectPerformance,
   getStudentPerformance,
@@ -81,5 +82,50 @@ export const useOneExamSubjectStudentPerfomance = (
   } catch (error) {
     console.error();
     return error;
+  }
+};
+
+// export const useExamSubjectPerfomance = (
+//   subjectID: string,
+// ) => {
+//   try {
+//     const { data: oneStudentPerformanceExam, isLoading } = useSWR(
+//       `api/view-exam-performance/${subjectID}`,
+//        async () => {
+//         return getExamSubjectPerformance(subjectID).then((res) => {
+//           console.log(res?.data);
+//           return res?.data
+//         });
+//       }
+//     );
+//     return { oneStudentPerformanceExam, isLoading };
+//   } catch (error) {
+//     console.error();
+//     return error;
+//   }
+// };
+
+export const useExamSubjectPerfomance = (subjectID: string | undefined) => {
+  try {
+    const key = subjectID ? `api/view-exam-performance/${subjectID}` : null;
+
+    const {
+      data: examPerformance,
+      error,
+      isValidating,
+    } = useSWR(key, async () => {
+      return getExamSubjectPerformance(subjectID!).then((res) => {
+        return res?.data ?? [];
+      });
+    });
+
+    return {
+      examPerformance: examPerformance ?? [],
+      isLoading: isValidating && !examPerformance && !error,
+      error,
+    };
+  } catch (error) {
+    console.error(error);
+    return { examPerformance: [], isLoading: false, error };
   }
 };

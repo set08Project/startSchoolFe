@@ -7,6 +7,7 @@ import LoadingScreen from "./components/static/LoadingScreen";
 import RouterScreen from "./router/RouterScreen";
 import PrivateRouter from "./router/PrivateRouter";
 import { Helmet } from "react-helmet";
+import OfflineIndicator from "./components/static/OfflineIndicator";
 // import { SWRConfig } from "swr";
 // import { swrConfig } from "./pages/hook/persistHook";
 
@@ -26,6 +27,7 @@ const App = () => {
         <PersistGate loading={null} persistor={persistor}>
           <ErrorBoundary fallback={<LoadingScreen />}>
             <RouterScreen />
+            <OfflineIndicator />
           </ErrorBoundary>
         </PersistGate>
       </Provider>

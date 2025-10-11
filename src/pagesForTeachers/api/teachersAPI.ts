@@ -76,6 +76,21 @@ export const getOneStudentExamSubjectPerformance = async (
   }
 };
 
+export const getExamSubjectPerformance = async (
+  subjectID: string,
+) => {
+  try {
+    return await axios
+      .get(`${URL}/view-exam-performance/${subjectID}/`)
+      .then((res) => {
+        return res?.data;
+      });
+  } catch (error) {
+    console.error();
+    return error;
+  }
+};
+
 export const getMidTestPerformanceResut = async (
   subjectID: string,
   quizID: string

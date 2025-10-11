@@ -186,6 +186,10 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import ViewAllStudentResult from "@/pages/page/resultOption/ViewAllResults";
 import StudentResultsDetail from "@/pages/page/resultOption/InputStudentsScore";
 import PrintReportCardDesignAdminScreen from "@/pages/page/resultOption/PrintStudentHistoryResult";
+import QuizSetupScreen from "@/pagesForTeachers/pages/quiz/QuizDetails";
+import ExamQuizSetupScreen from "@/pages/page/quizArea/QuizArea";
+import CreateMidQuizScreen from "@/pages/page/quizArea/CreateMidQuiz";
+import CreateExaminationScreen from "@/pages/page/quizArea/CreateExamination";
 
 const BroadSheetReportCardApproved = React.lazy(
   () => import("@/pages/page/ResultHistory/BoardSheet")
@@ -530,6 +534,36 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ViewSubjects />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "subjects/:subjectID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ExamQuizSetupScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "create-mid-test/:subjectID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <CreateMidQuizScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "create-examination/:subjectID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <CreateExaminationScreen />
               </Suspense>
             ),
           },

@@ -87,10 +87,18 @@ const ClassSubjectScreen: FC = () => {
               <p className="text-[13px] font-medium">
                 Subject Teacher Name: <span></span>
               </p>
-              <div className="flex mb-4 gap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap">
                 <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
                   {props?.subjectTeacherName}
                 </div>
+              </div>
+
+              <div className="flex">
+                <Link to={`/subjects/${props?._id}`} >
+                  <p className="text-[12px] font-medium bg-blue-950 hover:bg-blue-900 cursor-pointer text-white rounded-md py-2 px-4">
+                    Goto Quiz Area
+                  </p>
+                </Link>
               </div>
             </div>
           ))}

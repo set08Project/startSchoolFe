@@ -107,6 +107,8 @@
     "vaul": "^1.1.2",
     "yarn": "^1.22.21",
     "yet-another-react-lightbox": "^3.17.0"
+    ,
+    "idb": "^7.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

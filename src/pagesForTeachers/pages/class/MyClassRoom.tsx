@@ -39,7 +39,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
                 <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-100 cursor-pointer flex justify-center items-center">
-                  <Link to={`/test-exam-grade/${props?._id}`}>
+                  <Link to={`/final-exam-grade/${props?._id}`}>
                     <FaAddressBook className="hover:text-blue-900" />
                   </Link>
                 </div>
@@ -53,10 +53,17 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
               <p className="text-[13px] font-medium">
                 Subject Teacher Name: <span></span>
               </p>
-              <div className="flex mb-4 gap-2 flex-wrap">
-                <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
+              <div className="flexgap-2 flex-wrap">
+                <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
                   {props?.subjectTeacherName}
                 </div>
+              </div>
+              <div className="flex mb-">
+                <Link to={`/subjects/${props?._id}`} className="font-medium">
+                  <p className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 rounded-md text-white text-[12px] px-6 py-1 cursor-pointer">
+                    Goto Quiz Area
+                  </p>
+                </Link>
               </div>
             </div>
           ))}

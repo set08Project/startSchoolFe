@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "../../components/layout/LittleHeader";
 import {
+  useExamSubjectPerfomance,
   useOneExamSubjectStudentPerfomance,
   useOneSubjectStudentPerfomance,
   useSubjectStudentPerfomance,
@@ -14,15 +15,17 @@ import { useExam, useQuiz } from "../../hooks/useTeacher";
 const ExamResultSetupScreen = () => {
   const { subjectID, quizID } = useParams();
 
-  const { oneStudentPerformance } = useOneExamSubjectStudentPerfomance(
-    subjectID,
-    quizID
-  );
+  // const { oneStudentPerformance } = useOneExamSubjectStudentPerfomance(
+  //   subjectID,
+  //   quizID
+  // );
+
+  const {examPerformance}  = useExamSubjectPerfomance(quizID!);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { examData: quizData } = useExam(quizID);
-  const students = oneStudentPerformance;
+  const students = examPerformance;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -84,7 +87,7 @@ const ExamResultSetupScreen = () => {
                 </div>
 
                 <div className="w-[1500px]">
-                  {students?.map((record: any, i: number) => (
+                  {students?.performance?.map((record: any, i: number) => (
                     <motion.tr
                       key={record._id}
                       className="w-[2000px] items-center border-b hover:bg-gray-100 transition-colors duration-200 flex "

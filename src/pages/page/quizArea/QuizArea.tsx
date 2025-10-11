@@ -1,4 +1,4 @@
-// src/screens/QuizSetupScreen.js
+// src/screens/ExamQuizSetupScreen.js
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
@@ -8,17 +8,29 @@ import {
   MdVisibility,
   MdClose,
 } from "react-icons/md";
-import LittleHeader from "../../components/layout/LittleHeader";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
+
 import pix from "../../../assets/pix.jpg";
 import { GoGoal } from "react-icons/go";
-import {
-  useExamination,
-  useMidTest,
-  useSubjectAssignment,
-  useSujectQuiz,
-  useTeacherInfo,
-} from "../../hooks/useTeacher";
+
+// import {
+
+//   useMidTest,
+//   useSubjectAssignment,
+//   useSujectQuiz,
+//   useTeacherInfo,
+// } from "../../hooks/useTeacher";
+
+import { mutate } from "swr";
+
+import _ from "lodash";
+import { FaHandDots } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { displayDelay, displayStudent } from "@/global/reduxState";
+import Button from "@/components/reUse/Button";
+import toast, { Toaster } from "react-hot-toast";
+import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
+import LittleHeader from "@/components/static/LittleHeader";
+import ConfirmDeleteModal from "@/pagesForTeachers/pages/quiz/ConfirmDeleteModal";
 import {
   deleteExamination,
   deleteMidTestData,
@@ -29,21 +41,21 @@ import {
   stopExamination,
   stopMidTest,
   updateMidTestData,
-} from "../../api/teachersAPI";
-import { mutate } from "swr";
-import { useStudentPerfomance } from "../../hooks/useQuizHook";
-import _ from "lodash";
-import { FaHandDots } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { displayDelay, displayStudent } from "@/global/reduxState";
-import Button from "@/components/reUse/Button";
-import toast, { Toaster } from "react-hot-toast";
-import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
+} from "@/pagesForTeachers/api/teachersAPI";
 
-const QuizSetupScreen = () => {
-  const { teacherInfo } = useTeacherInfo();
+import {
+  useMidTest,
+  useSubjectAssignment,
+  useSujectQuiz,
+  useTeacherInfo,
+} from "@/pagesForTeachers/hooks/useTeacher";
+
+const ExamQuizSetupScreen = () => {
+//   const { teacherInfo } = useTeacherInfo();
+
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
+
   const { data: examination, mutate: examMutate } = useExaminationQuiz(
     subjectID!
   );
@@ -151,18 +163,18 @@ const QuizSetupScreen = () => {
               <div className="mt-4 text-center relative bottom-4">
                 <button
                   onClick={() => {
-                    setLoading(true);
-                    deleteExamination(
-                      teacherInfo?._id,
-                      subjectID!,
-                      examination?.exam?._id
-                    )
-                      .then(() => {
-                        examMutate(`api/api/view-subject-exam/${subjectID}`);
-                      })
-                      .finally(() => {
-                        setLoading(false);
-                      });
+                    // setLoading(true);
+                    // deleteExamination(
+                    //   teacherInfo?._id,
+                    //   subjectID!,
+                    //   examination?.exam?._id
+                    // )
+                    //   .then(() => {
+                    //     examMutate(`api/api/view-subject-exam/${subjectID}`);
+                    //   })
+                    //   .finally(() => {
+                    //     setLoading(false);
+                    //   });
                   }}
                   className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                 >
@@ -318,18 +330,18 @@ const QuizSetupScreen = () => {
               <div className="mt-4 text-center relative bottom-4">
                 <button
                   onClick={() => {
-                    setLoading(true);
-                    deleteMidTestData(
-                      teacherInfo?._id,
-                      subjectID!,
-                      midTest?._id
-                    )
-                      .then(() => {
-                        mutate(`api/view-subject-mid-test/${subjectID}`);
-                      })
-                      .finally(() => {
-                        setLoading(false);
-                      });
+                    // setLoading(true);
+                    // deleteMidTestData(
+                    //   teacherInfo?._id,
+                    //   subjectID!,
+                    //   midTest?._id
+                    // )
+                    //   .then(() => {
+                    //     mutate(`api/view-subject-mid-test/${subjectID}`);
+                    //   })
+                    //   .finally(() => {
+                    //     setLoading(false);
+                    //   });
                   }}
                   className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                 >
@@ -738,4 +750,4 @@ const QuizSetupScreen = () => {
   );
 };
 
-export default QuizSetupScreen;
+export default ExamQuizSetupScreen;

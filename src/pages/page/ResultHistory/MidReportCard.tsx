@@ -204,9 +204,9 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
       </div>
 
       <div
-        className={`w-[${
-          subjectData?.classSubjects.length * 200
-        }px]  border-r items-center flex`}
+        className={` border-r items-center flex`}
+
+        style={{ width: `${subjectData?.classSubjects.length * 280}px` }}
       >
         <div className="flex gap-4 ">
           {lodash
@@ -327,7 +327,7 @@ const SubjectMap: FC<iProps> = ({ props }) => {
   return (
     <div className="w-[260px] border-r ">
       <p>Subject Offered</p>
-      {/* <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p> */}
+      <p className="pl-3 font-bold text-[15px]">{props?.subjectTitle}</p>
       {/* <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
         <p className="w-[30px] border-r">1st</p>
         <p className="w-[30px] border-r">2nd</p>
@@ -335,8 +335,8 @@ const SubjectMap: FC<iProps> = ({ props }) => {
         <p className="w-[30px] border-r">4th</p>
         <p className="w-[35px] border-r">Exam</p>
         <p className="w-[35px] ">Total</p>
-        <p className="w-[35px] ">Grade</p> */}
-      {/* </div> */}
+        <p className="w-[35px] ">Grade</p>
+      </div> */}
     </div>
   );
 };
@@ -377,9 +377,8 @@ const MidReportCard = () => {
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           {/* 260px */}
           <div
-            className={`w-[${
-              subjectData?.classSubjects.length * 200
-            }px] border-r`}
+            className={` border-r`}
+            style={{width: `${subjectData?.classSubjects.length * 280}px`}}
           >
             {/* <div>Subject Grade</div> */}
             <div className=" flex ">

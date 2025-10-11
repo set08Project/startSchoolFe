@@ -8,10 +8,14 @@ export default defineConfig({
     react(),
 
     VitePWA({
+      injectRegister: false,
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
       workbox: {
-        globPatterns: ["**/*"],
+        globPatterns: ['**/*'],
       },
-      includeAssets: ["**/*"],
+      includeAssets: ['**/*'],
       manifest: {
         name: "Just Next",
         short_name: "Just Next",
@@ -52,6 +56,10 @@ export default defineConfig({
         background_color: "#FFFFFF",
         theme_color: "#172554",
         description: "The Next Generation Tooling for Educators!",
+      },
+      // point to our custom service worker source
+      injectManifest: {
+        swSrc: 'src/sw.ts',
       },
     }),
   ],

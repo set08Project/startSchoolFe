@@ -180,6 +180,38 @@ export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
   }
 };
 
+// offline-aware wrapper: if offline, enqueue the request to be retried when online
+import { enqueue, QueueEntry } from '@/lib/offlineQueue';
+
+export const bulkUploadofClassroomWithQueue = async (schoolID: string, formData: FormData) => {
+  if (typeof window !== 'undefined' && !navigator.onLine) {
+    // convert FormData to serializable object: store entries as array of [key, {type, value}]
+    const fdEntries: Array<any> = [];
+    formData.forEach((value, key) => {
+      if (value instanceof File) {
+        // read file as blob (we can store file as blob since idb supports it)
+        fdEntries.push({ key, value, isFile: true, name: (value as File).name, type: (value as File).type });
+      } else {
+        fdEntries.push({ key, value, isFile: false });
+      }
+    });
+
+    const entry: QueueEntry = {
+      url: `${URL}/create-bulk-classroom/${schoolID}`,
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      bodyType: 'formdata',
+      body: fdEntries,
+    };
+
+    const id = await enqueue(entry);
+    return { queued: true, id };
+  }
+
+  // if online, fallback to normal request
+  return await bulkUploadofClassroom(schoolID, formData);
+};
+
 export const bulkUploadofTeachers = async (schoolID: string, data: any) => {
   try {
     const config: any = {

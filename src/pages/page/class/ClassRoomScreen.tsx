@@ -16,7 +16,7 @@ import {
 import lodash from "lodash";
 import Input from "../../../components/reUse/Input";
 import toast from "react-hot-toast";
-import { bulkUploadofClassroom } from "@/pages/api/schoolAPIs";
+import { bulkUploadofClassroomWithQueue } from "@/pages/api/schoolAPIs";
 
 interface iProps {
   props?: any;
@@ -78,19 +78,30 @@ const [file, setFile] = useState();
 const [toggle, setToggle] = useState<boolean>(false);
 
 
-  const handleBulkClassroom = () => {
+  const handleBulkClassroom = async () => {
+    if (!file) return;
     setToggle(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file as any);
 
-    bulkUploadofClassroom(data?._id, formData)
-      .then(() => {
-        toast.success("Class data Have Been Successfully Imported");
-        mutate(`api/view-classrooms`);
-      })
-      .finally(() => {
-        setToggle(false);
-      });
+    try {
+      const res: any = await bulkUploadofClassroomWithQueue(data?._id, formData as any);
+      if (res && res.queued) {
+        toast.success('Upload queued — will be submitted when online');
+      } else {
+        toast.success('Class data Have Been Successfully Imported');
+      }
+
+      // revalidate classroom list
+      if (mutate) await mutate("api/view-classrooms/");
+    } catch (err) {
+      toast.error('Failed to upload class data');
+    } finally {
+      setToggle(false);
+      setFile(undefined as any);
+      const inputEl = document.getElementById('file') as HTMLInputElement | null;
+      if (inputEl) inputEl.value = '';
+    }
   };
 
   return (
