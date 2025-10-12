@@ -31,7 +31,7 @@ const PreviewExamination: FC<any> = ({
     });
   }, []);
 
-  console.log(subjectQuiz, subjectQuiz?.classDetails, subjectID);
+  console.log(subjectQuiz?.subjectClassID);
 
   return (
     <div>
@@ -59,12 +59,12 @@ const PreviewExamination: FC<any> = ({
           formData.append("theory", editorValue);
 
           createExaminationData(
-            subjectQuiz?.classDetails!,
+            subjectQuiz?.subjectClassID!,
             subjectID!,
             formData
           )
             .then((res: any) => {
-              console.log("res: ",res)
+              console.log("res: ", res);
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);

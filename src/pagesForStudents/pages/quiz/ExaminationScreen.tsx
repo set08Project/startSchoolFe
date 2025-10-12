@@ -29,7 +29,6 @@ const ExaminationTestScreen = () => {
 
   const courseID = quizData?.subjectID;
 
-  console.log(quizData);
 
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
@@ -61,7 +60,8 @@ const ExaminationTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === examID && el?.quizDone
   );
-  const timer = parseInt(quizData?.quiz?.instruction?.duration);
+ 
+  const timer = parseInt(quizData?.quiz?.instruction?.duration || 1 );
   let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {

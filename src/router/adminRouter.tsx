@@ -190,6 +190,11 @@ import QuizSetupScreen from "@/pagesForTeachers/pages/quiz/QuizDetails";
 import ExamQuizSetupScreen from "@/pages/page/quizArea/QuizArea";
 import CreateMidQuizScreen from "@/pages/page/quizArea/CreateMidQuiz";
 import CreateExaminationScreen from "@/pages/page/quizArea/CreateExamination";
+import ExamResultSetupRecordScreen from "@/pages/page/quizArea/ExamResultPerformance";
+import MidTestResultPerformanceScreen from "@/pages/page/quizArea/MidTestResultPerformance";
+import ExaminationPreviewScreen from "@/pages/page/quizArea/ExaminationPreview";
+import MidTestPreviewScreen from "@/pages/page/quizArea/MidTestPreviewScreen";
+import SubjectGradeCard from "@/pages/page/subject/SubjectGradeCard";
 
 const BroadSheetReportCardApproved = React.lazy(
   () => import("@/pages/page/ResultHistory/BoardSheet")
@@ -414,11 +419,39 @@ export const adminRouter = createBrowserRouter([
             ),
           },
           {
+                  path: "final-exam-grade/:subjectID/:examID",
+                  element: (
+                    <Suspense fallback={<LoadingScreen />}>
+                      <SubjectGradeCard />
+                    </Suspense>
+                  ),
+                },
+          {
             index: true,
             path: "result-history/:termID/:session/:term",
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <Result />
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "examination-preview-details/:subjectID/:quizID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {/* <div>Start</div> */}
+                <ExaminationPreviewScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "mid-test-preview-details/:subjectID/:quizID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                {/* <div>Start</div> */}
+                <MidTestPreviewScreen />
               </Suspense>
             ),
           },
@@ -544,6 +577,26 @@ export const adminRouter = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ExamQuizSetupScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "exam/detail-record/:subjectID/:examID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ExamResultSetupRecordScreen />
+              </Suspense>
+            ),
+          },
+
+          {
+            index: true,
+            path: "quiz/detail-record/:subjectID/:midQuizID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <MidTestResultPerformanceScreen />
               </Suspense>
             ),
           },

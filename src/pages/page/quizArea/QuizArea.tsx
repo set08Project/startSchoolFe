@@ -144,7 +144,9 @@ const ExamQuizSetupScreen = () => {
                 + Create Exam
               </p>
             </Link>
-            <Link to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}>
+            <Link
+              to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}
+            >
               <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-2 rounded-sm uppercase text-center">
                 + Record Report Card Scores
               </p>
@@ -195,11 +197,11 @@ const ExamQuizSetupScreen = () => {
                     {examination?.exam?.session}
                   </p>
                   <p className="font-bold text-[20px]">
-                     {examination?.exam?.subjectTitle}
+                    {examination?.exam?.subjectTitle}
                   </p>
                 </div>
                 <Link
-                  to={`/exam/details/${subjectID}/${examination?.exam?._id}`}
+                  to={`/exam/detail-record/${subjectID}/${examination?.exam?._id}`}
                 >
                   <MdPlayCircle
                     size={40}
@@ -307,7 +309,7 @@ const ExamQuizSetupScreen = () => {
                   )}
                 </div>
                 <Link
-                  to={`/examination-preview-details/${subjectID}/${examination?._id}`}
+                  to={`/examination-preview-details/${subjectID}/${examination?.exam?._id}`}
                   className={`mt-10 cursor-pointer flex gap-3 items-center 
                    bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
                 >
@@ -364,7 +366,7 @@ const ExamQuizSetupScreen = () => {
                     {midTest?.subjectTitle}
                   </p>
                 </div>
-                <Link to={`/mid-test/details/${subjectID}/${midTest?._id}`}>
+                <Link to={`/quiz/detail-record/${subjectID}/${midTest?._id}`}>
                   <MdPlayCircle
                     size={40}
                     className="opacity-60 text-red-600 hover:text-red-400 transition-all duration-300"

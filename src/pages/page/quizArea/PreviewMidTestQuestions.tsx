@@ -30,24 +30,26 @@ const PreviewMidTestScreen: FC<any> = ({
   const [state, setState] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
 
+  console.log("subjectQuiz: ", subjectQuiz);
+
   useEffect(() => {
     readClassInfo(subjectQuiz?.designated).then((res: any) => {
       setState(res.data);
     });
   }, []);
-  console.log("classes: ", state);
+  
 
   return (
     <div>
       <Button
         name={
           loading ? (
-            <div className="gap-3 flex items-center justify-center">
-              <FaSpinner className="animate-spin text-[15px]" />{" "}
-              <span>Loading...</span>
+            <div className="gap-3 flex items-center justify-center !text-white">
+              <FaSpinner className="animate-spin text-[15px] !text-white" />{" "}
+              <span className="text-white">Loading...</span>
             </div>
           ) : (
-            "Publish Question"
+            <span className="text-white">Publish Question</span>
           )
         }
         className={`text-black border mt-50 ${
@@ -62,7 +64,7 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("file", file);
           formData.append("theory", editorValue);
 
-          createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
+          createMidTestData(subjectQuiz?.classDetails!,subjectID!, formData)
             .then((res: any) => {
               if (res.status === 201) {
                 // This will trigger an immediate revalidation of the mid test data
