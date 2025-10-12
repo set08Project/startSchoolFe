@@ -60,8 +60,8 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
               </div>
               <div className="flex mb-">
                 <Link to={`/subjects/${props?._id}`} className="font-medium">
-                  <p className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 rounded-md text-white text-[12px] px-6 py-1 cursor-pointer">
-                    Goto Quiz Area
+                  <p className="bg-blue-950 hover:bg-blue-900 transition-all duration-300 rounded-md text-white text-[12px] px-6 py-2 cursor-pointer">
+                    Goto CBT Area
                   </p>
                 </Link>
               </div>

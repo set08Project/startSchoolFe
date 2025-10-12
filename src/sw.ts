@@ -5,7 +5,7 @@ import { registerRoute } from 'workbox-routing';
 import { NetworkFirst, CacheFirst } from 'workbox-strategies';
 
 // self.__WB_MANIFEST will be injected by the plugin when using injectManifest
-precacheAndRoute(self.__WB_MANIFEST || []);
+precacheAndRoute((self as any).__WB_MANIFEST || []);
 
 registerRoute(/\/api\//, new NetworkFirst({ cacheName: 'api-cache' }));
 registerRoute(/\.(?:png|jpg|jpeg|svg|webp|gif)$/, new CacheFirst({ cacheName: 'image-cache' }));

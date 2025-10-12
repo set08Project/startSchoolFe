@@ -1,13 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import Button from "../../components/reUse/Button";
-import { createQuiz, readClassInfo } from "../../api/teachersAPI";
+import Button from "@/components/reUse/Button";
+// import { , readClassInfo } from "../../api/teachersAPI";
 import { displayEmptyTest } from "../../../global/reduxState";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSujectQuiz } from "../../hooks/useTeacher";
+// import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import { FaSpinner } from "react-icons/fa";
+import { readClassInfo, createQuiz } from "@/pagesForTeachers/api/teachersAPI";
+import { useSujectQuiz } from "@/pagesForTeachers/hooks/useTeacher";
 
 const PreviewTest = () => {
   const navigate = useNavigate();

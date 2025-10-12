@@ -96,7 +96,7 @@ const ClassSubjectScreen: FC = () => {
               <div className="flex">
                 <Link to={`/subjects/${props?._id}`} >
                   <p className="text-[12px] font-medium bg-blue-950 hover:bg-blue-900 cursor-pointer text-white rounded-md py-2 px-4">
-                    Goto Quiz Area
+                    Goto CBT Area
                   </p>
                 </Link>
               </div>
