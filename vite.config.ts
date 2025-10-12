@@ -57,9 +57,11 @@ export default defineConfig({
         theme_color: "#172554",
         description: "The Next Generation Tooling for Educators!",
       },
-      // point to our custom service worker source
+      // point to our custom service worker source (path is relative to `srcDir`)
       injectManifest: {
-        swSrc: 'src/sw.ts',
+        // Use an absolute path for the service worker source so Rollup resolves it reliably
+        // (some environments / plugin versions resolve differently if swSrc is relative)
+        swSrc: path.resolve(__dirname, 'src', 'sw.js'),
       },
     }),
   ],
