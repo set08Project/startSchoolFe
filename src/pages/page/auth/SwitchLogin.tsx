@@ -106,7 +106,7 @@ const SwitchLogin = () => {
         </div>
       </div>
 
-      <div className="flex justify-center w-full">
+      {/* <div className="flex justify-center w-full">
         <div className="flex w-[80%] md:w-[500px] ">
           <Button
             className="bg-black font-semibold py-4 ml-0 flex-1"
@@ -119,8 +119,8 @@ const SwitchLogin = () => {
             onClick={changeTokenDisplay}
           />
         </div>
-      </div>
-      {token ? (
+      </div> */}
+      {!token ? (
         <div
           className="rounded-md bg-white transition-all duration-300 min-h-[200px] w-[80%] md:w-[500px] border p-4"
           // onSubmit={handleSubmit}
@@ -153,7 +153,7 @@ const SwitchLogin = () => {
               name={
                 loading ? "Loading..." : "Teacher Login with Email/Password"
               }
-              className="w-[97%] bg-neutral-950 text-white h-14 hover:bg-neutral-800 transition-all duration-300"
+              className="w-[97%] text-[16px] bg-neutral-950 text-white h-14 hover:bg-neutral-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmit}
               icon={loading && <ClipLoader color="white" size={18} />}
@@ -185,10 +185,11 @@ const SwitchLogin = () => {
           <div>
             <Button
               name={loading ? "Loading..." : "Teacher Login with EnrollmentID"}
-              className="w-[97%] bg-blue-950 text-white h-14 hover:bg-blue-800 transition-all duration-300"
+              className="w-[97%] !text-[16px bg-blue-950 text-white h-14 hover:bg-blue-800 transition-all duration-300"
               type="submit"
               onClick={handleSubmitToken}
               icon={loading && <ClipLoader color="white" size={18} />}
+              style={{ fontSize: "16px" }}
             />
 
             <div className="text-[12px] ml-2 font-bold cursor-pointer">

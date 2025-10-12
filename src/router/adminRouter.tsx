@@ -419,13 +419,13 @@ export const adminRouter = createBrowserRouter([
             ),
           },
           {
-                  path: "final-exam-grade/:subjectID/:examID",
-                  element: (
-                    <Suspense fallback={<LoadingScreen />}>
-                      <SubjectGradeCard />
-                    </Suspense>
-                  ),
-                },
+            path: "final-exam-grade/:subjectID/:examID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SubjectGradeCard />
+              </Suspense>
+            ),
+          },
           {
             index: true,
             path: "result-history/:termID/:session/:term",

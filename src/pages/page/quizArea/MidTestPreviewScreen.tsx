@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../../../components/reUse/Button";
-import LittleHeader from "../../../components/layout/LittleHeader";
+import Button from "@/components/reUse/Button";
+import LittleHeader from "@/components/layout/LittleHeader";
 import {
   useExamination,
   useMidTest,
   useQuiz,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import toast, { Toaster } from "react-hot-toast";
-import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
-import { MdPlayCircle } from "react-icons/md";
+
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
@@ -69,7 +68,6 @@ const MidTestPreviewScreen = () => {
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
 
-  console.log(examination?.quiz?.theory);
 
   return (
     <div>

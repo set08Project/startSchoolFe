@@ -102,7 +102,7 @@ const StudentLogin = () => {
           Sign in as Student or Parent to continue your Experience.
         </div>
       </div>
-
+      {/* / 
       <div className="flex justify-center w-full">
         <div className="flex w-[80%] md:w-[500px] ">
           <Button
@@ -116,7 +116,8 @@ const StudentLogin = () => {
             onClick={changeTokenDisplay}
           />
         </div>
-      </div>
+      </div>*/}
+
       {token ? (
         <div
           className="rounded-md bg-white transition-all duration-300 min-h-[200px] w-[80%] md:w-[500px] border-[2px] p-4"
@@ -190,6 +191,7 @@ const StudentLogin = () => {
               type="submit"
               onClick={handleSubmitToken}
               icon={loading && <ClipLoader color="white" size={18} />}
+              style={{ fontSize: "16px" }}
             />
 
             <div className="text-[12px] ml-2 font-bold cursor-pointer">

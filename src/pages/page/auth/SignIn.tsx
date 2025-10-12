@@ -132,6 +132,7 @@ const SignIn = () => {
             type="submit"
             onClick={handleSubmit}
             icon={loading && <ClipLoader color="white" size={18} />}
+            style={{ fontSize: "18px" }}
           />
 
           <div className="flex gap-[9px] md:gap-5 items-center flex-col sm:flex-row mt-5 mx-3 justify-between">
