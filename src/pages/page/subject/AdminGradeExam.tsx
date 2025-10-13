@@ -84,7 +84,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
   const makeGrade = () => {
     try {
       setLoading(true);
-      createGradeScore(teacherID.toString(), props?._id, {
+      createGradeScore( props?._id, {
         subject: subjectInfo?.subjectTitle,
         test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
