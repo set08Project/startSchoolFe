@@ -322,12 +322,12 @@ const Sider = () => {
       </div>
       <div>
         <Toaster />
-        <div className="mt-2 flex items-center gap-2">
+        {/* <div className="mt-2 flex items-center gap-2">
           <button onClick={() => setShowQueueAdmin(true)} className="px-3 py-2 bg-neutral-100 rounded flex items-center gap-2">
             Queued Requests
             {queuedCount > 0 && <span className="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">{queuedCount}</span>}
           </button>
-        </div>
+        </div> */}
         {data?.categoryType === "Secondary" ||
         data?.schoolTags[0]?.val === "Secondary School." ? (
           <SecondaryAdminScreen />

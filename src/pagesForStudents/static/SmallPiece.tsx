@@ -97,7 +97,7 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
           propName === "navs" ? "smallph h-[500px] overflow-y-auto" : ""
         }`}
       >
-        {state ? "Now" : "No no"}
+        
         {name?.map(({ title, icon, to }, i: number) => (
           <NavLink
             key={i}

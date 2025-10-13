@@ -190,13 +190,13 @@ const SmallPiece: FC<iProps> = ({ log, name, but, propName }) => {
       <hr />
 
       <p className="p-2 text-center break-words text-[12px] font-bold uppercase ">
-        {data?.presentTerm === "1st Term" && (
+        {/* {data?.presentTerm === "1st Term" && (
           <div className="mt-4 mb-2 px-2 text-center flex flex-col justify-center items-center border mx-2 rounded-md py-2">
             <div className=" text-[13px] font-medium ">
               <Countdown style1="14px" style2="12px" />
             </div>
           </div>
-        )}
+        )} */}
 
         {data?.schoolName}
       </p>

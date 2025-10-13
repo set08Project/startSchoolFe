@@ -32,14 +32,14 @@ export const Countdown: React.FC<{ style1?: string; style2?: string }> = ({
 
   return (
     <div>
-      <h1 className={`leading-[1.2] mb-2 text-[${style2}]`}>
+      {/* <h1 className={`leading-[1.2] mb-2 text-[${style2}]`}>
         Countdown to Start <br />
         2nd Term
       </h1>
       <h2 className={`text-red-500 text-[${style1}] uppercase font-semibold`}>
         {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m{" "}
         {timeLeft.seconds}s
-      </h2>
+      </h2> */}
     </div>
   );
 };
