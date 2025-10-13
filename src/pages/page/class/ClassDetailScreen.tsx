@@ -909,7 +909,7 @@ const ClassDetailScreen = () => {
           <ViewClassStudent />
         </div>
       </div>
-      <div className="my-4">view All Result for Printing</div>
+      {/* <div className="my-4">view All Result for Printing</div>
       <button
         onClick={() => {
           setLoadingState(!loadingState);
@@ -924,7 +924,7 @@ const ClassDetailScreen = () => {
         className="mb-5 bg-blue-950"
       >
         🖨️ {loadingState ? "Viewing Student" : "Print All Results"}
-      </button>
+      </button> */}
 
       {loadingState && (
         <div ref={targetRef} style={{ height: "100%" }}>
