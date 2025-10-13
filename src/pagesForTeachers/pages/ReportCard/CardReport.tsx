@@ -66,6 +66,9 @@ const ButtonReport: FC<iProps> = ({ stateValue, props, teacherInfo }) => {
     );
   });
 
+
+  console.log("gradeData: ", stateValue);
+
   return (
     <div className="w-[180px] border-r">
       <Button
@@ -106,9 +109,8 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
             (el) => el?.year === schoolAnnouncement?.presentSession
           )?.year
         }(${
-          schoolInfo?.find(
-            (el) => el?.presentTerm === schoolAnnouncement?.presentTerm
-          )?.presentTerm
+          (schoolAnnouncement?.presentTerm
+          )
         })`
       );
     })
@@ -171,11 +173,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
         schoolInfo?.find(
           (el) => el?.year === schoolAnnouncement?.presentSession
         )?.year
-      }(${
-        schoolInfo?.find(
-          (el) => el?.presentTerm === schoolAnnouncement?.presentTerm
-        )?.presentTerm
-      })`
+      }(${schoolAnnouncement?.presentTerm})`
     );
   });
 
@@ -183,7 +181,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
-  console.log("reading", result);
+
 
   return (
     <div
@@ -641,6 +639,7 @@ const CardReport = () => {
   const [toggle, setToggle] = useState<boolean>(true);
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
+
 
   return (
     <div className="">

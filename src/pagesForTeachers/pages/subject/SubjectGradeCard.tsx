@@ -143,7 +143,9 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
         examScore;
       const grade = calculateGrade(totalMark);
 
-      const response = await createGradeScore(teacherInfo?._id, props?._id, {
+      const response = await createGradeScore(
+        // teacherInfo?._id, 
+        props?._id, {
         subject: subjectInfo?.subjectTitle,
         test1: result?.test1 || 0,
         test2: result?.test2 || 0,

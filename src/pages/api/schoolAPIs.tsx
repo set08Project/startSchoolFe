@@ -515,9 +515,22 @@ export const deleteStudent = async (schoolID: string, studentID: string) => {
 
 export const outGoneStudent = async (schoolID: string, studentID: string) => {
   try {
-    const URL = "localhost:2244/api";
+    // const URL = "localhost:2244/api";
     return await axios
       .post(`${URL}/create-out-gone-student/${schoolID}/${studentID}`, null)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const viewOutGoneStudent = async (schoolID: string, ) => {
+  try {
+    // const URL = "localhost:2244/api";
+    return await axios
+      .get(`${URL}/view-out-gone-student/${schoolID}`, null)
       .then((res: any) => {
         return res;
       });

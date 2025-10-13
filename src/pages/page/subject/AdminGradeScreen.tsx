@@ -49,17 +49,12 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
 
   const { schoolInfo } = useSchoolSessionData(data?._id);
 
-  console.clear();
-  console.log(data);
 
-  const [test1, setTest1] = useState("0");
-  const [test2, setTest2] = useState("0");
-  const [test3, setTest3] = useState("0");
-  const [test4, setTest4] = useState("0");
-  const [exam, setExam] = useState("0");
+
 
   const { gradeData } = useStudentGrade(props?._id);
 
+  
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
@@ -67,9 +62,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         schoolInfo &&
         schoolInfo?.find((el) => el.year === data?.presentSession)?.year
       }(${
-        schoolInfo &&
-        schoolInfo?.find((el) => el.presentTerm === data?.presentTerm)
-          ?.presentTerm
+       (data?.presentTerm)
       })`
     );
   });
@@ -85,14 +78,42 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         `${props?.studentFirstName} ${props?.studentLastName}`
       );
     });
-
+    
     return readData;
   };
+
+    const [test1, setTest1] = useState("0");
+    const [test2, setTest2] = useState("0");
+    const [test3, setTest3] = useState("0");
+    // initialize from result (DB) but keep them controlled so user edits still work
+    const [test4, setTest4] = useState<string>(() =>
+      result?.test4 !== undefined && result?.test4 !== null ? String(result.test4) : "0"
+    );
+    const [exam, setExam] = useState<string>(() =>
+      result?.exam !== undefined && result?.exam !== null ? String(result.exam) : "0"
+    );
+
+    // Keep inputs in sync with DB values: whenever `result` changes, update test4/exam
+    // This ensures values added/updated in the backend are reflected in the inputs.
+    useEffect(() => {
+      if (result) {
+        if (result.test4 !== undefined && result.test4 !== null) {
+          setTest4(String(result.test4));
+        }
+        if (result.exam !== undefined && result.exam !== null) {
+          setExam(String(result.exam));
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [result?.test4, result?.exam]);
+
 
   const makeGrade = () => {
     try {
       setLoading(true);
-      createGradeScore(teacherID.toString(), props?._id, {
+      createGradeScore(
+        // teacherID.toString(), 
+        props?._id, {
         subject: subjectInfo?.subjectTitle,
         test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
@@ -112,6 +133,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
       return error.stack;
     }
   };
+
 
   return (
     <div

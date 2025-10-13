@@ -880,14 +880,14 @@ export const updateTeacherAvatar = async (teacherID: string, data: string) => {
 };
 
 export const createGradeScore = async (
-  teacherID: string,
+  
   studentID: string,
   data: {}
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
     return await axios
-      .post(`${URL}/create-report-card/${teacherID}/${studentID}`, data)
+      .post(`${URL}/create-report-card/${studentID}`, data)
       .then((res: any) => {
         return res?.data;
       });
@@ -897,15 +897,15 @@ export const createGradeScore = async (
 };
 
 export const createMidGradeScore = async (
-  teacherID: string,
+  // teacherID: string,
   studentID: string,
   data: {}
 ) => {
   try {
     return await axios
-      .post(`${URL}/create-mid-report-card/${teacherID}/${studentID}`, data)
+      .post(`${URL}/create-mid-report-card/${studentID}`, data)
       .then((res: any) => {
-        console.log("mid: ", res.data);
+      
         return res?.data;
       });
   } catch (error) {

@@ -235,6 +235,8 @@ const ViewStudent = () => {
       setShowButton(true);
       setLoading(true);
       outGoneStudent(schoolID, studentID).then((res) => {
+        console.log("OUT", res)
+
         if (res.status === 200) {
           toast.success("Student Has Been Successfully Deleted");
           setShowButton(false);

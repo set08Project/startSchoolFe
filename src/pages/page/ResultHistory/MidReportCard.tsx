@@ -94,6 +94,7 @@ interface iProps {
 const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+  const {data} = useSchoolData()
 
   const { state } = useReadMyClassInfoData("JSS 1A");
   const { subjectData } = useClassSubject(state?._id);
@@ -102,12 +103,14 @@ const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
     .find((el: any) => {
       return (
         el.classInfo ===
-        `${props?.classAssigned} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
+        `${props?.classAssigned} session: ${data?.presentSession}(${data?.presentTerm})`
       );
     })
     ?.result?.find((data: any) => {
       return data.subject === el?.subjectTitle;
     });
+
+    
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
@@ -158,8 +161,8 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
   let result = gradeMidData?.midReportCard.find((el: any) => {
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${schoolInfo![0]!?.year}(${
-        schoolInfo![0]!?.presentTerm
+      `${props?.classAssigned} session: ${data?.presentSession}(${
+        data!?.presentTerm
       })`
     );
   });

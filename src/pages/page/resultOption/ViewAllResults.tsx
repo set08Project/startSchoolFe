@@ -8,8 +8,10 @@ import { Link, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import crypto from "crypto";
 import {
+  useOutGoneSchoolStudents,
   useSchoolCookie,
   useSchoolData,
+  useSchoolStudentDetail,
   useSchoolStudents,
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
@@ -40,6 +42,7 @@ import { useReactToPrint } from "react-to-print";
 
 interface iProps {
   props?: any;
+  i?: any;
   id?: string;
   data?: any;
 }
@@ -76,29 +79,64 @@ const Remark: FC<iProps> = ({ id, data }) => {
   );
 };
 
-const AttendanceRatio: FC<iProps> = ({ props }) => {
-  const { mainStudentAttendance } = useStudentAttendance(props?._id);
-
+const StudentData: FC<iProps> = ({ props, i }) => {
+  const { studentDetails } = useSchoolStudentDetail(props);
   return (
-    <div>
-      {(mainStudentAttendance?.data?.attendance?.filter(
-        (el: any) => el.present === true
-      )?.length /
-        mainStudentAttendance?.data?.attendance?.length) *
-      100 ? (
-        <div>
-          {(
-            (mainStudentAttendance?.data?.attendance?.filter(
-              (el: any) => el.present === true
-            )?.length /
-              mainStudentAttendance?.data?.attendance?.length) *
-            100
-          ).toFixed(2)}
-          %
+    <div
+      key={props}
+      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+        i % 2 === 0 ? "bg-slate-50" : "bg-white"
+      }`}
+    >
+      <div className="w-[50px] border-r">{i + 1}</div>
+      {/* Image and Name */}
+      <div className="w-[150px] flex justify-center border-r">
+        <img
+          className="w-14 h-14 rounded-md border object-cover"
+          src={studentDetails?.data?.avtar ? studentDetails?.data?.avatar : pix}
+        />
+      </div>
+      <div className="w-[200px] border-r gap-2 font-bold">
+        {studentDetails?.data?.studentFirstName}{" "}
+        {studentDetails?.data?.studentLastName}
+        <div className="text-slate-500 font-medium">
+          RegID: {studentDetails?.data?.enrollmentID}
         </div>
-      ) : (
-        <p>0%</p>
-      )}
+      </div>
+      <div className="w-[130px] border-r">
+        {moment(studentDetails?.data?.createdAt).format("ll")}
+      </div>
+
+      <div className="w-[100px] border-r">{studentDetails?.data?.gender}</div>
+
+      {/* <div className="w-[100px] border-r  ">
+        {studentDetails?.data?.classAssigned}
+      </div> */}
+      <div className="w-[150px] border-r  ">
+        {studentDetails?.data?.phone
+          ? studentDetails?.data?.phone
+          : "Not yet Added"}
+      </div>
+      <div className="w-[200px] border-r  ">
+        {studentDetails?.data?.studentAddress
+          ? studentDetails?.data?.studentAddress
+          : "Not yet Added"}
+      </div>
+
+      <div className="w-[80px] border-r">3 of 5</div>
+      <Link
+        to={`/viewing-student-result-history/${studentDetails?.data?._id}`}
+        className="w-[180px] border-r"
+      >
+        <Button
+          name="View Detail"
+          className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
+          onClick={() => {}}
+        />
+      </Link>
+
+      {/* Delete Toggle Modal And Fuctions Are Below */}
+      
     </div>
   );
 };
@@ -125,6 +163,7 @@ const ViewAllStudentResult = () => {
 
   const { data: UI } = useSchoolData();
   const { students } = useSchoolStudents(UI?._id);
+  const {outStudents} = useOutGoneSchoolStudents(UI?._id!);
   const [viewstudent1stfees, setViewStudent1stFees] = useState(false);
   const [viewstudent2ndfees, setViewStudent2ndFees] = useState(false);
   const [viewstudent3rdfees, setViewStudent3rdFees] = useState(false);
@@ -261,8 +300,25 @@ const ViewAllStudentResult = () => {
     return fullName.includes(searchStudents.toLowerCase());
   });
 
+
+  const sortedStudentsII = outStudents?.data?.outGoneStudents?.sort(
+    (a: any, b: any) => a.studentName?.localeCompare(b.studentName)
+  );
+  // Search Function
+
+
+  const filteredStudentsII = sortedStudentsII?.filter((student: any) => {
+    const fullName =
+      `${student?.studentName}`.toLowerCase();
+    return fullName.includes(searchStudents.toLowerCase());
+  });
+
+
   const [stateID, setStateID] = useState<string>("");
+  const [toggleHistory, setToggleHistory] = useState<boolean>(true);
   const [toggleView, setToggleView] = useState<boolean>(false);
+
+ 
   return (
     <div className="relative">
       {/* header */}
@@ -281,11 +337,27 @@ const ViewAllStudentResult = () => {
 
         <div className="mb-3 sm:mb-0 flex items-center">
           <Button
-            name="Add a new Student"
-            className="uppercase md:text-[12px] text-[11px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
-            onClick={handleDisplayStaff}
+            name={`${
+              toggleHistory
+                ? "Viewing Present students"
+                : "Viewing Out-Gone students"
+            }`}
+            className={`uppercase md:text-[12px] text-[11px] font-medium  py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 cursor-pointer transition-all duration-300 ${
+              toggleHistory
+                ? "bg-blue-950 hover:bg-blue-900"
+                : "bg-red-500 hover:bg-red-600"
+            } `}
+            onClick={() => {
+              if (!document?.startViewTransition) {
+                setToggleHistory(!toggleHistory);
+              } else {
+                document?.startViewTransition(() => {
+                  setToggleHistory(!toggleHistory);
+                });
+              }
+            }}
           />
-          <input
+          {/* <input
             id="file"
             type="file"
             accept=".csv"
@@ -293,9 +365,9 @@ const ViewAllStudentResult = () => {
             onChange={(e: any) => {
               setFile(e.target.files[0]);
             }}
-          />
+          /> */}
 
-          {file ? (
+          {/* {file ? (
             <Button
               name={
                 toggle ? (
@@ -317,102 +389,104 @@ const ViewAllStudentResult = () => {
             >
               upload file for Bulk Entry
             </label>
-          )}
+          )} */}
         </div>
       </div>
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
-        <div className="text-[gray] w-[1520px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
-          <div className="w-[50px] border-r">S/N</div>
-          <div className="w-[150px] border-r">student Image</div>
-          <div className="w-[200px] border-r">student Name</div>
-          <div className="w-[130px] border-r">Reg. Date</div>
 
-          <div className="w-[100px] border-r">Gender</div>
+      {toggleHistory ? (
+        <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
+          <div className="text-[gray] w-[1520px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+            <div className="w-[50px] border-r">S/N</div>
+            <div className="w-[150px] border-r">student Image</div>
+            <div className="w-[200px] border-r">student Name</div>
+            <div className="w-[130px] border-r">Reg. Date</div>
 
-          <div className="w-[100px] border-r">student Class</div>
+            <div className="w-[100px] border-r">Gender</div>
 
-          <div className="w-[150px] border-r">Parent Contact</div>
-          <div className="w-[200px] border-r">Address </div>
+            <div className="w-[100px] border-r">student Class</div>
 
-          <div className="w-[80px] border-r">Rate</div>
-          <div className="w-[180px] border-r">View Detail</div>
-          <div className="w-[180px] border-r">Add Student Results</div>
-        </div>
+            <div className="w-[150px] border-r">Parent Contact</div>
+            <div className="w-[200px] border-r">Address </div>
 
-        <div className=" w-[1520px] overflow-hidden">
-          {filteredStudents?.length >= 0 ? (
-            <div>
-              {filteredStudents?.map((props: any, i: number) => {
-                return (
-                  <div>
+            <div className="w-[80px] border-r">Rate</div>
+            <div className="w-[180px] border-r">View Detail</div>
+            <div className="w-[180px] border-r">Add Student Results</div>
+          </div>
+
+          <div className=" w-[1520px] overflow-hidden">
+            {filteredStudents?.length >= 0 ? (
+              <div>
+                {filteredStudents?.map((props: any, i: number) => {
+                  return (
                     <div>
-                      <div
-                        key={props}
-                        className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
-                          i % 2 === 0 ? "bg-slate-50" : "bg-white"
-                        }`}
-                      >
-                        <div className="w-[50px] border-r">{i + 1}</div>
-                        {/* Image and Name */}
-                        <div className="w-[150px] flex justify-center border-r">
-                          <img
-                            className="w-14 h-14 rounded-md border object-cover"
-                            src={props?.avtar ? props?.avatar : pix}
-                          />
-                        </div>
-                        <div className="w-[200px] border-r gap-2 font-bold">
-                          {props?.studentFirstName} {props?.studentLastName}
-                          <div className="text-slate-500 font-medium">
-                            RegID: {props?.enrollmentID}
-                          </div>
-                        </div>
-                        <div className="w-[130px] border-r">
-                          {moment(props?.createdAt).format("ll")}
-                        </div>
-
-                        <div className="w-[100px] border-r">
-                          {props?.gender}
-                        </div>
-
-                        <div className="w-[100px] border-r  ">
-                          {props?.classAssigned}
-                        </div>
-                        <div className="w-[150px] border-r  ">
-                          {props?.phone ? props?.phone : "Not yet Added"}
-                        </div>
-                        <div className="w-[200px] border-r  ">
-                          {props?.studentAddress
-                            ? props?.studentAddress
-                            : "Not yet Added"}
-                        </div>
-
-                        <div className="w-[80px] border-r">3 of 5</div>
-                        <Link
-                          to={`/viewing-student-result-history/${props?._id}`}
-                          className="w-[180px] border-r"
-                        >
-                          <Button
-                            name="View Detail"
-                            className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
-                            onClick={() => {}}
-                          />
-                        </Link>
-
-                        {/* Delete Toggle Modal And Fuctions Are Below */}
+                      <div>
                         <div
-                          className="w-[180px] border-r"
-                          onClick={() => {
-                            valueStored.push(props?._id);
-                          }}
+                          key={props}
+                          className={`w-full flex items-center gap-2 text-[12px] font-medium  h-16 px-4 my-2  overflow-hidden ${
+                            i % 2 === 0 ? "bg-slate-50" : "bg-white"
+                          }`}
                         >
+                          <div className="w-[50px] border-r">{i + 1}</div>
+                          {/* Image and Name */}
+                          <div className="w-[150px] flex justify-center border-r">
+                            <img
+                              className="w-14 h-14 rounded-md border object-cover"
+                              src={props?.avtar ? props?.avatar : pix}
+                            />
+                          </div>
+                          <div className="w-[200px] border-r gap-2 font-bold">
+                            {props?.studentFirstName} {props?.studentLastName}
+                            <div className="text-slate-500 font-medium">
+                              RegID: {props?.enrollmentID}
+                            </div>
+                          </div>
+                          <div className="w-[130px] border-r">
+                            {moment(props?.createdAt).format("ll")}
+                          </div>
+
+                          <div className="w-[100px] border-r">
+                            {props?.gender}
+                          </div>
+
+                          <div className="w-[100px] border-r  ">
+                            {props?.classAssigned}
+                          </div>
+                          <div className="w-[150px] border-r  ">
+                            {props?.phone ? props?.phone : "Not yet Added"}
+                          </div>
+                          <div className="w-[200px] border-r  ">
+                            {props?.studentAddress
+                              ? props?.studentAddress
+                              : "Not yet Added"}
+                          </div>
+
+                          <div className="w-[80px] border-r">3 of 5</div>
                           <Link
-                            to={`/view-student-result-history/${props?._id}`}
+                            to={`/viewing-student-result-history/${props?._id}`}
+                            className="w-[180px] border-r"
                           >
-                            <label className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center">
-                              Add Results
-                            </label>
+                            <Button
+                              name="View Detail"
+                              className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
+                              onClick={() => {}}
+                            />
                           </Link>
-                          {/* <input
+
+                          {/* Delete Toggle Modal And Fuctions Are Below */}
+                          <div
+                            className="w-[180px] border-r"
+                            onClick={() => {
+                              valueStored.push(props?._id);
+                            }}
+                          >
+                            <Link
+                              to={`/view-student-result-history/${props?._id}`}
+                            >
+                              <label className="py-3 px-1 w-[85%] border rounded-md bg-red-500 text-[12px] text-white transition-all duration-300 hover:scale-105 cursor-pointer inline-block text-center">
+                                Add Results
+                              </label>
+                            </Link>
+                            {/* <input
                             type="checkbox"
                             id="my_modal_delete"
                             className="modal-toggle"
@@ -497,19 +571,60 @@ const ViewAllStudentResult = () => {
                               </div>
                             </div>
                           </div> */}
+                          </div>
                         </div>
                       </div>
+                      <div className="text-end text-[12px] font-bold"></div>
                     </div>
-                    <div className="text-end text-[12px] font-bold"></div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div>No student yet</div>
-          )}
+                  );
+                })}
+              </div>
+            ) : (
+              <div>No student yet</div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
+          <div className="text-[gray] w-[1520px] z-50 flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+            <div className="w-[50px] border-r">S/N</div>
+            <div className="w-[150px] border-r">student Image</div>
+            <div className="w-[200px] border-r">student Name</div>
+            <div className="w-[130px] border-r">Reg. Date</div>
+
+            <div className="w-[100px] border-r">Gender</div>
+
+            {/* <div className="w-[100px] border-r">student Class</div> */}
+
+            <div className="w-[150px] border-r">Parent Contact</div>
+            <div className="w-[200px] border-r">Address </div>
+
+            <div className="w-[80px] border-r">Rate</div>
+            <div className="w-[180px] border-r">View Detail</div>
+          </div>
+
+          <div className=" w-[1520px] overflow-hidden">
+            {filteredStudentsII?.length >= 0 ? (
+              <div>
+                {filteredStudentsII?.map(
+                  (props: any, i: number) => {
+                    return (
+                      <div key={i}>
+                        <div>
+                          <StudentData props={props?.student} i={i} />
+                        </div>
+                        <div className="text-end text-[12px] font-bold"></div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            ) : (
+              <div>No student yet</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

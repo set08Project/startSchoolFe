@@ -35,6 +35,7 @@ import {
   viewTermDetail,
   analyticPayment,
   viewStudentHistory,
+  viewOutGoneStudent,
 } from "../api/schoolAPIs";
 import {
   viewSchoolClassroom,
@@ -231,10 +232,7 @@ export const useSchoolData = () => {
 };
 
 export const useSchoolDataByName = (schoolName: string) => {
-  // const hasCache = (key: string): boolean => {
-  //   const cache = JSON.parse(localStorage.getItem("app-cache") || "[]");
-  //   return cache.some((entry: [string, any]) => entry[0] === key);
-  // };
+
   const x = `api/view-school/${schoolName}/reading-from-school-name`;
 
   const hasCache = sessionStorage.getItem(x) !== "false";
@@ -1462,6 +1460,30 @@ export const useAllSchools = () => {
   };
 
   return { allSchool };
+};
+
+export const useOutGoneSchoolStudents = (schoolID:string) => {
+  const { data: outStudents } = useSWR(
+    `api/view-out-gone-student/${schoolID}`,
+    async () => {
+      return await viewOutGoneStudent(schoolID).then((res: any) => {
+        return res?.data;
+      });
+    },
+
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+      // revalidateOnMount: hasCache,
+    }
+  );
+
+  const handleUpdate = async (newData: any) => {
+    mutate(newData, false);
+  };
+
+  return { outStudents };
 };
 
 // Records Get all

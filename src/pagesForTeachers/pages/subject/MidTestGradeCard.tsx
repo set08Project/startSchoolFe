@@ -97,7 +97,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
   const makeGrade = () => {
     try {
       setLoading(true);
-      createMidGradeScore(teacherInfo?._id, props?._id, {
+      createMidGradeScore(
+        // teacherInfo?._id, 
+        props?._id, {
         subject: subjectInfo?.subjectTitle,
 
         test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
@@ -105,6 +107,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
         test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
         exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
       }).then((res) => {
+        console.log("grade: ", res);
         setLoading(false);
         // if (res.status === 201) {
         mutate(`api/student-report-card/${props?._id}`);

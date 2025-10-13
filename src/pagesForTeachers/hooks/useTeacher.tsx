@@ -892,6 +892,7 @@ export const useStudentGrade = (studentID: string) => {
     x,
     () => {
       return viewStudentGrade(studentID!).then((res) => {
+        
         return res.data;
       });
     },
