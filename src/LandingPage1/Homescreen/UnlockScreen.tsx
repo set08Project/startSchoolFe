@@ -3,16 +3,16 @@ import React from "react";
 const UnlockScreen = () => {
   const data = [
     {
-      count: 200,
+      count: 1200,
       title: "Satisfied Customers",
     },
     {
-      count: 5,
+      count: 25,
       title: "Schools",
     },
 
     {
-      count: 1,
+      count: 2,
       title: "Communities Entered",
     },
     // {

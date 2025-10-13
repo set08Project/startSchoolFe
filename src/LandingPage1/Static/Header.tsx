@@ -40,12 +40,12 @@ const Header = () => {
                 />
               </div>
               <div className="hidden uppercase font-medium  items-center text-[17px] gap-[30px] text-white md:flex">
-                <NavLink to="/" className=" cursor-pointer navhover">
+                {/* <NavLink to="/" className=" cursor-pointer navhover">
                   <div>Home</div>
-                </NavLink>
-                <NavLink to="/features" className=" cursor-pointer navhover">
+                </NavLink> */}
+                {/* <NavLink to="/features" className=" cursor-pointer navhover">
                   <div>Features</div>
-                </NavLink>
+                </NavLink> */}
 
                 {/* <NavLink
                 to=""
