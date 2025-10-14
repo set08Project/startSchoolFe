@@ -515,7 +515,7 @@ const ExamQuizSetupScreen = () => {
                     />
                   </div>
                   <div className="flex flex-col mt-5">
-                    <label className="text-[12px]">Time/Duration(Hours)</label>
+                    <label className="text-[12px]">ime/Duration(Hours)</label>
                     <select
                       className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
                       name="hour"

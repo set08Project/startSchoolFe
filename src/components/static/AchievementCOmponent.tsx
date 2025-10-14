@@ -5,7 +5,7 @@ const AchievementBadge = ({ emoji, color, count, label }) => {
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="relative">
-        <div 
+        <div
           className="w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-lg"
           style={{ background: color }}
         >
@@ -17,7 +17,7 @@ const AchievementBadge = ({ emoji, color, count, label }) => {
           </div>
         )}
       </div>
-      {label && <span className="text-xs text-gray-600">{label}</span>}
+      {label && <span className="text-xs text-blue-900">{label}</span>}
     </div>
   );
 };
@@ -57,28 +57,28 @@ const Achievements = () => {
       emoji: "⭐",
       color: "linear-gradient(135deg, #FFEE58 0%, #FDD835 100%)",
       count: 12,
-      label: "Star",
+      label: "Report Card",
     },
     {
       id: 6,
       emoji: "🏆",
       color: "linear-gradient(135deg, #66BB6A 0%, #43A047 100%)",
       count: 2,
-      label: "Winner",
+      label: "CBT Exams",
     },
     {
       id: 7,
       emoji: "💎",
       color: "linear-gradient(135deg, #26C6DA 0%, #00ACC1 100%)",
       count: 1,
-      label: "Gem",
+      label: "Perfomance",
     },
     {
       id: 8,
       emoji: "🚀",
       color: "linear-gradient(135deg, #AB47BC 0%, #8E24AA 100%)",
       count: 7,
-      label: "Rocket",
+      label: "Trackers",
     },
   ]);
 
@@ -86,7 +86,7 @@ const Achievements = () => {
     <div className="mx-3">
       <div className=" px-auto">
         <div className="bg-white rounded-md border shadow-lg p-2 py-4">
-          <h1 className="text-[16px] font-bold text-gray-900 mb-3">Achievements</h1>
+          <h1 className="text-[16px] font-bold text-blue-900 mb-3">Achievements</h1>
           
           <div className="flex flex-wrap gap-6 justify-center ">
             {achievements.map((achievement) => (

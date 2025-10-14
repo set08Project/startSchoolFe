@@ -204,7 +204,7 @@ const HomeScreen = () => {
 
         <div className="order-first sm:order-last col-span-1 p-2 rounded-md h-[200px] md:sticky transition-all duration-300 mt-4 top-[4.5rem] sm:top-16">
           <div className="py-0 col-span-1 border p-2 rounded-md min-h-[200px] transition-all duration-300 -mt-5">
-            <div className="font-[700] text-[14px] mb-5 flex justify-center items-center">
+            <div className="font-[700] text-[14px] mb-5 flex justify-center items-center mt-3">
               {/* <GeneralDataScreen /> */}
               <div>Quick Actions</div>
               <div className="text-blue-950 text-[17px] ml-2">
