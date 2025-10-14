@@ -8,15 +8,49 @@ import { mutate } from 'swr';
 
 const updateSW = registerSW({
   onNeedRefresh() {
+    // Only prompt the user once per actual new service worker script (avoid repeat prompts on reload/new tabs)
     try {
-      const promptKey = 'ss-sw-prompted';
-      // only show the prompt once per tab/session to avoid repeated alerts on reload
-      if (typeof window !== 'undefined' && sessionStorage.getItem(promptKey)) return;
-      const shouldReload = confirm("New Content Now Available, Please Reload!");
-      // mark as prompted for this session so we don't spam the user
-      if (typeof window !== 'undefined') sessionStorage.setItem(promptKey, '1');
-      if (shouldReload) {
-        updateSW(true);
+      const promptKey = 'ss-sw-prompted-for';
+      if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
+        navigator.serviceWorker.getRegistration().then((reg) => {
+          const waitingUrl = (reg && (reg as any).waiting && (reg as any).waiting.scriptURL) || 'unknown';
+          try {
+            const alreadyPromptedFor = typeof window !== 'undefined' ? localStorage.getItem(promptKey) : null;
+            if (alreadyPromptedFor && alreadyPromptedFor === waitingUrl) {
+              // we've already prompted for this exact SW, don't show again
+              return;
+            }
+          } catch (e) {
+            // ignore storage errors
+          }
+
+          const shouldReload = confirm("New Content Now Available, Please Reload!");
+          // persist that we've prompted for this waiting SW so other reloads/tabs won't re-prompt
+          try {
+            if (typeof window !== 'undefined') localStorage.setItem(promptKey, waitingUrl);
+          } catch (e) {}
+
+          if (shouldReload) {
+            updateSW(true);
+          }
+        }).catch((e) => {
+          console.error('Failed to access SW registration for update prompting', e);
+          // fallback: basic prompt once per session
+          try {
+            const sessionKey = 'ss-sw-prompted';
+            if (typeof window !== 'undefined' && sessionStorage.getItem(sessionKey)) return;
+            const ok = confirm("New Content Now Available, Please Reload!");
+            if (typeof window !== 'undefined') sessionStorage.setItem(sessionKey, '1');
+            if (ok) updateSW(true);
+          } catch (err) {}
+        });
+      } else {
+        // no service worker available, fallback to single-session prompt
+        const sessionKey = 'ss-sw-prompted';
+        if (typeof window !== 'undefined' && sessionStorage.getItem(sessionKey)) return;
+        const ok = confirm("New Content Now Available, Please Reload!");
+        if (typeof window !== 'undefined') sessionStorage.setItem(sessionKey, '1');
+        if (ok) updateSW(true);
       }
     } catch (err) {
       // swallow storage/dialog errors
