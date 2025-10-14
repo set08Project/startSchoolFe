@@ -236,7 +236,7 @@ export const mainRouter = createBrowserRouter([
   },
 
   {
-    path: "/admin/team-account/view-only",
+    path: "/admin-view-only",
     element: <TeacherLayout />,
     children: [
       {
