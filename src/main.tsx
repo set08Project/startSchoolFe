@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { registerSW } from "virtual:pwa-register";
+import toast from 'react-hot-toast';
 import { processQueue, defaultProcessor } from '@/lib/offlineQueue';
 import { mutate } from 'swr';
 
@@ -24,33 +25,69 @@ const updateSW = registerSW({
             // ignore storage errors
           }
 
-          const shouldReload = confirm("New Content Now Available, Please Reload!");
-          // persist that we've prompted for this waiting SW so other reloads/tabs won't re-prompt
-          try {
-            if (typeof window !== 'undefined') localStorage.setItem(promptKey, waitingUrl);
-          } catch (e) {}
+          // show a non-blocking toast with Reload and Dismiss actions
+          const id = toast((t) => (
+            <div className="flex items-center gap-4">
+              <div className="mr-2">New content is available.</div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    try { if (typeof window !== 'undefined') localStorage.setItem(promptKey, waitingUrl); } catch(e){}
+                    updateSW(true);
+                    toast.dismiss(t.id);
+                  }}
+                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                >
+                  Reload
+                </button>
+                <button
+                  onClick={() => {
+                    try { if (typeof window !== 'undefined') localStorage.setItem(promptKey, waitingUrl); } catch(e){}
+                    toast.dismiss(t.id);
+                  }}
+                  className="bg-gray-200 text-gray-800 px-3 py-1 rounded"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          ), { duration: 15000 });
 
-          if (shouldReload) {
-            updateSW(true);
-          }
         }).catch((e) => {
           console.error('Failed to access SW registration for update prompting', e);
-          // fallback: basic prompt once per session
+          // fallback: session-based toast
           try {
             const sessionKey = 'ss-sw-prompted';
             if (typeof window !== 'undefined' && sessionStorage.getItem(sessionKey)) return;
-            const ok = confirm("New Content Now Available, Please Reload!");
+            const id = toast((t) => (
+              <div className="flex items-center gap-4">
+                <div className="mr-2">New content is available.</div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { updateSW(true); toast.dismiss(t.id); }}
+                    className="bg-blue-600 text-white px-3 py-1 rounded"
+                  >Reload</button>
+                  <button onClick={() => toast.dismiss(t.id)} className="bg-gray-200 text-gray-800 px-3 py-1 rounded">Dismiss</button>
+                </div>
+              </div>
+            ), { duration: 15000 });
             if (typeof window !== 'undefined') sessionStorage.setItem(sessionKey, '1');
-            if (ok) updateSW(true);
           } catch (err) {}
         });
       } else {
-        // no service worker available, fallback to single-session prompt
+        // no service worker available, fallback to session-based toast
         const sessionKey = 'ss-sw-prompted';
         if (typeof window !== 'undefined' && sessionStorage.getItem(sessionKey)) return;
-        const ok = confirm("New Content Now Available, Please Reload!");
+        const id = toast((t) => (
+          <div className="flex items-center gap-4">
+            <div className="mr-2">New content is available.</div>
+            <div className="flex gap-2">
+              <button onClick={() => { updateSW(true); toast.dismiss(t.id); }} className="bg-blue-600 text-white px-3 py-1 rounded">Reload</button>
+              <button onClick={() => toast.dismiss(t.id)} className="bg-gray-200 text-gray-800 px-3 py-1 rounded">Dismiss</button>
+            </div>
+          </div>
+        ), { duration: 15000 });
         if (typeof window !== 'undefined') sessionStorage.setItem(sessionKey, '1');
-        if (ok) updateSW(true);
       }
     } catch (err) {
       // swallow storage/dialog errors
@@ -68,6 +105,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
   // </React.StrictMode>
 );
+
+// When a new Service Worker takes control (after updateSW(true) / skipWaiting), reload once so the page uses new assets
+if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    try { window.location.reload(); } catch (e) { console.error('Failed to reload after controllerchange', e); }
+  });
+}
 
 // process any queued requests when we come back online
 if (typeof window !== 'undefined') {
