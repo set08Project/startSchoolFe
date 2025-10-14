@@ -16,7 +16,17 @@ const CreateExaminationScreen = () => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const [instruction, setInstruction] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
+  // initialize duration from redux if present; allow numeric choices 1-5 or 'custom'
+  const existingDuration = testQuestion && testQuestion[0]?.instruction?.duration;
+  const initialDuration = existingDuration !== undefined && existingDuration !== null
+    ? (['1','2','3','4','5'].includes(String(existingDuration)) ? String(existingDuration) : 'custom')
+    : '';
+  const initialCustomDuration = existingDuration !== undefined && existingDuration !== null && !['1','2','3','4','5'].includes(String(existingDuration))
+    ? String(existingDuration)
+    : '';
+
+  const [duration, setDuration] = useState<string>(initialDuration);
+  const [customDuration, setCustomDuration] = useState<string>(initialCustomDuration);
   const [mark, setMark] = useState<string>("");
 
   const [fileData, setFileData] = useState();
@@ -106,13 +116,12 @@ const [editorValue, setEditorValue] = useState("");
                     className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
                     name="hour"
                     id="hour"
-                    defaultValue={testQuestion[0]?.instruction?.duration}
                     value={duration}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setDuration(e.target.value);
                     }}
                   >
-                    <option disabled selected>
+                    <option value="" disabled>
                       choose
                     </option>
                     <option value="1">1 Hour</option>
@@ -120,8 +129,25 @@ const [editorValue, setEditorValue] = useState("");
                     <option value="3">3 Hours</option>
                     <option value="4">4 Hours</option>
                     <option value="5">5 Hours</option>
+                    <option value="custom">Other (enter hours)</option>
                   </select>
+                  {/* show a numeric input when user selects custom */}
                 </div>
+                {duration === "custom" && <div className="flex flex-col ml-6">
+                  <label className="text-[12px] mb-2">Custom Time</label>
+                  {
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      placeholder="Enter hours"
+                      className="border ml- px-2 h-[50px] rounded-md"
+                      value={customDuration}
+                      onChange={(e) => setCustomDuration(e.target.value)}
+                    />
+                  }
+                </div>}
+                
                 <div className="-mt-1 ml-6">
                   <label className="text-[12px] ">
                     Enter Mark Per Question
@@ -146,7 +172,14 @@ const [editorValue, setEditorValue] = useState("");
                 } uppercase text-[12px] ml-0 px-8 py-4`}
                 onClick={() => {
                   setToggle(true);
-                  let data: any = { duration, instruction, mark };
+                  // send numeric duration: if custom selected use customDuration, otherwise the selected value
+                  const resolvedDuration =
+                    duration === "custom" ? customDuration : duration;
+                  let data: any = {
+                    duration: resolvedDuration,
+                    instruction,
+                    mark,
+                  };
                   dispatch(addTestInstruction(data!));
                 }}
               />

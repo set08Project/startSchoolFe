@@ -8,8 +8,19 @@ import { mutate } from 'swr';
 
 const updateSW = registerSW({
   onNeedRefresh() {
-    if (confirm("New Content Now Available, Please Reload!")) {
-      updateSW(true);
+    try {
+      const promptKey = 'ss-sw-prompted';
+      // only show the prompt once per tab/session to avoid repeated alerts on reload
+      if (typeof window !== 'undefined' && sessionStorage.getItem(promptKey)) return;
+      const shouldReload = confirm("New Content Now Available, Please Reload!");
+      // mark as prompted for this session so we don't spam the user
+      if (typeof window !== 'undefined') sessionStorage.setItem(promptKey, '1');
+      if (shouldReload) {
+        updateSW(true);
+      }
+    } catch (err) {
+      // swallow storage/dialog errors
+      console.error('SW update prompt error', err);
     }
   },
   onOfflineReady() {
