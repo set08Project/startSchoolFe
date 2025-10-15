@@ -70,46 +70,59 @@ const ExaminationPreviewScreen = () => {
         <div className="bg-slate-50 justify-center flex min-h-[100vh]">
           <div className="bg-white w-full px-5">
             {examination?.quiz?.question?.map(
-              (question: any, index: number) => (
-                <div key={index}>
-                  <p className="text-[14px] font-bold mt-10">
-                    Question {index + 1}.
-                  </p>
-                  <div className="ml-4">
-                    <p className="text-[18px]">{question?.question}</p>
-                    <div className="ml-8">
-                      <p className="text-[12px] mt-5">
-                        Choose your options carefully
-                      </p>
-                      <p className="text-[12px] mb-5 font-semibold">
-                        Correct Answer: {question?.answer}
-                      </p>
-                      {question?.options?.map((el: any, i: number) => (
+              (question: any, index: number) => {
+
+                
+                return (
+                  <div key={index}>
+                    <p className="text-[14px] font-bold mt-10">
+                      Question {index + 1}.
+                    </p>
+                    <div className="ml-4">
+                      <p className="text-[18px]">{question?.question}</p>
+                      {question?.images && (
                         <div>
-                          {el !== "" && (
-                            <div
-                              key={i}
-                              className="flex items-center gap-2 ml-4"
-                            >
-                              <input
-                                className="radio radio-sm"
-                                type="radio"
-                                onChange={() => handleStateChange(index, el)}
-                                checked={state[index] === el}
-                              />
-                              <label>
-                                {typeof el === "string"
-                                  ? el
-                                  : JSON.stringify(el)}
-                              </label>
-                            </div>
-                          )}
+                          <br />
+                          {question?.images?.map((img: string, i: number) => (
+                            <img src={img} />
+                          ))}
+                          <br />
                         </div>
-                      ))}
+                      )}
+                      <div className="ml-8">
+                        <p className="text-[12px] mt-5">
+                          Choose your options carefully
+                        </p>
+                        <p className="text-[12px] mb-5 font-semibold">
+                          Correct Answer: {question?.answer}
+                        </p>
+                        {question?.options?.map((el: any, i: number) => (
+                          <div>
+                            {el !== "" && (
+                              <div
+                                key={i}
+                                className="flex items-center gap-2 ml-4"
+                              >
+                                <input
+                                  className="radio radio-sm"
+                                  type="radio"
+                                  onChange={() => handleStateChange(index, el)}
+                                  checked={state[index] === el}
+                                />
+                                <label>
+                                  {typeof el === "string"
+                                    ? el
+                                    : JSON.stringify(el)}
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
+                );
+              }
             )}
 
             <div className="border-r mt-10 w-full h-[10px] bg-red-30">

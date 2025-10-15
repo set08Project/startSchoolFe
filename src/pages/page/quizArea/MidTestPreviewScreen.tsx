@@ -105,6 +105,16 @@ const MidTestPreviewScreen = () => {
                   </p>
                   <div className="ml-4">
                     <p className="text-[18px]">{question?.question}</p>
+
+                    {question?.images && (
+                      <div>
+                        <br />
+                        {question?.images?.map((img: string, i: number) => (
+                          <img src={img} />
+                        ))}
+                        <br />
+                      </div>
+                    )}
                     <div className="ml-8">
                       <p className="text-[12px] mt-5">
                         Choose your options carefully

@@ -287,24 +287,31 @@ const MidTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
+                {readQuestion?.map((question: any, index: number) => (
                   <div key={index}>
                     <p className="text-[14px] font-bold mt-10">
                       Question {index + 1}.
                     </p>
                     <div className="ml-4">
                       <p className="text-[18px]">{question?.question}</p>
+
+                      {question?.images && (
+                        <div>
+                          <br />
+                          {question?.images?.map((img: string, i: number) => (
+                            <img src={img} key={i} />
+                          ))}
+                          <br />
+                        </div>
+                      )}
                       <div className="ml-8">
                         <p className="text-[12px] mt-5">
                           Choose your options carefully
                         </p>
                         {question?.options?.map((el: any, i: number) => (
-                          <div>
+                          <div key={i}>
                             {el !== "" && (
-                              <div
-                                key={i}
-                                className="flex items-center gap-2 ml-4"
-                              >
+                              <div className="flex items-center gap-2 ml-4">
                                 <input
                                   className="radio radio-sm"
                                   type="radio"

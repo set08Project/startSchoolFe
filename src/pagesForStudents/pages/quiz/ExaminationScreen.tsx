@@ -30,7 +30,6 @@ const ExaminationTestScreen = () => {
 
   const courseID = quizData?.subjectID;
 
-
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
       ...prev,
@@ -61,11 +60,9 @@ const ExaminationTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === examID && el?.quizDone
   );
- 
-  const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333" );
-  let timerInSeconds = timer * 3600;
 
-  
+  const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333");
+  let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {
     // prevent double submissions
@@ -103,7 +100,7 @@ const ExaminationTestScreen = () => {
       status: quizData.status,
     })
       .then((res) => {
-        console.log("reading: ", res)
+        console.log("reading: ", res);
         if (res.status === 201) {
           toast.success(
             `${
@@ -129,7 +126,6 @@ const ExaminationTestScreen = () => {
         localStorage.removeItem("countdown");
       });
   };
-
 
   // const handleSubmit = async () => {
   //   setLoading(true);
@@ -221,8 +217,7 @@ const ExaminationTestScreen = () => {
   //     localStorage.removeItem("countdown");
   //   }
   // };
-  
-  
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
@@ -254,6 +249,8 @@ const ExaminationTestScreen = () => {
     }
   }, [timeUp, isSubmitted]);
 
+  // Get shuffled questions from localStorage
+  const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
 
   return (
     <div>
@@ -320,22 +317,32 @@ const ExaminationTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map((question: any, index: number) => (
+                {readQuestion?.map((question: any, index: number) => (
                   <div key={index}>
                     <p className="text-[14px] font-bold mt-10">
                       Question {index + 1}.
                     </p>
                     <div className="ml-4">
                       <p className="text-[18px]">{question?.question}</p>
+
+                      {question?.images && (
+                        <div>
+                          <br />
+                          {question?.images?.map((img: string, i: number) => (
+                            <img src={img} key={i} />
+                          ))}
+                          <br />
+                        </div>
+                      )}
+
                       <div className="ml-8">
                         <p className="text-[12px] mt-5">
                           Choose your options carefully
                         </p>
                         {question?.options?.map((el: any, i: number) => (
-                          <div>
+                          <div key={i}>
                             {el !== "" && (
                               <div
-                                key={i}
                                 className="flex items-center gap-2 ml-4"
                               >
                                 <input
