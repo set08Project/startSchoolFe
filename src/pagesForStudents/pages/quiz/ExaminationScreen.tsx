@@ -331,7 +331,7 @@ const ExaminationTestScreen = () => {
       ) : (
         <div className="relative">
           {!start && (
-            <div className="absolute top-20 left-1/3 z-10">
+            <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
               <MdPlayCircle
                 size={200}
                 className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
@@ -347,8 +347,8 @@ const ExaminationTestScreen = () => {
                   }
                 }}
               />
-              <p className="font-bold">
-                Push Play to start your {quizData?.status}
+              <p className="font-medium text-[18px]">
+                Push Play to start your <span className="font-bold capitalize">{quizData?.status}</span>
               </p>
             </div>
           )}
