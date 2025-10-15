@@ -12,6 +12,8 @@ import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
 
+import lodash from "lodash";
+
 const ExaminationTestScreen = () => {
   const navigate = useNavigate();
   const { examID } = useParams();
@@ -126,7 +128,7 @@ const ExaminationTestScreen = () => {
         localStorage.removeItem("countdown");
       });
   };
-
+ 
   // const handleSubmit = async () => {
   //   setLoading(true);
   //   try {
@@ -250,7 +252,61 @@ const ExaminationTestScreen = () => {
   }, [timeUp, isSubmitted]);
 
   // Get shuffled questions from localStorage
-  const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
+  // const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
+
+   const [readQuestion, setReadQuestion] = useState(
+     JSON.parse(localStorage.getItem("examQuestions")!)
+   );
+  let score = 0;
+  let savedSeconds = JSON.parse(localStorage.getItem("countdown"));
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
+        event.preventDefault();
+        toast.error(
+          `This action can't be done, while ${
+            quizData?.status?.charAt(0).toUpperCase() +
+            quizData?.status.slice(1)
+          } is ongoing!`
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    localStorage.setItem("exam", JSON.stringify({ score, state }));
+
+    const question = JSON.parse(localStorage.getItem("examQuestions")!);
+
+    if (question === null) {
+      localStorage.setItem(
+        "examQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("examQuestions")!));
+    } else if (question?.length === 0) {
+      localStorage.setItem(
+        "examQuestions",
+        JSON.stringify(lodash.shuffle(myQuizData?.question))
+      );
+      setReadQuestion(JSON.parse(localStorage.getItem("examQuestions")!));
+    }
+
+    if (timeUp && !isSubmitted) {
+      // small delay to allow UI update and any pending state flush
+      const autoSubmit = setTimeout(() => {
+        handleSubmit();
+      }, 1000);
+      return () => clearTimeout(autoSubmit);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [state, readQuestion, myQuizData, timeUp]);
+
+
+ console.log("::", myQuizData);
 
   return (
     <div>
