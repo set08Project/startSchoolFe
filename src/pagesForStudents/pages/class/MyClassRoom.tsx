@@ -1,5 +1,5 @@
 document.title = "class room Detail's Page";
-import { MdDelete } from "react-icons/md";
+import { MdBook, MdDelete } from "react-icons/md";
 import { FC, useEffect, useState } from "react";
 
 import {
@@ -40,7 +40,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
               <div className="mt-3 flex justify-between items-center font-bold">
                 <p>{props?.subjectTitle}</p>
                 <div className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center">
-                  <MdDelete className="hover:text-blue-900" />
+                  <MdBook className="hover:text-blue-900" />
                 </div>
               </div>
               <div className="flex">
@@ -58,26 +58,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                 </div>
               </div>
 
-              {/* <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
-                <Link
-                  to={`/mid-test/details/${props?._id}/${
-                    props?.midTest[props?.midTest?.length - 1]
-                  }`}
-                  className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer"
-                >
-                  Start Mid Text
-                </Link>
-                <Link
-                  to={`/examination/details/${
-                    props?.examination
-[props?.examination
-?.length - 1]
-                  }`}
-                  className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer"
-                >
-                  Start Mid Text
-                </Link>
-              </div> */}
+            
 
               <StartTestComp props={props} subjectID={props?._id} />
             </div>
