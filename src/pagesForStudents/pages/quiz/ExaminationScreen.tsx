@@ -306,8 +306,11 @@ const ExaminationTestScreen = () => {
     };
   }, [state, readQuestion, myQuizData, timeUp]);
 
-
- console.log("::", myQuizData);
+  useEffect(() => {
+localStorage.removeItem("countdown");
+localStorage.removeItem("exam");
+localStorage.removeItem("examQuestions");
+  },[])
 
   return (
     <div>

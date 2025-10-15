@@ -513,7 +513,7 @@ export const deleteMidTestData = async (
   midTestID: string
 ) => {
   try {
-
+const URL="http://localhost:2244/api"
     return await axios
       .delete(`${URL}/delete-mid-test/${teacherID}/${subjectID}/${midTestID}`)
       .then((res: any) => {

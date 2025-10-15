@@ -228,6 +228,14 @@ myQuizData
     };
   }, [state, readQuestion, myQuizData, timeUp]);
 
+  useEffect(() => {
+localStorage.removeItem("countdown");
+localStorage.removeItem("midTest");
+localStorage.removeItem("midTestQuestions");
+  },[])
+
+
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
