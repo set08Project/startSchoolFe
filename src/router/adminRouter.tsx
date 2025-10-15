@@ -195,6 +195,7 @@ import MidTestResultPerformanceScreen from "@/pages/page/quizArea/MidTestResultP
 import ExaminationPreviewScreen from "@/pages/page/quizArea/ExaminationPreview";
 import MidTestPreviewScreen from "@/pages/page/quizArea/MidTestPreviewScreen";
 import SubjectGradeCard from "@/pages/page/subject/SubjectGradeCard";
+import MidTestSubjectGradeCardAdmin from "@/pages/page/subject/AdminGradeExamination";
 
 const BroadSheetReportCardApproved = React.lazy(
   () => import("@/pages/page/ResultHistory/BoardSheet")
@@ -281,10 +282,10 @@ export const adminRouter = createBrowserRouter([
           },
 
           {
-            path: "admin-test-exam-grade/:subjectID",
+            path: "admin-test-exam-grade/:subjectID/:quizID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
-                <AdminSubjectGradeCardScreen />
+                <MidTestSubjectGradeCardAdmin />
               </Suspense>
             ),
           },

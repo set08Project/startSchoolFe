@@ -31,6 +31,10 @@ const CreateExaminationScreen = () => {
 
   const [fileData, setFileData] = useState();
 
+    const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
+    const [customMinutes, setCustomMinutes] = useState<string>("");
+
+
   const uploadQuestion = (e: any) => {
     setFileData(e.target.files[0]);
   };
@@ -116,38 +120,71 @@ const [editorValue, setEditorValue] = useState("");
                     className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
                     name="hour"
                     id="hour"
-                    value={duration}
+                    defaultValue={testQuestion[0]?.instruction?.duration}
+                    value={isCustomDuration ? "custom" : duration}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      setDuration(e.target.value);
+                      const val = e.target.value;
+                      if (val === "custom") {
+                        setIsCustomDuration(true);
+                        // If there's already a customMinutes value, set duration accordingly
+                        if (customMinutes !== "") {
+                          const hrs = Number(customMinutes) / 60;
+                          setDuration(hrs.toFixed(3));
+                        }
+                      } else {
+                        setIsCustomDuration(false);
+                        setCustomMinutes("");
+                        setDuration(val);
+                      }
                     }}
                   >
                     <option value="" disabled>
-                      choose
+                      Choose Timer
                     </option>
-                    <option value="1">1 Hour</option>
-                    <option value="2">2 Hours</option>
-                    <option value="3">3 Hours</option>
-                    <option value="4">4 Hours</option>
-                    <option value="5">5 Hours</option>
-                    <option value="custom">Other (enter hours)</option>
+
+                    <option value="0.084">5 Minutes</option>
+                    <option value="0.167">10 Minutes</option>
+                    <option value="0.333">20 Minutes</option>
+                    <option value="0.500">30 Minutes</option>
+                    <option value="0.667">40 Minutes</option>
+                    <option value="0.833">50 Minutes</option>
+                    <option value="1.000">60 Minutes</option>
+                    <option value="1.500">90 Minutes</option>
+                    <option value="custom">Custom minutes...</option>
                   </select>
-                  {/* show a numeric input when user selects custom */}
                 </div>
-                {duration === "custom" && <div className="flex flex-col ml-6">
-                  <label className="text-[12px] mb-2">Custom Time</label>
-                  {
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.5"
-                      placeholder="Enter hours"
-                      className="border ml- px-2 h-[50px] rounded-md"
-                      value={customDuration}
-                      onChange={(e) => setCustomDuration(e.target.value)}
-                    />
-                  }
-                </div>}
-                
+                <div className="-mt-">
+                  {isCustomDuration && (
+                    <div className="flex flex-col ml-3">
+                      {/* <p className=" text-xs text-gray-500 mt-1">
+                        Duration saved
+                      </p> */}
+                      <label className="text-[12px] mb-[2px]">
+                        Custom Timer
+                      </label>
+                      <input
+                        className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                        placeholder="Enter minutes (e.g. 7)"
+                        value={customMinutes}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          // allow only digits
+                          if (v === "" || /^\d+$/.test(v)) {
+                            setCustomMinutes(v);
+                            if (v === "") {
+                              setDuration("");
+                            } else {
+                              const mins = Number(v);
+                              const hrs = mins / 60;
+                              // store as string formatted to 3 decimals
+                              setDuration(hrs.toFixed(3));
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
                 <div className="-mt-1 ml-6">
                   <label className="text-[12px] ">
                     Enter Mark Per Question

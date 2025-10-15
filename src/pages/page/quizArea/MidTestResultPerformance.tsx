@@ -48,7 +48,7 @@ const MidTestResultPerformanceScreen = () => {
         />
 
         <Link
-          to={`/mid-test-grade/${subjectID}/${midQuizID}`}
+          to={`/admin-test-exam-grade/${subjectID}/${midQuizID}`}
           className="px-4 py-2 border rounded-md mr-2 capitalize bg-purple-500 text-white cursor-pointer "
         >
           approve report card
