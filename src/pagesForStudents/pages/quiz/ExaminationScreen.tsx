@@ -20,6 +20,7 @@ const ExaminationTestScreen = () => {
 
   //   const { quizData } = useQuiz(examID!);
   const { examData: quizData } = useExam(examID!);
+
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
 

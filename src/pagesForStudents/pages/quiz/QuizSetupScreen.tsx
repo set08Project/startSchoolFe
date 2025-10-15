@@ -22,6 +22,8 @@ const QuizSetupScreen = () => {
 
   const { midTest } = useMidTest(subjectID!);
 
+  console.log("show me: ", midTest)
+
   const [completedQuizzes, setCompletedQuizzes] = useState<string[]>([]);
 
   const [loadingTest, setLoadingTest] = useState<boolean>(false);
@@ -39,6 +41,7 @@ const QuizSetupScreen = () => {
   };
 
   let readQuiz = _.filter(subjectQuiz?.quiz, (el: any) => el.status === "quiz");
+
 
   return (
     <div className="text-blue-950 relative">

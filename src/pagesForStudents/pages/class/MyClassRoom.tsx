@@ -4,6 +4,8 @@ import { FC, useEffect, useState } from "react";
 
 import {
   useClassSubject,
+  useExamination,
+  useMidTest,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import TimeTableScreen from "./TimeTableScreen";
@@ -16,6 +18,7 @@ import {
 } from "../../hooks/useStudentHook";
 import { readClassInfo } from "../../api/studentAPI";
 import LittleHeader from "../../../components/layout/LittleHeader";
+import { Link } from "react-router-dom";
 
 interface iProps {
   props?: string;
@@ -23,6 +26,7 @@ interface iProps {
 
 const ClassSubjectScreen: FC<iProps> = ({ props }) => {
   const { subjectData } = useClassSubject(props!);
+
 
   return (
     <div>
@@ -41,7 +45,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
               </div>
               <div className="flex">
                 <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
-                  compulsory
+                  Class Subject
                 </p>
               </div>
               <div className="flex-1" />
@@ -53,6 +57,29 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                   {props?.subjectTeacherName}
                 </div>
               </div>
+
+              {/* <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
+                <Link
+                  to={`/mid-test/details/${props?._id}/${
+                    props?.midTest[props?.midTest?.length - 1]
+                  }`}
+                  className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+                >
+                  Start Mid Text
+                </Link>
+                <Link
+                  to={`/examination/details/${
+                    props?.examination
+[props?.examination
+?.length - 1]
+                  }`}
+                  className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+                >
+                  Start Mid Text
+                </Link>
+              </div> */}
+
+              <StartTestComp props={props} subjectID={props?._id} />
             </div>
           ))}
         </div>
@@ -62,6 +89,43 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
             <FaCheckDouble size={13} />
             <p className="mt-3 text-[12px] font-medium">No Subject added yet</p>
           </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const StartTestComp: any = ({ props, subjectID }) => {
+  const { examination } = useExamination(subjectID!);
+  const { midTest } = useMidTest(subjectID!);
+
+  return (
+    <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
+      {midTest?.startMidTest && (
+        <Link
+          to={`/mid-test/details/${props?._id}/${
+            props?.midTest[props?.midTest?.length - 1]
+          }`}
+          className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+        >
+          Start Mid Text
+        </Link>
+      )}
+
+      {examination?.startExam && (
+        <Link
+          to={`/examination/details/${
+            props?.examination[props?.examination?.length - 1]
+          }`}
+          className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+        >
+          Start Examination
+        </Link>
+      )}
+
+      {!examination?.startExam && !midTest?.startMidTest && (
+        <div className="text-white bg-red-500 rounded-md px-4 py-2 text-[13px] cursor-pointer">
+          No Mid-Test/Examination Available yet
         </div>
       )}
     </div>
