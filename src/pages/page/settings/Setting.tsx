@@ -8,6 +8,7 @@ import { MdClose, MdFeedback } from "react-icons/md";
 import Input from "../../../components/reUse/Input";
 import { GiPadlock } from "react-icons/gi";
 import { useSchoolData } from "../../hook/useSchoolAuth";
+import { downlaodSchoolData, URL } from "@/pages/api/schoolAPIs";
 
 const SettingScreen: FC = () => {
   document.title = "School's Profile settings";
@@ -29,6 +30,7 @@ const SettingScreen: FC = () => {
       url: "/my-personal-info/main-account-setting",
       size: 35,
     },
+    
     // {
     //   icon: <HiMiniBuildingOffice2 size={45} />,
     //   title: "School's Page Settings",
@@ -36,6 +38,7 @@ const SettingScreen: FC = () => {
     //   url: "/my-personal-info/theme-settings",
     //   size: 35,
     // },
+
     {
       icon: <HiMiniBuildingOffice2 size={45} />,
       title: "Timetable Setup",
@@ -50,6 +53,7 @@ const SettingScreen: FC = () => {
 
   const [view, setView] = useState<boolean>(false);
   const [codeValue, setCodeValue] = useState<string>("");
+  const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
 
   return (
     <div className="relative min-h-[88vh] text-blue-950 flex flex-col ">
@@ -61,17 +65,13 @@ const SettingScreen: FC = () => {
             Main Settings Page
           </div>
           <div className="text-[13px]">
-            `` &middot;
-            <strong className="font-[600] mr-1">
-              {/* {data?.firstName} {data?.lastName} &middot; */}
-            </strong>
-            {/* {data?.email} &middot;{" "} */}
-            <Link
-              to="/"
-              className="underline text-black font-[400] hover:text-black "
+            &middot;
+            <div
+              className="underline text-red-500 text-[18px] hover:text-red-600 capitalize font-medium transition-all duration-300 cursor-pointer"
+              onClick={() => setShowDownloadModal(true)}
             >
-              <span>go back home</span>
-            </Link>
+              <span>Download School Data</span>
+            </div>
           </div>
         </div>
       </div>
@@ -205,6 +205,66 @@ const SettingScreen: FC = () => {
           <div>Give us Feedback</div>
         </label>
       </div>
+
+      {/* Download School Data Modal */}
+      {showDownloadModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-md">
+            <h2 className="text-xl font-semibold mb-2">Download School Data</h2>
+            <p className="mb-4 text-gray-700">
+              You are about to download your school's data. This may include
+              sensitive information. Do you want to proceed?
+            </p>
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium"
+                onClick={() => setShowDownloadModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-blue-950 hover:bg-blue-900 text-white font-medium"
+                onClick={async () => {
+                  try {
+                    const res = await downlaodSchoolData(data?._id);
+                    if (res && res.data) {
+                      // If the API returns a file URL or blob for a zip file
+                      if (res.data.url) {
+                        // Download via anchor tag
+                        const link = document.createElement("a");
+                        link.href = res.data.url;
+                        link.download = "school-data.zip";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      } else if (res.data instanceof Blob) {
+                        // If response is a Blob (zip)
+                        const blobUrl = window.URL.createObjectURL(res.data);
+                        const link = document.createElement("a");
+                        link.href = blobUrl;
+                        link.download = "school-data.zip";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(blobUrl);
+                      }
+                    }
+                  } catch (err) {
+                    // Optionally show error toast
+                  }
+                  setShowDownloadModal(false);
+                }}
+              >
+                <a
+                  href={`${URL}/export-data-file/${data?._id}`}
+                >
+                  Proceed
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Put this part before </body> tag */}
       <input type="checkbox" id="feedback" className="modal-toggle" />

@@ -7,7 +7,7 @@ import axios, { AxiosResponse } from "axios";
 
 // Working Online1
 // Working Online
-const URL: string = "https://startschoolbe-4.onrender.com/api";
+export const URL: string = "https://startschoolbe-4.onrender.com/api";
 const URL2: string = "https://startschoolbe-4.onrender.com";
 
 export const removeOptions = async (
@@ -76,6 +76,19 @@ export const deleteSchool = async (schoolID: string): Promise<any> => {
   try {
     return await axios
       .delete(`${URL}/delete-school/${schoolID}`)
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const downlaodSchoolData = async (schoolID: string): Promise<any> => {
+  try {
+    const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/export-data-file/${schoolID}`)
       .then((res: AxiosResponse) => {
         return res?.data;
       });
