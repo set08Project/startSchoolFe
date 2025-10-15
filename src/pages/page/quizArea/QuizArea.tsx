@@ -1,6 +1,6 @@
 // src/screens/ExamQuizSetupScreen.js
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
 import {
   MdPlayCircle,
@@ -111,6 +111,9 @@ const ExamQuizSetupScreen = () => {
   );
   const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
   const [toggle, setToggle] = useState(false);
+  const [showMidTestConfirm, setShowMidTestConfirm] = useState(false);
+  const [showExamConfirm, setShowExamConfirm] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="text-blue-950  relative">
@@ -124,6 +127,76 @@ const ExamQuizSetupScreen = () => {
 
       <div className="mt-10" />
 
+      {/* Confirm modal for Create Mid-Test */}
+      {showMidTestConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+            <h3 className="font-semibold text-lg mb-3">Create Mid-Test CBT</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you're ready to create Mid-Test's CBT for this
+              subject?
+              <br />
+              <br />
+              Please note that this should be created only once, if created
+              again it will overwrite the previous one!
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 rounded-md bg-gray-200"
+                onClick={() => setShowMidTestConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-md bg-purple-500 text-white"
+                onClick={() => {
+                  setShowMidTestConfirm(false);
+                  navigate(`/create-mid-test/${subjectID}`);
+                }}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm modal for Create Exam */}
+      {showExamConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+            <h3 className="font-semibold text-lg mb-3">
+              Create Examination CBT
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you're ready to create Examination's CBT for this
+              subject?
+              <br />
+              <br />
+              Please note that this should be created only once, if created
+              again it will overwrite the previous one!
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 rounded-md bg-gray-200"
+                onClick={() => setShowExamConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-md bg-pink-500 text-white"
+                onClick={() => {
+                  setShowExamConfirm(false);
+                  navigate(`/create-examination/${subjectID}`);
+                }}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
         <div className="mb-16 flex-col-reverse flex lg:flex-row justify-between items-center">
           <p className="mt-10 lg:mt-0">View Assignment/Test/Quiz</p>
@@ -134,16 +207,18 @@ const ExamQuizSetupScreen = () => {
                 + Create Pop Test
               </p>
             </Link>
-            <Link to={`/create-mid-test/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
-                + Create Mid-Test
-              </p>
-            </Link>
-            <Link to={`/create-examination/${subjectID}`}>
-              <p className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
-                + Create Exam
-              </p>
-            </Link>
+            <button
+              onClick={() => setShowMidTestConfirm(true)}
+              className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
+            >
+              + Create Mid-Test
+            </button>
+            <button
+              onClick={() => setShowExamConfirm(true)}
+              className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
+            >
+              + Create Exam
+            </button>
             <Link
               to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}
             >

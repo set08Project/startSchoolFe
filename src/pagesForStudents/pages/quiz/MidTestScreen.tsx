@@ -32,6 +32,7 @@ const MidTestScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
   const [timeUp, setTimeUp] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
 
@@ -110,6 +111,9 @@ const MidTestScreen = () => {
   let score = 0;
 
   const handleSubmit = () => {
+    // guard against double submissions
+    if (isSubmitted) return;
+    setIsSubmitted(true);
     setLoading(true);
     const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
       q.answer.trim()
@@ -166,6 +170,7 @@ const MidTestScreen = () => {
         localStorage.removeItem("midTest");
         localStorage.removeItem("midTestQuestions");
         setTimeUp(false);
+        // keep isSubmitted true to avoid retrying
       });
   };
   const [readQuestion, setReadQuestion] = useState(
@@ -205,63 +210,12 @@ const MidTestScreen = () => {
       setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
     }
 
-    if (timeUp) {
-      let autoSubmit = setTimeout(() => {
-        const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-          q.answer.trim()
-        );
-
-        correctAnswers?.forEach((correctAnswer: string, index: number) => {
-          if (correctAnswer === state[index]?.trim()) {
-            score++;
-          }
-        });
-
-        const percentage = Math.ceil((score / correctAnswers.length) * 100);
-
-        let remark = getRemark(percentage);
-        let grade = getGrade(percentage);
-        const markPerQuest = quizData?.quiz?.instruction?.mark;
-        const getQuizData = quizData?.quiz;
-        const totalquest = getQuizData?.question?.length;
-
-        performanceMidTest(studentInfo?._id, midTestID!, courseID, {
-          studentScore: score,
-          studentGrade: grade,
-          remark,
-          totalQuestions: totalquest,
-          markPerQuestion: markPerQuest,
-          status: quizData?.status,
-        })
-          .then((res) => {
-            if (res.status === 201) {
-              toast.success(
-                `${
-                  quizData?.status?.charAt(0).toUpperCase() +
-                  quizData?.statu?.slice(1)
-                } submitted successfully`
-              );
-              navigate(`/confirm-quiz-take/${studentInfo?._id}`, {
-                state: {
-                  correctAnswers,
-                  studentAnswers: state,
-                  score,
-                  total: correctAnswers.length,
-                },
-              });
-            } else {
-              toast.error("Something went wrong");
-            }
-          })
-          .finally(() => {
-            setLoading(false);
-            localStorage.removeItem("countdown");
-            localStorage.removeItem("midTest");
-            localStorage.removeItem("midTestQuestions");
-            setTimeUp(false);
-          });
-        clearTimeout(autoSubmit);
+    if (timeUp && !isSubmitted) {
+      // small delay to allow UI update and any pending state flush
+      const autoSubmit = setTimeout(() => {
+        handleSubmit();
       }, 1000);
+      return () => clearTimeout(autoSubmit);
     }
 
     return () => {

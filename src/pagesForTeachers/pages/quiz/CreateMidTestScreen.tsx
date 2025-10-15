@@ -22,6 +22,8 @@ const CreateMidTestScreen = () => {
   const [instruction, setInstruction] = useState<string>("");
   const [duration, setDuration] = useState<string>("0.084");
   const [mark, setMark] = useState<string>("2");
+  const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
+  const [customMinutes, setCustomMinutes] = useState<string>("");
 
   const [fileData, setFileData] = useState();
 
@@ -172,13 +174,25 @@ const CreateMidTestScreen = () => {
                     name="hour"
                     id="hour"
                     defaultValue={testQuestion[0]?.instruction?.duration}
-                    value={duration}
+                    value={isCustomDuration ? "custom" : duration}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      setDuration(e.target.value);
+                      const val = e.target.value;
+                      if (val === "custom") {
+                        setIsCustomDuration(true);
+                        // If there's already a customMinutes value, set duration accordingly
+                        if (customMinutes !== "") {
+                          const hrs = Number(customMinutes) / 60;
+                          setDuration(hrs.toFixed(3));
+                        }
+                      } else {
+                        setIsCustomDuration(false);
+                        setCustomMinutes("");
+                        setDuration(val);
+                      }
                     }}
                   >
-                    <option disabled selected>
-                      choose
+                    <option value="" disabled>
+                      Choose Timer
                     </option>
 
                     <option value="0.084">5 Minutes</option>
@@ -189,7 +203,40 @@ const CreateMidTestScreen = () => {
                     <option value="0.833">50 Minutes</option>
                     <option value="1.000">60 Minutes</option>
                     <option value="1.500">90 Minutes</option>
+                    <option value="custom">Custom minutes...</option>
                   </select>
+                </div>
+                <div className="-mt-">
+                  {isCustomDuration && (
+                    <div className="flex flex-col ml-3">
+                      {/* <p className=" text-xs text-gray-500 mt-1">
+                        Duration saved
+                      </p> */}
+                      <label className="text-[12px] mb-[2px]">
+                        Custom Timer
+                      </label>
+                      <input
+                        className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                        placeholder="Enter minutes (e.g. 7)"
+                        value={customMinutes}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          // allow only digits
+                          if (v === "" || /^\d+$/.test(v)) {
+                            setCustomMinutes(v);
+                            if (v === "") {
+                              setDuration("");
+                            } else {
+                              const mins = Number(v);
+                              const hrs = mins / 60;
+                              // store as string formatted to 3 decimals
+                              setDuration(hrs.toFixed(3));
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="-mt-1 ml-6">
                   <label className="text-[12px] ">
@@ -216,6 +263,7 @@ const CreateMidTestScreen = () => {
                 onClick={() => {
                   setToggle(true);
                   let data: any = { duration, instruction, mark };
+                 
                   dispatch(addTestInstruction(data!));
                 }}
               />

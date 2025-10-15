@@ -26,6 +26,7 @@ const ExaminationTestScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [activate, setActivate] = useState<boolean>(false);
   const [timeUp, setTimeUp] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
 
@@ -61,10 +62,15 @@ const ExaminationTestScreen = () => {
     (el: any) => el?.quizID === examID && el?.quizDone
   );
  
-  const timer = parseInt(quizData?.quiz?.instruction?.duration || 1 );
+  const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333" );
   let timerInSeconds = timer * 3600;
 
+  
+
   const handleSubmit = () => {
+    // prevent double submissions
+    if (isSubmitted) return;
+    setIsSubmitted(true);
     setLoading(true);
     const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
       q.answer.trim()
@@ -236,6 +242,18 @@ const ExaminationTestScreen = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  // Auto-submit when time is up
+  useEffect(() => {
+    if (timeUp && !isSubmitted) {
+      toast.success("Time is up — submitting automatically...");
+      // give a tiny delay to allow UI to update (optional)
+      setTimeout(() => {
+        handleSubmit();
+      }, 250);
+    }
+  }, [timeUp, isSubmitted]);
+
 
   return (
     <div>

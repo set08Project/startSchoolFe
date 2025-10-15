@@ -89,9 +89,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
     const [test4, setTest4] = useState<string>(() =>
       result?.test4 !== undefined && result?.test4 !== null ? String(result.test4) : "0"
     );
-    const [exam, setExam] = useState<string>(() =>
-      result?.exam !== undefined && result?.exam !== null ? String(result.exam) : "0"
-    );
+    // start empty so we can distinguish user edits; sync from server below
+    const [exam, setExam] = useState<string>("");
+    const [isEditingExam, setIsEditingExam] = useState<boolean>(false);
 
     // Keep inputs in sync with DB values: whenever `result` changes, update test4/exam
     // This ensures values added/updated in the backend are reflected in the inputs.
@@ -100,12 +100,17 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         if (result.test4 !== undefined && result.test4 !== null) {
           setTest4(String(result.test4));
         }
-        if (result.exam !== undefined && result.exam !== null) {
-          setExam(String(result.exam));
+        // Only sync exam from server when user is not actively editing
+        if (!isEditingExam) {
+          if (result.exam !== undefined && result.exam !== null) {
+            setExam(String(result.exam));
+          } else {
+            setExam("0");
+          }
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result?.test4, result?.exam]);
+      // re-run when result changes or editing flag changes
+    }, [result?.test4, result?.exam, isEditingExam]);
 
 
   const makeGrade = () => {
@@ -125,6 +130,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         if (res.status === 201) {
           mutate(`api/student-report-card/${props?._id}`);
           toast.success("Grade added");
+          // stop editing so subsequent server sync will populate inputs
+          setIsEditingExam(false);
         } else {
           toast.error("Grade denied");
         }
@@ -220,15 +227,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
           placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
           value={exam}
           onChange={(e: any) => {
-            {
-              readResultData(props)
-                ? setExam(
-                    (
-                      (readResultData(props)?.performanceRating / 100) *
-                      60
-                    ).toString()
-                  )
-                : setExam(e.target.value);
+            // allow user to edit the exam value; mark editing state so
+            // incoming server sync won't clobber what's being typed
+            setIsEditingExam(true);
+            const val = e.target.value;
+            // keep simple numeric constraints: allow empty or numbers
+            if (val === "" || (!isNaN(Number(val)) && Number(val) >= 0)) {
+              setExam(val);
             }
           }}
         />

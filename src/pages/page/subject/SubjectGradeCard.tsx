@@ -78,8 +78,11 @@ const matchedPerformance =
   }) ?? null;
 
 const performanceRating = matchedPerformance?.performanceRating ?? null;
+const performanceRatingII =
+  matchedPerformance?.studentScore *
+    parseInt(matchedPerformance?.markPerQuestion) ;
 
-console.log("Matched Performance:", performanceRating);
+console.log("Matched Performance:", matchedPerformance);
   const { oneStudentPerformanceExam: oneStudentPerformance } =
     useOneExamSubjectStudentPerfomance(
       subjectID,
@@ -87,8 +90,6 @@ console.log("Matched Performance:", performanceRating);
     );
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [test4, setTest4] = useState("");
-  const [exam, setExam] = useState("");
 
   // Local state for immediate display after submission
   const [displayGrade, setDisplayGrade] = useState<any>(null);
@@ -114,6 +115,17 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
     return el.subject === subjectInfo?.subjectTitle;
   });
 
+
+  
+  // initialize local input state empty; we'll sync from `result` below so
+  // the inputs update when server data changes (e.g. after mutate())
+  const [test4, setTest4] = useState(result?.test4 ? result.test4.toString() : "");
+  const [exam, setExam] = useState<string>("");
+  const [isEditingExam, setIsEditingExam] = useState<boolean>(false);
+
+
+  console.log("result: ",result?.exam)
+  console.log("result: ",exam)
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";
@@ -126,9 +138,30 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
   };
   
   const computedExamDefault =
-    performanceRating !== null && performanceRating !== undefined
-      ? (performanceRating * 0.6).toString()
+    performanceRatingII !== null && performanceRatingII !== undefined
+      ? (performanceRatingII).toString()
       : "";
+
+  // Keep the exam input in sync with server data unless the user is
+  // actively typing (exam !== ""). When a fresh result arrives (for
+  // example after mutate), populate the input so it always shows
+  // result.exam.
+  useEffect(() => {
+    try {
+      // If user hasn't typed anything, reflect the server value or
+      // the computed default
+      if (!isEditingExam && exam === "") {
+        if (result?.exam !== undefined && result?.exam !== null) {
+          setExam(String(result.exam));
+        } else if (computedExamDefault !== "") {
+          setExam(computedExamDefault);
+        }
+      }
+    } catch (err) {
+      console.error("sync exam effect error:", err);
+    }
+    // re-run when server value, computed default or user input changes
+  }, [result?.exam, computedExamDefault, exam]);
 
   const makeGrade = async () => {
     try {
@@ -179,8 +212,11 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
       toast.success("Grade added successfully!");
 
       // Clear input fields
-      setTest4("");
-      setExam("");
+      // Keep exam and test4 showing the submitted value; clear only if you
+      // want blank inputs. Mark editing false to allow server sync again.
+      setTest4(String(test4Score));
+      setExam(String(examScore));
+      setIsEditingExam(false);
     } catch (error: any) {
       setLoading(false);
       toast.error("Failed to add grade. Please try again.");
@@ -191,10 +227,11 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
   // Use displayGrade if available, otherwise fall back to result from database
   const currentResult = displayGrade || result;
 
+  console.log("result: ",result)
 
   return (
     <div
-      className={`w-full flex items-center gap-2 text-[12px] font-medium h-16 px-4 my-2 overflow-hidden ${
+      className={`text-blue-950 w-full flex items-center gap-2 text-[12px] font-medium h-16 px-4 my-2 overflow-hidden ${
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
@@ -257,7 +294,11 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
       </div>
 
       {/* Examination Score Input */}
-      <div className="w-[100px] border-r">
+      <div className="w-[100px] border-r mb-1">
+        <p>
+          <span className="text-[10px] font-medium">CBT Score:</span>{" "}
+          {computedExamDefault === "NaN" ? "0" : computedExamDefault}
+        </p>
         <input
           className="w-[80px] h-8 outline-none border rounded-md px-2"
           type="number"
@@ -266,13 +307,15 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
           placeholder={
             result?.exam !== undefined && result?.exam !== null
               ? result.exam.toString()
-              : computedExamDefault || "0"
+              : "0"
           }
-          // show explicit exam state if user typed one, otherwise show computed default
-          value={exam !== "" ? exam : computedExamDefault}
+          // show the user-typed value if present, otherwise show the latest
+          // server value or computed default
+          value={exam !== "" ? exam : ""}
           onChange={(e: any) => {
             const value = e.target.value;
             if (value === "" || (Number(value) >= 0 && Number(value) <= 60)) {
+              setIsEditingExam(true);
               setExam(value);
             }
           }}

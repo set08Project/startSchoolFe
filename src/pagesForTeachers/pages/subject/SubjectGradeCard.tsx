@@ -1,7 +1,3 @@
-
-
-
-
 document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
@@ -70,7 +66,11 @@ const matchedPerformance =
 
 const performanceRating = matchedPerformance?.performanceRating ?? null;
 
-console.log("Matched Performance:", performanceRating);
+const performanceRatingII =
+  matchedPerformance?.studentScore *
+    parseInt(matchedPerformance?.markPerQuestion) ;
+
+    
   const { oneStudentPerformanceExam: oneStudentPerformance } =
     useOneExamSubjectStudentPerfomance(
       subjectID,
@@ -78,8 +78,7 @@ console.log("Matched Performance:", performanceRating);
     );
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [test4, setTest4] = useState("");
-  const [exam, setExam] = useState("");
+  
 
   // Local state for immediate display after submission
   const [displayGrade, setDisplayGrade] = useState<any>(null);
@@ -105,6 +104,9 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
     return el.subject === subjectInfo?.subjectTitle;
   });
 
+  const [test4, setTest4] = useState(result?.text4 ? result.text4.toString() : "");
+  const [exam, setExam] = useState(result?.exam ? result.exam.toString() : "");
+
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";
@@ -117,8 +119,8 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
   };
   
   const computedExamDefault =
-    performanceRating !== null && performanceRating !== undefined
-      ? (performanceRating * 0.6).toString()
+    performanceRatingII !== null && performanceRatingII !== undefined
+      ? (performanceRatingII).toString()
       : "";
 
   const makeGrade = async () => {
@@ -173,7 +175,7 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
 
       // Clear input fields
       setTest4("");
-      setExam("");
+      setExam(result?.exam ? result.exam.toString() : "");
     } catch (error: any) {
       setLoading(false);
       toast.error("Failed to add grade. Please try again.");
@@ -183,6 +185,7 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
 
   // Use displayGrade if available, otherwise fall back to result from database
   const currentResult = displayGrade || result;
+
 
 
   return (
@@ -251,6 +254,10 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
 
       {/* Examination Score Input */}
       <div className="w-[100px] border-r">
+        <p>
+          <span className="text-[10px] font-medium">CBT Score:</span>{" "}
+          {computedExamDefault === "NaN" ? "0" : computedExamDefault}
+        </p>
         <input
           className="w-[80px] h-8 outline-none border rounded-md px-2"
           type="number"
@@ -259,10 +266,10 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
           placeholder={
             result?.exam !== undefined && result?.exam !== null
               ? result.exam.toString()
-              : computedExamDefault || "0"
+              : "0"
           }
           // show explicit exam state if user typed one, otherwise show computed default
-          value={exam !== "" ? exam : computedExamDefault}
+          value={exam !== "" ? exam : ""}
           onChange={(e: any) => {
             const value = e.target.value;
             if (value === "" || (Number(value) >= 0 && Number(value) <= 60)) {
