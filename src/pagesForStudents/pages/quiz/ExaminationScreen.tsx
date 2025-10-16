@@ -383,7 +383,7 @@ localStorage.removeItem("examQuestions");
                       Question {index + 1}.
                     </p>
                     <div className="ml-4">
-                      <p className="text-[18px]">{question?.question}</p>
+                      <p className="text-[18px]">{question?.question?.split(".")[1].trim()}</p>
 
                       {question?.images && (
                         <div>
