@@ -14,7 +14,7 @@ import { useMidTest } from "../../hooks/useMidTest";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 
-const PreviewMidTestScreen: FC<any> = ({
+const PreviewQuizScreen: FC<any> = ({
   instruction,
   duration,
   mark,
@@ -61,7 +61,7 @@ const PreviewMidTestScreen: FC<any> = ({
           formData.append("file", file);
           formData.append("theory", editorValue);
 
-          createMidTestData(subjectQuiz?.classDetails!, subjectID!, formData)
+          createQuizData(subjectQuiz?.classDetails!, subjectID!, formData)
             .then((res: any) => {
               if (res.status === 201) {
                 // This will trigger an immediate revalidation of the mid test data
@@ -78,4 +78,4 @@ const PreviewMidTestScreen: FC<any> = ({
   );
 };
 
-export default PreviewMidTestScreen;
+export default PreviewQuizScreen;

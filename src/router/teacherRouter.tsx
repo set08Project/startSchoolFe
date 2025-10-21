@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
+import CreatePopQuizScreen from "../pagesForTeachers/pages/quiz/CreatePopQuizData";
 
 const TeacherBroadSheetReportCardApproved = React.lazy(
   () => import("@/pagesForTeachers/pages/ReportCard/TeacherClassBroadSheet")
@@ -350,7 +351,8 @@ export const teacherRouter = createBrowserRouter([
         path: "create-quiz/:subjectID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
-            <CreateQuiz />
+            <CreatePopQuizScreen />
+            {/* <CreateQuiz /> */}
           </Suspense>
         ),
       },

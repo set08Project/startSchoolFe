@@ -479,6 +479,31 @@ export const createMidTestData = async (
   }
 };
 
+export const createQuizData = async (
+  classID: string,
+  subjectID: string,
+  data: any
+) => {
+  try {
+    const config: any = {
+      "content-type": "multipart/form-data",
+    };
+    // const URL = "http://localhost:2244/api";
+
+    return await axios
+      .post(
+        `${URL}/create-subject-quiz-file/${classID}/${subjectID}`,
+        data,
+        config
+      )
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const updateMidTestData = async (midTestID: string, data: {}) => {
   try {
     return await axios

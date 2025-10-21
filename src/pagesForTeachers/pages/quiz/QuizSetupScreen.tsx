@@ -104,6 +104,8 @@ const QuizSetupScreen = () => {
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const navigate = useNavigate();
 
+  console.log("subjectQuiz: ", readQuiz[0]?.quiz?.instruction);
+
   return (
     <div className="text-blue-950  relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
@@ -705,16 +707,17 @@ const QuizSetupScreen = () => {
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz && props?.quiz[1]?.question
-                          ? props?.quiz[1]?.question.length
+                        {props?.quiz && props?.quiz?.question
+                          ? props?.quiz?.question.length
                           : 0}
                       </span>
                     </div>
+                    
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz && props?.quiz[0]?.instruction
-                          ? props?.quiz[0]?.instruction.mark
+                        {props?.quiz && props?.quiz?.instruction
+                          ? props?.quiz?.instruction.mark
                           : 0}
                       </span>
                     </div>

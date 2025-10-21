@@ -58,15 +58,16 @@ const QuizTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === quizID && el?.quizDone
   );
-  const timer = parseFloat(quizData?.quiz[0]?.instruction?.duration);
+  const timer = parseFloat(quizData?.quiz?.instruction?.duration);
   let timerInSeconds = timer * 3600;
 
-  console.log(quizData?.quiz[0]?.instruction?.duration);
-
+ 
   const handleSubmit = () => {
     setLoading(true);
-    const correctAnswers = quizData?.quiz[1]?.question?.map((q: any) =>
-      q.answer.trim()
+    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+    {
+      q.answer ? q.answer.trim() : "";
+    }
     );
     let score = 0;
 
@@ -80,14 +81,13 @@ const QuizTestScreen = () => {
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
-    const markPerQuest = quizData?.quiz[0]?.instruction?.mark;
+    const markPerQuest = quizData?.quiz?.instruction?.mark;
     const getQuizData = quizData?.quiz;
 
     const totalquest = getQuizData[1]?.question?.length;
 
     timerInSeconds = 0;
 
-    console.log(quizData);
 
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
@@ -98,7 +98,7 @@ const QuizTestScreen = () => {
       status: quizData.status,
     })
       .then((res) => {
-        console.log(res);
+        console.log("submission response: ", res);
         if (res.status === 201) {
           toast.success(
             `${
@@ -146,7 +146,7 @@ const QuizTestScreen = () => {
 
   // ${quizData?.term && quizData?.term}
 
-  console.log(quizData);
+  
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -210,7 +210,7 @@ const QuizTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData[1]?.question?.map(
+                {myQuizData?.question?.map(
                   (question: any, index: number) => (
                     <div key={index}>
                       <p className="text-[14px] font-bold mt-10">

@@ -352,7 +352,8 @@ localStorage.removeItem("examQuestions");
                 }}
               />
               <p className="font-medium text-[18px]">
-                Push Play to start your <span className="font-bold capitalize">{quizData?.status}</span>
+                Push Play to start your{" "}
+                <span className="font-bold capitalize">{quizData?.status}</span>
               </p>
             </div>
           )}
@@ -383,7 +384,9 @@ localStorage.removeItem("examQuestions");
                       Question {index + 1}.
                     </p>
                     <div className="ml-4">
-                      <p className="text-[18px]">{question?.question?.split(".")[1].trim()}</p>
+                      <p className="text-[18px]">
+                        {question?.question?.replace(/^\d+\.\s*/, "")}
+                      </p>
 
                       {question?.images && (
                         <div>
@@ -402,9 +405,7 @@ localStorage.removeItem("examQuestions");
                         {question?.options?.map((el: any, i: number) => (
                           <div key={i}>
                             {el !== "" && (
-                              <div
-                                className="flex items-center gap-2 ml-4"
-                              >
+                              <div className="flex items-center gap-2 ml-4">
                                 <input
                                   className="radio radio-sm"
                                   type="radio"

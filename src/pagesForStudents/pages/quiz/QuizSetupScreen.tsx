@@ -21,9 +21,6 @@ const QuizSetupScreen = () => {
   const { examination } = useExamination(subjectID!);
 
   const { midTest } = useMidTest(subjectID!);
-
-  console.log("show me: ", midTest)
-
   const [completedQuizzes, setCompletedQuizzes] = useState<string[]>([]);
 
   const [loadingTest, setLoadingTest] = useState<boolean>(false);
@@ -41,7 +38,7 @@ const QuizSetupScreen = () => {
   };
 
   let readQuiz = _.filter(subjectQuiz?.quiz, (el: any) => el.status === "quiz");
-
+console.log(subjectQuiz?.quiz)
 
   return (
     <div className="text-blue-950 relative">
@@ -304,20 +301,20 @@ const QuizSetupScreen = () => {
                     <div>
                       Questions:{" "}
                       <span className="font-bold">
-                        {props?.quiz[1]?.question?.length}
+                        {props?.quiz?.question?.length}
                       </span>
                     </div>
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">
-                        {props?.quiz[0]?.instruction?.mark}
+                        {props?.quiz?.instruction?.mark}
                       </span>
                     </div>
                   </div>
                   <div className="text-[12px] mt-2 font-bold">
                     Instruction:{" "}
                     <span className="font-normal">
-                      {`${props?.quiz[0]?.instruction?.instruction}`.slice(
+                      {`${props?.quiz?.instruction?.instruction ? props?.quiz?.instruction?.instruction : "" }`.slice(
                         0,
                         Math.ceil(Math.random() * (100 - 70)) + 70
                       )}

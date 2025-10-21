@@ -37,11 +37,23 @@ const MidTestScreen = () => {
   const courseID = quizData?.subjectID;
 
   const handleStateChange = (questionIndex: any, optionValue: any) => {
-    setState((prev: any) => ({
-      ...prev,
-      [questionIndex]: optionValue.trim(),
-    }));
+    console.log("Selected answer:", {
+      questionIndex,
+      optionValue: optionValue.trim(),
+      originalValue: optionValue
+    });
+    
+    setState((prev: any) => {
+      const newState = {
+        ...prev,
+        [questionIndex]: optionValue.trim(),
+      };
+      console.log("Updated state:", newState);
+      return newState;
+    });
   };
+
+  console.log("read: ",state)
 
   const getRemark = (genPointScore: number) => {
     return genPointScore >= 0 && genPointScore <= 5
@@ -102,7 +114,7 @@ const MidTestScreen = () => {
 
   const myQuizData: any = quizData?.quiz;
 
-myQuizData
+// myQuizData
 
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === midTestID && el?.quizDone
@@ -110,20 +122,40 @@ myQuizData
   const timer = parseFloat(quizData?.quiz?.instruction?.duration);
 
   let timerInSeconds = timer * 3600;
-  let score = 0;
 
   const handleSubmit = () => {
     // guard against double submissions
     if (isSubmitted) return;
     setIsSubmitted(true);
     setLoading(true);
-    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-      q.answer.trim()
-    );
 
-    correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]?.trim()) {
+    // Initialize score inside handleSubmit
+    let score = 0;
+    console.log("Quiz Data:", quizData?.quiz?.question);
+    
+    
+    const correctAnswers = quizData?.quiz?.question?.map((q: any, index: number) => {
+      // console.log(`Question ${index + 1} correct answer:`, q.answer);
+      return q.answer.trim();
+    });
+
+    // console.log("All data to check:", {
+    //   correctAnswers,
+    //   studentAnswers: state,
+    //   rawQuizData: quizData?.quiz?.question
+    // });
+
+
+
+    correctAnswers?.forEach((correctAnswer: string, index: number) => {
+      const studentAnswer = state[index]?.trim() || "";
+      const isCorrect = correctAnswer === studentAnswer;
+      
+
+      
+      if (isCorrect) {
         score++;
+        console.log(`Question ${index + 1} correct! Score now: ${score}`);
       }
     });
 
@@ -137,6 +169,8 @@ myQuizData
     const totalquest = getQuizData?.question?.length;
 
     timerInSeconds = 0;
+
+    console.log(correctAnswers, score);
 
     performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,
@@ -175,7 +209,7 @@ myQuizData
         // keep isSubmitted true to avoid retrying
       });
   };
-
+let score=0
 
   const [readQuestion, setReadQuestion] = useState(
     JSON.parse(localStorage.getItem("midTestQuestions")!)
@@ -234,8 +268,6 @@ localStorage.removeItem("midTest");
 localStorage.removeItem("midTestQuestions");
   },[])
 
-
-
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -275,7 +307,8 @@ localStorage.removeItem("midTestQuestions");
                 }}
               />
               <p className="font-medium text-[18px]">
-                Push Play to start your <span className="font-bold capitalize">{quizData?.status}</span>
+                Push Play to start your{" "}
+                <span className="font-bold capitalize">{quizData?.status}</span>
               </p>
             </div>
           )}
@@ -300,52 +333,56 @@ localStorage.removeItem("midTestQuestions");
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {readQuestion?.map((question: any, index: number) => (
-                  <div key={index}>
-                    <p className="text-[14px] font-bold mt-10">
-                      Question {index + 1}.
-                    </p>
-                    <div className="ml-4">
-                      <p className="text-[18px]">{question?.question}</p>
-
-                      {question?.images && (
-                        <div>
-                          <br />
-                          {question?.images?.map((img: string, i: number) => (
-                            <img src={img} key={i} />
-                          ))}
-                          <br />
-                        </div>
-                      )}
-                      <div className="ml-8">
-                        <p className="text-[12px] mt-5">
-                          Choose your options carefully
+                {quizData?.quiz?.question?.map(
+                  (question: any, index: number) => (
+                    <div key={index}>
+                      <p className="text-[14px] font-bold mt-10">
+                        Question {index + 1}.
+                      </p>
+                      <div className="ml-4">
+                        <p className="text-[18px]">
+                          {question?.question.replace(/^\d+\.\s*/, "")}
                         </p>
-                        {question?.options?.map((el: any, i: number) => (
-                          <div key={i}>
-                            {el !== "" && (
-                              <div className="flex items-center gap-2 ml-4">
-                                <input
-                                  className="radio radio-sm"
-                                  type="radio"
-                                  onChange={() => {
-                                    handleStateChange(index, el);
-                                  }}
-                                  checked={state[index] === el.trim()}
-                                />
-                                <label>
-                                  {typeof el === "string"
-                                    ? el
-                                    : JSON.stringify(el)}
-                                </label>
-                              </div>
-                            )}
+
+                        {question?.images && (
+                          <div>
+                            <br />
+                            {question?.images?.map((img: string, i: number) => (
+                              <img src={img} key={i} />
+                            ))}
+                            <br />
                           </div>
-                        ))}
+                        )}
+                        <div className="ml-8">
+                          <p className="text-[12px] mt-5">
+                            Choose your options carefully
+                          </p>
+                          {question?.options?.map((el: any, i: number) => (
+                            <div key={i}>
+                              {el !== "" && (
+                                <div className="flex items-center gap-2 ml-4">
+                                  <input
+                                    className="radio radio-sm"
+                                    type="radio"
+                                    onChange={() => {
+                                      handleStateChange(index, el);
+                                    }}
+                                    checked={state[index] === el.trim()}
+                                  />
+                                  <label>
+                                    {typeof el === "string"
+                                      ? el
+                                      : JSON.stringify(el)}
+                                  </label>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
 
                 <div className="border-r mt-10 w-full h-[10px] bg-red-30">
                   <hr />
