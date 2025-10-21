@@ -129,37 +129,27 @@ const MidTestScreen = () => {
     setIsSubmitted(true);
     setLoading(true);
 
+    // Normalize correct answers from the currently loaded/shuffled questions (fallback to original quiz questions)
+    const correctAnswers = (readQuestion || myQuizData?.question || []).map(
+      (q: any) =>
+        typeof q?.answer === "string"
+          ? q.answer.trim()
+          : (q?.answer?.toString?.() || "")
+    );
+
     // Initialize score inside handleSubmit
     let score = 0;
-    console.log("Quiz Data:", quizData?.quiz?.question);
-    
-    
-    const correctAnswers = quizData?.quiz?.question?.map((q: any, index: number) => {
-      // console.log(`Question ${index + 1} correct answer:`, q.answer);
-      return q.answer.trim();
-    });
-
-    // console.log("All data to check:", {
-    //   correctAnswers,
-    //   studentAnswers: state,
-    //   rawQuizData: quizData?.quiz?.question
-    // });
-
-
-
-    correctAnswers?.forEach((correctAnswer: string, index: number) => {
+    // Use readQuestion for both display and scoring
+    readQuestion?.forEach((question: any, index: number) => {
+      const correctAnswer = question.answer?.trim() || "";
       const studentAnswer = state[index]?.trim() || "";
-      const isCorrect = correctAnswer === studentAnswer;
-      
-
-      
-      if (isCorrect) {
+      if (correctAnswer === studentAnswer) {
         score++;
-        console.log(`Question ${index + 1} correct! Score now: ${score}`);
       }
     });
 
-    const percentage = Math.ceil((score / correctAnswers.length) * 100);
+    const totalForCalc = correctAnswers.length || 1;
+    const percentage = Math.ceil((score / totalForCalc) * 100);
     let remark = getRemark(percentage);
     let grade = getGrade(percentage);
 
@@ -333,7 +323,7 @@ localStorage.removeItem("midTestQuestions");
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {quizData?.quiz?.question?.map(
+                {readQuestion?.map(
                   (question: any, index: number) => (
                     <div key={index}>
                       <p className="text-[14px] font-bold mt-10">
