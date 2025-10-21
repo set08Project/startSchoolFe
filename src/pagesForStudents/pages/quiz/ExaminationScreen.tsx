@@ -67,68 +67,143 @@ const ExaminationTestScreen = () => {
   const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333");
   let timerInSeconds = timer * 3600;
 
+  // const handleSubmit = () => {
+  //   // prevent double submissions
+  //   if (isSubmitted) return;
+  //   setIsSubmitted(true);
+  //   setLoading(true);
+  //   const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
+  //     q.answer.trim()
+  //   );
+  //   let score = 0;
+
+  //   correctAnswers.forEach((correctAnswer: string, index: number) => {
+  //     if (correctAnswer === state[index]?.trim()) {
+  //       score++;
+  //     }
+  //   });
+
+  //   const percentage = Math.ceil((score / correctAnswers.length) * 100);
+  //   let remark = getRemark(percentage);
+  //   let grade = getGrade(percentage);
+
+  //   const markPerQuest = quizData?.quiz?.instruction?.mark;
+  //   const getQuizData = quizData?.quiz;
+
+  //   const totalquest = getQuizData?.question?.length;
+
+  //   timerInSeconds = 0;
+
+    // performanceExamination(studentInfo?._id, examID!, courseID, {
+    //   studentScore: score,
+    //   studentGrade: grade,
+    //   remark,
+    //   totalQuestions: totalquest,
+    //   markPerQuestion: markPerQuest,
+    //   status: quizData.status,
+    // })
+    //   .then((res) => {
+    //     console.log("reading: ", res);
+    //     if (res.status === 201) {
+    //       toast.success(
+    //         `${
+    //           quizData?.status?.charAt(0).toUpperCase() +
+    //           quizData?.status.slice(1)
+    //         } submitted successfully`
+    //       );
+    //       // navigate(`/quiz-result/${examID}`, {
+    //       navigate(`/confirm-quiz-take/${examID}`, {
+    //         state: {
+    //           correctAnswers,
+    //           studentAnswers: state,
+    //           score,
+    //           total: correctAnswers.length,
+    //         },
+    //       });
+    //     } else {
+    //       toast.error("Something went wrong");
+    //     }
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //     localStorage.removeItem("countdown");
+    //   });
+  // };
+
   const handleSubmit = () => {
-    // prevent double submissions
-    if (isSubmitted) return;
-    setIsSubmitted(true);
-    setLoading(true);
-    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-      q.answer.trim()
-    );
-    let score = 0;
-
-    correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]?.trim()) {
-        score++;
-      }
-    });
-
-    const percentage = Math.ceil((score / correctAnswers.length) * 100);
-    let remark = getRemark(percentage);
-    let grade = getGrade(percentage);
-
-    const markPerQuest = quizData?.quiz?.instruction?.mark;
-    const getQuizData = quizData?.quiz;
-
-    const totalquest = getQuizData?.question?.length;
-
-    timerInSeconds = 0;
-
-    performanceExamination(studentInfo?._id, examID!, courseID, {
-      studentScore: score,
-      studentGrade: grade,
-      remark,
-      totalQuestions: totalquest,
-      markPerQuestion: markPerQuest,
-      status: quizData.status,
-    })
-      .then((res) => {
-        console.log("reading: ", res);
-        if (res.status === 201) {
-          toast.success(
-            `${
-              quizData?.status?.charAt(0).toUpperCase() +
-              quizData?.status.slice(1)
-            } submitted successfully`
-          );
-          // navigate(`/quiz-result/${examID}`, {
-          navigate(`/confirm-quiz-take/${examID}`, {
-            state: {
-              correctAnswers,
-              studentAnswers: state,
-              score,
-              total: correctAnswers.length,
-            },
-          });
-        } else {
-          toast.error("Something went wrong");
+      // guard against double submissions
+      if (isSubmitted) return;
+      setIsSubmitted(true);
+      setLoading(true);
+  
+      // Normalize correct answers from the currently loaded/shuffled questions (fallback to original quiz questions)
+      const correctAnswers = (readQuestion || myQuizData?.question || []).map(
+        (q: any) =>
+          typeof q?.answer === "string"
+            ? q.answer.trim()
+            : (q?.answer?.toString?.() || "")
+      );
+  
+      // Initialize score inside handleSubmit
+      let score = 0;
+      // Use readQuestion for both display and scoring
+      readQuestion?.forEach((question: any, index: number) => {
+        const correctAnswer = question.answer?.trim() || "";
+        const studentAnswer = state[index]?.trim() || "";
+        if (correctAnswer === studentAnswer) {
+          score++;
         }
-      })
-      .finally(() => {
-        setLoading(false);
-        localStorage.removeItem("countdown");
       });
-  };
+  
+      const totalForCalc = correctAnswers.length || 1;
+      const percentage = Math.ceil((score / totalForCalc) * 100);
+      let remark = getRemark(percentage);
+      let grade = getGrade(percentage);
+  
+      const markPerQuest = quizData?.quiz?.instruction?.mark;
+      const getQuizData = quizData?.quiz;
+  
+      const totalquest = getQuizData?.question?.length;
+  
+      timerInSeconds = 0;
+  
+      console.log(correctAnswers, score);
+  
+         performanceExamination(studentInfo?._id, examID!, courseID, {
+           studentScore: score,
+           studentGrade: grade,
+           remark,
+           totalQuestions: totalquest,
+           markPerQuestion: markPerQuest,
+           status: quizData.status,
+         })
+           .then((res) => {
+             console.log("reading: ", res);
+             if (res.status === 201) {
+               toast.success(
+                 `${
+                   quizData?.status?.charAt(0).toUpperCase() +
+                   quizData?.status.slice(1)
+                 } submitted successfully`
+               );
+               // navigate(`/quiz-result/${examID}`, {
+               navigate(`/confirm-quiz-take/${examID}`, {
+                 state: {
+                   correctAnswers,
+                   studentAnswers: state,
+                   score,
+                   total: correctAnswers.length,
+                 },
+               });
+             } else {
+               toast.error("Something went wrong");
+             }
+           })
+           .finally(() => {
+             setLoading(false);
+             localStorage.removeItem("countdown");
+           });
+    };
  
   // const handleSubmit = async () => {
   //   setLoading(true);
