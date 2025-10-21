@@ -150,15 +150,23 @@ const PastQuestionScreen = () => {
             <div className="bg-white justify-center flex min-h-[100vh]">
               <div className=" bg-white w-[90%] px-5">
                 {sevenData?.data
+                  ?.sort((a, b) => {
+                    return a.questionNumber - b.questionNumber;
+                  })
                   ?.map((props: any, index: number) => (
                     <div>
                       <p className="text-[14px] font-bold mt-10">
-                        Question {index + 1}.
+                        Question Number {index + 1}:
                       </p>
                       <i className="text-blue-950">
                         {props?.section && (
                           <>
-                            Instruction:
+                            <p className="text-[13px]">
+                              <span className="font-semibold uppercase">
+                                {props?.examtype}
+                              </span>{" "}
+                              Question:
+                            </p>
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: props?.section,

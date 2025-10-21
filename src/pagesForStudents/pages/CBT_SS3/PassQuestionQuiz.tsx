@@ -27,8 +27,8 @@ const PassQuestionQuiz = () => {
       <LittleHeader name="Subject Selection" />
 
       <div className="w-full flex justify-end mb-5">
-        <Link to="/history/cbt" className="text-blue-950 underline ">
-          CBT History
+        <Link to="/history/cbt" className="text-white bg-blue-950 font-medium px-4 py-2 rounded-md text-[12px] uppercase hover:text-blue-900 transition-all duration-300 ">
+          View Performance Records
         </Link>
       </div>
 

@@ -804,6 +804,7 @@ const ViewStudent = () => {
                                       className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
                                       onClick={() => {
                                         if (valueStored?.length <= 2) {
+                                          // console.log("read: ", valueStored);
                                           handeDeleteStudent(valueStored[0]);
                                         } else {
                                           handeDeleteStudent(valueStored[1]);

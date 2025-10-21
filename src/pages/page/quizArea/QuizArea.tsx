@@ -202,11 +202,11 @@ const ExamQuizSetupScreen = () => {
           <p className="mt-10 lg:mt-0">View Assignment/Test/Quiz</p>
 
           <div className="flex gap-2">
-            <Link to={`/create-quiz/${subjectID}`}>
+            {/* <Link to={`/create-quiz/${subjectID}`}>
               <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
                 + Create Pop Test
               </p>
-            </Link>
+            </Link> */}
             <button
               onClick={() => setShowMidTestConfirm(true)}
               className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
