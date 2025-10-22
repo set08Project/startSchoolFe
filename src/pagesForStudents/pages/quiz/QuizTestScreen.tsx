@@ -190,8 +190,8 @@ const QuizTestScreen = () => {
             </div>
           )}
           {/* Timer */}
-          <div className="sticky flex top-[70px] justify-end items-center">
-            <div className="sticky min-w-[230px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
+          <div className="sticky flex top-[70px] justify-end items-center pointer-events-none">
+            <div className="sticky min-w-[230px] p-3 border shadow-sm rounded-lg flex justify-center items-end flex-col bg-blue-50">
               <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
                 Test Count Down Timer <MdOutlineTimer />
               </h1>
@@ -210,47 +210,45 @@ const QuizTestScreen = () => {
           <div className="bg-slate-50 justify-center flex min-h-[100vh]">
             {start && (
               <div className="bg-white w-full px-5">
-                {myQuizData?.question?.map(
-                  (question: any, index: number) => (
-                    <div key={index}>
-                      <p className="text-[14px] font-bold mt-10">
-                        Question {index + 1}.
-                      </p>
-                      <div className="ml-4">
-                        <p className="text-[18px]">{question?.question}</p>
-                        <div className="ml-8">
-                          <p className="text-[12px] mt-5">
-                            Choose your options carefully
-                          </p>
-                          {question?.options?.map((el: any, i: number) => (
-                            <div>
-                              {el !== "" && (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2 ml-4"
-                                >
-                                  <input
-                                    className="radio radio-sm"
-                                    type="radio"
-                                    onChange={() => {
-                                      handleStateChange(index, el);
-                                    }}
-                                    checked={state[index] === el.trim()}
-                                  />
-                                  <label>
-                                    {typeof el === "string"
-                                      ? el
-                                      : JSON.stringify(el)}
-                                  </label>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                {myQuizData?.question?.map((question: any, index: number) => (
+                  <div key={index}>
+                    <p className="text-[14px] font-bold mt-10">
+                      Question {index + 1}.
+                    </p>
+                    <div className="ml-4">
+                      <p className="text-[18px]">{question?.question}</p>
+                      <div className="ml-8">
+                        <p className="text-[12px] mt-5">
+                          Choose your options carefully
+                        </p>
+                        {question?.options?.map((el: any, i: number) => (
+                          <div>
+                            {el !== "" && (
+                              <div
+                                key={i}
+                                className="flex items-center gap-2 ml-4"
+                              >
+                                <input
+                                  className="radio radio-sm"
+                                  type="radio"
+                                  onChange={() => {
+                                    handleStateChange(index, el);
+                                  }}
+                                  checked={state[index] === el.trim()}
+                                />
+                                <label>
+                                  {typeof el === "string"
+                                    ? el
+                                    : JSON.stringify(el)}
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
 
                 <div>
                   <Button

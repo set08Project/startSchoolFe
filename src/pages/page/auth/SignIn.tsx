@@ -28,7 +28,7 @@ const SignIn = () => {
 
   const handleSubmit = () => {
     setLoading(true);
-    const val = { email: state, enrollmentID: password };
+    const val = { email: state?.trim(), enrollmentID: password?.trim() };
 
     getSchoolCookie().then((res) => {});
 
@@ -48,7 +48,7 @@ const SignIn = () => {
             clearTimeout(x);
           }, 10);
         } else {
-          console.log(res);
+          
           if (res?.response?.data?.message === "Error finding school") {
             setLoading(false);
             toast.error("Error Finding School, Please Check your Connectivity");

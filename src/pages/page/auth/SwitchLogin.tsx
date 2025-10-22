@@ -32,7 +32,7 @@ const SwitchLogin = () => {
   const handleSubmit = () => {
     // e.preventDefault();
     setLoading(true);
-    const val = { email: state, password };
+    const val = { email: state?.trim(), password: password?.trim() };
 
     loginTeacher(val)
       .then((res) => {
@@ -62,7 +62,7 @@ const SwitchLogin = () => {
   const handleSubmitToken = () => {
     // e.preventDefault();
     setLoading(true);
-    const val = { token: enrollmentID };
+    const val = { token: enrollmentID?.trim() };
 
     loginTeacherToken(val)
       .then((res) => {

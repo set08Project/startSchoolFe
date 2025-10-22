@@ -31,7 +31,7 @@ const StudentLogin = () => {
   const handleSubmit = () => {
     // e.preventDefault();
     setLoading(true);
-    const val = { email: state, password };
+    const val = { email: state?.trim(), password: password?.trim() };
 
     loginStudentToken(val)
       .then((res) => {
@@ -58,7 +58,7 @@ const StudentLogin = () => {
   const handleSubmitToken = () => {
     // e.preventDefault();
     setLoading(true);
-    const val = { token: enrollmentID };
+    const val = { token: enrollmentID?.trim() };
 
     loginStudentToken(val)
       .then((res) => {

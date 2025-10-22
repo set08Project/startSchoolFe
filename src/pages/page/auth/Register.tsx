@@ -23,7 +23,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     if (email !== "") {
-      registerSchool(email).then((res) => {
+      registerSchool(email?.trim()).then((res) => {
         if (res.status === 201) {
           dispatch(getEntryEmail(email));
           setLoading(false);
@@ -70,6 +70,7 @@ const Register = () => {
           onChange={(e: any) => {
             setEmail(e.target.value);
           }}
+          
         />
         {/* <div className="mx-4 flex items-center gap-3">
           <input
