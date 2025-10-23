@@ -10,6 +10,21 @@ import axios, { AxiosResponse } from "axios";
 export const URL: string = "https://startschoolbe-4.onrender.com/api";
 const URL2: string = "https://startschoolbe-4.onrender.com";
 
+export const removePerformance = async (
+  performanceID: string,
+ 
+): Promise<any> => {
+  try {
+    return await axios
+      .delete(`${URL}/delete-performance/${performanceID}`)
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const removeOptions = async (
   schoolID: string,
   refID: string,

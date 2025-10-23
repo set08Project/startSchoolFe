@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LittleHeader from "@/components/layout/LittleHeader";
 import { Toaster } from "react-hot-toast";
@@ -13,6 +13,9 @@ import {
   useMidTestResultPerformanceData,
   useQuiz,
 } from "@/pagesForTeachers/hooks/useTeacher";
+import { removePerformance } from "@/pages/api/schoolAPIs";
+import { FaSpinner } from "react-icons/fa6";
+import { MdArrowBack } from "react-icons/md";
 
 const MidTestResultPerformanceScreen = () => {
   const { subjectID, quizID, midQuizID } = useParams();
@@ -27,14 +30,21 @@ const MidTestResultPerformanceScreen = () => {
     midQuizID
   );
 
-  const { midTestPerformance } = useMidTestResultPerformance(midQuizID);
+  const { midTestPerformance, mutate } = useMidTestResultPerformance(midQuizID);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [recordToDelete, setRecordToDelete] = useState<string>("");
   const { examData } = useExam(quizID);
   const { midTest: quizData } = useMidTest(subjectID);
 
-  const students = midTestPerformance?.performance;
+  // const students = midTestPerformance?.performance; // use localStudents for realtime updates
+
+    const [localStudents, setLocalStudents] = useState<any>(midTestPerformance);
+    useEffect(() => {
+      setLocalStudents(midTestPerformance);
+    }, [midTestPerformance]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -66,7 +76,7 @@ const MidTestResultPerformanceScreen = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {students?.length <= 0 ? (
+            {localStudents?.performance?.length <= 0 ? (
               <p className="text-center text-gray-600">
                 No Test Results Submitted.
               </p>
@@ -100,10 +110,13 @@ const MidTestResultPerformanceScreen = () => {
                   <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
                     Date
                   </div>
+                  <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+                    Remove
+                  </div>
                 </div>
 
                 <div className="w-[1500px]">
-                  {students?.map((record: any, i: number) => (
+                  {localStudents?.performance?.map((record: any, i: number) => (
                     <motion.tr
                       key={record._id}
                       className="w-[1500px] items-center border-b hover:bg-gray-100 transition-colors duration-200 flex "
@@ -150,6 +163,17 @@ const MidTestResultPerformanceScreen = () => {
                       <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
                         {new Date(record.createdAt).toLocaleDateString()}
                       </div>
+
+                      <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
+                        <Button
+                          className="bg-red-600 px-8 py-2 text-white rounded-mg shadow-md hover:bg-red-500 transition-colors duration-300"
+                          name="Remove"
+                          onClick={() => {
+                            setRecordToDelete(record._id);
+                            setShowDeleteModal(true);
+                          }}
+                        />
+                      </div>
                     </motion.tr>
                   ))}
                 </div>
@@ -158,13 +182,86 @@ const MidTestResultPerformanceScreen = () => {
           </motion.div>
         )}
 
-        <div className="mt-8 flex justify-center">
-          <Button
-            className="bg-blue-950 px-6 py-3 text-white rounded-full shadow-md hover:bg-blue-800 transition-colors duration-300"
-            name="Go Back"
-            onClick={() => navigate(-1)}
-          />
-        </div>
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Confirm Record Removal
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to remove this performance record? This
+                action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-">
+                <Button
+                  className="bg-gray-300 px-8 py-2 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-300 !text-[14px]"
+                  name="Cancel Action"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setRecordToDelete("");
+                  }}
+                />
+                <Button
+                  className="bg-red-600 px-8 py-2 text-white rounded-md hover:bg-red-700 transition-colors duration-300 !text-[14px]"
+                  name={
+                    loading ? (
+                      <span className="flex gap-2 items-center justify-center">
+                        <FaSpinner className="animate-spin text-white " />{" "}
+                        Removing...
+                      </span>
+                    ) : (
+                      "Remove Record"
+                    )
+                  }
+                  onClick={() => {
+                    setLoading(true);
+                    removePerformance(recordToDelete)
+                      .then((res) => {
+                        if (res.status === 200) {
+                          // remove from local state immediately
+                          setLocalStudents((prev: any) => {
+                            if (!prev) return prev;
+                            return {
+                              ...prev,
+                              performance: prev.performance.filter(
+                                (r: any) => r._id !== recordToDelete
+                              ),
+                            };
+                          });
+
+                          setLoading(false);
+                          setShowDeleteModal(false);
+                          setRecordToDelete("");
+                          // revalidate remote data
+                          // if (mutate) mutate(`api/view-mid-test-performance/${quizID}`);
+                        }
+                      })
+                      .catch((err) => {
+                        console.error("Remove error:", err);
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  }}
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+       <div className="mt-8 flex justify-center">
+                 <Button
+                   className="bg-neutral-950 px-6 py-3 text-white rounded-lg shadow-md hover:bg-neutral-800 transition-colors duration-300 !text-[16px]"
+                   name="Go Back"
+                   onClick={() => navigate(-1)}
+       
+                   icon={<MdArrowBack size={12}  className="animate-pulse text-white " />}
+                 />
+               </div>
       </div>
     </div>
   );

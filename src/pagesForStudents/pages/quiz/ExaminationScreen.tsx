@@ -145,97 +145,6 @@ const ExaminationTestScreen = () => {
              localStorage.removeItem("countdown");
            });
     };
- 
-  // const handleSubmit = async () => {
-  //   setLoading(true);
-  //   try {
-  //     // ensure questions array exists
-  //     const questions = Array.isArray(quizData?.quiz?.question)
-  //       ? quizData.quiz.question
-  //       : null;
-
-  //     if (!questions) {
-  //       toast.error("Quiz questions not available. Cannot submit.");
-  //       console.error("Quiz questions missing:", quizData);
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     const correctAnswers = questions.map((q: any) =>
-  //       (q?.answer || "").trim()
-  //     );
-  //     let score = 0;
-
-  //     correctAnswers.forEach((correctAnswer: string, index: number) => {
-  //       if (correctAnswer === (state[index] ?? "").trim()) {
-  //         score++;
-  //       }
-  //     });
-
-  //     const percentage = Math.ceil((score / correctAnswers.length) * 100);
-  //     const remark = getRemark(percentage);
-  //     const grade = getGrade(percentage);
-
-  //     const markPerQuest = quizData?.quiz?.instruction?.mark;
-  //     const getQuizData = quizData?.quiz;
-  //     const totalquest = getQuizData?.question?.length;
-
-  //     // prepare payload clearly
-  //     const payload = {
-  //       studentScore: score,
-  //       studentGrade: grade,
-  //       remark,
-  //       totalQuestions: Number(totalquest) || 0,
-  //       markPerQuestion: markPerQuest,
-  //       status: quizData?.status,
-  //       // include studentAnswers if backend expects them:
-  //       studentAnswers: state,
-  //       correctAnswers,
-  //     };
-
-  //     console.debug("Submitting performanceExamination payload:", {
-  //       studentId: studentInfo?._id,
-  //       examID,
-  //       courseID,
-  //       payload,
-  //     });
-
-  //     const res = await performanceExamination(
-  //       studentInfo?._id,
-  //       examID!,
-  //       courseID,
-  //       payload
-  //     );
-
-  //     console.debug("performanceExamination response:", res);
-
-  //     if (res?.status === 201) {
-  //       toast.success(
-  //         `${
-  //           quizData?.status?.charAt(0).toUpperCase() +
-  //           quizData?.status?.slice(1)
-  //         } submitted successfully`
-  //       );
-  //       navigate(`/confirm-quiz-take/${examID}`, {
-  //         state: {
-  //           correctAnswers,
-  //           studentAnswers: state,
-  //           score,
-  //           total: correctAnswers.length,
-  //         },
-  //       });
-  //     } else {
-  //       toast.error("Something went wrong");
-  //       console.error("Submission failed:", res);
-  //     }
-  //   } catch (err: any) {
-  //     console.error("Submission error:", err);
-  //     toast.error(err?.message || "Failed to submit quiz");
-  //   } finally {
-  //     setLoading(false);
-  //     localStorage.removeItem("countdown");
-  //   }
-  // };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -443,7 +352,8 @@ localStorage.removeItem("examQuestions");
          return Object.keys(answers)?.length;
        };
   
-      
+      console.log("done:: ", studentInfo);
+      console.log("done:: ", quizData);
 
   return (
     <div>

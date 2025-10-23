@@ -113,6 +113,7 @@ export const useExamSubjectPerfomance = (subjectID: string | undefined) => {
       data: examPerformance,
       error,
       isValidating,
+      mutate
     } = useSWR(key, async () => {
       return getExamSubjectPerformance(subjectID!).then((res) => {
         return res?.data ?? [];
@@ -122,10 +123,10 @@ export const useExamSubjectPerfomance = (subjectID: string | undefined) => {
     return {
       examPerformance: examPerformance ?? [],
       isLoading: isValidating && !examPerformance && !error,
-      error,
+      error,mutate
     };
   } catch (error) {
     console.error(error);
-    return { examPerformance: [], isLoading: false, error };
+    return { examPerformance: [], isLoading: false, error,  };
   }
 };
