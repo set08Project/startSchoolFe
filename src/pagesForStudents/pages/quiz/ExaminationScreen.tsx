@@ -25,7 +25,6 @@ const ExaminationTestScreen = () => {
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
 
-
   const [state, setState] = useState<any>({});
   const [start, setStart] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -70,84 +69,79 @@ const ExaminationTestScreen = () => {
   const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333");
   let timerInSeconds = timer * 3600;
 
-
   const handleSubmit = () => {
-      // guard against double submissions
-      if (isSubmitted) return;
-      setIsSubmitted(true);
-      setLoading(true);
+    // guard against double submissions
+    if (isSubmitted) return;
+    setIsSubmitted(true);
+    setLoading(true);
 
-  
-      // Normalize correct answers from the currently loaded/shuffled questions (fallback to original quiz questions)
-      const correctAnswers = (readQuestion || myQuizData?.question || []).map(
-        (q: any) =>
-          typeof q?.answer === "string"
-            ? q.answer.trim()
-            : (q?.answer?.toString?.() || "")
-      );
-  
-      // Initialize score inside handleSubmit
-      let score = 0;
-      // Use readQuestion for both display and scoring
-      readQuestion?.forEach((question: any, index: number) => {
-        const correctAnswer = question.answer?.trim() || "";
-        const studentAnswer = state[index]?.trim() || "";
-        if (correctAnswer === studentAnswer) {
-          score++;
+    // Normalize correct answers from the currently loaded/shuffled questions (fallback to original quiz questions)
+    const correctAnswers = (readQuestion || myQuizData?.question || []).map(
+      (q: any) =>
+        typeof q?.answer === "string"
+          ? q.answer.trim()
+          : q?.answer?.toString?.() || ""
+    );
+
+    // Initialize score inside handleSubmit
+    let score = 0;
+    // Use readQuestion for both display and scoring
+    readQuestion?.forEach((question: any, index: number) => {
+      const correctAnswer = question.answer?.trim() || "";
+      const studentAnswer = state[index]?.trim() || "";
+      if (correctAnswer === studentAnswer) {
+        score++;
+      }
+    });
+
+    const totalForCalc = correctAnswers.length || 1;
+    const percentage = Math.ceil((score / totalForCalc) * 100);
+    let remark = getRemark(percentage);
+    let grade = getGrade(percentage);
+
+    const markPerQuest = quizData?.quiz?.instruction?.mark;
+    const getQuizData = quizData?.quiz;
+
+    const totalquest = getQuizData?.question?.length;
+
+    timerInSeconds = 0;
+
+    performanceExamination(studentInfo?._id, examID!, courseID, {
+      studentScore: score,
+      studentGrade: grade,
+      remark,
+      totalQuestions: totalquest,
+      markPerQuestion: markPerQuest,
+      status: quizData.status,
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          toast.success(
+            `${
+              quizData?.status?.charAt(0).toUpperCase() +
+              quizData?.status.slice(1)
+            } submitted successfully`
+          );
+          // navigate(`/quiz-result/${examID}`, {
+          navigate(`/confirm-quiz-take/${examID}`, {
+            state: {
+              correctAnswers,
+              studentAnswers: state,
+              score,
+              total: correctAnswers.length,
+            },
+          });
+        } else {
+          toast.error("Something went wrong");
         }
+      })
+      .finally(() => {
+        setLoading(false);
+        try {
+          localStorage.removeItem(countdownKey);
+        } catch (e) {}
       });
-  
-      const totalForCalc = correctAnswers.length || 1;
-      const percentage = Math.ceil((score / totalForCalc) * 100);
-      let remark = getRemark(percentage);
-      let grade = getGrade(percentage);
-  
-      const markPerQuest = quizData?.quiz?.instruction?.mark;
-      const getQuizData = quizData?.quiz;
-  
-      const totalquest = getQuizData?.question?.length;
-  
-      timerInSeconds = 0;
-  
-   
-  
-         performanceExamination(studentInfo?._id, examID!, courseID, {
-           studentScore: score,
-           studentGrade: grade,
-           remark,
-           totalQuestions: totalquest,
-           markPerQuestion: markPerQuest,
-           status: quizData.status,
-         })
-           .then((res) => {
-            
-             if (res.status === 201) {
-               toast.success(
-                 `${
-                   quizData?.status?.charAt(0).toUpperCase() +
-                   quizData?.status.slice(1)
-                 } submitted successfully`
-               );
-               // navigate(`/quiz-result/${examID}`, {
-               navigate(`/confirm-quiz-take/${examID}`, {
-                 state: {
-                   correctAnswers,
-                   studentAnswers: state,
-                   score,
-                   total: correctAnswers.length,
-                 },
-               });
-             } else {
-               toast.error("Something went wrong");
-             }
-           })
-           .finally(() => {
-             setLoading(false);
-             try {
-               localStorage.removeItem(countdownKey);
-             } catch (e) {}
-           });
-    };
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -183,9 +177,9 @@ const ExaminationTestScreen = () => {
   // Get shuffled questions from localStorage
   // const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
 
-   const [readQuestion, setReadQuestion] = useState(
-     JSON.parse(localStorage.getItem("examQuestions")!)
-   );
+  const [readQuestion, setReadQuestion] = useState(
+    JSON.parse(localStorage.getItem("examQuestions")!)
+  );
   let score = 0;
 
   useEffect(() => {
@@ -205,12 +199,19 @@ const ExaminationTestScreen = () => {
     localStorage.setItem("exam", JSON.stringify({ score, state }));
 
     const question = JSON.parse(localStorage.getItem("examQuestions")!);
+    console.clear();
+    console.log(quizData);
 
     if (question === null) {
-      localStorage.setItem(
-        "examQuestions",
-        JSON.stringify(lodash.shuffle(myQuizData?.question))
-      );
+      const sourceQuestions = myQuizData?.question ?? [];
+      const questionsToStore = !quizData?.randomize
+        ? lodash.shuffle([...sourceQuestions])
+        : sourceQuestions;
+      localStorage.setItem("examQuestions", JSON.stringify(questionsToStore));
+      // localStorage.setItem(
+      //   "examQuestions",
+      //   JSON.stringify(lodash.shuffle(myQuizData?.question))
+      // );
       setReadQuestion(JSON.parse(localStorage.getItem("examQuestions")!));
     } else if (question?.length === 0) {
       localStorage.setItem(
@@ -231,7 +232,7 @@ const ExaminationTestScreen = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [state, readQuestion, myQuizData, timeUp]);
+  }, [state, readQuestion, myQuizData, timeUp, quizData?.randomize]);
 
   useEffect(() => {
     // do not clear countdown here so reloads won't reset the timer
@@ -240,124 +241,119 @@ const ExaminationTestScreen = () => {
       localStorage.removeItem("exam");
       localStorage.removeItem("examQuestions");
     } catch (e) {}
-  },[])
+  }, []);
 
-  
-  
-     const [currentQuestion, setCurrentQuestion] = useState(0);
-     const [answers, setAnswers] = useState({});
-     const [submitted, setSubmitted] = useState(false);
-     const [_score, setScore] = useState(0);
-  
-       const questions = [
-         {
-           id: 1,
-           question: "What does HTML stand for?",
-           options: [
-             "Hyper Text Markup Language",
-             "High Tech Modern Language",
-             "Home Tool Markup Language",
-             "Hyperlinks and Text Markup Language",
-           ],
-           correctAnswer: 0,
-         },
-         {
-           id: 2,
-           question:
-             "Which programming language is known as the 'language of the web'?",
-           options: ["Python", "Java", "JavaScript", "C++"],
-           correctAnswer: 2,
-         },
-         {
-           id: 3,
-           question: "What does CSS stand for?",
-           options: [
-             "Computer Style Sheets",
-             "Cascading Style Sheets",
-             "Creative Style Sheets",
-             "Colorful Style Sheets",
-           ],
-           correctAnswer: 1,
-         },
-         {
-           id: 4,
-           question: "Which of the following is a JavaScript framework?",
-           options: ["Django", "Flask", "React", "Laravel"],
-           correctAnswer: 2,
-         },
-        {
-          id: 5,
-          question: "What is the purpose of Git?",
-          options: [
-            "Image editing",
-            "Version control",
-            "Database management",
-            "Web hosting",
-          ],
-          correctAnswer: 1,
-        },
-        {
-          id: 6,
-          question: "Which HTTP method is used to retrieve data from a server?",
-          options: ["POST", "PUT", "GET", "DELETE"],
-          correctAnswer: 2,
-        },
-        {
-          id: 7,
-          question: "What does API stand for?",
-          options: [
-            "Application Programming Interface",
-            "Advanced Programming Interface",
-            "Application Process Integration",
-            "Automated Programming Interface",
-          ],
-          correctAnswer: 0,
-        },
-         {
-           id: 8,
-           question: "Which database is a NoSQL database?",
-           options: ["MySQL", "PostgreSQL", "MongoDB", "Oracle"],
-           correctAnswer: 2,
-         },
-         {
-           id: 9,
-           question: "What is the default port for HTTP?",
-           options: ["21", "80", "443", "8080"],
-           correctAnswer: 1,
-         },
-         {
-           id: 10,
-           question: "Which symbol is used for comments in JavaScript?",
-           options: ["#", "//", "/* */", "Both // and /* */"],
-           correctAnswer: 3,
-         },
-       ];
-  
-       const handleAnswerSelect = (optionIndex) => {
-         setAnswers({
-           ...answers,
-           [currentQuestion]: optionIndex,
-         });
-       };
-  
-       const handleNext = () => {
-         if (currentQuestion < readQuestion?.length - 1) {
-           setCurrentQuestion(currentQuestion + 1);
-         }
-       };
-  
-       const handlePrevious = () => {
-         if (currentQuestion > 0) {
-           setCurrentQuestion(currentQuestion - 1);
-         }
-       };
-  
-  
-       const getAnsweredCount = () => {
-         return Object.keys(answers)?.length;
-       };
-  
-    
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [_score, setScore] = useState(0);
+
+  const questions = [
+    {
+      id: 1,
+      question: "What does HTML stand for?",
+      options: [
+        "Hyper Text Markup Language",
+        "High Tech Modern Language",
+        "Home Tool Markup Language",
+        "Hyperlinks and Text Markup Language",
+      ],
+      correctAnswer: 0,
+    },
+    {
+      id: 2,
+      question:
+        "Which programming language is known as the 'language of the web'?",
+      options: ["Python", "Java", "JavaScript", "C++"],
+      correctAnswer: 2,
+    },
+    {
+      id: 3,
+      question: "What does CSS stand for?",
+      options: [
+        "Computer Style Sheets",
+        "Cascading Style Sheets",
+        "Creative Style Sheets",
+        "Colorful Style Sheets",
+      ],
+      correctAnswer: 1,
+    },
+    {
+      id: 4,
+      question: "Which of the following is a JavaScript framework?",
+      options: ["Django", "Flask", "React", "Laravel"],
+      correctAnswer: 2,
+    },
+    {
+      id: 5,
+      question: "What is the purpose of Git?",
+      options: [
+        "Image editing",
+        "Version control",
+        "Database management",
+        "Web hosting",
+      ],
+      correctAnswer: 1,
+    },
+    {
+      id: 6,
+      question: "Which HTTP method is used to retrieve data from a server?",
+      options: ["POST", "PUT", "GET", "DELETE"],
+      correctAnswer: 2,
+    },
+    {
+      id: 7,
+      question: "What does API stand for?",
+      options: [
+        "Application Programming Interface",
+        "Advanced Programming Interface",
+        "Application Process Integration",
+        "Automated Programming Interface",
+      ],
+      correctAnswer: 0,
+    },
+    {
+      id: 8,
+      question: "Which database is a NoSQL database?",
+      options: ["MySQL", "PostgreSQL", "MongoDB", "Oracle"],
+      correctAnswer: 2,
+    },
+    {
+      id: 9,
+      question: "What is the default port for HTTP?",
+      options: ["21", "80", "443", "8080"],
+      correctAnswer: 1,
+    },
+    {
+      id: 10,
+      question: "Which symbol is used for comments in JavaScript?",
+      options: ["#", "//", "/* */", "Both // and /* */"],
+      correctAnswer: 3,
+    },
+  ];
+
+  const handleAnswerSelect = (optionIndex) => {
+    setAnswers({
+      ...answers,
+      [currentQuestion]: optionIndex,
+    });
+  };
+
+  const handleNext = () => {
+    if (currentQuestion < readQuestion?.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const getAnsweredCount = () => {
+    return Object.keys(answers)?.length;
+  };
 
   return (
     <div>
@@ -423,7 +419,6 @@ const ExaminationTestScreen = () => {
                     }}
                     storageKey={`countdown_${examID}_${studentInfo?._id}`}
                   />
-                 
                 </div>
               ) : null}
             </div>
@@ -452,9 +447,8 @@ const ExaminationTestScreen = () => {
                           }%`,
                         }}
                       ></div>
-                      
                     </div>
-  <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {readQuestion.map((q, index) => (
                         <button
                           key={index}
@@ -476,7 +470,6 @@ const ExaminationTestScreen = () => {
                         </button>
                       ))}
                     </div>
-                  
                   </div>
 
                   <div className="mb-8">
@@ -507,38 +500,42 @@ const ExaminationTestScreen = () => {
                         <br />
                       </div>
                     )}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {readQuestion[currentQuestion].options.map((option, index) => (
-                        <button
-                          type="button"
-                          key={index}
-                          onClick={() => {
-                            // Update local UI selection and the main answer state
-                            handleAnswerSelect(index);
-                            handleStateChange(currentQuestion, option);
-                          }}
-                          className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center ${
-                            answers[currentQuestion] === index
-                              ? "border-blue-950 bg-blue-50"
-                              : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
-                          }`}
-                        >
-                          <div className="flex items-center w-full">
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center shrink-0 ${
-                                answers[currentQuestion] === index
-                                  ? "border-blue-950 bg-blue-950"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {answers[currentQuestion] === index && (
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                              )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {readQuestion[currentQuestion].options.map(
+                        (option, index) => (
+                          <button
+                            type="button"
+                            key={index}
+                            onClick={() => {
+                              // Update local UI selection and the main answer state
+                              handleAnswerSelect(index);
+                              handleStateChange(currentQuestion, option);
+                            }}
+                            className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center ${
+                              answers[currentQuestion] === index
+                                ? "border-blue-950 bg-blue-50"
+                                : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="flex items-center w-full">
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center shrink-0 ${
+                                  answers[currentQuestion] === index
+                                    ? "border-blue-950 bg-blue-950"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {answers[currentQuestion] === index && (
+                                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                                )}
+                              </div>
+                              <span className="text-gray-700 break-words">
+                                {option}
+                              </span>
                             </div>
-                            <span className="text-gray-700 break-words">{option}</span>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        )
+                      )}
                     </div>
                   </div>
 

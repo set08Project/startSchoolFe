@@ -57,9 +57,7 @@ export const findStudentWidthID = async (enrollmentID: string) => {
 export const clockIn = async (schoolID: string, studentID: string) => {
   try {
     return await axios
-      .patch(
-        `${"http://localhost:2244/api"}/student-clock-in/${schoolID}/${studentID}`
-      )
+      .patch(`${URL}/student-clock-in/${schoolID}/${studentID}`)
       .then((res) => {
         return res?.data;
       });
@@ -72,9 +70,7 @@ export const clockIn = async (schoolID: string, studentID: string) => {
 export const clockOut = async (schoolID: string, studentID: string) => {
   try {
     return await axios
-      .patch(
-        `${"http://localhost:2244/api"}/student-clock-out/${schoolID}/${studentID}`
-      )
+      .patch(`${URL}/student-clock-out/${schoolID}/${studentID}`)
       .then((res) => {
         return res?.data;
       });

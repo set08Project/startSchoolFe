@@ -35,6 +35,10 @@ import {
   deleteExamination,
   deleteMidTestData,
   deleteQuiz,
+  randomizeStartExam,
+  randomizeStartMidTest,
+  randomizeStopExam,
+  randomizeStopMidTest,
   readClassInfo,
   startExamination,
   startMidTest,
@@ -51,7 +55,7 @@ import {
 } from "@/pagesForTeachers/hooks/useTeacher";
 
 const ExamQuizSetupScreen = () => {
-//   const { teacherInfo } = useTeacherInfo();
+  //   const { teacherInfo } = useTeacherInfo();
 
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
@@ -63,6 +67,9 @@ const ExamQuizSetupScreen = () => {
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
+  const [examToDelete, setExamToDelete] = useState<string | null>(null);
+  const [isMidTestModalOpen, setMidTestModalOpen] = useState<Boolean>(false);
+  const [midTestToDelete, setMidTestToDelete] = useState<string | null>(null);
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [loadingExam, setLoadingExam] = useState<Boolean>(false);
@@ -111,6 +118,8 @@ const ExamQuizSetupScreen = () => {
   );
   const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
   const [toggle, setToggle] = useState(false);
+  const [tExamRand, setTExamRand] = useState(false);
+  const [tMidRand, setTMidRand] = useState(false);
   const [showMidTestConfirm, setShowMidTestConfirm] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const navigate = useNavigate();
@@ -238,32 +247,76 @@ const ExamQuizSetupScreen = () => {
                 {1}
               </div>
               <div className="mt-4 text-center relative bottom-4">
-                <button
-                  onClick={() => {
-                    // setLoading(true);
-                    // deleteExamination(
-                    //   teacherInfo?._id,
-                    //   subjectID!,
-                    //   examination?.exam?._id
-                    // )
-                    //   .then(() => {
-                    //     examMutate(`api/api/view-subject-exam/${subjectID}`);
-                    //   })
-                    //   .finally(() => {
-                    //     setLoading(false);
-                    //   });
-                  }}
-                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
-                >
-                  {loading ? (
-                    <FaSpinner size={20} className="mr-1" />
-                  ) : (
-                    <FaTrashAlt size={20} className="mr-1" />
+                <>
+                  <button
+                    onClick={() => {
+                      // open confirm modal and store target id
+                      setExamToDelete(examination?.exam?._id || null);
+                      setModalOpen(true);
+                    }}
+                    className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                  >
+                    {loading ? (
+                      <FaSpinner size={20} className="mr-1" />
+                    ) : (
+                      <FaTrashAlt size={20} className="mr-1" />
+                    )}
+                    {loading
+                      ? " Deleting Examination Question"
+                      : " Delete Examination Question"}
+                  </button>
+
+                  {/* Confirm delete modal for Examination */}
+                  {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+                        <h3 className="font-semibold text-lg mb-3">
+                          Delete Examination
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Are you sure you want to delete this examination? This
+                          action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-3">
+                          <button
+                            className="px-4 py-2 rounded-md bg-gray-200"
+                            onClick={() => {
+                              setModalOpen(false);
+                              setExamToDelete(null);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-md bg-red-500 text-white"
+                            onClick={async () => {
+                              if (!examToDelete) return;
+                              setLoading(true);
+                              try {
+                                await deleteExamination(
+                                  subjectID!,
+                                  examToDelete
+                                );
+                                examMutate(
+                                  `api/api/view-subject-exam/${subjectID}`
+                                );
+                              } catch (error) {
+                                console.error(error);
+                                toast.error("Failed to delete examination");
+                              } finally {
+                                setLoading(false);
+                                setModalOpen(false);
+                                setExamToDelete(null);
+                              }
+                            }}
+                          >
+                            Proceed
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  {loading
-                    ? " Deleting Examination Question"
-                    : " Delete Examination Question"}
-                </button>
+                </>
               </div>
 
               <div className="flex justify-between items-center">
@@ -291,9 +344,49 @@ const ExamQuizSetupScreen = () => {
                     {examination?.exam?.term} Examination
                   </p>
                 </div>
-                <p className="font-semibold text-[12px] mt-2">
-                  {/* {new Date(examination?.createdAt).toLocaleDateString()} */}
-                </p>
+                <div className="flex">
+                  {!examination?.exam?.randomize ? (
+                    <button
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
+                      onClick={() => {
+                        setTExamRand(true);
+                        randomizeStopExam(examination?.exam?._id)
+                          .then(() => {
+                            examMutate(`api/view-subject-exam/${subjectID}`);
+                            setTExamRand(false);
+                          })
+                          .finally(() => {
+                            setTExamRand(false);
+                          });
+                      }}
+                    >
+                      {tExamRand ? (
+                        <span className="flex items-center">
+                          <FaSpinner className="animate-spin " /> Randomizating
+                          Question
+                        </span>
+                      ) : (
+                        <span>Click to Stop Randomization of Question</span>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setTExamRand(true);
+                        randomizeStartExam(examination?.exam?._id)
+                          ?.then(() => {
+                            examMutate(`api/view-subject-exam/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setTExamRand(false);
+                          });
+                      }}
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-neutral-900 text-white px-4 py-1 rounded-md"
+                    >
+                      Click to Start Randomization of Question
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -405,30 +498,74 @@ const ExamQuizSetupScreen = () => {
                 {1}
               </div>
               <div className="mt-4 text-center relative bottom-4">
-                <button
-                  onClick={() => {
-                    // setLoading(true);
-                    // deleteMidTestData(
-                    //   teacherInfo?._id,
-                    //   subjectID!,
-                    //   midTest?._id
-                    // )
-                    //   .then(() => {
-                    //     mutate(`api/view-subject-mid-test/${subjectID}`);
-                    //   })
-                    //   .finally(() => {
-                    //     setLoading(false);
-                    //   });
-                  }}
-                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
-                >
-                  {loading ? (
-                    <FaSpinner size={20} className="mr-1" />
-                  ) : (
-                    <FaTrashAlt size={20} className="mr-1" />
+                <>
+                  <button
+                    onClick={() => {
+                      // open confirm modal for mid-test deletion
+                      setMidTestToDelete(midTest?._id || null);
+                      setMidTestModalOpen(true);
+                    }}
+                    className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                  >
+                    {loading ? (
+                      <FaSpinner size={20} className="mr-1" />
+                    ) : (
+                      <FaTrashAlt size={20} className="mr-1" />
+                    )}
+                    {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
+                  </button>
+
+                  {isMidTestModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+                        <h3 className="font-semibold text-lg mb-3">
+                          Delete Mid-Test
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Are you sure you want to delete this mid-test? This
+                          action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-3 mt-10">
+                          <button
+                            className="px-4 py-2 rounded-md bg-gray-200"
+                            onClick={() => {
+                              setMidTestModalOpen(false);
+                              setMidTestToDelete(null);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-md bg-red-500 text-white"
+                            onClick={async () => {
+                              if (!midTestToDelete) return;
+                              setLoading(true);
+                              try {
+                                await deleteMidTestData(
+                                  subjectID!,
+                                  midTestToDelete
+                                );
+                                // revalidate midTest list
+                                midTestMutate(
+                                  `api/view-subject-mid-test/${subjectID}`
+                                );
+                              } catch (error) {
+                                console.error(error);
+                                toast.error("Failed to delete mid-test");
+                              } finally {
+                                setLoading(false);
+                                setMidTestModalOpen(false);
+                                setMidTestToDelete(null);
+                              }
+                            }}
+                          >
+                            Proceed
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
-                </button>
+                </>
               </div>
 
               <div className="flex justify-between items-center">
@@ -455,9 +592,49 @@ const ExamQuizSetupScreen = () => {
                     {midTest?.term} mid Term Test
                   </p>
                 </div>
-                <p className="font-semibold text-[12px] mt-2">
-                  {/* {new Date(midTest?.createdAt).toLocaleDateString()} */}
-                </p>
+                <div className="flex">
+                  {!midTest?.randomize ? (
+                    <button
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
+                      onClick={() => {
+                        setTMidRand(true);
+                        randomizeStopMidTest(midTest?._id)
+                          .then(() => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                            setTMidRand(false);
+                          })
+                          .finally(() => {
+                            setTMidRand(false);
+                          });
+                      }}
+                    >
+                      {tMidRand ? (
+                        <span className="flex items-center">
+                          <FaSpinner className="animate-spin " /> Randomizating
+                          Question
+                        </span>
+                      ) : (
+                        <span>Click to Stop Randomization of Question</span>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setTMidRand(true);
+                        randomizeStartMidTest(midTest?._id)
+                          ?.then(() => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setTMidRand(false);
+                          });
+                      }}
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-neutral-900 text-white px-4 py-1 rounded-md"
+                    >
+                      Click to Start Randomization of Question
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>

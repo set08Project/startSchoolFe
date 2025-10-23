@@ -11,8 +11,7 @@ export const URL: string = "https://startschoolbe-4.onrender.com/api";
 const URL2: string = "https://startschoolbe-4.onrender.com";
 
 export const removePerformance = async (
-  performanceID: string,
- 
+  performanceID: string
 ): Promise<any> => {
   try {
     return await axios
@@ -27,12 +26,11 @@ export const removePerformance = async (
 
 export const removeOptions = async (
   schoolID: string,
-  refID: string,
- 
+  refID: string
 ): Promise<any> => {
   try {
     return await axios
-      .patch(`${URL}/remove-payment-option/${schoolID}/${refID}`,)
+      .patch(`${URL}/remove-payment-option/${schoolID}/${refID}`)
       .then((res: AxiosResponse) => {
         console.log("data: ", res);
         return res?.data;
@@ -101,7 +99,7 @@ export const deleteSchool = async (schoolID: string): Promise<any> => {
 
 export const downlaodSchoolData = async (schoolID: string): Promise<any> => {
   try {
-    const URL = "http://localhost:2244/api";
+    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/export-data-file/${schoolID}`)
       .then((res: AxiosResponse) => {
@@ -209,16 +207,25 @@ export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
 };
 
 // offline-aware wrapper: if offline, enqueue the request to be retried when online
-import { enqueue, QueueEntry } from '@/lib/offlineQueue';
+import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
-export const bulkUploadofClassroomWithQueue = async (schoolID: string, formData: FormData) => {
-  if (typeof window !== 'undefined' && !navigator.onLine) {
+export const bulkUploadofClassroomWithQueue = async (
+  schoolID: string,
+  formData: FormData
+) => {
+  if (typeof window !== "undefined" && !navigator.onLine) {
     // convert FormData to serializable object: store entries as array of [key, {type, value}]
     const fdEntries: Array<any> = [];
     formData.forEach((value, key) => {
       if (value instanceof File) {
         // read file as blob (we can store file as blob since idb supports it)
-        fdEntries.push({ key, value, isFile: true, name: (value as File).name, type: (value as File).type });
+        fdEntries.push({
+          key,
+          value,
+          isFile: true,
+          name: (value as File).name,
+          type: (value as File).type,
+        });
       } else {
         fdEntries.push({ key, value, isFile: false });
       }
@@ -226,9 +233,9 @@ export const bulkUploadofClassroomWithQueue = async (schoolID: string, formData:
 
     const entry: QueueEntry = {
       url: `${URL}/create-bulk-classroom/${schoolID}`,
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data' },
-      bodyType: 'formdata',
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      bodyType: "formdata",
       body: fdEntries,
     };
 
@@ -554,7 +561,7 @@ export const outGoneStudent = async (schoolID: string, studentID: string) => {
   }
 };
 
-export const viewOutGoneStudent = async (schoolID: string, ) => {
+export const viewOutGoneStudent = async (schoolID: string) => {
   try {
     // const URL = "localhost:2244/api";
     return await axios

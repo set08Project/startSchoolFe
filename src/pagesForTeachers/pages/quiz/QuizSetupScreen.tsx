@@ -24,6 +24,10 @@ import {
   deleteExamination,
   deleteMidTestData,
   deleteQuiz,
+  randomizeStartExam,
+  randomizeStartMidTest,
+  randomizeStopExam,
+  randomizeStopMidTest,
   readClassInfo,
   startExamination,
   startMidTest,
@@ -100,6 +104,8 @@ const QuizSetupScreen = () => {
   );
   const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
   const [toggle, setToggle] = useState(false);
+  const [tExamRand, setTExamRand] = useState(false);
+  const [tMidRand, setTMidRand] = useState(false);
   const [showMidTestConfirm, setShowMidTestConfirm] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const navigate = useNavigate();
@@ -123,7 +129,9 @@ const QuizSetupScreen = () => {
         {showMidTestConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
-              <h3 className="font-semibold text-lg mb-3">Create Mid-Test CBT</h3>
+              <h3 className="font-semibold text-lg mb-3">
+                Create Mid-Test CBT
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Are you sure you're ready to create Mid-Test's CBT for this
                 subject?
@@ -156,7 +164,9 @@ const QuizSetupScreen = () => {
         {showExamConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
-              <h3 className="font-semibold text-lg mb-3">Create Examination CBT</h3>
+              <h3 className="font-semibold text-lg mb-3">
+                Create Examination CBT
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Are you sure you're ready to create Examination's CBT for this
                 subject?
@@ -228,12 +238,9 @@ const QuizSetupScreen = () => {
               <div className="mt-4 text-center relative bottom-4">
                 <button
                   onClick={() => {
+                    console.log("Deleted");
                     setLoading(true);
-                    deleteExamination(
-                      teacherInfo?._id,
-                      subjectID!,
-                      examination?.exam?._id
-                    )
+                    deleteExamination(subjectID!, examination?.exam?._id)
                       .then(() => {
                         examMutate(`api/api/view-subject-exam/${subjectID}`);
                       })
@@ -279,9 +286,49 @@ const QuizSetupScreen = () => {
                     {examination?.exam?.term} Examination
                   </p>
                 </div>
-                <p className="font-semibold text-[12px] mt-2">
-                  {/* {new Date(examination?.createdAt).toLocaleDateString()} */}
-                </p>
+                <div className="flex">
+                  {examination?.exam?.randomize ? (
+                    <button
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
+                      onClick={() => {
+                        setTExamRand(true);
+                        randomizeStopExam(examination?.exam?._id)
+                          .then(() => {
+                            examMutate(`api/view-subject-exam/${subjectID}`);
+                            setTExamRand(false);
+                          })
+                          .finally(() => {
+                            setTExamRand(false);
+                          });
+                      }}
+                    >
+                      {tExamRand ? (
+                        <span className="flex items-center">
+                          <FaSpinner className="animate-spin " /> Randomizating
+                          Question
+                        </span>
+                      ) : (
+                        <span>Click to Stop Randomization of Question</span>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setTExamRand(true);
+                        randomizeStartExam(examination?.exam?._id)
+                          ?.then(() => {
+                            examMutate(`api/view-subject-exam/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setTExamRand(false);
+                          });
+                      }}
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-neutral-900 text-white px-4 py-1 rounded-md"
+                    >
+                      Click to Start Randomization of Question
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -396,11 +443,7 @@ const QuizSetupScreen = () => {
                 <button
                   onClick={() => {
                     setLoading(true);
-                    deleteMidTestData(
-                      teacherInfo?._id,
-                      subjectID!,
-                      midTest?._id
-                    )
+                    deleteMidTestData(subjectID!, midTest?._id)
                       .then(() => {
                         mutate(`api/view-subject-mid-test/${subjectID}`);
                       })
@@ -443,9 +486,49 @@ const QuizSetupScreen = () => {
                     {midTest?.term} mid Term Test
                   </p>
                 </div>
-                <p className="font-semibold text-[12px] mt-2">
-                  {/* {new Date(midTest?.createdAt).toLocaleDateString()} */}
-                </p>
+                <div className="flex">
+                  {midTest?.randomize ? (
+                    <button
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
+                      onClick={() => {
+                        setTMidRand(true);
+                        randomizeStopMidTest(midTest?._id)
+                          .then(() => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                            setTMidRand(false);
+                          })
+                          .finally(() => {
+                            setTMidRand(false);
+                          });
+                      }}
+                    >
+                      {tMidRand ? (
+                        <span className="flex items-center">
+                          <FaSpinner className="animate-spin " /> Randomizating
+                          Question
+                        </span>
+                      ) : (
+                        <span>Click to Stop Randomization of Question</span>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setTMidRand(true);
+                        randomizeStartMidTest(midTest?._id)
+                          ?.then(() => {
+                            mutate(`api/view-subject-mid-test/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setTMidRand(false);
+                          });
+                      }}
+                      className="cursor-pointer font-semibold text-[12px] mt-2 bg-neutral-900 text-white px-4 py-1 rounded-md"
+                    >
+                      Click to Start Randomization of Question
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -712,7 +795,7 @@ const QuizSetupScreen = () => {
                           : 0}
                       </span>
                     </div>
-                    
+
                     <div>
                       Mark/Question:{" "}
                       <span className="font-bold">

@@ -44,9 +44,9 @@ const MidTestScreen = () => {
     console.log("Selected answer:", {
       questionIndex,
       optionValue: optionValue.trim(),
-      originalValue: optionValue
+      originalValue: optionValue,
     });
-    
+
     setState((prev: any) => {
       const newState = {
         ...prev,
@@ -56,7 +56,6 @@ const MidTestScreen = () => {
       return newState;
     });
   };
-
 
   const getRemark = (genPointScore: number) => {
     return genPointScore >= 0 && genPointScore <= 5
@@ -117,7 +116,6 @@ const MidTestScreen = () => {
 
   const myQuizData: any = quizData?.quiz;
 
-
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === midTestID && el?.quizDone
   );
@@ -130,12 +128,11 @@ const MidTestScreen = () => {
     setIsSubmitted(true);
     setLoading(true);
 
-   
     const correctAnswers = (readQuestion || myQuizData?.question || []).map(
       (q: any) =>
         typeof q?.answer === "string"
           ? q.answer.trim()
-          : (q?.answer?.toString?.() || "")
+          : q?.answer?.toString?.() || ""
     );
 
     let score = 0;
@@ -159,7 +156,6 @@ const MidTestScreen = () => {
 
     timerInSeconds = 0;
 
-  
     performanceMidTest(studentInfo?._id, midTestID!, courseID, {
       studentScore: score,
       studentGrade: grade,
@@ -197,7 +193,7 @@ const MidTestScreen = () => {
         // keep isSubmitted true to avoid retrying
       });
   };
-let score=0
+  let score = 0;
 
   const [readQuestion, setReadQuestion] = useState(
     JSON.parse(localStorage.getItem("midTestQuestions")!)
@@ -224,10 +220,20 @@ let score=0
     const question = JSON.parse(localStorage.getItem("midTestQuestions")!);
 
     if (question === null) {
+      const sourceQuestions = myQuizData?.question ?? [];
+      const questionsToStore = !quizData?.randomize
+        ? lodash.shuffle([...sourceQuestions])
+        : sourceQuestions;
       localStorage.setItem(
         "midTestQuestions",
-        JSON.stringify(lodash.shuffle(myQuizData?.question))
+        JSON.stringify(questionsToStore)
       );
+      // localStorage.setItem(
+
+      // localStorage.setItem(
+      //   "midTestQuestions",
+      //   JSON.stringify(lodash.shuffle(myQuizData?.question))
+      // );
       setReadQuestion(JSON.parse(localStorage.getItem("midTestQuestions")!));
     } else if (question?.length === 0) {
       localStorage.setItem(
@@ -251,42 +257,38 @@ let score=0
   }, [state, readQuestion, myQuizData, timeUp]);
 
   useEffect(() => {
-localStorage.removeItem("countdown");
-localStorage.removeItem("midTest");
-localStorage.removeItem("midTestQuestions");
-  },[])
+    localStorage.removeItem("countdown");
+    localStorage.removeItem("midTest");
+    localStorage.removeItem("midTestQuestions");
+  }, []);
 
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [_score, setScore] = useState(0);
 
-   const [currentQuestion, setCurrentQuestion] = useState(0);
-   const [answers, setAnswers] = useState({});
-   const [submitted, setSubmitted] = useState(false);
-   const [_score, setScore] = useState(0);
+  const handleAnswerSelect = (optionIndex) => {
+    setAnswers({
+      ...answers,
+      [currentQuestion]: optionIndex,
+    });
+  };
 
-   
+  const handleNext = () => {
+    if (currentQuestion < readQuestion?.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
 
-     const handleAnswerSelect = (optionIndex) => {
-       setAnswers({
-         ...answers,
-         [currentQuestion]: optionIndex,
-       });
-     };
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
 
-     const handleNext = () => {
-       if (currentQuestion < readQuestion?.length - 1) {
-         setCurrentQuestion(currentQuestion + 1);
-       }
-     };
-
-     const handlePrevious = () => {
-       if (currentQuestion > 0) {
-         setCurrentQuestion(currentQuestion - 1);
-       }
-     };
-
-
-     const getAnsweredCount = () => {
-       return Object.keys(answers).length;
-     };
+  const getAnsweredCount = () => {
+    return Object.keys(answers).length;
+  };
 
   return (
     <div>
@@ -420,9 +422,11 @@ localStorage.removeItem("midTestQuestions");
                     {readQuestion[currentQuestion]?.images && (
                       <div>
                         <br />
-                        {readQuestion[currentQuestion]?.images?.map((img: string, i: number) => (
-                          <img src={img} key={i} className="h-60"/>
-                        ))}
+                        {readQuestion[currentQuestion]?.images?.map(
+                          (img: string, i: number) => (
+                            <img src={img} key={i} className="h-60" />
+                          )
+                        )}
                         <br />
                       </div>
                     )}
