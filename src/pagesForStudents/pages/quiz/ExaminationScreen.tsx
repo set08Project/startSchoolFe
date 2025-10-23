@@ -34,6 +34,7 @@ const ExaminationTestScreen = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
+  const countdownKey = `countdown_${examID}_${studentInfo?._id}`;
 
   const handleStateChange = (questionIndex: any, optionValue: any) => {
     setState((prev: any) => ({
@@ -142,7 +143,9 @@ const ExaminationTestScreen = () => {
            })
            .finally(() => {
              setLoading(false);
-             localStorage.removeItem("countdown");
+             try {
+               localStorage.removeItem(countdownKey);
+             } catch (e) {}
            });
     };
 
@@ -184,7 +187,6 @@ const ExaminationTestScreen = () => {
      JSON.parse(localStorage.getItem("examQuestions")!)
    );
   let score = 0;
-  let savedSeconds = JSON.parse(localStorage.getItem("countdown"));
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -232,9 +234,12 @@ const ExaminationTestScreen = () => {
   }, [state, readQuestion, myQuizData, timeUp]);
 
   useEffect(() => {
-localStorage.removeItem("countdown");
-localStorage.removeItem("exam");
-localStorage.removeItem("examQuestions");
+    // do not clear countdown here so reloads won't reset the timer
+    // clearing of countdown is handled when the exam is submitted or when time runs out
+    try {
+      localStorage.removeItem("exam");
+      localStorage.removeItem("examQuestions");
+    } catch (e) {}
   },[])
 
   
@@ -280,34 +285,34 @@ localStorage.removeItem("examQuestions");
            options: ["Django", "Flask", "React", "Laravel"],
            correctAnswer: 2,
          },
-         {
-           id: 5,
-           question: "What is the purpose of Git?",
-           options: [
-             "Image editing",
-             "Version control",
-             "Database management",
-             "Web hosting",
-           ],
-           correctAnswer: 1,
-         },
-         {
-           id: 6,
-           question: "Which HTTP method is used to retrieve data from a server?",
-           options: ["POST", "PUT", "GET", "DELETE"],
-           correctAnswer: 2,
-         },
-         {
-           id: 7,
-           question: "What does API stand for?",
-           options: [
-             "Application Programming Interface",
-             "Advanced Programming Interface",
-             "Application Process Integration",
-             "Automated Programming Interface",
-           ],
-           correctAnswer: 0,
-         },
+        {
+          id: 5,
+          question: "What is the purpose of Git?",
+          options: [
+            "Image editing",
+            "Version control",
+            "Database management",
+            "Web hosting",
+          ],
+          correctAnswer: 1,
+        },
+        {
+          id: 6,
+          question: "Which HTTP method is used to retrieve data from a server?",
+          options: ["POST", "PUT", "GET", "DELETE"],
+          correctAnswer: 2,
+        },
+        {
+          id: 7,
+          question: "What does API stand for?",
+          options: [
+            "Application Programming Interface",
+            "Advanced Programming Interface",
+            "Application Process Integration",
+            "Automated Programming Interface",
+          ],
+          correctAnswer: 0,
+        },
          {
            id: 8,
            question: "Which database is a NoSQL database?",
@@ -352,8 +357,7 @@ localStorage.removeItem("examQuestions");
          return Object.keys(answers)?.length;
        };
   
-      console.log("done:: ", studentInfo);
-      console.log("done:: ", quizData);
+    
 
   return (
     <div>
@@ -401,8 +405,8 @@ localStorage.removeItem("examQuestions");
             </div>
           )}
           {/* Timer */}
-          <div className="sticky flex top-[70px] justify-end items-center pointer-events-none">
-            <div className="sticky min-w-[200px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
+          <div className="sticky left-5 flex top-[px] justify-end items-center pointer-events-none">
+            <div className="sticky max-w-[250px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
               <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
                 Exam Count Down Timer <MdOutlineTimer />
               </h1>
@@ -410,18 +414,26 @@ localStorage.removeItem("examQuestions");
                 <div>
                   <CountdownTimer
                     initialSeconds={timerInSeconds}
-                    onTimeUp={() => setTimeUp(true)}
+                    onTimeUp={() => {
+                      setTimeUp(true);
+                      try {
+                        // auto-submit when timer ends
+                        handleSubmit();
+                      } catch (e) {}
+                    }}
+                    storageKey={`countdown_${examID}_${studentInfo?._id}`}
                   />
+                 
                 </div>
               ) : null}
             </div>
           </div>
 
           {/* Quiz Content */}
-          <div className="bg-slate-50 justify-center flex min-h-[100vh]">
+          <div className="bg-slate-0 justify-center flex -mt-40">
             {start && (
-              <div className="min-h-screenflex items-center justify-center p-4">
-                <div className="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full">
+              <div className="!min-h-[300px] flex items-centr justify-center p-4">
+                <div className="bg-white rounded-lg shadow-xl p-8 !w-[700px] w-full">
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-4">
                       <h1 className="text-sm font-bold text-gray-800">
@@ -440,10 +452,9 @@ localStorage.removeItem("examQuestions");
                           }%`,
                         }}
                       ></div>
+                      
                     </div>
-
-                    {/* Question Number Navigator */}
-                    <div className="flex flex-wrap gap-2">
+  <div className="flex flex-wrap gap-2">
                       {readQuestion.map((q, index) => (
                         <button
                           key={index}
@@ -465,6 +476,7 @@ localStorage.removeItem("examQuestions");
                         </button>
                       ))}
                     </div>
+                  
                   </div>
 
                   <div className="mb-8">
@@ -495,48 +507,38 @@ localStorage.removeItem("examQuestions");
                         <br />
                       </div>
                     )}
-
-                    <div className="space-y-3">
-                      {readQuestion[currentQuestion].options.map(
-                        (option, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              // Update local UI selection and the main answer state
-                              handleAnswerSelect(index);
-                              handleStateChange(currentQuestion, option);
-                            }}
-                            className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                              answers[currentQuestion] === index
-                                ? "border-blue-950 bg-blue-50"
-                                : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <div
-                                className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
-                                  answers[currentQuestion] === index
-                                    ? "border-blue-950 bg-blue-950"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {answers[currentQuestion] === index && (
-                                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                                )}
-                                {/* <input
-                                                className="radio radio-sm"
-                                                type="radio"
-                                                onChange={() => {
-                                                  handleStateChange(index, option);
-                                                }}
-                                                checked={state[index] === option.trim()}
-                                              /> */}
-                              </div>
-                              <span className="text-gray-700">{option}</span>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {readQuestion[currentQuestion].options.map((option, index) => (
+                        <button
+                          type="button"
+                          key={index}
+                          onClick={() => {
+                            // Update local UI selection and the main answer state
+                            handleAnswerSelect(index);
+                            handleStateChange(currentQuestion, option);
+                          }}
+                          className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center ${
+                            answers[currentQuestion] === index
+                              ? "border-blue-950 bg-blue-50"
+                              : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center w-full">
+                            <div
+                              className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center shrink-0 ${
+                                answers[currentQuestion] === index
+                                  ? "border-blue-950 bg-blue-950"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {answers[currentQuestion] === index && (
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              )}
                             </div>
-                          </button>
-                        )
-                      )}
+                            <span className="text-gray-700 break-words">{option}</span>
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   </div>
 

@@ -3,33 +3,72 @@ import React, { useState, useEffect } from "react";
 interface CountdownTimerProps {
   initialSeconds: number;
   onTimeUp: () => void;
+  storageKey?: string; // optional key to persist timer (useful for multiple timers)
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({
   initialSeconds,
   onTimeUp,
+  storageKey,
 }) => {
+  const key = storageKey || "countdown";
+
   const [seconds, setSeconds] = useState<number>(() => {
-    const savedSeconds = localStorage.getItem("countdown");
-    return savedSeconds ? Number(savedSeconds) : initialSeconds;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? Number(saved) : initialSeconds;
+    } catch (e) {
+      return initialSeconds;
+    }
   });
 
+  // start stable interval once; use functional update to avoid depending on `seconds`
   useEffect(() => {
-    if (seconds > 0) {
-      const timerId: NodeJS.Timeout = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          const newSeconds = prevSeconds - 1;
-          localStorage.setItem("countdown", newSeconds.toString());
-          return newSeconds >= 0 ? newSeconds : 0;
-        });
-      }, 1000);
+    let stopped = false;
 
-      return () => clearInterval(timerId); // Clear interval on unmount
-    } else {
-      localStorage.removeItem("countdown");
-      onTimeUp(); // Trigger onTimeUp callback when time reaches 0
+    const tick = () => {
+      setSeconds((prev) => {
+        const next = Math.max(prev - 1, 0);
+        try {
+          if (next > 0) localStorage.setItem(key, String(next));
+          else localStorage.removeItem(key);
+        } catch (e) {
+          // ignore quota/localStorage errors
+        }
+        return next;
+      });
+    };
+
+    // if initial is already 0, trigger onTimeUp immediately
+    if (seconds <= 0) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {}
+      onTimeUp();
+      return;
     }
-  }, [seconds, onTimeUp]);
+
+    const id = window.setInterval(() => {
+      if (!stopped) tick();
+    }, 1000);
+
+    return () => {
+      stopped = true;
+      clearInterval(id);
+    };
+    // We intentionally do not include `seconds` in deps so interval isn't recreated every tick.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, onTimeUp]);
+
+  // watch for when seconds reaches 0 to call onTimeUp exactly once
+  useEffect(() => {
+    if (seconds === 0) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {}
+      onTimeUp();
+    }
+  }, [seconds, key, onTimeUp]);
 
   const formatTime = (secs: number): string => {
     const hours = Math.floor(secs / 3600);
