@@ -204,6 +204,8 @@ const ExaminationTestScreen = () => {
 
     if (question === null) {
       const sourceQuestions = myQuizData?.question ?? [];
+      console.log("Source Questions:", sourceQuestions);
+
       const questionsToStore = !quizData?.randomize
         ? lodash.shuffle([...sourceQuestions])
         : sourceQuestions;

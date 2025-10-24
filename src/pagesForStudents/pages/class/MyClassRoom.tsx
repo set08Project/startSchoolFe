@@ -27,6 +27,13 @@ interface iProps {
 const ClassSubjectScreen: FC<iProps> = ({ props }) => {
   const { subjectData } = useClassSubject(props!);
 
+  useEffect(() => {
+    localStorage.removeItem("exam");
+    localStorage.removeItem("examQuestions");
+
+    localStorage.removeItem("midTest");
+    localStorage.removeItem("midTestQuestions");
+  }, []);
 
   return (
     <div>
@@ -57,8 +64,6 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                   {props?.subjectTeacherName}
                 </div>
               </div>
-
-            
 
               <StartTestComp props={props} subjectID={props?._id} />
             </div>
