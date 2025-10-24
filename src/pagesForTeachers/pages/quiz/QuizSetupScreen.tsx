@@ -287,7 +287,7 @@ const QuizSetupScreen = () => {
                   </p>
                 </div>
                 <div className="flex">
-                  {examination?.exam?.randomize ? (
+                  {!examination?.exam?.randomize ? (
                     <button
                       className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
                       onClick={() => {
@@ -487,7 +487,7 @@ const QuizSetupScreen = () => {
                   </p>
                 </div>
                 <div className="flex">
-                  {midTest?.randomize ? (
+                  {!midTest?.randomize ? (
                     <button
                       className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
                       onClick={() => {
