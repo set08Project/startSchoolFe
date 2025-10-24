@@ -292,7 +292,7 @@ const QuizSetupScreen = () => {
                       className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
                       onClick={() => {
                         setTExamRand(true);
-                        randomizeStopExam(examination?.exam?._id)
+                        randomizeStartExam(examination?.exam?._id)
                           .then(() => {
                             examMutate(`api/view-subject-exam/${subjectID}`);
                             setTExamRand(false);
@@ -315,7 +315,7 @@ const QuizSetupScreen = () => {
                     <button
                       onClick={() => {
                         setTExamRand(true);
-                        randomizeStartExam(examination?.exam?._id)
+                        randomizeStopExam(examination?.exam?._id)
                           ?.then(() => {
                             examMutate(`api/view-subject-exam/${subjectID}`);
                           })
@@ -492,7 +492,7 @@ const QuizSetupScreen = () => {
                       className="cursor-pointer font-semibold text-[12px] mt-2 bg-red-500 text-white px-4 py-1 rounded-md"
                       onClick={() => {
                         setTMidRand(true);
-                        randomizeStopMidTest(midTest?._id)
+                        randomizeStartMidTest(midTest?._id)
                           .then(() => {
                             mutate(`api/view-subject-mid-test/${subjectID}`);
                             setTMidRand(false);
@@ -515,7 +515,7 @@ const QuizSetupScreen = () => {
                     <button
                       onClick={() => {
                         setTMidRand(true);
-                        randomizeStartMidTest(midTest?._id)
+                        randomizeStopMidTest(midTest?._id)
                           ?.then(() => {
                             mutate(`api/view-subject-mid-test/${subjectID}`);
                           })
