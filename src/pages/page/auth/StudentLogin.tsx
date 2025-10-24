@@ -75,7 +75,7 @@ const StudentLogin = () => {
         } else {
           if (res?.response?.data?.message === undefined || "undefined") {
             setLoading(false);
-            toast.error("Poor Internet Connectivity");
+            toast.error("Wrong ID, Please check your EnrollmentID");
           } else {
             setLoading(false);
             toast.error(`${res?.response?.data?.message}`);

@@ -48,10 +48,9 @@ const SignIn = () => {
             clearTimeout(x);
           }, 10);
         } else {
-          
           if (res?.response?.data?.message === "Error finding school") {
             setLoading(false);
-            toast.error("Error Finding School, Please Check your Connectivity");
+            toast.error("Error Finding School, Please Check your email");
           } else if (
             res?.response?.data?.message ===
             "Error reading your school enrollment ID"
