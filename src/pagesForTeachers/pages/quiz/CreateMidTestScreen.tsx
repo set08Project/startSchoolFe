@@ -141,13 +141,23 @@ const CreateMidTestScreen = () => {
             <div>
               <div className="mt-5 flex flex-col">
                 <label className="text-[16px] mb-2">Enter Instruction</label>
-                <textarea
+                {/* <textarea
                   placeholder="Enter Instructions"
                   className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[16px] h-[200px] rounded-md resize-none outline-none p-2"
                   value={instruction}
                   onChange={(e) => {
                     setInstruction(e.target.value);
                   }}
+                /> */}
+                <ReactQuill
+                  value={instruction}
+                  onChange={(value) => {
+                    setInstruction(value);
+                    // setEditorValue(value);
+                  }}
+                  modules={modules}
+                  theme="snow"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] min-h-[200px] rounded-md resize-none outline-none p-2"
                 />
               </div>
               <div className="mt-5 flex flex-col">
@@ -263,7 +273,7 @@ const CreateMidTestScreen = () => {
                 onClick={() => {
                   setToggle(true);
                   let data: any = { duration, instruction, mark };
-                 
+
                   dispatch(addTestInstruction(data!));
                 }}
               />

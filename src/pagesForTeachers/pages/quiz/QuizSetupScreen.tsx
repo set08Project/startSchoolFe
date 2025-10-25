@@ -358,16 +358,15 @@ const QuizSetupScreen = () => {
                   </span>
                 </div>
               </div>
-              <div className="text-[12px] mt-2 font-bold">
-                Instruction:{" "}
-                <span className="font-normal">
-                  {examination?.exam?.quiz?.instruction?.instruction
-                    ? `${examination?.exam?.quiz?.instruction.instruction}`.slice(
-                        0,
-                        70
-                      ) + "..."
-                    : "..."}
-                </span>
+
+              <div className="text-[14px] mt-2 font-bold">
+                <div className="text-[16px] mb-2">Instruction:</div>
+                <div
+                  className="font-normal line-clamp-3"
+                  dangerouslySetInnerHTML={{
+                    __html: examination?.exam?.quiz?.instruction.instruction,
+                  }}
+                />
               </div>
 
               <div className="flex gap-3">
@@ -559,15 +558,13 @@ const QuizSetupScreen = () => {
                 </div>
               </div>
               <div className="text-[14px] mt-2 font-bold">
-                Instruction:{" "}
-                <span className="font-normal line-clamp-3">
-                  {/* {midTest?.quiz?.instruction?.instruction
-                    ? `${midTest?.quiz?.instruction.instruction}`.slice(0, 70) +
-                      "..."
-                    : "..."} */}
-
-                  {midTest?.quiz?.instruction.instruction}
-                </span>
+                <div className="text-[16px] mb-2">Instruction:</div>
+                <div
+                  className="font-normal line-clamp-3"
+                  dangerouslySetInnerHTML={{
+                    __html: midTest?.quiz?.instruction.instruction,
+                  }}
+                />
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex gap-3">
@@ -805,11 +802,14 @@ const QuizSetupScreen = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="text-[12px] mt-2 font-bold">
-                    Instruction:{" "}
-                    <span className="font-normal line-clamp-2">
-                      {props?.quiz && props?.quiz[0]?.instruction.instruction}
-                    </span>
+                  <div className="text-[14px] mt-2 font-bold">
+                    <div className="text-[16px] mb-2">Instruction:</div>
+                    <div
+                      className="font-normal line-clamp-3"
+                      dangerouslySetInnerHTML={{
+                        __html: props?.quiz?.instruction.instruction,
+                      }}
+                    />
                   </div>
                 </div>
               </div>

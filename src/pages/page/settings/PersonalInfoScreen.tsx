@@ -488,7 +488,7 @@ const PersonalInfoScreen = () => {
         </div>
       </div>
       <div className="w-full flex justify-between items-center smallphon relative">
-        <div className="w-[280px] ">
+        {/* <div className="w-[280px] ">
           <h1 className="font-medium text-[16px]">
             Delete All Students In your School
           </h1>
@@ -497,9 +497,9 @@ const PersonalInfoScreen = () => {
             about each student will be wiped off. Be absolutely sure about
             taking this action.
           </h3>
-        </div>
+        </div> */}
         <div>
-          <div>
+          {/* <div>
             <div className=" w-full">
               <div
                 className="underline font-medium py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
@@ -510,9 +510,9 @@ const PersonalInfoScreen = () => {
                 Proceed
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Popup Card */}
-          {popup === "Delete" && (
+          {/* {popup === "Delete" && (
             <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm bg-blue-50 top-0 left-0 rounded-lg">
               <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-white rounded-lg smallphone">
                 <div className="mb-3 text-center">
@@ -586,7 +586,7 @@ const PersonalInfoScreen = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

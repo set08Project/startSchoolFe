@@ -17,23 +17,31 @@ const CreateExaminationScreen = () => {
 
   const [instruction, setInstruction] = useState<string>("");
   // initialize duration from redux if present; allow numeric choices 1-5 or 'custom'
-  const existingDuration = testQuestion && testQuestion[0]?.instruction?.duration;
-  const initialDuration = existingDuration !== undefined && existingDuration !== null
-    ? (['1','2','3','4','5'].includes(String(existingDuration)) ? String(existingDuration) : 'custom')
-    : '';
-  const initialCustomDuration = existingDuration !== undefined && existingDuration !== null && !['1','2','3','4','5'].includes(String(existingDuration))
-    ? String(existingDuration)
-    : '';
+  const existingDuration =
+    testQuestion && testQuestion[0]?.instruction?.duration;
+  const initialDuration =
+    existingDuration !== undefined && existingDuration !== null
+      ? ["1", "2", "3", "4", "5"].includes(String(existingDuration))
+        ? String(existingDuration)
+        : "custom"
+      : "";
+  const initialCustomDuration =
+    existingDuration !== undefined &&
+    existingDuration !== null &&
+    !["1", "2", "3", "4", "5"].includes(String(existingDuration))
+      ? String(existingDuration)
+      : "";
 
   const [duration, setDuration] = useState<string>(initialDuration);
-  const [customDuration, setCustomDuration] = useState<string>(initialCustomDuration);
+  const [customDuration, setCustomDuration] = useState<string>(
+    initialCustomDuration
+  );
   const [mark, setMark] = useState<string>("");
 
   const [fileData, setFileData] = useState();
 
-    const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
-    const [customMinutes, setCustomMinutes] = useState<string>("");
-
+  const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
+  const [customMinutes, setCustomMinutes] = useState<string>("");
 
   const uploadQuestion = (e: any) => {
     setFileData(e.target.files[0]);
@@ -53,7 +61,7 @@ const CreateExaminationScreen = () => {
       // },
     },
   };
-const [editorValue, setEditorValue] = useState("");
+  const [editorValue, setEditorValue] = useState("");
   return (
     <div>
       <LittleHeader name="Create Examination Question Screen" />
@@ -86,13 +94,15 @@ const [editorValue, setEditorValue] = useState("");
             <div>
               <div className="mt-5 flex flex-col">
                 <label className="text-[16px] mb-2">Enter Instruction</label>
-                <textarea
-                  placeholder="Enter Instructions"
-                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[16px] h-[200px] rounded-md resize-none outline-none p-2"
+                <ReactQuill
                   value={instruction}
-                  onChange={(e) => {
-                    setInstruction(e.target.value);
+                  onChange={(value) => {
+                    setInstruction(value);
+                    // setEditorValue(value);
                   }}
+                  modules={modules}
+                  theme="snow"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] min-h-[200px] rounded-md resize-none outline-none p-2"
                 />
               </div>
 

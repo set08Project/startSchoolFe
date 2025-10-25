@@ -39,10 +39,9 @@ const CreateExamination = () => {
       // },
     },
   };
-const [editorValue, setEditorValue] = useState("");
-const [customMinutes, setCustomMinutes] = useState<string>("");
- const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
-
+  const [editorValue, setEditorValue] = useState("");
+  const [customMinutes, setCustomMinutes] = useState<string>("");
+  const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
 
   return (
     <div>
@@ -76,13 +75,23 @@ const [customMinutes, setCustomMinutes] = useState<string>("");
             <div>
               <div className="mt-5 flex flex-col">
                 <label className="text-[16px] mb-2">Enter Instruction</label>
-                <textarea
+                {/* <textarea
                   placeholder="Enter Instructions"
                   className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[16px] h-[200px] rounded-md resize-none outline-none p-2"
                   value={instruction}
                   onChange={(e) => {
                     setInstruction(e.target.value);
                   }}
+                /> */}
+                <ReactQuill
+                  value={instruction}
+                  onChange={(value) => {
+                    setInstruction(value);
+                    // setEditorValue(value);
+                  }}
+                  modules={modules}
+                  theme="snow"
+                  className="ml-0 w-full lg:max-w-[80%] border bg-gray-100 text-[12px] min-h-[200px] rounded-md resize-none outline-none p-2"
                 />
               </div>
               <div className="mt-5 flex flex-col">
@@ -102,92 +111,92 @@ const [customMinutes, setCustomMinutes] = useState<string>("");
                 />
               </div>
               <div className="mt-10 w-full flex gap-2">
-                              <div className="flex flex-col">
-                                <label className="text-[12px]">Time/Duration(Hours)</label>
-                                <select
-                                  className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
-                                  name="hour"
-                                  id="hour"
-                                  defaultValue={testQuestion[0]?.instruction?.duration}
-                                  value={isCustomDuration ? "custom" : duration}
-                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                    const val = e.target.value;
-                                    if (val === "custom") {
-                                      setIsCustomDuration(true);
-                                      // If there's already a customMinutes value, set duration accordingly
-                                      if (customMinutes !== "") {
-                                        const hrs = Number(customMinutes) / 60;
-                                        setDuration(hrs.toFixed(3));
-                                      }
-                                    } else {
-                                      setIsCustomDuration(false);
-                                      setCustomMinutes("");
-                                      setDuration(val);
-                                    }
-                                  }}
-                                >
-                                  <option value="" disabled>
-                                    Choose Timer
-                                  </option>
-              
-                                  <option value="0.084">5 Minutes</option>
-                                  <option value="0.167">10 Minutes</option>
-                                  <option value="0.333">20 Minutes</option>
-                                  <option value="0.500">30 Minutes</option>
-                                  <option value="0.667">40 Minutes</option>
-                                  <option value="0.833">50 Minutes</option>
-                                  <option value="1.000">60 Minutes</option>
-                                  <option value="1.500">90 Minutes</option>
-                                  <option value="custom">Custom minutes...</option>
-                                </select>
-                              </div>
-                              <div className="-mt-">
-                                {isCustomDuration && (
-                                  <div className="flex flex-col ml-3">
-                                    {/* <p className=" text-xs text-gray-500 mt-1">
+                <div className="flex flex-col">
+                  <label className="text-[12px]">Time/Duration(Hours)</label>
+                  <select
+                    className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
+                    name="hour"
+                    id="hour"
+                    defaultValue={testQuestion[0]?.instruction?.duration}
+                    value={isCustomDuration ? "custom" : duration}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      const val = e.target.value;
+                      if (val === "custom") {
+                        setIsCustomDuration(true);
+                        // If there's already a customMinutes value, set duration accordingly
+                        if (customMinutes !== "") {
+                          const hrs = Number(customMinutes) / 60;
+                          setDuration(hrs.toFixed(3));
+                        }
+                      } else {
+                        setIsCustomDuration(false);
+                        setCustomMinutes("");
+                        setDuration(val);
+                      }
+                    }}
+                  >
+                    <option value="" disabled>
+                      Choose Timer
+                    </option>
+
+                    <option value="0.084">5 Minutes</option>
+                    <option value="0.167">10 Minutes</option>
+                    <option value="0.333">20 Minutes</option>
+                    <option value="0.500">30 Minutes</option>
+                    <option value="0.667">40 Minutes</option>
+                    <option value="0.833">50 Minutes</option>
+                    <option value="1.000">60 Minutes</option>
+                    <option value="1.500">90 Minutes</option>
+                    <option value="custom">Custom minutes...</option>
+                  </select>
+                </div>
+                <div className="-mt-">
+                  {isCustomDuration && (
+                    <div className="flex flex-col ml-3">
+                      {/* <p className=" text-xs text-gray-500 mt-1">
                                       Duration saved
                                     </p> */}
-                                    <label className="text-[12px] mb-[2px]">
-                                      Custom Timer
-                                    </label>
-                                    <input
-                                      className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
-                                      placeholder="Enter minutes (e.g. 7)"
-                                      value={customMinutes}
-                                      onChange={(e) => {
-                                        const v = e.target.value;
-                                        // allow only digits
-                                        if (v === "" || /^\d+$/.test(v)) {
-                                          setCustomMinutes(v);
-                                          if (v === "") {
-                                            setDuration("");
-                                          } else {
-                                            const mins = Number(v);
-                                            const hrs = mins / 60;
-                                            // store as string formatted to 3 decimals
-                                            setDuration(hrs.toFixed(3));
-                                          }
-                                        }
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                              <div className="-mt-1 ml-6">
-                                <label className="text-[12px] ">
-                                  Enter Mark Per Question
-                                </label>
-                                <Input
-                                  placeholder="Enter Marks"
-                                  className="ml-0 w-full"
-                                  defaultValue={testQuestion[0]?.instruction?.mark}
-                                  value={mark}
-                                  onChange={(e) => {
-                                    setMark(e.target.value);
-                                  }}
-                                />
-                              </div>
-                            </div>
+                      <label className="text-[12px] mb-[2px]">
+                        Custom Timer
+                      </label>
+                      <input
+                        className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                        placeholder="Enter minutes (e.g. 7)"
+                        value={customMinutes}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          // allow only digits
+                          if (v === "" || /^\d+$/.test(v)) {
+                            setCustomMinutes(v);
+                            if (v === "") {
+                              setDuration("");
+                            } else {
+                              const mins = Number(v);
+                              const hrs = mins / 60;
+                              // store as string formatted to 3 decimals
+                              setDuration(hrs.toFixed(3));
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="-mt-1 ml-6">
+                  <label className="text-[12px] ">
+                    Enter Mark Per Question
+                  </label>
+                  <Input
+                    placeholder="Enter Marks"
+                    className="ml-0 w-full"
+                    defaultValue={testQuestion[0]?.instruction?.mark}
+                    value={mark}
+                    onChange={(e) => {
+                      setMark(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
             </div>
             <div className="flex">
               <Button
@@ -199,7 +208,7 @@ const [customMinutes, setCustomMinutes] = useState<string>("");
                   setToggle(true);
                   let data: any = { duration, instruction, mark };
 
-                   console.log("started: ", data);
+                  console.log("started: ", data);
                   dispatch(addTestInstruction(data!));
                 }}
               />

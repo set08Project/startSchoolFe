@@ -32,7 +32,7 @@ import {
 import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
-import ClipLoader from "react-spinners/ClipLoader";
+
 import { FaSpinner } from "react-icons/fa6";
 import PrintReciptScreen from "./PrintReceipt";
 import { MdClose } from "react-icons/md";
@@ -225,8 +225,6 @@ const ViewStudent = () => {
 
   useEffect(() => {}, [valueStored]);
 
-  // Delete Student Function
-
   // getting schoolID
   const schoolID = useSchoolCookie().dataID;
 
@@ -234,19 +232,30 @@ const ViewStudent = () => {
     try {
       setShowButton(true);
       setLoading(true);
-      outGoneStudent(schoolID, studentID).then((res) => {
-        console.log("OUT", res)
-
-        if (res.status === 200) {
-          toast.success("Student Has Been Successfully Deleted");
+      // deleteStudent(schoolID, studentID)
+      outGoneStudent(schoolID, studentID)
+        .then((res) => {
+          if (res.status === 201) {
+            toast.success("Student Has Been Successfully Deleted");
+            mutate(`api/read-student/${schoolID}`);
+            setShowButton(false);
+            setLoading(false);
+          } else {
+            toast.error("Failed to delete student");
+            setShowButton(false);
+            setLoading(false);
+          }
+        })
+        .finally(() => {
           setShowButton(false);
-        }
-      });
+          setLoading(false);
+        });
     } catch (error) {
+      toast.error("An error occurred while deleting student");
+      setShowButton(false);
+      setLoading(false);
       toast.error("Error In Deleting Student");
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -791,18 +800,32 @@ const ViewStudent = () => {
                               <div className="modal-action flex items-center">
                                 {loading ? (
                                   <Button
-                                    name="Deleting Student.."
-                                    className="px-3 py-1 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
+                                    disabled={true}
+                                    name="Deleting Student"
+                                    className="px-3 bg-red-500 text-[15px] !rounded-lg text-white transition-all duration-300 hover:scale-105 py-[14px]"
                                     icon={
-                                      <ClipLoader color="white" size={18} />
+                                      <FaSpinner className="animate-spin text-[14px]" />
                                     }
                                   />
                                 ) : (
                                   showButton && (
                                     <Button
-                                      name="Delete Student"
+                                      // disabled={showButton}
+                                      name={
+                                        loading ? (
+                                          <span className="flex items-center gap-2">
+                                            {/* <FaSpinner className="animate-spin text-[10px]" /> */}
+                                            Deleting Student
+                                          </span>
+                                        ) : (
+                                          "Delete Student"
+                                        )
+                                      }
                                       className="px-3 py-3 bg-red-500 text-[15px] text-white transition-all duration-300 hover:scale-105"
                                       onClick={() => {
+                                        setLoading(true);
+                                        console.log("to delete: ");
+                                        console.log("to delete: ", loading);
                                         if (valueStored?.length <= 2) {
                                           // console.log("read: ", valueStored);
                                           handeDeleteStudent(valueStored[0]);
@@ -818,6 +841,7 @@ const ViewStudent = () => {
                                     htmlFor="my_modal_delete"
                                     className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105"
                                     onClick={() => {
+                                      setLoading(false);
                                       setValueStored([]);
                                     }}
                                   >
