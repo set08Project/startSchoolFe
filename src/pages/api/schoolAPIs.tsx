@@ -7,8 +7,10 @@ import axios, { AxiosResponse } from "axios";
 
 // Working Online1
 // Working Online
-export const URL: string = "https://startschoolbe-4.onrender.com/api";
-const URL2: string = "https://startschoolbe-4.onrender.com";
+// export const URL: string = "https://startschoolbe-4.onrender.com/api";
+// const URL2: string = "https://startschoolbe-4.onrender.com";
+export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
+const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
 export const removePerformance = async (
   performanceID: string

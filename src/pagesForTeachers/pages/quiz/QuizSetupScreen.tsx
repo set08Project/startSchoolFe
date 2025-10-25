@@ -55,7 +55,6 @@ const QuizSetupScreen = () => {
   const { midTest, midTestMutate } = useMidTest(subjectID!);
 
   const [state, setState] = useState<any>({});
-  const [isModalOpen, setModalOpen] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [loadingExam, setLoadingExam] = useState<Boolean>(false);
@@ -110,7 +109,12 @@ const QuizSetupScreen = () => {
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const navigate = useNavigate();
 
-  console.log("subjectQuiz: ", readQuiz[0]?.quiz?.instruction);
+  const [isModalOpen, setModalOpen] = useState<Boolean>(false);
+  const [isModalOpenExam, setModalOpenExam] = useState<Boolean>(false);
+  const [examToDelete, setExamToDelete] = useState<string | null>(null);
+  const [isMidTestModalOpen, setMidTestModalOpen] = useState<Boolean>(false);
+  const [isExamModalOpen, setExamModalOpen] = useState<Boolean>(false);
+  const [midTestToDelete, setMidTestToDelete] = useState<string | null>(null);
 
   return (
     <div className="text-blue-950  relative">
@@ -235,30 +239,78 @@ const QuizSetupScreen = () => {
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
               </div>
+
               <div className="mt-4 text-center relative bottom-4">
-                <button
-                  onClick={() => {
-                    console.log("Deleted");
-                    setLoading(true);
-                    deleteExamination(subjectID!, examination?.exam?._id)
-                      .then(() => {
-                        examMutate(`api/api/view-subject-exam/${subjectID}`);
-                      })
-                      .finally(() => {
-                        setLoading(false);
-                      });
-                  }}
-                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
-                >
-                  {loading ? (
-                    <FaSpinner size={20} className="mr-1" />
-                  ) : (
-                    <FaTrashAlt size={20} className="mr-1" />
+                <>
+                  <button
+                    onClick={() => {
+                      // open confirm modal and store target id
+                      setExamToDelete(examination?.exam?._id || null);
+                      setModalOpenExam(true);
+                    }}
+                    className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                  >
+                    {loading ? (
+                      <FaSpinner size={20} className="mr-1" />
+                    ) : (
+                      <FaTrashAlt size={20} className="mr-1" />
+                    )}
+                    {loading
+                      ? " Deleting Examination Question"
+                      : " Delete Examination Question"}
+                  </button>
+
+                  {/* Confirm delete modal for Examination */}
+                  {isModalOpenExam && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+                        <h3 className="font-semibold text-lg mb-3">
+                          Delete Examination
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Are you sure you want to delete this examination? This
+                          action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-3">
+                          <button
+                            className="px-4 py-2 rounded-md bg-gray-200"
+                            onClick={() => {
+                              setModalOpenExam(false);
+                              setExamToDelete(null);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-md bg-red-500 text-white"
+                            onClick={async () => {
+                              if (!examToDelete) return;
+                              setLoading(true);
+                              try {
+                                await deleteExamination(
+                                  subjectID!,
+                                  examToDelete
+                                );
+                                examMutate(
+                                  `api/api/view-subject-exam/${subjectID}`
+                                );
+                              } catch (error) {
+                                console.error(error);
+                                toast.error("Failed to delete examination");
+                              } finally {
+                                setLoading(false);
+                                setModalOpenExam(false);
+                                setExamToDelete(null);
+                              }
+                            }}
+                          >
+                            Proceed
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  {loading
-                    ? " Deleting Examination Question"
-                    : " Delete Examination Question"}
-                </button>
+                </>
               </div>
 
               <div className="flex justify-between items-center">
@@ -438,27 +490,76 @@ const QuizSetupScreen = () => {
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
               </div>
+
               <div className="mt-4 text-center relative bottom-4">
-                <button
-                  onClick={() => {
-                    setLoading(true);
-                    deleteMidTestData(subjectID!, midTest?._id)
-                      .then(() => {
-                        mutate(`api/view-subject-mid-test/${subjectID}`);
-                      })
-                      .finally(() => {
-                        setLoading(false);
-                      });
-                  }}
-                  className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
-                >
-                  {loading ? (
-                    <FaSpinner size={20} className="mr-1" />
-                  ) : (
-                    <FaTrashAlt size={20} className="mr-1" />
+                <>
+                  <button
+                    onClick={() => {
+                      // open confirm modal for mid-test deletion
+                      setMidTestToDelete(midTest?._id || null);
+                      setMidTestModalOpen(true);
+                    }}
+                    className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
+                  >
+                    {loading ? (
+                      <FaSpinner size={20} className="mr-1" />
+                    ) : (
+                      <FaTrashAlt size={20} className="mr-1" />
+                    )}
+                    {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
+                  </button>
+
+                  {isMidTestModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
+                        <h3 className="font-semibold text-lg mb-3">
+                          Delete Mid-Test
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Are you sure you want to delete this mid-test? This
+                          action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-3 mt-10">
+                          <button
+                            className="px-4 py-2 rounded-md bg-gray-200"
+                            onClick={() => {
+                              setMidTestModalOpen(false);
+                              setMidTestToDelete(null);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-md bg-red-500 text-white"
+                            onClick={async () => {
+                              if (!midTestToDelete) return;
+                              setLoading(true);
+                              try {
+                                await deleteMidTestData(
+                                  subjectID!,
+                                  midTestToDelete
+                                );
+                                // revalidate midTest list
+                                midTestMutate(
+                                  `api/view-subject-mid-test/${subjectID}`
+                                );
+                              } catch (error) {
+                                console.error(error);
+                                toast.error("Failed to delete mid-test");
+                              } finally {
+                                setLoading(false);
+                                setMidTestModalOpen(false);
+                                setMidTestToDelete(null);
+                              }
+                            }}
+                          >
+                            Proceed
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
-                </button>
+                </>
               </div>
 
               <div className="flex justify-between items-center">
@@ -724,6 +825,7 @@ const QuizSetupScreen = () => {
                   <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                     {i + 1}
                   </div>
+
                   <div className="mt-4 text-center relative bottom-4">
                     <button
                       onClick={() => handleDelete(props._id)}

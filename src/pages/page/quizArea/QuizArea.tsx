@@ -67,6 +67,7 @@ const ExamQuizSetupScreen = () => {
 
   const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
+  const [isModalOpenExam, setModalOpenExam] = useState<Boolean>(false);
   const [examToDelete, setExamToDelete] = useState<string | null>(null);
   const [isMidTestModalOpen, setMidTestModalOpen] = useState<Boolean>(false);
   const [midTestToDelete, setMidTestToDelete] = useState<string | null>(null);
@@ -267,7 +268,8 @@ const ExamQuizSetupScreen = () => {
                   </button>
 
                   {/* Confirm delete modal for Examination */}
-                  {isModalOpen && (
+
+                  {isModalOpenExam && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                       <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
                         <h3 className="font-semibold text-lg mb-3">
@@ -507,6 +509,7 @@ const ExamQuizSetupScreen = () => {
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
               </div>
+
               <div className="mt-4 text-center relative bottom-4">
                 <>
                   <button
@@ -577,7 +580,6 @@ const ExamQuizSetupScreen = () => {
                   )}
                 </>
               </div>
-
               <div className="flex justify-between items-center">
                 <div className="flex flex-col ">
                   <p className="font-semibold italicmt-0 text-[12px]">
@@ -595,7 +597,6 @@ const ExamQuizSetupScreen = () => {
                   />
                 </Link>
               </div>
-
               <div className="flex flex-col mb-3">
                 <div className="flex">
                   <p className="px-4 tracking-widest font-semibold capitalize py-1 rounded-md text-[12px] border bg-purple-200">
@@ -646,16 +647,13 @@ const ExamQuizSetupScreen = () => {
                   )}
                 </div>
               </div>
-
               <div>
                 <p className="text-[14px] my-5 italic">
                   Students can't access this midTest Questions yet, <br />{" "}
                   change the accessibility of students to take test!{" "}
                 </p>
               </div>
-
               <div className="flex-1" />
-
               <div className="flex justify-between text-[13px]">
                 <div>
                   Questions:{" "}
