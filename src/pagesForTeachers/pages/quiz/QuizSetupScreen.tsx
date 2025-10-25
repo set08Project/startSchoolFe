@@ -198,7 +198,7 @@ const QuizSetupScreen = () => {
         <div className="mb-16 flex-col-reverse flex lg:flex-row justify-between items-center">
           <p className="mt-10 lg:mt-0">View Assignment/Test/Quiz</p>
 
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <Link to={`/create-quiz/${subjectID}`}>
               <p className="font-medium cursor-pointer bg-neutral-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center">
                 + Create Pop Test

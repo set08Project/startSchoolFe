@@ -61,14 +61,12 @@ const QuizTestScreen = () => {
   const timer = parseFloat(quizData?.quiz?.instruction?.duration);
   let timerInSeconds = timer * 3600;
 
- 
   const handleSubmit = () => {
     setLoading(true);
-    const correctAnswers = quizData?.quiz?.question?.map((q: any) =>
-    {
-      q.answer ? q.answer.trim() : "";
-    }
-    );
+    const correctAnswers = quizData?.quiz?.question?.map((q: any) => {
+      return q.answer ? q.answer.trim() : "";
+    });
+
     let score = 0;
 
     correctAnswers.forEach((correctAnswer: string, index: number) => {
@@ -87,7 +85,12 @@ const QuizTestScreen = () => {
     const totalquest = getQuizData[1]?.question?.length;
 
     timerInSeconds = 0;
-
+    console.log(
+      "THis is time up value: ",
+      quizData?.quiz?.question?.map((x) => {
+        return x.answer.trim();
+      })
+    );
 
     performanceTest(studentInfo?._id, quizID!, courseID, {
       studentScore: score,
@@ -98,6 +101,7 @@ const QuizTestScreen = () => {
       status: quizData.status,
     })
       .then((res) => {
+        console.log(res);
         console.log("submission response: ", res);
         if (res.status === 201) {
           toast.success(
@@ -146,7 +150,6 @@ const QuizTestScreen = () => {
 
   // ${quizData?.term && quizData?.term}
 
-  
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
