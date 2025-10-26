@@ -17,21 +17,28 @@ document.title = "view teacher subject";
 interface iProp {
   props?: any;
   quiz?: boolean;
-  test?: boolean;
-  ass?: boolean;
+  midTest?: boolean;
+  exam?: boolean;
   teach?: boolean;
 }
 
-const SubjectRecord: FC<iProp> = ({ ass, props, quiz, teach, test }) => {
+const SubjectRecord: FC<iProp> = ({ exam, props, quiz, teach, midTest }) => {
   const { subjectInfo } = useSujectInfo(props);
 
   return (
     <div>
-      {test && <div>{subjectInfo?.test ? subjectInfo?.test?.length : 0}</div>}
-      {quiz && <div>{subjectInfo?.quiz ? subjectInfo?.quiz?.length : 0}</div>}
-      {ass && (
-        <div>{subjectInfo?.quiz ? subjectInfo?.assignment?.length : 0}</div>
+      {quiz && (
+        <div>
+          {subjectInfo?.quiz?.length > 0 ? (
+            <span>Yes ({subjectInfo?.quiz?.length})</span>
+          ) : (
+            "No"
+          )}
+        </div>
       )}
+      {midTest && <div>{subjectInfo?.midTest?.length > 0 ? "Yes" : "No"}</div>}
+      {exam && <div>{subjectInfo?.examination?.length > 0 ? "Yes" : "No"}</div>}
+
       {teach && <div>{subjectInfo?.subjectTeacherName}</div>}
     </div>
   );
@@ -72,10 +79,10 @@ const MyClassroom: FC = () => {
           <div className="w-[1500px] text-[gray] flex gap-9 text-[12px] font-medium uppercase mb-10 px-4">
             <div className="w-[150px] border-r">Class Subject</div>
             <div className="w-[150px] border-r">Subject Teacher</div>
-            <div className="w-[100px] border-r">No of Assignment</div>
-            <div className="w-[100px] border-r">No of Quiz</div>
+            <div className="w-[100px] border-r">Quiz Ready?</div>
+            <div className="w-[100px] border-r">Mid-Test Ready?</div>
+            <div className="w-[100px] border-r">Examination Ready?</div>
 
-            <div className="w-[100px] border-r">No Of Test</div>
             <div className="w-[250px] border-r">Description</div>
             <div className="w-[200px] border-r">View Details</div>
           </div>
@@ -92,14 +99,14 @@ const MyClassroom: FC = () => {
                 <div className="w-[150px] border-r text-black font-bold">
                   <SubjectRecord props={props._id} teach />
                 </div>
-                <div className="w-[100px] border-r text-black font-bold">
-                  <SubjectRecord props={props._id} ass />
-                </div>
-                <div className="w-[100px] border-r text-black font-bold">
+                <div className="w-[100px] border-r border-l text-black font-bold">
                   <SubjectRecord props={props._id} quiz />
                 </div>
                 <div className="w-[100px] border-r text-black font-bold">
-                  <SubjectRecord props={props._id} test />
+                  <SubjectRecord props={props._id} midTest />
+                </div>
+                <div className="w-[100px] border-r text-black font-bold">
+                  <SubjectRecord props={props._id} exam />
                 </div>
                 <div className="w-[250px] border-r text-black">
                   no caption yet

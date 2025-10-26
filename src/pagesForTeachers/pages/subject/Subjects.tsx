@@ -10,23 +10,23 @@ document.title = "view teacher subject";
 
 interface iProp {
   props?: any;
+  midTest?: boolean;
   quiz?: boolean;
-  test?: boolean;
-  ass?: boolean;
+  exam?: boolean;
 }
 
-const SubjectRecord: FC<iProp> = ({ props, quiz, test, ass }) => {
+const SubjectRecord: FC<iProp> = ({ props, midTest, quiz, exam }) => {
   const { subjectInfo } = useSujectInfo(props);
+
+  console.log(subjectInfo);
 
   return (
     <div>
-      {test && <div>{subjectInfo?.test ? subjectInfo?.test?.length : 0}</div>}
-      {quiz && <div>{subjectInfo?.quiz ? subjectInfo?.quiz?.length : 0}</div>}
-      {ass && (
-        <div>
-          {subjectInfo?.assignment ? subjectInfo?.assignment?.length : 0}
-        </div>
-      )}
+      {quiz && <div>{subjectInfo?.quiz?.length > 0 ? "Yes" : "No"}</div>}
+
+      {midTest && <div>{subjectInfo?.midTest?.length > 0 ? "Yes" : "No"}</div>}
+
+      {exam && <div>{subjectInfo?.examination?.length > 0 ? "Yes" : "No"}</div>}
     </div>
   );
 };
@@ -56,9 +56,9 @@ const TeacherSubject: FC = () => {
           <div className="py-6 px-2 border rounded-md min-w-[350px] overflow-y-hidden mt-9">
             <div className="w-[1200px] text-[gray] flex gap-9 text-[12px] font-medium uppercase mb-10 px-4">
               <div className="w-[150px] border-r">Teacher Subject</div>
-              <div className="w-[100px] border-r">No of Quiz</div>
-              <div className="w-[100px] border-r">No Of Test</div>
-              <div className="w-[100px] border-r">No Of Assignment</div>
+              <div className="w-[100px] border-r">Quiz Ready?</div>
+              <div className="w-[100px] border-r">Test Ready?</div>
+              <div className="w-[100px] border-r">Examination Ready?</div>
               <div className="w-[250px] border-r">Description</div>
               <div className="w-[200px] border-r">View Details</div>
             </div>
@@ -80,10 +80,10 @@ const TeacherSubject: FC = () => {
                       <SubjectRecord props={props.id} quiz />
                     </div>
                     <div className="w-[100px] border-r text-black font-bold">
-                      <SubjectRecord props={props.id} test />
+                      <SubjectRecord props={props.id} midTest />
                     </div>
                     <div className="w-[100px] border-r text-black font-bold">
-                      <SubjectRecord props={props.id} ass />
+                      <SubjectRecord props={props.id} exam />
                     </div>
                     <div className="w-[250px] border-r text-black">
                       no caption yet
