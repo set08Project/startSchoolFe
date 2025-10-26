@@ -23,6 +23,7 @@ import {
 import { mutate } from "swr";
 import Input from "../../../components/reUse/Input";
 import { FaSpinner } from "react-icons/fa6";
+import { set } from "lodash";
 
 interface iProps {
   props?: any;
@@ -65,7 +66,7 @@ const ViewSubjects = () => {
   const [subjectTeacher, setSubjectTeacher] = useState("");
   const [searchSubject, setSearchSubject] = useState("");
   const { dataID } = useSchoolCookie();
-const { data } = useSchoolData();
+  const { data } = useSchoolData();
   const { schoolTeacher } = useSchoolTeacher();
 
   const onTeacherSubject = (subjectID: string) => {
@@ -99,7 +100,6 @@ const { data } = useSchoolData();
   const [file, setFile] = useState<File | null>(null);
   const [toggle, setToggle] = useState(false);
 
-  
   const handleBulkClassroom = () => {
     setToggle(true);
     const formData = new FormData();
@@ -114,6 +114,8 @@ const { data } = useSchoolData();
         setToggle(false);
       });
   };
+  const [propsID, setPropsID] = useState<string | null>("");
+  const [propsIDII, setPropsIDII] = useState<string | null>("");
 
   return (
     <div>
@@ -129,52 +131,52 @@ const { data } = useSchoolData();
           onChange={handleSubjectSearch}
         />
 
-
         {file ? (
-                  <Button
-                    name={
-                      toggle ? (
-                        <div className="flex items-center gap-2 duration-300 transition-all">
-                          <FaSpinner className="animate-spin text-[18px]" />
-                          <span>Uploading Data</span>
-                        </div>
-                      ) : (
-                        "Add file to Student"
-                      )
-                    }
-                    className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
-                    onClick={handleBulkClassroom}
-                  />
-                ) : (
-                  <label
-                    htmlFor="file"
-                    className="uppercase lg:text-[12px]font-medium bg-neutral-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[11px]"
-                  >
-                    upload file for Bulk Entry
-                    <input
-                      id="file"
-                      type="file"
-                      accept=".csv"
-                      className="hidden"
-                      hidden
-                      onChange={(e: any) => {
-                        setFile(e.target.files[0]);
-                      }}
-                    />
-                  </label>
-                )}
+          <Button
+            name={
+              toggle ? (
+                <div className="flex items-center gap-2 duration-300 transition-all">
+                  <FaSpinner className="animate-spin text-[18px]" />
+                  <span>Uploading Data</span>
+                </div>
+              ) : (
+                "Add file to Student"
+              )
+            }
+            className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
+            onClick={handleBulkClassroom}
+          />
+        ) : (
+          <label
+            htmlFor="file"
+            className="uppercase lg:text-[12px]font-medium bg-neutral-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-neutral-900 cursor-pointer transition-all duration-300 px-5 border rounded-md m-2 overflow-hidden flex items-center justify-center text-white  md:text-[13px] text-[11px]"
+          >
+            upload file for Bulk Entry
+            <input
+              id="file"
+              type="file"
+              accept=".csv"
+              className="hidden"
+              hidden
+              onChange={(e: any) => {
+                setFile(e.target.files[0]);
+              }}
+            />
+          </label>
+        )}
       </div>
       <div className="py-6 px-2  border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1250px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[200px] border-r">Subject Name</div>
 
-          <div className="w-[200px] border-r">Teacher Info</div>
+          <div className="w-[300px] border-r">Teacher Info</div>
           <div className="w-[100px] border-r">Class</div>
-          <div className="w-[200px] border-r">Assign Teacher</div>
-          <div className="w-[200px] border-r">Remove Subject</div>
+          <div className="w-[150px] border-r">Assign Teacher</div>
+          <div className="w-[230px] border-r">Remove Subject from Teacher</div>
+          <div className="w-[200px] border-r">Delete Subject</div>
         </div>
 
-        <div className=" w-[900px] overflow-hidden ">
+        <div className=" w-[1250px] overflow-hidden ">
           {subjectSearch?.map((props: any, i: number) => (
             <div>
               <div>
@@ -188,7 +190,7 @@ const { data } = useSchoolData();
                     {props?.subjectTitle}
                   </div>
 
-                  <div className={`w-[200px] border-r `}>
+                  <div className={`w-[300px] border-r `}>
                     {props?.subjectTeacherName ? (
                       <div>
                         <TeacherInfo props={props?.teacherID} />
@@ -200,7 +202,7 @@ const { data } = useSchoolData();
 
                   <div className="w-[100px] border-r">{props?.designated}</div>
 
-                  <div className="w-[200px] border-r">
+                  <div className="w-[150px] border-r">
                     <div className="mt-5 text-[13px] font-medium">
                       <label
                         htmlFor="assign_class_subject"
@@ -313,8 +315,41 @@ const { data } = useSchoolData();
                   {/* name */}
 
                   <label
+                    className="w-[230px] my-3 bg-neutral-900 text-white py-2 px-4 flex justify-center items-center rounded-md text-[12px] transition-all duration-300 cursor-pointer "
+                    onClick={() => {
+                      setPropsID(props._id);
+                      removeTeacherSubject(
+                        dataID,
+                        props?.teacherID,
+                        props?._id
+                      ).then((res: any) => {
+                        if (res.status === 200) {
+                          // mutate(`api/view-teacher-detail/${props?.teacherID}`);
+                          mutate(`api/view-school-subject/${dataID}`);
+                          toast.success(
+                            "subject Remove from Teacher's Archieve"
+                          );
+                          setPropsID(null);
+                        } else {
+                          toast.error("something went wrong");
+                          setPropsID(null);
+                        }
+                      });
+                    }}
+                  >
+                    {propsID === props._id ? (
+                      <span className="flex items-center gap-2">
+                        <FaSpinner className="animate-spin text-[16px]" />{" "}
+                        Removing Subject's Teacher
+                      </span>
+                    ) : (
+                      " - Remove Subject from Teacher"
+                    )}
+                  </label>
+                  <label
                     className="w-[200px] my-3 bg-red-500 text-white py-2 px-4 flex justify-center items-center rounded-md text-[12px] transition-all duration-300 cursor-pointer "
                     onClick={() => {
+                      setPropsIDII(props._id);
                       {
                         !!props?.teacherID
                           ? removeTeacherSubject(
@@ -322,20 +357,22 @@ const { data } = useSchoolData();
                               props?.teacherID,
                               props?._id
                             ).then((res: any) => {
-                              if (res.status === 201) {
+                              if (res.status === 200) {
                                 mutate(
                                   `api/view-teacher-detail/${props?.teacherID}`
                                 );
                                 deletSubject(dataID, props?._id).then(
                                   (res: any) => {
+                                    setPropsIDII(null);
                                     mutate(`api/view-school-subject/${dataID}`);
                                     toast.success(
-                                      "subject Remove from Archieve"
+                                      "subject Remove from Teacher's Archieve"
                                     );
                                   }
                                 );
                               } else {
                                 toast.error("something went wrong");
+                                setPropsIDII(null);
                               }
                             })
                           : deletSubject(dataID, props?._id).then(
@@ -347,7 +384,14 @@ const { data } = useSchoolData();
                       }
                     }}
                   >
-                    - Remove This Subject
+                    {propsIDII === props._id ? (
+                      <span className="flex items-center gap-2">
+                        <FaSpinner className="animate-spin text-[16px]" />{" "}
+                        Deleting Subject's Archive
+                      </span>
+                    ) : (
+                      " - Delete This Subject"
+                    )}
                   </label>
                 </div>
               </div>
