@@ -123,6 +123,10 @@ const MidTestScreen = () => {
 
   let timerInSeconds = timer * 3600;
 
+  const countdownKey = midTestID
+    ? `midTest-${midTestID}-countdown`
+    : `midTest-countdown`;
+
   const handleSubmit = () => {
     if (isSubmitted) return;
     setIsSubmitted(true);
@@ -186,7 +190,9 @@ const MidTestScreen = () => {
       })
       .finally(() => {
         setLoading(false);
-        localStorage.removeItem("countdown");
+        try {
+          localStorage.removeItem(countdownKey);
+        } catch (e) {}
         localStorage.removeItem("midTest");
         localStorage.removeItem("midTestQuestions");
         setTimeUp(false);
@@ -199,7 +205,13 @@ const MidTestScreen = () => {
     JSON.parse(localStorage.getItem("midTestQuestions")!)
   );
 
-  let savedSeconds = JSON.parse(localStorage.getItem("countdown"));
+  let savedSeconds = null;
+  try {
+    const raw = localStorage.getItem(countdownKey);
+    savedSeconds = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    savedSeconds = null;
+  }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -257,7 +269,7 @@ const MidTestScreen = () => {
   }, [state, readQuestion, myQuizData, timeUp]);
 
   useEffect(() => {
-    localStorage.removeItem("countdown");
+    // keep countdown persisted across refreshes; only clear midTest metadata/questions on fresh mount
     localStorage.removeItem("midTest");
     localStorage.removeItem("midTestQuestions");
   }, []);
@@ -317,6 +329,17 @@ const MidTestScreen = () => {
                 size={200}
                 className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
                 onClick={() => {
+                  // initialize per-test countdown so refresh continues the timer
+                  try {
+                    const existing = localStorage.getItem(countdownKey);
+                    if (!existing) {
+                      localStorage.setItem(
+                        countdownKey,
+                        String(timerInSeconds)
+                      );
+                    }
+                  } catch (e) {}
+
                   if (!document.startViewTransition) {
                     setStart(true);
                     setActivate(true);
@@ -345,6 +368,7 @@ const MidTestScreen = () => {
                   <CountdownTimer
                     initialSeconds={timerInSeconds}
                     onTimeUp={() => setTimeUp(true)}
+                    storageKey={countdownKey}
                   />
                 </div>
               ) : null}

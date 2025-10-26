@@ -18,8 +18,6 @@ interface iProp {
 const SubjectRecord: FC<iProp> = ({ props, midTest, quiz, exam }) => {
   const { subjectInfo } = useSujectInfo(props);
 
-  console.log(subjectInfo);
-
   return (
     <div>
       {quiz && <div>{subjectInfo?.quiz?.length > 0 ? "Yes" : "No"}</div>}
@@ -57,7 +55,7 @@ const TeacherSubject: FC = () => {
             <div className="w-[1200px] text-[gray] flex gap-9 text-[12px] font-medium uppercase mb-10 px-4">
               <div className="w-[150px] border-r">Teacher Subject</div>
               <div className="w-[100px] border-r">Quiz Ready?</div>
-              <div className="w-[100px] border-r">Test Ready?</div>
+              <div className="w-[100px] border-r">Mid-Test Ready?</div>
               <div className="w-[100px] border-r">Examination Ready?</div>
               <div className="w-[250px] border-r">Description</div>
               <div className="w-[200px] border-r">View Details</div>
