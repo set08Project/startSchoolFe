@@ -1685,7 +1685,7 @@ export const removeTeacherSubject = async (
   subjectID: string
 ) => {
   try {
-    const URL = "http://localhost:2244/api";
+    // const URL = "http://localhost:2244/api";
     return await axios
       .patch(
         `${URL}/remove-teacher-subject/${schoolID}/${teacherID}/${subjectID}/`
