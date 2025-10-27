@@ -416,7 +416,7 @@ const QuizSetupScreen = () => {
                 <div
                   className="font-normal line-clamp-3"
                   dangerouslySetInnerHTML={{
-                    __html: examination?.exam?.quiz?.instruction.instruction,
+                    __html: examination?.exam?.quiz?.instruction?.instruction,
                   }}
                 />
               </div>
@@ -663,7 +663,7 @@ const QuizSetupScreen = () => {
                 <div
                   className="font-normal line-clamp-3"
                   dangerouslySetInnerHTML={{
-                    __html: midTest?.quiz?.instruction.instruction,
+                    __html: midTest?.quiz?.instruction?.instruction,
                   }}
                 />
               </div>
@@ -909,7 +909,7 @@ const QuizSetupScreen = () => {
                     <div
                       className="font-normal line-clamp-3"
                       dangerouslySetInnerHTML={{
-                        __html: props?.quiz?.instruction.instruction,
+                        __html: props?.quiz?.instruction?.instruction,
                       }}
                     />
                   </div>
