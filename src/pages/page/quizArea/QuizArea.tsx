@@ -413,7 +413,7 @@ const ExamQuizSetupScreen = () => {
                   Mark/Question:{" "}
                   <span className="font-bold">
                     {examination?.exam?.quiz?.instruction
-                      ? examination?.exam?.quiz?.instruction.mark
+                      ? examination?.exam?.quiz?.instruction?.mark
                       : 0}
                   </span>
                 </div>
@@ -422,7 +422,7 @@ const ExamQuizSetupScreen = () => {
                 Instruction:{" "}
                 <span className="font-normal">
                   {examination?.exam?.quiz?.instruction?.instruction
-                    ? `${examination?.exam?.quiz?.instruction.instruction}`.slice(
+                    ? `${examination?.exam?.quiz?.instruction?.instruction}`.slice(
                         0,
                         70
                       ) + "..."
@@ -435,7 +435,7 @@ const ExamQuizSetupScreen = () => {
                 <div
                   className="font-normal line-clamp-3"
                   dangerouslySetInnerHTML={{
-                    __html: examination?.exam?.quiz?.instruction.instruction,
+                    __html: examination?.exam?.quiz?.instruction?.instruction,
                   }}
                 />
               </div>
@@ -659,7 +659,7 @@ const ExamQuizSetupScreen = () => {
                   Questions:{" "}
                   <span className="font-bold">
                     {midTest?.quiz?.question
-                      ? midTest?.quiz?.question.length
+                      ? midTest?.quiz?.question?.length
                       : 0}
                   </span>
                 </div>
@@ -667,7 +667,7 @@ const ExamQuizSetupScreen = () => {
                   Mark/Question:{" "}
                   <span className="font-bold">
                     {midTest?.quiz?.instruction
-                      ? midTest?.quiz?.instruction.mark
+                      ? midTest?.quiz?.instruction?.mark
                       : 0}
                   </span>
                 </div>
@@ -677,7 +677,7 @@ const ExamQuizSetupScreen = () => {
                 <div
                   className="font-normal line-clamp-3"
                   dangerouslySetInnerHTML={{
-                    __html: midTest?.quiz?.instruction.instruction,
+                    __html: midTest?.quiz?.instruction?.instruction,
                   }}
                 />
               </div>
@@ -911,7 +911,7 @@ const ExamQuizSetupScreen = () => {
                       Mark/Question:{" "}
                       <span className="font-bold">
                         {props?.quiz && props?.quiz[0]?.instruction
-                          ? props?.quiz[0]?.instruction.mark
+                          ? props?.quiz[0]?.instruction?.mark
                           : 0}
                       </span>
                     </div>
@@ -921,7 +921,7 @@ const ExamQuizSetupScreen = () => {
                     <div
                       className="font-normal line-clamp-3"
                       dangerouslySetInnerHTML={{
-                        __html: props?.quiz?.instruction.instruction,
+                        __html: props?.quiz?.instruction?.instruction,
                       }}
                     />
                   </div>
