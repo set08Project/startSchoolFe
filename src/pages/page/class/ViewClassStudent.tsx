@@ -151,12 +151,14 @@ const ViewClassStudent: FC = () => {
     setToggleValue("");
   };
 
+  console.log("reading: ", classStudents?.students);
+
   return (
     <div>
       <Toaster />
       <div className="mt-4">
         <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-          <div className="text-[gray] w-[2120px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
+          <div className="text-[gray] w-[2360px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
             <div className="w-[50px] border-r">S/N</div>
             <div className="w-[90px] border-r">student Image</div>
             <div className="w-[200px] border-r">student Name</div>
@@ -176,12 +178,12 @@ const ViewClassStudent: FC = () => {
             <div className="w-[80px] border-r">Rate</div>
             <div className="w-[180px] border-r">View Detail</div>
             <div className="w-[180px] border-r">View Report Card</div>
-            <div className="w-[180px] border-r">Restrict Result</div>
+            <div className="w-[220px] border-r">Restrict Result</div>
           </div>
 
           <div>
             {sortedStudents?.length > 0 ? (
-              <div className="relative w-[2120px] overflow-hidden">
+              <div className="relative w-[2360px] overflow-hidden">
                 {sortedStudents?.map((props: any, i: number) => (
                   <div className="">
                     <div>
@@ -329,14 +331,15 @@ const ViewClassStudent: FC = () => {
                         </div>
 
                         <View props={props} />
-                        <div className="w-[180px] border-r text-[10px]">
+
+                        <div className="w-[220px] border-r text-[10px]">
                           <Button
                             name={`${
                               loading && loadingValue === props?._id
                                 ? ""
                                 : props?.viewReportCard
-                                ? "Free"
-                                : "Restrict"
+                                ? "Clear Restriction"
+                                : "Hold Back Result"
                             }`}
                             icon={
                               loading &&
@@ -352,7 +355,7 @@ const ViewClassStudent: FC = () => {
                             onClick={() => {
                               setLoading(true);
                               setLoadingValue(props?._id);
-                              if (props?.viewReportCard === true) {
+                              if (props?.viewReportCard) {
                                 updateStudentRestrictMode(
                                   data?._id,
                                   props?._id,
@@ -585,22 +588,21 @@ const View: FC<any> = ({ props }) => {
   });
 
   return (
-    <div className="w-[180px]">
+    <div className="w-[180px] -mt-4">
       {grade?.approve ? (
         <Link
           to={`/view-students-report-card/${props?._id}`}
           className="w-[180px] border-r"
         >
           <Button
-            name="Report-card"
-            className="py-3 w-[85%] mt-7 bg-orange-500 text-white  hover:bg-orange-600 transition-all duration-300"
-            onClick={() => {}}
+            name="Ready to View"
+            className="py-3 w-[85%] mt-10 bg-orange-500 text-white  hover:bg-orange-600 transition-all duration-300"
           />
         </Link>
       ) : (
         <div className="w-[180px] border-r">
           <Button
-            name="Not Ready"
+            name="Not yet Ready"
             className="py-3 w-[85%] mt-7 bg-red-500 text-white  hover:bg-red-600 transition-all duration-300"
           />
         </div>

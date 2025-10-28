@@ -1,6 +1,10 @@
 import { MdPlaylistAddCheck } from "react-icons/md";
 import Personal from "./pages/Chart/Personal";
-import { useReadOneClassInfo, useStudentInfo } from "./hooks/useStudentHook";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+  useStudentInfoData,
+} from "./hooks/useStudentHook";
 import StudentPerformance from "./pages/Chart/PerformingStudent";
 import Calendar from "./pages/Chart/Calendar";
 import pix from "./../assets/pix.jpg";
@@ -21,6 +25,7 @@ import {
   useStudentMidGrade,
 } from "../pagesForTeachers/hooks/useTeacher";
 import ArticleHolderScreen from "./pages/screens/ArticleHolderScreen";
+import StudentDetail from "./pages/class/StudentDetail";
 
 const StudentDashboard = () => {
   const readData = Array.from({ length: 2 });
@@ -55,6 +60,7 @@ const StudentDashboard = () => {
   const { gradeData } = useStudentGrade(studentInfo?._id);
   const { gradeMidData } = useStudentMidGrade(studentInfo?._id);
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
+  const { studentInfoData } = useStudentInfoData(studentInfo?.studentID);
 
   let resultData = gradeData?.reportCard?.find((el: any) => {
     return (
@@ -71,14 +77,6 @@ const StudentDashboard = () => {
       `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
     );
   });
-
-  console.log("hmm", resultData);
-  console.log(
-    "hmm",
-    `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
-      oneClass?.presentTerm
-    })`
-  );
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -123,7 +121,19 @@ const StudentDashboard = () => {
                   resultData?.approve ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {resultData?.approve ? "ready now" : "not yet Ready"}
+                {resultData?.approve ? (
+                  <p>
+                    Ready Now <br />
+                    {gradeData?.viewReportCard && (
+                      <span className="text-red-500 text-[14px]">
+                        {" "}
+                        (Needs to clear some issues, Please see Admin!)
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  "not yet Ready"
+                )}
               </p>
               <div className="flex ">
                 {resultData?.approve ? (
@@ -145,7 +155,19 @@ const StudentDashboard = () => {
                   resultData?.approve ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {midResultData?.approve ? "ready now" : "not yet Ready"}
+                {midResultData?.approve ? (
+                  <p>
+                    Ready Now <br />
+                    {gradeData?.viewReportCard && (
+                      <span className="text-red-500 text-[14px]">
+                        {" "}
+                        (Needs to clear some issues, Please see Admin!)
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  "not yet Ready"
+                )}
               </p>
               <div className="flex ">
                 {midResultData?.approve ? (

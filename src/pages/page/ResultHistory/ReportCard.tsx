@@ -54,10 +54,7 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
         el.classInfo ===
         `${props?.classAssigned} session: ${
           schoolInfo?.find((el) => el?.year === data?.presentSession)?.year
-        }(${
-          schoolInfo?.find((el) => el?.presentTerm === data?.presentTerm)
-            ?.presentTerm
-        })`
+        }(${data?.presentTerm})`
       );
     })
     ?.result?.find((data: any) => {
@@ -72,9 +69,6 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
             {result?.subject ? result?.subject : "Have't Entered"}
           </p>
           <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-            {/* <p className="w-[30px] border-r">1st</p>
-            <p className="w-[30px] border-r">2nd</p>
-            <p className="w-[30px] border-r">3rd</p> */}
             <p className="w-[30px] border-r">Test</p>
             <p className="w-[35px] border-r">Exam</p>
             <p className="w-[35px] ">Total</p>
@@ -83,9 +77,6 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
         </div>
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        {/* <p className="w-[30px] border-r">{result?.test1 ? result?.test1 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test2 ? result?.test2 : 0}</p>
-        <p className="w-[30px] border-r">{result?.test3 ? result?.test3 : 0}</p> */}
         <p className="w-[30px] border-r">{result?.test4 ? result?.test4 : 0}</p>
         <p className="w-[35px] border-r">{result?.exam ? result?.exam : 0}</p>
         <p className="w-[35px] font-bold border-r">
@@ -111,14 +102,10 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
 
   let result = gradeData?.reportCard.find((el: any) => {
+    console.log("Class Info Check: ", el.classInfo);
     return (
       el.classInfo ===
-      `${props?.classAssigned} session: ${
-        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)?.year
-      }(${
-        schoolInfo?.find((el) => el.presentTerm === oneClass?.presentTerm)
-          ?.presentTerm
-      })`
+      `${props?.classAssigned} session: ${data?.presentSession}(${oneClass?.presentTerm})`
     );
   });
 

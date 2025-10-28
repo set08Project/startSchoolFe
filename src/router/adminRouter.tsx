@@ -300,6 +300,15 @@ export const adminRouter = createBrowserRouter([
           // },
 
           {
+            path: "admin-test-exam-grade/:subjectID/",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SubjectGradeCard />
+              </Suspense>
+            ),
+          },
+
+          {
             path: "view-students-report-card/:studentID",
             element: (
               <Suspense fallback={<LoadingScreen />}>

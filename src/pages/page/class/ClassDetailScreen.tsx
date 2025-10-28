@@ -80,7 +80,7 @@ const ClassSubjectScreen: FC = () => {
               </div>
               <div className="flex">
                 <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
-                  compulsory
+                  class subject
                 </p>
               </div>
               <div className="flex-1" />
@@ -94,7 +94,7 @@ const ClassSubjectScreen: FC = () => {
               </div>
 
               <div className="flex">
-                <Link to={`/subjects/${props?._id}`} >
+                <Link to={`/subjects/${props?._id}`}>
                   <p className="text-[12px] font-medium bg-blue-950 hover:bg-blue-900 cursor-pointer text-white rounded-md py-2 px-4">
                     Goto CBT Area
                   </p>

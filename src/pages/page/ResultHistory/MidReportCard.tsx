@@ -92,13 +92,12 @@ interface iProps {
 // };
 
 const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
-  const { gradeData } = useStudentGrade(props?._id);
-  const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
-  const {data} = useSchoolData()
+  // const { gradeData } = useStudentGrade(props?._id);
+  // const { schoolInfo } = useSchoolSessionData(props?.schoolIDs);
+  // const { subjectData } = useClassSubject(state?._id);
+  // const { state } = useReadMyClassInfoData("JSS 1A");
 
-  const { state } = useReadMyClassInfoData("JSS 1A");
-  const { subjectData } = useClassSubject(state?._id);
-
+  const { data } = useSchoolData();
   let result = gradeMidData?.midReportCard
     .find((el: any) => {
       return (
@@ -109,8 +108,6 @@ const SubjectScore: FC<any> = ({ props, el, gradeMidData }) => {
     ?.result?.find((data: any) => {
       return data.subject === el?.subjectTitle;
     });
-
-    
 
   return (
     <div className="w-[260px] border-r-2 border-blue-950 ">
@@ -180,7 +177,6 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   )?.performanceRating;
 
-  console.log("comment: ", result?.adminComment);
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -208,7 +204,6 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
 
       <div
         className={` border-r items-center flex`}
-
         style={{ width: `${subjectData?.classSubjects.length * 280}px` }}
       >
         <div className="flex gap-4 ">
@@ -381,7 +376,7 @@ const MidReportCard = () => {
           {/* 260px */}
           <div
             className={` border-r`}
-            style={{width: `${subjectData?.classSubjects.length * 280}px`}}
+            style={{ width: `${subjectData?.classSubjects.length * 280}px` }}
           >
             {/* <div>Subject Grade</div> */}
             <div className=" flex ">

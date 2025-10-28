@@ -620,9 +620,9 @@ export const updateStudentRestrictMode = async (
   toggle: boolean
 ) => {
   try {
-    // const URL = "localhost:2244/api";
+    // const URL = "http://localhost:2244/api";
     return await axios
-      .patch(`${URL}/restrict-view/${schoolID}/${studentID}`, toggle)
+      .patch(`${URL}/restrict-view/${schoolID}/${studentID}`, { toggle })
       .then((res: any) => {
         return res;
       });
@@ -1298,8 +1298,9 @@ export const viewGallary = async (schoolID: string) => {
 export const deleteGallary = async (schoolID: string, gallaryID: string) => {
   try {
     return await axios
-      .get(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
+      .delete(`${URL}/delete-gallary/${schoolID}/${gallaryID}`)
       .then((res: any) => {
+        console.log("del: ", res);
         return res?.data;
       });
   } catch (error) {

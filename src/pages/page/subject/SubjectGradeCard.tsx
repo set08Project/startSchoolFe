@@ -1,7 +1,3 @@
-
-
-
-
 document.title = "View Students for Grading";
 import pix from "../../../assets/pix.jpg";
 import Button from "../../../components/reUse/Button";
@@ -26,7 +22,10 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 // import { createGradeScore } from "../../api/teachersAPI";
 
-import { useExamSubjectPerfomance, useOneExamSubjectStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
+import {
+  useExamSubjectPerfomance,
+  useOneExamSubjectStudentPerfomance,
+} from "@/pagesForTeachers/hooks/useQuizHook";
 import { createGradeScore } from "@/pagesForTeachers/api/teachersAPI";
 import {
   useClassStudent,
@@ -46,43 +45,40 @@ interface iProps {
 const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const { subjectID, examID } = useParams();
   // const { teacherInfo } = useTeacherInfo();
-  const {data} = useSchoolData()
+  const { data } = useSchoolData();
   const { schoolAnnouncement } = useSchoolAnnouncement(data?._id);
   const { subjectInfo } = useSujectInfo(subjectID);
-const { examPerformance } = useExamSubjectPerfomance(examID!);
+  const { examPerformance } = useExamSubjectPerfomance(examID!);
 
+  // console.clear()
+  // console.log(examPerformance?.performance)
 
-// console.clear()
-// console.log(examPerformance?.performance)
+  const studentFullNameA = `${props?.studentFirstName ?? ""} ${
+    props?.studentLastName ?? ""
+  }`
+    .trim()
+    .toLowerCase();
+  const studentFullNameB = `${props?.studentLastName ?? ""} ${
+    props?.studentFirstName ?? ""
+  }`
+    .trim()
+    .toLowerCase();
 
+  const performanceList: any[] = Array.isArray(examPerformance)
+    ? examPerformance
+    : examPerformance?.performance ?? [];
 
-const studentFullNameA = `${props?.studentFirstName ?? ""} ${
-  props?.studentLastName ?? ""
-}`
-  .trim()
-  .toLowerCase();
-const studentFullNameB = `${props?.studentLastName ?? ""} ${
-  props?.studentFirstName ?? ""
-}`
-  .trim()
-  .toLowerCase();
+  const matchedPerformance =
+    performanceList.find((p: any) => {
+      const name = (p?.studentName ?? "").trim().toLowerCase();
+      return name === studentFullNameA || name === studentFullNameB;
+    }) ?? null;
 
-const performanceList: any[] = Array.isArray(examPerformance)
-  ? examPerformance
-  : examPerformance?.performance ?? [];
+  const performanceRating = matchedPerformance?.performanceRating ?? null;
+  const performanceRatingII =
+    matchedPerformance?.studentScore *
+    parseInt(matchedPerformance?.markPerQuestion);
 
-const matchedPerformance =
-  performanceList.find((p: any) => {
-    const name = (p?.studentName ?? "").trim().toLowerCase();
-    return name === studentFullNameA || name === studentFullNameB;
-  }) ?? null;
-
-const performanceRating = matchedPerformance?.performanceRating ?? null;
-const performanceRatingII =
-  matchedPerformance?.studentScore *
-    parseInt(matchedPerformance?.markPerQuestion) ;
-
-console.log("Matched Performance:", matchedPerformance);
   const { oneStudentPerformanceExam: oneStudentPerformance } =
     useOneExamSubjectStudentPerfomance(
       subjectID,
@@ -98,34 +94,29 @@ console.log("Matched Performance:", matchedPerformance);
 
   // Find the current report card entry
   const reportData = gradeData?.reportCard?.find((el: any) => {
-   
-    const x = el.classInfo?.trim()?.replace(/\s+/g, " ")
-      ?.replace(/\n/g, "").trim();
-const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
+    const x = el.classInfo
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+    const y = `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`;
 
-    return (
-      el.classInfo?.replace(/\s+/g, " ")?.replace(/\n/g, "")?.trim() 
-     
-    );
+    return el.classInfo?.replace(/\s+/g, " ")?.replace(/\n/g, "")?.trim();
   });
-
 
   // Find the subject result
   const result = reportData?.result?.find((el: any) => {
     return el.subject === subjectInfo?.subjectTitle;
   });
 
-
-  
   // initialize local input state empty; we'll sync from `result` below so
   // the inputs update when server data changes (e.g. after mutate())
-  const [test4, setTest4] = useState(result?.test4 ? result.test4.toString() : "");
+  const [test4, setTest4] = useState(
+    result?.test4 ? result.test4.toString() : ""
+  );
   const [exam, setExam] = useState<string>("");
   const [isEditingExam, setIsEditingExam] = useState<boolean>(false);
 
-
-  console.log("result: ",result?.exam)
-  console.log("result: ",exam)
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";
@@ -136,10 +127,10 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
     if (totalMark >= 40) return "E";
     return "F";
   };
-  
+
   const computedExamDefault =
     performanceRatingII !== null && performanceRatingII !== undefined
-      ? (performanceRatingII).toString()
+      ? performanceRatingII.toString()
       : "";
 
   // Keep the exam input in sync with server data unless the user is
@@ -171,10 +162,12 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
       const test4Score = test4 ? parseInt(test4) : result?.test4 || 0;
       // const examScore = exam ? parseInt(exam) : result?.exam || 0;
       const examScore =
-       exam !== ""
+        exam !== ""
           ? parseInt(exam, 10)
-          : result?.exam ?? (computedExamDefault !== "" && !isNaN(Number(computedExamDefault))
-              ? Math.round(Number(computedExamDefault)): 0);
+          : result?.exam ??
+            (computedExamDefault !== "" && !isNaN(Number(computedExamDefault))
+              ? Math.round(Number(computedExamDefault))
+              : 0);
 
       // Calculate total and grade immediately (including test1, test2, test3)
       const totalMark =
@@ -227,7 +220,7 @@ const y =  `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSes
   // Use displayGrade if available, otherwise fall back to result from database
   const currentResult = displayGrade || result;
 
-  console.log("result: ",result)
+  console.log("result: ", result);
 
   return (
     <div
@@ -364,7 +357,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const SubjectGradeCard = () => {
   const { teacherInfo } = useTeacherInfo();
-  const {data} = useSchoolData()
+  const { data } = useSchoolData();
   const { subjectID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
   const { viewClasses } = useViewSchoolClassRM(data?._id);

@@ -48,27 +48,32 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { schoolInfo } = useSchoolSessionData(data?._id);
-
-  const [test1, setTest1] = useState("");
-  const [test2, setTest2] = useState("");
-  const [test3, setTest3] = useState("");
-  const [test4, setTest4] = useState("");
-  const [exam, setExam] = useState("");
+  const { data: schoolData } = useSchoolData();
 
   const { gradeData } = useStudentGrade(props?._id);
+  const [test4, setTest4] = useState<string>("");
+  const [exam, setExam] = useState<string>("");
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
+    console.log("info: ", el?.classInfo);
     return (
       el.classInfo ===
-      `${subjectInfo?.designated} session: ${
-        schoolInfo && schoolInfo[0]?.year
-      }(${schoolInfo && schoolInfo[0]?.presentTerm})`
+      `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
     );
   });
+
+  console.log("Report Data:: ", reportData);
 
   let result = reportData?.result.find((el: any) => {
     return el.subject === subjectInfo?.subjectTitle;
   });
+
+  useEffect(() => {
+    if (result) {
+      setTest4(result.test4?.toString() || "");
+      setExam(result.exam?.toString() || "");
+    }
+  }, [result]);
 
   const readResultData = (props: any) => {
     let readData: any = oneStudentPerformance?.find((el: any) => {
@@ -81,29 +86,38 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
     return readData;
   };
 
-  const makeGrade = () => {
+  const makeGrade = async () => {
     try {
+      if (!test4 && !exam) {
+        toast.error("Please enter at least one score");
+        return;
+      }
+
       setLoading(true);
-      createGradeScore( props?._id, {
+      const res = await createGradeScore(props?._id, {
         subject: subjectInfo?.subjectTitle,
-        test1: test1 ? parseInt(test1) : result?.test1 ? result?.test1 : 0,
-        test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
-        test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
-        test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
-        exam: exam ? parseInt(exam) : result?.exam ? result?.exam : 0,
-      }).then((res) => {
-        setLoading(false);
-        if (res.status === 201) {
-          mutate(`api/student-report-card/${props?._id}`);
-          toast.success("Grade added");
-        } else {
-          toast.error("Grade denied");
-        }
+        test4: test4 ? parseInt(test4) : result?.test4 || 0,
+        exam: exam ? parseInt(exam) : result?.exam || 0,
       });
+
+      if (res.status === 200) {
+        await mutate(`api/student-report-card/${props?._id}`);
+        toast.success("Grade updated successfully");
+
+        // Refresh the data
+        mutate(`api/view-student-grade/${props?._id}`);
+      } else {
+        toast.error("Failed to update grade");
+      }
     } catch (error: any) {
-      return error.stack;
+      toast.error("An error occurred while updating grade");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  console.log("Result: ", gradeData?.reportCard);
 
   return (
     <div
@@ -134,71 +148,49 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
         <AttendanceRatio props={props} />
       </div>
 
-      <div className="w-[100px] border-r items-center flex">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test1 !== undefined ? result?.test1 : 0}`}
-          value={test1}
-          onChange={(e: any) => {
-            setTest1(e.target.value);
-          }}
-          defaultValue={20}
-        />
-      </div>
-
       <div className="w-[100px] border-r">
         <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test2 !== undefined ? result?.test2 : 0}`}
-          value={test2}
-          onChange={(e: any) => {
-            setTest2(e.target.value);
-          }}
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test3 !== undefined ? result?.test3 : 0}`}
-          value={test3}
-          onChange={(e: any) => {
-            setTest3(e.target.value);
-          }}
-        />
-      </div>
-
-      <div className="w-[100px] border-r">
-        <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.test4 !== undefined ? result?.test4 : 0}`}
+          className="w-[70px] h-8 outline-none border rounded-md px-2"
+          type="number"
+          min="0"
+          max="40"
+          placeholder={`${
+            result?.test4 !== undefined ? result?.test4 : "Test /40"
+          }`}
           value={test4}
           onChange={(e: any) => {
-            setTest4(e.target.value);
+            const value = parseInt(e.target.value);
+            if (!isNaN(value) && value >= 0 && value <= 40) {
+              setTest4(e.target.value);
+            }
           }}
         />
       </div>
 
-      <div className="w-[100px] border-r  ">
+      <div className="w-[100px] border-r">
         <input
-          className="w-[80px] h-8 outline-none border rounded-md px-2 "
-          //   type="number"
-          placeholder={`${result?.exam !== undefined ? result?.exam : 0}`}
+          className="w-[80px] h-8 outline-none border rounded-md px-2"
+          type="number"
+          min="0"
+          max="60"
+          placeholder={`${
+            readResultData(props)?.performanceRating
+              ? ((readResultData(props)?.performanceRating / 100) * 60).toFixed(
+                  0
+                )
+              : result?.exam !== undefined
+              ? result?.exam
+              : "Exam /60"
+          }`}
           value={exam}
           onChange={(e: any) => {
-            {
-              readResultData(props)
-                ? setExam(
-                    (
-                      (readResultData(props)?.performanceRating / 100) *
-                      60
-                    ).toString()
-                  )
-                : setExam(e.target.value);
+            const value = parseInt(e.target.value);
+            if (!isNaN(value) && value >= 0 && value <= 60) {
+              setExam(e.target.value);
+            } else if (readResultData(props)) {
+              const calculatedScore =
+                (readResultData(props)?.performanceRating / 100) * 60;
+              setExam(calculatedScore.toFixed(0));
             }
           }}
         />
@@ -294,19 +286,7 @@ const AdminSubjectGradeCard = () => {
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
           <div className="w-[100px] border-r">
-            1st Test <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">
-            2nd Test
-            <br /> Score
-          </div>
-          <div className="w-[100px] border-r">
-            3rd Test <br />
-            Score
-          </div>
-          <div className="w-[100px] border-r">
-            NoteBook
+            General Test
             <br />
             Score
           </div>

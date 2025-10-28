@@ -302,6 +302,42 @@ const MidTestScreen = () => {
     return Object.keys(answers).length;
   };
 
+  const getShuffledOptions = (question, questionIndex) => {
+    // Ensure options exist
+    if (!question?.options) return [];
+
+    // Deterministic shuffle using a seeded PRNG based on questionIndex and question text
+    function seededRandom(seed) {
+      let x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    }
+
+    // Create a unique seed per question (using questionIndex and question text)
+    const seed =
+      questionIndex * 1000 +
+      (typeof question.question === "string"
+        ? question.question
+            .split("")
+            .reduce((acc, c) => acc + c.charCodeAt(0), 0)
+        : 0);
+
+    // Copy options with original indices
+    const optionsWithIndices = question.options.map((option, index) => ({
+      option,
+      originalIndex: index,
+    }));
+
+    // Fisher-Yates shuffle with seeded random
+    const arr = [...optionsWithIndices];
+    for (let i = arr.length - 1; i > 0; i--) {
+      // Use a different seed for each swap
+      const rand = seededRandom(seed + i);
+      const j = Math.floor(rand * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -454,7 +490,7 @@ const MidTestScreen = () => {
                         <br />
                       </div>
                     )}
-
+                    {/* 
                     <div className="space-y-3">
                       {readQuestion[currentQuestion]?.options.map(
                         (option, index) => (
@@ -488,6 +524,42 @@ const MidTestScreen = () => {
                           </button>
                         )
                       )}
+                    </div>
+                    <hr className="my-4" /> */}
+                    <div className="space-y-3">
+                      {getShuffledOptions(
+                        readQuestion[currentQuestion],
+                        currentQuestion
+                      ).map(({ option, originalIndex }, displayIndex) => (
+                        <button
+                          key={displayIndex}
+                          onClick={() => {
+                            // Use originalIndex to maintain correct answer tracking
+                            handleAnswerSelect(originalIndex);
+                            handleStateChange(currentQuestion, option);
+                          }}
+                          className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                            answers[currentQuestion] === originalIndex
+                              ? "border-blue-950 bg-blue-50"
+                              : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <div
+                              className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+                                answers[currentQuestion] === originalIndex
+                                  ? "border-blue-950 bg-blue-950"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {answers[currentQuestion] === originalIndex && (
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              )}
+                            </div>
+                            <span className="text-gray-700">{option}</span>
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   </div>
 
