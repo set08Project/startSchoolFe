@@ -29,7 +29,10 @@ import {
   useSchoolData,
   useSchoolSessionData,
 } from "../../pages/hook/useSchoolAuth";
-import { useSchoolAnnouncement } from "../../pagesForTeachers/hooks/useTeacher";
+import {
+  useSchoolAnnouncement,
+  useStudentGrade,
+} from "../../pagesForTeachers/hooks/useTeacher";
 import { readSchool } from "../../pages/api/schoolAPIs";
 import SecondaryStudentScreen from "./SecondaryStudentScreen";
 import PrimaryStudentScreen from "./PrimaryStudentScreen";
@@ -47,7 +50,7 @@ const Sider = () => {
   const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs);
   const { data } = useSchoolData();
   const user = useSelector((state: any) => state.user);
-
+  const { gradeData } = useStudentGrade(studentInfo?._id);
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
   const handleToggleMenuFalse = () => {
@@ -178,16 +181,16 @@ const Sider = () => {
 
                 schoolFeePayment({
                   email: studentInfo?.parentEmail,
-                  amount:
-                    termRead === "1st Term"
-                      ? oneClass?.class1stFee
-                      : // oneClass?.class1stFee
-                      termRead === "2nd Term"
-                      ? oneClass?.class2ndFee
-                      : termRead === "3rd Term"
-                      ? oneClass?.class3rdFee
-                      : null,
-
+                  // amount:
+                  //   termRead === "1st Term"
+                  //     ? oneClass?.class1stFee
+                  //     : // oneClass?.class1stFee
+                  //     termRead === "2nd Term"
+                  //     ? oneClass?.class2ndFee
+                  //     : termRead === "3rd Term"
+                  //     ? oneClass?.class3rdFee
+                  //     : null,
+                  amount: gradeData?.classTermFee,
                   subAccountCode:
                     schoolInfo?.bankDetails?.schoolFeeAccountPaymentCode,
                 }).then((res) => {

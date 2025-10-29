@@ -42,28 +42,39 @@ const ConfirmPaymentRecipt: React.FC = () => {
   let [state, setState] = useState("");
 
   useEffect(() => {
-    let x = setTimeout(() => {
-      setState(search.split("reference=")[1]);
-      if (search.split("reference=")[1] !== "" || null) {
-        verifyPay(search.split("reference=")[1]).then((res) => {
-          if (res.status === true) {
-            console.log("res dataII: ", res?.data?.amount);
-            setObject(res?.data);
-           
+    const reference = search.split("reference=")[1];
 
-            schoolPaymentEndPoint(studentInfo?._id, {
-              date: moment(res?.data?.createdAt).format("lll"),
-              amount: res?.data?.amount / 100,
-              reference: res?.data?.reference,
-              purchasedID: res?.data.id,
+    if (!reference) {
+      return;
+    }
+
+    setState(reference);
+
+    const verifyPayment = async () => {
+      try {
+        const res = await verifyPay(reference);
+
+        if (res?.status === true && res?.data) {
+          setObject(res.data);
+
+          if (studentInfo?._id) {
+            await schoolPaymentEndPoint(studentInfo._id, {
+              date: moment(res.data.createdAt).format("lll"),
+              amount: res.data.amount / 100,
+              reference: res.data.reference,
+              purchasedID: res.data.id,
             });
           }
-        });
+        } else {
+          console.error("Payment verification failed:", res);
+        }
+      } catch (error) {
+        console.error("Error verifying payment:", error);
       }
+    };
 
-      clearTimeout(x);
-    }, 100);
-  }, [state]);
+    verifyPayment();
+  }, [search, studentInfo?._id]);
 
   const downloadPDF = () => {
     const input = contentRef.current;

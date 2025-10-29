@@ -361,6 +361,7 @@ const ViewStudent = () => {
           {filteredStudents?.length >= 0 ? (
             <div>
               {filteredStudents?.map((props: any, i: number) => {
+                console.log("show me: ", props);
                 return (
                   <div>
                     <div>
@@ -397,14 +398,6 @@ const ViewStudent = () => {
                                 htmlFor="my_modal_6"
                                 // className={`btn text-[12px] font-medium text-white `}
                               >
-                                {/* First term toggle commented */}
-                                {/* <label
-                                htmlFor="my_modal_6"
-                                className="absolute bg-white z-80 bg-transparent hover:bg-transparent border-0 btn"
-                                onClick={() => {
-                                  setID(props?._id);
-                                }}
-                              /> */}
                                 <input
                                   type="checkbox"
                                   className={`
@@ -417,6 +410,7 @@ const ViewStudent = () => {
                             `}
                                   checked={props?.feesPaid1st}
                                   onClick={() => {
+                                    console.log("free: ", props?.classTermFee);
                                     schoolPaymentEndPoint(props?._id, {
                                       date: moment(Date.now()).format("lll"),
                                       amount: props?.classTermFee,

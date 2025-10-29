@@ -1,7 +1,7 @@
 document.title = "class room Detail's Page";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import Button from "../../../components/reUse/Button";
-import { FaCheckDouble, FaStar } from "react-icons/fa6";
+import { FaCheckDouble, FaSpinner, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
 import { MdCheck, MdClose, MdEditDocument, MdSave } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import { displaySession } from "../../../global/reduxState";
 import { FC, useRef, useState } from "react";
 import Input from "../../../components/reUse/Input";
 import { Link, useParams } from "react-router-dom";
-
+import { X, DollarSign, TrendingUp } from "lucide-react";
 import BeatLoader from "react-spinners/ClipLoader";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -41,6 +41,7 @@ import ReportCardScreenDone from "./ResultCardDone";
 // import { usePDF } from "@react-pdf/renderer";
 import moment from "moment";
 import { usePDF } from "react-to-pdf";
+import { opacity } from "html2canvas/dist/types/css/property-descriptors/opacity";
 
 // import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
@@ -119,14 +120,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="relative bg-white p-6 rounded-lg shadow-lg lg:w-full w-[90%] max-w-sm h-[498px] flex flex-col items-center justify-around">
-        <button
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 rounded-lg ">
+      <div className="relative  rounded-lg  lg:w-full w-[90%] h-[698px] flex flex-col items-center justify-around">
+        {/* <button
           onClick={onClose}
           className="absolute top-4 right-4 bg-gray-500 text-white w-6 h-6 flex items-center justify-center rounded-full focus:outline-none"
         >
           X
-        </button>
+        </button> */}
         {children}
       </div>
     </div>
@@ -175,22 +176,6 @@ const ClassDetailScreen = () => {
   const openFeeModal = () => setFeeModalOpen(true);
   const closeFeeModal = () => setFeeModalOpen(false);
 
-  const handleUpdateFee = () => {
-    updateTermFee(dataID!, classID!, {
-      class1stFee: firstTermFee,
-      class2ndFee: secondTermFee,
-      class3rdFee: thirdTermFee,
-    }).then((res) => {
-      if (res.status === 201) {
-        toast.success("class fee updated");
-      } else {
-        toast.error(`${res?.response?.data?.messgae}`);
-      }
-    });
-    // console.log(`Fee updated to: ${feeAmount}`);
-    closeFeeModal();
-  };
-
   const { schoolTeacher } = useSchoolTeacher();
 
   const [teacher, setTeacher] = useState<string>("");
@@ -237,22 +222,6 @@ const ClassDetailScreen = () => {
       }
     });
   };
-
-  // const updateStudent1stFee = () => {
-  //   verifyPayment1st(dataID!, studentID!, {
-  //     classTeacherName: teacher,
-  //   }).then((res) => {
-  //     if (res.status === 201) {
-  //       mutate(`api/view-classrooms/${classID}`);
-
-  //       toast.success("class teacher updated");
-  //       handleToggleMenuFalse();
-  //     } else {
-  //       toast.error(`${res?.response?.data?.messgae}`);
-  //       handleToggleMenuFalse();
-  //     }
-  //   });
-  // };
 
   const { data } = useSchoolData();
 
@@ -466,6 +435,48 @@ const ClassDetailScreen = () => {
     }
   };
 
+  const [fees, setFees] = useState({
+    term1: "",
+    term2: "",
+    term3: "",
+  });
+  const [isOpen, setIsOpen] = useState(true);
+  const [isOpenLoading, setIsOpenLoading] = useState(false);
+
+  const handleUpdateFee = () => {
+    setIsOpenLoading(true);
+    updateTermFee(dataID!, classID!, {
+      class1stFee: parseInt(fees.term1),
+      class2ndFee: parseInt(fees.term2),
+      class3rdFee: parseInt(fees.term3),
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          toast.success("class fee updated");
+          closeFeeModal();
+          setIsOpenLoading(false);
+        } else {
+          toast.error(`${res?.response?.data?.messgae}`);
+          closeFeeModal();
+          setIsOpenLoading(false);
+        }
+      })
+      .finally(() => {});
+    // console.log(`Fee updated to: ${feeAmount}`);
+  };
+
+  const handleChange = (term, value) => {
+    setFees((prev) => ({ ...prev, [term]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Updated fees:", fees);
+    handleUpdateFee();
+  };
+
+  if (!isOpen) return null;
+
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
@@ -598,10 +609,11 @@ const ClassDetailScreen = () => {
           </button>
           <Modal
             isOpen={isFeeModalOpen}
+            // onClose
             onClose={closeFeeModal}
-            className="p-10 bg-white rounded-lg shadow-xl max-w-xl w-full mx-auto"
+            className="rounded-lg shadow-xl w-[800px] bg-green-500 mx-auto"
           >
-            <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+            {/* <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
               Class Fee Update
             </h2>
             <p className="text-gray-600 mb-10 text-center">
@@ -647,6 +659,126 @@ const ClassDetailScreen = () => {
               >
                 Update Fees
               </button>
+            </div> */}
+
+            <div className=" w-full  flex items-center justify-center p-4">
+              <div className="relative bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+                {/* Decorative gradient background */}
+                <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-10"></div>
+
+                {/* Close button */}
+                <button
+                  // onClick={() => setIsOpen(false)}
+                  onClick={closeFeeModal}
+                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 hover:rotate-90 transform"
+                >
+                  <X className="w-5 h-5 text-gray-600" />
+                </button>
+
+                {/* Header section */}
+                <div className="relative pt-8 pb-6 px-8">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                      <TrendingUp className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
+                    Class Fee Update
+                  </h2>
+                  <p className="text-gray-500 text-center text-sm">
+                    Update the fee structure for all three terms
+                  </p>
+                </div>
+
+                {/* Form section */}
+                <form onSubmit={handleSubmit} className="px-8 pb-8">
+                  <div className="space-y-5">
+                    {/* 1st Term Fee */}
+                    <div className="group">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        1st Term Fee
+                      </label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <DollarSign className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                        </div>
+                        <input
+                          type="number"
+                          value={fees.term1}
+                          onChange={(e) =>
+                            handleChange("term1", e.target.value)
+                          }
+                          placeholder="Enter amount"
+                          className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-200 text-gray-800 placeholder-gray-400"
+                        />
+                      </div>
+                    </div>
+
+                    {/* 2nd Term Fee */}
+                    <div className="group">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        2nd Term Fee
+                      </label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <DollarSign className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                        </div>
+                        <input
+                          type="number"
+                          value={fees.term2}
+                          onChange={(e) =>
+                            handleChange("term2", e.target.value)
+                          }
+                          placeholder="Enter amount"
+                          className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-200 text-gray-800 placeholder-gray-400"
+                        />
+                      </div>
+                    </div>
+
+                    {/* 3rd Term Fee */}
+                    <div className="group">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        3rd Term Fee
+                      </label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <DollarSign className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                        </div>
+                        <input
+                          type="number"
+                          value={fees.term3}
+                          onChange={(e) =>
+                            handleChange("term3", e.target.value)
+                          }
+                          placeholder="Enter amount"
+                          className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-200 text-gray-800 placeholder-gray-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit button */}
+                  <button
+                    type="submit"
+                    className={`uppercase w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300 ${
+                      isOpenLoading && "opacity-90 cursor-not-allowed"
+                    }`}
+                    disabled={isOpenLoading}
+                  >
+                    {isOpenLoading ? (
+                      <p className="flex items-center justify-center gap-2">
+                        <FaSpinner className="animate-spin" /> Updating Fees...
+                      </p>
+                    ) : (
+                      <p>Update Fees</p>
+                    )}
+                  </button>
+                </form>
+
+                {/* Decorative bottom element */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
+              </div>
             </div>
           </Modal>
         </div>
