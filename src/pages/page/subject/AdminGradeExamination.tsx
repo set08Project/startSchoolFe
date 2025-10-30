@@ -32,6 +32,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import {
   createMidGradeScore,
   createMidGradeScoreRecord,
+  removeMidGradeScoreRecord,
+  removeMidGradeScoreRecordPerformance,
 } from "@/pagesForTeachers/api/teachersAPI";
 import {
   useClassStudent,
@@ -48,10 +50,11 @@ interface iProps {
   props?: any;
   data?: any;
   id?: string;
+  subject?: string;
   i?: number;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, data, subject }) => {
   const { subjectID, quizID } = useParams();
   const { teacherInfo } = useTeacherInfo();
   const { data: schoolData } = useSchoolData();
@@ -64,7 +67,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
       subjectInfo?.examination[subjectInfo?.examination.length - 1]
     );
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [recordLoading, setRecordLoading] = useState<boolean>(false);
+  const [cancelLoading, setCancelLoading] = useState<boolean>(false);
   const [recorded, setRecorded] = useState<boolean>(false);
 
   const { schoolInfo } = useSchoolSessionData(schoolData?._id);
@@ -119,7 +123,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
 
   const makeGrade = async () => {
     try {
-      setLoading(true);
+      setRecordLoading(true);
       // First record the score
       const recordRes = await createMidGradeScoreRecord(resultData?._id);
       if (!recordRes) {
@@ -149,7 +153,39 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
       toast.error(error.message || "Failed to record grade");
       console.error(error);
     } finally {
-      setLoading(false);
+      setRecordLoading(false);
+    }
+  };
+
+  const removeGrade = async (subject: string) => {
+    try {
+      setCancelLoading(true);
+      // First record the score
+      const recordRes = await removeMidGradeScoreRecordPerformance(
+        resultData?._id
+      );
+      if (!recordRes) {
+        throw new Error("Failed to remove score record");
+      }
+
+      // Then remove the grade
+      const gradeRes = await removeMidGradeScoreRecord(props?._id, subject);
+      if (!gradeRes) {
+        throw new Error("Failed to remove grade");
+      }
+
+      // Update UI and data
+      toast.success("Grade removed successfully");
+      setRecorded(false); // Set recorded to false since grade is now removed
+
+      // Mutate data to refresh UI
+      mutate(`api/student-report-card/${props?._id}`);
+      mutate(`api/get-mid-test-student-performance/${quizID}`);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to remove grade");
+      console.error(error);
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -205,14 +241,14 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
       <div className="w-[250px] border-r relative">
         <Button
           name={
-            loading
+            recordLoading
               ? "Recording..."
               : recorded
               ? "✓ Grade Recorded"
               : "Record Grade"
           }
           icon={
-            loading && (
+            recordLoading && (
               <ClipLoader
                 color="white"
                 size={12}
@@ -220,17 +256,51 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
               />
             )
           }
-          disabled={recorded || loading}
+          disabled={recorded || recordLoading || cancelLoading}
           className={`pl-4 py-3 w-[85%] !text-[12px] uppercase text-white  
             ${
               recorded
                 ? "bg-gray-500 cursor-not-allowed"
-                : loading
+                : recordLoading
                 ? "bg-blue-800 cursor-wait"
                 : "bg-blue-950 hover:bg-blue-900"
             }
             transition-all duration-300`}
           onClick={makeGrade}
+        />
+      </div>
+
+      <div className="w-[250px] border-r relative">
+        <Button
+          name={
+            cancelLoading
+              ? "Removing..."
+              : recorded
+              ? "Cancel Record"
+              : "Grade Not Recorded"
+          }
+          icon={
+            cancelLoading && (
+              <ClipLoader
+                color="white"
+                size={12}
+                className="py-0 my-0 absolute bottom-6 z-10 left-10"
+              />
+            )
+          }
+          disabled={!recorded || cancelLoading || recordLoading}
+          className={`pl-4 py-3 w-[85%] !text-[12px] uppercase text-white  
+            ${
+              cancelLoading
+                ? "bg-gray-600 cursor-wait"
+                : recorded
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-gray-400 cursor-not-allowed"
+            }
+            transition-all duration-300`}
+          onClick={() => {
+            removeGrade(subject);
+          }}
         />
       </div>
     </div>
@@ -269,10 +339,142 @@ const MidTestSubjectGradeCardAdmin = () => {
   const { data } = useSchoolData();
   const { subjectID, quizID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
+  const [globalLoading, setGlobalLoading] = useState<boolean>(false);
+  const [globalLoadingII, setGlobalLoadingII] = useState<boolean>(false);
 
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
-
   const { viewClasses } = useViewSchoolClassRM(data?._id);
+  const { midTestPerformance } = useMidTestResultPerformance(quizID);
+
+  const approveAllGrades = async () => {
+    try {
+      setGlobalLoading(true);
+      const performances = midTestPerformance?.performance || [];
+
+      let successCount = 0;
+      let failCount = 0; // Process each student's grade
+      for (const performance of performances) {
+        try {
+          // Record the score
+          const recordRes = await createMidGradeScoreRecord(performance?._id);
+          if (!recordRes) continue;
+
+          // Find student info
+          const student = sortedStudents?.find(
+            (st) =>
+              `${st.studentFirstName} ${st.studentLastName}` ===
+              performance.studentName
+          );
+          if (!student) continue;
+
+          // Create the grade
+          const gradeRes = await createMidGradeScore(student._id, {
+            subject: subjectInfo?.subjectTitle,
+            test2: 0,
+            test3: 0,
+            test4: 0,
+            exam: performance?.performanceRating || 0,
+          });
+
+          if (gradeRes) {
+            successCount++;
+            // Refresh this student's report card so per-row hooks update
+            try {
+              await mutate(`api/student-report-card/${student._id}`);
+            } catch (e) {
+              // non-fatal
+            }
+          } else failCount++;
+        } catch (error) {
+          failCount++;
+          console.error("Error processing student:", error);
+        }
+      }
+
+      // Show results
+      if (successCount > 0) {
+        toast.success(`Successfully recorded ${successCount} grades`);
+      }
+      if (failCount > 0) {
+        toast.error(`Failed to record ${failCount} grades`);
+      }
+
+      // Refresh data
+      mutate(`api/get-mid-test-student-performance/${quizID}`);
+    } catch (error) {
+      toast.error("Failed to process bulk grade recording");
+      console.error(error);
+    } finally {
+      setGlobalLoading(false);
+    }
+  };
+
+  const cancelAllGrades = async () => {
+    try {
+      setGlobalLoadingII(true);
+
+      const performances = midTestPerformance?.performance || [];
+
+      let successCount = 0;
+      let failCount = 0;
+
+      // Process each student's grade cancellation
+      for (const performance of performances) {
+        if (!performance.quizRecorded) continue; // Skip if not recorded
+
+        try {
+          // Remove the performance record
+          const recordRes = await removeMidGradeScoreRecordPerformance(
+            performance?._id
+          );
+          if (!recordRes) continue;
+
+          // Find student info
+          const student = sortedStudents?.find(
+            (st) =>
+              `${st.studentFirstName} ${st.studentLastName}` ===
+              performance.studentName
+          );
+          if (!student) continue;
+
+          // Remove the grade
+          const gradeRes = await removeMidGradeScoreRecord(
+            student._id,
+            subjectInfo?.subjectTitle
+          );
+
+          if (gradeRes) {
+            successCount++;
+            // Refresh this student's report card so per-row hooks update
+            try {
+              await mutate(`api/student-report-card/${student._id}`);
+            } catch (e) {
+              // non-fatal
+            }
+          } else failCount++;
+        } catch (error) {
+          failCount++;
+          console.error("Error processing student:", error);
+        }
+      }
+
+      // Show results
+      if (successCount > 0) {
+        toast.success(`Successfully cancelled ${successCount} grades`);
+      }
+      if (failCount > 0) {
+        toast.error(`Failed to cancel ${failCount} grades`);
+      }
+
+      // Refresh data
+      mutate(`api/get-mid-test-student-performance/${quizID}`);
+    } catch (error) {
+      toast.error("Failed to process bulk grade cancellation");
+      console.error(error);
+    } finally {
+      setGlobalLoadingII(false);
+    }
+  };
 
   let mainClass = viewClasses?.classRooms?.find((el: any) => {
     return el?.classSubjects?.find((el: any) => {
@@ -282,7 +484,7 @@ const MidTestSubjectGradeCardAdmin = () => {
 
   const { oneClass } = useReadOneClassInfo(mainClass?._id);
   const { classStudents } = useClassStudent(oneClass?._id!);
-  const { midTestPerformance } = useMidTestResultPerformance(quizID);
+  // const { midTestPerformance } = useMidTestResultPerformance(quizID);
 
   const allStudents = classStudents?.students;
 
@@ -303,9 +505,24 @@ const MidTestSubjectGradeCardAdmin = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end"></div>
+      <div className="flex w-full justify-end gap-4 mb-4">
+        <Button
+          onClick={approveAllGrades}
+          disabled={globalLoading}
+          className="bg-blue-950 text-white py-2 px-4 !text-[16px] rounded-md hover:bg-blue-900 transition-all duration-300"
+          name={globalLoading ? "Processing..." : "Approve All Grades"}
+        />
+
+        <Button
+          onClick={cancelAllGrades}
+          disabled={globalLoadingII}
+          className="bg-red-600 text-white py-2 px-4 !text-[16px] rounded-md hover:bg-red-700 transition-all duration-300"
+          name={globalLoadingII ? "Processing..." : "Cancel All Grades"}
+        />
+      </div>
+
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-        <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1500px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[160px] border-r">Student's Grade</div>
@@ -314,9 +531,10 @@ const MidTestSubjectGradeCardAdmin = () => {
           <div className="w-[100px] border-r">Mid Test Examination Score</div>
 
           <div className="w-[250px] border-r">Submit Report</div>
+          <div className="w-[250px] border-r">Undo Action</div>
         </div>
 
-        <div className=" w-[900px] overflow-hidden">
+        <div className=" w-[1500px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (
@@ -325,6 +543,7 @@ const MidTestSubjectGradeCardAdmin = () => {
                     props={props}
                     i={i}
                     data={midTestPerformance?.performance}
+                    subject={subjectInfo?.subjectTitle}
                   />
                 </div>
               ))}

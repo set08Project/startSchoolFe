@@ -999,6 +999,35 @@ export const createMidGradeScoreRecord = async (performanceID: string) => {
   }
 };
 
+export const removeMidGradeScoreRecordPerformance = async (
+  performanceID: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/quit-subject-quiz-performance-record/${performanceID}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const removeMidGradeScoreRecord = async (
+  studentID: string,
+  subject: string
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/remove-mid-report-card/${studentID}`, { subject })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const viewStudentGrade = async (studentID: string) => {
   try {
     return await axios

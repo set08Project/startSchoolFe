@@ -725,7 +725,7 @@ const ViewStudent = () => {
                         </div>
                         <div className="w-[200px] border-r  ">
                           {props?.totalPerformance
-                            ? props?.totalPerformance
+                            ? parseFloat(props?.totalPerformance.toFixed(2))
                             : "0"}
                         </div>
                         <div className="w-[80px] border-r">3 of 5</div>

@@ -225,7 +225,7 @@ const MainStudentRow: FC<any> = ({ props, i, Data, mutate }) => {
           : "No Comment Yet"}
       </div>
 
-      <div className="w-[180px] border-r">
+      <div className="w-[220px] border-r">
         <Button
           name={result?.approve ? "Result Approved " : "Approve Result"}
           icon={loading && <FaSpinner className={`animate-spin `} />}
@@ -395,7 +395,7 @@ const MidReportCard = () => {
           <div className="w-[300px] border-r">Class Teacher's Comment</div>
           {/* <div className="w-[300px] border-r">Give Report/Remark</div> */}
 
-          <div className="w-[180px] border-r">Submit Report</div>
+          <div className="w-[220px] border-r">Submit Report</div>
           <div className="w-[180px] border-r">
             <p className="w-[35px] ">Approve</p>
           </div>
