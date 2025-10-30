@@ -31,17 +31,88 @@
 }
 
 @media print {
-  body * {
-    visibility: hidden; /* Hide all elements */
+  /* Reset all print margins */
+  @page {
+    size: A4 portrait;
+    margin: 0;
   }
 
-  .print-only {
-    visibility: visible; /* Show only the target section */
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  /* Hide all elements except report */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the report content */
+  .print-content,
+  .print-content * {
+    visibility: visible;
+    overflow: visible !important;
+  }
+
+  /* Specific print styles */
+  .print-content {
     position: absolute;
-    top: 0;
     left: 0;
+    top: 0;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 10mm;
+    box-sizing: border-box;
+    background: white !important;
+    font-size: 11pt;
+    line-height: 1.3;
+  }
+
+  /* Force background colors and images in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Ensure proper page breaks */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Hide non-printable elements */
+  .print-hidden,
+  button,
+  .toaster {
+    display: none !important;
+  }
+
+  /* Table styles */
+  table {
     width: 100%;
-    height: 100%;
+    border-collapse: collapse;
+  }
+
+  td,
+  th {
+    border: 1pt solid black;
+    padding: 4pt;
+  }
+
+  /* Font optimizations */
+  body {
+    font-family: "Times New Roman", Times, serif;
   }
 }
 /* 

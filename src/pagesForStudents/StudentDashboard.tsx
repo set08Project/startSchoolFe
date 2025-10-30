@@ -127,7 +127,7 @@ const StudentDashboard = () => {
                     {gradeData?.viewReportCard && (
                       <span className="text-red-500 text-[14px]">
                         {" "}
-                        (Needs to clear some issues, Please see Admin!)
+                        (Please see Admin!)
                       </span>
                     )}
                   </p>
@@ -136,7 +136,7 @@ const StudentDashboard = () => {
                 )}
               </p>
               <div className="flex ">
-                {resultData?.approve ? (
+                {resultData?.approve && !gradeData?.viewReportCard ? (
                   <Link to={`/print-result`}>
                     <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view this term's report card
@@ -161,7 +161,7 @@ const StudentDashboard = () => {
                     {gradeData?.viewReportCard && (
                       <span className="text-red-500 text-[14px]">
                         {" "}
-                        (Needs to clear some issues, Please see Admin!)
+                        (Please see Admin!)
                       </span>
                     )}
                   </p>
@@ -170,7 +170,7 @@ const StudentDashboard = () => {
                 )}
               </p>
               <div className="flex ">
-                {midResultData?.approve ? (
+                {midResultData?.approve && !gradeData?.viewReportCard ? (
                   <Link to={`/mid`}>
                     <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view Mid term's report card

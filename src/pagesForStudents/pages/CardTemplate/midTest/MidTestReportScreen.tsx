@@ -574,12 +574,18 @@ const MidTestReportScreen: React.FC = () => {
                           <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">
                               {" "}
-                              {el?.performanceRating}
+                              {resultMax?.find(
+                                (item: any) => item.subject === el?.subjectTitle
+                              )?.score || 0}
                             </p>
                           </div>
 
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                            <p className="text">{0}</p>
+                            <p className="text">
+                              {resultMin?.find(
+                                (item: any) => item.subject === el?.subjectTitle
+                              )?.score || 0}
+                            </p>
                           </div>
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text-[18px]">{el?.studentGrade}</p>
