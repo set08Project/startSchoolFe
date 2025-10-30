@@ -18,7 +18,11 @@ import {
   useSubjectPerformance,
   useMidTestResultPerformance,
 } from "../../hooks/useTeacher";
-import { createGradeScore, createMidGradeScore } from "../../api/teachersAPI";
+import {
+  createGradeScore,
+  createMidGradeScore,
+  createMidGradeScoreRecord,
+} from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -61,8 +65,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-  console.log("result LOOKUP: ", gradeData);
-
   let reportData = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
@@ -73,6 +75,53 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
   let result = reportData?.result.find((el: any) => {
     return el.subject === subjectInfo?.subjectTitle;
   });
+
+  // const readResultData = (props: any) => {
+  //   let readData: any = oneStudentPerformance?.find((el: any) => {
+  //     return (
+  //       el.studentName ===
+  //       `${props?.studentFirstName} ${props?.studentLastName}`
+  //     );
+  //   });
+
+  //   return readData;
+  // };
+  // let resultValue = data?.find(
+  //   (el: any) =>
+  //     el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  // )?.performanceRating;
+
+  const resultData = data?.find(
+    (el: any) =>
+      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
+  );
+
+  // const makeGrade = () => {
+  //   try {
+  //     setLoading(true);
+  //     createMidGradeScore(
+  //       // teacherInfo?._id,
+  //       props?._id, {
+  //       subject: subjectInfo?.subjectTitle,
+
+  //       test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
+  //       test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
+  //       test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
+  //       exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
+  //     }).then((res) => {
+  //       console.log("grade: ", res);
+  //       setLoading(false);
+  //       // if (res.status === 201) {
+  //       mutate(`api/student-report-card/${props?._id}`);
+  //       toast.success("Grade added");
+  //       // } else {
+  //       //   toast.error("Grade denied");
+  //       // }
+  //     });
+  //   } catch (error: any) {
+  //     return error.stack;
+  //   }
+  // };
 
   const readResultData = (props: any) => {
     let readData: any = oneStudentPerformance?.find((el: any) => {
@@ -89,35 +138,49 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   )?.performanceRating;
 
-  const resultData = data?.find(
-    (el: any) =>
-      el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
-  );
+  const [recorded, setRecorded] = useState<boolean>(false);
+  // Check if grade has been recorded on mount and when data changes
+  useEffect(() => {
+    const hasBeenRecorded = Boolean(
+      resultData?.quizRecorded ||
+        (resultData?.performanceRating && result?.exam)
+    );
+    setRecorded(hasBeenRecorded);
+  }, [resultData, result]);
 
-  const makeGrade = () => {
+  const makeGrade = async () => {
     try {
       setLoading(true);
-      createMidGradeScore(
-        // teacherInfo?._id, 
-        props?._id, {
-        subject: subjectInfo?.subjectTitle,
+      // First record the score
+      const recordRes = await createMidGradeScoreRecord(resultData?._id);
+      if (!recordRes) {
+        throw new Error("Failed to record score");
+      }
 
-        test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
-        test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
-        test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
+      // Then create the grade
+      const gradeRes = await createMidGradeScore(props?._id, {
+        subject: subjectInfo?.subjectTitle,
+        test2: 0,
+        test3: 0,
+        test4: 0,
         exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
-      }).then((res) => {
-        console.log("grade: ", res);
-        setLoading(false);
-        // if (res.status === 201) {
-        mutate(`api/student-report-card/${props?._id}`);
-        toast.success("Grade added");
-        // } else {
-        //   toast.error("Grade denied");
-        // }
       });
+      if (!gradeRes) {
+        throw new Error("Failed to create grade");
+      }
+
+      // Update UI and data
+      toast.success("Grade recorded successfully");
+      setRecorded(true);
+
+      // Mutate data to refresh UI
+      mutate(`api/student-report-card/${props?._id}`);
+      mutate(`api/get-mid-test-student-performance/${quizID}`);
     } catch (error: any) {
-      return error.stack;
+      toast.error(error.message || "Failed to record grade");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -142,7 +205,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
           </div>
         </div>
       </div>
-      <div className="w-[100px] border-r pl-2">
+      <div className="w-[160px] border-r pl-2">
         {resultData?.performanceRating ? resultData?.performanceRating : 0} /100
         -{" "}
         <span className="font-bold text-[12px]">
@@ -170,9 +233,15 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
           readOnly
         />
       </div>
-      <div className="w-[180px] border-r relative">
+      <div className="w-[250px] border-r relative">
         <Button
-          name={loading ? "Loading" : "APPROVE"}
+          name={
+            loading
+              ? "Recording..."
+              : recorded
+              ? "✓ Grade Recorded"
+              : "Record Grade"
+          }
           icon={
             loading && (
               <ClipLoader
@@ -182,7 +251,16 @@ const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
               />
             )
           }
-          className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+          disabled={recorded || loading}
+          className={`pl-4 py-3 w-[85%] !text-[12px] uppercase text-white  
+            ${
+              recorded
+                ? "bg-gray-500 cursor-not-allowed"
+                : loading
+                ? "bg-blue-800 cursor-wait"
+                : "bg-blue-950 hover:bg-blue-900"
+            }
+            transition-all duration-300`}
           onClick={makeGrade}
         />
       </div>
@@ -259,12 +337,12 @@ const MidTestSubjectGradeCard = () => {
         <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
-          <div className="w-[100px] border-r">Student's Grade</div>
+          <div className="w-[160px] border-r">Student's Grade</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
           <div className="w-[100px] border-r">Mid Test Examination Score</div>
 
-          <div className="w-[180px] border-r">Submit Report</div>
+          <div className="w-[250px] border-r">Submit Report</div>
         </div>
 
         <div className=" w-[900px] overflow-hidden">

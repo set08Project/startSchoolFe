@@ -243,6 +243,8 @@ const AnalyticScreen: React.FC = () => {
   const { data } = useSchoolData();
   const { data: termData } = useSchoolTermDetails(data?.presentTermID);
 
+  console.log("Term Data Debug:", termData);
+
   const { termlyExpense } = useTermExpenses(data?._id);
 
   const otherPayment = _?.sumBy(
@@ -299,7 +301,12 @@ const AnalyticScreen: React.FC = () => {
     ["desc"]
   ).reverse();
 
-  console.log("sortedData: ", sortedData);
+  console.log(
+    "sortedData: ",
+    `₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`
+  );
+
+  console.log("expenseCategoriesII: ", termData);
 
   return (
     <div className="min-h-screen bg-background p-2 text-blue-950">

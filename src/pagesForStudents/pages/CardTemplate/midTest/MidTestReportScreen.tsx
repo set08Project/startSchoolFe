@@ -1,16 +1,4 @@
 import React, { useState, useRef, useEffect, FC } from "react";
-// import {
-//   useReadOneClassInfo,
-//   useStudentInfo,
-// } from "../../hooks/useStudentHook";
-// import {
-//   useClassSubject,
-//   useSchoolAnnouncement,
-//   useStudentGrade,
-//   useSujectInfo,
-//   useTeacherDetail,
-// } from "../../../pagesForTeachers/hooks/useTeacher";
-// import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import lodash from "lodash";
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
@@ -84,10 +72,10 @@ const MidTestReportScreen: React.FC = () => {
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
 
-  let numbPassed =
-    gradeMidData?.midReportCard[0]?.result?.length -
-    lodash.filter(gradeMidData?.midReportCard[0]?.result, { grade: "F" })
-      ?.length;
+  // let numbPassed =
+  //   gradeMidData?.midReportCard[0]?.result?.length -
+  //   lodash.filter(gradeMidData?.midReportCard[0]?.result, { grade: "F" })
+  //     ?.length;
 
   let commulationScore =
     (gradeMidData?.midReportCard[0]?.result
@@ -228,6 +216,18 @@ const MidTestReportScreen: React.FC = () => {
     preprocessContent();
   }, []);
 
+  const numbPassed =
+    midResultData?.result?.filter((item: any) => {
+      // Count all grades that are not "F"
+      return item.grade !== "F" && item.grade !== "F9";
+    })?.length || 0;
+
+  // Calculate percentage of passed subjects
+  const passPercentage = midResultData?.result?.length
+    ? ((numbPassed / midResultData?.result?.length) * 100).toFixed(1)
+    : 0;
+
+  console.log(numbPassed, passPercentage);
   return (
     <div ref={contentRef} className="overflow-hidden">
       <Toaster />
@@ -654,7 +654,7 @@ const MidTestReportScreen: React.FC = () => {
                     No. of subject passed
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {numbPassed}
+                    {numbPassed} ({passPercentage}%)
                   </h1>
                 </div>
                 <div className=" border p-2 ">

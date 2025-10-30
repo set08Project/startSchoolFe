@@ -75,6 +75,7 @@ export const useSchoolTermDetails = (termID: string) => {
     x,
     () => {
       return analyticPayment(termID!).then((res) => {
+        console.log("res data term detail: ", res.data);
         return res.data;
       });
     },
@@ -232,7 +233,6 @@ export const useSchoolData = () => {
 };
 
 export const useSchoolDataByName = (schoolName: string) => {
-
   const x = `api/view-school/${schoolName}/reading-from-school-name`;
 
   const hasCache = sessionStorage.getItem(x) !== "false";
@@ -1462,7 +1462,7 @@ export const useAllSchools = () => {
   return { allSchool };
 };
 
-export const useOutGoneSchoolStudents = (schoolID:string) => {
+export const useOutGoneSchoolStudents = (schoolID: string) => {
   const { data: outStudents } = useSWR(
     `api/view-out-gone-student/${schoolID}`,
     async () => {

@@ -117,6 +117,7 @@ export const analyticPayment = async (termID: string) => {
     return await axios
       .get(`${URL}/view-school-term/${termID}`)
       .then((res: any) => {
+        console.log("analyticPayment: ", res);
         return res;
       });
   } catch (error: any) {

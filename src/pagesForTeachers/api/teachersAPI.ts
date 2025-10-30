@@ -961,7 +961,6 @@ export const updateTeacherAvatar = async (teacherID: string, data: string) => {
 
 export const createGradeScore = async (studentID: string, data: {}) => {
   try {
-    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-report-card/${studentID}`, data)
       .then((res: any) => {
@@ -980,6 +979,18 @@ export const createMidGradeScore = async (
   try {
     return await axios
       .post(`${URL}/create-mid-report-card/${studentID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createMidGradeScoreRecord = async (performanceID: string) => {
+  try {
+    return await axios
+      .patch(`${URL}/updated-subject-quiz-performance-record/${performanceID}`)
       .then((res: any) => {
         return res?.data;
       });

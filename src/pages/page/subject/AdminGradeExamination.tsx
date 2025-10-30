@@ -29,7 +29,10 @@ import ClipLoader from "react-spinners/ClipLoader";
 //   useOneExamSubjectStudentPerfomance,
 //   useOneSubjectStudentPerfomance,
 // } from "../../hooks/useQuizHook";
-import { createMidGradeScore } from "@/pagesForTeachers/api/teachersAPI";
+import {
+  createMidGradeScore,
+  createMidGradeScoreRecord,
+} from "@/pagesForTeachers/api/teachersAPI";
 import {
   useClassStudent,
   useStudentGrade,
@@ -39,6 +42,7 @@ import {
   useMidTestResultPerformance,
 } from "@/pagesForTeachers/hooks/useTeacher";
 import { useOneExamSubjectStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
+import { checkDomainOfScale } from "recharts/types/util/ChartUtils";
 
 interface iProps {
   props?: any;
@@ -50,7 +54,7 @@ interface iProps {
 const MainStudentRow: FC<iProps> = ({ props, i, data }) => {
   const { subjectID, quizID } = useParams();
   const { teacherInfo } = useTeacherInfo();
-const {data:schoolData} = useSchoolData()
+  const { data: schoolData } = useSchoolData();
   const { subjectInfo } = useSujectInfo(subjectID);
   const { perform } = useSubjectPerformance(subjectID);
 
@@ -61,6 +65,7 @@ const {data:schoolData} = useSchoolData()
     );
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [recorded, setRecorded] = useState<boolean>(false);
 
   const { schoolInfo } = useSchoolSessionData(schoolData?._id);
 
@@ -103,30 +108,48 @@ const {data:schoolData} = useSchoolData()
       el.studentName === `${props?.studentFirstName} ${props?.studentLastName}`
   );
 
-  const makeGrade = () => {
+  // Check if grade has been recorded on mount and when data changes
+  useEffect(() => {
+    const hasBeenRecorded = Boolean(
+      resultData?.quizRecorded ||
+        (resultData?.performanceRating && result?.exam)
+    );
+    setRecorded(hasBeenRecorded);
+  }, [resultData, result]);
+
+  const makeGrade = async () => {
     try {
       setLoading(true);
-      createMidGradeScore(
-        // teacherInfo?._id, 
-        props?._id, {
-        subject: subjectInfo?.subjectTitle,
+      // First record the score
+      const recordRes = await createMidGradeScoreRecord(resultData?._id);
+      if (!recordRes) {
+        throw new Error("Failed to record score");
+      }
 
-        test2: test2 ? parseInt(test2) : result?.test2 ? result?.test2 : 0,
-        test3: test3 ? parseInt(test3) : result?.test3 ? result?.test3 : 0,
-        test4: test4 ? parseInt(test4) : result?.test4 ? result?.test4 : 0,
+      // Then create the grade
+      const gradeRes = await createMidGradeScore(props?._id, {
+        subject: subjectInfo?.subjectTitle,
+        test2: 0,
+        test3: 0,
+        test4: 0,
         exam: resultData?.performanceRating ? resultData?.performanceRating : 0,
-      }).then((res) => {
-        console.log("grade: ", res);
-        setLoading(false);
-        // if (res.status === 201) {
-        mutate(`api/student-report-card/${props?._id}`);
-        toast.success("Grade added");
-        // } else {
-        //   toast.error("Grade denied");
-        // }
       });
+      if (!gradeRes) {
+        throw new Error("Failed to create grade");
+      }
+
+      // Update UI and data
+      toast.success("Grade recorded successfully");
+      setRecorded(true);
+
+      // Mutate data to refresh UI
+      mutate(`api/student-report-card/${props?._id}`);
+      mutate(`api/get-mid-test-student-performance/${quizID}`);
     } catch (error: any) {
-      return error.stack;
+      toast.error(error.message || "Failed to record grade");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -151,7 +174,7 @@ const {data:schoolData} = useSchoolData()
           </div>
         </div>
       </div>
-      <div className="w-[100px] border-r pl-2">
+      <div className="w-[160px] border-r pl-2">
         {resultData?.performanceRating ? resultData?.performanceRating : 0} /100
         -{" "}
         <span className="font-bold text-[12px]">
@@ -179,9 +202,15 @@ const {data:schoolData} = useSchoolData()
           readOnly
         />
       </div>
-      <div className="w-[180px] border-r relative">
+      <div className="w-[250px] border-r relative">
         <Button
-          name={loading ? "Loading" : "APPROVE"}
+          name={
+            loading
+              ? "Recording..."
+              : recorded
+              ? "✓ Grade Recorded"
+              : "Record Grade"
+          }
           icon={
             loading && (
               <ClipLoader
@@ -191,7 +220,16 @@ const {data:schoolData} = useSchoolData()
               />
             )
           }
-          className="pl-4 py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+          disabled={recorded || loading}
+          className={`pl-4 py-3 w-[85%] !text-[12px] uppercase text-white  
+            ${
+              recorded
+                ? "bg-gray-500 cursor-not-allowed"
+                : loading
+                ? "bg-blue-800 cursor-wait"
+                : "bg-blue-950 hover:bg-blue-900"
+            }
+            transition-all duration-300`}
           onClick={makeGrade}
         />
       </div>
@@ -228,7 +266,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const MidTestSubjectGradeCardAdmin = () => {
   const { teacherInfo } = useTeacherInfo();
-  const {data} = useSchoolData()
+  const { data } = useSchoolData();
   const { subjectID, quizID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
 
@@ -270,12 +308,12 @@ const MidTestSubjectGradeCardAdmin = () => {
         <div className="text-[gray] w-[900px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
-          <div className="w-[100px] border-r">Student's Grade</div>
+          <div className="w-[160px] border-r">Student's Grade</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
           <div className="w-[100px] border-r">Mid Test Examination Score</div>
 
-          <div className="w-[180px] border-r">Submit Report</div>
+          <div className="w-[250px] border-r">Submit Report</div>
         </div>
 
         <div className=" w-[900px] overflow-hidden">
