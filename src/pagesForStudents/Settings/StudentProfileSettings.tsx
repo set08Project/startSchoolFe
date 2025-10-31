@@ -141,14 +141,14 @@ const StudentProfileSettings = () => {
               {studentInfo?.studentFirstName}
             </h1>
           </div>
-          <div
+          {/* <div
             className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => {
               setToggle("firstName");
             }}
           >
             Edit
-          </div>
+          </div> */}
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
@@ -159,14 +159,6 @@ const StudentProfileSettings = () => {
 
               {studentInfo?.studentLastName}
             </h1>
-          </div>
-          <div
-            className="py-1 px-6 border border-blue-950 rounded-md text-[14px] md:text-[17px] font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            onClick={() => {
-              setToggle("lastName");
-            }}
-          >
-            Edit
           </div>
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
@@ -230,17 +222,17 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%] lg:min-w-[30%] flex justify-start items-center">
-            <h3 className="font-bold w-[70px] text-[14px] md:text-[18px] md:w-[30%]">
+            <h3 className="font-bold w-[] text-[14px] md:text-[18px] ">
               Phone No:
             </h3>
             {studentInfo?.phone ? (
-              <div>
-                <h1 className="text-[14px] sm:text-[17px] font-medium">
+              <div className="bg-red-500 w-full">
+                <h1 className="text-[14px] w-full !sm:text-[14px] font-medium">
                   {studentInfo?.phone}
                 </h1>
               </div>
             ) : (
-              <div className="text-[14px] md:text-[18px] text-blue-800 font-[600]">
+              <div className="text-[14px] md:text-[18px] text-blue-950  ml-2 ">
                 + add your phone number
               </div>
             )}
@@ -254,7 +246,7 @@ const StudentProfileSettings = () => {
         </div>
         <div className="border-b py-6 px-4 flex justify-between items-center hover:bg-gray-50">
           <div className="min-w-[80%]  flex justify-start items-center">
-            <h3 className="font-bold w-[70px] text-[14px] md:text-[18px] ">
+            <h3 className="font-bold text-[14px] md:text-[18px] ">
               Parent No:
             </h3>
             {studentInfo?.parentPhoneNumber ? (
@@ -264,7 +256,7 @@ const StudentProfileSettings = () => {
                 </h1>
               </div>
             ) : (
-              <div className="text-[10px] md:text-[18px] text-blue-800 font-[600]">
+              <div className="text-[10px] md:text-[18px] text-blue-950 ml-2">
                 + add your parent number
               </div>
             )}
@@ -354,7 +346,7 @@ const StudentProfileSettings = () => {
             )}
             {toggle === "ParentEmail" && (
               <Input
-                placeholder="@johndoe@gmail.com"
+                placeholder="youremailhere@gmail.com"
                 value={parentEmail}
                 className="mb-4"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
