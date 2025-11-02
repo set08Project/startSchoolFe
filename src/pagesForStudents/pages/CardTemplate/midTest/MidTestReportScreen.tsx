@@ -311,6 +311,23 @@ const MidTestReportScreen: React.FC = () => {
                 {school?.schoolName} <br />
                 {school?.schoolName} {school?.schoolName}
               </div>
+              <div
+                className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-100 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center z-10 opacity-50"
+                style={{
+                  lineHeight: "5.5em",
+                  whiteSpace: "pre-wrap",
+                  userSelect: "none",
+                  pointerEvents: "none",
+                  rotate: "0deg",
+                }}
+              >
+                <div className="w-[160px] h-[150px] absolute left-[40%] bottom-[5%] ">
+                  <img
+                    src={school?.stamp}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
 
               {/* full */}
               <div className="hidden md:flex items-center justify-between w-auto">
@@ -513,12 +530,12 @@ const MidTestReportScreen: React.FC = () => {
                       <p className="text-[12px]">(100)</p>
                     </div>
 
-                    <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                    <div className=" w-[100px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Class Highest Score</p>
                     </div>
-                    <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                    {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Class lowest Score</p>
-                    </div>
+                    </div> */}
                     {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                       <p className="text">Class AVG. Score</p>
                     </div> */}
@@ -571,7 +588,7 @@ const MidTestReportScreen: React.FC = () => {
                               {el?.performanceRating}
                             </p>
                           </div>
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                          <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">
                               {" "}
                               {resultMax?.find(
@@ -580,13 +597,13 @@ const MidTestReportScreen: React.FC = () => {
                             </p>
                           </div>
 
-                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                          {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text">
                               {resultMin?.find(
                                 (item: any) => item.subject === el?.subjectTitle
                               )?.score || 0}
                             </p>
-                          </div>
+                          </div> */}
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
                             <p className="text-[18px]">{el?.studentGrade}</p>
                           </div>
@@ -914,7 +931,7 @@ const MidTestReportScreen: React.FC = () => {
 
               {/* Comments */}
 
-              <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10">
+              <div className=" grid grid-cols-1 md:grid-cols-2 text-[12px] mt-10 relative">
                 <div className="border mr-3 p-2">
                   <p>Principal's Comment</p>
 

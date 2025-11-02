@@ -7,6 +7,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import FinalMidTestScreenReport from "@/pagesForStudents/pages/quiz/FinalMidTestScreenReport";
 import CourseDetail from "@/pagesForStudents/screen/CourseDetail";
 import LearnScreen from "@/pagesForStudents/pages/learning/LearnScreen";
+import MyClassRoomTestExamScreen from "@/pagesForStudents/pages/testExam/MyClassRoom";
+// import MyClassRoomTestExamScreen from "../pagesForStudents/pages/class/MyClassRoom";
 // import MidTestReportScreen from "@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen";
 
 // const OtherPayments = React.lazy(
@@ -313,6 +315,14 @@ export const studentRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <MyClassRoomScreen />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/my-classroom-test-exam",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MyClassRoomTestExamScreen />
           </Suspense>
         ),
       },
