@@ -339,12 +339,13 @@ const MidTestSubjectGradeCardAdmin = () => {
   const { data } = useSchoolData();
   const { subjectID, quizID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
-  const [globalLoading, setGlobalLoading] = useState<boolean>(false);
-  const [globalLoadingII, setGlobalLoadingII] = useState<boolean>(false);
 
   const { classroom } = useSchoolClassRMDetail(teacherInfo?.schoolIDs);
   const { viewClasses } = useViewSchoolClassRM(data?._id);
   const { midTestPerformance } = useMidTestResultPerformance(quizID);
+
+  const [globalLoading, setGlobalLoading] = useState<boolean>(false);
+  const [globalLoadingII, setGlobalLoadingII] = useState<boolean>(false);
 
   const approveAllGrades = async () => {
     try {
