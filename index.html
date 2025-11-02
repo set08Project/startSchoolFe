@@ -27,6 +27,18 @@
       media="(prefers-color-scheme: dark)"
     />
 
+    <!-- Redirect script for old Firebase URL -->
+    <script>
+      const prodHostname = "just-next.web.app";
+
+      if (window.location.hostname === prodHostname) {
+        window.location.href =
+          "https://justnext.ng" +
+          window.location.pathname +
+          window.location.search;
+      }
+    </script>
+
     <title>Just Next</title>
   </head>
   <body>
