@@ -27,9 +27,21 @@
       media="(prefers-color-scheme: dark)"
     />
 
+    <!-- Redirect script for old Firebase URL -->
+    <script>
+      const prodHostname = "just-next.web.app";
+
+      if (window.location.hostname === prodHostname) {
+        window.location.href =
+          "https://justnext.ng" +
+          window.location.pathname +
+          window.location.search;
+      }
+    </script>
+
     <title>Just Next</title>
-    <script type="module" crossorigin src="/assets/index-CBuzIQv9.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DVM3DWvm.css">
+    <script type="module" crossorigin src="/assets/index-BzsFwmPR.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Cf5re-6G.css">
   <link rel="manifest" href="/manifest.webmanifest"></head>
   <body>
     <div id="root"></div>
