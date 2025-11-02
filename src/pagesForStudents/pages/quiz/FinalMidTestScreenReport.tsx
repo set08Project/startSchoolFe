@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import img from "../../../assets/socials/Examsubmited.png";
 import img1 from "../../assets/testIMage.jpg";
 
 const FinalMidTestScreenReport = () => {
@@ -32,7 +31,7 @@ const FinalMidTestScreenReport = () => {
             You’ve successfully completed your exam.
             <span className="block mt-1">Wishing you the very best!</span>
           </p>
-          <Link to="/dashboard">
+          <Link to="/my-classroom-test-exam">
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.97 }}
