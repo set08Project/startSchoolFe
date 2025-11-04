@@ -1,7 +1,12 @@
 // src/screens/ExamQuizSetupScreen.js
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
+import {
+  FaTrashAlt,
+  FaCheckDouble,
+  FaSpinner,
+  FaRegEdit,
+} from "react-icons/fa";
 import {
   MdPlayCircle,
   MdVisibilityOff,
@@ -30,7 +35,8 @@ import Button from "@/components/reUse/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
 import LittleHeader from "@/components/static/LittleHeader";
-import ConfirmDeleteModal from "@/pagesForTeachers/pages/quiz/ConfirmDeleteModal";
+import { ConfirmDeleteModal } from "@/pagesForTeachers/pages/quiz/ConfirmDeleteModal";
+import { ConfirmDeleteModalMidTest } from "@/pagesForTeachers/pages/quiz/ConfirmDeleteModal";
 import {
   deleteExamination,
   deleteMidTestData,
@@ -118,7 +124,9 @@ const ExamQuizSetupScreen = () => {
     midTest?.quiz?.instruction?.duration
   );
   const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
+
   const [toggle, setToggle] = useState(false);
+  const [toggleEdit, setToggleEdit] = useState(false);
   const [tExamRand, setTExamRand] = useState(false);
   const [tMidRand, setTMidRand] = useState(false);
   const [showMidTestConfirm, setShowMidTestConfirm] = useState(false);
@@ -132,7 +140,42 @@ const ExamQuizSetupScreen = () => {
       <ConfirmDeleteModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={confirmDelete}
+        onConfirm={async () => {
+          if (!examToDelete) return;
+          setLoading(true);
+          try {
+            await deleteExamination(subjectID!, examToDelete);
+            examMutate(`api/api/view-subject-exam/${subjectID}`);
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete examination");
+          } finally {
+            setLoading(false);
+            setModalOpen(false);
+            setExamToDelete(null);
+          }
+        }}
+      />
+
+      <ConfirmDeleteModalMidTest
+        isOpen={isMidTestModalOpen}
+        onClose={() => setMidTestModalOpen(false)}
+        onConfirm={async () => {
+          if (!midTestToDelete) return;
+          setLoading(true);
+          try {
+            await deleteMidTestData(subjectID!, midTestToDelete);
+            // revalidate midTest list
+            midTestMutate(`api/view-subject-mid-test/${subjectID}`);
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete mid-test");
+          } finally {
+            setLoading(false);
+            setMidTestModalOpen(false);
+            setMidTestToDelete(null);
+          }
+        }}
       />
 
       <div className="mt-10" />
@@ -242,7 +285,7 @@ const ExamQuizSetupScreen = () => {
 
       <div>
         {examination?.exam && (
-          <div>
+          <div className="relative overflow-hidden">
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
                 {1}
@@ -254,6 +297,7 @@ const ExamQuizSetupScreen = () => {
                       // open confirm modal and store target id
                       setExamToDelete(examination?.exam?._id || null);
                       setModalOpen(true);
+                      // setModalOpenExam(false);
                     }}
                     className="flex items-center justify-center text-red-600 hover:text-red-400 transition-all duration-300 font-bold"
                   >
@@ -284,6 +328,7 @@ const ExamQuizSetupScreen = () => {
                             className="px-4 py-2 rounded-md bg-gray-200"
                             onClick={() => {
                               setModalOpen(false);
+                              // setModalOpenExam(false);
                               setExamToDelete(null);
                             }}
                           >
@@ -439,64 +484,152 @@ const ExamQuizSetupScreen = () => {
                   }}
                 />
               </div>
+              <div className="flex justify-between">
+                <div className="flex gap-3">
+                  <div
+                    className={`mt-10 cursor-pointer flex gap-3 items-center ${
+                      examination?.exam?.startExam
+                        ? "bg-blue-950"
+                        : "bg-red-500"
+                    } text-white px-6 py-3 rounded-md`}
+                    onClick={() => {
+                      setLoadingExam(true);
 
-              <div className="flex gap-3">
-                <div
-                  className={`mt-10 cursor-pointer flex gap-3 items-center ${
-                    examination?.exam?.startExam ? "bg-blue-950" : "bg-red-500"
-                  } text-white px-6 py-3 rounded-md`}
+                      examination?.exam?.startExam
+                        ? stopExamination(examination?.exam?._id)
+                            .then((res) => {
+                              console.log("res: ", res);
+                              examMutate(`api/view-subject-exam/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingExam(false);
+                            })
+                        : startExamination(examination?.exam?._id)
+                            .then((res) => {
+                              console.log("res: ", res);
+                              examMutate(`api/view-subject-exam/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingExam(false);
+                            });
+                    }}
+                  >
+                    {loadingExam ? (
+                      "Laoding"
+                    ) : (
+                      <span>
+                        {examination?.startExam
+                          ? "Exam can Start "
+                          : "Change Visibility"}
+                      </span>
+                    )}
+                    {examination?.startExam ? (
+                      <MdVisibility
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    ) : (
+                      <MdVisibilityOff
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    )}
+                  </div>
+                  <Link
+                    to={`/examination-preview-details/${subjectID}/${examination?.exam?._id}`}
+                    className={`mt-10 cursor-pointer flex gap-3 items-center 
+                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
+                  >
+                    {<span>Preview Questions</span>}
+                  </Link>
+                </div>
+
+                {/* <div
+                  className="flex items-center gap-2  px-4 py-2 rounded-md cursor-pointer"
                   onClick={() => {
-                    setLoadingExam(true);
-
-                    examination?.exam?.startExam
-                      ? stopExamination(examination?.exam?._id)
-                          .then((res) => {
-                            console.log("res: ", res);
-                            examMutate(`api/view-subject-exam/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingExam(false);
-                          })
-                      : startExamination(examination?.exam?._id)
-                          .then((res) => {
-                            console.log("res: ", res);
-                            examMutate(`api/view-subject-exam/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingExam(false);
-                          });
+                    setToggleEdit(true);
                   }}
                 >
-                  {loadingExam ? (
-                    "Laoding"
-                  ) : (
-                    <span>
-                      {examination?.startExam
-                        ? "Exam can Start "
-                        : "Change Visibility"}
-                    </span>
-                  )}
-                  {examination?.startExam ? (
-                    <MdVisibility
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  ) : (
-                    <MdVisibilityOff
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  )}
-                </div>
-                <Link
-                  to={`/examination-preview-details/${subjectID}/${examination?.exam?._id}`}
-                  className={`mt-10 cursor-pointer flex gap-3 items-center 
-                   bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
-                >
-                  {<span>Preview Questions</span>}
-                </Link>
+                  <FaRegEdit />
+                  <p className="uppercase text-[14px] text-red-500 font-medium">
+                    Make Edit
+                  </p>
+                </div> */}
               </div>
             </div>
+
+            {toggleEdit && (
+              <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
+                <div className="flex">
+                  <div className="flex justify-end w-full mb-5">
+                    <MdClose
+                      className="text-[20px] cursor-pointer"
+                      onClick={() => setToggleEdit(false)}
+                    />
+                  </div>
+                </div>
+                <p className="text-[14px] leading-1 border-b pb-5">
+                  Want to make some Edit on the Time to take the Test and the
+                  Duration
+                </p>
+
+                <div className="text-[12px] mt-10">
+                  <p>Set updated marks</p>
+                  <input
+                    className="border w-full h-[45px] rounded-md outline-none px-2"
+                    value={mark}
+                    onChange={(e: any) => setMark(e.target.value)}
+                    placeholder="update the Mark"
+                    defaultValue={examination?.quiz?.instruction?.mark}
+                  />
+                </div>
+                <div className="flex flex-col mt-5">
+                  <label className="text-[12px]">Time/Duration(Hours)</label>
+                  <select
+                    className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
+                    name="hour"
+                    id="hour"
+                    // defaultValue={testQuestion[0]?.instruction?.duration}
+                    value={duration}
+                    defaultValue={examination?.quiz?.instruction?.duration}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setDuration(e.target.value);
+                    }}
+                  >
+                    <option disabled selected>
+                      choose
+                    </option>
+
+                    <option value="0.084">5 Minutes</option>
+                    <option value="0.167">10 Minutes</option>
+                    <option value="0.333">20 Minutes</option>
+                    <option value="0.500">30 Minutes</option>
+                    <option value="0.667">40 Minutes</option>
+                    <option value="0.833">50 Minutes</option>
+                    <option value="1.000">60 Minutes</option>
+                    <option value="1.500">90 Minutes</option>
+                  </select>
+                </div>
+
+                <Button
+                  name={"update"}
+                  className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
+                  onClick={() => {
+                    updateMidTestData(midTest?._id, {
+                      mark: parseInt(mark),
+                      duration,
+                    })
+                      .then((res) => {
+                        toast.success("Updated successfully");
+                        midTestMutate(`api/view-subject-mid-test/${subjectID}`);
+                      })
+                      .finally(() => {
+                        setToggle(false);
+                      });
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -528,7 +661,7 @@ const ExamQuizSetupScreen = () => {
                     {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
                   </button>
 
-                  {isMidTestModalOpen && (
+                  {false && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                       <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
                         <h3 className="font-semibold text-lg mb-3">
@@ -735,6 +868,7 @@ const ExamQuizSetupScreen = () => {
                     {<span>Preview Questions</span>}
                   </Link>
                 </div>
+
                 <div
                   className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
                   onClick={() => {
@@ -747,6 +881,7 @@ const ExamQuizSetupScreen = () => {
                   </p>
                 </div>
               </div>
+
               {toggle && (
                 <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
                   <div className="flex">
@@ -773,7 +908,7 @@ const ExamQuizSetupScreen = () => {
                     />
                   </div>
                   <div className="flex flex-col mt-5">
-                    <label className="text-[12px]">ime/Duration(Hours)</label>
+                    <label className="text-[12px]">Time/Duration(Hours)</label>
                     <select
                       className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
                       name="hour"
