@@ -10,7 +10,10 @@ import {
 } from "react-icons/md";
 import LittleHeader from "../../components/layout/LittleHeader";
 import { useNavigate } from "react-router-dom";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import {
+  ConfirmDeleteModal,
+  ConfirmDeleteModalMidTest,
+} from "./ConfirmDeleteModal";
 import pix from "../../../assets/pix.jpg";
 import { GoGoal } from "react-icons/go";
 import {
@@ -121,9 +124,44 @@ const QuizSetupScreen = () => {
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
 
       <ConfirmDeleteModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={confirmDelete}
+        isOpen={isModalOpenExam}
+        onClose={() => setModalOpenExam(false)}
+        onConfirm={async () => {
+          if (!examToDelete) return;
+          setLoading(true);
+          try {
+            await deleteExamination(subjectID!, examToDelete);
+            examMutate(`api/api/view-subject-exam/${subjectID}`);
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete examination");
+          } finally {
+            setLoading(false);
+            setModalOpenExam(false);
+            setExamToDelete(null);
+          }
+        }}
+      />
+
+      <ConfirmDeleteModalMidTest
+        isOpen={isMidTestModalOpen}
+        onClose={() => setMidTestModalOpen(false)}
+        onConfirm={async () => {
+          if (!midTestToDelete) return;
+          setLoading(true);
+          try {
+            await deleteMidTestData(subjectID!, midTestToDelete);
+            // revalidate midTest list
+            midTestMutate(`api/view-subject-mid-test/${subjectID}`);
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete mid-test");
+          } finally {
+            setLoading(false);
+            setMidTestModalOpen(false);
+            setMidTestToDelete(null);
+          }
+        }}
       />
 
       <div className="mt-10" />
@@ -259,57 +297,6 @@ const QuizSetupScreen = () => {
                       ? " Deleting Examination Question"
                       : " Delete Examination Question"}
                   </button>
-
-                  {/* Confirm delete modal for Examination */}
-                  {isModalOpenExam && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
-                        <h3 className="font-semibold text-lg mb-3">
-                          Delete Examination
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Are you sure you want to delete this examination? This
-                          action cannot be undone.
-                        </p>
-                        <div className="flex justify-end gap-3">
-                          <button
-                            className="px-4 py-2 rounded-md bg-gray-200"
-                            onClick={() => {
-                              setModalOpenExam(false);
-                              setExamToDelete(null);
-                            }}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="px-4 py-2 rounded-md bg-red-500 text-white"
-                            onClick={async () => {
-                              if (!examToDelete) return;
-                              setLoading(true);
-                              try {
-                                await deleteExamination(
-                                  subjectID!,
-                                  examToDelete
-                                );
-                                examMutate(
-                                  `api/api/view-subject-exam/${subjectID}`
-                                );
-                              } catch (error) {
-                                console.error(error);
-                                toast.error("Failed to delete examination");
-                              } finally {
-                                setLoading(false);
-                                setModalOpenExam(false);
-                                setExamToDelete(null);
-                              }
-                            }}
-                          >
-                            Proceed
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </>
               </div>
 
@@ -508,57 +495,6 @@ const QuizSetupScreen = () => {
                     )}
                     {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
                   </button>
-
-                  {isMidTestModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                      <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
-                        <h3 className="font-semibold text-lg mb-3">
-                          Delete Mid-Test
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Are you sure you want to delete this mid-test? This
-                          action cannot be undone.
-                        </p>
-                        <div className="flex justify-end gap-3 mt-10">
-                          <button
-                            className="px-4 py-2 rounded-md bg-gray-200"
-                            onClick={() => {
-                              setMidTestModalOpen(false);
-                              setMidTestToDelete(null);
-                            }}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="px-4 py-2 rounded-md bg-red-500 text-white"
-                            onClick={async () => {
-                              if (!midTestToDelete) return;
-                              setLoading(true);
-                              try {
-                                await deleteMidTestData(
-                                  subjectID!,
-                                  midTestToDelete
-                                );
-                                // revalidate midTest list
-                                midTestMutate(
-                                  `api/view-subject-mid-test/${subjectID}`
-                                );
-                              } catch (error) {
-                                console.error(error);
-                                toast.error("Failed to delete mid-test");
-                              } finally {
-                                setLoading(false);
-                                setMidTestModalOpen(false);
-                                setMidTestToDelete(null);
-                              }
-                            }}
-                          >
-                            Proceed
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </>
               </div>
 
