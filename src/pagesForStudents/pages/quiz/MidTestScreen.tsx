@@ -119,6 +119,7 @@ const MidTestScreen = () => {
   const isQuizDone = performance?.performance?.find(
     (el: any) => el?.quizID === midTestID && el?.quizDone
   );
+
   const timer = parseFloat(quizData?.quiz?.instruction?.duration);
 
   let timerInSeconds = timer * 3600;

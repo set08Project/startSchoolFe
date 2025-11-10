@@ -25,41 +25,27 @@ interface iProps {
   onTestCountChange?: (count: number) => void;
 }
 
-// New component to check individual subject test status
 const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
 
-  // Only render if at least one test is active
   const shouldDisplay = midTest?.startMidTest || examination?.startExam;
-
   if (!shouldDisplay) return null;
+
   const { performance } = useStudentPerfomance(studentInfo?._id);
 
-  // derive the most recent quiz IDs for midTest and examination (used in links)
-  const midQuizID = subject?.midTest?.[subject?.midTest?.length - 1];
-  const examQuizID = subject?.examination?.[subject?.examination?.length - 1];
-
-  // Check completion by matching the student's performance entries by quizID and quizDone
-  const hasCompletedMidTest = Boolean(
-    performance?.performance?.some(
-      (perf: any) => perf?.quizDone && subject?.midTest?.includes(perf?.quizID)
-    )
+  const hasCompletedMidTest = performance?.performance?.some(
+    (perf: any) =>
+      perf.subjectID === subject?._id && perf.testDetails?.type === "mid-test"
   );
 
-  const hasCompletedExam = Boolean(
-    performance?.performance?.some(
-      (perf: any) =>
-        perf?.quizDone && subject?.examination?.includes(perf?.quizID)
-    )
+  const hasCompletedExam = performance?.performance?.some(
+    (perf: any) =>
+      perf.subjectID === subject?._id && perf.testDetails?.type === "exam"
   );
 
-  // overall completed (only counts active test types)
-  const hasCompletedTest = Boolean(
-    (midTest?.startMidTest && hasCompletedMidTest) ||
-      (examination?.startExam && hasCompletedExam)
-  );
+  const hasCompletedTest = !!hasCompletedMidTest || !!hasCompletedExam;
 
   return (
     <div className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4">
@@ -69,17 +55,19 @@ const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
           <MdBook className="hover:text-blue-900" />
         </div>
       </div>
+
       <div className="flex gap-2">
         <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
           Class Subject
         </p>
-        {/* {hasCompletedTest && (
+        {hasCompletedTest && (
           <p className="text-[12px] bg-green-100 text-green-700 rounded-sm py-2 px-3 shadow-sm flex items-center gap-1">
             <FaCheckDouble size={12} />
             Completed
           </p>
-        )} */}
+        )}
       </div>
+
       <div className="flex-1" />
       <p className="text-[13px] font-medium">
         Subject Teacher Name: <span></span>
@@ -89,12 +77,12 @@ const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
           {subject?.subjectTeacherName}
         </div>
       </div>
-      {/* suuuuu */}
+
       <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
         {midTest?.startMidTest &&
           (hasCompletedMidTest ? (
-            <p className="text-[13px] text-green-600 border px-6 py-2 rounded-md border-green-400 bg-green-50 cursor-not-allowed">
-              Test Done
+            <p className="text-[13px] text-green-600 font-semibold">
+              Mid Test Done
             </p>
           ) : (
             <Link
@@ -109,12 +97,12 @@ const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
 
         {examination?.startExam &&
           (hasCompletedExam ? (
-            <p className="text-[13px] text-green-600 border px-6 py-2 rounded-md border-green-400 bg-green-50 cursor-not-allowed">
+            <p className="text-[13px] text-green-600 font-semibold">
               Examination Done
             </p>
           ) : (
             <Link
-              to={`/examination/details/${
+              to={`/examination/details/${subject?._id}/${
                 subject?.examination[subject?.examination?.length - 1]
               }`}
               className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer hover:bg-purple-700 transition-colors"
@@ -140,7 +128,6 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
 
   const hasSubjects = subjectData?.classSubjects?.length > 0;
 
-  // Component to track visible subjects and count total tests
   const SubjectCardWithCounter: FC<{
     subject: any;
     onTestCountChange: (count: number) => void;
@@ -152,53 +139,24 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
 
-    // derive the most recent quiz IDs for midTest and examination
-    const midQuizID = subject?.midTest?.[subject?.midTest?.length - 1];
-    const examQuizID = subject?.examination?.[subject?.examination?.length - 1];
-
-    // Check specific completion flags for this subject by quizID
-    const hasCompletedMidTest = Boolean(
-      performance?.performance?.some(
-        (perf: any) =>
-          perf?.quizDone && subject?.midTest?.includes(perf?.quizID)
-      )
-    );
-
-    const hasCompletedExam = Boolean(
-      performance?.performance?.some(
-        (perf: any) =>
-          perf?.quizDone && subject?.examination?.includes(perf?.quizID)
-      )
-    );
-
-    const hasCompletedTest = Boolean(
-      (midTest?.startMidTest && hasCompletedMidTest) ||
-        (examination?.startExam && hasCompletedExam)
+    const hasCompletedTest = performance?.performance?.some(
+      (perf: any) => perf.subjectID === subject?._id
     );
 
     useEffect(() => {
       if (shouldDisplay) {
         setVisibleSubjectCount((prev) => prev + 1);
-
-        // compute remaining tests individually: mid + exam
-        const midRemaining =
-          midTest?.startMidTest && !hasCompletedMidTest ? 1 : 0;
-        const examRemaining =
-          examination?.startExam && !hasCompletedExam ? 1 : 0;
-        const testCount = midRemaining + examRemaining;
-
+        const testCount = !hasCompletedTest
+          ? (midTest?.startMidTest ? 1 : 0) + (examination?.startExam ? 1 : 0)
+          : 0;
         onTestCountChange(testCount);
       }
       return () => {
         if (shouldDisplay) {
           setVisibleSubjectCount((prev) => prev - 1);
-
-          const midRemaining =
-            midTest?.startMidTest && !hasCompletedMidTest ? 1 : 0;
-          const examRemaining =
-            examination?.startExam && !hasCompletedExam ? 1 : 0;
-          const testCount = midRemaining + examRemaining;
-
+          const testCount = !hasCompletedTest
+            ? (midTest?.startMidTest ? 1 : 0) + (examination?.startExam ? 1 : 0)
+            : 0;
           onTestCountChange(-testCount);
         }
       };
@@ -206,8 +164,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
       shouldDisplay,
       midTest?.startMidTest,
       examination?.startExam,
-      hasCompletedMidTest,
-      hasCompletedExam,
+      hasCompletedTest,
     ]);
 
     return <SubjectCard subject={subject} />;
@@ -218,9 +175,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   }, [subjectData]);
 
   const handleTestCountChange = (count: number) => {
-    if (onTestCountChange) {
-      onTestCountChange(count);
-    }
+    if (onTestCountChange) onTestCountChange(count);
   };
 
   return (
@@ -300,9 +255,9 @@ const MyClassRoomTestExamScreen = () => {
 
         <ClassSubjectScreen
           props={oneClass?._id}
-          onTestCountChange={(count) => {
-            setTotalAvailableTests((prev) => prev + count);
-          }}
+          onTestCountChange={(count) =>
+            setTotalAvailableTests((prev) => prev + count)
+          }
         />
       </div>
     </div>
