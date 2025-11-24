@@ -96,11 +96,11 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-3">
-      <div className={`text-[30px] font-bold ${getColor()}`}>
+    <div className="flex flex-col justify-center items-center gap-3">
+      <div className={`text-[25px] font-bold ${getColor()}`}>
         {formatTime(seconds)}
       </div>
-      <div>
+      <div className="-mt-5">
         <svg
           className="w-[50px] h-[80px] transition-all duration-300 transform -rotate-90"
           viewBox="0 0 36 36"

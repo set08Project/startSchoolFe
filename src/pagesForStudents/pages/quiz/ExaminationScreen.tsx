@@ -15,6 +15,388 @@ import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { FaSpinner } from "react-icons/fa6";
 import lodash from "lodash";
 
+function MathRenderer({ text }) {
+  if (!text) return null;
+
+  const str = String(text);
+
+  function parseMath(input) {
+    const result = [];
+    let i = 0;
+    let currentText = "";
+
+    while (i < input.length) {
+      let matched = false;
+
+      // Check for determinant: |a b; c d|
+      if (input[i] === "|") {
+        let closing = -1;
+        for (let j = i + 1; j < input.length; j++) {
+          if (input[j] === "|") {
+            closing = j;
+            break;
+          }
+        }
+
+        if (closing > i) {
+          const content = input.substring(i + 1, closing);
+          if (content.includes(";")) {
+            if (currentText) {
+              result.push({ type: "text", content: currentText });
+              currentText = "";
+            }
+            result.push({ type: "determinant", content: content });
+            i = closing + 1;
+            matched = true;
+          }
+        }
+      }
+
+      // Check for fraction: (numerator)/(denominator)
+      if (!matched && input[i] === "(") {
+        let firstClose = findMatchingParen(input, i);
+
+        if (
+          firstClose > i &&
+          firstClose + 2 < input.length &&
+          input[firstClose + 1] === "/" &&
+          input[firstClose + 2] === "("
+        ) {
+          let secondClose = findMatchingParen(input, firstClose + 2);
+
+          if (secondClose > firstClose) {
+            if (currentText) {
+              result.push({ type: "text", content: currentText });
+              currentText = "";
+            }
+            result.push({
+              type: "fraction",
+              numerator: input.substring(i + 1, firstClose),
+              denominator: input.substring(firstClose + 3, secondClose),
+            });
+            i = secondClose + 1;
+            matched = true;
+          }
+        }
+      }
+
+      // Check for superscript: base^(exponent)
+      if (
+        !matched &&
+        input[i] === "^" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
+        let baseStart = i - 1;
+
+        while (baseStart > 0 && /[a-zA-Z0-9_]/.test(input[baseStart - 1])) {
+          baseStart--;
+        }
+
+        let close = findMatchingParen(input, i + 1);
+
+        if (close > i && baseStart < i) {
+          if (baseStart > 0 && currentText.length > 0) {
+            result.push({
+              type: "text",
+              content: currentText.substring(
+                0,
+                currentText.length - (i - baseStart)
+              ),
+            });
+          }
+          result.push({
+            type: "superscript",
+            base: input.substring(baseStart, i),
+            sup: input.substring(i + 2, close),
+          });
+          currentText = "";
+          i = close + 1;
+          matched = true;
+        }
+      }
+
+      // Check for subscript: base_(subscript) or base₁₀ format
+      if (
+        !matched &&
+        input[i] === "_" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
+        let baseStart = i - 1;
+
+        while (baseStart > 0 && /[a-zA-Z0-9]/.test(input[baseStart - 1])) {
+          baseStart--;
+        }
+
+        let close = findMatchingParen(input, i + 1);
+
+        if (close > i && baseStart < i) {
+          if (baseStart > 0 && currentText.length > 0) {
+            result.push({
+              type: "text",
+              content: currentText.substring(
+                0,
+                currentText.length - (i - baseStart)
+              ),
+            });
+          }
+          result.push({
+            type: "subscript",
+            base: input.substring(baseStart, i),
+            sub: input.substring(i + 2, close),
+          });
+          currentText = "";
+          i = close + 1;
+          matched = true;
+        }
+      }
+
+      // Check for Unicode subscripts like ₁₀
+      if (!matched && /[₀₁₂₃₄₅₆₇₈₉]/.test(input[i])) {
+        let baseStart = i - 1;
+        while (baseStart > 0 && /[a-zA-Z0-9]/.test(input[baseStart - 1])) {
+          baseStart--;
+        }
+
+        let subEnd = i;
+        while (subEnd < input.length && /[₀₁₂₃₄₅₆₇₈₉]/.test(input[subEnd])) {
+          subEnd++;
+        }
+
+        if (baseStart < i) {
+          if (baseStart > 0 && currentText.length > 0) {
+            result.push({
+              type: "text",
+              content: currentText.substring(
+                0,
+                currentText.length - (i - baseStart)
+              ),
+            });
+          }
+
+          // Convert Unicode subscripts to normal numbers
+          const subText = input
+            .substring(i, subEnd)
+            .replace(/₀/g, "0")
+            .replace(/₁/g, "1")
+            .replace(/₂/g, "2")
+            .replace(/₃/g, "3")
+            .replace(/₄/g, "4")
+            .replace(/₅/g, "5")
+            .replace(/₆/g, "6")
+            .replace(/₇/g, "7")
+            .replace(/₈/g, "8")
+            .replace(/₉/g, "9");
+
+          result.push({
+            type: "subscript",
+            base: input.substring(baseStart, i),
+            sub: subText,
+          });
+          currentText = "";
+          i = subEnd;
+          matched = true;
+        }
+      }
+
+      // Check for square root: √(content)
+      if (
+        !matched &&
+        input[i] === "√" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
+        let close = findMatchingParen(input, i + 1);
+
+        if (close > i) {
+          if (currentText) {
+            result.push({ type: "text", content: currentText });
+            currentText = "";
+          }
+          result.push({
+            type: "sqrt",
+            content: input.substring(i + 2, close),
+          });
+          i = close + 1;
+          matched = true;
+        }
+      }
+
+      if (!matched) {
+        currentText += input[i];
+        i++;
+      }
+    }
+
+    if (currentText) {
+      result.push({ type: "text", content: currentText });
+    }
+
+    return result;
+  }
+
+  function findMatchingParen(str, start) {
+    let depth = 1;
+    for (let j = start + 1; j < str.length; j++) {
+      if (str[j] === "(") depth++;
+      if (str[j] === ")") {
+        depth--;
+        if (depth === 0) return j;
+      }
+    }
+    return -1;
+  }
+
+  function renderDeterminant(content) {
+    const rows = content.split(";").map((r) => r.trim());
+    const cells = [];
+
+    for (let r = 0; r < rows.length; r++) {
+      const values = rows[r].split(/\s+/).filter((v) => v);
+      for (let c = 0; c < values.length; c++) {
+        cells.push({ value: values[c], key: `${r}-${c}` });
+      }
+    }
+
+    const colCount = rows[0].split(/\s+/).filter((v) => v).length;
+
+    return (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          margin: "0 3px",
+          verticalAlign: "middle",
+        }}
+      >
+        <span style={{ fontSize: "1.5em", fontWeight: "100", lineHeight: "1" }}>
+          |
+        </span>
+        <span
+          style={{
+            display: "inline-grid",
+            gridTemplateColumns: `repeat(${colCount}, auto)`,
+            gridTemplateRows: `repeat(${rows.length}, auto)`,
+            gap: "4px 12px",
+            padding: "0 8px",
+          }}
+        >
+          {cells.map((cell) => (
+            <span key={cell.key} style={{ textAlign: "center" }}>
+              {cell.value}
+            </span>
+          ))}
+        </span>
+        <span style={{ fontSize: "1.5em", fontWeight: "100", lineHeight: "1" }}>
+          |
+        </span>
+      </span>
+    );
+  }
+
+  function renderPart(part) {
+    if (part.type === "fraction") {
+      return (
+        <span
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            verticalAlign: "middle",
+            margin: "0 2px",
+            fontSize: "0.9em",
+            lineHeight: "1.2",
+          }}
+        >
+          <span
+            style={{ padding: "0 4px", borderBottom: "1px solid currentColor" }}
+          >
+            <MathRenderer text={part.numerator} />
+          </span>
+          <span style={{ padding: "0 4px" }}>
+            <MathRenderer text={part.denominator} />
+          </span>
+        </span>
+      );
+    }
+
+    if (part.type === "superscript") {
+      return (
+        <span style={{ display: "inline-flex", alignItems: "flex-start" }}>
+          <span>
+            <MathRenderer text={part.base} />
+          </span>
+          <span
+            style={{
+              fontSize: "0.7em",
+              marginLeft: "0.1em",
+              marginTop: "-0.3em",
+            }}
+          >
+            <MathRenderer text={part.sup} />
+          </span>
+        </span>
+      );
+    }
+
+    if (part.type === "subscript") {
+      return (
+        <span style={{ display: "inline-flex", alignItems: "flex-end" }}>
+          <span>
+            <MathRenderer text={part.base} />
+          </span>
+          <span
+            className="-mt-4"
+            style={{
+              fontSize: "0.7em",
+              marginLeft: "0.1em",
+              marginBottom: "-1em",
+            }}
+          >
+            <MathRenderer text={part.sub} />
+          </span>
+        </span>
+      );
+    }
+
+    if (part.type === "sqrt") {
+      return (
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            margin: "0 2px",
+          }}
+        >
+          <span style={{ fontSize: "1.2em" }}>√</span>
+          <span
+            style={{ borderTop: "1px solid currentColor", padding: "0 4px" }}
+          >
+            <MathRenderer text={part.content} />
+          </span>
+        </span>
+      );
+    }
+
+    if (part.type === "determinant") {
+      return renderDeterminant(part.content);
+    }
+
+    return <span>{part.content}</span>;
+  }
+
+  const parsed = parseMath(str);
+
+  return (
+    <>
+      {parsed.map((part, index) => (
+        <span key={index}>{renderPart(part)}</span>
+      ))}
+    </>
+  );
+}
+
 const ExaminationTestScreen = () => {
   const navigate = useNavigate();
   const { examID } = useParams();
@@ -250,90 +632,6 @@ const ExaminationTestScreen = () => {
   const [submitted, setSubmitted] = useState(false);
   const [_score, setScore] = useState(0);
 
-  const questions = [
-    {
-      id: 1,
-      question: "What does HTML stand for?",
-      options: [
-        "Hyper Text Markup Language",
-        "High Tech Modern Language",
-        "Home Tool Markup Language",
-        "Hyperlinks and Text Markup Language",
-      ],
-      correctAnswer: 0,
-    },
-    {
-      id: 2,
-      question:
-        "Which programming language is known as the 'language of the web'?",
-      options: ["Python", "Java", "JavaScript", "C++"],
-      correctAnswer: 2,
-    },
-    {
-      id: 3,
-      question: "What does CSS stand for?",
-      options: [
-        "Computer Style Sheets",
-        "Cascading Style Sheets",
-        "Creative Style Sheets",
-        "Colorful Style Sheets",
-      ],
-      correctAnswer: 1,
-    },
-    {
-      id: 4,
-      question: "Which of the following is a JavaScript framework?",
-      options: ["Django", "Flask", "React", "Laravel"],
-      correctAnswer: 2,
-    },
-    {
-      id: 5,
-      question: "What is the purpose of Git?",
-      options: [
-        "Image editing",
-        "Version control",
-        "Database management",
-        "Web hosting",
-      ],
-      correctAnswer: 1,
-    },
-    {
-      id: 6,
-      question: "Which HTTP method is used to retrieve data from a server?",
-      options: ["POST", "PUT", "GET", "DELETE"],
-      correctAnswer: 2,
-    },
-    {
-      id: 7,
-      question: "What does API stand for?",
-      options: [
-        "Application Programming Interface",
-        "Advanced Programming Interface",
-        "Application Process Integration",
-        "Automated Programming Interface",
-      ],
-      correctAnswer: 0,
-    },
-    {
-      id: 8,
-      question: "Which database is a NoSQL database?",
-      options: ["MySQL", "PostgreSQL", "MongoDB", "Oracle"],
-      correctAnswer: 2,
-    },
-    {
-      id: 9,
-      question: "What is the default port for HTTP?",
-      options: ["21", "80", "443", "8080"],
-      correctAnswer: 1,
-    },
-    {
-      id: 10,
-      question: "Which symbol is used for comments in JavaScript?",
-      options: ["#", "//", "/* */", "Both // and /* */"],
-      correctAnswer: 3,
-    },
-  ];
-
   const handleAnswerSelect = (optionIndex) => {
     setAnswers({
       ...answers,
@@ -439,13 +737,13 @@ const ExaminationTestScreen = () => {
             </div>
           )}
           {/* Timer */}
-          <div className="sticky left-5 flex top-[px] justify-end items-center pointer-events-none">
-            <div className="sticky max-w-[250px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
+          <div className="sticky left-5 flex top-[10px] justify-end items-center pointer-events-none">
+            <div className="sticky max-w-[210px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
               <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
-                Exam Count Down Timer <MdOutlineTimer />
+                Time Remaining
               </h1>
               {activate && timerInSeconds ? (
-                <div>
+                <div className="w-full">
                   <CountdownTimer
                     initialSeconds={timerInSeconds}
                     onTimeUp={() => {
@@ -466,7 +764,7 @@ const ExaminationTestScreen = () => {
           <div className="bg-slate-0 justify-center flex -mt-40">
             {start && (
               <div className="!min-h-[300px] flex items-centr justify-center p-4">
-                <div className="bg-white rounded-lg shadow-xl p-8 !w-[700px] w-full">
+                <div className="bg-white rounded-lg shadow-xl p-8 !w-[700px] ">
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-4">
                       <h1 className="text-sm font-bold text-gray-800">
@@ -521,12 +819,13 @@ const ExaminationTestScreen = () => {
                         </span>
                       )}
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                      {readQuestion[currentQuestion]?.question?.replace(
-                        /^\d+\.\s*/,
-                        ""
-                      )}
-                    </h2>
+                    <div className="text-4xl font-medium text-gray-800 mb-6">
+                      <span className="text-lg text-gray-800  min-h-[160px]">
+                        <MathRenderer
+                          text={readQuestion[currentQuestion]?.question}
+                        />
+                      </span>
+                    </div>
                     {readQuestion[currentQuestion]?.images && (
                       <div>
                         <br />
@@ -538,49 +837,12 @@ const ExaminationTestScreen = () => {
                         <br />
                       </div>
                     )}
-                    {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {readQuestion[currentQuestion].options.map(
-                        (option, index) => (
-                          <button
-                            type="button"
-                            key={index}
-                            onClick={() => {
-                              // Update local UI selection and the main answer state
-                              handleAnswerSelect(index);
-                              handleStateChange(currentQuestion, option);
-                            }}
-                            className={`w-full text-left p-4 rounded-lg border-2 transition-all flex items-center ${
-                              answers[currentQuestion] === index
-                                ? "border-blue-950 bg-blue-50"
-                                : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
-                            }`}
-                          >
-                            <div className="flex items-center w-full">
-                              <div
-                                className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center shrink-0 ${
-                                  answers[currentQuestion] === index
-                                    ? "border-blue-950 bg-blue-950"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {answers[currentQuestion] === index && (
-                                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                                )}
-                              </div>
-                              <span className="text-gray-700 break-words">
-                                {option}
-                              </span>
-                            </div>
-                          </button>
-                        )
-                      )}
-                    </div>
 
-                    <hr className="my-6" /> */}
-
+                    {/* Options */}
+                    <div className="mt-8" />
                     <div
                       // className="space-y-3"
-                      className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                      className="grid grid-cols-1 sm:grid-cols-1 gap-4"
                     >
                       {getShuffledOptions(
                         readQuestion[currentQuestion],
@@ -611,7 +873,9 @@ const ExaminationTestScreen = () => {
                                 <div className="w-2 h-2 bg-white rounded-full"></div>
                               )}
                             </div>
-                            <span className="text-gray-700">{option}</span>
+                            <span className="text-gray-700">
+                              {<MathRenderer text={option} />}
+                            </span>
                           </div>
                         </button>
                       ))}
