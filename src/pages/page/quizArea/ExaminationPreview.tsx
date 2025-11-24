@@ -9,189 +9,219 @@ import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useExamination, useQuiz } from "@/pagesForTeachers/hooks/useTeacher";
 
-
 function MathRenderer({ text }) {
   if (!text) return null;
-  
+
   const str = String(text);
-  
+
   // Parse all math notations recursively
   function parseMath(input) {
     const result = [];
     let i = 0;
-    let currentText = '';
-    
+    let currentText = "";
+
     while (i < input.length) {
       let matched = false;
-      
+
       // Check for determinant: |a b; c d|
-      if (input[i] === '|') {
+      if (input[i] === "|") {
         let closing = -1;
         for (let j = i + 1; j < input.length; j++) {
-          if (input[j] === '|') {
+          if (input[j] === "|") {
             closing = j;
             break;
           }
         }
-        
+
         if (closing > i) {
           const content = input.substring(i + 1, closing);
           // Only treat as determinant if it contains semicolon (matrix format)
-          if (content.includes(';')) {
+          if (content.includes(";")) {
             if (currentText) {
-              result.push({ type: 'text', content: currentText });
-              currentText = '';
+              result.push({ type: "text", content: currentText });
+              currentText = "";
             }
-            result.push({ type: 'determinant', content: content });
+            result.push({ type: "determinant", content: content });
             i = closing + 1;
             matched = true;
           }
         }
       }
-      
+
       // Check for fraction: (numerator)/(denominator)
-      if (!matched && input[i] === '(') {
+      if (!matched && input[i] === "(") {
         let firstClose = findMatchingParen(input, i);
-        
-        if (firstClose > i && firstClose + 2 < input.length && 
-            input[firstClose + 1] === '/' && input[firstClose + 2] === '(') {
+
+        if (
+          firstClose > i &&
+          firstClose + 2 < input.length &&
+          input[firstClose + 1] === "/" &&
+          input[firstClose + 2] === "("
+        ) {
           let secondClose = findMatchingParen(input, firstClose + 2);
-          
+
           if (secondClose > firstClose) {
             if (currentText) {
-              result.push({ type: 'text', content: currentText });
-              currentText = '';
+              result.push({ type: "text", content: currentText });
+              currentText = "";
             }
             result.push({
-              type: 'fraction',
+              type: "fraction",
               numerator: input.substring(i + 1, firstClose),
-              denominator: input.substring(firstClose + 3, secondClose)
+              denominator: input.substring(firstClose + 3, secondClose),
             });
             i = secondClose + 1;
             matched = true;
           }
         }
       }
-      
+
       // Check for superscript: base^(exponent)
-      if (!matched && input[i] === '^' && i + 1 < input.length && input[i + 1] === '(') {
+      if (
+        !matched &&
+        input[i] === "^" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
         let baseStart = i - 1;
-        
+
         // Extract base (can be a single character, word, or number)
         while (baseStart > 0 && /[a-zA-Z0-9_]/.test(input[baseStart - 1])) {
           baseStart--;
         }
-        
+
         let close = findMatchingParen(input, i + 1);
-        
+
         if (close > i && baseStart < i) {
           if (baseStart > 0 && currentText.length > 0) {
-            result.push({ type: 'text', content: currentText.substring(0, currentText.length - (i - baseStart)) });
+            result.push({
+              type: "text",
+              content: currentText.substring(
+                0,
+                currentText.length - (i - baseStart)
+              ),
+            });
           }
           result.push({
-            type: 'superscript',
+            type: "superscript",
             base: input.substring(baseStart, i),
-            sup: input.substring(i + 2, close)
+            sup: input.substring(i + 2, close),
           });
-          currentText = '';
+          currentText = "";
           i = close + 1;
           matched = true;
         }
       }
-      
+
       // Check for subscript: base_(subscript)
-      if (!matched && input[i] === '_' && i + 1 < input.length && input[i + 1] === '(') {
+      if (
+        !matched &&
+        input[i] === "_" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
         let baseStart = i - 1;
-        
+
         while (baseStart > 0 && /[a-zA-Z0-9]/.test(input[baseStart - 1])) {
           baseStart--;
         }
-        
+
         let close = findMatchingParen(input, i + 1);
-        
+
         if (close > i && baseStart < i) {
           if (baseStart > 0 && currentText.length > 0) {
-            result.push({ type: 'text', content: currentText.substring(0, currentText.length - (i - baseStart)) });
+            result.push({
+              type: "text",
+              content: currentText.substring(
+                0,
+                currentText.length - (i - baseStart)
+              ),
+            });
           }
           result.push({
-            type: 'subscript',
+            type: "subscript",
             base: input.substring(baseStart, i),
-            sub: input.substring(i + 2, close)
+            sub: input.substring(i + 2, close),
           });
-          currentText = '';
+          currentText = "";
           i = close + 1;
           matched = true;
         }
       }
-      
+
       // Check for square root: √(content)
-      if (!matched && input[i] === '√' && i + 1 < input.length && input[i + 1] === '(') {
+      if (
+        !matched &&
+        input[i] === "√" &&
+        i + 1 < input.length &&
+        input[i + 1] === "("
+      ) {
         let close = findMatchingParen(input, i + 1);
-        
+
         if (close > i) {
           if (currentText) {
-            result.push({ type: 'text', content: currentText });
-            currentText = '';
+            result.push({ type: "text", content: currentText });
+            currentText = "";
           }
           result.push({
-            type: 'sqrt',
-            content: input.substring(i + 2, close)
+            type: "sqrt",
+            content: input.substring(i + 2, close),
           });
           i = close + 1;
           matched = true;
         }
       }
-      
+
       if (!matched) {
         currentText += input[i];
         i++;
       }
     }
-    
+
     if (currentText) {
-      result.push({ type: 'text', content: currentText });
+      result.push({ type: "text", content: currentText });
     }
-    
+
     return result;
   }
-  
+
   // Helper function to find matching closing parenthesis
   function findMatchingParen(str, start) {
     let depth = 1;
     for (let j = start + 1; j < str.length; j++) {
-      if (str[j] === '(') depth++;
-      if (str[j] === ')') {
+      if (str[j] === "(") depth++;
+      if (str[j] === ")") {
         depth--;
         if (depth === 0) return j;
       }
     }
     return -1;
   }
-  
+
   function renderDeterminant(content) {
-    const rows = content.split(';').map(r => r.trim());
+    const rows = content.split(";").map((r) => r.trim());
     const cells = [];
-    
+
     for (let r = 0; r < rows.length; r++) {
-      const values = rows[r].split(/\s+/).filter(v => v);
+      const values = rows[r].split(/\s+/).filter((v) => v);
       for (let c = 0; c < values.length; c++) {
         cells.push({ value: values[c], key: `${r}-${c}` });
       }
     }
-    
-    const colCount = rows[0].split(/\s+/).filter(v => v).length;
-    
+
+    const colCount = rows[0].split(/\s+/).filter((v) => v).length;
+
     return (
       <span className="inline-flex items-center mx-0.5">
         <span className="text-2xl font-thin leading-none">|</span>
-        <span 
+        <span
           className="inline-grid gap-x-3 gap-y-1 px-2"
           style={{
             gridTemplateColumns: `repeat(${colCount}, auto)`,
-            gridTemplateRows: `repeat(${rows.length}, auto)`
+            gridTemplateRows: `repeat(${rows.length}, auto)`,
           }}
         >
-          {cells.map(cell => (
+          {cells.map((cell) => (
             <span key={cell.key} className="text-center">
               {cell.value}
             </span>
@@ -201,11 +231,14 @@ function MathRenderer({ text }) {
       </span>
     );
   }
-  
+
   function renderPart(part) {
-    if (part.type === 'fraction') {
+    if (part.type === "fraction") {
       return (
-        <span className="inline-flex flex-col items-center mx-0.5 text-sm leading-tight align-middle" style={{ verticalAlign: 'middle' }}>
+        <span
+          className="inline-flex flex-col items-center mx-0.5 text-sm leading-tight align-middle"
+          style={{ verticalAlign: "middle" }}
+        >
           <span className="px-1 border-b border-current">
             <MathRenderer text={part.numerator} />
           </span>
@@ -215,30 +248,40 @@ function MathRenderer({ text }) {
         </span>
       );
     }
-    
-    if (part.type === 'superscript') {
+
+    if (part.type === "superscript") {
       return (
         <span className="inline-flex items-start">
-          <span><MathRenderer text={part.base} /></span>
-          <span className="text-[0.7em] ml-[0.1em]" style={{ marginTop: '-0.3em' }}>
+          <span>
+            <MathRenderer text={part.base} />
+          </span>
+          <span
+            className="text-[0.7em] ml-[0.1em]"
+            style={{ marginTop: "-0.3em" }}
+          >
             <MathRenderer text={part.sup} />
           </span>
         </span>
       );
     }
-    
-    if (part.type === 'subscript') {
+
+    if (part.type === "subscript") {
       return (
         <span className="inline-flex items-end">
-          <span><MathRenderer text={part.base} /></span>
-          <span className="text-[0.7em] ml-[0.1em]" style={{ marginBottom: '-0.1em' }}>
+          <span>
+            <MathRenderer text={part.base} />
+          </span>
+          <span
+            className="text-[0.7em] ml-[0.1em]"
+            style={{ marginBottom: "-0.1em" }}
+          >
             <MathRenderer text={part.sub} />
           </span>
         </span>
       );
     }
-    
-    if (part.type === 'sqrt') {
+
+    if (part.type === "sqrt") {
       return (
         <span className="inline-flex items-center mx-0.5">
           <span className="text-lg">√</span>
@@ -248,26 +291,26 @@ function MathRenderer({ text }) {
         </span>
       );
     }
-    
-    if (part.type === 'determinant') {
+
+    if (part.type === "determinant") {
       return renderDeterminant(part.content);
     }
-    
+
     return <span>{part.content}</span>;
   }
-  
+
   const parsed = parseMath(str);
-  
+
   return (
     <span className="inline-flex items-center flex-wrap">
       {parsed.map((part, index) => (
-        <main key={index} className="">{renderPart(part)}</main>
+        <main key={index} className="">
+          {renderPart(part)}
+        </main>
       ))}
     </span>
   );
 }
-
-
 
 const ExaminationPreviewScreen = () => {
   const navigate = useNavigate();
@@ -309,15 +352,23 @@ const ExaminationPreviewScreen = () => {
   const timerInSeconds = timer * 3600;
 
   // Prepare question list and pagination
-  const questions: any[] = (examination?.quiz?.question && Array.isArray(examination.quiz.question))
-    ? examination.quiz.question
-    : [];
+  const questions: any[] =
+    examination?.quiz?.question && Array.isArray(examination.quiz.question)
+      ? examination.quiz.question
+      : [];
 
   const totalQuestions = questions.length;
   const totalPages = Math.max(1, Math.ceil(totalQuestions / PAGE_SIZE));
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const pagedQuestions = questions.slice(startIndex, startIndex + PAGE_SIZE);
 
+  // Navigate to a page and smoothly scroll to top (guard against SSR)
+  const goToPage = (newPage: number) => {
+    setCurrentPage(newPage);
+    if (typeof window !== "undefined" && window?.scrollTo) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
     <div>
@@ -325,8 +376,6 @@ const ExaminationPreviewScreen = () => {
       <LittleHeader
         name={`${examination?.subjectTitle} Examination Preview Screen`}
       />
-
-
 
       <div className="relative">
         {/* Timer */}
@@ -351,64 +400,80 @@ const ExaminationPreviewScreen = () => {
           <div className="bg-white w-full px-5">
             {/* {quest?.map( */}
             {pagedQuestions.map((question: any, idx: number) => {
-                const index = startIndex + idx;
-                return (
-                  <div key={index}>
-                    <p className="text-[14px] font-bold mt-10">
-                      Question {index + 1}.
-                    </p>
-                    <div className="ml-4">
+              const index = startIndex + idx;
+              return (
+                <div key={index}>
+                  <p className="text-[14px] font-bold mt-10">
+                    Question {index + 1}.
+                  </p>
+                  <div className="ml-4">
+                    <div className="mb-4">
+                      <span className="font-semibold text-gray-700 mr-2">
+                        {index + 1}.
+                      </span>
+                      <span className="text-lg text-gray-800">
+                        <MathRenderer text={question.question} />
+                      </span>
+                    </div>
 
-               <div className="mb-4">
-              <span className="font-semibold text-gray-700 mr-2">{index + 1}.</span>
-              <span className="text-lg text-gray-800">
-                <MathRenderer text={question.question} />
-              </span>
-            </div>
+                    {question?.images && (
+                      <div>
+                        <br />
+                        {question?.images?.map((img: string, i: number) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            key={i}
+                            src={img}
+                            alt={`question-${index}-img-${i}`}
+                          />
+                        ))}
+                        <br />
+                      </div>
+                    )}
 
-                      {question?.images && (
-                        <div>
-                          <br />
-                          {question?.images?.map((img: string, i: number) => (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img key={i} src={img} alt={`question-${index}-img-${i}`} />
-                          ))}
-                          <br />
-                        </div>
-                      )}
+                    <div className="ml-8">
+                      <p className="text-[12px] mt-5">
+                        Choose your options carefully
+                      </p>
+                      <p className="text-[12px] mb-5 font-semibold">
+                        Correct Answer: {question?.answer}
+                      </p>
 
-
-                      <div className="ml-8">
-                        <p className="text-[12px] mt-5">
-                          Choose your options carefully
-                        </p>
-                        <p className="text-[12px] mb-5 font-semibold">
-                          Correct Answer: {question?.answer}
-                        </p>
-
-                        <div className="space-y-2 ml-6 flex flex-col max-w-[600px]">
-              {question.options.map((opt, optIdx) => {
-                const isCorrect = opt === question.answer;
-                return (
-                  <div 
-                    key={optIdx} 
-                    className={`p-3 rounded ${isCorrect ? 'bg-green-50 border border-green-300' : 'bg-gray-50 border border-gray-200'}`}
-                  >
-                    <span className="font-semibold mr-2 text-gray-700">
-                      {String.fromCharCode(65 + optIdx)}.
-                    </span>
-                    <span className={isCorrect ? 'text-green-800 font-medium' : 'text-gray-700'}>
-                      <MathRenderer text={opt} />
-                      {isCorrect && <span className="ml-2 text-green-600">✓</span>}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+                      <div className="space-y-2 ml-6 flex flex-col max-w-[600px]">
+                        {question.options.map((opt, optIdx) => {
+                          const isCorrect = opt === question.answer;
+                          return (
+                            <div
+                              key={optIdx}
+                              className={`p-3 rounded ${
+                                isCorrect
+                                  ? "bg-green-50 border border-green-300"
+                                  : "bg-gray-50 border border-gray-200"
+                              }`}
+                            >
+                              <span className="font-semibold mr-2 text-gray-700">
+                                {String.fromCharCode(65 + optIdx)}.
+                              </span>
+                              <span
+                                className={
+                                  isCorrect
+                                    ? "text-green-800 font-medium"
+                                    : "text-gray-700"
+                                }
+                              >
+                                <MathRenderer text={opt} />
+                                {isCorrect && (
+                                  <span className="ml-2 text-green-600">✓</span>
+                                )}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
-                );
+                </div>
+              );
             })}
 
             {/* Pagination controls */}
@@ -416,20 +481,24 @@ const ExaminationPreviewScreen = () => {
               <div>
                 <button
                   className="px-4 py-2 bg-gray-100 rounded mr-2 disabled:opacity-50"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  onClick={() => goToPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage <= 1}
                 >
                   Previous
                 </button>
                 <button
                   className="py-2 bg-blue-100 px-10 rounded disabled:opacity-50"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() =>
+                    goToPage(Math.min(totalPages, currentPage + 1))
+                  }
                   disabled={currentPage >= totalPages}
                 >
                   Next
                 </button>
               </div>
-              <div className="text-sm text-gray-600">Page {currentPage} of {totalPages}</div>
+              <div className="text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </div>
             </div>
 
             <div className="border-r mt-10 w-full h-[10px] bg-red-30">

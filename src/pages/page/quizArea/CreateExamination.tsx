@@ -9,6 +9,7 @@ import PreviewExamination from "./PreviewExamination";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Toaster } from "react-hot-toast";
 
 const CreateExaminationScreen = () => {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const CreateExaminationScreen = () => {
   return (
     <div>
       <LittleHeader name="Create Examination Question Screen" />
+      <Toaster />
 
       <div className="mt-10" />
 

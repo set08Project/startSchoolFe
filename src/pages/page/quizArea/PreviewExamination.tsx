@@ -8,8 +8,12 @@ import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStude
 
 import { useSujectQuiz } from "@/pagesForTeachers/hooks/useTeacher";
 
-import { createExaminationData, readClassInfo } from "@/pagesForTeachers/api/teachersAPI";
+import {
+  createExaminationData,
+  readClassInfo,
+} from "@/pagesForTeachers/api/teachersAPI";
 import Button from "@/pagesForTeachers/components/reUse/Button";
+import toast from "react-hot-toast";
 
 const PreviewExamination: FC<any> = ({
   instruction,
@@ -68,6 +72,15 @@ const PreviewExamination: FC<any> = ({
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
+              } else {
+                console.log(res?.response?.data?.errors);
+                toast.error(
+                  `Errors In:\n ${
+                    res?.response?.data?.errors.map((el: string) => {
+                      return `- ${el}\n`;
+                    }) || "Failed to create"
+                  }`
+                );
               }
             })
             .finally(() => {

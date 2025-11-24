@@ -444,6 +444,13 @@ const ExaminationPreviewScreen = () => {
   const timer = parseInt(quizData?.quiz[0]?.instruction?.duration);
   const timerInSeconds = timer * 3600;
 
+  const goToPage = (newPage: number) => {
+    setCurrentPage(newPage);
+    if (typeof window !== "undefined" && window?.scrollTo) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -555,15 +562,19 @@ const ExaminationPreviewScreen = () => {
               <div>
                 <button
                   className="px-4 py-2 bg-gray-100 rounded mr-2 disabled:opacity-50"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  // onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  onClick={() => goToPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage <= 1}
                 >
                   Previous
                 </button>
                 <button
                   className="py-2 bg-blue-100 px-10 rounded disabled:opacity-50"
+                  // onClick={() =>
+                  //   setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  // }
                   onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    goToPage(Math.min(totalPages, currentPage + 1))
                   }
                   disabled={currentPage >= totalPages}
                 >
