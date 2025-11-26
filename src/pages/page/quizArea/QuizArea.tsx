@@ -50,6 +50,7 @@ import {
   startMidTest,
   stopExamination,
   stopMidTest,
+  updateExaminationData,
   updateMidTestData,
 } from "@/pagesForTeachers/api/teachersAPI";
 
@@ -81,6 +82,7 @@ const ExamQuizSetupScreen = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [loadingExam, setLoadingExam] = useState<Boolean>(false);
   const [loadingTest, setLoadingTest] = useState<Boolean>(false);
+  const [toggleExam, setToggleExam] = useState<Boolean>(false);
 
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
 
@@ -132,6 +134,93 @@ const ExamQuizSetupScreen = () => {
   const [showMidTestConfirm, setShowMidTestConfirm] = useState(false);
   const [showExamConfirm, setShowExamConfirm] = useState(false);
   const navigate = useNavigate();
+
+  const [markExam, setMarkExam] = useState<string | number | undefined>(
+    examination?.exam?.quiz?.instruction?.mark ?? ""
+  );
+
+  const [durationExam, setDurationExam] = useState<string | number | undefined>(
+    examination?.exam?.quiz?.instruction?.duration ?? ""
+  );
+
+  // Custom duration states for midTest and Exam
+  const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
+  const [customMinutes, setCustomMinutes] = useState<string>("");
+  const [isCustomDurationExam, setIsCustomDurationExam] =
+    useState<boolean>(false);
+  const [customMinutesExam, setCustomMinutesExam] = useState<string>("");
+
+  // Keep local component state in sync when remote data updates
+  useEffect(() => {
+    setDuration(midTest?.quiz?.instruction?.duration ?? "");
+    setMark(midTest?.quiz?.instruction?.mark ?? "");
+  }, [midTest]);
+
+  useEffect(() => {
+    setDurationExam(examination?.exam?.quiz?.instruction?.duration ?? "");
+    setMarkExam(examination?.exam?.quiz?.instruction?.mark ?? "");
+  }, [examination]);
+
+  const STANDARD_DURATIONS = [
+    "0.084",
+    "0.167",
+    "0.333",
+    "0.500",
+    "0.667",
+    "0.833",
+    "1.000",
+    "1.500",
+  ];
+
+  // detect if duration is a custom value (not in standard options)
+  useEffect(() => {
+    const cur = String(duration);
+    if (cur && !STANDARD_DURATIONS.includes(cur)) {
+      setIsCustomDuration(true);
+      const mins = Number(cur) * 60;
+      setCustomMinutes(Number.isFinite(mins) ? String(Math.round(mins)) : "");
+    } else {
+      setIsCustomDuration(false);
+      setCustomMinutes("");
+    }
+  }, [duration]);
+
+  useEffect(() => {
+    const cur = String(durationExam);
+    if (cur && !STANDARD_DURATIONS.includes(cur)) {
+      setIsCustomDurationExam(true);
+      const mins = Number(cur) * 60;
+      setCustomMinutesExam(
+        Number.isFinite(mins) ? String(Math.round(mins)) : ""
+      );
+    } else {
+      setIsCustomDurationExam(false);
+      setCustomMinutesExam("");
+    }
+  }, [durationExam]);
+
+  // When user types custom minutes, update the duration in hours (string with 3 decimals)
+  useEffect(() => {
+    if (isCustomDuration) {
+      if (customMinutes === "") {
+        setDuration("");
+      } else {
+        const hrs = Number(customMinutes) / 60;
+        setDuration(hrs.toFixed(3));
+      }
+    }
+  }, [customMinutes]);
+
+  useEffect(() => {
+    if (isCustomDurationExam) {
+      if (customMinutesExam === "") {
+        setDurationExam("");
+      } else {
+        const hrs = Number(customMinutesExam) / 60;
+        setDurationExam(hrs.toFixed(3));
+      }
+    }
+  }, [customMinutesExam]);
 
   return (
     <div className="text-blue-950  relative">
@@ -458,9 +547,16 @@ const ExamQuizSetupScreen = () => {
                   Mark/Question:{" "}
                   <span className="font-bold">
                     {examination?.exam?.quiz?.instruction
-                      ? examination?.exam?.quiz?.instruction?.mark
+                      ? examination?.exam?.quiz?.instruction.mark
                       : 0}
                   </span>
+                  <div>
+                    Time:{" "}
+                    {(
+                      examination?.exam?.quiz?.instruction?.duration * 60
+                    ).toFixed(2)}{" "}
+                    Minutes
+                  </div>
                 </div>
               </div>
               <div className="text-[12px] mt-2 font-bold">
@@ -484,7 +580,7 @@ const ExamQuizSetupScreen = () => {
                   }}
                 />
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-end justify-between">
                 <div className="flex gap-3">
                   <div
                     className={`mt-10 cursor-pointer flex gap-3 items-center ${
@@ -544,17 +640,124 @@ const ExamQuizSetupScreen = () => {
                   </Link>
                 </div>
 
-                {/* <div
-                  className="flex items-center gap-2  px-4 py-2 rounded-md cursor-pointer"
-                  onClick={() => {
-                    setToggleEdit(true);
-                  }}
-                >
-                  <FaRegEdit />
-                  <p className="uppercase text-[14px] text-red-500 font-medium">
-                    Make Edit
-                  </p>
-                </div> */}
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div
+                      className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
+                      onClick={() => {
+                        setToggleExam(true);
+                      }}
+                    >
+                      <FaRegEdit />
+                      <p className="uppercase text-[14px] text-red-500 font-medium">
+                        Edit Exam Details
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {toggleExam && (
+                  <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
+                    <div className="flex">
+                      <div className="flex justify-end w-full mb-5">
+                        <MdClose
+                          className="text-[20px] cursor-pointer"
+                          onClick={() => setToggleExam(false)}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-[14px] leading-1 border-b pb-5">
+                      Want to make some Edit on the Time to take the Test and
+                      the Duration
+                    </p>
+
+                    <div className="text-[12px] mt-8">
+                      <p>Set updated Exam marks</p>
+                      <input
+                        className="border w-full h-[45px] rounded-md outline-none px-2"
+                        value={markExam}
+                        onChange={(e: any) => setMarkExam(e.target.value)}
+                        placeholder="update the Mark"
+                        defaultValue={examination?.quiz?.instruction?.mark}
+                      />
+                    </div>
+                    <div className="flex flex-col mt-5">
+                      <label className="text-[12px]">
+                        Time/Duration(Hours)
+                      </label>
+                      <select
+                        className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
+                        name="hour"
+                        id="hour"
+                        // defaultValue={testQuestion[0]?.instruction?.duration}
+                        value={isCustomDurationExam ? "custom" : durationExam}
+                        defaultValue={examination?.quiz?.instruction?.duration}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                          const val = e.target.value;
+                          if (val === "custom") {
+                            setIsCustomDurationExam(true);
+                            // preserve existing custom minutes if any, otherwise use 30
+                            if (!customMinutesExam) setCustomMinutesExam("30");
+                          } else {
+                            setIsCustomDurationExam(false);
+                            setCustomMinutesExam("");
+                            setDurationExam(val);
+                          }
+                        }}
+                      >
+                        <option disabled selected>
+                          choose
+                        </option>
+
+                        <option value="0.084">5 Minutes</option>
+                        <option value="0.167">10 Minutes</option>
+                        <option value="0.333">20 Minutes</option>
+                        <option value="0.500">30 Minutes</option>
+                        <option value="0.667">40 Minutes</option>
+                        <option value="0.833">50 Minutes</option>
+                        <option value="1.000">60 Minutes</option>
+                        <option value="1.500">90 Minutes</option>
+                        <option value="custom">Custom minutes...</option>
+                      </select>
+                      {isCustomDurationExam && (
+                        <div className="flex flex-col ml-3 -mt-4">
+                          <label className="text-[12px] mb-[2px]">
+                            Custom Timer (minutes)
+                          </label>
+                          <input
+                            className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                            placeholder="Enter minutes (e.g. 7)"
+                            value={customMinutesExam}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              if (v === "" || /^\d+$/.test(v)) {
+                                setCustomMinutesExam(v);
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <Button
+                      name={"update"}
+                      className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
+                      onClick={() => {
+                        updateExaminationData(examination?.exam?._id, {
+                          mark: parseInt(String(markExam)) || 0,
+                          duration: durationExam,
+                        })
+                          .then((res) => {
+                            toast.success("Updated successfully");
+                            examMutate(`api/view-subject-exam/${subjectID}`);
+                          })
+                          .finally(() => {
+                            setToggleExam(false);
+                          });
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -797,7 +1000,7 @@ const ExamQuizSetupScreen = () => {
                   </span>
                 </div>
                 <div>
-                  Mark/Question:{" "}
+                  Mark/Question:
                   <span className="font-bold">
                     {midTest?.quiz?.instruction
                       ? midTest?.quiz?.instruction?.mark
@@ -814,7 +1017,7 @@ const ExamQuizSetupScreen = () => {
                   }}
                 />
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-end">
                 <div className="flex gap-3">
                   <div
                     className={`mt-10 cursor-pointer flex gap-3 items-center ${

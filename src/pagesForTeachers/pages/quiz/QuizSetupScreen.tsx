@@ -1,7 +1,12 @@
 // src/screens/QuizSetupScreen.js
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaTrashAlt, FaCheckDouble, FaSpinner } from "react-icons/fa";
+import {
+  FaTrashAlt,
+  FaCheckDouble,
+  FaSpinner,
+  FaRegEdit,
+} from "react-icons/fa";
 import {
   MdPlayCircle,
   MdVisibilityOff,
@@ -36,6 +41,7 @@ import {
   startMidTest,
   stopExamination,
   stopMidTest,
+  updateExaminationData,
   updateMidTestData,
 } from "../../api/teachersAPI";
 import { mutate } from "swr";
@@ -102,10 +108,100 @@ const QuizSetupScreen = () => {
     }
   };
 
-  const [duration, setDuration] = useState(
-    midTest?.quiz?.instruction?.duration
+  const [duration, setDuration] = useState<string | number | undefined>(
+    midTest?.quiz?.instruction?.duration ?? ""
   );
-  const [mark, setMark] = useState(midTest?.quiz?.instruction?.mark);
+  const [durationExam, setDurationExam] = useState<string | number | undefined>(
+    examination?.exam?.quiz?.instruction?.duration ?? ""
+  );
+
+  const [mark, setMark] = useState<string | number | undefined>(
+    midTest?.quiz?.instruction?.mark ?? ""
+  );
+
+  const [markExam, setMarkExam] = useState<string | number | undefined>(
+    examination?.exam?.quiz?.instruction?.mark ?? ""
+  );
+
+  // Custom duration states for midTest and Exam
+  const [isCustomDuration, setIsCustomDuration] = useState<boolean>(false);
+  const [customMinutes, setCustomMinutes] = useState<string>("");
+  const [isCustomDurationExam, setIsCustomDurationExam] =
+    useState<boolean>(false);
+  const [customMinutesExam, setCustomMinutesExam] = useState<string>("");
+
+  // Keep local component state in sync when remote data updates
+  useEffect(() => {
+    setDuration(midTest?.quiz?.instruction?.duration ?? "");
+    setMark(midTest?.quiz?.instruction?.mark ?? "");
+  }, [midTest]);
+
+  useEffect(() => {
+    setDurationExam(examination?.exam?.quiz?.instruction?.duration ?? "");
+    setMarkExam(examination?.exam?.quiz?.instruction?.mark ?? "");
+  }, [examination]);
+
+  const STANDARD_DURATIONS = [
+    "0.084",
+    "0.167",
+    "0.333",
+    "0.500",
+    "0.667",
+    "0.833",
+    "1.000",
+    "1.500",
+  ];
+
+  // detect if duration is a custom value (not in standard options)
+  useEffect(() => {
+    const cur = String(duration);
+    if (cur && !STANDARD_DURATIONS.includes(cur)) {
+      setIsCustomDuration(true);
+      const mins = Number(cur) * 60;
+      setCustomMinutes(Number.isFinite(mins) ? String(Math.round(mins)) : "");
+    } else {
+      setIsCustomDuration(false);
+      setCustomMinutes("");
+    }
+  }, [duration]);
+
+  useEffect(() => {
+    const cur = String(durationExam);
+    if (cur && !STANDARD_DURATIONS.includes(cur)) {
+      setIsCustomDurationExam(true);
+      const mins = Number(cur) * 60;
+      setCustomMinutesExam(
+        Number.isFinite(mins) ? String(Math.round(mins)) : ""
+      );
+    } else {
+      setIsCustomDurationExam(false);
+      setCustomMinutesExam("");
+    }
+  }, [durationExam]);
+
+  // When user types custom minutes, update the duration in hours (string with 3 decimals)
+  useEffect(() => {
+    if (isCustomDuration) {
+      if (customMinutes === "") {
+        setDuration("");
+      } else {
+        const hrs = Number(customMinutes) / 60;
+        setDuration(hrs.toFixed(3));
+      }
+    }
+  }, [customMinutes]);
+
+  useEffect(() => {
+    if (isCustomDurationExam) {
+      if (customMinutesExam === "") {
+        setDurationExam("");
+      } else {
+        const hrs = Number(customMinutesExam) / 60;
+        setDurationExam(hrs.toFixed(3));
+      }
+    }
+  }, [customMinutesExam]);
+
   const [toggle, setToggle] = useState(false);
   const [tExamRand, setTExamRand] = useState(false);
   const [tMidRand, setTMidRand] = useState(false);
@@ -119,6 +215,8 @@ const QuizSetupScreen = () => {
   const [isMidTestModalOpen, setMidTestModalOpen] = useState<Boolean>(false);
   const [isExamModalOpen, setExamModalOpen] = useState<Boolean>(false);
   const [midTestToDelete, setMidTestToDelete] = useState<string | null>(null);
+
+  console.log(examination?._id, "exam idddddd");
 
   return (
     <div className="text-blue-950  relative">
@@ -396,6 +494,13 @@ const QuizSetupScreen = () => {
                       ? examination?.exam?.quiz?.instruction.mark
                       : 0}
                   </span>
+                  <div>
+                    Time:{" "}
+                    {(
+                      examination?.exam?.quiz?.instruction?.duration * 60
+                    ).toFixed(2)}{" "}
+                    Minutes
+                  </div>
                 </div>
               </div>
 
@@ -408,7 +513,8 @@ const QuizSetupScreen = () => {
                   }}
                 />
               </div>
-              <div className="flex justify-between items-center">
+
+              <div className="flex justify-between items-end">
                 <div className="flex gap-3">
                   <div
                     className={`mt-10 cursor-pointer flex gap-3 items-center ${
@@ -460,7 +566,7 @@ const QuizSetupScreen = () => {
                     )}
                   </div>
                   <Link
-                    to={`/examination-preview-details/${subjectID}/${examination?._id}`}
+                    to={`/examination-preview-details/${subjectID}/${examination?.exam?._id}`}
                     className={`mt-10 cursor-pointer flex gap-3 items-center 
                    bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
                   >
@@ -473,11 +579,12 @@ const QuizSetupScreen = () => {
                     className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
                     onClick={() => {
                       setToggleExam(true);
+                      console.log("clicked: ", examination?.exam?._id);
                     }}
                   >
-                    <FaHandDots />
+                    <FaRegEdit />
                     <p className="uppercase text-[14px] text-red-500 font-medium">
-                      Make Edit
+                      Edit Exam Details
                     </p>
                   </div>
                 </div>
@@ -497,14 +604,14 @@ const QuizSetupScreen = () => {
                     Duration
                   </p>
 
-                  <div className="text-[12px] mt-10">
-                    <p>Set updated marks</p>
+                  <div className="text-[12px] mt-8">
+                    <p>Set updated Exam marks</p>
                     <input
                       className="border w-full h-[45px] rounded-md outline-none px-2"
-                      value={mark}
-                      onChange={(e: any) => setMark(e.target.value)}
+                      value={markExam}
+                      onChange={(e: any) => setMarkExam(e.target.value)}
                       placeholder="update the Mark"
-                      defaultValue={midTest?.quiz?.instruction?.mark}
+                      defaultValue={examination?.quiz?.instruction?.mark}
                     />
                   </div>
                   <div className="flex flex-col mt-5">
@@ -514,10 +621,19 @@ const QuizSetupScreen = () => {
                       name="hour"
                       id="hour"
                       // defaultValue={testQuestion[0]?.instruction?.duration}
-                      value={duration}
-                      defaultValue={midTest?.quiz?.instruction?.duration}
+                      value={isCustomDurationExam ? "custom" : durationExam}
+                      defaultValue={examination?.quiz?.instruction?.duration}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        setDuration(e.target.value);
+                        const val = e.target.value;
+                        if (val === "custom") {
+                          setIsCustomDurationExam(true);
+                          // preserve existing custom minutes if any, otherwise use 30
+                          if (!customMinutesExam) setCustomMinutesExam("30");
+                        } else {
+                          setIsCustomDurationExam(false);
+                          setCustomMinutesExam("");
+                          setDurationExam(val);
+                        }
                       }}
                     >
                       <option disabled selected>
@@ -532,22 +648,39 @@ const QuizSetupScreen = () => {
                       <option value="0.833">50 Minutes</option>
                       <option value="1.000">60 Minutes</option>
                       <option value="1.500">90 Minutes</option>
+                      <option value="custom">Custom minutes...</option>
                     </select>
+                    {isCustomDurationExam && (
+                      <div className="flex flex-col ml-3 -mt-4">
+                        <label className="text-[12px] mb-[2px]">
+                          Custom Timer (minutes)
+                        </label>
+                        <input
+                          className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                          placeholder="Enter minutes (e.g. 7)"
+                          value={customMinutesExam}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            if (v === "" || /^\d+$/.test(v)) {
+                              setCustomMinutesExam(v);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <Button
                     name={"update"}
                     className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
                     onClick={() => {
-                      updateMidTestData(midTest?._id, {
-                        mark: parseInt(mark),
-                        duration,
+                      updateExaminationData(examination?.exam?._id, {
+                        mark: parseInt(String(markExam)) || 0,
+                        duration: durationExam,
                       })
                         .then((res) => {
                           toast.success("Updated successfully");
-                          midTestMutate(
-                            `api/view-subject-mid-test/${subjectID}`
-                          );
+                          examMutate(`api/view-subject-exam/${subjectID}`);
                         })
                         .finally(() => {
                           setToggleExam(false);
@@ -795,10 +928,18 @@ const QuizSetupScreen = () => {
                       name="hour"
                       id="hour"
                       // defaultValue={testQuestion[0]?.instruction?.duration}
-                      value={duration}
+                      value={isCustomDuration ? "custom" : duration}
                       defaultValue={midTest?.quiz?.instruction?.duration}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        setDuration(e.target.value);
+                        const val = e.target.value;
+                        if (val === "custom") {
+                          setIsCustomDuration(true);
+                          if (!customMinutes) setCustomMinutes("30");
+                        } else {
+                          setIsCustomDuration(false);
+                          setCustomMinutes("");
+                          setDuration(val);
+                        }
                       }}
                     >
                       <option disabled selected>
@@ -813,7 +954,26 @@ const QuizSetupScreen = () => {
                       <option value="0.833">50 Minutes</option>
                       <option value="1.000">60 Minutes</option>
                       <option value="1.500">90 Minutes</option>
+                      <option value="custom">Custom minutes...</option>
                     </select>
+                    {isCustomDuration && (
+                      <div className="flex flex-col ml-3 mt-3">
+                        <label className="text-[12px] mb-[2px]">
+                          Custom Timer (minutes)
+                        </label>
+                        <input
+                          className="border w-[180px] text-[14px] h-[50px] rounded-md outline-none px-2 mt-2"
+                          placeholder="Enter minutes (e.g. 7)"
+                          value={customMinutes}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            if (v === "" || /^\d+$/.test(v)) {
+                              setCustomMinutes(v);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <Button
@@ -821,7 +981,7 @@ const QuizSetupScreen = () => {
                     className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
                     onClick={() => {
                       updateMidTestData(midTest?._id, {
-                        mark: parseInt(mark),
+                        mark: parseInt(String(mark)) || 0,
                         duration,
                       })
                         .then((res) => {

@@ -370,6 +370,26 @@ const ExaminationPreviewScreen = () => {
     }
   };
 
+  // Helper to generate page buttons, using ellipses when many pages
+  const getPageButtons = (total: number, current: number) => {
+    const maxButtons = 7; // including first and last (with ellipses)
+    if (total <= maxButtons) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const left = Math.max(2, current - 2);
+    const right = Math.min(total - 1, current + 2);
+    const pages: Array<number | string> = [1];
+
+    if (left > 2) pages.push("...");
+
+    for (let p = left; p <= right; p++) pages.push(p);
+
+    if (right < total - 1) pages.push("...");
+    pages.push(total);
+    return pages;
+  };
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
@@ -477,6 +497,7 @@ const ExaminationPreviewScreen = () => {
             })}
 
             {/* Pagination controls */}
+            <div className="mt-20" />
             <div className="flex items-center justify-between my-6">
               <div>
                 <button
@@ -496,8 +517,32 @@ const ExaminationPreviewScreen = () => {
                   Next
                 </button>
               </div>
-              <div className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
+              <div className="flex items-center gap-2">
+                {getPageButtons(totalPages, currentPage).map((p, i) =>
+                  typeof p === "string" ? (
+                    <span key={i} className="px-2 text-gray-400">
+                      {p}
+                    </span>
+                  ) : (
+                    <button
+                      key={i}
+                      onClick={() => goToPage(p as number)}
+                      aria-current={p === currentPage}
+                      className={`px-3 py-1 rounded ${
+                        p === currentPage
+                          ? "bg-blue-950 text-white"
+                          : "bg-gray-100 text-gray-700"
+                      } hover:bg-blue-100`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+              </div>
+              <div className="text-sm text-gray-600 flex items-center gap-3">
+                <div className="text-sm text-gray-600 ml-4">
+                  Page {currentPage} of {totalPages}
+                </div>
               </div>
             </div>
 
