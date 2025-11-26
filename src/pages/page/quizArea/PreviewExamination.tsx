@@ -68,17 +68,15 @@ const PreviewExamination: FC<any> = ({
             formData
           )
             .then((res: any) => {
-              console.log("res: ", res);
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
               } else {
-                console.log(res?.response?.data?.errors);
                 toast.error(
-                  `Errors In:\n ${
-                    res?.response?.data?.errors.map((el: string) => {
-                      return `- ${el}\n`;
-                    }) || "Failed to create"
+                  `Errors In:\n${
+                    res?.response?.data?.errors
+                      ?.map((el: string) => `- ${el} \n`.replace(/,/g, " "))
+                      .join(",", "") || "Failed to create"
                   }`
                 );
               }

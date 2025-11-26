@@ -72,7 +72,7 @@ const CreateExaminationScreen = () => {
 
       <div className="grid grid-cols-1 relative">
         <div className="order-first mb-10 border col-span-2 min-h-[200px] top-20 p-4 rounded-lg flex flex-col">
-          <div className="flex">
+          <div className="flex items-center gap-3">
             <label
               htmlFor="question"
               className="py-3 px-8 bg-neutral-950 text-[13px] uppercase font-semibold text-white rounded-sm cursor-pointer hover:bg-neutral-800 duration-300 transition-all"
@@ -85,6 +85,88 @@ const CreateExaminationScreen = () => {
               type="file"
               onChange={uploadQuestion}
             />
+
+            <label
+              htmlFor="upload_instruction_modal"
+              className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-950 text-white cursor-pointer"
+              aria-label="Upload instructions"
+            >
+              ?
+            </label>
+            {/* Modal: Upload Instructions */}
+            <input
+              type="checkbox"
+              id="upload_instruction_modal"
+              className="modal-toggle"
+            />
+            <div
+              className="modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="upload_instruction_modal_title"
+            >
+              <div className="modal-box rounded-md">
+                <h3
+                  id="upload_instruction_modal_title"
+                  className="font-bold text-lg"
+                >
+                  Please this is the format to follow when uploading questions
+                </h3>
+                <div className="py-4 text-sm text-gray-700">
+                  <p className="mb-2">
+                    Please upload a <strong>.docx</strong> file containing
+                    questions in a clear format. The parser supports typical
+                    multiple-choice formatting (numbered question blocks
+                    followed by options labeled A., B., C., etc.).
+                  </p>
+                  <p className="mb-2">
+                    Special scientific characters (Greek letters, μ, subscripts,
+                    superscripts, fractions, and basic math notation) are
+                    preserved using our DOCX to HTML conversion. If you include
+                    images, they will be embedded as data URIs.
+                  </p>
+                  <br />
+                  <br />
+                  <p className="text-xs text-gray-500">
+                    1. Which of the following best describes commercial farming.
+                    <br />
+                    <br />
+                    A. Production of plants and animal for family consumption.
+                    <br />
+                    B. Large scale agricultural production for sales. <br />
+                    C. Large scale agricultural production for family
+                    consumption. <br />
+                    D. Use of family labor for large scale agricultural
+                    production. <br />
+                    Answer: Large scale agricultural production for sales.
+                    <br />
+                    <br />
+                    2. In which year did the World War II end?
+                    <br />
+                    <br />
+                    A. 1945
+                    <br />
+                    B. 1949 <br />
+                    C. 1941 <br />
+                    D. 1942
+                    <br />
+                    Answer: 1945
+                    <br />
+                    <br />
+                  </p>
+                </div>
+                <div className="modal-action">
+                  <label
+                    htmlFor="upload_instruction_modal"
+                    className="btn px-8 bg-blue-950 text-white hover:bg-blue-900"
+                  >
+                    OK
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* end */}
           </div>
 
           <div className="mt-10" />
@@ -199,7 +281,7 @@ const CreateExaminationScreen = () => {
                 </div>
                 <div className="-mt-1 ml-6">
                   <label className="text-[12px] ">
-                    Enter Mark Per Question
+                    Enter Mark Per Question 44
                   </label>
                   <Input
                     placeholder="Enter Marks"

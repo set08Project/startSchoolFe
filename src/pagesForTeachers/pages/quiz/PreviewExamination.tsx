@@ -8,6 +8,7 @@ import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import toast from "react-hot-toast";
 
 const PreviewExamination: FC<any> = ({
   instruction,
@@ -63,6 +64,14 @@ const PreviewExamination: FC<any> = ({
               if (res.status === 201) {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
+              } else {
+                toast.error(
+                  `Errors In:\n${
+                    res?.response?.data?.errors
+                      ?.map((el: string) => `- ${el} \n`.replace(/,/g, " "))
+                      .join(",", "") || "Failed to create"
+                  }`
+                );
               }
             })
             .finally(() => {
