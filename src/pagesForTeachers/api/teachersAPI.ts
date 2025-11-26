@@ -573,6 +573,18 @@ export const updateMidTestData = async (midTestID: string, data: {}) => {
   }
 };
 
+export const updateExaminationData = async (midTestID: string, data: {}) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-subject-mid-test/${midTestID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const deleteExamination = async (subjectID: string, examID: string) => {
   try {
     // const URL="http://localhost:2244/api"

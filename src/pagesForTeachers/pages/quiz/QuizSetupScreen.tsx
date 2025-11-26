@@ -62,6 +62,7 @@ const QuizSetupScreen = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [loadingExam, setLoadingExam] = useState<Boolean>(false);
   const [loadingTest, setLoadingTest] = useState<Boolean>(false);
+  const [toggleExam, setToggleExam] = useState<Boolean>(false);
 
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
 
@@ -407,63 +408,154 @@ const QuizSetupScreen = () => {
                   }}
                 />
               </div>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-3">
+                  <div
+                    className={`mt-10 cursor-pointer flex gap-3 items-center ${
+                      examination?.exam?.startExam
+                        ? "bg-blue-950"
+                        : "bg-red-500"
+                    } text-white px-6 py-3 rounded-md`}
+                    onClick={() => {
+                      setLoadingExam(true);
 
-              <div className="flex gap-3">
-                <div
-                  className={`mt-10 cursor-pointer flex gap-3 items-center ${
-                    examination?.exam?.startExam ? "bg-blue-950" : "bg-red-500"
-                  } text-white px-6 py-3 rounded-md`}
-                  onClick={() => {
-                    setLoadingExam(true);
-
-                    examination?.exam?.startExam
-                      ? stopExamination(examination?.exam?._id)
-                          .then((res) => {
-                            console.log("res: ", res);
-                            examMutate(`api/view-subject-exam/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingExam(false);
-                          })
-                      : startExamination(examination?.exam?._id)
-                          .then((res) => {
-                            console.log("res: ", res);
-                            examMutate(`api/view-subject-exam/${subjectID}`);
-                          })
-                          .finally(() => {
-                            setLoadingExam(false);
-                          });
-                  }}
-                >
-                  {loadingExam ? (
-                    "Laoding"
-                  ) : (
-                    <span>
-                      {examination?.startExam
-                        ? "Exam can Start "
-                        : "Change Visibility"}
-                    </span>
-                  )}
-                  {examination?.startExam ? (
-                    <MdVisibility
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  ) : (
-                    <MdVisibilityOff
-                      size={20}
-                      className=" text-white transition-all duration-300"
-                    />
-                  )}
-                </div>
-                <Link
-                  to={`/examination-preview-details/${subjectID}/${examination?._id}`}
-                  className={`mt-10 cursor-pointer flex gap-3 items-center 
+                      examination?.exam?.startExam
+                        ? stopExamination(examination?.exam?._id)
+                            .then((res) => {
+                              console.log("res: ", res);
+                              examMutate(`api/view-subject-exam/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingExam(false);
+                            })
+                        : startExamination(examination?.exam?._id)
+                            .then((res) => {
+                              console.log("res: ", res);
+                              examMutate(`api/view-subject-exam/${subjectID}`);
+                            })
+                            .finally(() => {
+                              setLoadingExam(false);
+                            });
+                    }}
+                  >
+                    {loadingExam ? (
+                      "Laoding"
+                    ) : (
+                      <span>
+                        {examination?.startExam
+                          ? "Exam can Start "
+                          : "Change Visibility"}
+                      </span>
+                    )}
+                    {examination?.startExam ? (
+                      <MdVisibility
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    ) : (
+                      <MdVisibilityOff
+                        size={20}
+                        className=" text-white transition-all duration-300"
+                      />
+                    )}
+                  </div>
+                  <Link
+                    to={`/examination-preview-details/${subjectID}/${examination?._id}`}
+                    className={`mt-10 cursor-pointer flex gap-3 items-center 
                    bg-orange-500 text-white px-6 py-3 rounded-md italic font-semibold`}
-                >
-                  {<span>Preview Questions</span>}
-                </Link>
+                  >
+                    {<span>Preview Questions</span>}
+                  </Link>
+                </div>
+
+                <div>
+                  <div
+                    className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
+                    onClick={() => {
+                      setToggleExam(true);
+                    }}
+                  >
+                    <FaHandDots />
+                    <p className="uppercase text-[14px] text-red-500 font-medium">
+                      Make Edit
+                    </p>
+                  </div>
+                </div>
               </div>
+              {toggleExam && (
+                <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
+                  <div className="flex">
+                    <div className="flex justify-end w-full mb-5">
+                      <MdClose
+                        className="text-[20px] cursor-pointer"
+                        onClick={() => setToggleExam(false)}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[14px] leading-1 border-b pb-5">
+                    Want to make some Edit on the Time to take the Test and the
+                    Duration
+                  </p>
+
+                  <div className="text-[12px] mt-10">
+                    <p>Set updated marks</p>
+                    <input
+                      className="border w-full h-[45px] rounded-md outline-none px-2"
+                      value={mark}
+                      onChange={(e: any) => setMark(e.target.value)}
+                      placeholder="update the Mark"
+                      defaultValue={midTest?.quiz?.instruction?.mark}
+                    />
+                  </div>
+                  <div className="flex flex-col mt-5">
+                    <label className="text-[12px]">Time/Duration(Hours)</label>
+                    <select
+                      className="border border-blue-950 w-full h-[50px] rounded-md  mt-2 px-2 relative transition-all duration-300 mb-6 select select-bordered max-w-xs "
+                      name="hour"
+                      id="hour"
+                      // defaultValue={testQuestion[0]?.instruction?.duration}
+                      value={duration}
+                      defaultValue={midTest?.quiz?.instruction?.duration}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setDuration(e.target.value);
+                      }}
+                    >
+                      <option disabled selected>
+                        choose
+                      </option>
+
+                      <option value="0.084">5 Minutes</option>
+                      <option value="0.167">10 Minutes</option>
+                      <option value="0.333">20 Minutes</option>
+                      <option value="0.500">30 Minutes</option>
+                      <option value="0.667">40 Minutes</option>
+                      <option value="0.833">50 Minutes</option>
+                      <option value="1.000">60 Minutes</option>
+                      <option value="1.500">90 Minutes</option>
+                    </select>
+                  </div>
+
+                  <Button
+                    name={"update"}
+                    className="bg-blue-950 transition-all duration-300 hover:bg-blue-900 cursor-pointer uppercase font-medium pr-7"
+                    onClick={() => {
+                      updateMidTestData(midTest?._id, {
+                        mark: parseInt(mark),
+                        duration,
+                      })
+                        .then((res) => {
+                          toast.success("Updated successfully");
+                          midTestMutate(
+                            `api/view-subject-mid-test/${subjectID}`
+                          );
+                        })
+                        .finally(() => {
+                          setToggleExam(false);
+                        });
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -657,6 +749,7 @@ const QuizSetupScreen = () => {
                     {<span>Preview Questions</span>}
                   </Link>
                 </div>
+
                 <div
                   className="flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-md cursor-pointer"
                   onClick={() => {
@@ -669,6 +762,7 @@ const QuizSetupScreen = () => {
                   </p>
                 </div>
               </div>
+
               {toggle && (
                 <div className=" absolute right-0 top-0 h-full w-[300px] border bg-white p-4">
                   <div className="flex">

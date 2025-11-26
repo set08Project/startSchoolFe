@@ -410,7 +410,7 @@ export const studentRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/examination/details2/:examID",
+        path: "/examination/details/:examID",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ExaminationTestScreen />
