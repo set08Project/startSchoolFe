@@ -448,7 +448,7 @@ const ExaminationTestScreen = () => {
     (el: any) => el?.quizID === examID && el?.quizDone
   );
 
-  const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.0333");
+  const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.500");
   let timerInSeconds = timer * 3600;
 
   const handleSubmit = () => {
@@ -581,12 +581,9 @@ const ExaminationTestScreen = () => {
     localStorage.setItem("exam", JSON.stringify({ score, state }));
 
     const question = JSON.parse(localStorage.getItem("examQuestions")!);
-    console.clear();
-    console.log(quizData);
 
     if (question === null) {
       const sourceQuestions = myQuizData?.question ?? [];
-      console.log("Source Questions:", sourceQuestions);
 
       const questionsToStore = !quizData?.randomize
         ? lodash.shuffle([...sourceQuestions])

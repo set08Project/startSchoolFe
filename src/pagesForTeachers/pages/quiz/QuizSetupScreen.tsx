@@ -119,6 +119,10 @@ const QuizSetupScreen = () => {
     midTest?.quiz?.instruction?.mark ?? ""
   );
 
+  const [dept, setDept] = useState<string | number | undefined>(
+    examination?.exam?.quiz?.instruction?.dept ?? ""
+  );
+
   const [markExam, setMarkExam] = useState<string | number | undefined>(
     examination?.exam?.quiz?.instruction?.mark ?? ""
   );
@@ -501,6 +505,13 @@ const QuizSetupScreen = () => {
                     ).toFixed(2)}{" "}
                     Minutes
                   </div>
+                  <div>
+                    Dept:
+                    <strong className="font-semibold">
+                      {" "}
+                      {examination?.exam?.quiz?.instruction?.dept}
+                    </strong>
+                  </div>
                 </div>
               </div>
 
@@ -599,12 +610,74 @@ const QuizSetupScreen = () => {
                       />
                     </div>
                   </div>
-                  <p className="text-[14px] leading-1 border-b pb-5">
-                    Want to make some Edit on the Time to take the Test and the
-                    Duration
+                  <p className="text-[16px] leading-1 border-b pb-5">
+                    Want to make some Edit
                   </p>
 
-                  <div className="text-[12px] mt-8">
+                  <div className="flex items-center gap-2">
+                    <p
+                      className={`text-[12px] mt-6 
+                          ${
+                            dept === "General"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+                      onClick={() => {
+                        setDept("General");
+                      }}
+                    >
+                      Gen.
+                    </p>
+                    <p
+                      className={`text-[12px] mt-6 
+                          ${
+                            dept === "Art"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+                      onClick={() => {
+                        setDept("Art");
+                      }}
+                    >
+                      Art
+                    </p>
+                    <p
+                      className={`text-[12px] mt-6 
+                          ${
+                            dept === "Commercial"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+                      onClick={() => {
+                        setDept("Commercial");
+                      }}
+                    >
+                      Com.
+                    </p>
+                    <p
+                      className={`text-[12px] mt-6 
+                          ${
+                            dept === "Science"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+                      onClick={() => {
+                        setDept("Science");
+                      }}
+                    >
+                      Sci.
+                    </p>
+                  </div>
+
+                  <div className="text-[12px] mt-6">
                     <p>Set updated Exam marks</p>
                     <input
                       className="border w-full h-[45px] rounded-md outline-none px-2"

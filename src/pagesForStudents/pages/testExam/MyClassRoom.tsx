@@ -23,16 +23,35 @@ import { useStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
 interface iProps {
   props?: string;
   onTestCountChange?: (count: number) => void;
+  dept?: string;
 }
 
 // New component to check individual subject test status
-const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
+const SubjectCard: FC<{ subject: any; dept?: string }> = ({
+  subject,
+  dept,
+}) => {
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
 
   // Only render if at least one test is active
-  const shouldDisplay = midTest?.startMidTest || examination?.startExam;
+  const examDept = String(examination?.quiz?.instruction?.dept || "")
+    .toLowerCase()
+    .trim();
+  const midDept = String(midTest?.quiz?.instruction?.dept || "")
+    .toLowerCase()
+    .trim();
+  const normalizedFilter = String(dept || "")
+    .toLowerCase()
+    .trim();
+  const matchesDept =
+    !normalizedFilter ||
+    examDept === normalizedFilter ||
+    midDept === normalizedFilter;
+
+  const shouldDisplay =
+    (midTest?.startMidTest || examination?.startExam) && matchesDept;
 
   if (!shouldDisplay) return null;
   const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -127,7 +146,7 @@ const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
   );
 };
 
-const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
+const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
   const { subjectData } = useClassSubject(props!);
   const [visibleSubjectCount, setVisibleSubjectCount] = useState(0);
 
@@ -147,7 +166,11 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   }> = ({ subject, onTestCountChange }) => {
     const { examination } = useExamination(subject?._id);
     const { midTest } = useMidTest(subject?._id);
-    const shouldDisplay = midTest?.startMidTest || examination?.startExam;
+    const examDept = examination?.quiz?.instruction?.dept;
+    const midDept = midTest?.quiz?.instruction?.dept;
+    const matchesDept = !dept || examDept === dept || midDept === dept;
+    const shouldDisplay =
+      (midTest?.startMidTest || examination?.startExam) && matchesDept;
 
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -185,6 +208,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
           midTest?.startMidTest && !hasCompletedMidTest ? 1 : 0;
         const examRemaining =
           examination?.startExam && !hasCompletedExam ? 1 : 0;
+
         const testCount = midRemaining + examRemaining;
 
         onTestCountChange(testCount);
@@ -208,9 +232,12 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
       examination?.startExam,
       hasCompletedMidTest,
       hasCompletedExam,
+      dept,
+      examination?.quiz?.instruction?.dept,
+      midTest?.quiz?.instruction?.dept,
     ]);
 
-    return <SubjectCard subject={subject} />;
+    return <SubjectCard subject={subject} dept={dept} />;
   };
 
   useEffect(() => {
@@ -261,6 +288,8 @@ const MyClassRoomTestExamScreen = () => {
   const [totalAvailableTests, setTotalAvailableTests] = useState(0);
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
+  const [dept, setDept] = useState<string>("");
+
   useEffect(() => {
     readClassInfo(studentInfo?.classAssigned).then((res: any) => {
       setClassInfo(res?.data);
@@ -294,11 +323,75 @@ const MyClassRoomTestExamScreen = () => {
 
       <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4">
         <p>Class Subject for {oneClass?.className} for Test and Examination</p>
-        <p className="text-[13px] font-bold mb-6">
+        <p className="text-[13px] font-bold mb-">
           Below are all the subject this CLASS That are now Available!
         </p>
 
+        <div className="flex items-center gap-2 mb-5">
+          <p
+            className={`text-[12px] mt-5 
+                          ${
+                            dept === ""
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+            onClick={() => {
+              setDept("");
+            }}
+          >
+            Show All
+          </p>
+          <p
+            className={`text-[12px] mt-5 
+                          ${
+                            dept === "Art"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+            onClick={() => {
+              setDept("Art");
+            }}
+          >
+            Art
+          </p>
+          <p
+            className={`text-[12px] mt-5 
+                          ${
+                            dept === "Commercial"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+            onClick={() => {
+              setDept("Commercial");
+            }}
+          >
+            Commercial
+          </p>
+          <p
+            className={`text-[12px] mt-5 
+                          ${
+                            dept === "Science"
+                              ? "bg-blue-950 text-white"
+                              : "bg-gray-200 text-black"
+                          }
+                          rounded-md px-4 py-1
+                        cursor-pointer`}
+            onClick={() => {
+              setDept("Science");
+            }}
+          >
+            Science
+          </p>
+        </div>
+
         <ClassSubjectScreen
+          dept={dept}
           props={oneClass?._id}
           onTestCountChange={(count) => {
             setTotalAvailableTests((prev) => prev + count);

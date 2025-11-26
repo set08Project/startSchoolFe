@@ -134,7 +134,21 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   }> = ({ subject, onTestCountChange }) => {
     const { examination } = useExamination(subject?._id);
     const { midTest } = useMidTest(subject?._id);
-    const shouldDisplay = midTest?.startMidTest || examination?.startExam;
+    const examDept = String(examination?.exam?.quiz?.instruction?.dept || "")
+      .toLowerCase()
+      .trim();
+    const midDept = String(midTest?.quiz?.instruction?.dept || "")
+      .toLowerCase()
+      .trim();
+    const normalizedFilter = String(dept || "")
+      .toLowerCase()
+      .trim();
+    const matchesDept =
+      !normalizedFilter ||
+      examDept === normalizedFilter ||
+      midDept === normalizedFilter;
+    const shouldDisplay =
+      (midTest?.startMidTest || examination?.startExam) && matchesDept;
 
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -165,9 +179,12 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
       midTest?.startMidTest,
       examination?.startExam,
       hasCompletedTest,
+      dept,
+      examination?.exam?.quiz?.instruction?.dept,
+      midTest?.quiz?.instruction?.dept,
     ]);
 
-    return <SubjectCard subject={subject} />;
+    return <SubjectCard subject={subject} dept={dept} />;
   };
 
   useEffect(() => {
