@@ -281,7 +281,7 @@ const CreateExaminationScreen = () => {
                 </div>
                 <div className="-mt-1 ml-6">
                   <label className="text-[12px] ">
-                    Enter Mark Per Question 44
+                    Enter Mark Per Question
                   </label>
                   <Input
                     placeholder="Enter Marks"
