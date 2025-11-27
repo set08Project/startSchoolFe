@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
@@ -614,7 +614,17 @@ const ExaminationTestScreen = () => {
   // clearing of countdown is handled when the exam is submitted or when time runs out
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
+  // initialize answers from local storage (if present) so we don't overwrite on mount
+  const initialAnswersFromStorage = (() => {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(`examAnswers_${examID}_${storageId}`) || "null"
+      );
+      if (saved && saved.answers) return saved.answers;
+    } catch (e) {}
+    return {};
+  })();
+  const [answers, setAnswers] = useState(initialAnswersFromStorage);
   const [submitted, setSubmitted] = useState(false);
   const [_score, setScore] = useState(0);
 
@@ -637,14 +647,37 @@ const ExaminationTestScreen = () => {
         if (typeof saved.currentQuestion === "number")
           setCurrentQuestion(saved.currentQuestion);
       }
+      // if the user was previously a guest and now we have a studentId, migrate stored guest answers to student key
+      try {
+        if (studentInfo?._id) {
+          const guestKey = `examAnswers_${examID}_${guestSessionId}`;
+          const studentKey = `examAnswers_${examID}_${studentInfo?._id}`;
+          const guestSaved = JSON.parse(
+            localStorage.getItem(guestKey) || "null"
+          );
+          const studentSaved = JSON.parse(
+            localStorage.getItem(studentKey) || "null"
+          );
+          if (guestSaved && !studentSaved) {
+            localStorage.setItem(studentKey, JSON.stringify(guestSaved));
+            // optionally remove guest key: localStorage.removeItem(guestKey);
+          }
+        }
+      } catch (e) {}
     } catch (e) {
       // ignore
     }
   }, [storageKeyAnswers, readQuestion]);
 
   // Persist answers and state to localStorage whenever they change
+  const didMountRef = useRef(false);
   useEffect(() => {
     try {
+      // avoid overwriting previously saved answers on mount
+      if (!didMountRef.current) {
+        didMountRef.current = true;
+        return;
+      }
       localStorage.setItem(
         storageKeyAnswers,
         JSON.stringify({ answers, state, currentQuestion })
