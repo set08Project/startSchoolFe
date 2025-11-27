@@ -12,6 +12,39 @@ import axios, { AxiosResponse } from "axios";
 export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
 const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
+export const removeAllPerformance = async (
+  performanceID: string
+): Promise<any> => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .delete(`${URL}/delete-all-performances/${performanceID}`)
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const removeSelectedPerformance = async (
+  quizID: string,
+  studentIDs: string[]
+): Promise<any> => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .delete(`${URL}/delete-selected-students/${quizID}`, {
+        data: { studentIDs },
+      })
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const removePerformance = async (
   performanceID: string
 ): Promise<any> => {

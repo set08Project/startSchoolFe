@@ -451,102 +451,93 @@ const ExaminationTestScreen = () => {
   const timer = parseFloat(quizData?.quiz?.instruction?.duration || "0.500");
   let timerInSeconds = timer * 3600;
 
-  const handleSubmit = () => {
-    // guard against double submissions
+  const handleSubmit = async () => {
     if (isSubmitted) return;
     setIsSubmitted(true);
     setLoading(true);
 
-    // Normalize correct answers from the currently loaded/shuffled questions (fallback to original quiz questions)
-    const correctAnswers = (readQuestion || myQuizData?.question || []).map(
-      (q: any) =>
-        typeof q?.answer === "string"
-          ? q.answer.trim()
-          : q?.answer?.toString?.() || ""
-    );
+    try {
+      const correctAnswers = (readQuestion || myQuizData?.question || []).map(
+        (q: any) =>
+          typeof q?.answer === "string"
+            ? q.answer.trim()
+            : q?.answer?.toString?.() || ""
+      );
 
-    // Initialize score inside handleSubmit
-    let score = 0;
-    // Use readQuestion for both display and scoring
-    readQuestion?.forEach((question: any, index: number) => {
-      const correctAnswer = question.answer?.trim() || "";
-      const studentAnswer = state[index]?.trim() || "";
-      if (correctAnswer === studentAnswer) {
-        score++;
-      }
-    });
-
-    const totalForCalc = correctAnswers.length || 1;
-    const percentage = Math.ceil((score / totalForCalc) * 100);
-    let remark = getRemark(percentage);
-    let grade = getGrade(percentage);
-
-    const markPerQuest = quizData?.quiz?.instruction?.mark;
-    const getQuizData = quizData?.quiz;
-
-    const totalquest = getQuizData?.question?.length;
-
-    timerInSeconds = 0;
-
-    performanceExamination(studentInfo?._id, examID!, courseID, {
-      studentScore: score,
-      studentGrade: grade,
-      remark,
-      totalQuestions: totalquest,
-      markPerQuestion: markPerQuest,
-      status: quizData.status,
-    })
-      .then((res) => {
-        if (res.status === 201) {
-          toast.success(
-            `${
-              quizData?.status?.charAt(0).toUpperCase() +
-              quizData?.status.slice(1)
-            } submitted successfully`
-          );
-          // navigate(`/quiz-result/${examID}`, {
-          navigate(`/confirm-quiz-take/${examID}`, {
-            state: {
-              correctAnswers,
-              studentAnswers: state,
-              score,
-              total: correctAnswers.length,
-            },
-          });
-        } else {
-          toast.error("Something went wrong");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-        try {
-          localStorage.removeItem(countdownKey);
-          // remove saved answers/state upon submission
-          const key = `examAnswers_${examID}_${studentInfo?._id || "guest"}`;
-          localStorage.removeItem(key);
-        } catch (e) {}
+      let score = 0;
+      readQuestion?.forEach((question: any, index: number) => {
+        const correctAnswer = question.answer?.trim() || "";
+        const studentAnswer = state[index]?.trim() || "";
+        if (correctAnswer === studentAnswer) score++;
       });
-  };
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
-        event.preventDefault();
-        toast.error(
-          `This action can't be done, while ${
+      const totalForCalc = correctAnswers.length || 1;
+      const percentage = Math.ceil((score / totalForCalc) * 100);
+      const remark = getRemark(percentage);
+      const grade = getGrade(percentage);
+      const markPerQuest = quizData?.quiz?.instruction?.mark;
+      const totalquest = quizData?.quiz?.question?.length;
+
+      timerInSeconds = 0;
+
+      const res = await performanceExamination(
+        studentInfo?._id,
+        examID!,
+        courseID,
+        {
+          studentScore: score,
+          studentGrade: grade,
+          remark,
+          totalQuestions: totalquest,
+          markPerQuestion: markPerQuest,
+          status: quizData.status,
+        }
+      );
+
+      if (res?.status === 201) {
+        toast.success(
+          `${
             quizData?.status?.charAt(0).toUpperCase() +
             quizData?.status.slice(1)
-          } is ongoing!`
+          } submitted successfully`
         );
+        navigate(`/confirm-quiz-take/${examID}`, {
+          state: {
+            correctAnswers,
+            studentAnswers: state,
+            score,
+            total: correctAnswers.length,
+          },
+        });
+      } else {
+        toast.error("Something went wrong");
       }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+    } catch (e) {
+      console.error(e);
+      toast.error("Something went wrong, try again");
+    } finally {
+      setLoading(false);
+      try {
+        localStorage.removeItem(countdownKey);
+        const answersKeyStudent = `examAnswers_${examID}_${studentInfo?._id}`;
+        const answersKeyGuest = `examAnswers_${examID}_${guestSessionId}`;
+        localStorage.removeItem(answersKeyStudent);
+        localStorage.removeItem(answersKeyGuest);
+        const questionsKeyStudent = examQuestionsKey(
+          studentInfo?._id || guestSessionId
+        );
+        const questionsKeyGuest = examQuestionsKey(guestSessionId);
+        localStorage.removeItem(questionsKeyStudent);
+        localStorage.removeItem(questionsKeyGuest);
+        const startedKeyStudent = examStartedKey(
+          studentInfo?._id || guestSessionId
+        );
+        const startedKeyGuest = examStartedKey(guestSessionId);
+        localStorage.removeItem(startedKeyStudent);
+        localStorage.removeItem(startedKeyGuest);
+      } catch (e) {}
+    }
+  };
 
   // Auto-submit when time is up
   useEffect(() => {
@@ -562,70 +553,65 @@ const ExaminationTestScreen = () => {
   // Get shuffled questions from localStorage
   // const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
 
-  const [readQuestion, setReadQuestion] = useState(
-    JSON.parse(localStorage.getItem("examQuestions")!)
-  );
+  // Create a stable guest session id so guest keys don't collide between different sessions
+  const [guestSessionId] = useState(() => {
+    const key = `examGuestSession_${examID}`;
+    try {
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = `${Date.now().toString(36)}_${Math.random()
+          .toString(36)
+          .slice(2, 10)}`;
+        localStorage.setItem(key, id);
+      }
+      return id;
+    } catch (e) {
+      return `guest_${Date.now()}`;
+    }
+  });
+  const storageId = studentInfo?._id || guestSessionId;
+  const examQuestionsKey = (id: string) => `examQuestions_${examID}_${id}`;
+  const examStartedKey = (id: string) => `examStarted_${examID}_${id}`;
+
+  const [readQuestion, setReadQuestion] = useState(() => {
+    try {
+      const stored = localStorage.getItem(examQuestionsKey(storageId));
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    // fallback to original questions until start pressed
+    return myQuizData?.question ?? [];
+  });
   let score = 0;
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
-        event.preventDefault();
-        toast.error(
-          `This action can't be done, while ${
-            quizData?.status?.charAt(0).toUpperCase() +
-            quizData?.status.slice(1)
-          } is ongoing!`
-        );
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    localStorage.setItem("exam", JSON.stringify({ score, state }));
-
-    const question = JSON.parse(localStorage.getItem("examQuestions")!);
-
-    if (question === null) {
-      const sourceQuestions = myQuizData?.question ?? [];
-
-      const questionsToStore = !quizData?.randomize
-        ? lodash.shuffle([...sourceQuestions])
-        : sourceQuestions;
-      localStorage.setItem("examQuestions", JSON.stringify(questionsToStore));
-      // localStorage.setItem(
-      //   "examQuestions",
-      //   JSON.stringify(lodash.shuffle(myQuizData?.question))
-      // );
-      setReadQuestion(JSON.parse(localStorage.getItem("examQuestions")!));
-    } else if (question?.length === 0) {
-      localStorage.setItem(
-        "examQuestions",
-        JSON.stringify(lodash.shuffle(myQuizData?.question))
-      );
-      setReadQuestion(JSON.parse(localStorage.getItem("examQuestions")!));
-    }
-
-    if (timeUp && !isSubmitted) {
-      // small delay to allow UI update and any pending state flush
-      const autoSubmit = setTimeout(() => {
-        handleSubmit();
-      }, 1000);
-      return () => clearTimeout(autoSubmit);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [state, readQuestion, myQuizData, timeUp, quizData?.randomize]);
-
-  useEffect(() => {
-    // do not clear countdown here so reloads won't reset the timer
-    // clearing of countdown is handled when the exam is submitted or when time runs out
+    // This effect rehydrates readQuestion and start state when the
+    // quiz data or user changes. Avoid running it on `state` or
+    // `readQuestion` changes to prevent accidental resets.
     try {
-      localStorage.removeItem("exam");
-      localStorage.removeItem("examQuestions");
+      const startedVal = localStorage.getItem(
+        examStartedKey(studentInfo?._id || guestSessionId)
+      );
+      const started = startedVal === "true";
+      if (started) {
+        const saved = localStorage.getItem(examQuestionsKey(storageId));
+        if (saved) setReadQuestion(JSON.parse(saved));
+        // rehydrate current question from the answers storage
+        try {
+          const savedAns = JSON.parse(
+            localStorage.getItem(storageKeyAnswers) || "null"
+          );
+          if (savedAns && typeof savedAns.currentQuestion === "number") {
+            setCurrentQuestion(savedAns.currentQuestion);
+          }
+        } catch (e) {}
+        setStart(true);
+        setActivate(true);
+      }
     } catch (e) {}
-  }, []);
+  }, [myQuizData, quizData?.randomize, storageId]);
+
+  // do not clear countdown or examQuestions here so reloads won't reset the timer
+  // clearing of countdown is handled when the exam is submitted or when time runs out
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -633,16 +619,11 @@ const ExaminationTestScreen = () => {
   const [_score, setScore] = useState(0);
 
   const handleAnswerSelect = (optionIndex) => {
-    setAnswers({
-      ...answers,
-      [currentQuestion]: optionIndex,
-    });
+    setAnswers((prev) => ({ ...prev, [currentQuestion]: optionIndex }));
   };
 
   // Storage key for saving answers + state per student and exam
-  const storageKeyAnswers = `examAnswers_${examID}_${
-    studentInfo?._id || "guest"
-  }`;
+  const storageKeyAnswers = `examAnswers_${examID}_${storageId}`;
 
   // Load saved answers/state from localStorage when component mounts or readQuestion updates
   useEffect(() => {
@@ -653,6 +634,8 @@ const ExaminationTestScreen = () => {
       if (saved) {
         if (saved.answers) setAnswers(saved.answers);
         if (saved.state) setState(saved.state);
+        if (typeof saved.currentQuestion === "number")
+          setCurrentQuestion(saved.currentQuestion);
       }
     } catch (e) {
       // ignore
@@ -664,21 +647,89 @@ const ExaminationTestScreen = () => {
     try {
       localStorage.setItem(
         storageKeyAnswers,
-        JSON.stringify({ answers, state })
+        JSON.stringify({ answers, state, currentQuestion })
       );
     } catch (e) {}
-  }, [answers, state, storageKeyAnswers]);
+  }, [answers, state, storageKeyAnswers, currentQuestion]);
+
+  // Persist readQuestion order and started flag when start button is pressed
+  const startExam = () => {
+    try {
+      const key = examQuestionsKey(storageId);
+      const existing = localStorage.getItem(key);
+      const startedKeyVal = examStartedKey(storageId);
+      const startedFlag = localStorage.getItem(startedKeyVal);
+
+      // Determine whether we should resume an existing attempt (started + answers present)
+      const savedAnswers = localStorage.getItem(storageKeyAnswers);
+      const resumeExistingAttempt = startedFlag === "true" && !!savedAnswers;
+      // If starting a new attempt (not resuming), clear any old answers to avoid accidental carry-over
+      if (!resumeExistingAttempt) {
+        try {
+          localStorage.removeItem(storageKeyAnswers);
+          setAnswers({});
+          setState({});
+          setCurrentQuestion(0);
+        } catch (e) {}
+      }
+      // If we are resuming an existing attempt, rehydrate; otherwise create a new randomized order
+      if (!resumeExistingAttempt) {
+        const sourceQuestions = myQuizData?.question ?? [];
+        // If `randomize` === true, do a seeded shuffle to ensure per-user uniqueness
+        // We derive a deterministic seed from the examID and studentID (or guest session)
+        const seedSource = `${examID}_${storageId}`;
+        const seed = hashStringToNumber(seedSource);
+        // Force shuffle on Start unless you want to respect the teacher flag.
+        // If you want teachers to control randomize, set this to false.
+        const forceShuffleOnStart = true;
+        const shouldShuffle =
+          forceShuffleOnStart || (quizData?.randomize ?? true);
+        const questionsToStore = (
+          shouldShuffle
+            ? seededShuffle([...sourceQuestions], seed)
+            : sourceQuestions
+        ).map((q: any) => ({
+          ...q,
+          question: stripLeadingNumberFromText(q?.question),
+          options: q?.options
+            ? q.options.map(stripLeadingOptionLetter)
+            : q?.options,
+        }));
+        // store under student key if available, otherwise guest key
+        localStorage.setItem(key, JSON.stringify(questionsToStore));
+        setReadQuestion(questionsToStore);
+      } else {
+        try {
+          setReadQuestion(JSON.parse(existing));
+        } catch (e) {}
+      }
+      // If there's a saved answers payload, restore currentQuestion
+      try {
+        const savedAns = JSON.parse(
+          localStorage.getItem(storageKeyAnswers) || "null"
+        );
+        if (savedAns && typeof savedAns.currentQuestion === "number") {
+          setCurrentQuestion(savedAns.currentQuestion);
+        }
+      } catch (e) {}
+      // mark exam as started so reloads will rehydrate the same state
+      localStorage.setItem(startedKeyVal, "true");
+    } catch (e) {}
+    setStart(true);
+    setActivate(true);
+  };
+
+  // NOTE: guestSessionId is now computed at mount-time via useState to ensure stability
 
   const handleNext = () => {
-    if (currentQuestion < readQuestion?.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
+    setCurrentQuestion((prev) => {
+      const maxIndex = Math.max((readQuestion?.length || 1) - 1, 0);
+      return Math.min(prev + 1, maxIndex);
+    });
   };
 
   const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-    }
+    setCurrentQuestion((prev) => Math.max(0, prev - 1));
   };
 
   const getAnsweredCount = () => {
@@ -696,13 +747,19 @@ const ExaminationTestScreen = () => {
     }
 
     // Create a unique seed per question (using questionIndex and question text)
-    const seed =
-      questionIndex * 1000 +
-      (typeof question.question === "string"
+    const questionId = question?._id || question?.id || null;
+    const textHash =
+      typeof question.question === "string"
         ? question.question
             .split("")
             .reduce((acc, c) => acc + c.charCodeAt(0), 0)
-        : 0);
+        : 0;
+    const seed =
+      (questionId
+        ? String(questionId)
+            .split("")
+            .reduce((a, c) => a + c.charCodeAt(0), 0)
+        : questionIndex * 1000) + textHash;
 
     // Copy options with original indices
     const optionsWithIndices = question.options.map((option, index) => ({
@@ -721,13 +778,56 @@ const ExaminationTestScreen = () => {
     return arr;
   };
 
+  // Deterministic seeded shuffle for questions (unique per user/session)
+  function hashStringToNumber(str: string) {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 33) ^ str.charCodeAt(i);
+    }
+    return Math.abs(hash >>> 0);
+  }
+
+  function mulberry32(seed: number) {
+    return function () {
+      seed |= 0;
+      seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function seededShuffle<T>(arr: T[], seed: number) {
+    const rand = mulberry32(seed);
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function stripLeadingNumberFromText(text?: string) {
+    if (!text) return "";
+    return String(text)
+      .replace(/^\s*\d+\.\s*/, "")
+      .trim();
+  }
+
+  function stripLeadingOptionLetter(text?: string) {
+    if (!text) return "";
+    return String(text)
+      .replace(/^[A-Da-d]\.\s*/, "")
+      .trim();
+  }
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
         name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
           quizData?.status
-        } Screen stt`}
+        } Screen`}
       />
 
       {isQuizDone ? (
@@ -754,12 +854,10 @@ const ExaminationTestScreen = () => {
                       className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
                       onClick={() => {
                         if (!document.startViewTransition) {
-                          setStart(true);
-                          setActivate(true);
+                          startExam();
                         } else {
                           document.startViewTransition(() => {
-                            setStart(true);
-                            setActivate(true);
+                            startExam();
                           });
                         }
                       }}
@@ -796,12 +894,10 @@ const ExaminationTestScreen = () => {
                     className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
                     onClick={() => {
                       if (!document.startViewTransition) {
-                        setStart(true);
-                        setActivate(true);
+                        startExam();
                       } else {
                         document.startViewTransition(() => {
-                          setStart(true);
-                          setActivate(true);
+                          startExam();
                         });
                       }
                     }}
@@ -818,17 +914,6 @@ const ExaminationTestScreen = () => {
                   <MdPlayCircle
                     size={200}
                     className=" opacity-80 text-red-400 hover:text-red-500 transition-all duration-300 cursor-not-allowed"
-                    // onClick={() => {
-                    //   if (!document.startViewTransition) {
-                    //     setStart(true);
-                    //     setActivate(true);
-                    //   } else {
-                    //     document.startViewTransition(() => {
-                    //       setStart(true);
-                    //       setActivate(true);
-                    //     });
-                    //   }
-                    // }}
                   />
                   <p className="font-medium text-[18px]">
                     Please wait... Data loading{" "}
@@ -956,30 +1041,11 @@ const ExaminationTestScreen = () => {
                           key={displayIndex}
                           onClick={() => {
                             // Use originalIndex to maintain correct answer tracking
-                            // selectOption will update both answers and state and persist to localStorage
-                            const optionText = option;
-                            const newAnswers = {
-                              ...answers,
-                              [currentQuestion]: originalIndex,
-                            };
-                            const newState = {
-                              ...state,
-                              [currentQuestion]: optionText,
-                            };
-                            setAnswers(newAnswers);
-                            setState(newState);
-                            try {
-                              const key = `examAnswers_${examID}_${
-                                studentInfo?._id || "guest"
-                              }`;
-                              localStorage.setItem(
-                                key,
-                                JSON.stringify({
-                                  answers: newAnswers,
-                                  state: newState,
-                                })
-                              );
-                            } catch (e) {}
+                            handleAnswerSelect(originalIndex);
+                            setState((prev) => ({
+                              ...prev,
+                              [currentQuestion]: option,
+                            }));
                           }}
                           className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
                             answers[currentQuestion] === originalIndex

@@ -27,13 +27,7 @@ interface iProps {
 const ClassSubjectScreen: FC<iProps> = ({ props }) => {
   const { subjectData } = useClassSubject(props!);
 
-  useEffect(() => {
-    localStorage.removeItem("exam");
-    localStorage.removeItem("examQuestions");
-
-    localStorage.removeItem("midTest");
-    localStorage.removeItem("midTestQuestions");
-  }, []);
+  // Do not clear localStorage here — this would reset in-progress exams for other pages
 
   return (
     <div>

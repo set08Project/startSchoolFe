@@ -120,12 +120,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   const [visibleSubjectCount, setVisibleSubjectCount] = useState(0);
   const [dept, setDept] = useState<string>("");
 
-  useEffect(() => {
-    localStorage.removeItem("exam");
-    localStorage.removeItem("examQuestions");
-    localStorage.removeItem("midTest");
-    localStorage.removeItem("midTestQuestions");
-  }, []);
+  // Avoid clearing in-progress exam or mid-test localStorage on mount.
 
   const hasSubjects = subjectData?.classSubjects?.length > 0;
 
