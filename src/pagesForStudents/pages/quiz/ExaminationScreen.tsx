@@ -407,12 +407,50 @@ const ExaminationTestScreen = () => {
   const { studentInfo } = useStudentInfo();
   const { performance } = useStudentPerfomance(studentInfo?._id);
 
+  // Create a stable guest session id so guest keys don't collide between different sessions
+  const [guestSessionId] = useState(() => {
+    const key = `examGuestSession_${examID}`;
+    try {
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = `${Date.now().toString(36)}_${Math.random()
+          .toString(36)
+          .slice(2, 10)}`;
+        localStorage.setItem(key, id);
+      }
+      return id;
+    } catch (e) {
+      return `guest_${Date.now()}`;
+    }
+  });
+  const storageId = studentInfo?._id || guestSessionId;
+  const examQuestionsKey = (id: string) => `examQuestions_${examID}_${id}`;
+  const examStartedKey = (id: string) => `examStarted_${examID}_${id}`;
+
   const [state, setState] = useState<any>({});
-  const [start, setStart] = useState<boolean>(false);
+  // Initialize start from localStorage so the play overlay doesn't show after refresh
+  const getSavedStarted = () => {
+    try {
+      const studentKey = `examStarted_${examID}_${studentInfo?._id}`;
+      const guestKey = `examStarted_${examID}_${guestSessionId}`;
+      const storageKey = `examStarted_${examID}_${storageId}`;
+      const val =
+        localStorage.getItem(studentKey) ||
+        localStorage.getItem(guestKey) ||
+        localStorage.getItem(storageKey) ||
+        "false";
+      return val === "true";
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const [start, setStart] = useState<boolean>(() => getSavedStarted());
   const [loading, setLoading] = useState<boolean>(false);
-  const [activate, setActivate] = useState<boolean>(false);
+  const [activate, setActivate] = useState<boolean>(() => getSavedStarted());
   const [timeUp, setTimeUp] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const courseID = quizData?.subjectID;
   const countdownKey = `countdown_${examID}_${studentInfo?._id}`;
@@ -452,8 +490,8 @@ const ExaminationTestScreen = () => {
   let timerInSeconds = timer * 3600;
 
   const handleSubmit = async () => {
-    if (isSubmitted) return;
-    setIsSubmitted(true);
+    if (isSubmitting || isSubmitted) return;
+    setIsSubmitting(true);
     setLoading(true);
 
     try {
@@ -501,6 +539,27 @@ const ExaminationTestScreen = () => {
             quizData?.status.slice(1)
           } submitted successfully`
         );
+        // cleanup storage only after successful submission
+        try {
+          localStorage.removeItem(countdownKey);
+          const answersKeyStudent = `examAnswers_${examID}_${studentInfo?._id}`;
+          const answersKeyGuest = `examAnswers_${examID}_${guestSessionId}`;
+          localStorage.removeItem(answersKeyStudent);
+          localStorage.removeItem(answersKeyGuest);
+          const questionsKeyStudent = examQuestionsKey(
+            studentInfo?._id || guestSessionId
+          );
+          const questionsKeyGuest = examQuestionsKey(guestSessionId);
+          localStorage.removeItem(questionsKeyStudent);
+          localStorage.removeItem(questionsKeyGuest);
+          const startedKeyStudent = examStartedKey(
+            studentInfo?._id || guestSessionId
+          );
+          const startedKeyGuest = examStartedKey(guestSessionId);
+          localStorage.removeItem(startedKeyStudent);
+          localStorage.removeItem(startedKeyGuest);
+        } catch (e) {}
+        setIsSubmitted(true);
         navigate(`/confirm-quiz-take/${examID}`, {
           state: {
             correctAnswers,
@@ -517,61 +576,21 @@ const ExaminationTestScreen = () => {
       toast.error("Something went wrong, try again");
     } finally {
       setLoading(false);
-      try {
-        localStorage.removeItem(countdownKey);
-        const answersKeyStudent = `examAnswers_${examID}_${studentInfo?._id}`;
-        const answersKeyGuest = `examAnswers_${examID}_${guestSessionId}`;
-        localStorage.removeItem(answersKeyStudent);
-        localStorage.removeItem(answersKeyGuest);
-        const questionsKeyStudent = examQuestionsKey(
-          studentInfo?._id || guestSessionId
-        );
-        const questionsKeyGuest = examQuestionsKey(guestSessionId);
-        localStorage.removeItem(questionsKeyStudent);
-        localStorage.removeItem(questionsKeyGuest);
-        const startedKeyStudent = examStartedKey(
-          studentInfo?._id || guestSessionId
-        );
-        const startedKeyGuest = examStartedKey(guestSessionId);
-        localStorage.removeItem(startedKeyStudent);
-        localStorage.removeItem(startedKeyGuest);
-      } catch (e) {}
+      setIsSubmitting(false);
     }
   };
-
   // Auto-submit when time is up
   useEffect(() => {
-    if (timeUp && !isSubmitted) {
+    if (timeUp && !isSubmitted && !isSubmitting) {
       toast.success("Time is up — submitting automatically...");
-      // give a tiny delay to allow UI to update (optional)
       setTimeout(() => {
         handleSubmit();
       }, 250);
     }
-  }, [timeUp, isSubmitted]);
+  }, [timeUp, isSubmitted, isSubmitting]);
 
   // Get shuffled questions from localStorage
   // const readQuestion = JSON.parse(localStorage.getItem("readQuestion") || "[]");
-
-  // Create a stable guest session id so guest keys don't collide between different sessions
-  const [guestSessionId] = useState(() => {
-    const key = `examGuestSession_${examID}`;
-    try {
-      let id = localStorage.getItem(key);
-      if (!id) {
-        id = `${Date.now().toString(36)}_${Math.random()
-          .toString(36)
-          .slice(2, 10)}`;
-        localStorage.setItem(key, id);
-      }
-      return id;
-    } catch (e) {
-      return `guest_${Date.now()}`;
-    }
-  });
-  const storageId = studentInfo?._id || guestSessionId;
-  const examQuestionsKey = (id: string) => `examQuestions_${examID}_${id}`;
-  const examStartedKey = (id: string) => `examStarted_${examID}_${id}`;
 
   const [readQuestion, setReadQuestion] = useState(() => {
     try {
@@ -615,17 +634,43 @@ const ExaminationTestScreen = () => {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   // initialize answers from local storage (if present) so we don't overwrite on mount
+  const extractAnswersFromSaved = (saved: any) => {
+    if (!saved) return {};
+    if (saved.answers && typeof saved.answers === "object")
+      return saved.answers;
+    // If saved itself is an object keyed by numeric keys, treat as answers map
+    if (
+      typeof saved === "object" &&
+      Object.keys(saved).length > 0 &&
+      Object.keys(saved).every((k) => /^[0-9]+$/.test(k))
+    ) {
+      return saved;
+    }
+    return {};
+  };
+
   const initialAnswersFromStorage = (() => {
     try {
-      const saved = JSON.parse(
-        localStorage.getItem(`examAnswers_${examID}_${storageId}`) || "null"
+      const studentKey = `examAnswers_${examID}_${
+        studentInfo?._id || storageId
+      }`;
+      const guestKey = `examAnswers_${examID}_${guestSessionId}`;
+      const savedStudent = JSON.parse(
+        localStorage.getItem(studentKey) || "null"
       );
-      if (saved && saved.answers) return saved.answers;
+      const savedGuest = JSON.parse(localStorage.getItem(guestKey) || "null");
+      // Prefer the student key if it exists, otherwise fall back to guest
+      const selected =
+        savedStudent ||
+        savedGuest ||
+        JSON.parse(
+          localStorage.getItem(`examAnswers_${examID}_${storageId}`) || "null"
+        );
+      return extractAnswersFromSaved(selected);
     } catch (e) {}
     return {};
   })();
   const [answers, setAnswers] = useState(initialAnswersFromStorage);
-  const [submitted, setSubmitted] = useState(false);
   const [_score, setScore] = useState(0);
 
   const handleAnswerSelect = (optionIndex) => {
@@ -638,11 +683,18 @@ const ExaminationTestScreen = () => {
   // Load saved answers/state from localStorage when component mounts or readQuestion updates
   useEffect(() => {
     try {
-      const saved = JSON.parse(
-        localStorage.getItem(storageKeyAnswers) || "null"
-      );
+      const studentKey = `examAnswers_${examID}_${
+        studentInfo?._id || storageId
+      }`;
+      const guestKey = `examAnswers_${examID}_${guestSessionId}`;
+      const saved =
+        JSON.parse(localStorage.getItem(studentKey) || "null") ||
+        JSON.parse(localStorage.getItem(guestKey) || "null") ||
+        JSON.parse(localStorage.getItem(storageKeyAnswers) || "null");
       if (saved) {
-        if (saved.answers) setAnswers(saved.answers);
+        // support both wrapper {answers, state, currentQuestion} and older flat answer object
+        const extracted = extractAnswersFromSaved(saved);
+        if (extracted) setAnswers(extracted);
         if (saved.state) setState(saved.state);
         if (typeof saved.currentQuestion === "number")
           setCurrentQuestion(saved.currentQuestion);
@@ -671,21 +723,118 @@ const ExaminationTestScreen = () => {
 
   // Persist answers and state to localStorage whenever they change
   const didMountRef = useRef(false);
-  useEffect(() => {
-    try {
-      // avoid overwriting previously saved answers on mount
-      if (!didMountRef.current) {
-        didMountRef.current = true;
-        return;
-      }
-      localStorage.setItem(
-        storageKeyAnswers,
-        JSON.stringify({ answers, state, currentQuestion })
-      );
-    } catch (e) {}
-  }, [answers, state, storageKeyAnswers, currentQuestion]);
+  // useEffect(() => {
+  //   try {
+  //     // avoid overwriting previously saved answers on mount
+  //     if (!didMountRef.current) {
+  //       didMountRef.current = true;
+  //       return;
+  //     }
+  //     localStorage.setItem(
+  //       storageKeyAnswers,
+  //       JSON.stringify({ answers, state, currentQuestion })
+  //     );
+  //   } catch (e) {}
+  // }, [answers, state, storageKeyAnswers, currentQuestion]);
 
   // Persist readQuestion order and started flag when start button is pressed
+  // const startExam = () => {
+  //   try {
+  //     const key = examQuestionsKey(storageId);
+  //     const existing = localStorage.getItem(key);
+  //     const startedKeyVal = examStartedKey(storageId);
+  //     const startedFlag = localStorage.getItem(startedKeyVal);
+
+  //     // Determine whether we should resume an existing attempt (started + answers present)
+  //     const savedAnswers = localStorage.getItem(storageKeyAnswers);
+  //     const resumeExistingAttempt = startedFlag === "true" && !!savedAnswers;
+  //     // If starting a new attempt (not resuming), clear any old answers to avoid accidental carry-over
+  //     if (!resumeExistingAttempt) {
+  //       try {
+  //         localStorage.removeItem(storageKeyAnswers);
+  //         setAnswers({});
+  //         setState({});
+  //         setCurrentQuestion(0);
+  //       } catch (e) {}
+  //     }
+  //     // If we are resuming an existing attempt, rehydrate; otherwise create a new randomized order
+  //     if (!resumeExistingAttempt) {
+  //       const sourceQuestions = myQuizData?.question ?? [];
+  //       // If `randomize` === true, do a seeded shuffle to ensure per-user uniqueness
+  //       // We derive a deterministic seed from the examID and studentID (or guest session)
+  //       const seedSource = `${examID}_${storageId}`;
+  //       const seed = hashStringToNumber(seedSource);
+  //       // Force shuffle on Start unless you want to respect the teacher flag.
+  //       // If you want teachers to control randomize, set this to false.
+  //       const forceShuffleOnStart = true;
+  //       const shouldShuffle =
+  //         forceShuffleOnStart || (quizData?.randomize ?? true);
+  //       const questionsToStore = (
+  //         shouldShuffle
+  //           ? seededShuffle([...sourceQuestions], seed)
+  //           : sourceQuestions
+  //       ).map((q: any) => ({
+  //         ...q,
+  //         question: stripLeadingNumberFromText(q?.question),
+  //         options: q?.options
+  //           ? q.options.map(stripLeadingOptionLetter)
+  //           : q?.options,
+  //       }));
+  //       // store under student key if available, otherwise guest key
+  //       localStorage.setItem(key, JSON.stringify(questionsToStore));
+  //       setReadQuestion(questionsToStore);
+  //     } else {
+  //       try {
+  //         setReadQuestion(JSON.parse(existing));
+  //       } catch (e) {}
+  //     }
+  //     // If there's a saved answers payload, restore currentQuestion
+  //     try {
+  //       const savedAns = JSON.parse(
+  //         localStorage.getItem(storageKeyAnswers) || "null"
+  //       );
+  //       if (savedAns && typeof savedAns.currentQuestion === "number") {
+  //         setCurrentQuestion(savedAns.currentQuestion);
+  //       }
+  //     } catch (e) {}
+  //     // mark exam as started so reloads will rehydrate the same state
+  //     localStorage.setItem(startedKeyVal, "true");
+  //   } catch (e) {}
+  //   setStart(true);
+  //   setActivate(true);
+  // };
+
+  useEffect(() => {
+    // Only save if exam has started
+    if (!start) return;
+
+    try {
+      const dataToSave = {
+        answers,
+        state,
+        currentQuestion,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem(storageKeyAnswers, JSON.stringify(dataToSave));
+
+      // Also save to student-specific key if logged in
+      if (studentInfo?._id) {
+        const studentKey = `examAnswers_${examID}_${studentInfo._id}`;
+        localStorage.setItem(studentKey, JSON.stringify(dataToSave));
+      }
+    } catch (e) {
+      console.error("Error saving answers:", e);
+    }
+  }, [
+    answers,
+    state,
+    currentQuestion,
+    start,
+    storageKeyAnswers,
+    examID,
+    studentInfo?._id,
+  ]);
+
   const startExam = () => {
     try {
       const key = examQuestionsKey(storageId);
@@ -693,30 +842,43 @@ const ExaminationTestScreen = () => {
       const startedKeyVal = examStartedKey(storageId);
       const startedFlag = localStorage.getItem(startedKeyVal);
 
-      // Determine whether we should resume an existing attempt (started + answers present)
+      // Determine whether we should resume an existing attempt
       const savedAnswers = localStorage.getItem(storageKeyAnswers);
       const resumeExistingAttempt = startedFlag === "true" && !!savedAnswers;
-      // If starting a new attempt (not resuming), clear any old answers to avoid accidental carry-over
-      if (!resumeExistingAttempt) {
+
+      if (resumeExistingAttempt) {
+        // RESUME: rehydrate saved questions and answers
+        try {
+          if (existing) {
+            setReadQuestion(JSON.parse(existing));
+          }
+          const savedAns = JSON.parse(savedAnswers);
+          if (savedAns) {
+            if (savedAns.answers) setAnswers(savedAns.answers);
+            if (savedAns.state) setState(savedAns.state);
+            if (typeof savedAns.currentQuestion === "number") {
+              setCurrentQuestion(savedAns.currentQuestion);
+            }
+          }
+        } catch (e) {
+          console.error("Error resuming exam:", e);
+        }
+      } else {
+        // NEW ATTEMPT: clear old data and create fresh randomized questions
         try {
           localStorage.removeItem(storageKeyAnswers);
           setAnswers({});
           setState({});
           setCurrentQuestion(0);
         } catch (e) {}
-      }
-      // If we are resuming an existing attempt, rehydrate; otherwise create a new randomized order
-      if (!resumeExistingAttempt) {
+
         const sourceQuestions = myQuizData?.question ?? [];
-        // If `randomize` === true, do a seeded shuffle to ensure per-user uniqueness
-        // We derive a deterministic seed from the examID and studentID (or guest session)
         const seedSource = `${examID}_${storageId}`;
         const seed = hashStringToNumber(seedSource);
-        // Force shuffle on Start unless you want to respect the teacher flag.
-        // If you want teachers to control randomize, set this to false.
         const forceShuffleOnStart = true;
         const shouldShuffle =
           forceShuffleOnStart || (quizData?.randomize ?? true);
+
         const questionsToStore = (
           shouldShuffle
             ? seededShuffle([...sourceQuestions], seed)
@@ -728,26 +890,17 @@ const ExaminationTestScreen = () => {
             ? q.options.map(stripLeadingOptionLetter)
             : q?.options,
         }));
-        // store under student key if available, otherwise guest key
+
         localStorage.setItem(key, JSON.stringify(questionsToStore));
         setReadQuestion(questionsToStore);
-      } else {
-        try {
-          setReadQuestion(JSON.parse(existing));
-        } catch (e) {}
       }
-      // If there's a saved answers payload, restore currentQuestion
-      try {
-        const savedAns = JSON.parse(
-          localStorage.getItem(storageKeyAnswers) || "null"
-        );
-        if (savedAns && typeof savedAns.currentQuestion === "number") {
-          setCurrentQuestion(savedAns.currentQuestion);
-        }
-      } catch (e) {}
-      // mark exam as started so reloads will rehydrate the same state
+
+      // Mark exam as started
       localStorage.setItem(startedKeyVal, "true");
-    } catch (e) {}
+    } catch (e) {
+      console.error("Error starting exam:", e);
+    }
+
     setStart(true);
     setActivate(true);
   };
@@ -879,47 +1032,6 @@ const ExaminationTestScreen = () => {
           {/* This Part watch out */}
           {!start && (
             <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
-              {/* {quizData?.subjectTitle ? (
-                <div>
-                  <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
-                    <MdPlayCircle
-                      size={200}
-                      className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
-                      onClick={() => {
-                        if (!document.startViewTransition) {
-                          startExam();
-                        } else {
-                          document.startViewTransition(() => {
-                            startExam();
-                          });
-                        }
-                      }}
-                    />
-                    <p className="font-medium text-[18px]">
-                      Push Play to start your{" "}
-                      <span className="font-bold capitalize">
-                        {quizData?.status}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
-                    <MdPlayCircle
-                      size={200}
-                      className="cursor-pointer animate-pulse text-red-500 hover:text-red-600 transition-all duration-300"
-                    />
-                    <p className="font-medium text-[18px]">
-                      Push Play to start your{" "}
-                      <span className="font-bold capitalize">
-                        {quizData?.status}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              )} */}
-
               {quizData?.subjectTitle ? (
                 <div className="flex items-center justify-center flex-col">
                   <MdPlayCircle
@@ -946,7 +1058,7 @@ const ExaminationTestScreen = () => {
                 <div className="flex items-center justify-center flex-col">
                   <MdPlayCircle
                     size={200}
-                    className=" opacity-80 text-red-400 hover:text-red-500 transition-all duration-300 cursor-not-allowed"
+                    className="opacity-80 text-red-400 hover:text-red-500 transition-all duration-300 cursor-not-allowed"
                   />
                   <p className="font-medium text-[18px]">
                     Please wait... Data loading{" "}
@@ -1126,7 +1238,11 @@ const ExaminationTestScreen = () => {
                         onClick={() => {
                           handleSubmit();
                         }}
-                        disabled={getAnsweredCount() !== readQuestion?.length}
+                        disabled={
+                          getAnsweredCount() !== readQuestion?.length ||
+                          isSubmitting ||
+                          isSubmitted
+                        }
                         className={`px-6 py-2 rounded-lg transition-colors ${
                           getAnsweredCount() === readQuestion?.length
                             ? "bg-green-600 text-white hover:bg-green-700"
