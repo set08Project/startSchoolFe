@@ -25,7 +25,7 @@ interface iProps {
   onTestCountChange?: (count: number) => void;
 }
 
-const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
+const SubjectCard: FC<any> = ({ subject }) => {
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
@@ -118,6 +118,7 @@ const SubjectCard: FC<{ subject: any }> = ({ subject }) => {
 const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   const { subjectData } = useClassSubject(props!);
   const [visibleSubjectCount, setVisibleSubjectCount] = useState(0);
+  const [dept, setDept] = useState<string>("");
 
   useEffect(() => {
     localStorage.removeItem("exam");
