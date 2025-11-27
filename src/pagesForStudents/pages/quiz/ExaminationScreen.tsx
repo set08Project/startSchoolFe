@@ -710,27 +710,101 @@ const ExaminationTestScreen = () => {
         </div>
       ) : (
         <div className="relative">
+          {/* This Part watch out */}
           {!start && (
             <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
-              <MdPlayCircle
-                size={200}
-                className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
-                onClick={() => {
-                  if (!document.startViewTransition) {
-                    setStart(true);
-                    setActivate(true);
-                  } else {
-                    document.startViewTransition(() => {
-                      setStart(true);
-                      setActivate(true);
-                    });
-                  }
-                }}
-              />
-              <p className="font-medium text-[18px]">
-                Push Play to start your{" "}
-                <span className="font-bold capitalize">{quizData?.status}</span>
-              </p>
+              {/* {quizData?.subjectTitle ? (
+                <div>
+                  <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
+                    <MdPlayCircle
+                      size={200}
+                      className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
+                      onClick={() => {
+                        if (!document.startViewTransition) {
+                          setStart(true);
+                          setActivate(true);
+                        } else {
+                          document.startViewTransition(() => {
+                            setStart(true);
+                            setActivate(true);
+                          });
+                        }
+                      }}
+                    />
+                    <p className="font-medium text-[18px]">
+                      Push Play to start your{" "}
+                      <span className="font-bold capitalize">
+                        {quizData?.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="absolute top-20 left-1/3 z-10 flex flex-col justify-center items-center gap-5">
+                    <MdPlayCircle
+                      size={200}
+                      className="cursor-pointer animate-pulse text-red-500 hover:text-red-600 transition-all duration-300"
+                    />
+                    <p className="font-medium text-[18px]">
+                      Push Play to start your{" "}
+                      <span className="font-bold capitalize">
+                        {quizData?.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )} */}
+
+              {quizData?.subjectTitle ? (
+                <div className="flex items-center justify-center flex-col">
+                  <MdPlayCircle
+                    size={200}
+                    className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
+                    onClick={() => {
+                      if (!document.startViewTransition) {
+                        setStart(true);
+                        setActivate(true);
+                      } else {
+                        document.startViewTransition(() => {
+                          setStart(true);
+                          setActivate(true);
+                        });
+                      }
+                    }}
+                  />
+                  <p className="font-medium text-[18px]">
+                    Push Play to start your{" "}
+                    <span className="font-bold capitalize">
+                      {quizData?.status}
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center flex-col">
+                  <MdPlayCircle
+                    size={200}
+                    className=" opacity-80 text-red-400 hover:text-red-500 transition-all duration-300 cursor-not-allowed"
+                    // onClick={() => {
+                    //   if (!document.startViewTransition) {
+                    //     setStart(true);
+                    //     setActivate(true);
+                    //   } else {
+                    //     document.startViewTransition(() => {
+                    //       setStart(true);
+                    //       setActivate(true);
+                    //     });
+                    //   }
+                    // }}
+                  />
+                  <p className="font-medium text-[18px]">
+                    Please wait... Data loading{" "}
+                    <span className="font-bold capitalize">
+                      {quizData?.status}
+                    </span>
+                  </p>
+                </div>
+              )}
             </div>
           )}
           {/* Timer */}
