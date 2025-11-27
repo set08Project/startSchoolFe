@@ -521,6 +521,9 @@ const ExaminationTestScreen = () => {
         setLoading(false);
         try {
           localStorage.removeItem(countdownKey);
+          // remove saved answers/state upon submission
+          const key = `examAnswers_${examID}_${studentInfo?._id || "guest"}`;
+          localStorage.removeItem(key);
         } catch (e) {}
       });
   };
@@ -636,6 +639,36 @@ const ExaminationTestScreen = () => {
     });
   };
 
+  // Storage key for saving answers + state per student and exam
+  const storageKeyAnswers = `examAnswers_${examID}_${
+    studentInfo?._id || "guest"
+  }`;
+
+  // Load saved answers/state from localStorage when component mounts or readQuestion updates
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(storageKeyAnswers) || "null"
+      );
+      if (saved) {
+        if (saved.answers) setAnswers(saved.answers);
+        if (saved.state) setState(saved.state);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [storageKeyAnswers, readQuestion]);
+
+  // Persist answers and state to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        storageKeyAnswers,
+        JSON.stringify({ answers, state })
+      );
+    } catch (e) {}
+  }, [answers, state, storageKeyAnswers]);
+
   const handleNext = () => {
     if (currentQuestion < readQuestion?.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -694,7 +727,7 @@ const ExaminationTestScreen = () => {
       <LittleHeader
         name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
           quizData?.status
-        } Screen`}
+        } Screen stt`}
       />
 
       {isQuizDone ? (
@@ -923,8 +956,30 @@ const ExaminationTestScreen = () => {
                           key={displayIndex}
                           onClick={() => {
                             // Use originalIndex to maintain correct answer tracking
-                            handleAnswerSelect(originalIndex);
-                            handleStateChange(currentQuestion, option);
+                            // selectOption will update both answers and state and persist to localStorage
+                            const optionText = option;
+                            const newAnswers = {
+                              ...answers,
+                              [currentQuestion]: originalIndex,
+                            };
+                            const newState = {
+                              ...state,
+                              [currentQuestion]: optionText,
+                            };
+                            setAnswers(newAnswers);
+                            setState(newState);
+                            try {
+                              const key = `examAnswers_${examID}_${
+                                studentInfo?._id || "guest"
+                              }`;
+                              localStorage.setItem(
+                                key,
+                                JSON.stringify({
+                                  answers: newAnswers,
+                                  state: newState,
+                                })
+                              );
+                            } catch (e) {}
                           }}
                           className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
                             answers[currentQuestion] === originalIndex
