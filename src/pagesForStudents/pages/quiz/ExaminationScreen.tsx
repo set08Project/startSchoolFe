@@ -6,6 +6,7 @@ import { useExam, useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
 import { performanceExamination, performanceTest } from "../../api/studentAPI";
 import { useStudentInfo } from "../../hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
+import { motion } from "framer-motion";
 import oops from "../../../assets/socials/oops-transformed-removebg-preview.png";
 import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
@@ -451,6 +452,7 @@ const ExaminationTestScreen = () => {
   const [timeUp, setTimeUp] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showSubmitConfirmModal, setShowSubmitConfirmModal] = useState(false);
 
   const courseID = quizData?.subjectID;
   const countdownKey = `countdown_${examID}_${studentInfo?._id}`;
@@ -723,6 +725,7 @@ const ExaminationTestScreen = () => {
 
   // Persist answers and state to localStorage whenever they change
   const didMountRef = useRef(false);
+
   // useEffect(() => {
   //   try {
   //     // avoid overwriting previously saved answers on mount
@@ -1236,17 +1239,19 @@ const ExaminationTestScreen = () => {
                     {currentQuestion === readQuestion?.length - 1 ? (
                       <button
                         onClick={() => {
-                          handleSubmit();
+                          const allAnswered =
+                            getAnsweredCount() === readQuestion?.length;
+                          if (allAnswered) {
+                            handleSubmit();
+                          } else {
+                            setShowSubmitConfirmModal(true);
+                          }
                         }}
-                        disabled={
-                          getAnsweredCount() !== readQuestion?.length ||
-                          isSubmitting ||
-                          isSubmitted
-                        }
+                        disabled={isSubmitting || isSubmitted}
                         className={`px-6 py-2 rounded-lg transition-colors ${
                           getAnsweredCount() === readQuestion?.length
                             ? "bg-green-600 text-white hover:bg-green-700"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-amber-500 text-white hover:bg-amber-600"
                         }`}
                       >
                         {loading ? (
@@ -1271,14 +1276,58 @@ const ExaminationTestScreen = () => {
 
                   {currentQuestion === readQuestion?.length - 1 &&
                     getAnsweredCount() !== readQuestion?.length && (
-                      <p className="text-center text-sm text-amber-600 mt-4">
-                        Please answer all questions before submitting
+                      <p className="text-center text-sm text-red-500 font-semibold uppercase mt-4">
+                        Please Note that, one or more <br />
+                        questions are unanswered.
                       </p>
                     )}
                 </div>
               </div>
             )}
           </div>
+        </div>
+      )}
+      {/* Submit confirmation modal - shown when some questions are unanswered */}
+      {showSubmitConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4"
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              Confirm Submission
+            </h3>
+            <p className="text-gray-600 mb-6">
+              You have {readQuestion?.length - getAnsweredCount()} unanswered
+              question(s). Are you sure you want to submit the exam?
+            </p>
+            <div className="flex justify-end gap-4">
+              <Button
+                className="bg-gray-300 px-6 py-2 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-300 !text-[14px]"
+                name="Cancel"
+                onClick={() => setShowSubmitConfirmModal(false)}
+              />
+              <Button
+                className="bg-green-600 px-6 py-2 text-white rounded-md hover:bg-green-700 transition-colors duration-300 !text-[14px]"
+                name={
+                  loading ? (
+                    <span className="flex gap-2 items-center justify-center">
+                      <FaSpinner className="animate-spin text-white " />{" "}
+                      Sending...
+                    </span>
+                  ) : (
+                    "Confirm & Submit"
+                  )
+                }
+                disabled={isSubmitting || isSubmitted}
+                onClick={() => {
+                  setShowSubmitConfirmModal(false);
+                  handleSubmit();
+                }}
+              />
+            </div>
+          </motion.div>
         </div>
       )}
     </div>
