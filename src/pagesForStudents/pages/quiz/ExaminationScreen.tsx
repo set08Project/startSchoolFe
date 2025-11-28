@@ -1075,7 +1075,7 @@ const ExaminationTestScreen = () => {
           )}
           {/* Timer */}
           <div className="sticky left-5 flex top-[10px] justify-end items-center pointer-events-none">
-            <div className="sticky max-w-[210px] p-3 bg-blue-50 border shadow-sm rounded-lg flex justify-center items-end flex-col">
+            <div className="sticky max-w-[210px] p-3 backdrop-blur-sm border shadow-sm rounded-lg flex justify-center items-end flex-col">
               <h1 className="mb-1 text-blue-950 font-semibold flex items-center justify-start gap-2">
                 Time Remaining
               </h1>
