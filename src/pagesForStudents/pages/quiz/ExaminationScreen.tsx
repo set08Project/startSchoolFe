@@ -1014,9 +1014,13 @@ const ExaminationTestScreen = () => {
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
-          quizData?.status
-        } Screen`}
+        name={
+          quizData
+            ? `${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
+                quizData?.status
+              } Screen`
+            : "Loading Screen's Info"
+        }
       />
 
       {isQuizDone ? (
