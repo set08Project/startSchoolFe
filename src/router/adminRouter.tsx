@@ -196,6 +196,7 @@ import ExaminationPreviewScreen from "@/pages/page/quizArea/ExaminationPreview";
 import MidTestPreviewScreen from "@/pages/page/quizArea/MidTestPreviewScreen";
 import SubjectGradeCard from "@/pages/page/subject/SubjectGradeCard";
 import MidTestSubjectGradeCardAdmin from "@/pages/page/subject/AdminGradeExamination";
+import AdminReportCardTemplateOne from "@/pages/page/ResultHistory/ReportCardTemplateOne";
 
 const BroadSheetReportCardApproved = React.lazy(
   () => import("@/pages/page/ResultHistory/BoardSheet")
@@ -310,6 +311,17 @@ export const adminRouter = createBrowserRouter([
 
           {
             path: "view-students-report-card/:studentID",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <ErrorBoundary FallbackComponent={Fallback}>
+                  <AdminReportCardTemplateOne />
+                </ErrorBoundary>
+              </Suspense>
+            ),
+          },
+
+          {
+            path: "view-students-report-card-one/:studentID",
             element: (
               <Suspense fallback={<LoadingScreen />}>
                 <ErrorBoundary FallbackComponent={Fallback}>

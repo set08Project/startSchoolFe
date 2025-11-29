@@ -135,20 +135,55 @@ const PrintReportCard: React.FC = () => {
             (r.exam || 0)
           );
         }, 0);
+        const subjectCount = report.result.length || 0;
+        const percent = subjectCount > 0 ? total / subjectCount : 0;
         studentTotals.push({
           id: sid,
           total,
-          subjectCount: report.result.length,
+          subjectCount,
+          percent,
         });
       }
     }
   } catch (e) {}
 
-  const sortedTotals = studentTotals.sort((a, b) => b.total - a.total);
-  const myPositionIndex = sortedTotals.findIndex(
-    (el) => el.id === studentInfo?._id
+  const sortedTotals = studentTotals.sort(
+    (a, b) => (b.percent || 0) - (a.percent || 0)
   );
-  const studentPosition = myPositionIndex >= 0 ? myPositionIndex + 1 : null;
+  // assign ranks with standard competition ranking (1,1,3 for a tie) by percent
+  let lastPercent: number | null = null;
+  let lastRank = 0;
+  let countRank = 0;
+  const rankedTotals: Array<{
+    id: string;
+    total: number;
+    percent?: number;
+    rank: number;
+  }> = [];
+  for (const t of sortedTotals) {
+    countRank += 1;
+    const p = t.percent ?? 0;
+    if (lastPercent !== null && p === lastPercent) {
+      rankedTotals.push({
+        id: t.id,
+        total: t.total,
+        percent: t.percent,
+        rank: lastRank,
+      });
+    } else {
+      lastPercent = p;
+      lastRank = countRank;
+      rankedTotals.push({
+        id: t.id,
+        total: t.total,
+        percent: t.percent,
+        rank: lastRank,
+      });
+    }
+  }
+  const myRankEntry = rankedTotals.find((r) => r.id === studentInfo?._id);
+  const studentPosition = myRankEntry ? myRankEntry.rank : null;
+  const studentPercent = myRankEntry ? myRankEntry.percent ?? null : null;
 
   // If the hook-based computed position is not available (or uses bad hooks), compute using API as a fallback
   useEffect(() => {
@@ -157,7 +192,12 @@ const PrintReportCard: React.FC = () => {
         if (studentPosition) return; // already computed
         if (!subjectData?.students?.length) return;
         setPositionLoading(true);
-        const totals: Array<{ id: string; total: number }> = [];
+        const totals: Array<{
+          id: string;
+          total: number;
+          subjectCount?: number;
+          percent?: number;
+        }> = [];
         const normalize = (s: any) =>
           (s || "")
             .toString()
@@ -237,17 +277,23 @@ const PrintReportCard: React.FC = () => {
                     (r.exam || 0)
                   );
                 }, 0);
-                totals.push({ id: sid, total: tot });
+                const subjectCount = report.result.length || 0;
+                const percent = subjectCount > 0 ? tot / subjectCount : 0;
+                totals.push({ id: sid, total: tot, subjectCount, percent });
               }
             } catch (e) {
               // ignore errors for individual students
             }
           }) || []
         );
-        totals.sort((a, b) => b.total - a.total);
+        totals.sort((a, b) => (b.percent || 0) - (a.percent || 0));
         const myIndex = totals.findIndex((t) => t.id === studentInfo?._id);
         const pos = myIndex >= 0 ? myIndex + 1 : null;
         setComputedStudentPosition(pos);
+        // store computed percent if pos available
+        if (pos && myIndex >= 0) {
+          setComputedStudentPercent(totals[myIndex]?.percent ?? null);
+        }
       } catch (e) {
         console.error("Error computing class position in PrintReportCard:", e);
       } finally {
@@ -324,6 +370,9 @@ const PrintReportCard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [useTemplateOne, setUseTemplateOne] = useState<boolean>(false);
   const [computedStudentPosition, setComputedStudentPosition] = useState<
+    number | null
+  >(null);
+  const [computedStudentPercent, setComputedStudentPercent] = useState<
     number | null
   >(null);
   const [positionLoading, setPositionLoading] = useState<boolean>(false);
@@ -424,6 +473,15 @@ const PrintReportCard: React.FC = () => {
             {positionLoading ? (
               <span className="text-xs italic ml-2">(computing...)</span>
             ) : null}
+            {(studentPercent ?? computedStudentPercent) != null && (
+              <span className="text-xs ml-2">
+                (
+                {((studentPercent ?? computedStudentPercent) as number).toFixed(
+                  2
+                )}
+                %)
+              </span>
+            )}
           </span>
         </div>
 
@@ -456,6 +514,7 @@ const PrintReportCard: React.FC = () => {
             st2,
             st3,
             studentPosition: studentPosition ?? computedStudentPosition,
+            studentPercent: studentPercent ?? computedStudentPercent,
             classTotals: studentTotals,
           }}
           className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-slate-100 px-8 py-2 rounded-md bg-white border`}

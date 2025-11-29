@@ -220,7 +220,7 @@ export const studentRouter = createBrowserRouter([
       },
 
       {
-        path: "/print-result-one",
+        path: "/print-result",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ErrorBoundary FallbackComponent={Fallback}>
@@ -231,7 +231,7 @@ export const studentRouter = createBrowserRouter([
       },
 
       {
-        path: "/print-result",
+        path: "/print-result-one",
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ErrorBoundary FallbackComponent={Fallback}>

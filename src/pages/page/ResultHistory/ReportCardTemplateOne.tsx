@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSpinner } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
-import {
-  useReadOneClassInfo,
-  useStudentInfo,
-} from "../../hooks/useStudentHook";
+import { useLocation, useParams } from "react-router-dom";
+// import {
+//   useReadOneClassInfo,
+//   useStudentInfo,
+// } from "../../hooks/useStudentHook";
 import {
   useSchoolAnnouncement,
   useStudentGrade,
@@ -22,6 +22,11 @@ import toast, { Toaster } from "react-hot-toast";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 import { usePDF } from "react-to-pdf";
+import {
+  useReadOneClassInfo,
+  useStudentInfo,
+  useStudentInfoData,
+} from "@/pagesForStudents/hooks/useStudentHook";
 
 interface ReportCardTemplateOneProps {
   studentInfo?: any;
@@ -35,10 +40,9 @@ interface ReportCardTemplateOneProps {
   st2?: any;
   st3?: any;
   studentPosition?: number;
-  studentPercent?: number;
 }
 
-const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
+const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   studentInfo: propStudentInfo,
   school: propSchool,
   grade: propGrade,
@@ -49,87 +53,27 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   st2: propSt2,
   st3: propSt3,
   studentPosition: propStudentPosition,
-  studentPercent: propStudentPercent,
   subjectData: propSubjectData,
 }) => {
-  const { studentInfo: hookStudentInfo } = useStudentInfo();
+  const { studentID } = useParams();
+  const { studentInfoData: hookStudentInfo } = useStudentInfoData(studentID);
+
   const location = useLocation();
   const stateData: any = (location && (location.state as any)) || {};
-  const { gradeData: hookGradeData } = useStudentGrade(
-    hookStudentInfo?._id || propStudentInfo?._id
-  );
+  const { gradeData: hookGradeData } = useStudentGrade(studentID);
+
   const studentInfo =
     propStudentInfo || stateData.studentInfo || hookStudentInfo;
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.[0];
+
+  const grade = propGrade || stateData.grade || hookGradeData?.reportCard[0];
+
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
   const [computedTotals, setComputedTotals] = useState<
-    Array<{
-      id: string;
-      total: number;
-      subjectCount?: number;
-      percent?: number;
-    }>
+    Array<{ id: string; total: number; subjectCount?: number }>
   >(() => stateData?.classTotals || []);
   const [isComputingPosition, setIsComputingPosition] =
     useState<boolean>(false);
-  const [computedStudentPercent, setComputedStudentPercent] = useState<
-    number | null
-  >(null);
-
-  // Initialize from router state if passed
-  useEffect(() => {
-    if (stateData?.studentPercent) {
-      setComputedStudentPercent(stateData.studentPercent);
-    }
-    if (stateData?.studentPosition) {
-      setComputedPosition(stateData.studentPosition);
-    }
-    if (stateData?.classTotals) {
-      setComputedTotals(stateData.classTotals);
-      // If classTotals passed but no position, compute positional rank by percent
-      if (!stateData?.studentPosition && stateData?.classTotals?.length) {
-        const ct = (stateData.classTotals || []).slice();
-        ct.sort((a: any, b: any) => (b.percent || 0) - (a.percent || 0));
-        let last = null;
-        let lastRankLocal = 0;
-        let c = 0;
-        const rankedLocal: Array<{
-          id: string;
-          percent?: number;
-          rank: number;
-        }> = [];
-        for (const t of ct) {
-          c += 1;
-          const p = t.percent ?? 0;
-          if (last !== null && p === last) {
-            rankedLocal.push({
-              id: t.id,
-              percent: t.percent,
-              rank: lastRankLocal,
-            });
-          } else {
-            last = p;
-            lastRankLocal = c;
-            rankedLocal.push({
-              id: t.id,
-              percent: t.percent,
-              rank: lastRankLocal,
-            });
-          }
-        }
-        const mine = rankedLocal.find((r) => r.id === studentInfo?._id);
-        if (mine) {
-          setComputedPosition(mine.rank);
-          setComputedStudentPercent(mine.percent ?? null);
-        }
-      }
-    }
-  }, [
-    stateData?.studentPercent,
-    stateData?.studentPosition,
-    stateData?.classTotals,
-  ]);
 
   const defaultSubjects = [
     "Maximum Obtainable Mark",
@@ -172,9 +116,8 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
   );
-  // const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
 
-  const { gradeData } = useStudentGrade(studentInfo?._id);
+  const { gradeData } = useStudentGrade(studentID);
   const { subjectData: hookSubjectData } = useClassSubject(
     studentInfo?.presentClassID
   );
@@ -240,7 +183,6 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
           id: string;
           total: number;
           subjectCount?: number;
-          percent?: number;
         }> = [];
         setIsComputingPosition(true);
         await Promise.all(
@@ -253,16 +195,6 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                 res?.data?.reportCard || res?.reportCard || [];
               // DEBUG: If this student was reported as skipped by user, log full response
               if (sid === "691451f061a5371e65809c71") {
-                console.log(
-                  "DEBUG ReportCardTemplateOne - raw res for",
-                  sid,
-                  res
-                );
-                console.log(
-                  "DEBUG ReportCardTemplateOne - reportArray for",
-                  sid,
-                  reportArray
-                );
               }
               if (!reportArray || reportArray.length === 0) {
                 console.log(
@@ -323,39 +255,36 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   (r.exam || 0)
                 );
               }, 0);
-              const subjectCount = report.result.length || 0;
-              const percent = subjectCount > 0 ? tot / subjectCount : 0;
-              totals.push({ id: sid, total: tot, subjectCount, percent });
+              totals.push({
+                id: sid,
+                total: tot,
+                subjectCount: report.result.length,
+              });
               console.log(report.result, "total for student", sid, "is", tot);
             } catch (e) {
               // ignore errors for individual students
             }
           })
         );
-        totals.sort((a, b) => (b.percent || 0) - (a.percent || 0));
+        totals.sort((a, b) => b.total - a.total);
         // assign ranks with standard competition ranking (1,1,3 for a tie)
-        let lastPercent: number | null = null;
+        let lastTotal: number | null = null;
         let lastRank = 0;
         let count = 0;
         const ranked: Array<{ id: string; total: number; rank: number }> = [];
         for (const t of totals) {
           count += 1;
-          const p = t.percent ?? 0;
-          if (lastPercent !== null && p === lastPercent) {
+          if (lastTotal !== null && t.total === lastTotal) {
+            // same rank as previous
             ranked.push({ id: t.id, total: t.total, rank: lastRank });
           } else {
-            lastPercent = p;
+            lastTotal = t.total;
             lastRank = count;
             ranked.push({ id: t.id, total: t.total, rank: lastRank });
           }
         }
         const myRank = ranked.find((r) => r.id === studentInfo?._id);
         if (myRank) setComputedPosition(myRank.rank);
-        const myPercent = totals.find(
-          (t) => t.id === studentInfo?._id
-        )?.percent;
-        if (typeof myPercent !== "undefined")
-          setComputedStudentPercent(myPercent);
         else if (totals.length === 0) setComputedPosition(-1);
         setComputedTotals(totals);
       } catch (e) {
@@ -368,10 +297,9 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   }, [propSubjectData?.students, positionFromState, studentInfo, school]);
 
   const positionLabel = positionFromState ?? computedPosition;
-  const percentFromState = stateData?.studentPercent ?? propStudentPercent;
-  const percentLabel = percentFromState ?? computedStudentPercent;
 
   const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
+  console.log("studentID-grade", studentInfo?.presentClassID);
   const printableRef = useRef<HTMLDivElement | null>(null);
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 
@@ -482,7 +410,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
   return (
-    <main className="max-w-5xl mx-auto">
+    <main className="w-full max-w-5xl mx-auto">
       <div className="flex justify-end gap-2 mb-2">
         <button
           className={`px-8 py-1 bg-white border rounded-md text-[12px] tracking-widest  ${
@@ -521,34 +449,13 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
       <div className="w-full max-w-5xl mx-auto p-4 bg-gray-50">
         <Toaster position="top-center" reverseOrder={true} />
 
-        <Card className="shadow-lg" ref={targetRef}>
-          <CardContent className="px-6 py-2">
-            <div
-              className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
-              style={{
-                lineHeight: "5.5em",
-                whiteSpace: "pre-wrap",
-                userSelect: "none",
-                pointerEvents: "none",
-                rotate: "30deg",
-              }}
-            >
-              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
-              {school?.schoolName} <br />
-              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
-              {school?.schoolName} <br />
-              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
-              {school?.schoolName} <br />
-              {school?.schoolName} {school?.schoolName}
-              {school?.schoolName} <br />
-              {school?.schoolName} {school?.schoolName}
-            </div>
-
+        <Card className="shadow-lg overflow-hidden" ref={targetRef}>
+          <CardContent className="px-6 py-2 overflow-hidden">
             {/* Header */}
 
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-2">
-                {/* {computedTotals?.length > 0 && (
+                {computedTotals?.length > 0 && (
                   <div className="ml-6 text-xs text-gray-500">
                     <div className="font-semibold">Top 5 computed totals</div>
                     <ul>
@@ -559,7 +466,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       ))}
                     </ul>
                   </div>
-                )} */}
+                )}
               </div>
             </div>
 
@@ -608,6 +515,27 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div
+              className="absolute  max-w-[50%] overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
+              style={{
+                lineHeight: "5.5em",
+                whiteSpace: "pre-wrap",
+                userSelect: "none",
+                pointerEvents: "none",
+                rotate: "30deg",
+              }}
+            >
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName} {school?.schoolName}{" "}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
+              {school?.schoolName} <br />
+              {school?.schoolName} {school?.schoolName}
             </div>
 
             {/* Student's Personal Data */}
@@ -877,11 +805,6 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                             <span className="text-xs font-bold">
                               {formatOrdinal(positionLabel)} of{" "}
                               {subjectData?.students?.length ?? "N/A"}
-                              {percentLabel != null && (
-                                <span className="text-xs font-medium ml-2">
-                                  ({percentLabel.toFixed(2)}%)
-                                </span>
-                              )}
                               {!positionLabel ? (
                                 <span className="text-xs italic ml-2">
                                   (computing...)
@@ -906,7 +829,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                           <Label className="text-xs">
                             No. Of Subjects Offered:{" "}
                             <span className="text-sm font-semibold mt-1">
-                              {grade.result.length}
+                              {grade?.result?.length}
                             </span>
                           </Label>
                         </div>
@@ -1188,4 +1111,4 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   );
 };
 
-export default ReportCardTemplateOne;
+export default AdminReportCardTemplateOne;

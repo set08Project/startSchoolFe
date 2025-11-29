@@ -4,6 +4,7 @@ import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
 import CreatePopQuizScreen from "../pagesForTeachers/pages/quiz/CreatePopQuizData";
+import TeacherRportCardTemplateOne from "@/pagesForTeachers/pages/CardTemplate/TeacherReportCardTemplateOne";
 
 const TeacherBroadSheetReportCardApproved = React.lazy(
   () => import("@/pagesForTeachers/pages/ReportCard/TeacherClassBroadSheet")
@@ -193,6 +194,17 @@ export const teacherRouter = createBrowserRouter([
       },
       {
         path: "teacher-student-report-card/:studentID",
+        index: true,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <TeacherRportCardTemplateOne />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+      {
+        path: "teacher-student-report-card-one/:studentID",
         index: true,
         element: (
           <Suspense fallback={<LoadingScreen />}>

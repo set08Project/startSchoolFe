@@ -235,6 +235,7 @@ export const useStudentInfo = () => {
     x,
     () => {
       return viewStduentDetail(dataID!).then((res: any) => {
+        console.log("studentInfo-hook", res);
         return res.data;
       });
     },
