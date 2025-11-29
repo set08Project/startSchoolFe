@@ -634,7 +634,7 @@
 //                 </section>
 //               </main>
 //               {/* <main className="overflow-auto uppercase text-[12px]">
-             
+
 //             </main> */}
 //               <main className="grid grid-cols-1 sm:grid-cols-4 my-2">
 //                 <div className=" border p-2 ">
@@ -1135,7 +1135,6 @@
 //   );
 // };
 
-
 import React, { useState, useRef, useEffect, FC } from "react";
 import {
   useClassSubject,
@@ -1260,8 +1259,6 @@ const PrintReportCardScreen: React.FC = () => {
         ?.filter(Boolean)?.length *
         100)) *
     100;
-
- 
 
   let holdeAll = [];
 
@@ -1434,6 +1431,7 @@ const PrintReportCardScreen: React.FC = () => {
           "Print Result"
         )}
       </button>
+
       <div className="overflow-auto w-[1280px]">
         <h1 className="text-[10px] md:text-[12px] text-center mt-5 uppercase font-medium mb-2 italic">
           {studentInfo?.classAssigned} {school?.presentSession}

@@ -22,7 +22,7 @@ const Register = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    if (email !== "") {
+    if (email !== "" && email.includes("@")) {
       registerSchool(email?.trim()).then((res) => {
         if (res.status === 201) {
           dispatch(getEntryEmail(email));
@@ -40,6 +40,9 @@ const Register = () => {
           );
         }
       });
+    } else {
+      setLoading(false);
+      toast.error("Please enter a valid email address");
     }
   };
 
@@ -70,7 +73,6 @@ const Register = () => {
           onChange={(e: any) => {
             setEmail(e.target.value);
           }}
-          
         />
         {/* <div className="mx-4 flex items-center gap-3">
           <input

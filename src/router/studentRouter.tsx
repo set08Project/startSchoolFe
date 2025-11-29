@@ -8,6 +8,7 @@ import FinalMidTestScreenReport from "@/pagesForStudents/pages/quiz/FinalMidTest
 import CourseDetail from "@/pagesForStudents/screen/CourseDetail";
 import LearnScreen from "@/pagesForStudents/pages/learning/LearnScreen";
 import MyClassRoomTestExamScreen from "@/pagesForStudents/pages/testExam/MyClassRoom";
+import ReportCardTemplateOne from "@/pagesForStudents/pages/CardTemplate/ReportCardTemplateOne";
 // import MyClassRoomTestExamScreen from "../pagesForStudents/pages/class/MyClassRoom";
 // import MidTestReportScreen from "@/pagesForStudents/pages/CardTemplate/midTest/MidTestReportScreen";
 
@@ -213,6 +214,17 @@ export const studentRouter = createBrowserRouter([
           <Suspense fallback={<LoadingScreen />}>
             <ErrorBoundary FallbackComponent={Fallback}>
               <CourseDetail />
+            </ErrorBoundary>
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "/print-result-one",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ErrorBoundary FallbackComponent={Fallback}>
+              <ReportCardTemplateOne />
             </ErrorBoundary>
           </Suspense>
         ),
