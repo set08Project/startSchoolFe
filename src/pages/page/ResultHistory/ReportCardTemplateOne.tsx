@@ -409,6 +409,8 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
+  console.log("studentInfo-prop", computedTotals);
+
   return (
     <main className="w-full max-w-5xl mx-auto">
       <div className="flex justify-end gap-2 mb-2">
@@ -455,13 +457,18 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-2">
+                view
                 {computedTotals?.length > 0 && (
                   <div className="ml-6 text-xs text-gray-500">
                     <div className="font-semibold">Top 5 computed totals</div>
                     <ul>
-                      {computedTotals.slice(0, 5).map((t, idx) => (
+                      {computedTotals.slice(0, 7).map((t, idx) => (
                         <li key={t.id}>
-                          {idx + 1}. {t.id} — {t.total}
+                          {idx + 1}. {t.id} — {t.total} - {t.subjectCount} -{" "}
+                          {((t.total / (t.subjectCount * 100)) * 100).toFixed(
+                            2
+                          )}
+                          %{" "}
                         </li>
                       ))}
                     </ul>
