@@ -432,7 +432,11 @@ const ExaminationPreviewScreen = () => {
                         {index + 1}.
                       </span>
                       <span className="text-lg text-gray-800">
-                        <MathRenderer text={question.question} />
+                        <MathRenderer
+                          text={question.question
+                            .slice(0, question?.question.indexOf("https"))
+                            .trim()}
+                        />
                       </span>
                     </div>
 
@@ -449,6 +453,14 @@ const ExaminationPreviewScreen = () => {
                         ))}
                         <br />
                       </div>
+                    )}
+
+                    {question?.question.includes("https") && (
+                      <img
+                        src={`https://${
+                          question?.question.split("https://")[1]
+                        }`}
+                      />
                     )}
 
                     <div className="ml-8">

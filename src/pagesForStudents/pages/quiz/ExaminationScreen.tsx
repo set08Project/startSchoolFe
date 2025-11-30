@@ -1016,7 +1016,7 @@ const ExaminationTestScreen = () => {
       <LittleHeader
         name={
           quizData
-            ? `${quizData?.term && quizData?.term} ${quizData?.subjectTitle} ${
+            ? `${quizData?.term || ""} ${quizData?.subjectTitle} ${
                 quizData?.status
               } Screen`
             : "Loading Screen's Info"
@@ -1163,11 +1163,29 @@ const ExaminationTestScreen = () => {
                     <div className="text-4xl font-medium text-gray-800 mb-6">
                       <span className="text-lg text-gray-800  min-h-[160px]">
                         <MathRenderer
-                          text={readQuestion[currentQuestion]?.question}
+                          text={readQuestion[currentQuestion]?.question
+                            .slice(
+                              0,
+                              readQuestion[currentQuestion]?.question?.indexOf(
+                                "https"
+                              )
+                            )
+                            .trim()}
                         />
                       </span>
                     </div>
-                    {readQuestion[currentQuestion]?.images && (
+                    {readQuestion[currentQuestion]?.question.includes(
+                      "https"
+                    ) && (
+                      <img
+                        src={`https://${
+                          readQuestion[currentQuestion]?.question.split(
+                            "https://"
+                          )[1]
+                        }`}
+                      />
+                    )}
+                    {/* {readQuestion[currentQuestion]?.images && (
                       <div>
                         <br />
                         {readQuestion[currentQuestion]?.images?.map(
@@ -1177,7 +1195,7 @@ const ExaminationTestScreen = () => {
                         )}
                         <br />
                       </div>
-                    )}
+                    )} */}
 
                     {/* Options */}
                     <div className="mt-8" />

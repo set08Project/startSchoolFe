@@ -68,7 +68,8 @@ const PreviewExamination: FC<any> = ({
             formData
           )
             .then((res: any) => {
-              if (res.status === 201) {
+              console.log(res);
+              if (res.message === "Exam created successfully!") {
                 mutate(`api/view-subject-quiz/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
               } else {

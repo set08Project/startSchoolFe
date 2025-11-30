@@ -495,7 +495,7 @@ export const createExaminationData = async (
       "content-type": "multipart/form-data",
     };
 
-    // const URLi = "http://localhost:2244/api";
+    // const URL = "http://localhost:2244/api";
 
     return await axios
       .post(
