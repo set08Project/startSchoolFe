@@ -58,7 +58,7 @@ const Header = () => {
               </div>
             </div>
             <Link
-              to="/auth"
+              to="/auth/login"
               className="mr-5  text-[12px] md:text-[15px] font-medium"
               style={{ zIndex: "20px" }}
             >
