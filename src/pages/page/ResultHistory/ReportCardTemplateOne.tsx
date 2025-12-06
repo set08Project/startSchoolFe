@@ -299,7 +299,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const positionLabel = positionFromState ?? computedPosition;
 
   const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
-  console.log("studentID-grade", studentInfo?.presentClassID);
+
   const printableRef = useRef<HTMLDivElement | null>(null);
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 
@@ -409,8 +409,6 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
 
-  console.log("studentInfo-prop", computedTotals);
-
   return (
     <main className="w-full max-w-5xl mx-auto">
       <div className="flex justify-end gap-2 mb-2">
@@ -457,7 +455,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-2">
-                view
+                {/* view
                 {computedTotals?.length > 0 && (
                   <div className="ml-6 text-xs text-gray-500">
                     <div className="font-semibold">Top 5 computed totals</div>
@@ -473,7 +471,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       ))}
                     </ul>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 

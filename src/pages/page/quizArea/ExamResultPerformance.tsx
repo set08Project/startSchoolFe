@@ -1,7 +1,6 @@
 import { removeSelectedPerformance } from "@/pages/api/schoolAPIs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { Toaster, toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import LittleHeader from "@/components/layout/LittleHeader";
@@ -14,6 +13,8 @@ import {
 } from "@/pages/api/schoolAPIs";
 import { FaSpinner } from "react-icons/fa6";
 import { MdArrowBack } from "react-icons/md";
+import { usePDF } from "react-to-pdf";
+import moment from "moment";
 
 const ExamResultSetupRecordScreen = () => {
   const { subjectID, examID } = useParams();
@@ -22,6 +23,8 @@ const ExamResultSetupRecordScreen = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingII, setLoadingII] = useState<boolean>(false);
+
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showDeleteAllModal, setShowDeleteAllModal] = useState<boolean>(false);
   const [recordToDelete, setRecordToDelete] = useState<string>("");
@@ -32,7 +35,8 @@ const ExamResultSetupRecordScreen = () => {
     useState<boolean>(false);
   const [deleteSelectedProcessing, setDeleteSelectedProcessing] =
     useState<boolean>(false);
-  // Local copy so we can update the UI immediately on delete
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const { examData: quizData } = useExam(examID);
   const students = examPerformance;
 
@@ -40,6 +44,73 @@ const ExamResultSetupRecordScreen = () => {
   useEffect(() => {
     setLocalStudents(examPerformance);
   }, [examPerformance]);
+
+  // Filter students based on search term
+  const filteredStudents =
+    localStudents?.performance?.filter((record: any) =>
+      record?.studentName?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
+
+  // usePDF hook with targetRef and custom options to handle oklch colors
+  const { toPDF, targetRef } = usePDF({
+    filename: `exam_results_${examID || moment().format("YYYY-MM-DD")}.pdf`,
+    page: {
+      margin: 10,
+      format: "a4",
+      orientation: "landscape",
+    },
+    canvas: {
+      mimeType: "image/png",
+      qualityRatio: 1,
+    },
+    overrides: {
+      canvas: {
+        onclone: (clonedDoc: Document) => {
+          // Find all elements in the cloned document
+          const allElements = clonedDoc.querySelectorAll("*");
+          allElements.forEach((el: Element) => {
+            const htmlEl = el as HTMLElement;
+            const computedStyle = window.getComputedStyle(htmlEl);
+
+            // Replace oklch colors with standard colors
+            const properties = [
+              "color",
+              "backgroundColor",
+              "borderColor",
+              "fill",
+              "stroke",
+            ];
+            properties.forEach((prop) => {
+              const value = computedStyle.getPropertyValue(prop);
+              if (value && value.includes("oklch")) {
+                // Set fallback colors
+                if (prop === "color") {
+                  htmlEl.style.color = "#000000";
+                } else if (prop === "backgroundColor") {
+                  htmlEl.style.backgroundColor = "#ffffff";
+                } else if (prop === "borderColor") {
+                  htmlEl.style.borderColor = "#e5e7eb";
+                }
+              }
+            });
+          });
+        },
+      },
+    },
+  });
+
+  const handleDownloadPdf = async () => {
+    try {
+      setLoadingII(true);
+      await toPDF();
+      toast.success("PDF downloaded successfully!");
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      toast.error("Failed to generate PDF. Please try again.");
+    } finally {
+      setLoadingII(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -70,165 +141,228 @@ const ExamResultSetupRecordScreen = () => {
               </p>
             ) : (
               <div className="flex flex-col overflow-auto">
-                <div className="w-[1600px] flex bg-white rounded-lg shadow-md">
-                  <div className=" w-[50px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4"
-                      checked={
-                        localStudents?.performance?.length > 0 &&
-                        selectedIds.length ===
-                          localStudents?.performance?.length
-                      }
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          const ids = (localStudents?.performance || []).map(
-                            (r: any) => String(r.student || r._id)
-                          );
-                          setSelectedIds(ids);
-                        } else {
-                          setSelectedIds([]);
-                        }
-                      }}
-                    />
-                    <div>S/N</div>
-                  </div>
-                  <div className="py-3 w-[300px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Student Name
-                  </div>
-                  <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Student Attempts
-                  </div>
+                {/* Search bar */}
 
-                  <div className="w-[250px] border-r py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Student Score
-                  </div>
-
-                  <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Student Grade
-                  </div>
-                  <div className="py-3 w-[250px] border-r  px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Remark
-                  </div>
-
-                  <div className="py-3 px-6 w-[180px] border-r bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Test Completed
-                  </div>
-                  <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
-                    Date
-                  </div>
-                  <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-red-500 uppercase tracking-wider">
-                    Remove
-                  </div>
-                </div>
-                <div className="ml-auto px-4 py-3 flex items-center gap-3">
-                  <Button
-                    className={`px-6 py-2 rounded-md shadow-md transition-colors duration-300 !text-[14px] ${
-                      localStudents?.performance?.length > 0
-                        ? "bg-red-600 text-white hover:bg-red-500"
-                        : "bg-gray-300 text-gray-400 cursor-not-allowed"
-                    }`}
-                    name="Remove All"
-                    disabled={!localStudents?.performance?.length}
-                    onClick={() => setShowDeleteAllModal(true)}
-                  />
-                  <Button
-                    className={`px-6 py-2 rounded-md shadow-md transition-colors duration-300 !text-[14px] ${
-                      selectedIds.length > 0
-                        ? "bg-red-600 text-white hover:bg-red-500"
-                        : "bg-gray-300 text-gray-400 cursor-not-allowed"
-                    }`}
-                    name={`Delete Selected (${selectedIds.length})`}
-                    disabled={selectedIds.length === 0}
-                    onClick={() => setShowDeleteSelectedModal(true)}
-                  />
-                </div>
-
-                <div className="w-[1500px]">
-                  {localStudents?.performance?.map((record: any, i: number) => (
-                    <motion.tr
-                      key={record._id}
-                      className="w-[1600px] items-center border-b hover:bg-gray-100 transition-colors duration-200 flex "
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      <div className="w-[50px] py-4 px-6 text-sm text-gray-700 flex items-center gap-3">
+                {/* Download button above the table */}
+                <div className="absolute">
+                  <div className=" py-3 flex gap-3 mb-4">
+                    <div className="mb-4">
+                      <div className="relative max-w-md">
                         <input
-                          type="checkbox"
-                          className="h-4 w-4"
-                          checked={selectedIds.includes(
-                            String(record.student || record._id)
-                          )}
-                          onChange={(e) => {
-                            const id = String(record.student || record._id);
-                            setSelectedIds((prev) => {
-                              if (prev.includes(id))
-                                return prev.filter((p) => p !== id);
-                              return [...prev, id];
-                            });
-                          }}
+                          type="text"
+                          placeholder="Search student by name..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full px-4 h-12 mt-0 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent font-medium"
                         />
-                        <div>{i + 1}</div>
-                      </div>
-
-                      <div className="py-4 w-[300px] border-r px-6 text-sm text-gray-700">
-                        {record?.studentName}
-                      </div>
-
-                      <div className="border-r w-[150px] py-4 px-6 text-sm text-gray-700">
-                        {record.studentScore}/{record.totalQuestions}
-                      </div>
-
-                      <div className="py-4 border-r w-[250px] px-6 text-sm text-gray-700">
-                        <div className="text-blue-700">
-                          ({Number(record.markPerQuestion)} Mark Per Question)
-                        </div>
-                        {record.studentScore * Number(record.markPerQuestion)}/
-                        {record.totalQuestions * Number(record.markPerQuestion)}
-                      </div>
-
-                      <div className="py-3 w-[150px] border-r px-6  text-left  font-medium  uppercase tracking-wider text-[30px]">
-                        {record?.studentGrade}
-                      </div>
-
-                      <div className="py-4 px-6 text-sm w-[250px] border-r text-gray-700">
-                        {record.remark}
-                      </div>
-
-                      <div className=" text-start py-4 w-[180px] border-r px-6 text-sm text-gray-700">
-                        {record.quizDone ? (
-                          <div className="py-4 px-6  text-sm text-green-700">
-                            Completed
-                          </div>
-                        ) : (
-                          <div className="py-4 px-6 text-sm text-red-700">
-                            Not Completed
-                          </div>
+                        {searchTerm && (
+                          <button
+                            onClick={() => setSearchTerm("")}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            ✕
+                          </button>
                         )}
                       </div>
+                      {searchTerm && (
+                        <p className="text-sm text-gray-600 mt-2">
+                          Found {filteredStudents.length} student
+                          {filteredStudents.length !== 1 ? "s" : ""}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      disabled={loadingII}
+                      className={`text-[12px] ml-10 tracking-widest transition-all duration-300 hover:bg-blue-100 px-8 py-0.5 h-12 bg-blue-950 hover:bg-blue-900 text-white rounded-md border ${
+                        loadingII &&
+                        "cursor-not-allowed bg-blue-200 animate-pulse"
+                      }`}
+                      onClick={handleDownloadPdf}
+                    >
+                      {loadingII ? (
+                        <div className="flex gap-2 items-center">
+                          <FaSpinner className="animate-spin" />
+                          <span>Downloading...</span>
+                        </div>
+                      ) : (
+                        "Download PDF"
+                      )}
+                    </button>
+                    <Button
+                      className={`px-6 h-12 mt-0 rounded-md shadow-md transition-colors duration-300 !text-[14px] ${
+                        localStudents?.performance?.length > 0
+                          ? "bg-red-600 text-white hover:bg-red-500"
+                          : "bg-gray-300 text-gray-400 cursor-not-allowed"
+                      }`}
+                      name="Remove All"
+                      disabled={!localStudents?.performance?.length}
+                      onClick={() => setShowDeleteAllModal(true)}
+                    />
+                    <Button
+                      className={`px-6 h-12 mt-0 rounded-md shadow-md transition-colors duration-300 !text-[14px] ${
+                        selectedIds.length > 0
+                          ? "bg-red-600 text-white hover:bg-red-500"
+                          : "bg-gray-300 text-gray-400 cursor-not-allowed"
+                      }`}
+                      name={`Delete Selected (${selectedIds.length})`}
+                      disabled={selectedIds.length === 0}
+                      onClick={() => setShowDeleteSelectedModal(true)}
+                    />
+                  </div>
+                </div>
 
-                      <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
-                        {new Date(record.createdAt).toLocaleDateString()}
-                      </div>
+                <hr />
+                {/* <div className="mt-10" /> */}
+                {/* Attach targetRef here for PDF capture */}
+                <div ref={targetRef} className="bg-white mt-20">
+                  <div className="w-[1600px] flex bg-white rounded-lg shadow-md">
+                    <div className=" w-[50px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4"
+                        checked={
+                          localStudents?.performance?.length > 0 &&
+                          selectedIds.length ===
+                            localStudents?.performance?.length
+                        }
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            const ids = (localStudents?.performance || []).map(
+                              (r: any) => String(r.student || r._id)
+                            );
+                            setSelectedIds(ids);
+                          } else {
+                            setSelectedIds([]);
+                          }
+                        }}
+                      />
+                      <div>S/N</div>
+                    </div>
+                    <div className="py-3 w-[300px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Student Name
+                    </div>
+                    <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Student Attempts
+                    </div>
+                    <div className="w-[250px] border-r py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Student Score
+                    </div>
+                    <div className="py-3 w-[150px] border-r px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Student Grade
+                    </div>
+                    <div className="py-3 w-[250px] border-r  px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Remark
+                    </div>
+                    <div className="py-3 px-6 w-[180px] border-r bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Test Completed
+                    </div>
+                    <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider">
+                      Date
+                    </div>
+                    <div className="w-[160px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-red-500 uppercase tracking-wider">
+                      Remove
+                    </div>
+                  </div>
 
-                      <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
-                        <Button
-                          className="bg-red-600 px-8 py-2 text-white rounded-mg shadow-md hover:bg-red-500 transition-colors duration-300"
-                          name="Remove"
-                          onClick={() => {
-                            setRecordToDelete(record._id);
-                            setShowDeleteModal(true);
-                          }}
-                        />
+                  <div className="w-[1500px]">
+                    {filteredStudents.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        {searchTerm
+                          ? "No students found matching your search."
+                          : "No students available."}
                       </div>
-                    </motion.tr>
-                  ))}
+                    ) : (
+                      filteredStudents.map((record: any, i: number) => (
+                        <motion.div
+                          key={record._id}
+                          className="w-[1600px] items-center border-b hover:bg-gray-100 transition-colors duration-200 flex "
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          <div className="w-[50px] py-4 px-6 text-sm text-gray-700 flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              className="h-4 w-4"
+                              checked={selectedIds.includes(
+                                String(record.student || record._id)
+                              )}
+                              onChange={(e) => {
+                                const id = String(record.student || record._id);
+                                setSelectedIds((prev) => {
+                                  if (prev.includes(id))
+                                    return prev.filter((p) => p !== id);
+                                  return [...prev, id];
+                                });
+                              }}
+                            />
+                            <div>{i + 1}</div>
+                          </div>
+
+                          <div className="py-4 w-[300px] border-r px-6 text-sm text-gray-700">
+                            {record?.studentName}
+                          </div>
+
+                          <div className="border-r w-[150px] py-4 px-6 text-sm text-gray-700">
+                            {record.studentScore}/{record.totalQuestions}
+                          </div>
+
+                          <div className="py-4 border-r w-[250px] px-6 text-sm text-gray-700">
+                            <div className="text-blue-700">
+                              ({Number(record.markPerQuestion)} Mark Per
+                              Question)
+                            </div>
+                            {record.studentScore *
+                              Number(record.markPerQuestion)}
+                            /
+                            {record.totalQuestions *
+                              Number(record.markPerQuestion)}
+                          </div>
+
+                          <div className="py-3 w-[150px] border-r px-6  text-left  font-medium  uppercase tracking-wider text-[30px]">
+                            {record?.studentGrade}
+                          </div>
+
+                          <div className="py-4 px-6 text-sm w-[250px] border-r text-gray-700">
+                            {record.remark}
+                          </div>
+
+                          <div className=" text-start py-4 w-[180px] border-r px-6 text-sm text-gray-700">
+                            {record.quizDone ? (
+                              <div className="py-4 px-6  text-sm text-green-700">
+                                Completed
+                              </div>
+                            ) : (
+                              <div className="py-4 px-6 text-sm text-red-700">
+                                Not Completed
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
+                            {new Date(record.createdAt).toLocaleDateString()}
+                          </div>
+
+                          <div className="w-[160px] py-4 px-6 text-sm text-gray-700">
+                            <Button
+                              className="bg-red-600 px-8 py-2 text-white rounded-mg shadow-md hover:bg-red-500 transition-colors duration-300"
+                              name="Remove"
+                              onClick={() => {
+                                setRecordToDelete(record._id);
+                                setShowDeleteModal(true);
+                              }}
+                            />
+                          </div>
+                        </motion.div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             )}
           </motion.div>
         )}
+
         {/* Delete Selected Modal */}
         {showDeleteSelectedModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -273,7 +407,6 @@ const ExamResultSetupRecordScreen = () => {
                       .then((res) => {
                         if (res.status === 200 || res.status === 201) {
                           toast.success("Selected performance records removed");
-                          // Remove matching records from local state immediately
                           setLocalStudents((prev: any) => {
                             if (!prev) return prev;
                             return {
@@ -311,7 +444,7 @@ const ExamResultSetupRecordScreen = () => {
           </div>
         )}
 
-        {/* Confirmation Modal */}
+        {/* Delete Single Record Modal */}
         {showDeleteModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -352,7 +485,6 @@ const ExamResultSetupRecordScreen = () => {
                     removePerformance(recordToDelete)
                       .then((res) => {
                         if (res.status === 200) {
-                          // remove from local state immediately
                           setLocalStudents((prev: any) => {
                             if (!prev) return prev;
                             return {
@@ -362,16 +494,15 @@ const ExamResultSetupRecordScreen = () => {
                               ),
                             };
                           });
-
-                          setLoading(false);
                           setShowDeleteModal(false);
                           setRecordToDelete("");
-                          // revalidate remote data
                           if (mutate) mutate();
+                          toast.success("Record removed successfully");
                         }
                       })
                       .catch((err) => {
                         console.error("Remove error:", err);
+                        toast.error("Failed to remove record");
                       })
                       .finally(() => {
                         setLoading(false);
@@ -382,7 +513,8 @@ const ExamResultSetupRecordScreen = () => {
             </motion.div>
           </div>
         )}
-        {/* Bulk Confirmation Modal */}
+
+        {/* Delete All Modal */}
         {showDeleteAllModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <motion.div
@@ -397,7 +529,7 @@ const ExamResultSetupRecordScreen = () => {
                 Are you sure you want to remove <strong>ALL</strong> performance
                 records for this exam? This action cannot be undone.
               </p>
-              <div className="flex justify-end gap-">
+              <div className="flex justify-end gap-4">
                 <Button
                   className="bg-gray-300 px-8 py-2 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-300 !text-[14px]"
                   name="Cancel"
@@ -423,7 +555,6 @@ const ExamResultSetupRecordScreen = () => {
                       .then((res) => {
                         if (res.status === 200 || res.status === 201) {
                           toast.success("All performance records removed");
-                          // Clear local state immediately for UX
                           setLocalStudents((prev: any) => ({
                             ...prev,
                             performance: [],
@@ -444,7 +575,6 @@ const ExamResultSetupRecordScreen = () => {
                       .finally(() => {
                         setDeleteAllProcessing(false);
                         setShowDeleteAllModal(false);
-                        setLoading(false);
                       });
                   }}
                 />
