@@ -4,7 +4,8 @@ import moment from "moment";
 import lodash from "lodash";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
-import { usePDF } from "react-to-pdf";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 import LittleHeader from "../../../components/static/LittleHeader";
 import {
@@ -267,12 +268,7 @@ const BroadSheetReportCardApproved: FC = () => {
   >({});
 
   const contentRef = useRef<HTMLDivElement>(null);
-  const { toPDF, targetRef }: any = usePDF({
-    filename: `broadsheet-${oneClass?.className}-${moment().format("lll")}.pdf`,
-    page: {
-      orientation: "landscape",
-    },
-  });
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const classInfo = `${oneClass?.className?.trim() || ""} session: ${
     data?.data?.presentSession || ""
@@ -350,15 +346,57 @@ const BroadSheetReportCardApproved: FC = () => {
 
   const handlePrintResult = async () => {
     setLoading(true);
-    setLoadingView(true);
+    try {
+      const element = tableRef.current;
+      if (!element) throw new Error("Table not found");
 
-    setTimeout(() => {
-      toPDF().finally(() => {
-        setLoading(false);
-        setLoadingView(false);
-        toast.success("Result downloaded.");
+      // Render to canvas with high scale for quality
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
       });
-    }, 2000);
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: "a4",
+      });
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // Calculate how many pages are needed
+      let heightLeft = pdfHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+
+      // Add additional pages if content is taller than one page
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Save PDF
+      pdf.save(
+        `broadsheet-${oneClass?.className}-${moment().format("YYYY-MM-DD")}.pdf`
+      );
+      toast.success("Result downloaded successfully.");
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      toast.error("Failed to generate PDF. See console for details.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const dynamicWidth = loadingView
@@ -403,9 +441,9 @@ const BroadSheetReportCardApproved: FC = () => {
       </div>
 
       <div
-        ref={targetRef}
+        ref={tableRef}
         style={{ width: dynamicWidth, height: "100%" }}
-        className={`py-6 px-2 min-w-[300px] ${
+        className={`py-6 px-2 min-w-[300px] bg-white ${
           !loadingView
             ? "border rounded-md overflow-x-auto overflow-y-hidden"
             : ""

@@ -151,8 +151,6 @@ const ViewClassStudent: FC = () => {
     setToggleValue("");
   };
 
-  console.log("reading: ", classStudents?.students);
-
   return (
     <div>
       <Toaster />
