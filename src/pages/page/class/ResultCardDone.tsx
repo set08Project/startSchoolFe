@@ -628,7 +628,7 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
                 </div>
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">
-                    Attendance Performance
+                    Attendance Performance1
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
                     {grade?.attendance}

@@ -8,7 +8,63 @@ import { MdClose, MdFeedback } from "react-icons/md";
 import Input from "../../../components/reUse/Input";
 import { GiPadlock } from "react-icons/gi";
 import { useSchoolData } from "../../hook/useSchoolAuth";
-import { downlaodSchoolData, URL } from "@/pages/api/schoolAPIs";
+import {
+  downlaodSchoolData,
+  URL,
+  updateSchoolResumptionTeamInfo,
+} from "@/pages/api/schoolAPIs";
+import toast from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa6";
+import { IoCalendarOutline } from "react-icons/io5";
+
+// Utility function to format date as "10th Sept 2025"
+const formatDateOrdinal = (date: Date): string => {
+  const day = date.getDate();
+  const suffix = ["st", "nd", "rd"][(((day + 90) % 100) - 10) % 10] || "th";
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day}${suffix} ${month} ${year}`;
+};
+
+// Utility function to convert "10th Sept 2025" back to "2025-09-10"
+const parseOrdinalDate = (str: string): string => {
+  const match = str.match(/(\d+)\w+\s+(\w+)\s+(\d{4})/);
+  if (!match) return "";
+  const [, day, month, year] = match;
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const monthIndex = months.indexOf(month) + 1;
+  return `${year}-${String(monthIndex).padStart(2, "0")}-${String(day).padStart(
+    2,
+    "0"
+  )}`;
+};
 
 const SettingScreen: FC = () => {
   document.title = "School's Profile settings";
@@ -30,7 +86,7 @@ const SettingScreen: FC = () => {
       url: "/my-personal-info/main-account-setting",
       size: 35,
     },
-    
+
     // {
     //   icon: <HiMiniBuildingOffice2 size={45} />,
     //   title: "School's Page Settings",
@@ -54,6 +110,17 @@ const SettingScreen: FC = () => {
   const [view, setView] = useState<boolean>(false);
   const [codeValue, setCodeValue] = useState<string>("");
   const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
+  const [teamFormData, setTeamFormData] = useState({
+    NumberOfDays: "",
+    SchoolTeamResumption: "",
+    SchoolTeamCloses: "",
+  });
+  const [teamLoading, setTeamLoading] = useState<boolean>(false);
+  const [showResumptionPicker, setShowResumptionPicker] =
+    useState<boolean>(false);
+  const [showClosesPicker, setShowClosesPicker] = useState<boolean>(false);
+  const [resumptionMonth, setResumptionMonth] = useState(new Date());
+  const [closesMonth, setClosesMonth] = useState(new Date());
 
   return (
     <div className="relative min-h-[88vh] text-blue-950 flex flex-col ">
@@ -75,9 +142,7 @@ const SettingScreen: FC = () => {
           </div>
         </div>
       </div>
-
       {/* profile Account Detail Card */}
-
       <div
         className="my-6 text-blue-950 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 transition-all duration-300 lg:[&>*:nth-child(3)]:col-span-2 xl:[&>*:nth-child(3)]:col-span-1
       "
@@ -193,9 +258,339 @@ const SettingScreen: FC = () => {
           );
         })}
       </div>
+      <main className="flex flex-col w-full">
+        <div className="my-10 border-t" />
+        <p className="text-lg font-semibold mb-4">Team's Data</p>
 
+        {/* Team Resumption Form */}
+        <div className="border rounded-lg p-6 bg-white shadow-md max-w-4xl">
+          <h3 className="text-base font-semibold mb-4 text-blue-950">
+            School Team Resumption Settings
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                Number of Days
+              </label>
+              <Input
+                type="number"
+                placeholder="Enter number of days"
+                value={teamFormData.NumberOfDays}
+                onChange={(e) =>
+                  setTeamFormData((prev) => ({
+                    ...prev,
+                    NumberOfDays: e.target.value,
+                  }))
+                }
+                className="w-[98%] h-11 mt-0 ml-0"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                School Team Resumption Date
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowResumptionPicker(!showResumptionPicker)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 flex items-center gap-2 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-950"
+                >
+                  <IoCalendarOutline size={18} />
+                  <span>
+                    {teamFormData.SchoolTeamResumption
+                      ? teamFormData.SchoolTeamResumption
+                      : "Select date"}
+                  </span>
+                </button>
+                {showResumptionPicker && (
+                  <div className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80">
+                    <div className="flex justify-between items-center mb-4">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setResumptionMonth(
+                            new Date(
+                              resumptionMonth.getFullYear(),
+                              resumptionMonth.getMonth() - 1
+                            )
+                          )
+                        }
+                        className="px-3 py-1 hover:bg-gray-200 rounded font-semibold text-lg"
+                      >
+                        ←
+                      </button>
+                      <span className="font-semibold text-lg">
+                        {resumptionMonth.toLocaleString("default", {
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setResumptionMonth(
+                            new Date(
+                              resumptionMonth.getFullYear(),
+                              resumptionMonth.getMonth() + 1
+                            )
+                          )
+                        }
+                        className="px-3 py-1 hover:bg-gray-200 rounded font-semibold text-lg"
+                      >
+                        →
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-7 gap-2 mb-2">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                        (day) => (
+                          <div
+                            key={day}
+                            className="h-10 flex items-center justify-center text-xs font-bold text-gray-600"
+                          >
+                            {day}
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <div className="grid grid-cols-7 gap-2">
+                      {Array.from({ length: 42 }).map((_, i) => {
+                        const firstDay = new Date(
+                          resumptionMonth.getFullYear(),
+                          resumptionMonth.getMonth(),
+                          1
+                        ).getDay();
+                        const daysInMonth = new Date(
+                          resumptionMonth.getFullYear(),
+                          resumptionMonth.getMonth() + 1,
+                          0
+                        ).getDate();
+                        const dayNum = i - firstDay + 1;
+
+                        if (dayNum <= 0 || dayNum > daysInMonth) {
+                          return (
+                            <div
+                              key={i}
+                              className="w-8 h-8 flex items-center justify-center"
+                            />
+                          );
+                        }
+
+                        const date = new Date(
+                          resumptionMonth.getFullYear(),
+                          resumptionMonth.getMonth(),
+                          dayNum
+                        );
+                        const formatted = formatDateOrdinal(date);
+                        const isSelected =
+                          teamFormData.SchoolTeamResumption === formatted;
+
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => {
+                              setTeamFormData((prev) => ({
+                                ...prev,
+                                SchoolTeamResumption: formatted,
+                              }));
+                              setShowResumptionPicker(false);
+                            }}
+                            className={`h-10 flex items-center justify-center rounded text-sm font-semibold ${
+                              isSelected
+                                ? "bg-blue-950 text-white"
+                                : "hover:bg-gray-200 text-gray-700"
+                            }`}
+                          >
+                            {dayNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                School Team Closes Date
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowClosesPicker(!showClosesPicker)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 flex items-center gap-2 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-950"
+                >
+                  <IoCalendarOutline size={18} />
+                  <span>
+                    {teamFormData.SchoolTeamCloses
+                      ? teamFormData.SchoolTeamCloses
+                      : "Select date"}
+                  </span>
+                </button>
+                {showClosesPicker && (
+                  <div className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-80">
+                    <div className="flex justify-between items-center mb-4">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setClosesMonth(
+                            new Date(
+                              closesMonth.getFullYear(),
+                              closesMonth.getMonth() - 1
+                            )
+                          )
+                        }
+                        className="px-3 py-1 hover:bg-gray-200 rounded font-semibold text-lg"
+                      >
+                        ←
+                      </button>
+                      <span className="font-semibold text-lg">
+                        {closesMonth.toLocaleString("default", {
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setClosesMonth(
+                            new Date(
+                              closesMonth.getFullYear(),
+                              closesMonth.getMonth() + 1
+                            )
+                          )
+                        }
+                        className="px-3 py-1 hover:bg-gray-200 rounded font-semibold text-lg"
+                      >
+                        →
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-7 gap-2 mb-2">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                        (day) => (
+                          <div
+                            key={day}
+                            className="h-10 flex items-center justify-center text-xs font-bold text-gray-600"
+                          >
+                            {day}
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <div className="grid grid-cols-7 gap-2">
+                      {Array.from({ length: 42 }).map((_, i) => {
+                        const firstDay = new Date(
+                          closesMonth.getFullYear(),
+                          closesMonth.getMonth(),
+                          1
+                        ).getDay();
+                        const daysInMonth = new Date(
+                          closesMonth.getFullYear(),
+                          closesMonth.getMonth() + 1,
+                          0
+                        ).getDate();
+                        const dayNum = i - firstDay + 1;
+
+                        if (dayNum <= 0 || dayNum > daysInMonth) {
+                          return (
+                            <div
+                              key={i}
+                              className="w-8 h-8 flex items-center justify-center"
+                            />
+                          );
+                        }
+
+                        const date = new Date(
+                          closesMonth.getFullYear(),
+                          closesMonth.getMonth(),
+                          dayNum
+                        );
+                        const formatted = formatDateOrdinal(date);
+                        const isSelected =
+                          teamFormData.SchoolTeamCloses === formatted;
+
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => {
+                              setTeamFormData((prev) => ({
+                                ...prev,
+                                SchoolTeamCloses: formatted,
+                              }));
+                              setShowClosesPicker(false);
+                            }}
+                            className={`h-10 flex items-center justify-center rounded text-sm font-semibold ${
+                              isSelected
+                                ? "bg-blue-950 text-white"
+                                : "hover:bg-gray-200 text-gray-700"
+                            }`}
+                          >
+                            {dayNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <Button
+            name={teamLoading ? "Updating..." : "Update Team Info"}
+            disabled={
+              teamLoading ||
+              !teamFormData.NumberOfDays ||
+              !teamFormData.SchoolTeamResumption ||
+              !teamFormData.SchoolTeamCloses
+            }
+            className="bg-blue-950 text-white hover:bg-blue-900 disabled:bg-gray-400"
+            icon={
+              teamLoading ? (
+                <FaSpinner className="animate-spin text-10" />
+              ) : undefined
+            }
+            onClick={async () => {
+              setTeamLoading(true);
+              try {
+                const res = await updateSchoolResumptionTeamInfo(data?._id, {
+                  NumberOfDays: parseInt(teamFormData.NumberOfDays).toString(),
+                  SchoolTeamResumption: parseOrdinalDate(
+                    teamFormData.SchoolTeamResumption
+                  ),
+                  SchoolTeamCloses: parseOrdinalDate(
+                    teamFormData.SchoolTeamCloses
+                  ),
+                });
+
+                if (
+                  res &&
+                  res.message === "school account detail updated successfully"
+                ) {
+                  toast.success("Team info updated successfully");
+                  setTeamFormData({
+                    NumberOfDays: "",
+                    SchoolTeamResumption: "",
+                    SchoolTeamCloses: "",
+                  });
+                } else {
+                  toast.error("Failed to update team info");
+                }
+              } catch (err) {
+                console.error("Error updating team info:", err);
+                toast.error("Error updating team info");
+              } finally {
+                setTeamLoading(false);
+              }
+            }}
+          />
+        </div>
+      </main>
       <div className="flex-1 " />
-
       <div className="flex justify-end gap-4">
         <label
           htmlFor="feedback"
@@ -205,7 +600,6 @@ const SettingScreen: FC = () => {
           <div>Give us Feedback</div>
         </label>
       </div>
-
       {/* Download School Data Modal */}
       {showDownloadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
@@ -255,17 +649,12 @@ const SettingScreen: FC = () => {
                   setShowDownloadModal(false);
                 }}
               >
-                <a
-                  href={`${URL}/export-data-file/${data?._id}`}
-                >
-                  Proceed
-                </a>
+                <a href={`${URL}/export-data-file/${data?._id}`}>Proceed</a>
               </button>
             </div>
           </div>
         </div>
       )}
-
       {/* Put this part before </body> tag */}
       <input type="checkbox" id="feedback" className="modal-toggle" />
       <div className="modal" role="dialog">
@@ -290,6 +679,7 @@ const SettingScreen: FC = () => {
           Close
         </label>
       </div>
+      s
     </div>
   );
 };

@@ -27,6 +27,7 @@ import {
   useStudentInfo,
   useStudentInfoData,
 } from "@/pagesForStudents/hooks/useStudentHook";
+import { data } from "@/mainPage/TeamScreen/NextSuperAdmin/allCharts/CardBarChart";
 
 interface ReportCardTemplateOneProps {
   studentInfo?: any;
@@ -197,11 +198,6 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               if (sid === "691451f061a5371e65809c71") {
               }
               if (!reportArray || reportArray.length === 0) {
-                console.log(
-                  "ReportCardTemplateOne - skipped student",
-                  sid,
-                  "- no reportCard"
-                );
                 return;
               }
 
@@ -225,23 +221,11 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       info.includes(
                         normalize(String(school?.presentSession))
                       )));
-                if (!found)
-                  console.log(
-                    "ReportCardTemplateOne - skipped report for student",
-                    sid,
-                    "classInfo:",
-                    el?.classInfo
-                  );
-                return found;
+                if (!found) return found;
               });
 
               // Skip if no matching report found OR if report has no results
               if (!report || !report.result || report.result.length === 0) {
-                console.log(
-                  "ReportCardTemplateOne - skipped student",
-                  sid,
-                  "- no matching report or empty results"
-                );
                 return;
               }
 
@@ -260,7 +244,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                 total: tot,
                 subjectCount: report.result.length,
               });
-              console.log(report.result, "total for student", sid, "is", tot);
+              // console.log(report.result, "total for student", sid, "is", tot);
             } catch (e) {
               // ignore errors for individual students
             }
@@ -628,10 +612,10 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         {grade?.attendance?.schoolOpened || ""}
                       </div>
                       <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.attendance?.present || ""}
+                        {grade?.attendance || ""}%
                       </div>
                       <div className="p-2 text-center">
-                        {grade?.attendance?.absent || ""}
+                        {100 - grade?.attendance || ""}%
                       </div>
                     </div>
                     <div className="bg-gray-200 text-center  border-t border-b border-gray-800">
@@ -645,23 +629,27 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         <div>School Opened</div>
                       </div>
                       <div className="border-r border-b border-gray-800 p-1">
-                        <div className="font-semibold">No. Of</div>
-                        <div>Days Present</div>
+                        <div className="font-semibold">School</div>
+                        <div>Resumption Date</div>
                       </div>
                       <div className="border-b border-gray-800 p-1">
-                        <div className="font-semibold">No. Of</div>
-                        <div>Days Absent</div>
+                        <div className="font-semibold">School</div>
+                        <div>Closing Date</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.terminalDuration?.schoolOpened || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.terminalDuration?.present || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {moment(school?.SchoolTeamResumption).format(
+                          "Do MMM, YYYY"
+                        ) || ""}
                       </div>
-                      <div className="p-2 text-center">
-                        {grade?.terminalDuration?.absent || ""}
+                      <div className="p-2 text-center text-sm font-medium">
+                        {moment(school?.SchoolTeamCloses).format(
+                          "Do MMM, YYYY"
+                        ) || ""}
                       </div>
                     </div>
                   </div>

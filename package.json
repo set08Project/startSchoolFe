@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "build": "tsc && vite build",
-  "postbuild": "node scripts/copy-index.js",
-  "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-  "preview": "vite preview"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "postbuild": "node scripts/copy-index.js",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^41.3.1",
@@ -54,6 +54,7 @@
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.4.3",
     "i": "^0.3.7",
+    "idb": "^7.1.1",
     "input-otp": "^1.4.2",
     "jspdf": "^2.5.2",
     "jsvectormap": "^1.6.0",
@@ -71,7 +72,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-content-loader": "^6.2.1",
     "react-datepicker": "^6.1.0",
-    "react-day-picker": "^9.10.0",
+    "react-day-picker": "^9.12.0",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-error-boundary": "^4.0.12",
@@ -108,8 +109,6 @@
     "vaul": "^1.1.2",
     "yarn": "^1.22.21",
     "yet-another-react-lightbox": "^3.17.0"
-    ,
-    "idb": "^7.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

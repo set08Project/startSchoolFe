@@ -12,6 +12,26 @@ import axios, { AxiosResponse } from "axios";
 export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
 const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
+export const updateSchoolResumptionTeamInfo = async (
+  schoolID: string,
+  data: {
+    NumberOfDays: string;
+    SchoolTeamResumption: string;
+    SchoolTeamCloses: string;
+  }
+): Promise<any> => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .patch(`${URL}/change-school-team-info/${schoolID}`, data)
+      .then((res: AxiosResponse) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const removeAllPerformance = async (
   performanceID: string
 ): Promise<any> => {
