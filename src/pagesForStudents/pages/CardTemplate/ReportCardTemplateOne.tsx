@@ -712,23 +712,27 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         <div>School Opened</div>
                       </div>
                       <div className="border-r border-b border-gray-800 p-1">
-                        <div className="font-semibold">No. Of</div>
-                        <div>Days Present</div>
+                        <div className="font-semibold">School</div>
+                        <div>Resumption Date</div>
                       </div>
                       <div className="border-b border-gray-800 p-1">
-                        <div className="font-semibold">No. Of</div>
-                        <div>Days Absent</div>
+                        <div className="font-semibold">School</div>
+                        <div>Closing Date</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.terminalDuration?.schoolOpened || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.terminalDuration?.present || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {moment(school?.SchoolTeamResumption).format(
+                          "Do MMM, YYYY"
+                        ) || ""}
                       </div>
-                      <div className="p-2 text-center">
-                        {grade?.terminalDuration?.absent || ""}
+                      <div className="p-2 text-center text-sm font-medium">
+                        {moment(school?.SchoolTeamCloses).format(
+                          "Do MMM, YYYY"
+                        ) || ""}
                       </div>
                     </div>
                   </div>
