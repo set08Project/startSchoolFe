@@ -608,13 +608,13 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.attendance?.schoolOpened || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center">
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
                         {grade?.attendance || ""}%
                       </div>
-                      <div className="p-2 text-center">
+                      <div className="p-2 text-center text-sm font-medium">
                         {100 - grade?.attendance || ""}%
                       </div>
                     </div>

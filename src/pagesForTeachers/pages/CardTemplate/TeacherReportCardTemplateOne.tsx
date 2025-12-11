@@ -619,14 +619,14 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.attendance?.schoolOpened || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center">
-                        {grade?.attendance?.present || ""}
+                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                        {grade?.attendance || ""}%
                       </div>
-                      <div className="p-2 text-center">
-                        {grade?.attendance?.absent || ""}
+                      <div className="p-2 text-center text-sm font-medium">
+                        {100 - grade?.attendance || ""}%
                       </div>
                     </div>
                     <div className="bg-gray-200 text-center  border-t border-b border-gray-800">
