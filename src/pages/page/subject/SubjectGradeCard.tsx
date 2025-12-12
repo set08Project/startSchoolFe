@@ -116,6 +116,9 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   );
   const [exam, setExam] = useState<string>("");
   const [isEditingExam, setIsEditingExam] = useState<boolean>(false);
+  const [teacherComment, setTeacherComment] = useState(
+    result?.teacherComment ? result.teacherComment : ""
+  );
 
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
@@ -185,6 +188,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         test3: result?.test3 || 0,
         test4: test4Score,
         exam: examScore,
+        teacherComment: teacherComment,
       });
 
       // Update local display state immediately
@@ -196,6 +200,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         test3: result?.test3 || 0,
         test4: test4Score,
         exam: examScore,
+        teacherComment: teacherComment,
       });
 
       // Refresh data from server
@@ -210,6 +215,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       setTest4(String(test4Score));
       setExam(String(examScore));
       setIsEditingExam(false);
+      setTeacherComment("");
     } catch (error: any) {
       setLoading(false);
       toast.error("Failed to add grade. Please try again.");
@@ -224,9 +230,10 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
 
   return (
     <div
-      className={`text-blue-950 w-full flex items-center gap-2 text-[12px] font-medium h-16 px-4 my-2 overflow-hidden ${
+      className={`text-blue-950 flex items-center gap-2 text-[12px] font-medium h-16 px-4 my-2 overflow-hidden whitespace-nowrap ${
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
+      style={{ width: "1180px" }}
     >
       <div className="w-[100px] border-r font-bold">{i + 1}</div>
 
@@ -315,8 +322,21 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
         />
       </div>
 
+      {/* Teacher Comment Input */}
+      <div className="w-[200px] border-r">
+        <input
+          className="w-[95%] h-8 outline-none border rounded-md px-2 text-[11px]"
+          type="text"
+          placeholder={`${result?.teacherComment || "Add Comment"}`}
+          maxLength={100}
+          value={teacherComment}
+          onChange={(e: any) => setTeacherComment(e.target.value)}
+          title="Teacher's comment for this subject"
+        />
+      </div>
+
       {/* Submit Button */}
-      <div className="w-[180px] border-r relative">
+      <div className="w-[180px] relative">
         <Button
           name={loading ? "Loading..." : "Add Score"}
           icon={
@@ -394,18 +414,19 @@ const SubjectGradeCard = () => {
 
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-x-auto">
         {/* Table Header */}
-        <div className="text-gray-600 w-[1000px] flex gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-gray-600 w-[1180px] flex gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">Student Info</div>
           <div className="w-[100px] border-r">Student's Grade</div>
           <div className="w-[100px] border-r">Attendance Ratio</div>
           <div className="w-[100px] border-r">Test Score (40)</div>
           <div className="w-[100px] border-r">Exam Score (60)</div>
-          <div className="w-[180px] border-r">Submit Report</div>
+          <div className="w-[200px] border-r">Teacher Comment</div>
+          <div className="w-[180px]">Submit Report</div>
         </div>
 
         {/* Table Body */}
-        <div className="w-[1000px] overflow-hidden">
+        <div className="w-[1180px] overflow-hidden">
           {sortedStudents.length > 0 ? (
             sortedStudents.map((student: any, index: number) => (
               <MainStudentRow key={student._id} props={student} i={index} />

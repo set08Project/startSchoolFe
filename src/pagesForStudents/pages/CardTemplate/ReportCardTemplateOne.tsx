@@ -762,7 +762,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         Total Average MKS
                       </th>
                       <th className="border border-gray-800 p-1 w-20">GRADE</th>
-                      <th className="border border-gray-800 p-1 w-[150px]">
+                      <th className="border border-gray-800 p-1 w-[250px]">
                         Teacher's Comment
                       </th>
                       {/* <th className="border border-gray-800 p-1 w-20">

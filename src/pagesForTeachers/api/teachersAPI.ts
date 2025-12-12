@@ -974,6 +974,7 @@ export const updateTeacherAvatar = async (teacherID: string, data: string) => {
 
 export const createGradeScore = async (studentID: string, data: {}) => {
   try {
+    // const URL: string = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-report-card/${studentID}`, data)
       .then((res: any) => {
