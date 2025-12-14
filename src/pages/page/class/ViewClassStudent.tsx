@@ -24,6 +24,7 @@ import {
   verifyPayment1st,
   verifyPayment2nd,
   verifyPayment3rd,
+  migrateStudent,
 } from "../../api/schoolAPIs";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import crypto from "crypto";
@@ -125,6 +126,129 @@ const Performance: FC<iProps> = ({ props }) => {
   );
 };
 
+const sss1Classes = [
+  "SSS 1ART",
+  "SSS 1COMMERCIAL",
+  "SSS 1SCIENCE",
+  "SSS 1A",
+  "SSS 1C",
+  "SSS 1B",
+  "SSS 1D",
+];
+
+const MigrateStudent: FC<
+  iProps & { studentId: string; onMigrateSuccess?: () => void }
+> = ({ props, studentId, onMigrateSuccess, id }) => {
+  const user = useSelector((el: any) => el.user);
+  const [selectedClass, setSelectedClass] = useState<string>("");
+  const [customClass, setCustomClass] = useState<string>("");
+  const [showCustom, setShowCustom] = useState<boolean>(false);
+  const [isMigrating, setIsMigrating] = useState<boolean>(false);
+
+  const handleMigrate = async () => {
+    const targetClass = showCustom ? customClass.toUpperCase() : selectedClass;
+
+    if (!targetClass) {
+      toast.error("Please select or enter a target class");
+      return;
+    }
+
+    setIsMigrating(true);
+    try {
+      const migrationData = {
+        studentMigrations: [
+          {
+            studentId: studentId,
+            targetClassName: targetClass,
+          },
+        ],
+      };
+
+      const response = await migrateStudent(id, migrationData);
+
+      if (response?.status === 200 || response?.data) {
+        toast.success("Student migrated successfully");
+        setSelectedClass("");
+        setCustomClass("");
+        setShowCustom(false);
+        onMigrateSuccess?.();
+      } else {
+        toast.error("Failed to migrate student");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Migration error");
+    } finally {
+      setIsMigrating(false);
+    }
+  };
+
+  return (
+    <div className="flex gap-1 items-center flex-wrap">
+      {!showCustom ? (
+        <>
+          <select
+            value={selectedClass}
+            onChange={(e) => {
+              if (e.target.value === "custom") {
+                setShowCustom(true);
+                setSelectedClass("");
+              } else {
+                setSelectedClass(e.target.value);
+              }
+            }}
+            className="px-2 py-2 border border-gray-300 rounded-md text-[11px] focus:outline-none focus:border-blue-500 flex-1 min-w-[100px]"
+          >
+            <option value="">Select Class</option>
+            {sss1Classes.map((cls) => (
+              <option key={cls} value={cls}>
+                {cls}
+              </option>
+            ))}
+            <option value="custom">+ Custom Class</option>
+          </select>
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            value={customClass}
+            onChange={(e) => setCustomClass(e.target.value)}
+            placeholder="Enter class name"
+            className="px-2 uppercase py-2 border border-gray-300 rounded-md text-[11px] focus:outline-none focus:border-blue-500 flex-1 min-w-[100px]"
+          />
+          <button
+            onClick={() => {
+              setShowCustom(false);
+              setCustomClass("");
+              setSelectedClass("");
+            }}
+            className="px-2 py-2 text-[11px] font-medium rounded-md bg-gray-400 text-white hover:bg-gray-500 transition-all duration-300 whitespace-nowrap"
+          >
+            Cancel
+          </button>
+        </>
+      )}
+      <button
+        onClick={handleMigrate}
+        disabled={isMigrating}
+        className={`px-2 py-2 text-[11px] font-medium rounded-md transition-all duration-300 whitespace-nowrap ${
+          isMigrating
+            ? "bg-gray-400 text-white cursor-not-allowed"
+            : "bg-green-600 text-white hover:bg-green-700"
+        }`}
+      >
+        {isMigrating ? (
+          <div className="flex items-center gap-1">
+            <FaSpinner className="animate-spin text-[12px]" />
+          </div>
+        ) : (
+          "Migrate"
+        )}
+      </button>
+    </div>
+  );
+};
+
 const ViewClassStudent: FC = () => {
   const { classID } = useParams();
   const user = useSelector((el: any) => el.user);
@@ -140,6 +264,10 @@ const ViewClassStudent: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingValue, setLoadingValue] = useState<string>("");
   const [toggleValue, setToggleValue] = useState<string>("");
+  const [migrationClass, setMigrationClass] = useState<{
+    [key: string]: string;
+  }>({});
+  const [migratingStudentId, setMigratingStudentId] = useState<string>("");
 
   const updated = (id: string) => {
     setToggle(true);
@@ -171,7 +299,7 @@ const ViewClassStudent: FC = () => {
             <div className="w-[150px] border-r">Parent Contact</div>
             <div className="w-[200px] border-r">Address </div>
 
-            <div className="w-[200px] border-r">Performance Ratio</div>
+            <div className="w-[250px] border-r">Migrate Student</div>
 
             <div className="w-[80px] border-r">Rate</div>
             <div className="w-[180px] border-r">View Detail</div>
@@ -300,8 +428,15 @@ const ViewClassStudent: FC = () => {
                             ? props.studentAddress
                             : "no Address yet"}
                         </div>
-                        <div className="w-[200px] border-r  ">
-                          {/* {props?.performance ? props?.performance : 0}% */}
+                        <div className="w-[250px] border-r  ">
+                          <MigrateStudent
+                            id={data?._id}
+                            props={props}
+                            studentId={props?._id}
+                            onMigrateSuccess={() => {
+                              mutate(`api/view-all-class-students/${classID}`);
+                            }}
+                          />
                         </div>
                         <div className="w-[80px] border-r">
                           {Math.ceil(Math.random() * (5 - 1)) + 1} of 5

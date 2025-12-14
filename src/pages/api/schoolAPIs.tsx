@@ -1446,8 +1446,22 @@ export const verifyPayment3rd = async (schoolID: string, studentID: string) => {
   }
 };
 
+export const migrateStudent = async (schoolID: string, data: {}) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .patch(`${URL}/migrate-sss1holders/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
 export const createNewSession = async (schoolID: string, data: {}) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-new-school-session/${schoolID}`, data)
       .then((res: any) => {
