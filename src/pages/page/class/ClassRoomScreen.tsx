@@ -74,33 +74,37 @@ const ClassRoomScreen = () => {
       });
     }
   };
-const [file, setFile] = useState();
-const [toggle, setToggle] = useState<boolean>(false);
-
+  const [file, setFile] = useState();
+  const [toggle, setToggle] = useState<boolean>(false);
 
   const handleBulkClassroom = async () => {
     if (!file) return;
     setToggle(true);
     const formData = new FormData();
-    formData.append('file', file as any);
+    formData.append("file", file as any);
 
     try {
-      const res: any = await bulkUploadofClassroomWithQueue(data?._id, formData as any);
+      const res: any = await bulkUploadofClassroomWithQueue(
+        data?._id,
+        formData as any
+      );
       if (res && res.queued) {
-        toast.success('Upload queued — will be submitted when online');
+        toast.success("Upload queued — will be submitted when online");
       } else {
-        toast.success('Class data Have Been Successfully Imported');
+        toast.success("Class data Have Been Successfully Imported");
       }
 
       // revalidate classroom list
       if (mutate) await mutate("api/view-classrooms/");
     } catch (err) {
-      toast.error('Failed to upload class data');
+      toast.error("Failed to upload class data");
     } finally {
       setToggle(false);
       setFile(undefined as any);
-      const inputEl = document.getElementById('file') as HTMLInputElement | null;
-      if (inputEl) inputEl.value = '';
+      const inputEl = document.getElementById(
+        "file"
+      ) as HTMLInputElement | null;
+      if (inputEl) inputEl.value = "";
     }
   };
 
@@ -207,7 +211,10 @@ const [toggle, setToggle] = useState<boolean>(false);
                           1st Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props?.class1stFee).toLocaleString()}
+                          ₦
+                          {isNaN(parseInt(props?.class1stFee))
+                            ? "0"
+                            : parseInt(props?.class1stFee).toLocaleString()}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
@@ -215,7 +222,10 @@ const [toggle, setToggle] = useState<boolean>(false);
                           2nd Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props?.class2ndFee).toLocaleString()}
+                          ₦
+                          {isNaN(parseInt(props?.class2ndFee))
+                            ? "0"
+                            : parseInt(props?.class2ndFee).toLocaleString()}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
@@ -223,7 +233,10 @@ const [toggle, setToggle] = useState<boolean>(false);
                           3rd Term
                         </label>
                         <p className="mt-3 font-bold">
-                          ₦{parseInt(props?.class3rdFee).toLocaleString()}
+                          ₦
+                          {isNaN(parseInt(props?.class3rdFee))
+                            ? "0"
+                            : parseInt(props?.class3rdFee).toLocaleString()}
                         </p>
                       </div>
                     </div>
