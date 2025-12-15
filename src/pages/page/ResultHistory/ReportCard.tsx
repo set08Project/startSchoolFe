@@ -39,6 +39,57 @@ interface iProps {
   teacherInfo?: any;
 }
 
+const generateAdminComment = (
+  result: any,
+  attendance: number,
+  studentName: string
+) => {
+  const grade = result?.grade;
+  const points = result?.points || 0;
+
+  let performanceLevel = "";
+  let attendanceStatus = "";
+  let comment = "";
+
+  // Determine performance level based on grade (A1, B2, B3, C4, C5, C6, D7, E8, F9)
+  if (grade === "A1") {
+    performanceLevel =
+      "excellent performance with outstanding results across all subjects";
+  } else if (grade === "B2" || grade === "B3") {
+    performanceLevel = "very good performance with strong academic results";
+  } else if (grade === "C4" || grade === "C5" || grade === "C6") {
+    performanceLevel =
+      "satisfactory performance and shows average academic progress";
+  } else if (grade === "D7") {
+    performanceLevel =
+      "below average performance and needs improvement in several areas";
+  } else if (grade === "E8") {
+    performanceLevel = "poor performance and requires significant intervention";
+  } else if (grade === "F9") {
+    performanceLevel =
+      "failing performance and requires immediate intervention and support";
+  } else {
+    performanceLevel = "performance that requires review and improvement";
+  }
+
+  // Determine attendance status
+  if (attendance >= 90) {
+    attendanceStatus = "excellent attendance record";
+  } else if (attendance >= 75) {
+    attendanceStatus = "good attendance record";
+  } else if (attendance >= 60) {
+    attendanceStatus = "acceptable attendance record";
+  } else {
+    attendanceStatus =
+      "poor attendance record which may affect academic performance";
+  }
+
+  // Generate final comment with student name
+  comment = `${studentName} demonstrates ${performanceLevel}. Final Grade: ${grade}. Total Points: ${points}. The student has been reviewed and approved by the administration.`;
+
+  return comment;
+};
+
 const SubjectScore: FC<iProps> = ({ props, el }) => {
   const { gradeData } = useStudentGrade(props?._id);
   const { data } = useSchoolData();
@@ -171,9 +222,21 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
               : "bg-red-500 hover:bg-red-600 "
           } transition-all duration-300`}
           onClick={() => {
-            // if (result?.adminComment !== "") {
-            adminReport(data?._id, props?._id, result?.adminComment).then(
+            // Get attendance value from the student data
+            const mainStudentAttendance = (props as any)?.attendance || 0;
+            const studentFullName = `${props?.studentFirstName} ${props?.studentLastName}`;
+
+            console.log("hmm: ", result, mainStudentAttendance);
+            // Generate admin comment based on student performance
+            const generatedComment = generateAdminComment(
+              result,
+              mainStudentAttendance,
+              studentFullName
+            );
+
+            adminReport(data?._id, props?._id, generatedComment).then(
               (res: any) => {
+                console.log(res);
                 if (res.status === 201) {
                   mutate(`api/student-report-card/${props?._id}`);
                   toast.success("Report Card Report Noted");

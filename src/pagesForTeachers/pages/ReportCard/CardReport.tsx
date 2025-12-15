@@ -181,8 +181,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
     `${result?.classTeacherComment ? result?.classTeacherComment : ""}`
   );
 
-
-
   return (
     <div
       className={`w-full flex items-center gap-2 text-[12px] font-medium  h-28 px-4 my-2  overflow-hidden ${
@@ -204,9 +202,22 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
           </div>
         </div>
       </div>
-      <div className="w-[100px] border-r">
-        <AttendanceRatio props={props} />
+      <div className="w-[300px] border-r">
+        {/* <AttendanceRatio props={props} /> */}
+
+        <textarea
+          className="border rounded-sm w-[94%] p-1 text-[12px] h-20 resize-none mx-2"
+          placeholder="Add comment about student's general performance"
+          value={stateValue}
+          onChange={(e) => {
+            setStateValue(e.target.value);
+          }}
+        />
       </div>
+
+      <div className="w-[100px] border-r">{result?.points}</div>
+
+      <div className="w-[100px] border-r">{result?.grade}</div>
 
       <div
         className={`w-[${
@@ -222,9 +233,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
         </div>
       </div>
 
-      <div className="w-[100px] border-r">{result?.points}</div>
-
-      <div className="w-[100px] border-r">{result?.grade}</div>
       <div className="w-[100px] border-r">
         <input
           type="text"
@@ -282,7 +290,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
             // if (result?.classTeacherComment !== "") {
             reportCardRemark(teacherInfo?._id, props?._id, {
               attendance,
-              teacherComment: result?.classTeacherComment,
+              teacherComment: stateValue,
             }).then((res: any) => {
               setLoading(false);
               if (res.status === 201) {
@@ -363,7 +371,7 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
   );
 };
 
-const SubjectMap: FC<iProps> = ({ props }) => {
+const SubjectMap: FC<iProps> = ({ props, i }) => {
   return <div className="w-[200px] border-r ">subject Offered</div>;
 };
 
@@ -640,7 +648,6 @@ const CardReport = () => {
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
 
-
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -649,7 +656,7 @@ const CardReport = () => {
       <LittleHeader name={"Class Teacher Remark"} />
 
       <div className="mt-10">
-        <div className="text-[12px] font-semibold">Report Record for</div>
+        <div className="text-[12px] font-semibold">Report Record</div>
         <select
           className="select select-bordered  w-full max-w-xs mb-10 mt-2"
           value={state}
@@ -725,9 +732,10 @@ const CardReport = () => {
             >
               <div className="w-[100px] border-r">Sequence</div>
               <div className="w-[250px] border-r">student Info</div>
-              <div className="w-[100px] border-r">
-                Student's Attendance Ratio
-              </div>
+              <div className="w-[300px] border-r">Teacher's Comment</div>
+
+              <div className="w-[100px] border-r">Total Points</div>
+              <div className="w-[100px] border-r">Grade</div>
               {/* 260px */}
               <div
                 className={`w-[${
@@ -739,15 +747,13 @@ const CardReport = () => {
                   <div className="flex gap-4">
                     {lodash
                       .sortBy(subjectData?.classSubjects, "subjectTitle")
-                      ?.map((props: any) => (
-                        <SubjectMap props={props} />
+                      ?.map((props: any, i: number) => (
+                        <SubjectMap props={props} i={i} />
                       ))}
                   </div>
                 </div>
               </div>
 
-              <div className="w-[100px] border-r">Total Points</div>
-              <div className="w-[100px] border-r">Grade</div>
               <div className="w-[100px] border-r">Attendance</div>
               {/* <div className="w-[300px] border-r">Give Report/Remark</div> */}
 
