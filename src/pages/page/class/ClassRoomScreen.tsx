@@ -16,7 +16,11 @@ import {
 import lodash from "lodash";
 import Input from "../../../components/reUse/Input";
 import toast from "react-hot-toast";
-import { bulkUploadofClassroomWithQueue } from "@/pages/api/schoolAPIs";
+import {
+  bulkUploadofClassroomWithQueue,
+  deleteClassroom,
+} from "@/pages/api/schoolAPIs";
+import { MdDelete } from "react-icons/md";
 
 interface iProps {
   props?: any;
@@ -76,6 +80,32 @@ const ClassRoomScreen = () => {
   };
   const [file, setFile] = useState();
   const [toggle, setToggle] = useState<boolean>(false);
+  const [deletingClassID, setDeletingClassID] = useState<string>("");
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [classToDelete, setClassToDelete] = useState<any>(null);
+
+  const handleDeleteClassroom = async (classID: string) => {
+    setDeletingClassID(classID);
+    try {
+      const response = await deleteClassroom(data?._id, classID);
+      if (response?.successful === 1 || response?.status === "success") {
+        toast.success("Classroom deleted successfully");
+        mutate("api/view-classrooms/");
+        setShowDeleteModal(false);
+      } else {
+        toast.error(response?.message || "Failed to delete classroom");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Error deleting classroom");
+    } finally {
+      setDeletingClassID("");
+    }
+  };
+
+  const openDeleteModal = (classItem: any) => {
+    setClassToDelete(classItem);
+    setShowDeleteModal(true);
+  };
 
   const handleBulkClassroom = async () => {
     if (!file) return;
@@ -166,7 +196,7 @@ const ClassRoomScreen = () => {
         className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
         style={{ color: "var(--secondary)" }}
       >
-        <div className="text-[gray] w-[1480px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1550px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[80px] border-r">Class</div>
           <div className="w-[100px] border-r">Number of Students</div>
 
@@ -182,9 +212,10 @@ const ClassRoomScreen = () => {
           <div className="w-[150px] border-r">Class Academic Performance</div>
 
           <div className="w-[180px] border-r">View Detail</div>
+          <div className="w-[70px] border-r">Delete</div>
         </div>
 
-        <div className=" w-[1480px] overflow-hidden">
+        <div className=" w-[1550px] overflow-hidden">
           {lodash
             .sortBy(schoolClassroom?.classRooms, "className")
             .map((props: any, i: number) => (
@@ -381,12 +412,71 @@ const ClassRoomScreen = () => {
                         onClick={() => {}}
                       />
                     </Link>
+
+                    <div className="w-[70px] border-r flex items-center justify-center">
+                      <button
+                        onClick={() => openDeleteModal(props)}
+                        disabled={deletingClassID === props?._id}
+                        className="p-2 text-red-500 hover:bg-red-100 rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete classroom"
+                      >
+                        {deletingClassID === props?._id ? (
+                          <FaSpinner className="animate-spin text-[18px]" />
+                        ) : (
+                          <MdDelete size={20} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-md">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-4 overflow-hidden">
+            <div className="p-6">
+              <h2 className="text-lg font-bold text-gray-800 mb-2">
+                Delete Classroom
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete the classroom{" "}
+                <span className="font-semibold text-red-600">
+                  {classToDelete?.className}
+                </span>
+                ? This action cannot be undone.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  disabled={deletingClassID === classToDelete?._id}
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    handleDeleteClassroom(classToDelete?._id);
+                    setShowDeleteModal(false);
+                  }}
+                  disabled={deletingClassID === classToDelete?._id}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {deletingClassID === classToDelete?._id && (
+                    <FaSpinner className="animate-spin text-[16px]" />
+                  )}
+                  {deletingClassID === classToDelete?._id
+                    ? "Deleting..."
+                    : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

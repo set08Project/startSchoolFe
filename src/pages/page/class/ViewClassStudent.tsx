@@ -15,6 +15,7 @@ import Button from "../../../components/reUse/Button";
 import moment from "moment";
 import {
   useSchool,
+  useSchoolClassRM,
   useSchoolData,
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
@@ -126,24 +127,20 @@ const Performance: FC<iProps> = ({ props }) => {
   );
 };
 
-const sss1Classes = [
-  "SSS 1ART",
-  "SSS 1COMMERCIAL",
-  "SSS 1SCIENCE",
-  "SSS 1A",
-  "SSS 1C",
-  "SSS 1B",
-  "SSS 1D",
-];
-
 const MigrateStudent: FC<
-  iProps & { studentId: string; onMigrateSuccess?: () => void }
-> = ({ props, studentId, onMigrateSuccess, id }) => {
+  iProps & {
+    studentId: string;
+    onMigrateSuccess?: () => void;
+    classes: string[];
+  }
+> = ({ props, studentId, onMigrateSuccess, id, classes }) => {
   const user = useSelector((el: any) => el.user);
   const [selectedClass, setSelectedClass] = useState<string>("");
   const [customClass, setCustomClass] = useState<string>("");
   const [showCustom, setShowCustom] = useState<boolean>(false);
   const [isMigrating, setIsMigrating] = useState<boolean>(false);
+
+  console.log(classes);
 
   const handleMigrate = async () => {
     const targetClass = showCustom ? customClass.toUpperCase() : selectedClass;
@@ -166,14 +163,14 @@ const MigrateStudent: FC<
 
       const response = await migrateStudent(id, migrationData);
 
-      if (response?.status === 200 || response?.data) {
+      if (response?.data?.successful === 1) {
         toast.success("Student migrated successfully");
         setSelectedClass("");
         setCustomClass("");
         setShowCustom(false);
         onMigrateSuccess?.();
       } else {
-        toast.error("Failed to migrate student");
+        toast.error(response?.data?.errors[0]?.error);
       }
     } catch (error: any) {
       toast.error(error?.message || "Migration error");
@@ -199,7 +196,7 @@ const MigrateStudent: FC<
             className="px-2 py-2 border border-gray-300 rounded-md text-[11px] focus:outline-none focus:border-blue-500 flex-1 min-w-[100px]"
           >
             <option value="">Select Class</option>
-            {sss1Classes.map((cls) => (
+            {classes?.map((cls) => (
               <option key={cls} value={cls}>
                 {cls}
               </option>
@@ -254,7 +251,15 @@ const ViewClassStudent: FC = () => {
   const user = useSelector((el: any) => el.user);
   const { classStudents } = useClassStudent(classID!);
   const { data } = useSchoolData();
+  const { schoolClassroom } = useSchoolClassRM();
+
   const allStudents = classStudents?.students;
+
+  // Extract class names from schoolClassroom
+  const availableClasses =
+    schoolClassroom?.classRooms?.map(
+      (classroom: any) => classroom?.className
+    ) || [];
 
   const sortedStudents = classStudents?.students?.sort((a: any, b: any) =>
     a.studentLastName?.localeCompare(b.studentLastName)
@@ -278,7 +283,6 @@ const ViewClassStudent: FC = () => {
     setToggle(false);
     setToggleValue("");
   };
-
   return (
     <div>
       <Toaster />
@@ -294,7 +298,7 @@ const ViewClassStudent: FC = () => {
             <div className="w-[100px] border-r">Today's Attendance</div>
             <div className="w-[100px] border-r">This team Attendance Ratio</div>
 
-            <div className="w-[100px] border-r">student Class</div>
+            <div className="w-[100px] border-r">student Present Class</div>
 
             <div className="w-[150px] border-r">Parent Contact</div>
             <div className="w-[200px] border-r">Address </div>
@@ -417,8 +421,17 @@ const ViewClassStudent: FC = () => {
                         <div className="w-[100px] border-r">
                           <AttendanceRatio props={props?._id} />
                         </div>
-                        <div className="w-[100px] border-r  ">
-                          {classStudents?.className}
+                        <div
+                          className={`w-[100px] border-r uppercase 
+                          ${
+                            (props?.classAssigned === "SSS 1Holders" ||
+                              props?.classAssigned === "SSS 1") &&
+                            "text-red-500 font-bold"
+                          }
+                          `}
+                        >
+                          {/* {classStudents?.className} */}
+                          {props?.classAssigned}
                         </div>
                         <div className="w-[150px] border-r  ">
                           {props?.phone ? props.phone : "no phone yet"}
@@ -433,6 +446,7 @@ const ViewClassStudent: FC = () => {
                             id={data?._id}
                             props={props}
                             studentId={props?._id}
+                            classes={availableClasses}
                             onMigrateSuccess={() => {
                               mutate(`api/view-all-class-students/${classID}`);
                             }}

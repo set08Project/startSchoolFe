@@ -1004,6 +1004,7 @@ export const createSchoolSubject = async (schoolID: string, data: any) => {
 
 export const createSchoolClassroom = async (schoolID: string, data: any) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-classroom/${schoolID}`, data)
       .then((res: any) => {
@@ -1451,6 +1452,19 @@ export const migrateStudent = async (schoolID: string, data: {}) => {
     // const URL = "http://localhost:2244/api";
     return await axios
       .patch(`${URL}/migrate-sss1holders/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const deleteClassroom = async (schoolID: string, classID: string) => {
+  try {
+    // const URL = "http://localhost:2244/api";
+    return await axios
+      .delete(`${URL}/delete-classrooms/${schoolID}/${classID}`)
       .then((res: any) => {
         return res?.data;
       });
