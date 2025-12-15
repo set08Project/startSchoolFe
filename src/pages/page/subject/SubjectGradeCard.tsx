@@ -101,6 +101,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       .trim();
     const y = `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`;
 
+    console.log("fint: ", y, x);
+
     return el.classInfo?.replace(/\s+/g, " ")?.replace(/\n/g, "")?.trim();
   });
 
@@ -108,6 +110,8 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
   const result = reportData?.result?.find((el: any) => {
     return el.subject === subjectInfo?.subjectTitle;
   });
+
+  console.log("result: ",result)
 
   // initialize local input state empty; we'll sync from `result` below so
   // the inputs update when server data changes (e.g. after mutate())
