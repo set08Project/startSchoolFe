@@ -145,7 +145,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const commulationScore = subjectsCount > 0 ? totalScore / subjectsCount : 0;
 
   const formatOrdinal = (n: number | null | undefined) => {
-    if (n == null || n <= 0) return "N/A";
+    if (n == null || n < 1) return "N/A";
     const s = ["th", "st", "nd", "rd"],
       v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
@@ -158,8 +158,28 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
       try {
         // If a position was passed from state/props, don't compute
         if (positionFromState != null) return;
-        const studentIDs =
+        const rawStudentList =
           propSubjectData?.students || hookSubjectData?.students || [];
+
+        // normalize student ids - handle arrays of ids or arrays of student objects
+        const studentIDs: string[] = (rawStudentList || [])
+          .map((s: any) => {
+            if (!s && s !== 0) return null;
+            if (typeof s === "string") return s;
+            // common id fields used across the app
+            return s?._id ?? s?.id ?? s?.studentID ?? null;
+          })
+          .filter(Boolean) as string[];
+
+        console.log(
+          "computePosition: studentIDs (count):",
+          studentIDs.length,
+          studentIDs.slice(0, 6)
+        );
+        console.log(
+          "computePosition: looking for student id:",
+          studentInfo?._id
+        );
 
         const normalize = (s: any) =>
           (s || "")
@@ -268,8 +288,77 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
           }
         }
         const myRank = ranked.find((r) => r.id === studentInfo?._id);
-        if (myRank) setComputedPosition(myRank.rank);
-        else if (totals.length === 0) setComputedPosition(-1);
+        console.log(
+          "computePosition: totals found",
+          totals.length,
+          "ranked entries",
+          ranked.length,
+          "myRank:",
+          myRank
+        );
+
+        // if direct id match failed, try normalized-id matching
+        let finalRank = myRank ?? null;
+        const normalizeId = (s: any) =>
+          (s || "")
+            .toString()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "")
+            .trim();
+        if (!finalRank && studentInfo?._id) {
+          const myNorm = normalizeId(studentInfo?._id);
+          finalRank =
+            ranked.find((r) => normalizeId(r.id) === myNorm) ||
+            ranked.find((r) => normalizeId(r.id).includes(myNorm));
+        }
+
+        // final fallback: fetch this student's own report and match by total
+        if (!finalRank && studentInfo?._id) {
+          try {
+            const myRes: any = await viewStudentGrade(studentInfo?._id);
+            const myReportArray =
+              myRes?.data?.reportCard || myRes?.reportCard || [];
+            const myReport = (myReportArray || []).find((el: any) => {
+              const info = normalize(el?.classInfo || "");
+              const matchesClass =
+                (classAssignedNorm && info.includes(classAssignedNorm)) ||
+                (targetClassInfo && info.includes(targetClassInfo)) ||
+                (compact(info) &&
+                  compact(info).includes(compact(classAssignedNorm))) ||
+                (targetClassInfo &&
+                  compact(info).includes(compact(targetClassInfo)));
+              const matchesSessionOrTerm =
+                (sessionNorm && info.includes(sessionNorm)) ||
+                (termNorm && info.includes(termNorm));
+              const found =
+                matchesClass &&
+                (matchesSessionOrTerm ||
+                  (school?.presentSession &&
+                    info.includes(normalize(String(school?.presentSession)))));
+              return found;
+            });
+            if (myReport && myReport.result && myReport.result.length > 0) {
+              const myTot = myReport.result.reduce((acc: number, r: any) => {
+                return (
+                  acc +
+                  (r.test1 || 0) +
+                  (r.test2 || 0) +
+                  (r.test3 || 0) +
+                  (r.test4 || 0) +
+                  (r.exam || 0)
+                );
+              }, 0);
+              // find ranked entry with same total (first occurrence)
+              const byTotal = ranked.find((r) => r.total === myTot);
+              if (byTotal) finalRank = byTotal;
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        if (finalRank) setComputedPosition(finalRank.rank);
+        else setComputedPosition(null);
         setComputedTotals(totals);
       } catch (e) {
         console.error("Error computing class position:", e);
@@ -281,6 +370,8 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   }, [propSubjectData?.students, positionFromState, studentInfo, school]);
 
   const positionLabel = positionFromState ?? computedPosition;
+
+  // console.log("computedPosition:", formatOrdinal(positionLabel));
 
   const { subjectData }: any = useClassSubject(studentInfo?.presentClassID);
 
@@ -397,7 +488,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
     <main className="w-full max-w-5xl mx-auto">
       <div className="flex justify-end gap-2 mb-2">
         <button
-          className={`px-8 py-1 bg-white border rounded-md text-[12px] tracking-widest  ${
+          className={`px-8 py-1 bg-white border rounded-md text-[10px] tracking-widest  ${
             pdfLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-slate-100"
           }`}
           onClick={handlePrint}
@@ -408,7 +499,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
         <button
           disabled={loading}
-          className={`text-[12px] tracking-widest transistion-all duration-300 hover:bg-red-100 px-8 py-2 rounded-md bg-white border ${
+          className={`text-[10px] tracking-widest transistion-all duration-300 hover:bg-red-100 px-8 py-2 rounded-md bg-white border ${
             loading && "cursor-not-allowed bg-red-200 animate-pulse"
           }`}
           onClick={() => {
@@ -430,11 +521,11 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
           )}
         </button>
       </div>
-      <div className="w-full max-w-5xl mx-auto p-4 bg-gray-50">
+      <div className="w-full max-w-5xl text-xs mx-auto p-2 bg-gray-50">
         <Toaster position="top-center" reverseOrder={true} />
 
-        <Card className="shadow-lg overflow-hidden" ref={targetRef}>
-          <CardContent className="px-6 py-2 overflow-hidden">
+        <Card className="shadow-lg overflow-hidden pb-5" ref={targetRef}>
+          <CardContent className="px-6 py-0 overflow-hidden">
             {/* Header */}
 
             <div className="flex justify-between items-start mb-2">
@@ -442,25 +533,44 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                 {/* view
                 {computedTotals?.length > 0 && (
                   <div className="ml-6 text-xs text-gray-500">
-                    <div className="font-semibold">Top 5 computed totals</div>
+                    <div className="font-semibold">
+                      Position: {formatOrdinal(positionLabel)} of{" "}
+                      {computedTotals.length}
+                      {!positionLabel && isComputingPosition && (
+                        <span className="italic ml-2">(computing...)</span>
+                      )}
+                    </div>
+                    <div className="mt-1 font-semibold">
+                      Top 5 computed totals
+                    </div>
                     <ul>
-                      {computedTotals.slice(0, 7).map((t, idx) => (
-                        <li key={t.id}>
-                          {idx + 1}. {t.id} — {t.total} - {t.subjectCount} -{" "}
-                          {((t.total / (t.subjectCount * 100)) * 100).toFixed(
-                            2
-                          )}
-                          %{" "}
-                        </li>
-                      ))}
+                      {computedTotals.slice(0, 7).map((t, idx) => {
+                        const isCurrentStudent = t.id === studentInfo?._id;
+                        return (
+                          <li
+                            key={t.id}
+                            className={
+                              isCurrentStudent ? "bg-blue-100 px-1" : ""
+                            }
+                          >
+                            {idx + 1}.{" "}
+                            {t.id === studentInfo?._id ? "YOU" : t.id} —{" "}
+                            {t.total} - {t.subjectCount} -{" "}
+                            {((t.total / (t.subjectCount * 100)) * 100).toFixed(
+                              2
+                            )}
+                            %{" "}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 )} */}
               </div>
             </div>
 
-            <div ref={printableRef} className="border border-black mb-4">
-              <div className="flex items-start justify-between px-4 py-2 bg-white">
+            <div ref={printableRef} className="border border-black mb-1">
+              <div className="flex items-start justify-between px-4 py-2 bg-white text-[10px]">
                 <div className="flex items-center gap-4">
                   <div className="w-30 h-30 border border-black flex items-center justify-center  rounded-md overflow-hidden">
                     <div className="border h-32 w-32">
@@ -477,12 +587,14 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                     </div>
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold text-blue-700 flex justify-start">
+                    <h1 className="text-[30px] font-bold text-blue-700 flex justify-start">
                       {school?.schoolName || "Loading..."}
                     </h1>
-                    <p className="text-sm">{schoolAddress || "Loading..."}</p>
-                    <p className="text-xs font-semibold mt-1">
-                      FOR SENIOR SECONDARY SCHOOLS
+                    <p className="text-[15px] mt-2 flex-wrap">
+                      {schoolAddress || "Loading..."}
+                    </p>
+                    <p className="text-[12px] font-semibold mt-1">
+                      SECONDARY SCHOOLS
                     </p>
                   </div>
                 </div>
@@ -528,61 +640,61 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
             </div>
 
             {/* Student's Personal Data */}
-            <div className="mb-4">
-              <div className="bg-gray-800 text-white text-center py-1 font-semibold">
+            <div className="mb-2">
+              <div className="bg-gray-800 text-white text-center py-0.5 font-semibold text-[10px]">
                 STUDENT'S PERSONAL DATA
               </div>
-              <div className="border border-gray-800">
+              <div className="border border-gray-800 text-[10px]">
                 <div className="grid grid-cols-2 gap-0">
                   {/* Left Column */}
                   <div className="border-r border-gray-800 ">
-                    <div className="border-b border-gray-800 p-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="border-b border-gray-800 px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         Name
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">{`${
+                      <div className="text-[14px] font-semibold flex-1 flex items-center">{`${
                         studentInfo?.studentFirstName || ""
                       } ${studentInfo?.studentLastName || ""}`}</div>
                     </div>
-                    <div className="border-b border-gray-800 px-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="border-b border-gray-800 px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         Class
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">
+                      <div className="text-xs flex-1 flex items-center">
                         {studentInfo?.classAssigned || ""}
                       </div>
                     </div>
-                    <div className="border-b border-gray-800 px-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="border-b border-gray-800 px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         DOB
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">
+                      <div className="text-[10px] flex-1 flex items-center">
                         {studentInfo?.dateOfBirth || ""}
                       </div>
                     </div>
-                    <div className="border-b border-gray-800 px-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="border-b border-gray-800 px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         School
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">
+                      <div className="text-xs flex-1 flex items-center">
                         {propSchool?.schoolName ||
                           studentInfo?.schoolName ||
                           ""}
                       </div>
                     </div>
-                    <div className="border-b border-gray-800 px-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="border-b border-gray-800 px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         Class
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">
+                      <div className="text-xs flex-1 flex items-center">
                         {studentInfo?.classAssigned || ""}
                       </div>
                     </div>
-                    <div className="px-2 flex items-center gap-2">
-                      <Label className="text-xs font-semibold w-24 uppercase">
+                    <div className="px-2 py-0.5 flex items-center gap-2">
+                      <Label className="text-[10px] font-semibold w-24 uppercase">
                         LG/District
                       </Label>
-                      <div className="h-7 text-sm flex-1 flex items-center">
+                      <div className="text-[10px] flex-1 flex items-center">
                         {studentInfo?.lga || ""}
                       </div>
                     </div>
@@ -590,63 +702,65 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
                   {/* Middle Column - Attendance */}
                   <div className="border-r border-gray-800 h-full ">
-                    <div className="bg-gray-200 text-center  border-b border-gray-800">
-                      <span className="text-xs font-semibold ">ATTENDANCE</span>
+                    <div className="bg-gray-200 text-center border-b border-gray-800 py-0.5">
+                      <span className="text-[10px] font-semibold">
+                        ATTENDANCE
+                      </span>
                     </div>
-                    <div className="grid grid-cols-3 text-center text-xs">
-                      <div className="border-r border-b border-gray-800 p-1">
+                    <div className="grid grid-cols-3 text-center text-[10px]">
+                      <div className="border-r border-b border-gray-800 p-0.5">
                         <div className="font-semibold">No. Of Days</div>
                         <div>School Opened</div>
                       </div>
-                      <div className="border-r border-b border-gray-800 p-1">
+                      <div className="border-r border-b border-gray-800 p-0.5">
                         <div className="font-semibold">No. Of</div>
                         <div>Days Present</div>
                       </div>
-                      <div className="border-b border-gray-800 p-1">
+                      <div className="border-b border-gray-800 p-0.5">
                         <div className="font-semibold">No. Of</div>
                         <div>Days Absent</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                      <div className="border-r border-gray-800 p-2 text-center text-[10px] font-medium">
                         {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                      <div className="border-r border-gray-800 p-2 text-center text-[10px] font-medium">
                         {grade?.attendance || ""}%
                       </div>
-                      <div className="p-2 text-center text-sm font-medium">
+                      <div className="p-2 text-center text-[10px] font-medium">
                         {100 - grade?.attendance || ""}%
                       </div>
                     </div>
-                    <div className="bg-gray-200 text-center  border-t border-b border-gray-800">
-                      <span className="text-xs font-semibold">
+                    <div className="bg-gray-200 text-center border-t border-b border-gray-800 py-0.5">
+                      <span className="text-[10px] font-semibold">
                         TERMINAL DURATION
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 text-center text-xs">
-                      <div className="border-r border-b border-gray-800 p-1">
+                    <div className="grid grid-cols-3 text-center text-[10px]">
+                      <div className="border-r border-b border-gray-800 p-0.5">
                         <div className="font-semibold">No. Of Days</div>
                         <div>School Opened</div>
                       </div>
-                      <div className="border-r border-b border-gray-800 p-1">
+                      <div className="border-r border-b border-gray-800 p-0.5">
                         <div className="font-semibold">School</div>
                         <div>Resumption Date</div>
                       </div>
-                      <div className="border-b border-gray-800 p-1">
+                      <div className="border-b border-gray-800 p-0.5">
                         <div className="font-semibold">School</div>
                         <div>Closing Date</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 h-[30px]">
-                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                      <div className="border-r border-gray-800 p-2 text-center text-[10px] font-medium">
                         {school?.NumberOfDays || ""}
                       </div>
-                      <div className="border-r border-gray-800 p-2 text-center text-sm font-medium">
+                      <div className="border-r border-gray-800 p-2 text-center text-[10px] font-medium">
                         {moment(school?.SchoolTeamResumption).format(
                           "Do MMM, YYYY"
                         ) || ""}
                       </div>
-                      <div className="p-2 text-center text-sm font-medium">
+                      <div className="p-2 text-center text-[10px] font-medium">
                         {moment(school?.SchoolTeamCloses).format(
                           "Do MMM, YYYY"
                         ) || ""}
@@ -658,28 +772,30 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
             </div>
 
             {/* Academic Performance */}
-            <div className="mb-4">
-              <div className="bg-gray-800 text-white text-center py-1 font-semibold">
+            <div className="mb-2">
+              <div className="bg-gray-800 text-white text-center py-0.5 font-semibold text-[10px]">
                 ACADEMIC PERFORMANCE
               </div>
               <div className="border border-gray-800 overflow-x-auto">
-                <table className="w-full text-xs">
+                <table className="w-full text-[10px]">
                   <thead>
                     <tr className="bg-gray-200">
-                      <th className="border border-gray-800 p-1 text-left text-md">
+                      <th className="border border-gray-800 p-0.5 text-left text-[10px]">
                         Subject
                       </th>
-                      <th className="border border-gray-800 p-1 w-[80px]">
+                      <th className="border border-gray-800 p-0.5 w-[80px]">
                         Cont. Ass.
                       </th>
-                      <th className="border border-gray-800 p-1 w-[90px]">
+                      <th className="border border-gray-800 p-0.5 w-[90px]">
                         Exam Marks
                       </th>
-                      <th className="border border-gray-800 p-1 w-[140px]">
+                      <th className="border border-gray-800 p-0.5 w-[140px]">
                         Total Average MKS
                       </th>
-                      <th className="border border-gray-800 p-1 w-20">GRADE</th>
-                      <th className="border border-gray-800 p-1 w-[250px]">
+                      <th className="border border-gray-800 p-0.5 w-20">
+                        GRADE
+                      </th>
+                      <th className="border border-gray-800 p-0.5 w-[250px]">
                         Teacher's Comment
                       </th>
                       {/* <th className="border border-gray-800 p-1 w-20">
@@ -693,22 +809,22 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       : subjects
                     ).map((subject: any, index: number) => (
                       <tr key={index} className={index === 0 ? "" : ""}>
-                        <td className="border border-gray-800 p-1 text-[15px] font-semibold">
+                        <td className="border border-gray-800 p-0.5 text-[13px] pl-2 font-semibold">
                           {typeof subject === "string"
                             ? subject
                             : subject.subject}
                         </td>
-                        <td className="border border-gray-800 p-1 text-center">
+                        <td className="border border-gray-800 p-0.5 text-center text-[14px] ">
                           {typeof subject === "string"
                             ? ""
                             : subject.test4 ?? ""}
                         </td>
-                        <td className="border border-gray-800 p-1 text-center">
+                        <td className="border border-gray-800 p-0.5 text-center  text-[14px]">
                           {typeof subject === "string"
                             ? ""
                             : subject.exam ?? ""}
                         </td>
-                        <td className="border border-gray-800 p-1 text-center">
+                        <td className="border border-gray-800 p-0.5 text-center text-[14px] font-semibold">
                           {typeof subject === "string"
                             ? ""
                             : (subject.test1 ?? 0) +
@@ -717,12 +833,12 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                               (subject.test4 ?? 0) +
                               (subject.exam ?? 0)}
                         </td>
-                        <td className="border border-gray-800 p-1 text-center">
+                        <td className="border border-gray-800 p-0.5 text-center text-[14px] font-semibold">
                           {typeof subject === "string"
                             ? ""
                             : subject.grade ?? ""}
                         </td>
-                        <td className="border border-gray-800 p-1">
+                        <td className="border border-gray-800 p-0.5 leading-tight py-1 text-[10px] font-semibold">
                           {typeof subject === "string"
                             ? ""
                             : subject.comment || subject.teacherComment || ""}
@@ -735,93 +851,93 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               </div>
             </div>
 
-            <div className="mb-4">
-              <div className="bg-gray-800 text-white text-center py-1 font-semibold text-sm">
+            <div className="mb-2">
+              <div className="bg-gray-800 text-white text-center py-0.5 font-semibold text-[10px]">
                 GRADING SCALE & PERFORMANCE SUMMARY
               </div>
               <div className="border border-gray-800">
-                <table className="w-full text-xs table-fixed">
+                <table className="w-full text-[10px] table-fixed">
                   <tbody>
                     <tr>
-                      <td className=" border-gray-800 px-2 w-1/3  gap-2">
+                      <td className="border-gray-800 px-1 w-1/3 gap-2">
                         <span className="">
                           <span className="font-bold">A1</span> 75-100
                           (EXCELLENT)
                         </span>
                       </td>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <span className="">
                           <span className="font-bold">B2</span> 70-74 (VERY
                           GOOD)
                         </span>
-                        <span className="ml-4">
+                        <span className="ml-2">
                           <span className="font-bold">B3</span> 65-69 (GOOD)
                         </span>
                       </td>
 
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <span className="">
                           <span className="font-bold">C4</span> 60-64 (UPPER
                           CREDIT)
                         </span>
-                        <span className="ml-4">
+                        <span className="ml-2">
                           <span className="font-bold">C5</span> 55-59 (CREDIT)
                         </span>
                       </td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <span className="">
                           <span className="font-bold">C6</span> 50-54 (LOWER
                           CREDIT)
                         </span>
                       </td>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <span className="">
                           <span className="font-bold">D7</span> 45-49 (PASS)
                         </span>
-                        <span className="ml-4">
+                        <span className="ml-2">
                           <span className="font-bold">E8</span> 40-44 (PASS)
                         </span>
                       </td>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <span className="">
                           <span className="font-bold">F9</span> 0-39 (FAIL)
                         </span>
                       </td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-800 p-2 font-semibold w-1/3">
-                        <Label className="text-xs">
+                      <td className="border border-gray-800 p-1 font-semibold w-1/3">
+                        <Label className="text-[10px]">
                           Position:{" "}
-                          <span className="text-sm font-semibold mt-1">
-                            <span className="text-xs font-bold">
-                              {formatOrdinal(positionLabel)} of{" "}
+                          <span className="text-[10px] font-semibold mt-1">
+                            <span className="text-[10px] font-bold">
+                              {/* {formatOrdinal(positionLabel)} of{" "}
                               {subjectData?.students?.length ?? "N/A"}
                               {!positionLabel ? (
-                                <span className="text-xs italic ml-2">
+                                <span className="text-[10px] italic ml-2">
                                   (computing...)
                                 </span>
-                              ) : null}
+                              ) : null} */}
                             </span>
                           </span>
                         </Label>
                       </td>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <div>
-                          <Label className="text-xs">
+                          <Label className="text-[12px]">
                             Total Score:{" "}
-                            <span className="text-sm font-semibold mt-1">
+                            <span className="text-[14px] font-semibold">
                               {totalScore}
                             </span>
                           </Label>
                         </div>
                       </td>
-                      <td className="border border-gray-800 p-2 w-1/3">
+                      <td className="border border-gray-800 p-1 w-1/3">
                         <div>
-                          <Label className="text-xs">
+                          <Label className="text-[10px]">
                             No. Of Subjects Offered:{" "}
-                            <span className="text-sm font-semibold mt-1">
+                            <span className="text-[14px] font-semibold">
                               {grade?.result?.length}
                             </span>
                           </Label>
@@ -829,14 +945,14 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       </td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-800 p-2 font-semibold w-1/3">
+                      <td className="border border-gray-800 p-1 font-semibold w-1/3">
                         Percentage Score
                       </td>
                       <td
-                        className="border border-gray-800 p-2 w-2/3"
+                        className="border border-gray-800 p-1 w-2/3"
                         colSpan={2}
                       >
-                        <p className="text-sm font-semibold">
+                        <p className="text-[13px] font-semibold">
                           {commulationScore.toFixed(2)}%
                         </p>
                       </td>
@@ -906,44 +1022,44 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
           </div> */}
 
             {/* Clubs Section */}
-            <div className="mb-4">
-              <div className="bg-gray-800 text-white text-center py-1 font-semibold">
+            <div className="mb-2">
+              <div className="bg-gray-800 text-white text-center py-0.5 font-semibold text-[10px]">
                 CLUBS, YOUTH ORGANIZATION, ETC
               </div>
 
               <div className="border border-gray-800 grid grid-cols-5 font-medium">
                 <div className="border-r border-gray-800 px-2">
-                  <Label className="text-ms font-bold flex justify-between items-center mt-1.5">
+                  <Label className="text-[10px] font-bold flex justify-between items-center mt-1.5">
                     SKILL
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
-                    <span>COMMUNICATION </span>
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
+                    <span>COMMUNICATION</span>
                     <span className="border-l px-5">
                       {grade?.softSkill[0]?.communication}
                     </span>
                   </Label>
                 </div>
-                <div className="p-2 border-r border-gray-800 ">
-                  <Label className="text-xs  flex justify-between">
+                <div className="p-1 border-r border-gray-800">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     LEADERSHIP
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {grade?.softSkill[0]?.leadership}
                     </span>
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     PUNCIALITY
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {" "}
                       {grade?.softSkill[0]?.punctuality}
                     </span>
                   </Label>
                 </div>
-                <div className="p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     EMPATHY
                     <span className="border-l px-5">
                       {grade?.softSkill[0]?.empathy}
@@ -953,38 +1069,38 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               </div>
 
               <div className="border-x border-gray-800 grid grid-cols-5 font-medium">
-                <div className="border-r border-gray-800 px-2">
-                  <Label className="text-sm font-bold flex justify-between items-center mt-1.5">
+                <div className="border-r border-gray-800 px-1 py-0.5">
+                  <Label className="text-[10px] font-bold flex justify-between items-center">
                     PEOPLE SKILL
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     <span>CONFIDENCE </span>
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {" "}
                       {grade?.peopleSkill[0]?.confidence}
                     </span>
                   </Label>
                 </div>
-                <div className="p-2 border-r border-gray-800 ">
-                  <Label className="text-xs  flex justify-between">
+                <div className="p-1 border-r border-gray-800">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     HARDWORKING
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {grade?.peopleSkill[0]?.hardworking}
                     </span>
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     PRESENTATIONAL
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {grade?.peopleSkill[0]?.presentational}
                     </span>
                   </Label>
                 </div>
-                <div className="p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     RESILIENT
                     <span className="border-l px-5">
                       {grade?.peopleSkill[0]?.resilient}
@@ -994,59 +1110,59 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               </div>
 
               <div className="border border-gray-800 grid grid-cols-5 font-medium">
-                <div className="border-r border-gray-800 px-2">
-                  <Label className="text-sm font-bold flex justify-between items-center mt-1.5">
+                <div className="border-r border-gray-800 px-1 py-0.5">
+                  <Label className="text-[10px] font-bold flex justify-between items-center">
                     PHYSICAL SKILL
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
                     <span>SPORT </span>
-                    <span className="border-l px-5">
+                    <span className="border-l px-3">
                       {grade?.physicalSkill[0]?.sportship}
                     </span>
                   </Label>
                 </div>
-                <div className="p-2 border-r border-gray-800 ">
-                  <Label className="text-xs  flex justify-between">
-                    <span className="border-l px-5"></span>
+                <div className="p-1 border-r border-gray-800">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
+                    <span className="border-l px-3"></span>
                   </Label>
                 </div>
-                <div className="border-r border-gray-800 p-2">
-                  <Label className="text-xs flex justify-between">
-                    <span className="border-l px-5"></span>
+                <div className="border-r border-gray-800 p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
+                    <span className="border-l px-3"></span>
                   </Label>
                 </div>
-                <div className="p-2">
-                  <Label className="text-xs flex justify-between">
-                    <span className="border-l px-5"></span>
+                <div className="p-1">
+                  <Label className="text-[10px] flex justify-between text-[9px]">
+                    <span className="border-l px-3"></span>
                   </Label>
                 </div>
               </div>
             </div>
 
             {/* Comments and Signatures */}
-            <div className="border-t my-5" />
-            <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-12 ">
+            <div className="border-t my-1" />
+            <div className="space-y-1">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-xs font-semibold">
+                  <Label className="text-[10px] font-semibold">
                     Class Teacher's Comment:
                     <p>
-                      <span className="font-semibold">
+                      <span className="font-semibold -mt-5">
                         {teacherDetail?.staffName}
                       </span>
                     </p>
                   </Label>
-                  <div className="w-full  border-gray-300 rounded leading-5 text-sm italic mt-1 h-16">
+                  <div className="w-full border-gray-300 rounded leading-3 text-[11px] italic mt-0.5 h-8 tracking-wide font-semibold ">
                     {grade?.classTeacherComment}
                   </div>
                 </div>
 
                 <div>
-                  <Label className="text-xs font-semibold">
+                  <Label className="text-[10px] font-semibold">
                     Signature & Date (
-                    <span className="h-7 text-xs mt-1">
+                    <span className="text-[10px]">
                       <span>{moment(grade?.createdAt).format("ll")}</span>
                     </span>
                     )
@@ -1054,28 +1170,28 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-12">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-xs font-semibold">
+                  <Label className="text-[10px] font-">
                     Principal's Comment:{" "}
-                    <p className="capitalize">
+                    <p className="capitalize text-[9px]">
                       {school?.name} {school?.name2}
                     </p>
                   </Label>
-                  <div className="w-full border-gray-300 rounded leading-5 text-sm italic mt-1 h-16 ">
+                  <div className="w-full border-gray-300 rounded leading-3 text-[11px] italic mt-0.5 h-8 font-semibold tracking-wide">
                     {" "}
                     {grade?.adminComment}
                   </div>
                 </div>
                 <div>
-                  <Label className="text-xs font-semibold  ">
+                  <Label className="text-[10px] font-semibold">
                     Signature & Date (
-                    <span className="h-7 text-xs mt-1">
+                    <span className="text-[10px]">
                       <span>{moment(grade?.createdAt).format("ll")}</span>
                     </span>
                     )
                   </Label>
-                  <div className="w-[160px] h-[60px] border mt-2">
+                  <div className="w-[160px] h-[40px] border mt-1">
                     <img
                       src={school?.signature}
                       className="w-full h-full object-contain"
@@ -1097,6 +1213,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               </div>
             </div> */}
             </div>
+            <div className="mt-5" />
           </CardContent>
         </Card>
       </div>
