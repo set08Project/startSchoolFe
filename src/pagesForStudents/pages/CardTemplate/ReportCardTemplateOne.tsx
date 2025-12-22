@@ -521,7 +521,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
       <div className="w-full max-w-5xl mx-auto p-4 bg-gray-50">
         <Toaster position="top-center" reverseOrder={true} />
 
-        <Card className="shadow-lg" ref={targetRef}>
+        <Card className="shadow-lg pb-5" ref={targetRef}>
           <CardContent className="px-6 py-2">
             <div
               className="absolute overflow-hidden inset-0 text-gray-300 text-opacity-20 text-[5vw] font-bold tracking-widest uppercase flex justify-center items-center"
