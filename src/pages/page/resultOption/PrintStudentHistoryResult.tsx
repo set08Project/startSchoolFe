@@ -235,7 +235,7 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
             <span>downloading...</span>
           </div>
         ) : (
-          "Print Result1"
+          "Print Result"
         )}
       </button>
       <div className="flex w-full justify-end"></div>

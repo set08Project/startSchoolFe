@@ -712,7 +712,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         <td className="border border-gray-800 p-1 text-center">
                           {typeof subject === "string"
                             ? ""
-                            : subject.test4 ?? ""}
+                            : (subject.test4 || subject.test1 )?? ""}
                         </td>
                         <td className="border border-gray-800 p-1 text-center">
                           {typeof subject === "string"

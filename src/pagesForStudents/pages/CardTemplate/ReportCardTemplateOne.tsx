@@ -3,6 +3,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
 import {
   useReadOneClassInfo,
+  useSchoolArticle,
   useStudentInfo,
 } from "../../hooks/useStudentHook";
 import {
@@ -22,6 +23,7 @@ import toast, { Toaster } from "react-hot-toast";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 import { usePDF } from "react-to-pdf";
+import { useNotes, useSchoolClassRMDetail, useSchoolData, useSchoolTeacher } from "@/pages/hook/useSchoolAuth";
 
 interface ReportCardTemplateOneProps {
   studentInfo?: any;
@@ -55,12 +57,36 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const { studentInfo: hookStudentInfo } = useStudentInfo();
   const location = useLocation();
   const stateData: any = (location && (location.state as any)) || {};
+
   const { gradeData: hookGradeData } = useStudentGrade(
     hookStudentInfo?._id || propStudentInfo?._id
   );
+  
+  
   const studentInfo =
-    propStudentInfo || stateData.studentInfo || hookStudentInfo;
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.[0];
+  propStudentInfo || stateData.studentInfo || hookStudentInfo;
+
+  // const {schoolAnnouncement} = useSchoolAnnouncement(hookStudentInfo?.schoolIDs)
+
+    // const {classroom} = useSchoolClassRMDetail(studentInfo?.schoolIDs)
+const {timetbale} = useNotes(studentInfo?.schoolIDs)
+
+    console.log("view data: ", timetbale)
+
+  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.find((el:any)=>{
+    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
+
+  });
+
+
+
+
+  console.log("DataII ", hookGradeData?.reportCard?.find((el:any)=>{
+    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
+
+  }))
+
+
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
   const [computedTotals, setComputedTotals] = useState<
@@ -743,7 +769,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
             {/* Academic Performance */}
             <div className="mb-4">
               <div className="bg-gray-800 text-white text-center py-1 font-semibold">
-                ACADEMIC PERFORMANCE
+                ACADEMIC PERFORMANCE 
               </div>
               <div className="border border-gray-800 overflow-x-auto">
                 <table className="w-full text-xs">
@@ -784,7 +810,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         <td className="border border-gray-800 p-1 text-center">
                           {typeof subject === "string"
                             ? ""
-                            : subject.test4 ?? ""}
+                            : (subject.test4 || subject.test1 )?? ""}
                         </td>
                         <td className="border border-gray-800 p-1 text-center">
                           {typeof subject === "string"

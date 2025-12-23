@@ -28,6 +28,7 @@ import {
   useStudentInfoData,
 } from "@/pagesForStudents/hooks/useStudentHook";
 import { data } from "@/mainPage/TeamScreen/NextSuperAdmin/allCharts/CardBarChart";
+import { useSchoolClassRM } from "@/pages/hook/useSchoolAuth";
 
 interface ReportCardTemplateOneProps {
   studentInfo?: any;
@@ -58,6 +59,8 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 }) => {
   const { studentID } = useParams();
   const { studentInfoData: hookStudentInfo } = useStudentInfoData(studentID);
+const {schoolClassroom} = useSchoolClassRM()
+
 
   const location = useLocation();
   const stateData: any = (location && (location.state as any)) || {};
@@ -66,7 +69,13 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const studentInfo =
     propStudentInfo || stateData.studentInfo || hookStudentInfo;
 
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard[0];
+  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.find((el:any)=>{
+  return el.classInfo === `${studentInfo?.classAssigned} session: ${schoolClassroom?.presentSession}(${schoolClassroom?.presentTerm})`
+
+});
+
+
+
 
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
@@ -817,7 +826,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         <td className="border border-gray-800 p-0.5 text-center text-[14px] ">
                           {typeof subject === "string"
                             ? ""
-                            : subject.test4 ?? ""}
+                            : (subject.test4 || subject.test1) ?? ""}
                         </td>
                         <td className="border border-gray-800 p-0.5 text-center  text-[14px]">
                           {typeof subject === "string"
@@ -1034,7 +1043,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="border-r border-gray-800 p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     <span>COMMUNICATION</span>
                     <span className="border-l px-5">
                       {grade?.softSkill[0]?.communication}
@@ -1042,7 +1051,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="p-1 border-r border-gray-800">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     LEADERSHIP
                     <span className="border-l px-3">
                       {grade?.softSkill[0]?.leadership}
@@ -1050,7 +1059,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="border-r border-gray-800 p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     PUNCIALITY
                     <span className="border-l px-3">
                       {" "}
@@ -1059,7 +1068,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     EMPATHY
                     <span className="border-l px-5">
                       {grade?.softSkill[0]?.empathy}
@@ -1075,7 +1084,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="border-r border-gray-800 p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     <span>CONFIDENCE </span>
                     <span className="border-l px-3">
                       {" "}
@@ -1084,7 +1093,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="p-1 border-r border-gray-800">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     HARDWORKING
                     <span className="border-l px-3">
                       {grade?.peopleSkill[0]?.hardworking}
@@ -1092,7 +1101,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="border-r border-gray-800 p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     PRESENTATIONAL
                     <span className="border-l px-3">
                       {grade?.peopleSkill[0]?.presentational}
@@ -1100,7 +1109,7 @@ const AdminReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                   </Label>
                 </div>
                 <div className="p-1">
-                  <Label className="text-[10px] flex justify-between text-[9px]">
+                  <Label className="flex justify-between text-[9px]">
                     RESILIENT
                     <span className="border-l px-5">
                       {grade?.peopleSkill[0]?.resilient}
