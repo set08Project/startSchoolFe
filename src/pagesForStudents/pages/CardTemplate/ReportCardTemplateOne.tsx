@@ -936,7 +936,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                           <Label className="text-xs">
                             No. Of Subjects Offered:{" "}
                             <span className="text-sm font-semibold mt-1">
-                              {grade.result.length}
+                              {grade?.result?.length}
                             </span>
                           </Label>
                         </div>
