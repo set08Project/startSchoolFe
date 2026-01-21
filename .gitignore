@@ -26,3 +26,7 @@ dist-ssr
 
 # Contentlayer
 .contentlayer
+
+# Agent Architecture
+.tmp/
+.env

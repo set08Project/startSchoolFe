@@ -35,9 +35,10 @@ import Input from "../../../pagesForTeachers/components/reUse/Input";
 
 import { FaSpinner } from "react-icons/fa6";
 import PrintReciptScreen from "./PrintReceipt";
-import { MdClose } from "react-icons/md";
-
 import { useReactToPrint } from "react-to-print";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { MdClose } from "react-icons/md";
 
 interface iProps {
   props?: any;
@@ -275,6 +276,52 @@ const ViewStudent = () => {
 
   const [stateID, setStateID] = useState<string>("");
   const [toggleView, setToggleView] = useState<boolean>(false);
+
+  const handleDownloadAllStudentsPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = ["S/N", "Full Name", "Reg ID", "Class", "Gender"];
+    const tableRows: any[] = [];
+
+    filteredStudents.forEach((student: any, index: number) => {
+      const studentData = [
+        index + 1,
+        `${student.studentLastName} ${student.studentFirstName}`,
+        student.enrollmentID,
+        student.classAssigned,
+        student.gender,
+      ];
+      tableRows.push(studentData);
+    });
+
+    doc.setFontSize(18);
+    doc.text("All Students List", 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+
+    // Simple manual table generation since jspdf-autotable isn't installed
+    let yPos = 35;
+    doc.setFont("helvetica", "bold");
+    tableColumn.forEach((col, i) => {
+      doc.text(col, 14 + i * 40, yPos);
+    });
+
+    doc.setFont("helvetica", "normal");
+    yPos += 10;
+    tableRows.forEach((row) => {
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 20;
+      }
+      row.forEach((cell: any, i: number) => {
+        doc.text(String(cell), 14 + i * 40, yPos);
+      });
+      yPos += 8;
+    });
+
+    doc.save(`All_Students_${UI?.schoolName || "List"}.pdf`);
+    toast.success("Student list PDF downloaded");
+  };
+
   return (
     <div className="relative">
       {/* header */}
@@ -284,14 +331,21 @@ const ViewStudent = () => {
       <div className="mt-10" />
 
       <div className=" sm:flex w-full justify-between items-start">
-        <Input
+         <div><Input
           placeholder="Search Student Name or Class"
           className="ml-0"
           value={searchStudents}
           onChange={handleSearch}
         />
+          <Button
+            name="Download Students"
+            className="uppercase md:text-[12px] text-[11px] font-medium bg-orange-500 py-  hover:bg-orange-600 cursor-pointer transition-all duration-300 -ml-0 -mt-4"
+            onClick={handleDownloadAllStudentsPDF}
+          />
 
+          </div>
         <div className="mb-3 sm:mb-0 flex items-center">
+         
           <Button
             name="Add a new Student"
             className="uppercase md:text-[12px] text-[11px] font-medium bg-blue-950 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-blue-900 cursor-pointer transition-all duration-300"
@@ -306,6 +360,7 @@ const ViewStudent = () => {
               setFile(e.target.files[0]);
             }}
           />
+         
 
           {file ? (
             <Button
@@ -330,6 +385,8 @@ const ViewStudent = () => {
               upload file for Bulk Entry
             </label>
           )}
+
+         
         </div>
       </div>
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden">
@@ -874,9 +931,6 @@ const ViewStudent = () => {
 };
 
 export default ViewStudent;
-
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 const Modal: React.FC<any> = ({ props, setStateID, setToggleView }) => {
   const { studentInfoData } = useStudentInfoData(props);
