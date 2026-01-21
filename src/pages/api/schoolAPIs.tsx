@@ -9,8 +9,15 @@ import axios, { AxiosResponse } from "axios";
 // Working Online
 // export const URL: string = "https://startschoolbe-4.onrender.com/api";
 // const URL2: string = "https://startschoolbe-4.onrender.com";
-export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
-const URL2: string = "https://startschoolbe-lsda.onrender.com";
+
+// ?working
+// ?working
+// export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
+// const URL2: string = "https://startschoolbe-lsda.onrender.com";
+
+// ?New Try
+export const URL: string = "https://start-school-be.vercel.app/api";
+const URL2: string = "https://start-school-be.vercel.app";
 
 export const updateSchoolResumptionTeamInfo = async (
   schoolID: string,
