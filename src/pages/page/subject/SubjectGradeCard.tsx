@@ -15,6 +15,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
+import { ConfirmDeleteModal } from "@/components/modals/ConfirmDeleteModal";
 
 // import {
 
@@ -26,7 +28,7 @@ import {
   useExamSubjectPerfomance,
   useOneExamSubjectStudentPerfomance,
 } from "@/pagesForTeachers/hooks/useQuizHook";
-import { createGradeScore } from "@/pagesForTeachers/api/teachersAPI";
+import { createGradeScore, removeGradeScore } from "@/pagesForTeachers/api/teachersAPI";
 import {
   useClassStudent,
   useStudentGrade,
@@ -86,11 +88,13 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     );
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Local state for immediate display after submission
   const [displayGrade, setDisplayGrade] = useState<any>(null);
 
-  const { gradeData } = useStudentGrade(props?._id);
+  const { gradeData, mutate: updateGradeData } = useStudentGrade(props?._id);
 
   // Find the current report card entry
   const reportData = gradeData?.reportCard?.find((el: any) => {
@@ -227,6 +231,46 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
     }
   };
 
+  const handleDeleteClick = () => {
+      setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+      const res = await removeGradeScore(props?._id, subjectInfo?.subjectTitle);
+      
+      if (res) {
+          // Construct optimistic update
+          const updatedGradeData = { ...gradeData };
+          const reportIndex = updatedGradeData?.reportCard?.findIndex((r: any) => r._id === res._id);
+          
+          if (reportIndex !== -1 && updatedGradeData?.reportCard) {
+            updatedGradeData.reportCard[reportIndex] = res;
+            await updateGradeData(updatedGradeData);
+          } else {
+             await mutate(`api/student-report-card/${props?._id}`); 
+          }
+      }
+
+      // Clear local state
+      setDisplayGrade(null);
+      setTest4("");
+      setExam("");
+      setTeacherComment("");
+      
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      
+      toast.success("Grade removed successfully");
+    } catch (error) {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      toast.error("Failed to remove grade.");
+      console.error(error);
+    }
+  };
+
   // Use displayGrade if available, otherwise fall back to result from database
   const currentResult = displayGrade || result;
 
@@ -340,7 +384,7 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       </div>
 
       {/* Submit Button */}
-      <div className="w-[180px] relative">
+      <div className="w-[180px] relative flex gap-2">
         <Button
           name={loading ? "Loading..." : "Add Score"}
           icon={
@@ -352,7 +396,25 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
           onClick={makeGrade}
           disabled={loading}
         />
+        {result && (
+          <div 
+            onClick={handleDeleteClick}
+            className="w-10 h-10 rounded-md bg-red-50 text-red-600 flex items-center justify-center cursor-pointer hover:bg-red-100 transition-colors mt-2"
+            title="Remove Score"
+          >
+            {isDeleting ? <ClipLoader color="red" size={12} /> : "🗑️"}
+          </div>
+        )}
       </div>
+
+      <ConfirmDeleteModal 
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Remove Grade Score?"
+        message={`Are you sure you want to remove the ${subjectInfo?.subjectTitle} score for ${props?.studentFirstName} ${props?.studentLastName}? This action cannot be undone.`}
+        loading={isDeleting}
+      />
     </div>
   );
 };

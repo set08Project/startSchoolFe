@@ -5,6 +5,9 @@ import axios, { AxiosResponse } from "axios";
 // const URL2: string = import.meta.env.VITE_URL;
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
+// const URL2: string = "http://localhost:2244";
+// const URL: string = "http://localhost:2244/api";
+
 // Working Online1
 // Working Online
 // export const URL: string = "https://startschoolbe-4.onrender.com/api";

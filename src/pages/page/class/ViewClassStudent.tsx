@@ -27,7 +27,7 @@ import {
   verifyPayment3rd,
   migrateStudent,
 } from "../../api/schoolAPIs";
-import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
+import { clockIn, clockOut, findStudentWidthID, schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import crypto from "crypto";
 import { useStudentInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import { udatedStudentBulkInfo } from "../../../pagesForTeachers/api/teachersAPI";
@@ -288,14 +288,14 @@ const ViewClassStudent: FC = () => {
       <Toaster />
       <div className="mt-4">
         <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
-          <div className="text-[gray] w-[2360px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
+          <div className="text-[gray] w-[2450px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4 border-b pb-3">
             <div className="w-[50px] border-r">S/N</div>
             <div className="w-[90px] border-r">student Image</div>
             <div className="w-[200px] border-r">student Name</div>
             <div className="w-[220px] border-r">Session Fee</div>
 
             <div className="w-[130px] border-r">Reg. Date</div>
-            <div className="w-[100px] border-r">Today's Attendance</div>
+            <div className="w-[150px] border-r">Today's Attendance</div>
             <div className="w-[100px] border-r">This team Attendance Ratio</div>
 
             <div className="w-[100px] border-r">student Present Class</div>
@@ -313,7 +313,7 @@ const ViewClassStudent: FC = () => {
 
           <div>
             {sortedStudents?.length > 0 ? (
-              <div className="relative w-[2360px] overflow-hidden">
+              <div className="relative w-[2450px] overflow-hidden">
                 {sortedStudents?.map((props: any, i: number) => (
                   <div className="">
                     <div>
@@ -415,9 +415,91 @@ const ViewClassStudent: FC = () => {
                         <div className="w-[130px] border-r">
                           {moment(props.createdAt).format("ll")}
                         </div>
-                        <div className="w-[100px] border-r">
+                        <div className="w-[150px] border-r">
                           <Remark data={props} id={classStudents?._id} />
+
+<Button
+              name={
+                loadingValue === props?._id
+                  ? "Clocking..."
+                  : props?.clockIn
+                  ? "Clock-Out"
+                  : "Clock-In"
+              }
+              icon={
+                loadingValue === props?._id && (
+                  <FaSpinner className="animate-spin text-[14px]" />
+                )
+              }
+              disabled={loadingValue === props?._id}
+              className={`
+                ${
+                  loadingValue === props?._id
+                    ? "bg-red-400 cursor-not-allowed animate-pulse "
+                    : props?.clockIn
+                    ? "bg-green-500"
+                    : "bg-red-500"
+                } 
+              text-white !text-[12px] uppercase !text-center border-none font-medium py-4 !-pl-0 !mx-1 !px-1 !w-[130px] leading-tight`}
+              onClick={() => {
+                setLoadingValue(props?._id);
+                console.log("props", props);
+
+                findStudentWidthID(props?.enrollmentID)
+                  .then((res) => {
+                    if (res.status === 201) {
+                      console.log("res in", res);
+                      if (!res.data?.data?.clockIn) {
+                        return clockIn(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            console.log("res out", res);
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock in`
+                            );
+                            return mutate(
+                              `api/view-all-class-students/${classID}`
+                            );
+                          } else {
+                            toast.error(
+                              "student has not been clocked in yet, Please try again!"
+                            );
+                          }
+                        });
+                      } else {
+                        return clockOut(
+                          res.data?.data?.schoolIDs,
+                          res.data?.data?._id
+                        ).then((res) => {
+                          if (res.status === 201) {
+                            toast.success(
+                              `${res.data?.studentFirstName}, has been clock out`
+                            );
+                            return mutate(
+                              `api/view-all-class-students/${classID}`
+                            );
+                          } else {
+                            toast.error(
+                              "student has not been clocked out yet, Please try again!"
+                            );
+                          }
+                        });
+                      }
+                    } else {
+                      toast.error("something went wrong");
+                    }
+                  })
+                  .finally(() => {
+                    setLoadingValue("");
+                  });
+              }}
+            />
+
                         </div>
+
+
                         <div className="w-[100px] border-r">
                           <AttendanceRatio props={props?._id} />
                         </div>
@@ -466,7 +548,7 @@ const ViewClassStudent: FC = () => {
                             />
                           </div>
                           <Link
-                            to={`student-details/:studentID`}
+                            to={`/view-students/student-details/${props?._id}`}
                             className="w-[80px]"
                           >
                             <Button
@@ -511,13 +593,14 @@ const ViewClassStudent: FC = () => {
                                   .then((res) => {
                                     if (res.status === 201) {
                                       toast.success("Restricted mode disabled");
-                                      mutate(
+                                      return mutate(
                                         `api/view-all-class-students/${classID}`
                                       );
                                     }
                                   })
                                   .finally(() => {
                                     setLoading(false);
+                                    setLoadingValue("");
                                   });
                               } else {
                                 updateStudentRestrictMode(
@@ -527,8 +610,8 @@ const ViewClassStudent: FC = () => {
                                 )
                                   .then((res) => {
                                     if (res.status === 201) {
-                                      toast.success("Restricted mode disabled");
-                                      mutate(
+                                      toast.success("Restricted mode enabled");
+                                      return mutate(
                                         `api/view-all-class-students/${classID}`
                                       );
                                     }

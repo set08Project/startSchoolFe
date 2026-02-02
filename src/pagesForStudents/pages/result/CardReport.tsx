@@ -237,7 +237,7 @@ const CardReportHistory = () => {
             width: `${1000 + subjectData?.classSubjects.length * 260}px`,
           }}
         >
-          <div className="w-[100px] border-r">Sequence </div>
+          <div className="w-[100px] border-r">Sequence</div>
           <div className="w-[250px] border-r">student Info</div>
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[100px] border-r">Class Performance</div>

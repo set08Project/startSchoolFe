@@ -194,6 +194,7 @@ import ExamResultSetupRecordScreen from "@/pages/page/quizArea/ExamResultPerform
 import MidTestResultPerformanceScreen from "@/pages/page/quizArea/MidTestResultPerformance";
 import ExaminationPreviewScreen from "@/pages/page/quizArea/ExaminationPreview";
 import MidTestPreviewScreen from "@/pages/page/quizArea/MidTestPreviewScreen";
+
 import SubjectGradeCard from "@/pages/page/subject/SubjectGradeCard";
 import MidTestSubjectGradeCardAdmin from "@/pages/page/subject/AdminGradeExamination";
 import AdminReportCardTemplateOne from "@/pages/page/ResultHistory/ReportCardTemplateOne";

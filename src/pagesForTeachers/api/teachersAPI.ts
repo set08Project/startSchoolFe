@@ -1001,6 +1001,22 @@ export const createMidGradeScore = async (
   }
 };
 
+export const removeGradeScore = async (
+  studentID: string,
+  subject: string
+) => {
+  try {
+    
+    return await axios
+      .patch(`${URL}/remove-report-card/${studentID}`, { subject })
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const createMidGradeScoreRecord = async (performanceID: string) => {
   try {
     return await axios

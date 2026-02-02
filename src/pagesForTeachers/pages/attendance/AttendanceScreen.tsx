@@ -16,6 +16,9 @@ import { mutate } from "swr";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
 import toast, { Toaster } from "react-hot-toast";
 import { UnLazyImage } from "@unlazy/react";
+import Button from "@/components/reUse/Button";
+import { FaSpinner } from "react-icons/fa6";
+import { clockIn, clockOut, findStudentWidthID } from "@/pagesForStudents/api/studentAPI";
 
 interface iProps {
   props?: string;
@@ -127,6 +130,8 @@ const AttendanceScreen = () => {
     a.studentFirstName?.localeCompare(b.studentFirstName)
   );
 
+  const [loadingValue, setLoadingValue] = useState<string>("");
+
   return (
     <div className="">
       <Toaster position="top-center" reverseOrder={true} />
@@ -160,9 +165,11 @@ const AttendanceScreen = () => {
         className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden "
         style={{ color: "var(--secondary)" }}
       >
-        <div className="text-[gray] w-[1020px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
+        <div className="text-[gray] w-[1220px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[50px] border-r">s/n</div>
           <div className="w-[250px] border-r">student info</div>
+          <div className="w-[200px] border-r">Mark Attendance</div>
+
           <div className="w-[200px] border-r">Mark Attendance</div>
           <div className="w-[100px] border-r">Today's Attendance</div>
           <div className="w-[130px] border-r">Gender</div>
@@ -176,7 +183,7 @@ const AttendanceScreen = () => {
           <div className="w-[80px] border-r">Rate</div>
         </div>
 
-        <div className=" w-[1020px] overflow-hidden">
+        <div className=" w-[1220px] overflow-hidden">
           {sortedStudents?.length > 0 ? (
             <div>
               {sortedStudents?.map((props: any, i: number) => (
@@ -202,6 +209,87 @@ const AttendanceScreen = () => {
                             {props?.studentFirstName} {props?.studentLastName}
                           </div>
                         </div>
+                      </div>
+
+                      <div className="w-[200px] border-r">
+                        <Button
+                                      name={
+                                        loadingValue === props?._id
+                                          ? "Clocking..."
+                                          : props?.clockIn
+                                          ? "Clock-Out"
+                                          : "Clock-In"
+                                      }
+                                      icon={
+                                        loadingValue === props?._id && (
+                                          <FaSpinner className="animate-spin text-[14px]" />
+                                        )
+                                      }
+                                      disabled={loadingValue === props?._id}
+                                      className={`
+                                        ${
+                                          loadingValue === props?._id
+                                            ? "bg-red-400 cursor-not-allowed animate-pulse "
+                                            : props?.clockIn
+                                            ? "bg-green-500"
+                                            : "bg-red-500"
+                                        } 
+                                      text-white !text-[12px] uppercase !text-center border-none font-medium py-4 !-pl-0 !mx-1 !px-1 !w-[130px] leading-tight`}
+                                      onClick={() => {
+                                        setLoadingValue(props?._id);
+                                        console.log("props", props);
+
+                                        findStudentWidthID(props?.enrollmentID)
+                                          .then((res) => {
+                                            if (res.status === 201) {
+                                              console.log("res in", res);
+                                              if (!res.data?.data?.clockIn) {
+                                                return clockIn(
+                                                  res.data?.data?.schoolIDs,
+                                                  res.data?.data?._id
+                                                ).then((res) => {
+                                                  if (res.status === 201) {
+                                                    console.log("res out", res);
+                                                    toast.success(
+                                                      `${res.data?.studentFirstName}, has been clock in`
+                                                    );
+                                                    return mutate(
+                                                      `api/view-all-class-students/${state}`
+                                                    );
+                                                  } else {
+                                                    toast.error(
+                                                      "student has not been clocked in yet, Please try again!"
+                                                    );
+                                                  }
+                                                });
+                                              } else {
+                                                return clockOut(
+                                                  res.data?.data?.schoolIDs,
+                                                  res.data?.data?._id
+                                                ).then((res) => {
+                                                  if (res.status === 201) {
+                                                    toast.success(
+                                                      `${res.data?.studentFirstName}, has been clock out`
+                                                    );
+                                                    return mutate(
+                                                      `api/view-all-class-students/${state}`
+                                                    );
+                                                  } else {
+                                                    toast.error(
+                                                      "student has not been clocked out yet, Please try again!"
+                                                    );
+                                                  }
+                                                });
+                                              }
+                                            } else {
+                                              toast.error("something went wrong");
+                                            }
+                                          })
+                                          .finally(() => {
+                                            setLoadingValue("");
+                                          });
+                                      }}
+                                    />
                       </div>
 
                       <div className="w-[200px] border-r">
