@@ -5,8 +5,8 @@ import axios, { AxiosResponse } from "axios";
 // const URL2: string = import.meta.env.VITE_URL;
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 
-// const URL2: string = "http://localhost:2244";
-// const URL: string = "http://localhost:2244/api";
+const URL2: string = "http://localhost:2244";
+const URL: string = "http://localhost:2244/api";
 
 // Working Online1
 // Working Online
@@ -19,8 +19,8 @@ import axios, { AxiosResponse } from "axios";
 // const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
 // ?New Try
-export const URL: string = "https://start-school-be.vercel.app/api";
-const URL2: string = "https://start-school-be.vercel.app";
+// export const URL: string = "https://start-school-be.vercel.app/api";
+// const URL2: string = "https://start-school-be.vercel.app";
 
 export const updateSchoolResumptionTeamInfo = async (
   schoolID: string,

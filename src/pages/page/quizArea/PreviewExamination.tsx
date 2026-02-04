@@ -47,7 +47,7 @@ const PreviewExamination: FC<any> = ({
               <span>Loading...</span>
             </div>
           ) : (
-            "Publish Question"
+            "Publish Question "
           )
         }
         className={`text-black border mt-50 ${
