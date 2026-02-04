@@ -10,7 +10,7 @@ import axios from "axios";
 
 // const URL: string = "https://startschoolbe-4.onrender.com/api";
 // const URL: string = "https://startschoolbe-lsda.onrender.com/api";
-const URL: string = "https://start-school-be.vercel.app/api";
+export const URL: string = "https://start-school-be.vercel.app/api";
 
 // const URL: string = "https://server.justnext.com.ng/api";
 
