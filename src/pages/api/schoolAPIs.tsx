@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
 // working locally
 
@@ -247,14 +248,47 @@ export const bulkUploadofSubject = async (schoolID: string, data: any) => {
     const config: any = {
       "Content-Type": "multipart/form-data",
     };
-    return await axios
-      .post(`${URL}/create-bulk-subject/${schoolID}`, data, config)
-      .then((res: any) => {
-        return res;
-      });
+    const res = await axios.post(`${URL}/create-bulk-subject/${schoolID}`, data, config);
+    return res;
   } catch (error: any) {
-    return error;
+    console.error("bulkUploadofSubject error:", error);
+    throw error;
   }
+};
+
+export const bulkUploadofSubjectWithQueue = async (
+  schoolID: string,
+  formData: FormData
+) => {
+  if (typeof window !== "undefined" && !navigator.onLine) {
+    const fdEntries: Array<any> = [];
+    formData.forEach((value, key) => {
+      if (value instanceof File) {
+        fdEntries.push({
+          key,
+          value,
+          isFile: true,
+          name: (value as File).name,
+          type: (value as File).type,
+        });
+      } else {
+        fdEntries.push({ key, value, isFile: false });
+      }
+    });
+
+    const entry: QueueEntry = {
+      url: `${URL}/create-bulk-subject/${schoolID}`,
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      bodyType: "formdata",
+      body: fdEntries,
+    };
+
+    const id = await enqueue(entry);
+    return { queued: true, id };
+  }
+
+  return await bulkUploadofSubject(schoolID, formData);
 };
 
 export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
@@ -273,7 +307,6 @@ export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
 };
 
 // offline-aware wrapper: if offline, enqueue the request to be retried when online
-import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
 export const bulkUploadofClassroomWithQueue = async (
   schoolID: string,

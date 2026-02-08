@@ -15,7 +15,7 @@ import { MdCheck, MdClose } from "react-icons/md";
 
 import toast, { Toaster } from "react-hot-toast";
 import {
-  bulkUploadofSubject,
+  bulkUploadofSubjectWithQueue,
   deletSubject,
   removeTeacherSubject,
   updateSchoolSubjectTeacher,
@@ -100,18 +100,31 @@ const ViewSubjects = () => {
   const [file, setFile] = useState<File | null>(null);
   const [toggle, setToggle] = useState(false);
 
-  const handleBulkClassroom = () => {
+  const handleBulkSubject = () => {
+    console.log("Preparing Subject Bulk Upload...", { schoolID: data?._id, hasFile: !!file });
     setToggle(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", file as any);
 
-    bulkUploadofSubject(data?._id, formData)
-      .then(() => {
-        toast.success("Students Have Been Successfully Imported");
+    bulkUploadofSubjectWithQueue(data?._id, formData)
+      .then((res: any) => {
+        console.log("Subject Bulk Upload Response:", res);
+        if (res && res.queued) {
+          toast.success("Upload queued — will be submitted when online");
+        } else {
+          toast.success(res?.data?.message || "Subjects Have Been Successfully Imported");
+        }
         mutate(`api/view-school-subject/${data?._id}`);
+      })
+      .catch((err: any) => {
+        console.error("Subject Bulk Upload Error:", err);
+        toast.error(err?.response?.data?.message || "Failed to upload subjects");
       })
       .finally(() => {
         setToggle(false);
+        setFile(null);
+        const inputEl = document.getElementById("file") as HTMLInputElement;
+        if (inputEl) inputEl.value = "";
       });
   };
   const [propsID, setPropsID] = useState<string | null>("");
@@ -140,11 +153,11 @@ const ViewSubjects = () => {
                   <span>Uploading Data</span>
                 </div>
               ) : (
-                "Add file to Student"
+                "Add file to Subject"
               )
             }
             className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
-            onClick={handleBulkClassroom}
+            onClick={handleBulkSubject}
           />
         ) : (
           <label

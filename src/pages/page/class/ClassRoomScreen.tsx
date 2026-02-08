@@ -121,7 +121,7 @@ const ClassRoomScreen = () => {
       if (res && res.queued) {
         toast.success("Upload queued — will be submitted when online");
       } else {
-        toast.success("Class data Have Been Successfully Imported");
+        toast.success(res?.data?.message || "Class data Have Been Successfully Imported");
       }
 
       // revalidate classroom list
@@ -156,7 +156,7 @@ const ClassRoomScreen = () => {
                   <span>Uploading Data</span>
                 </div>
               ) : (
-                "Add file to Student"
+                "Add file to ClassRoom"
               )
             }
             className="uppercase lg:text-[12px] text-[9px] font-medium bg-red-500 py-2 sm:py-4 md:py-2 lg:py-4 md:px-4 hover:bg-red-600 cursor-pointer transition-all duration-300"
