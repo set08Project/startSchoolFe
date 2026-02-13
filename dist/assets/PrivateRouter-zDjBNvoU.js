@@ -1,0 +1,1 @@
+import{aJ as a,r as o,bZ as i,j as e,b_ as n}from"./index-BZIH-tyb.js";const x=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{i()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(n,{to:"/"})})};export{x as default};

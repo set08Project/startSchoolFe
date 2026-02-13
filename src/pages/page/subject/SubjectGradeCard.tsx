@@ -103,11 +103,13 @@ const MainStudentRow: FC<iProps> = ({ props, i }) => {
       ?.replace(/\s+/g, " ")
       ?.replace(/\n/g, "")
       .trim();
-    const y = `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`;
+    const y = `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
 
-    console.log("fint: ", y, x);
-
-    return el.classInfo?.replace(/\s+/g, " ")?.replace(/\n/g, "")?.trim();
+    return x === y;
   });
 
   // Find the subject result
