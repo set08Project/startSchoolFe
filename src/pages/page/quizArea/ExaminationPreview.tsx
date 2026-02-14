@@ -432,10 +432,13 @@ const ExaminationPreviewScreen = () => {
                         {index + 1}.
                       </span>
                       <span className="text-lg text-gray-800">
+
                         <MathRenderer
-                          text={question.question
+                          text={question?.question.includes("https") ? question.question
                             .slice(0, question?.question.indexOf("https"))
-                            .trim()}
+                            .trim() : question.question
+                            
+                          }
                         />
                       </span>
                     </div>

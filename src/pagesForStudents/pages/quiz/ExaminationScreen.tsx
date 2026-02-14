@@ -1163,14 +1163,24 @@ const ExaminationTestScreen = () => {
                     <div className="text-4xl font-medium text-gray-800 mb-6">
                       <span className="text-lg text-gray-800  min-h-[160px]">
                         <MathRenderer
-                          text={readQuestion[currentQuestion]?.question
+                          text={ 
+                          //  false
+                           readQuestion[currentQuestion]?.question?.includes(
+                                "https"
+                              )
+                           ? readQuestion[currentQuestion]?.question
                             .slice(
                               0,
                               readQuestion[currentQuestion]?.question?.indexOf(
                                 "https"
                               )
                             )
-                            .trim()}
+                            .trim() 
+                            :
+                            readQuestion[currentQuestion]?.question
+                           
+                          
+                          }
                         />
                       </span>
                     </div>
