@@ -82,10 +82,18 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, subject }) => {
   const { gradeData } = useStudentGrade(props?._id);
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
-    return (
-      el.classInfo ===
-      `${subjectInfo?.designated} session: ${schoolInfo[0]?.year}(${schoolInfo[0]?.presentTerm})`
-    );
+    const x = el.classInfo
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+    const y = `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+
+    return x === y;
   });
 
   let result = reportData?.result.find((el: any) => {
@@ -506,22 +514,6 @@ const MidTestSubjectGradeCardAdmin = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end gap-4 mb-4">
-        <Button
-          onClick={approveAllGrades}
-          disabled={globalLoading}
-          className="bg-blue-950 text-white py-2 px-4 !text-[16px] rounded-md hover:bg-blue-900 transition-all duration-300"
-          name={globalLoading ? "Processing..." : "Approve All Grades"}
-        />
-
-        <Button
-          onClick={cancelAllGrades}
-          disabled={globalLoadingII}
-          className="bg-red-600 text-white py-2 px-4 !text-[16px] rounded-md hover:bg-red-700 transition-all duration-300"
-          name={globalLoadingII ? "Processing..." : "Cancel All Grades"}
-        />
-      </div>
-
       <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
         <div className="text-[gray] w-[1500px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[100px] border-r">Sequence</div>
@@ -553,6 +545,22 @@ const MidTestSubjectGradeCardAdmin = () => {
             <div>No student yet</div>
           )}
         </div>
+      </div>
+
+      <div className="mt-8 flex justify-end gap-4 pb-10 px-4">
+        <Button
+          onClick={approveAllGrades}
+          disabled={globalLoading}
+          className="bg-blue-950 text-white py-3 px-8 !text-[18px] rounded-xl hover:bg-blue-900 transition-all duration-300 shadow-lg"
+          name={globalLoading ? "Processing..." : "Approve All Grades"}
+        />
+
+        <Button
+          onClick={cancelAllGrades}
+          disabled={globalLoadingII}
+          className="bg-red-600 text-white py-3 px-8 !text-[18px] rounded-xl hover:bg-red-700 transition-all duration-300 shadow-lg"
+          name={globalLoadingII ? "Processing..." : "Cancel All Grades"}
+        />
       </div>
     </div>
   );

@@ -25,6 +25,8 @@ import {
 } from "@/pagesForTeachers/hooks/useTeacher";
 import { useOneExamSubjectStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
 import { createGradeScore } from "@/pagesForTeachers/api/teachersAPI";
+import { ConfirmBulkSaveModal } from "@/components/modals/ConfirmBulkSaveModal";
+import { Save } from "lucide-react";
 
 interface iProps {
   props?: any;
@@ -32,9 +34,11 @@ interface iProps {
   data?: any;
   i?: number;
   teacherID?: number;
+  allScores?: any;
+  updateScore?: (studentID: string, fields: any) => void;
 }
 
-const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
+const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, updateScore }) => {
   const { subjectID } = useParams();
 
   const { subjectInfo } = useSujectInfo(subjectID);
@@ -45,21 +49,43 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID }) => {
       subjectInfo?.examination[subjectInfo?.examination.length - 1]
     );
 
-  const [loading, setLoading] = useState<boolean>(false);
-
   const { schoolInfo } = useSchoolSessionData(data?._id);
   const { data: schoolData } = useSchoolData();
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { gradeData } = useStudentGrade(props?._id);
-  const [test4, setTest4] = useState<string>("");
-  const [exam, setExam] = useState<string>("");
+
+  // Use lifted state
+  const studentScores = allScores?.[props?._id] || {};
+
+  const [test4, setTest4] = useState<string>(
+    studentScores.test4 !== undefined ? studentScores.test4 : ""
+  );
+  const [exam, setExam] = useState<string>(
+    studentScores.exam !== undefined ? studentScores.exam : ""
+  );
+
+  // Sync with parent
+  useEffect(() => {
+    if (updateScore) {
+       updateScore(props?._id, { test4, exam });
+    }
+  }, [test4, exam]);
 
   let reportData = gradeData?.reportCard?.find((el: any) => {
-    console.log("info: ", el?.classInfo);
-    return (
-      el.classInfo ===
-      `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
-    );
+    const x = el.classInfo
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+    const y = `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+
+    return x === y;
   });
 
   console.log("Report Data:: ", reportData);
@@ -249,6 +275,17 @@ const AdminSubjectGradeCard = () => {
   const { subjectID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
 
+  const [allScores, setAllScores] = useState<Record<string, any>>({});
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [bulkLoading, setBulkLoading] = useState(false);
+
+  const updateScore = (studentID: string, fields: any) => {
+    setAllScores((prev) => ({
+      ...prev,
+      [studentID]: { ...prev[studentID], ...fields },
+    }));
+  };
+
   const { classroom } = useSchoolClassRMDetail(subjectInfo?.subjectClassID);
   const { viewClasses } = useViewSchoolClassRM(data?._id);
 
@@ -268,6 +305,42 @@ const AdminSubjectGradeCard = () => {
   useEffect(() => {
     mutate(`api/view-classrooms/`);
   }, [teacherInfo, subjectInfo, viewClasses]);
+
+  const studentsWithInput = sortedStudents?.filter((student: any) => {
+    const score = allScores[student._id];
+    return score && (score.test4 || score.exam);
+  }) || [];
+
+  const handleBulkSave = async () => {
+    try {
+      setBulkLoading(true);
+      
+      const promises = studentsWithInput.map(async (student: any) => {
+        const score = allScores[student._id];
+        return createGradeScore(student._id, {
+          subject: subjectInfo?.subjectTitle,
+          test4: score.test4 ? parseInt(score.test4) : 0,
+          exam: score.exam ? parseInt(score.exam) : 0,
+        });
+      });
+
+      await Promise.all(promises);
+      
+      const mutatePromises = studentsWithInput.map((student: any) => 
+        mutate(`api/student-report-card/${student._id}`)
+      );
+      await Promise.all(mutatePromises);
+
+      toast.success(`Successfully added scores for ${studentsWithInput.length} students`);
+      setIsBulkModalOpen(false);
+      setBulkLoading(false);
+      setAllScores({});
+    } catch (error) {
+      setBulkLoading(false);
+      toast.error("An error occurred during bulk save.");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="">
@@ -305,6 +378,8 @@ const AdminSubjectGradeCard = () => {
                     i={i}
                     data={data}
                     teacherID={oneClass?.teacherID}
+                    allScores={allScores}
+                    updateScore={updateScore}
                   />
                 </div>
               ))}
@@ -314,6 +389,26 @@ const AdminSubjectGradeCard = () => {
           )}
         </div>
       </div>
+
+      {studentsWithInput.length > 0 && (
+        <div className="mt-8 flex justify-end pb-10 px-4">
+          <Button
+            name="Add All Scores"
+            onClick={() => setIsBulkModalOpen(true)}
+            className="bg-neutral-950 text-white hover:bg-neutral-900 transition-all font-bold px-10 py-2 rounded-xl shadow-lg hover:shadow-neutral-500/30 flex items-center gap-2 text-lg"
+            icon={<Save size={20} />}
+          />
+        </div>
+      )}
+
+      <ConfirmBulkSaveModal 
+        isOpen={isBulkModalOpen}
+        onClose={() => setIsBulkModalOpen(false)}
+        onConfirm={handleBulkSave}
+        count={studentsWithInput.length}
+        loading={bulkLoading}
+        message={`This will add grades for all ${studentsWithInput.length} students you have entered scores for.`}
+      />
     </div>
   );
 };
