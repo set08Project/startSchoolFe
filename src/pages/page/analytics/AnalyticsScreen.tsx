@@ -44,7 +44,7 @@ import moment from "moment";
 // import schoolHeaderImage from "@/assets/school-header.jpg";
 
 // Mock data for the dashboard
-const getMonthlyData = (expenses: any[], incomes: any[]) => {
+const getMonthlyData = (expenses: any[], inflows: any[]) => {
   const months = [
     "Jan",
     "Feb",
@@ -60,80 +60,49 @@ const getMonthlyData = (expenses: any[], incomes: any[]) => {
     "Dec",
   ];
 
-  // Initialize monthly totals with default values
-  const monthlyTotals = months.map((month) => ({
+  const hasExpenses = Array.isArray(expenses) && expenses.length > 0;
+  const hasInflows = Array.isArray(inflows) && inflows.length > 0;
+
+  if (!hasExpenses && !hasInflows) {
+    return months.map((month) => ({
+      month,
+      income: 1500,
+      expenses: 800,
+    }));
+  }
+
+  const data = months.map((month) => ({
     month,
     income: 0,
     expenses: 0,
   }));
 
-  // Process expenses if they exist
-  if (Array.isArray(expenses)) {
-    expenses.forEach((expense: any) => {
-      if (expense?.amount && expense?.createdAt) {
-        const date = new Date(expense.createdAt);
-        const month = date.getMonth();
-        if (month >= 0 && month < 12) {
-          monthlyTotals[month].expenses += Number(expense.amount);
-        }
-      }
-    });
-  }
+  expenses?.forEach((expense) => {
+    const date = new Date(expense.createdAt);
+    const month = date.getMonth();
+    if (month >= 0 && month < 12) {
+      data[month].expenses += Number(expense.amount) || 0;
+    }
+  });
 
-  // Process incomes if they exist
-  if (Array.isArray(incomes)) {
-    incomes.forEach((income: any) => {
-      if (income?.paymentAmount && income?.createdAt) {
-        const date = new Date(income.createdAt);
-        const month = date.getMonth();
-        if (month >= 0 && month < 12) {
-          monthlyTotals[month].income += Number(income.paymentAmount);
-        }
-      }
-    });
-  }
+  inflows?.forEach((inflow) => {
+    const date = new Date(inflow.createdAt);
+    const month = date.getMonth();
+    if (month >= 0 && month < 12) {
+      data[month].income +=
+        Number(inflow.displayAmount || inflow.amount || inflow.paymentAmount) ||
+        0;
+    }
+  });
 
-  // Add a small default value if all values are 0
-  const hasData = monthlyTotals.some(
-    (item) => item.income > 0 || item.expenses > 0
-  );
-  if (!hasData) {
-    return months.map((month) => ({
-      month,
-      income: 1000, // Default value for visualization
-      expenses: 500, // Default value for visualization
-    }));
-  }
-
-  return monthlyTotals;
+  // Filter out months with no data to keep the chart clean if desired,
+  // or return all months. Here we return all for a full year view.
+  return data;
 };
-
-const monthlyData = [
-  { month: "Jan", income: 45000, expenses: 38000 },
-  { month: "Feb", income: 52000, expenses: 41000 },
-  { month: "Mar", income: 48000, expenses: 39000 },
-  { month: "Apr", income: 55000, expenses: 42000 },
-  { month: "May", income: 51000, expenses: 40000 },
-  { month: "Jun", income: 58000, expenses: 44000 },
-  { month: "Jul", income: 45000, expenses: 38000 },
-  { month: "Aug", income: 52000, expenses: 41000 },
-  { month: "Sep", income: 48000, expenses: 39000 },
-  { month: "Oct", income: 55000, expenses: 42000 },
-  { month: "Nov", income: 51000, expenses: 40000 },
-  { month: "Dec", income: 58000, expenses: 44000 },
-];
-
-const expenseCategories = [
-  { name: "Staff Salaries", value: 35000, color: "hsl(220 70% 50%)" },
-  { name: "Utilities", value: 8000, color: "hsl(160 70% 50%)" },
-  { name: "Supplies", value: 6000, color: "hsl(35 90% 55%)" },
-  { name: "Maintenance", value: 4000, color: "hsl(0 70% 55%)" },
-  { name: "Other", value: 3000, color: "hsl(270 70% 50%)" },
-];
 
 const getExpenseCategories = (expenses: any[]) => {
   // Define category colors
-  const categoryColors = {
+  const categoryColors: { [key: string]: string } = {
     "Staff Salaries": "hsl(220 70% 50%)",
     Utilities: "hsl(160 70% 50%)",
     Supplies: "hsl(35 90% 55%)",
@@ -144,9 +113,19 @@ const getExpenseCategories = (expenses: any[]) => {
     Other: "hsl(300 70% 50%)",
   };
 
+  if (!Array.isArray(expenses) || expenses.length === 0) {
+    return [
+      { name: "Staff Salaries", value: 35000, color: "hsl(220 70% 50%)" },
+      { name: "Utilities", value: 8000, color: "hsl(160 70% 50%)" },
+      { name: "Supplies", value: 6000, color: "hsl(35 90% 55%)" },
+      { name: "Maintenance", value: 4000, color: "hsl(0 70% 55%)" },
+      { name: "Other", value: 3000, color: "hsl(270 70% 50%)" },
+    ];
+  }
+
   // Group expenses by category and sum their values
   const categorizedExpenses = expenses?.reduce((acc: any, expense: any) => {
-    const category = expense?.category || "Other";
+    const category = expense?.paymentCategory || "Other";
     if (!acc[category]) {
       acc[category] = 0;
     }
@@ -247,23 +226,45 @@ const AnalyticScreen: React.FC = () => {
 
   const { termlyExpense } = useTermExpenses(data?._id);
 
-  const otherPayment = _?.sumBy(
-    termData?.data?.paymentOptions,
-    (option: any) => Number(option.paymentAmount) || 0
+  let allInflows = (termData?.data?.storePayment || [])
+    .map((el: any) => ({
+      ...el,
+      type: "inflow",
+      displayDescription: el.item || "Store Sale",
+      displayAmount: el.amount,
+    }))
+    .concat(
+      (termData?.data?.schoolFeePayment || []).map((el: any) => ({
+        ...el,
+        type: "inflow",
+        displayDescription: `School Fee - ${el.studentFirstName} ${el.studentLastName}`,
+        displayAmount: el.amount,
+      })),
+      (termData?.data?.paymentOptions || []).map((el: any) => ({
+        ...el,
+        type: "inflow",
+        displayDescription: el.paymentDetails || "Other Payment",
+        displayAmount: el.paymentAmount,
+      }))
+    );
+
+  let allOutflows = (termlyExpense?.data?.expense || []).map((el: any) => ({
+    ...el,
+    type: "outflow",
+    displayDescription: el.item || "Expense",
+    displayAmount: el.amount,
+  }));
+
+  const incomePaymentTotal = _?.sumBy(
+    allInflows,
+    (el: any) => Number(el.displayAmount) || 0
   );
 
-  const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
+  const expensePaymentTotal = _?.sumBy(termlyExpense?.data?.expense, "amount");
 
-  const expensePayment = _?.sumBy(termlyExpense?.data?.expense, "amount");
+  const storePaymentTotal = _?.sumBy(termData?.data?.storePayment, "amount");
 
-  // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
-
-  let allData = termData?.data?.storePayment.concat(
-    termData?.data?.schoolFeePayment,
-    termData?.data?.paymentOptions
-  );
-
-  const expenseData = termlyExpense?.data?.expense
+  const schoolFeePaymentTotal = termData?.data?.schoolFeePayment
     ?.map((el: any) => {
       return el?.amount ? el?.amount : 0;
     })
@@ -271,42 +272,18 @@ const AnalyticScreen: React.FC = () => {
       return a + b;
     }, 0);
 
-  const schoolFeePayment = termData?.data?.schoolFeePayment
-    ?.map((el: any) => {
-      return el?.amount ? el?.amount : 0;
-    })
-    .reduce((a: number, b: number) => {
-      return a + b;
-    }, 0);
+  const monthlyData = getMonthlyData(termlyExpense?.data?.expense, allInflows);
 
-  const monthlyData = getMonthlyData(
-    termlyExpense?.data?.expense,
-    termData?.data?.paymentOptions
-  );
-
-  console.log("Monthly Data Debug:", {
-    expenses: termlyExpense?.data?.expense,
-    incomes: termData?.data?.paymentOptions,
-    result: monthlyData,
-  });
-
-  const expenseCategoriesII = getExpenseCategories(
+  const expenseCategoriesCalculated = getExpenseCategories(
     termlyExpense?.data?.expense
   );
 
   // Concatenate and sort all data by createdAt in descending order
-  const sortedData = _?.orderBy(
-    allData?.concat(termlyExpense?.data?.expense || []) || [],
+  const sortedTransactions = _?.orderBy(
+    allInflows.concat(allOutflows),
     ["createdAt"],
     ["desc"]
-  ).reverse();
-
-  console.log(
-    "sortedData: ",
-    `₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`
   );
-
-  console.log("expenseCategoriesII: ", termData);
 
   return (
     <div className="min-h-screen bg-background p-2 text-blue-950">
@@ -338,29 +315,29 @@ const AnalyticScreen: React.FC = () => {
         {/*  */}
         <MetricCard
           title="Total Income"
-          value={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
-          change="+12% from last month"
-          icon={<BsCashCoin className="h-5 w-5 " />}
+          value={`₦${parseFloat(`${incomePaymentTotal}`).toLocaleString()}`}
+          change={`${allInflows.length} Transactions`}
+          icon={<TrendingUp className="h-5 w-5" />}
           variant="income"
         />
         <MetricCard
           title="Total Expenses"
-          value={`₦${parseFloat(`${expensePayment}`).toLocaleString()}`}
+          value={`₦${parseFloat(`${expensePaymentTotal}`).toLocaleString()}`}
           change="+8% from last month"
           icon={<FaCcMastercard className="h-5 w-5" />}
           variant="expense"
         />
         <MetricCard
-          title="Net Balance/Store"
-          value={`₦${parseFloat(`${storePayment}`).toLocaleString()}`}
-          change="+22% from last month"
+          title="Store Sales"
+          value={`₦${parseFloat(`${storePaymentTotal}`).toLocaleString()}`}
+          change={`${termData?.data?.storePayment?.length || 0} items sold`}
           icon={<FaStore className="h-5 w-5" />}
-          variant="primary"
+          variant="neutral"
         />
         <MetricCard
           title="Total SchoolFees"
-          value={`₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`}
-          change={`${termData?.data?.schoolFeePayment?.length} +3% from last month`}
+          value={`₦${parseFloat(`${schoolFeePaymentTotal}`).toLocaleString()}`}
+          change={`${termData?.data?.schoolFeePayment?.length || 0} Paid this term`}
           icon={<Users className="h-5 w-5" />}
           variant="neutral"
         />
@@ -433,7 +410,7 @@ const AnalyticScreen: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={expenseCategories}
+                  data={expenseCategoriesCalculated}
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
@@ -443,7 +420,7 @@ const AnalyticScreen: React.FC = () => {
                     `${name} ${(percent * 100).toFixed(0)}%`
                   }
                 >
-                  {expenseCategories.map((entry, index) => (
+                  {expenseCategoriesCalculated.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -454,7 +431,7 @@ const AnalyticScreen: React.FC = () => {
                     borderRadius: "8px",
                   }}
                   formatter={(value) => [
-                    `$${value.toLocaleString()}`,
+                    `₦${value.toLocaleString()}`,
                     "Amount",
                   ]}
                 />
@@ -470,8 +447,8 @@ const AnalyticScreen: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {/* sortedData?.slice(0, 10) recentTransactions*/}
-            {sortedData?.slice(0, 10).map((transaction: any, i: number) => (
+            {/* sortedTransactions?.slice(0, 10) */}
+            {sortedTransactions?.slice(0, 10).map((transaction: any, i: number) => (
               <div
                 key={i}
                 className="flex items-center justify-between p-4 bg-muted/30 rounded-lg smooth-transition hover:bg-muted/50"
@@ -479,16 +456,12 @@ const AnalyticScreen: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <div
                     className={`p-2 rounded-full ${
-                      transaction.paymentMode === "cash" ||
-                      transaction.paymentMode === "online" ||
-                      transaction.reference === "paid in cash"
+                      transaction.type === "inflow"
                         ? "bg-success-light text-success"
                         : "bg-destructive-light text-destructive"
                     }`}
                   >
-                    {transaction.paymentMode === "cash" ||
-                    transaction.paymentMode === "online" ||
-                    transaction.reference === "paid in cash" ? (
+                    {transaction.type === "inflow" ? (
                       <TrendingUp className="h-4 w-4" />
                     ) : (
                       <TrendingDown className="h-4 w-4" />
@@ -496,14 +469,8 @@ const AnalyticScreen: React.FC = () => {
                   </div>
                   <div>
                     <p className="font-medium">
-                      {" "}
-                      {transaction.paymentDetails ||
-                        transaction.item ||
-                        "Other payments"}{" "}
-                      -{" "}
-                      {transaction?.paymentMode === "cash" ||
-                      transaction?.paymentMode === "online" ||
-                      transaction?.reference === "paid in cash" ? (
+                      {transaction.displayDescription} -{" "}
+                      {transaction.type === "inflow" ? (
                         <span className="text-green-500 font-semibold text-[12px] uppercase ">
                           Inflow
                         </span>
@@ -514,24 +481,20 @@ const AnalyticScreen: React.FC = () => {
                       )}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {moment(transaction.createAt).format("DD-MM-YYY")}
+                      {moment(transaction.createdAt).format("DD-MM-YYYY")}
                     </p>
                   </div>
                 </div>
                 <span
                   className={`font-semibold ${
-                    transaction.paymentMode === "cash" ||
-                    transaction.paymentMode === "online" ||
-                    transaction.reference === "paid in cash"
+                    transaction.type === "inflow"
                       ? "text-success"
                       : "text-destructive"
                   }`}
                 >
                   ₦
                   {Math.abs(
-                    transaction.amount ||
-                      transaction.amount ||
-                      parseInt(transaction.paymentAmount)
+                    Number(transaction.displayAmount) || 0
                   ).toLocaleString()}
                 </span>
               </div>
@@ -545,92 +508,3 @@ const AnalyticScreen: React.FC = () => {
 
 export default AnalyticScreen;
 
-const AnalyticScreenData: React.FC = () => {
-  const { data } = useSchoolData();
-  const { data: termData } = useSchoolTermDetails(data?.presentTermID);
-
-  const { termlyExpense } = useTermExpenses(data?._id);
-
-  const otherPayment = _?.sumBy(
-    termData?.data?.paymentOptions,
-    (option: any) => Number(option.paymentAmount) || 0
-  );
-
-  const storePayment = _?.sumBy(termData?.data?.storePayment, "amount");
-
-  const expensePayment = _?.sumBy(termData?.data?.expensePayOut, "amount");
-
-  // const schoolFeePayment = _?.sumBy(termData?.data?.schoolFeePayment, "cost");
-
-  let allData = termData?.data?.storePayment.concat(
-    termData?.data?.schoolFeePayment,
-    termData?.data?.paymentOptions
-  );
-  const expenseData = termlyExpense?.data?.expense
-    ?.map((el: any) => {
-      return el?.amount ? el?.amount : 0;
-    })
-    .reduce((a: number, b: number) => {
-      return a + b;
-    }, 0);
-  const schoolFeePayment = termData?.data?.schoolFeePayment
-    ?.map((el: any) => {
-      return el?.amount ? el?.amount : 0;
-    })
-    .reduce((a: number, b: number) => {
-      return a + b;
-    }, 0);
-
-  return (
-    <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 text-blue-950">
-        <CardDataStats
-          title="Inflow[income]"
-          total={`₦${parseFloat(`${otherPayment}`).toLocaleString()}`}
-          rate=""
-          levelUp
-        >
-          <BsCashCoin size={30} />
-        </CardDataStats>
-        <CardDataStats
-          title="Outflow[Expenses]"
-          total={`₦${parseFloat(`${expenseData}`).toLocaleString()}`}
-          rate=""
-          levelUp
-        >
-          <FaCcMastercard size={30} />
-        </CardDataStats>
-        <CardDataStats
-          title="Store Sales"
-          total={`₦${parseFloat(`${storePayment}`).toLocaleString()}`}
-          rate=""
-          levelUp
-        >
-          <FaStore size={30} />
-        </CardDataStats>
-        <CardDataStats
-          title="School Fees[Paid]"
-          total={`₦${parseFloat(`${schoolFeePayment}`).toLocaleString()}`}
-          rate={`${termData?.data?.schoolFeePayment?.length}`}
-          levelDown
-        >
-          <BsPeopleFill size={30} />
-        </CardDataStats>
-      </div>
-
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        {/* <ChartOne
-          schoolFee={schoolFeePayment}
-          store={storePayment}
-          others={otherPayment}
-          expensePayment={expenseData}
-          data={data}
-        /> */}
-        {/* <ChartTwo /> */}
-
-        <div className="col-span-12 xl:col-span-12">{/* <TableOne /> */}</div>
-      </div>
-      {/* <ChatCard /> */}
-    </>
-  );
-};
