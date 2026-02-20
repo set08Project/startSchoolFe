@@ -90,8 +90,9 @@ const TableTag = () => {
           GRADE SCALE
         </div>
         <div className=" text-center w-[90%] py-2">
-          70-100% * A(Excellent) 60-69.9% *B (VERY GOOD) 50-59.9% *C(GOOD)
-          40-49.9% *D(PASS) 30-39.9% *E(FAIR) 0-29% *F(WEAK)
+          75-100% * A1(Excellent) 70-74% * B2(Very Good) 65-69% * B3(Good)
+          60-64% * C4(Credit) 55-59% * C5(Credit) 50-54% * C6(Credit)
+          45-49% * D7(Pass) 40-44% * E8(Pass) 0-39% * F9(Fail)
         </div>
       </div>
       <div className=" w-full">

@@ -133,7 +133,7 @@ const StudentDetail = () => {
       <StudentResultsDetail />
       <div className="my-6 border-t" />
       {/* class subject */}
-      <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      {/* <div className="w-full min-h-[180px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>Present Class Details </p>
         <p className="text-[13px]">
           Class Handled:{" "}
@@ -206,8 +206,8 @@ const StudentDetail = () => {
             </div>
           </div>
         )}
-      </div>
-      <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
+      </div> */}
+      {/* <div className="mt-6 w-full min-h-[100px] pb-10 bg-slate-50 rounded-lg border py-2 px-4 ">
         <p>student's Performance Detail</p>
         <p className="text-[13px] flex items-center font-medium">
           General Performance Ratings:{" "}
@@ -235,7 +235,7 @@ const StudentDetail = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Attendance */}
       <div className="mt-6 w-full min-h-[60px] py-5 bg-slate-50 rounded-lg border  px-4 ">
         <p className="mb-2">
@@ -269,6 +269,7 @@ const StudentDetail = () => {
               </div>
             ))}
           </div>
+          
         </div>
       </div>
     </div>

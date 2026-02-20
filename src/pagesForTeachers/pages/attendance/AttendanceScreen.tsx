@@ -19,6 +19,7 @@ import { UnLazyImage } from "@unlazy/react";
 import Button from "@/components/reUse/Button";
 import { FaSpinner } from "react-icons/fa6";
 import { clockIn, clockOut, findStudentWidthID } from "@/pagesForStudents/api/studentAPI";
+import { clockWithOfflineFallback } from "@/hooks/useOfflineClock";
 
 interface iProps {
   props?: string;
@@ -237,29 +238,33 @@ const AttendanceScreen = () => {
                                       text-white !text-[12px] uppercase !text-center border-none font-medium py-4 !-pl-0 !mx-1 !px-1 !w-[130px] leading-tight`}
                                       onClick={() => {
                                         setLoadingValue(props?._id);
-                                        console.log("props", props);
+
+                                        if (!navigator.onLine) {
+                                          clockWithOfflineFallback(
+                                            props?.clockIn ? "clock-out" : "clock-in",
+                                            props?.schoolIDs,
+                                            props?._id
+                                          ).then(() => {
+                                            toast.success("Saved offline - will sync when back online");
+                                            setLoadingValue("");
+                                            // Optimistically toggle some UI if possible, or just let sync handle it
+                                          });
+                                          return;
+                                        }
 
                                         findStudentWidthID(props?.enrollmentID)
                                           .then((res) => {
                                             if (res.status === 201) {
-                                              console.log("res in", res);
                                               if (!res.data?.data?.clockIn) {
                                                 return clockIn(
                                                   res.data?.data?.schoolIDs,
                                                   res.data?.data?._id
                                                 ).then((res) => {
                                                   if (res.status === 201) {
-                                                    console.log("res out", res);
-                                                    toast.success(
-                                                      `${res.data?.studentFirstName}, has been clock in`
-                                                    );
-                                                    return mutate(
-                                                      `api/view-all-class-students/${state}`
-                                                    );
+                                                    toast.success(`${res.data?.studentFirstName}, has been clock in`);
+                                                    return mutate(`api/view-all-class-students/${state}`);
                                                   } else {
-                                                    toast.error(
-                                                      "student has not been clocked in yet, Please try again!"
-                                                    );
+                                                    toast.error("student has not been clocked in yet, Please try again!");
                                                   }
                                                 });
                                               } else {
@@ -268,16 +273,10 @@ const AttendanceScreen = () => {
                                                   res.data?.data?._id
                                                 ).then((res) => {
                                                   if (res.status === 201) {
-                                                    toast.success(
-                                                      `${res.data?.studentFirstName}, has been clock out`
-                                                    );
-                                                    return mutate(
-                                                      `api/view-all-class-students/${state}`
-                                                    );
+                                                    toast.success(`${res.data?.studentFirstName}, has been clock out`);
+                                                    return mutate(`api/view-all-class-students/${state}`);
                                                   } else {
-                                                    toast.error(
-                                                      "student has not been clocked out yet, Please try again!"
-                                                    );
+                                                    toast.error("student has not been clocked out yet, Please try again!");
                                                   }
                                                 });
                                               }

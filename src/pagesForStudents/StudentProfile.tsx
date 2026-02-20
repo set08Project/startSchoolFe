@@ -8,16 +8,17 @@ import { MdEmail } from "react-icons/md";
 import { HiPhoto } from "react-icons/hi2";
 import { BsPerson, BsPhone } from "react-icons/bs";
 import { FaAddressBook } from "react-icons/fa6";
+import { FaQrcode } from "react-icons/fa";
 import IG from "../../src/assets/ig.png";
 import FB from "../../src/assets/fb.png";
 import Linkden from "../../src/assets/linkden.png";
 import X from "../../src/assets/ig.png";
 import { FaUserEdit } from "react-icons/fa";
-// import { Link } from "react-router-dom";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
 import { useState, useEffect, useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import StudentIDCardModal from "@/components/modals/StudentIDCardModal";
 import {
   readClassInfo,
   readOneClassInfo,
@@ -32,6 +33,7 @@ const StudentProfile = () => {
   const [state, setState] = useState<string>("");
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showIDCard, setShowIDCard] = useState(false);
   const student = useStudentInfo().studentInfo;
   const fetchOnce = useRef(true);
   const initials =
@@ -258,6 +260,13 @@ const StudentProfile = () => {
               <div className="p-3 bg-gray-100 font-medium rounded-lg text-[17px]">
                 {student?.enrollmentID}
               </div>
+              <button
+                onClick={() => setShowIDCard(true)}
+                className="mt-2 flex items-center gap-2 text-blue-950 font-medium text-[13px] hover:text-blue-700 transition-all duration-200 cursor-pointer"
+              >
+                <FaQrcode size={16} />
+                View My QR ID Card
+              </button>
             </div>
             <div className="mb-5">
               <div className="mb-2 font-medium text-[11px] md:text-[17px] text-gray-600 uppercase">
@@ -352,6 +361,9 @@ const StudentProfile = () => {
           </div>
         </div>
       </div>
+      {showIDCard && student && (
+        <StudentIDCardModal student={student} onClose={() => setShowIDCard(false)} />
+      )}
     </div>
   );
 };

@@ -8,12 +8,13 @@ import RouterScreen from "./router/RouterScreen";
 import PrivateRouter from "./router/PrivateRouter";
 import { Helmet } from "react-helmet";
 import OfflineIndicator from "./components/static/OfflineIndicator";
+import useOfflineClock from "./hooks/useOfflineClock";
 // import { SWRConfig } from "swr";
-// import { swrConfig } from "./pages/hook/persistHook";
 
 let persistor = persistStore(store);
 
 const App = () => {
+  useOfflineClock();
   const helmetContext: any = {};
   return (
     // <SWRConfig value={swrConfig}>

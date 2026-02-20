@@ -870,8 +870,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
 
                       <td className="border border-gray-800 p-2 w-1/3">
                         <span className="">
-                          <span className="font-bold">C4</span> 60-64 (UPPER
-                          CREDIT)
+                          <span className="font-bold">C4</span> 60-64 (CREDIT)
                         </span>
                         <span className="ml-4">
                           <span className="font-bold">C5</span> 55-59 (CREDIT)
@@ -881,8 +880,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                     <tr>
                       <td className="border border-gray-800 p-2 w-1/3">
                         <span className="">
-                          <span className="font-bold">C6</span> 50-54 (LOWER
-                          CREDIT)
+                          <span className="font-bold">C6</span> 50-54 (CREDIT)
                         </span>
                       </td>
                       <td className="border border-gray-800 p-2 w-1/3">
