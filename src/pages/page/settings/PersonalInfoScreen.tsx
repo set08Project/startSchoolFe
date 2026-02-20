@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../../../components/reUse/Input";
 import Button from "../../../components/reUse/Button";
 import { MdSave } from "react-icons/md";
@@ -11,10 +11,12 @@ import {
   deleteAllStudent,
   updateSchoolSignature,
   updateSchoolStamp,
+  updateSchoolSMS,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
+import { ConfirmSMSModal } from "../../../components/modals/ConfirmSMSModal";
 
 const PersonalInfoScreen = () => {
   const { data } = useSchoolData();
@@ -29,8 +31,17 @@ const PersonalInfoScreen = () => {
   const [toggle1, setToggle1] = useState<boolean>(false);
   const [toggle2, setToggle2] = useState<boolean>(false);
   const [toggle3, setToggle3] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [pendingSMSValue, setPendingSMSValue] = useState<boolean>(false);
 
   const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [smsToggle, setSmsToggle] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (data) {
+      setSmsToggle(data?.sendSMS);
+    }
+  }, [data?.sendSMS]);
 
   const [signature, setSignature] = useState<string>("");
   const [stamp, setStamp] = useState<string>("");
@@ -95,6 +106,42 @@ const PersonalInfoScreen = () => {
     }
   };
 
+  const onToggleSMS = async (value: boolean) => {
+    setIsModalOpen(false); // Close modal right away
+    setSmsToggle(value); // Immediate UI reflection
+    const originalData = data;
+    const key = `api/view-school/${schoolID}/seconded-data`;
+
+    // Optimistic update
+    mutate(
+      key,
+      { ...data, sendSMS: value },
+      false
+    );
+
+    try {
+      setLoading(true);
+      const res = await updateSchoolSMS(schoolID, value);
+      if (res.status === 201) {
+        toast.success("SMS Notification status updated");
+        mutate(key);
+      } else {
+        throw new Error("Update failed");
+      }
+    } catch (error) {
+      toast.error("Error updating SMS Notification status");
+      setSmsToggle(!value); // Rollback UI reflection
+      mutate(key, originalData, false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleClick = (newValue: boolean) => {
+    setPendingSMSValue(newValue);
+    setIsModalOpen(true);
+  };
+
   const handleDeleteAllStudents = () => {
     setSpin(true);
     setTimeout(() => {
@@ -121,554 +168,463 @@ const PersonalInfoScreen = () => {
   };
 
   return (
-    <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
-      <Toaster position="top-center" />
-      {/* forms */}
-      <div>
-        <div className="flex w-[100%] justify-between h-[100px] relative ">
-          <div>
-            <div>Legal Name</div>
-            {toggle ? (
-              <div
-                className="absolute top-6 z-10 -left-1
+    <>
+      <div className="grid col-span-6 lg:col-span-3 pr-0 h-[100px] text-blue-950">
+        <Toaster position="top-center" />
+        {/* forms */}
+        <div>
+          <div className="flex w-[100%] justify-between h-[100px] relative ">
+            <div>
+              <div>Legal Name</div>
+              {toggle ? (
+                <div
+                  className="absolute top-6 z-10 -left-1
                 h-[200px] w-[100%] sm:w-[120%] md:w-[105%] lg:w-[110%]  bg-blue-500 py-4
                 "
-                style={{
-                  background: "rgba(252, 254, 255, 0.25)",
-                  backdropFilter: " blur( 4px )",
-                }}
-              >
-                <div className="z-20">
-                  <div className="flex w-full">
-                    <Input
-                      className="flex-1 mr-1 placeholder:text-gray-400 "
-                      placeholder={data?.name ? "" : "Enter First Name"}
-                      defaultValue={data?.name}
-                      value={firstName}
-                      onChange={(e: any) => {
-                        setFirstName(e.target.value);
-                      }}
-                    />
-                    <Input
-                      className="flex-1 ml-1"
-                      placeholder={data?.name2 ? "" : "Enter Last Name"}
-                      defaultValue={data?.name2}
-                      value={lastName}
-                      onChange={(e: any) => {
-                        setLastName(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Button
-                      name={`${loading ? " Loading" : "save name"}`}
-                      icon={
-                        loading ? (
-                          <BeatLoader
-                            color={"color"}
-                            size={18}
-                            className="mb-[0.12rem]"
-                          />
-                        ) : (
-                          <MdSave />
-                        )
-                      }
-                      className={` bg-blue-950 transition-all duration-300 ${
-                        loading && "h-12"
-                      }`}
-                      onClick={() => {
-                        setLoading(true);
-                        changeSchoolPersonalName(data?._id, {
-                          name: firstName,
-                          name2: lastName,
-                        }).then((res) => {
-                          setLoading(false);
-                          setToggle(false);
+                  style={{
+                    background: "rgba(252, 254, 255, 0.25)",
+                    backdropFilter: " blur( 4px )",
+                  }}
+                >
+                  <div className="z-20">
+                    <div className="flex w-full">
+                      <Input
+                        className="flex-1 mr-1 placeholder:text-gray-400 "
+                        placeholder={data?.name ? "" : "Enter First Name"}
+                        defaultValue={data?.name}
+                        value={firstName}
+                        onChange={(e: any) => {
+                          setFirstName(e.target.value);
+                        }}
+                      />
+                      <Input
+                        className="flex-1 ml-1"
+                        placeholder={data?.name2 ? "" : "Enter Last Name"}
+                        defaultValue={data?.name2}
+                        value={lastName}
+                        onChange={(e: any) => {
+                          setLastName(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        name={`${loading ? " Loading" : "save name"}`}
+                        icon={
+                          loading ? (
+                            <BeatLoader
+                              color={"color"}
+                              size={18}
+                              className="mb-[0.12rem]"
+                            />
+                          ) : (
+                            <MdSave />
+                          )
+                        }
+                        className={` bg-blue-950 transition-all duration-300 ${
+                          loading && "h-12"
+                        }`}
+                        onClick={() => {
+                          setLoading(true);
+                          changeSchoolPersonalName(data?._id, {
+                            name: firstName,
+                            name2: lastName,
+                          }).then((res) => {
+                            setLoading(false);
+                            setToggle(false);
 
-                          toast.success("Legal Name updated successfully");
-                          mutate(`api/view-school/${data?._id}`);
-                        });
-                      }}
-                    />
+                            toast.success("Legal Name updated successfully");
+                            mutate(`api/view-school/${data?._id}`);
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div>
-                {data?.name || data?.name2 ? (
-                  <div>
-                    {data?.name} {data?.name2}
-                  </div>
-                ) : (
-                  <div>No Legal Name yet</div>
-                )}
-              </div>
-            )}
-          </div>
-          <div
-            className="text-[12px] underline font-[500] hover:cursor-pointer  ml-10"
-            onClick={onToggle}
-          >
-            Change
-          </div>
-        </div>
-      </div>
-
-      {/* forms */}
-      <div>
-        <div className="flex w-full justify-between h-[100px] relative ">
-          {" "}
-          <div>
-            <div>Email address</div>
-            <div className="text-[12px] leading-4 text-[gray] mb-4 ">
-              Use an address you’ll always have access to.
-            </div>
-            <div className="font-[400] mt-3">
-              {toggle1 ? (
-                <div>{data?.email}</div>
               ) : (
                 <div>
-                  {data?.email.substring(0, 2)}****@
-                  {data?.email.split("@")[1]}
+                  {data?.name || data?.name2 ? (
+                    <div>
+                      {data?.name} {data?.name2}
+                    </div>
+                  ) : (
+                    <div>No Legal Name yet</div>
+                  )}
                 </div>
               )}
             </div>
-          </div>
-          <div
-            className="text-[12px] underline font-[500] hover:cursor-pointer "
-            onClick={onToggle1}
-          >
-            View
+            <div
+              className="text-[12px] underline font-[500] hover:cursor-pointer  ml-10"
+              onClick={onToggle}
+            >
+              Change
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* forms */}
-      <div>
-        <div className="flex w-full justify-between h-[100px] relative mt-10 ">
-          {" "}
-          <div>
-            <div>Phone numbers</div>
-
-            {toggle2 ? (
-              <div
-                className="absolute top-5 z-10 
-                h-[200px] w-[100%] sm:w-[120%] md:w-[90%]   bg-blue-500 py-4
-                "
-                style={{
-                  background: "rgba(252, 254, 255, 0.25)",
-                  backdropFilter: " blur( 4px )",
-                }}
-              >
-                <div className="z-20">
-                  <div className="flex w-full">
-                    <Input
-                      className="flex-1 mr-1 placeholder:text-gray-400 "
-                      placeholder={
-                        data?.phone ? "" : "Enter your contact mobile number "
-                      }
-                      defaultValue={phone}
-                      value={phone}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setPhone(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Button
-                      name={`${loading ? " Loading" : "save number"}`}
-                      icon={
-                        loading ? (
-                          <BeatLoader
-                            color={"color"}
-                            size={18}
-                            className="mb-[0.12rem]"
-                          />
-                        ) : (
-                          <MdSave />
-                        )
-                      }
-                      className={` bg-blue-950 transition-all duration-300 ${
-                        loading && "h-12"
-                      }`}
-                      onClick={() => {
-                        setLoading(true);
-                        changeSchoolPhone(data?._id, phone).then(() => {
-                          toast.success("Phone Number Updated successfully");
-                          setLoading(false);
-                          setToggle2(false);
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
-                Add a your contact phone Number: {data?.phoneNumber}
-              </div>
-            )}
-
+        {/* forms */}
+        <div>
+          <div className="flex w-full justify-between h-[100px] relative ">
+            {" "}
             <div>
+              <div>Email address</div>
+              <div className="text-[12px] leading-4 text-[gray] mb-4 ">
+                Use an address you’ll always have access to.
+              </div>
               <div className="font-[400] mt-3">
-                {toggle2 ? (
-                  <div>{data?.phoneNumber}</div>
+                {toggle1 ? (
+                  <div>{data?.email}</div>
                 ) : (
                   <div>
-                    {data?.phone ? (
-                      <div>{data?.phone}</div>
-                    ) : (
-                      <div>No phone contact yet</div>
-                    )}
+                    {data?.email.substring(0, 2)}****@
+                    {data?.email.split("@")[1]}
                   </div>
                 )}
               </div>
             </div>
-          </div>
-          <div
-            className="text-[12px] underline font-[500] hover:cursor-pointer "
-            onClick={onToggle2}
-          >
-            Change
+            <div
+              className="text-[12px] underline font-[500] hover:cursor-pointer "
+              onClick={onToggle1}
+            >
+              View
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* forms */}
-      <div>
-        <div className="flex w-full justify-between h-[70px] relative mt-10 ">
-          {" "}
-          <div>
-            <div>Change School Name</div>
+        {/* forms */}
+        <div>
+          <div className="flex w-full justify-between h-[100px] relative mt-10 ">
+            {" "}
+            <div>
+              <div>Phone numbers</div>
 
-            {toggle3 ? (
-              <div
-                className="absolute top-8 z-10 
+              {toggle2 ? (
+                <div
+                  className="absolute top-5 z-10 
+                h-[200px] w-[100%] sm:w-[120%] md:w-[90%]   bg-blue-500 py-4
+                "
+                  style={{
+                    background: "rgba(252, 254, 255, 0.25)",
+                    backdropFilter: " blur( 4px )",
+                  }}
+                >
+                  <div className="z-20">
+                    <div className="flex w-full">
+                      <Input
+                        className="flex-1 mr-1 placeholder:text-gray-400 "
+                        placeholder={
+                          data?.phone ? "" : "Enter your contact mobile number "
+                        }
+                        defaultValue={phone}
+                        value={phone}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setPhone(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        name={`${loading ? " Loading" : "save number"}`}
+                        icon={
+                          loading ? (
+                            <BeatLoader
+                              color={"color"}
+                              size={18}
+                              className="mb-[0.12rem]"
+                            />
+                          ) : (
+                            <MdSave />
+                          )
+                        }
+                        className={` bg-blue-950 transition-all duration-300 ${
+                          loading && "h-12"
+                        }`}
+                        onClick={() => {
+                          setLoading(true);
+                          changeSchoolPhone(data?._id, phone).then(() => {
+                            toast.success("Phone Number Updated successfully");
+                            setLoading(false);
+                            setToggle2(false);
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
+                  Add a your contact phone Number: {data?.phoneNumber}
+                </div>
+              )}
+
+              <div>
+                <div className="font-[400] mt-3">
+                  {toggle2 ? (
+                    <div>{data?.phoneNumber}</div>
+                  ) : (
+                    <div>
+                      {data?.phone ? (
+                        <div>{data?.phone}</div>
+                      ) : (
+                        <div>No phone contact yet</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div
+              className="text-[12px] underline font-[500] hover:cursor-pointer "
+              onClick={onToggle2}
+            >
+              Change
+            </div>
+          </div>
+        </div>
+
+        {/* forms */}
+        <div>
+          <div className="flex w-full justify-between relative mt-10">
+            <div>
+              <div>Change School Name</div>
+
+              {toggle3 ? (
+                <div
+                  className="absolute top-8 z-10 
                 h-[200px] w-[100%] sm:w-[120%] md:w-[90%] bg-blue-500 py-4
                 "
-                style={{
-                  background: "rgba(252, 254, 255, 0.25)",
-                  backdropFilter: " blur( 4px )",
-                }}
-              >
-                <div className="z-20">
-                  <div className="flex w-full">
-                    <Input
-                      className="flex-1 mr-1 placeholder:text-gray-400 "
-                      value={phone}
-                      defaultValue={data?.schoolName}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setPhone(e.target.value);
-                      }}
-                    />
+                  style={{
+                    background: "rgba(252, 254, 255, 0.25)",
+                    backdropFilter: " blur( 4px )",
+                  }}
+                >
+                  <div className="z-20">
+                    <div className="flex w-full">
+                      <Input
+                        className="flex-1 mr-1 placeholder:text-gray-400 "
+                        value={phone}
+                        defaultValue={data?.schoolName}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setPhone(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        name={`${loading ? " Loading" : "save school name"}`}
+                        icon={
+                          loading ? (
+                            <BeatLoader
+                              color={"color"}
+                              size={18}
+                              className="mb-[0.12rem]"
+                            />
+                          ) : (
+                            <MdSave />
+                          )
+                        }
+                        className={` bg-blue-950 transition-all duration-300 ${
+                          loading && "h-12"
+                        }`}
+                        onClick={() => {
+                          setLoading(true);
+                          changeSchoolName(data?._id, { schoolName: phone }).then(
+                            () => {
+                              setLoading(false);
+                              onToggle3();
+                              mutate(`api/view-school/${data?._id}`);
+                            }
+                          );
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Button
-                      name={`${loading ? " Loading" : "save school name"}`}
-                      icon={
-                        loading ? (
-                          <BeatLoader
-                            color={"color"}
-                            size={18}
-                            className="mb-[0.12rem]"
-                          />
-                        ) : (
-                          <MdSave />
-                        )
-                      }
-                      className={` bg-blue-950 transition-all duration-300 ${
-                        loading && "h-12"
+                </div>
+              ) : (
+                <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
+                  You can always update your school name here:{" "}
+                  <span className="font-medium">{data?.schoolName}</span>
+                </div>
+              )}
+
+              <div className="mt-10 mb-10">
+                <div className="flex items-center gap-4">
+                  <div className="text-[16px] font-medium">SMS Notifications</div>
+                  <div
+                    className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-all duration-300 ${
+                      smsToggle ? "bg-green-500" : "bg-gray-400"
+                    }`}
+                    onClick={() => handleToggleClick(!smsToggle)}
+                  >
+                    <div
+                      className={`w-4 h-4 rounded-full bg-white transition-all duration-300 transform ${
+                        smsToggle ? "translate-x-6" : "translate-x-0"
                       }`}
-                      onClick={() => {
-                        setLoading(true);
-                        changeSchoolName(data?._id, { schoolName: phone }).then(
-                          () => {
-                            setLoading(false);
-                            onToggle3();
-                            mutate(`api/view-school/${data?._id}`);
-                          }
-                        );
-                      }}
                     />
                   </div>
                 </div>
+                <p className="text-[12px] text-gray-500 mt-1">
+                  Enable this to send SMS notifications to parents when their child
+                  clocks in or out.
+                </p>
               </div>
-            ) : (
-              <div className="text-[12px] leading-4 text-[gray] mb-4 mr-8 ">
-                You can always update your school name here:{" "}
-                <span className="font-medium">{data?.schoolName}</span>
-              </div>
-            )}
 
-            <div>
-              <div className="font-[400] mt-3">
-                {/* {toggle3 ? (
-                  <div>{data?.schoolName}</div>
-                ) : (
+              <div className="flex gap-2 items-center w-full ">
+                <div className="mt-0  p-5 uppercase">
+                  {data?.signature ? (
+                    <img
+                      src={data?.signature}
+                      className="w-[200px] h-[120px] border mb-10 object-contain"
+                    />
+                  ) : (
+                    <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
+                      <p>NO SIGNATURE YET</p>
+                    </div>
+                  )}
                   <div>
-                    {data?.schoolName ? (
-                      <div></div>
+                    {signature ? (
+                      <button
+                        className={`bg-red-500 ${
+                          loading
+                            ? "cursor-not-allowed bg-red-400 animate-pulse"
+                            : "cursor-pointer"
+                        } text-white px-[45px] py-4 rounded-md text-[12px]`}
+                        disabled={loading}
+                        onClick={() => {
+                          setLoading(true);
+                          const formData: any = new FormData();
+                          formData.append("avatar", signature);
+                          updateSchoolSignature(data?._id, formData)
+                            .then((res) => {
+                              if (res.status === 201) {
+                                toast.success(
+                                  "signature updated successfully"
+                                );
+                                mutate(`api/api/view-school/${data?._id}`);
+                              } else {
+                                toast.error("signature updated Error");
+                              }
+                            })
+                            .finally(() => {
+                              setLoading(false);
+                            });
+                        }}
+                      >
+                        {loading ? "Loading..." : "upload Signature"}
+                      </button>
                     ) : (
                       <div>
-                  updateSchoolSignature      school Name:{" "}
-                        <strong className="font-medium">
-                          {data?.schoolName}
-                        </strong>
+                        <label
+                          htmlFor="signature-upload"
+                          className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
+                        >
+                          Update Signature
+                        </label>
+                        <input
+                          className="hidden"
+                          type="file"
+                          id="signature-upload"
+                          onChange={(e: any) => {
+                            setSignature(e.target.files[0]);
+                          }}
+                        />
                       </div>
                     )}
                   </div>
-                )} */}
+                </div>
 
-                <div className="flex gap-2 items-center w-full ">
-                  <div className="mt-0  p-5 uppercase">
-                    {data?.signature ? (
-                      <img
-                        src={data?.signature}
-                        className="w-[200px] h-[120px] border mb-10 object-contain"
-                      />
-                    ) : (
-                      <div className="w-[200px] h-[120px] border mb-10 flex justify-center items-center text-[12px] font-semibold italic">
-                        <p>NO SIGNATURE YET</p>
-                      </div>
-                    )}
-                    <div>
-                      {signature ? (
-                        <button
-                          className={`bg-red-500 ${
-                            loading
-                              ? "cursor-not-allowed bg-red-400 animate-pulse"
-                              : "cursor-pointer"
-                          } text-white px-[45px] py-4 rounded-md text-[12px]`}
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const formData: any = new FormData();
-                            formData.append("avatar", signature);
-                            updateSchoolSignature(data?._id, formData)
-                              .then((res) => {
-                                if (res.status === 201) {
-                                  toast.success(
-                                    "signature updated successfully"
-                                  );
-                                  mutate(`api/api/view-school/${data?._id}`);
-                                } else {
-                                  toast.error("signature updated Error");
-                                }
-                              })
-                              .finally(() => {
-                                setLoading(false);
-                              });
-                          }}
-                        >
-                          {loading ? "Loading..." : "upload Signature"}
-                        </button>
+                <div className="mt-0  p-5 uppercase">
+                  {data?.stamp ? (
+                    <img
+                      src={data?.stamp}
+                      className="w-[200px] h-[120px] border mb-10 object-contain"
+                    />
+                  ) : (
+                    <div className="w-[200px] h-[120px]  border mb-10 flex justify-center items-center text-[12px] font-semibold italic overflow-hidden">
+                      {stamp === "" ? (
+                        <p>NO STAMP YET</p>
                       ) : (
-                        <div>
-                          <label
-                            htmlFor="signature-upload"
-                            className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
-                          >
-                            Update Signature
-                          </label>
-                          <input
-                            className="hidden"
-                            type="file"
-                            id="signature-upload"
-                            onChange={(e: any) => {
-                              setSignature(e.target.files[0]);
-                            }}
-                          />
-                        </div>
+                        <img
+                          src={stampFile}
+                          className="h-[120px] border mb-10 object-cover"
+                        />
                       )}
                     </div>
-                  </div>
-
-                  <div className="mt-0  p-5 uppercase">
-                    {data?.stamp ? (
-                      <img
-                        src={data?.stamp}
-                        className="w-[200px] h-[120px] border mb-10 object-contain"
-                      />
+                  )}
+                  <div>
+                    {stamp ? (
+                      <button
+                        className={`bg-red-500 ${
+                          loading
+                            ? "cursor-not-allowed bg-red-400 animate-pulse"
+                            : "cursor-pointer"
+                        } text-white px-[45px] py-4 rounded-md text-[12px]`}
+                        disabled={loading}
+                        onClick={() => {
+                          setLoading(true);
+                          const formData: any = new FormData();
+                          formData.append("avatar", stamp);
+                          updateSchoolStamp(data?._id, formData)
+                            .then((res) => {
+                              if (res.status === 201) {
+                                toast.success("stamp updated successfully");
+                                mutate(`api/api/view-school/${data?._id}`);
+                              } else {
+                                toast.error("stamp updated Error");
+                              }
+                            })
+                            .finally(() => {
+                              setLoading(false);
+                              setStamp("");
+                            });
+                        }}
+                      >
+                        {loading ? "Loading..." : "upload stamp"}
+                      </button>
                     ) : (
-                      <div className="w-[200px] h-[120px]  border mb-10 flex justify-center items-center text-[12px] font-semibold italic overflow-hidden">
-                        {stamp === "" ? (
-                          <p>NO STAMP YET</p>
-                        ) : (
-                          <img
-                            src={stampFile}
-                            className="h-[120px] border mb-10 object-cover"
-                          />
-                        )}
+                      <div>
+                        <label
+                          htmlFor="stamp-upload"
+                          className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
+                        >
+                          Update stamp
+                        </label>
+                        <input
+                          className="hidden"
+                          type="file"
+                          id="stamp-upload"
+                          onChange={(e: any) => {
+                            setStamp(e.target.files[0]);
+                            setStampFile(
+                              URL.createObjectURL(e.target.files[0])
+                            );
+                          }}
+                        />
                       </div>
                     )}
-                    <div>
-                      {stamp ? (
-                        <button
-                          className={`bg-red-500 ${
-                            loading
-                              ? "cursor-not-allowed bg-red-400 animate-pulse"
-                              : "cursor-pointer"
-                          } text-white px-[45px] py-4 rounded-md text-[12px]`}
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const formData: any = new FormData();
-                            formData.append("avatar", stamp);
-                            updateSchoolStamp(data?._id, formData)
-                              .then((res) => {
-                                if (res.status === 201) {
-                                  toast.success("stamp updated successfully");
-                                  mutate(`api/api/view-school/${data?._id}`);
-                                } else {
-                                  toast.error("stamp updated Error");
-                                }
-                              })
-                              .finally(() => {
-                                setLoading(false);
-                                setStamp("");
-                              });
-                          }}
-                        >
-                          {loading ? "Loading..." : "upload stamp"}
-                        </button>
-                      ) : (
-                        <div>
-                          <label
-                            htmlFor="stamp-upload"
-                            className="mt-4 bg-blue-950 text-white px-12 py-4 rounded-md text-[12px] cursor-pointer"
-                          >
-                            Update stamp
-                          </label>
-                          <input
-                            className="hidden"
-                            type="file"
-                            id="stamp-upload"
-                            onChange={(e: any) => {
-                              setStamp(e.target.files[0]);
-                              setStampFile(
-                                URL.createObjectURL(e.target.files[0])
-                              );
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            className="text-[12px] underline font-[500] hover:cursor-pointer "
-            onClick={onToggle3}
-          >
-            Change
+            <div
+              className="text-[12px] underline font-[500] hover:cursor-pointer "
+              onClick={onToggle3}
+            >
+              Change
+            </div>
           </div>
         </div>
-      </div>
-      <div className="w-full flex justify-between items-center smallphon relative">
-        {/* <div className="w-[280px] ">
-          <h1 className="font-medium text-[16px]">
-            Delete All Students In your School
-          </h1>
-          <h3 className="text-[12px] font-extrabold">
-            This is an irreversible action, All students and associated data's
-            about each student will be wiped off. Be absolutely sure about
-            taking this action.
-          </h3>
-        </div> */}
-        <div>
-          {/* <div>
-            <div className=" w-full">
-              <div
-                className="underline font-medium py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                onClick={() => {
-                  setPopup("Delete");
-                }}
-              >
-                Proceed
-              </div>
-            </div>
-          </div> */}
-          {/* Popup Card */}
-          {/* {popup === "Delete" && (
-            <div className="absolute freshh py-[30px] mb-3 w-full flex justify-center items-center backdrop-blur-sm bg-blue-50 top-0 left-0 rounded-lg">
-              <div className="p-4 w-[400px] sm:w-[470px] min-h-[300px] bg-white rounded-lg smallphone">
-                <div className="mb-3 text-center">
-                  <h3 className="font-bold text-lg text-center text-blue-950">
-                    All Student Deletion Notice
-                  </h3>
-                </div>
-                <div className="mb text-blue-950">
-                  <p className="mb-3 text-[14px]">
-                    You are about to permanently delete{" "}
-                    <span className="font-extrabold">All students </span> record
-                    from your database. This action is irreversible and cannot
-                    be undone, and will result in the complete removal of all
-                    associated data, including academic history, contact
-                    information, and every other students detail.{" "}
-                  </p>
-                  <p className="ml-3 mb-3 font-extrabold">
-                    Be Absolutely Sure of this decision
-                  </p>
-                  <div className="mb-3 flex items-center justify-center gap-3 font-semibold  text-[15px]">
-                    <p>
-                      If <span className="text-red-500 text-[20px]">YES</span>{" "}
-                      continue,
-                    </p>
-                    <p className="">
-                      If <span className="text-[20px]">NO</span> cancel.
-                    </p>
-                  </div>
-                  <div className="pt-2 flex justify-between items-center sm:justify-center sm:gap-5">
-                    {spin ? (
-                      <div className="">
-                        <button
-                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
-                            changeText ? "hidden" : "block"
-                          }`}
-                        >
-                          <ClipLoader
-                            color={"#fff"}
-                            loading={loading}
-                            size={20}
-                          />
-                          Deleting...
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="">
-                        <button
-                          className={`text-white font-medium flex justify-center items-center gap-3 bg-red-600 py-3 px-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
-                            changeText ? "hidden" : "block"
-                          }`}
-                          onClick={() => {
-                            handleDeleteAllStudents();
-                            setchangeText(true);
-                          }}
-                        >
-                          Delete All Students(Not Active)
-                        </button>
-                      </div>
-                    )}
 
-                    <button
-                      className="btn text-white py-4 px-6 bg-blue-950 border hover:bg-blue-950 scale-105 cursor-pointer"
-                      onClick={() => {
-                        setPopup(null);
-                        setchangeText(false);
-                      }}
-                    >
-                      {changeText ? "Close" : "Cancel"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )} */}
-        </div>
+        {/* Delete All Students section removed / commented out */}
       </div>
-    </div>
+      <ConfirmSMSModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={() => onToggleSMS(pendingSMSValue)}
+        currentStatus={smsToggle}
+        loading={loading}
+      />
+    </>
   );
 };
 

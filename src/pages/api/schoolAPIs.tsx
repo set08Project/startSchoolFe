@@ -1898,3 +1898,14 @@ export const readDailyExpense = async (schoolID: string) => {
     return error;
   }
 };
+export const updateSchoolSMS = async (schoolID: string, sendSMS: boolean) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-school-sms/${schoolID}`, { sendSMS })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
