@@ -35,8 +35,8 @@ const PersonalInfoScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [pendingSMSValue, setPendingSMSValue] = useState<boolean>(false);
 
-  const [loadingData, setLoadingData] = useState<boolean>(false);
   const [smsToggle, setSmsToggle] = useState<boolean>(false);
+  const [smsLoadingText, setSmsLoadingText] = useState<string>("");
 
   useEffect(() => {
     if (data) {
@@ -108,9 +108,8 @@ const PersonalInfoScreen = () => {
   };
 
   const onToggleSMS = async (value: boolean) => {
-    setIsModalOpen(false); // Close modal right away
-
     if (!value) {
+      setIsModalOpen(false); // Close modal when disabling
       // Disabling logic
       setSmsToggle(value); // Immediate UI reflection
       const originalData = data;
@@ -137,22 +136,29 @@ const PersonalInfoScreen = () => {
       }
     } else {
       // Enabling logic (trigger payment)
+      // Keep modal open to show loading state
       try {
         setLoading(true);
         const res = await makeSMSPayment(schoolID, { email: data?.email });
 
         if (res.status === 201) {
           toast.success("Initializing payment...");
+          setSmsLoadingText("Redirecting to Paystack...");
           setTimeout(() => {
             window.location.href = res.data.data.authorization_url;
-          }, 1000);
+            // No need to close modal, the page will redirect
+          }, 1500);
         } else {
+          setIsModalOpen(false); // Close on error
+          setLoading(false);
+          setSmsLoadingText("");
           toast.error("Failed to initialize payment");
         }
       } catch (error) {
-        toast.error("Error initializing payment");
-      } finally {
+        setIsModalOpen(false);
         setLoading(false);
+        setSmsLoadingText("");
+        toast.error("Error initializing payment");
       }
     }
   };
@@ -643,6 +649,7 @@ const PersonalInfoScreen = () => {
         onConfirm={() => onToggleSMS(pendingSMSValue)}
         currentStatus={smsToggle}
         loading={loading}
+        loadingText={smsLoadingText}
         totalCost={data?.students?.length * 960}
       />
     </>

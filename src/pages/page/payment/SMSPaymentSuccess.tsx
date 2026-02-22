@@ -5,6 +5,7 @@ import { useSchoolCookie } from "../../hook/useSchoolAuth";
 import { CheckCircle2, XCircle, ArrowRight, Home, Settings } from "lucide-react";
 import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
+import { mutate } from "swr";
 
 const SMSPaymentSuccess: FC = () => {
   const { dataID } = useSchoolCookie();
@@ -23,6 +24,7 @@ const SMSPaymentSuccess: FC = () => {
           if (res.status === 200) {
             setStatus("success");
             setPaymentData(res.data);
+            mutate(`api/view-school/${dataID}/seconded-data`);
             toast.success("SMS Activation Successful!");
           } else {
             setStatus("error");

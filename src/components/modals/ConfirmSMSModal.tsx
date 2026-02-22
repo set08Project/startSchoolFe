@@ -8,6 +8,7 @@ interface ConfirmSMSModalProps {
   onConfirm: () => void;
   currentStatus: boolean;
   loading?: boolean;
+  loadingText?: string;
   totalCost?: number;
 }
 
@@ -18,6 +19,7 @@ export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
   currentStatus,
   totalCost,
   loading = false,
+  loadingText,
 }) => {
   if (!isOpen) return null;
 
@@ -77,7 +79,10 @@ export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
               disabled={loading}
             >
               {loading ? (
-                <ClipLoader color="white" size={18} />
+                <div className="flex items-center gap-2">
+                  <ClipLoader color="white" size={18} />
+                  {loadingText && <span className="animate-pulse">{loadingText}</span>}
+                </div>
               ) : (
                 currentStatus ? "Yes, Disable" : `Pay ₦${totalCost?.toLocaleString()}`
               )}
