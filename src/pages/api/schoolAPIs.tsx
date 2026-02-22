@@ -1909,3 +1909,27 @@ export const updateSchoolSMS = async (schoolID: string, sendSMS: boolean) => {
     return error;
   }
 };
+
+export const makeSMSPayment = async (schoolID: string, data: any) => {
+  try {
+    return await axios
+      .post(`${URL}/make-sms-payment/${schoolID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const verifySMSPayment = async (schoolID: string, ref: string) => {
+  try {
+    return await axios
+      .get(`${URL}/verify-sms-payment/${schoolID}/${ref}`)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};

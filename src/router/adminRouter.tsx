@@ -42,6 +42,10 @@ const SuccessfulPaymentScreen = React.lazy(
   () => import("../pages/page/payment/PaymentSuccessfulScreen")
 );
 
+const SMSPaymentSuccess = React.lazy(
+  () => import("../pages/page/payment/SMSPaymentSuccess")
+);
+
 const DownloadTest = React.lazy(
   () => import("../pages/page/payment/DownloadTest")
 );
@@ -218,6 +222,15 @@ export const adminRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <SuccessPage />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: "sms-payment-success",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <SMSPaymentSuccess />
           </Suspense>
         ),
       },

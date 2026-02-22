@@ -8,6 +8,7 @@ interface ConfirmSMSModalProps {
   onConfirm: () => void;
   currentStatus: boolean;
   loading?: boolean;
+  totalCost?: number;
 }
 
 export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
@@ -15,6 +16,7 @@ export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
   onClose,
   onConfirm,
   currentStatus,
+  totalCost,
   loading = false,
 }) => {
   if (!isOpen) return null;
@@ -52,7 +54,7 @@ export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
           <p className="text-sm text-gray-500 mb-8 leading-relaxed">
             {currentStatus 
               ? "Are you sure you want to stop sending SMS notifications to parents? This might reduce engagement."
-              : "Are you sure you want to send SMS notifications to parents? Note that standard SMS rates may apply via Termii."}
+              : `Are you sure you want to send SMS notifications to parents? This will cost ₦${totalCost?.toLocaleString()} for this term (960 Naira per student).`}
           </p>
 
           <div className="flex gap-4">
@@ -77,7 +79,7 @@ export const ConfirmSMSModal: FC<ConfirmSMSModalProps> = ({
               {loading ? (
                 <ClipLoader color="white" size={18} />
               ) : (
-                currentStatus ? "Yes, Disable" : "Yes, Enable"
+                currentStatus ? "Yes, Disable" : `Pay ₦${totalCost?.toLocaleString()}`
               )}
             </button>
           </div>

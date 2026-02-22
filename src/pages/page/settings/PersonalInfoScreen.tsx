@@ -12,6 +12,7 @@ import {
   updateSchoolSignature,
   updateSchoolStamp,
   updateSchoolSMS,
+  makeSMSPayment,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -108,32 +109,51 @@ const PersonalInfoScreen = () => {
 
   const onToggleSMS = async (value: boolean) => {
     setIsModalOpen(false); // Close modal right away
-    setSmsToggle(value); // Immediate UI reflection
-    const originalData = data;
-    const key = `api/view-school/${schoolID}/seconded-data`;
 
-    // Optimistic update
-    mutate(
-      key,
-      { ...data, sendSMS: value },
-      false
-    );
+    if (!value) {
+      // Disabling logic
+      setSmsToggle(value); // Immediate UI reflection
+      const originalData = data;
+      const key = `api/view-school/${schoolID}/seconded-data`;
 
-    try {
-      setLoading(true);
-      const res = await updateSchoolSMS(schoolID, value);
-      if (res.status === 201) {
-        toast.success("SMS Notification status updated");
-        mutate(key);
-      } else {
-        throw new Error("Update failed");
+      // Optimistic update
+      mutate(key, { ...data, sendSMS: value }, false);
+
+      try {
+        setLoading(true);
+        const res = await updateSchoolSMS(schoolID, value);
+        if (res.status === 201) {
+          toast.success("SMS Notification status updated");
+          mutate(key);
+        } else {
+          throw new Error("Update failed");
+        }
+      } catch (error) {
+        toast.error("Error updating SMS Notification status");
+        setSmsToggle(!value); // Rollback UI reflection
+        mutate(key, originalData, false);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error("Error updating SMS Notification status");
-      setSmsToggle(!value); // Rollback UI reflection
-      mutate(key, originalData, false);
-    } finally {
-      setLoading(false);
+    } else {
+      // Enabling logic (trigger payment)
+      try {
+        setLoading(true);
+        const res = await makeSMSPayment(schoolID, { email: data?.email });
+
+        if (res.status === 201) {
+          toast.success("Initializing payment...");
+          setTimeout(() => {
+            window.location.href = res.data.data.authorization_url;
+          }, 1000);
+        } else {
+          toast.error("Failed to initialize payment");
+        }
+      } catch (error) {
+        toast.error("Error initializing payment");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -623,6 +643,7 @@ const PersonalInfoScreen = () => {
         onConfirm={() => onToggleSMS(pendingSMSValue)}
         currentStatus={smsToggle}
         loading={loading}
+        totalCost={data?.students?.length * 960}
       />
     </>
   );
