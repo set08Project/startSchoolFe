@@ -245,6 +245,8 @@ export const bulkUploadofStudent = async (schoolID: string, data: any) => {
 
 export const bulkUploadofSubject = async (schoolID: string, data: any) => {
   try {
+    // const URL = "http://localhost:2244/api"
+
     const config: any = {
       "Content-Type": "multipart/form-data",
     };
@@ -275,6 +277,8 @@ export const bulkUploadofSubjectWithQueue = async (
         fdEntries.push({ key, value, isFile: false });
       }
     });
+
+    // const URL = "http://localhost:2244/api"
 
     const entry: QueueEntry = {
       url: `${URL}/create-bulk-subject/${schoolID}`,
