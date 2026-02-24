@@ -216,18 +216,13 @@ const StudentProfile = () => {
                 <p className="mb-1 flex items-center gap-1">
                   <BsPerson /> Gender:
                 </p>
-                {student?.gender === "" ? (
-                  <h1 className="text-[18px] text-blue-500 font-normal">
-                    + add your gender
-                  </h1>
-                ) : (
-                  <input
-                    value={formData.gender || student?.gender || ""}
-                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
-                    name="gender"
-                    onChange={handleInputChange}
-                  />
-                )}
+                <input
+                  value={formData.gender || student?.gender || ""}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="gender"
+                  placeholder="Enter Gender"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
@@ -256,42 +251,30 @@ const StudentProfile = () => {
                   <BsPhone />
                   My Phone Number:
                 </p>
-                {student?.phone === "" ? (
-                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
-                    + add your phone number
-                  </h1>
-                ) : (
-                  <input
-                    value={formData.phone || student?.phone || ""}
-                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
-                    name="phone"
-                    placeholder="Enter Phone Number"
-                    onChange={handleInputChange}
-                  />
-                )}
+                <input
+                  value={formData.phone || student?.phone || ""}
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="phone"
+                  placeholder="Enter Phone Number"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1 md:text-[17px] text-[11px]">
                   <BsPhone />
                   Parent Phone Number:
                 </p>
-                {student?.parentPhoneNumber === "" ? (
-                  <h1 className="md:text-[18px] text-blue-500 font-normal text-[11px]">
-                    + add parent phone number
-                  </h1>
-                ) : (
-                  <input
-                    value={
-                      formData.parentPhoneNumber ||
-                      student?.parentPhoneNumber ||
-                      ""
-                    }
-                    className="outline-none bg-transparent text-[18px] font-semibold capitalize "
-                    name="parentPhoneNumber"
-                    placeholder="Enter parent phone Number"
-                    onChange={handleInputChange}
-                  />
-                )}
+                <input
+                  value={
+                    formData.parentPhoneNumber ||
+                    student?.parentPhoneNumber ||
+                    ""
+                  }
+                  className="outline-none bg-transparent text-[18px] font-semibold capitalize "
+                  name="parentPhoneNumber"
+                  placeholder="Enter parent phone Number"
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3 py-2 px-3 bg-gray-100 rounded-lg">
                 <p className="mb-1 flex items-center gap-1">
