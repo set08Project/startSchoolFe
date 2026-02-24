@@ -19,7 +19,7 @@ const ClockingScreen = () => {
       console.log(`Code matched = ${decodedText}`);
       
       // If it's the backend URL, redirect to it
-      // Standard QR format: https://.../api/qr-scan/:schoolID/:studentID
+      // Standard QR format: https://.../api/qr-scan/:schoolID/:studentID start
       if (decodedText.includes("/api/qr-scan")) {
         // Stop the scanner and redirect
         scanner.clear().then(() => {
