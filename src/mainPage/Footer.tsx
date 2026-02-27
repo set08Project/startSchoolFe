@@ -15,13 +15,13 @@ const Footer = () => {
           />
           <div className="text-center">Innovating Education, Just for you!</div>
           <div className="text-center text-[12px] font-light mt-2">
-            #4 Barrister Ahmed Musa Street, Ajegunle-Apapa Lagos
+            #4 Barrister Ahmed Musa Street, <br/>Ajegunle-Apapa Lagos
             <br />
             08165968846
           </div>
         </div>
       </div>
-      <aside className="items-center grid-flow-col">
+      <aside className="items- grid-flow-col">
         <Link to="/">
           <img className="h-5" src={logo} />
         </Link>
