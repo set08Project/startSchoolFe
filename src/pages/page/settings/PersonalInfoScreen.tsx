@@ -13,6 +13,7 @@ import {
   updateSchoolStamp,
   updateSchoolSMS,
   makeSMSPayment,
+  testSchoolSMS,
 } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
@@ -37,6 +38,9 @@ const PersonalInfoScreen = () => {
 
   const [smsToggle, setSmsToggle] = useState<boolean>(false);
   const [smsLoadingText, setSmsLoadingText] = useState<string>("");
+  const [testPhone, setTestPhone] = useState<string>("");
+  const [testLoading, setTestLoading] = useState<boolean>(false);
+  const [selectedChannel, setSelectedChannel] = useState<string>("generic");
 
   useEffect(() => {
     if (data) {
@@ -160,6 +164,27 @@ const PersonalInfoScreen = () => {
         setSmsLoadingText("");
         toast.error("Error initializing payment");
       }
+    }
+  };
+
+  const handleTestSMS = async () => {
+    if (!testPhone) {
+      toast.error("Please enter a phone number to test");
+      return;
+    }
+
+    try {
+      setTestLoading(true);
+      const res = await testSchoolSMS(testPhone, selectedChannel);
+      if (res.status === 200) {
+        toast.success(`Test SMS (${selectedChannel}) Triggered!`);
+      } else {
+        toast.error(`Failed on ${selectedChannel} channel. Try another?`);
+      }
+    } catch (error) {
+      toast.error("Error triggering test SMS");
+    } finally {
+      setTestLoading(false);
     }
   };
 
@@ -493,6 +518,57 @@ const PersonalInfoScreen = () => {
                   Enable this to send SMS notifications to parents when their child
                   clocks in or out.
                 </p>
+                <div className="mt-4 flex flex-col gap-3 max-w-[300px]">
+                  <p className="text-[14px] font-semibold text-blue-900">Manual SMS Test</p>
+                  
+                  <div className="flex flex-col gap-2 bg-gray-50 p-2 rounded border border-gray-200">
+                    <p className="text-[12px] font-medium text-gray-700">Select Channel:</p>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-1 text-[12px] cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="channel" 
+                          value="generic" 
+                          checked={selectedChannel === "generic"}
+                          onChange={() => setSelectedChannel("generic")}
+                        /> Generic
+                      </label>
+                      <label className="flex items-center gap-1 text-[12px] cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="channel" 
+                          value="dnd" 
+                          checked={selectedChannel === "dnd"}
+                          onChange={() => setSelectedChannel("dnd")}
+                        /> DND
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Phone (e.g. 080123...)"
+                      className="border rounded px-2 py-1 text-[13px] outline-none flex-1 border-gray-300 focus:border-blue-500"
+                      value={testPhone}
+                      onChange={(e) => setTestPhone(e.target.value)}
+                    />
+                    <button
+                      disabled={testLoading}
+                      onClick={handleTestSMS}
+                      className={`px-3 py-1 rounded text-[12px] font-bold text-white transition-all ${
+                        testLoading
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700"
+                      }`}
+                    >
+                      {testLoading ? "Sending..." : "Send Test"}
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-gray-400 italic leading-tight">
+                    Try **DND** channel if Generic gives a 404 (Sender Not Found) error.
+                  </p>
+                </div>
               </div>
 
               <div className="flex gap-2 items-center w-full ">

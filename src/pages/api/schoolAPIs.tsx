@@ -3,8 +3,8 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
 // working locally
 
-// const URL2: string = import.meta.env.VITE_URL;
-// const URL: string = import.meta.env.VITE_MAIN_URL;
+const URL2: string = import.meta.env.VITE_URL;
+export const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL2: string = "http://localhost:2244";
 // const URL: string = "http://localhost:2244/api";
@@ -20,8 +20,8 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 // const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
 // ?New Try
-export const URL: string = "https://start-school-be.vercel.app/api";
-const URL2: string = "https://start-school-be.vercel.app";
+// export const URL: string = "https://start-school-be.vercel.app/api";
+// const URL2: string = "https://start-school-be.vercel.app";
 
 export const updateSchoolResumptionTeamInfo = async (
   schoolID: string,
@@ -1937,3 +1937,16 @@ export const verifySMSPayment = async (schoolID: string, ref: string) => {
     return error;
   }
 };
+export const testSchoolSMS = async (phone: string, channel: string = "generic") => {
+  try {
+    const URL = "http://localhost:2244/api";
+    return await axios
+      .get(`${URL}/test-sms/${phone}?action=send&channel=${channel}`)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+

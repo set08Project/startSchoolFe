@@ -1,27 +1,25 @@
-import { useEffect } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { useEffect, useRef } from "react";
+import { Html5QrcodeScanner, Html5Qrcode } from "html5-qrcode";
 import LittleHeader from "@/components/static/LittleHeader";
 
 const ClockingScreen = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const scanner = new Html5QrcodeScanner(
       "reader",
       { 
         fps: 10, 
         qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
+        aspectRatio: 1.0,
+        showTorchButtonIfSupported: true,
       },
       /* verbose= */ false
     );
 
     const onScanSuccess = (decodedText: string) => {
-      // decodedText is the URL or data
       console.log(`Code matched = ${decodedText}`);
-      
-      // If it's the backend URL, redirect to it
-      // Standard QR format: https://.../api/qr-scan/:schoolID/:studentID 
       if (decodedText.includes("/api/qr-scan")) {
-        // Stop the scanner and redirect
         scanner.clear().then(() => {
           window.location.href = decodedText;
         }).catch(err => {
@@ -32,22 +30,45 @@ const ClockingScreen = () => {
     };
 
     const onScanFailure = (error: any) => {
-      // Quietly ignore scan failures to avoid spamming the console
+      // Quietly ignore
     };
 
     scanner.render(onScanSuccess, onScanFailure);
 
     return () => {
-      scanner.clear().catch(error => console.error("Failed to clear scanner during cleanup", error));
+      scanner.clear().catch(error => console.error("Failed to clear scanner", error));
     };
   }, []);
+
+  const handleNativeAppOpen = () => {
+    // Attempt to open ZXing scanner app with a return URL to this page
+    const returnUrl = encodeURIComponent(window.location.href);
+    window.location.href = `zxing://scan/?ret=${returnUrl}`;
+  };
+
+  const handleFileScan = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const html5QrCode = new Html5Qrcode("reader-hidden");
+    try {
+      const decodedText = await html5QrCode.scanFile(file, true);
+      console.log("File Scan Success:", decodedText);
+      if (decodedText.includes("/api/qr-scan")) {
+        window.location.href = decodedText;
+      }
+    } catch (err) {
+      console.error("File Scan Error:", err);
+      alert("Could not find a valid QR code in the photo. Please try again.");
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 overflow-hidden">
       <LittleHeader name="Attendance Scanner" />
       
-      <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-10">
-        <div className="max-w-[450px] w-full bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100 flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-10 overflow-y-auto">
+        <div className="max-w-[450px] w-full bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100 flex flex-col mb-6">
           
           {/* Header Info */}
           <div className="p-8 text-center bg-slate-50/50">
@@ -64,20 +85,63 @@ const ClockingScreen = () => {
           </div>
           
           {/* Scanner Viewport */}
-          <div className="px-8 pb-8">
+          <div className="px-8 pb-4">
              <div className="relative group">
-                {/* Decorative corners */}
                 <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-blue-600 rounded-tl-2xl z-10 pointer-events-none"></div>
                 <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-blue-600 rounded-tr-2xl z-10 pointer-events-none"></div>
                 <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-blue-600 rounded-bl-2xl z-10 pointer-events-none"></div>
                 <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-blue-600 rounded-br-2xl z-10 pointer-events-none"></div>
                 
-                {/* The Scanner */}
                 <div id="reader" className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-900 shadow-inner"></div>
+                <div id="reader-hidden" className="hidden"></div>
                 
-                {/* Scanning Beam (Visual effect) */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-blue-500/30 blur-sm animate-[scan_2s_infinite] z-20 pointer-events-none"></div>
              </div>
+          </div>
+
+          {/* Alternative native Options */}
+          <div className="px-8 pb-8 pt-2 flex flex-col gap-3">
+             <div className="flex items-center gap-3 my-2">
+                <div className="flex-1 h-px bg-slate-100"></div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Or Use Native</span>
+                <div className="flex-1 h-px bg-slate-100"></div>
+             </div>
+
+             <div className="grid grid-cols-2 gap-3">
+                <button 
+                  onClick={handleNativeAppOpen}
+                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-slate-100 transition-all group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fillRule="evenodd" d="M3 4.875C3 3.84 3.84 3 4.875 3h4.5c1.035 0 1.875.84 1.875 1.875v4.5c0 1.035-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0 1 3 9.375v-4.5ZM4.875 4.5a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h4.5Zm7.875.375c0-1.035.84-1.875 1.875-1.875h4.5C20.16 3 21 3.84 21 4.875v4.5c0 1.035-.84 1.875-1.875 1.875h-4.5a1.875 1.875 0 0 1-1.875-1.875v-4.5Zm1.875-.375a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h-4.5ZM3 14.625c0-1.035.84-1.875 1.875-1.875h4.5c1.035 0 1.875.84 1.875 1.875v4.5c0 1.035-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0 1 3 19.125v-4.5ZM4.875 14.25a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h-4.5Zm9.375-.375a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5Zm.75.75v4.5h4.5v-4.5h-4.5Z" clipRule="evenodd" />
+                     </svg>
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-700">Open App</span>
+                </button>
+
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-slate-100 transition-all group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path d="M12 9a3.75 3.75 0 1 0 0 7.5A3.75 3.75 0 0 0 12 9Z" />
+                        <path fillRule="evenodd" d="M9.344 3.071a49.52 49.52 0 0 1 5.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 0 1-3 3h-15a3 3 0 0 1-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 0 0 1.11-.71l.822-1.315a2.742 2.742 0 0 1 2.332-1.39ZM12 6.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5Zm4.5 1.875a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0Z" clipRule="evenodd" />
+                     </svg>
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-700">System Camera</span>
+                </button>
+             </div>
+             
+             <input 
+               type="file" 
+               ref={fileInputRef}
+               className="hidden" 
+               accept="image/*" 
+               capture="environment"
+               onChange={handleFileScan}
+             />
           </div>
           
           {/* Footer Info */}
@@ -91,13 +155,6 @@ const ClockingScreen = () => {
              </span>
           </div>
         </div>
-        
-        {/* Simple Guide */}
-        <div className="mt-8 flex flex-col items-center">
-            <div className="px-6 py-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/20 text-slate-500 text-xs font-medium shadow-sm transition-all hover:bg-white/80">
-                Facing issues? Try cleaning your camera lens
-            </div>
-        </div>
       </div>
 
       <style>{`
@@ -106,17 +163,19 @@ const ClockingScreen = () => {
         #reader__dashboard_section_csr button {
           background-color: #1e3a8a !important;
           color: white !important;
-          border-radius: 8px !important;
-          padding: 8px 16px !important;
+          border-radius: 12px !important;
+          padding: 10px 20px !important;
           border: none !important;
           font-weight: 600 !important;
           margin: 10px 0 !important;
           cursor: pointer !important;
+          box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2) !important;
         }
         #reader__dashboard_section_csr select {
-          padding: 6px !important;
-          border-radius: 6px !important;
+          padding: 8px !important;
+          border-radius: 8px !important;
           border: 1px solid #e2e8f0 !important;
+          background-color: white !important;
         }
         @keyframes scan {
           0% { transform: translateY(0); }
@@ -124,6 +183,7 @@ const ClockingScreen = () => {
         }
         #reader__status_span { display: none !important; }
         #reader__camera_selection { margin-bottom: 10px !important; width: 100% !important; }
+        #reader__scan_region { background: #0f172a !important; }
       `}</style>
     </div>
   );

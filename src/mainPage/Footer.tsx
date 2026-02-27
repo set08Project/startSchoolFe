@@ -14,6 +14,11 @@ const Footer = () => {
             className="w-[150px] h-[100px] object-contain"
           />
           <div className="text-center">Innovating Education, Just for you!</div>
+          <div className="text-center text-[12px] font-light mt-2">
+            #4 Barrister Ahmed Musa Street, Ajegunle-Apapa Lagos
+            <br />
+            08165968846
+          </div>
         </div>
       </div>
       <aside className="items-center grid-flow-col">
