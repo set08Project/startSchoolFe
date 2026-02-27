@@ -21,7 +21,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <aside className="items- grid-flow-col">
+      <aside className="items-center grid-flow-col">
         <Link to="/">
           <img className="h-5" src={logo} />
         </Link>
