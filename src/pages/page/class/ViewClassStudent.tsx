@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import pix from "../../../assets/pix.jpg";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +29,6 @@ import {
   migrateStudent,
 } from "../../api/schoolAPIs";
 import { clockIn, clockOut, findStudentWidthID, schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
-import crypto from "crypto";
 import { useStudentInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import { udatedStudentBulkInfo } from "../../../pagesForTeachers/api/teachersAPI";
 import { mutate } from "swr";
@@ -364,9 +364,7 @@ const ViewClassStudent: FC = () => {
                                 //   amount: 20000,
                                 //   reference: "paid in cash",
                                 //   confirm: true,
-                                //   purchasedID: crypto
-                                //     ?.randomBytes(3)
-                                //     .toString("hex"),
+                                //   purchasedID: uuid().slice(0, 7),
                                 // }).then((res) => {
                                 //   console.log("done: ", res);
                                 // });

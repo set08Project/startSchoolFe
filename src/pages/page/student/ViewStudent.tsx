@@ -6,7 +6,6 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import crypto from "crypto";
 import {
   useSchoolCookie,
   useSchoolData,
@@ -38,7 +37,10 @@ import PrintReciptScreen from "./PrintReceipt";
 import { useReactToPrint } from "react-to-print";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdQrCode } from "react-icons/md";
+import StudentIDCardModal from "../../../components/modals/StudentIDCardModal";
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
+import StudentIDCardPDF from "../../../components/pdf/StudentIDCardPDF";
 
 interface iProps {
   props?: any;
@@ -178,8 +180,8 @@ const ViewStudent = () => {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
           amount: "2000",
-          purchasedID: crypto.randomBytes(3).toString("hex"),
-          reference: crypto.randomBytes(3).toString("hex"),
+          purchasedID: getValue(6),
+          reference: getValue(6),
         }).then(() => {
           setID("");
           toast.success("3rd term SchoolFees has been Approved");
@@ -276,6 +278,79 @@ const ViewStudent = () => {
 
   const [stateID, setStateID] = useState<string>("");
   const [toggleView, setToggleView] = useState<boolean>(false);
+  const [showIDCard, setShowIDCard] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [isDownloadingCards, setIsDownloadingCards] = useState(false);
+
+  const BACKEND_URL = "https://start-school-be.vercel.app/api";
+
+  const generateQRCodeDataURL = (student: any): Promise<string> => {
+    return new Promise((resolve) => {
+      const qrValue = `${BACKEND_URL}/qr-scan/${student?.schoolIDs}/${student?._id}`;
+      // Use a temporary canvas to generate the QR code
+      const canvas = document.createElement("canvas");
+      // We need to import QRCode from qrcode.react to draw on canvas
+      // But since we are in a function, we might need a better way if we don't want to render.
+      // For now, let's assume we can use a library or just use an image from a service if easier
+      // Actually, let's use a hidden QRCodeCanvas component approach in the render if possible.
+      // Or just use an online QR generator for the PDF for now to ensure it works,
+      // but local is better.
+      // Let's use a simple data URL generator or similar.
+      // Alternative: Use the qrcode-generator micro library if I can.
+      // Actually, I'll use the StudentIDCardPDF with an image URL that gets generated.
+      resolve(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrValue)}`);
+    });
+  };
+
+  const handleDownloadAllIDCards = async () => {
+    if (!paginatedStudents || paginatedStudents.length === 0) {
+      toast.error("No students to download");
+      return;
+    }
+
+    setIsDownloadingCards(true);
+    toast.loading("Generating ID cards PDF...", { id: "generating-pdf" });
+
+    try {
+      const qrCodesMap: { [key: string]: string } = {};
+      
+      for (const student of paginatedStudents) {
+        qrCodesMap[student._id] = await generateQRCodeDataURL(student);
+      }
+
+      const blob = await pdf(
+        <StudentIDCardPDF students={paginatedStudents} qrCodes={qrCodesMap} />
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Student_ID_Cards_Page_${currentPage}.pdf`;
+      link.click();
+      
+      toast.success("ID cards PDF downloaded", { id: "generating-pdf" });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF", { id: "generating-pdf" });
+    } finally {
+      setIsDownloadingCards(false);
+    }
+  };
+
+  // Pagination
+  const STUDENTS_PER_PAGE = 15;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset to page 1 when search changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchStudents]);
+
+  const totalPages = Math.ceil((filteredStudents?.length || 0) / STUDENTS_PER_PAGE);
+  const paginatedStudents = filteredStudents?.slice(
+    (currentPage - 1) * STUDENTS_PER_PAGE,
+    currentPage * STUDENTS_PER_PAGE
+  );
 
   const handleDownloadAllStudentsPDF = () => {
     const doc = new jsPDF();
@@ -337,12 +412,20 @@ const ViewStudent = () => {
           value={searchStudents}
           onChange={handleSearch}
         />
-          <Button
-            name="Download Students"
-            className="uppercase md:text-[12px] text-[11px] font-medium bg-orange-500 py-  hover:bg-orange-600 cursor-pointer transition-all duration-300 -ml-0 -mt-4"
-            onClick={handleDownloadAllStudentsPDF}
-          />
+          <div className="flex items-center gap-2 -mt-4">
+            <Button
+              name="Download Students"
+              className="uppercase md:text-[12px] text-[11px] font-medium bg-orange-500 hover:bg-orange-600 cursor-pointer transition-all duration-300"
+              onClick={handleDownloadAllStudentsPDF}
+            />
 
+            <Button
+              name={isDownloadingCards ? "Generating..." : "Download ID Cards"}
+              className="uppercase md:text-[12px] text-[11px] font-medium bg-blue-800 hover:bg-blue-900 cursor-pointer transition-all duration-300"
+              onClick={handleDownloadAllIDCards}
+              disabled={isDownloadingCards}
+            />
+          </div>
           </div>
         <div className="mb-3 sm:mb-0 flex items-center">
          
@@ -411,14 +494,15 @@ const ViewStudent = () => {
 
           <div className="w-[80px] border-r">Rate</div>
           <div className="w-[180px] border-r">View Detail</div>
+          <div className="w-[80px] border-r">QR ID</div>
           <div className="w-[180px] border-r">Student Action</div>
         </div>
 
         <div className=" w-[2220px] overflow-hidden">
           {filteredStudents?.length >= 0 ? (
             <div>
-              {filteredStudents?.map((props: any, i: number) => {
-                console.log("show me: ", props);
+              {paginatedStudents?.map((props: any, i: number) => {
+                const globalIndex = (currentPage - 1) * STUDENTS_PER_PAGE + i;
                 return (
                   <div>
                     <div>
@@ -428,7 +512,7 @@ const ViewStudent = () => {
                           i % 2 === 0 ? "bg-slate-50" : "bg-white"
                         }`}
                       >
-                        <div className="w-[50px] border-r">{i + 1}</div>
+                        <div className="w-[50px] border-r">{globalIndex + 1}</div>
                         {/* Image and Name */}
                         <div className="w-[150px] flex justify-center border-r">
                           <img
@@ -785,6 +869,16 @@ const ViewStudent = () => {
                             ? parseFloat(props?.totalPerformance.toFixed(2))
                             : "0"}
                         </div>
+                        <div className="w-[80px] border-r flex justify-center">
+                          <MdQrCode
+                            size={24}
+                            className="cursor-pointer text-blue-950 hover:text-blue-700 transition-all duration-200"
+                            onClick={() => {
+                              setSelectedStudent(props);
+                              setShowIDCard(true);
+                            }}
+                          />
+                        </div>
                         <div className="w-[80px] border-r">3 of 5</div>
                         <Link
                           to={`student-details/${props?._id}`}
@@ -925,7 +1019,66 @@ const ViewStudent = () => {
             <div>No student yet</div>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 px-4 flex-wrap gap-3">
+            <p className="text-[12px] text-gray-500 font-medium">
+              Showing {(currentPage - 1) * STUDENTS_PER_PAGE + 1}–{Math.min(currentPage * STUDENTS_PER_PAGE, filteredStudents?.length || 0)} of {filteredStudents?.length || 0} students
+            </p>
+            <div className="flex items-center gap-1 flex-wrap">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-2 text-[12px] font-medium rounded-md border bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                ← Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, idx) => idx + 1)
+                .filter((page) => page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1)
+                .reduce<(number | string)[]>((acc, page, index, arr) => {
+                  if (index > 0 && (page as number) - (arr[index - 1] as number) > 1) acc.push("...");
+                  acc.push(page);
+                  return acc;
+                }, [])
+                .map((item, idx) =>
+                  item === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 text-[12px]">...</span>
+                  ) : (
+                    <button
+                      key={item}
+                      onClick={() => setCurrentPage(item as number)}
+                      className={`w-8 h-8 text-[12px] font-medium rounded-md border transition-all duration-200 ${
+                        currentPage === item
+                          ? "bg-blue-950 text-white border-blue-950"
+                          : "bg-white hover:bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 text-[12px] font-medium rounded-md border bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {showIDCard && selectedStudent && (
+        <StudentIDCardModal
+          student={selectedStudent}
+          onClose={() => {
+            setShowIDCard(false);
+            setSelectedStudent(null);
+          }}
+        />
+      )}
     </div>
   );
 };

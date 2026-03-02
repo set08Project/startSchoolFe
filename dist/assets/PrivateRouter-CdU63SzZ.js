@@ -1,1 +1,0 @@
-import{aO as a,r as o,c3 as c,j as e,c4 as i}from"./index-CNoUEwSl.js";const u=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{c()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(i,{to:"/"})})};export{u as default};

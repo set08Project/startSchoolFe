@@ -66,8 +66,7 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
               {/* Photo */}
               <div className="flex-shrink-0">
                 <div
-                  className="w-[80px] h-[90px] rounded-xl overflow-hidden border-2"
-                  style={{ borderColor: "rgba(255,255,255,0.3)" }}
+                  className="w-[80px] h-[90px] rounded-xl overflow-hidden border border-white/20"
                 >
                   <img
                     src={student?.avatar || pic}
@@ -104,7 +103,7 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-white/10 mb-4" />
+            <div className="mb-4" />
 
             {/* QR Section */}
             <div className="flex flex-col items-center gap-2">
@@ -124,11 +123,7 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
             </div>
 
             {/* Footer */}
-            <div className="mt-4 flex items-center justify-between">
-              <div
-                className="h-1.5 flex-1 rounded-full mr-3"
-                style={{ background: "linear-gradient(90deg, #fbbf24, #3b82f6, #6366f1)" }}
-              />
+            <div className="mt-4 flex items-center justify-center">
               <p className="text-blue-300 text-[9px] tracking-widest uppercase whitespace-nowrap">
                 Academic Session
               </p>

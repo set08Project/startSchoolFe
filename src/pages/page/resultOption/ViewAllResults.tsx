@@ -6,7 +6,6 @@ import LittleHeader from "../../../components/static/LittleHeader";
 import { displayDelay, displayStudent } from "../../../global/reduxState";
 import { Link, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import crypto from "crypto";
 import {
   useOutGoneSchoolStudents,
   useSchoolCookie,
@@ -215,8 +214,8 @@ const ViewAllStudentResult = () => {
         schoolPaymentEndPoint(studentID, {
           date: moment(Date.now()).format("lll"),
           amount: "2000",
-          purchasedID: crypto.randomBytes(3).toString("hex"),
-          reference: crypto.randomBytes(3).toString("hex"),
+          purchasedID: getValue(6),
+          reference: getValue(6),
         }).then(() => {
           setID("");
           toast.success("3rd term SchoolFees has been Approved");
