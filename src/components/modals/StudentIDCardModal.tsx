@@ -52,7 +52,7 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
                 <p className="text-white font-bold text-[13px] tracking-wide uppercase leading-tight">
                   {student?.schoolName || "School"}
                 </p>
-                <p className="text-blue-200 text-[10px] tracking-widest uppercase">
+                <p className="text-blue-200 mt-2 text-[10px] tracking-widest uppercase">
                   Student ID Card
                 </p>
               </div>
@@ -62,22 +62,9 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
 
           {/* Body */}
           <div className="px-5 pt-4 pb-5">
-            <div className="flex gap-4 items-start mb-4">
-              {/* Photo */}
-              <div className="flex-shrink-0">
-                <div
-                  className="w-[80px] h-[90px] rounded-xl overflow-hidden border border-white/20"
-                >
-                  <img
-                    src={student?.avatar || pic}
-                    alt="student"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-
+            <div className="mb-4">
               {/* Info */}
-              <div className="flex-1 pt-1">
+              <div className="pt-1">
                 <h2 className="text-white font-bold text-[17px] leading-tight capitalize">
                   {student?.studentFirstName} {student?.studentLastName}
                 </h2>
@@ -86,12 +73,12 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
                 </p>
                 <div className="mt-2 space-y-1">
                   <div>
-                    <p className="text-blue-300 text-[9px] uppercase tracking-widest">
-                      Enrollment ID
-                    </p>
-                    <p className="text-yellow-300 font-bold text-[14px] tracking-widest font-mono">
+                    <p className="text-blue-300 text-[9px] uppercase tracking-widest flex">
+                      Enrollment ID: <span className="ml-4 text-yellow-300 font-bold text-[14px] tracking-widest font-mono">
                       {student?.enrollmentID}
+                    </span>
                     </p>
+                    
                   </div>
                   {student?.gender && (
                     <p className="text-blue-200 text-[11px] capitalize">
@@ -101,9 +88,6 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
                 </div>
               </div>
             </div>
-
-            {/* Divider */}
-            <div className="mb-4" />
 
             {/* QR Section */}
             <div className="flex flex-col items-center gap-2">
@@ -124,9 +108,9 @@ const StudentIDCardModal = ({ student, onClose }: Props) => {
 
             {/* Footer */}
             <div className="mt-4 flex items-center justify-center">
-              <p className="text-blue-300 text-[9px] tracking-widest uppercase whitespace-nowrap">
+              {/* <p className="text-blue-300 text-[9px] tracking-widest uppercase whitespace-nowrap">
                 Academic Session
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

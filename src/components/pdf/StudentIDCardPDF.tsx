@@ -10,20 +10,21 @@ import {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 20,
     backgroundColor: "#ffffff",
   },
   cardContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    gap: 10,
   },
   card: {
-    width: "48%", // Two cards per row
-    height: 220,
-    marginBottom: 20,
+    width: 170, // Fixed width for A4 (595pt) to fit 3 columns
+    height: 240,
+    marginBottom: 10,
     borderRadius: 15,
-    backgroundColor: "#0f172a", // Match the modal's dark blue
+    backgroundColor: "#0f172a", 
     color: "#ffffff",
     overflow: "hidden",
     borderWidth: 1,
@@ -129,60 +130,69 @@ interface Props {
   qrCodes: { [key: string]: string }; // Map of student ID to QR data URL
 }
 
-const StudentIDCardPDF = ({ students, qrCodes }: Props) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.cardContainer}>
-        {students.map((student) => (
-          <View key={student._id} style={styles.card}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.schoolInfo}>
-                <Text style={styles.schoolName}>
-                  {student.schoolName || student.schoolIDs || "SCHOOL"}
-                </Text>
-                <Text style={styles.idTag}>STUDENT ID CARD</Text>
-              </View>
-            </View>
+const chunkArray = (arr: any[], size: number) => {
+  const chunked = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunked.push(arr.slice(i, i + size));
+  }
+  return chunked;
+};
 
-            {/* Body */}
-            <View style={styles.body}>
-              <Image
-                style={styles.avatar}
-                src={student.avatar || "https://res.cloudinary.com/dpf7vtoey/image/upload/v1711200000/pix_jtshjg.jpg"}
-              />
-              <View style={styles.infoSection}>
-                <Text style={styles.name}>
-                  {student.studentFirstName} {student.studentLastName}
-                </Text>
-                <Text style={styles.className}>
-                  {student.classAssigned || "Student"}
-                </Text>
-                <View>
-                  <Text style={styles.enrollmentLabel}>Enrollment ID</Text>
-                  <Text style={styles.enrollmentID}>{student.enrollmentID}</Text>
+const StudentIDCardPDF = ({ students, qrCodes }: Props) => {
+  const studentChunks = chunkArray(students, 9); // 3x3 = 9 cards per page
+
+  return (
+    <Document>
+      {studentChunks.map((chunk, index) => (
+        <Page key={index} size="A4" style={styles.page}>
+          <View style={styles.cardContainer}>
+            {chunk.map((student) => (
+              <View key={student._id} style={styles.card}>
+                {/* Header */}
+                <View style={styles.header}>
+                  <View style={styles.schoolInfo}>
+                    <Text style={styles.schoolName}>
+                      {student.schoolName || student.schoolIDs || "SCHOOL"}
+                    </Text>
+                    <Text style={styles.idTag}>STUDENT ID CARD</Text>
+                  </View>
+                </View>
+
+                <View style={styles.body}>
+                  <View style={styles.infoSection}>
+                    <Text style={styles.name}>
+                      {student.studentFirstName} {student.studentLastName}
+                    </Text>
+                    <Text style={styles.className}>
+                      {student.classAssigned || "Student"}
+                    </Text>
+                    <View>
+                      <Text style={styles.enrollmentLabel}>Enrollment ID</Text>
+                      <Text style={styles.enrollmentID}>{student.enrollmentID}</Text>
+                    </View>
+                  </View>
+                </View>
+
+                {/* QR Section */}
+                <View style={styles.qrSection}>
+                  {qrCodes[student._id] ? (
+                    <Image style={styles.qrCode} src={qrCodes[student._id]} />
+                  ) : (
+                    <View style={[styles.qrCode, { backgroundColor: "#eee" }]} />
+                  )}
+                </View>
+
+                {/* Footer */}
+                <View style={styles.footer}>
+                  <Text style={styles.sessionInfo}>Academic Session</Text>
                 </View>
               </View>
-            </View>
-
-            {/* QR Section */}
-            <View style={styles.qrSection}>
-              {qrCodes[student._id] ? (
-                <Image style={styles.qrCode} src={qrCodes[student._id]} />
-              ) : (
-                <View style={[styles.qrCode, { backgroundColor: "#eee" }]} />
-              )}
-            </View>
-
-            {/* Footer */}
-            <View style={styles.footer}>
-              <Text style={styles.sessionInfo}>Academic Session</Text>
-            </View>
+            ))}
           </View>
-        ))}
-      </View>
-    </Page>
-  </Document>
-);
+        </Page>
+      ))}
+    </Document>
+  );
+};
 
 export default StudentIDCardPDF;

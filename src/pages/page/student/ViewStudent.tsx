@@ -13,7 +13,7 @@ import {
   useStudentAttendance,
 } from "../../hook/useSchoolAuth";
 import moment from "moment";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import {
   bulkUploadofStudent,
   // deleteAllStudent,
@@ -28,7 +28,7 @@ import {
   useStudentInfo,
   useStudentInfoData,
 } from "../../../pagesForStudents/hooks/useStudentHook";
-import { mutate } from "swr";
+// import { mutate } from "swr";
 import { schoolPaymentEndPoint } from "../../../pagesForStudents/api/studentAPI";
 import Input from "../../../pagesForTeachers/components/reUse/Input";
 
@@ -128,7 +128,7 @@ const ViewStudent = () => {
   };
 
   const { data: UI } = useSchoolData();
-  const { students } = useSchoolStudents(UI?._id);
+  const { students, mutate: mutateStudents } = useSchoolStudents(UI?._id);
   const [viewstudent1stfees, setViewStudent1stFees] = useState(false);
   const [viewstudent2ndfees, setViewStudent2ndFees] = useState(false);
   const [viewstudent3rdfees, setViewStudent3rdFees] = useState(false);
@@ -137,6 +137,16 @@ const ViewStudent = () => {
 
   const handleToggleCheckbox1st = (studentID: any) => {
     setViewStudent1stFees(!viewstudent1stfees);
+
+    const prevData = students;
+    const updatedList = students?.data?.students?.map((s: any) =>
+      s._id === studentID ? { ...s, feesPaid1st: true } : s
+    );
+
+    mutateStudents(
+      { ...students, data: { ...students.data, students: updatedList } },
+      false
+    );
 
     verifyPayment1st(UI?._id, studentID!).then((res: any) => {
       if (res.status === 200) {
@@ -147,11 +157,12 @@ const ViewStudent = () => {
           reference: getValue(10),
         }).then((res) => {
           setID("");
-          toast.success("3rd term SchoolFees has been Approved");
-          mutate(`api/read-student/${UI?._id}`);
+          toast.success("1st term SchoolFees has been Approved");
+          mutateStudents();
         });
       } else {
         toast.error("Fail to approve this 1st term SchoolFees");
+        mutateStudents(prevData);
         setID("");
       }
     });
@@ -160,20 +171,41 @@ const ViewStudent = () => {
   const handleToggleCheckbox2nd = (studentID: any) => {
     setViewStudent2ndFees(!viewstudent2ndfees);
 
+    const prevData = students;
+    const updatedList = students?.data?.students?.map((s: any) =>
+      s._id === studentID ? { ...s, feesPaid2nd: true } : s
+    );
+
+    mutateStudents(
+      { ...students, data: { ...students.data, students: updatedList } },
+      false
+    );
+
     verifyPayment2nd(UI?._id, studentID!).then((res: any) => {
       if (res.status === 200) {
         setID("");
         toast.success("2nd term SchoolFees has been Approved");
-        mutate(`api/read-student/${UI?._id}`);
+        mutateStudents();
       } else {
         setID("");
         toast.error("Fail to approve this 2nd term SchoolFees");
+        mutateStudents(prevData);
       }
     });
   };
 
   const handleToggleCheckbox3rd = (studentID: any) => {
     setViewStudent3rdFees(!viewstudent3rdfees);
+
+    const prevData = students;
+    const updatedList = students?.data?.students?.map((s: any) =>
+      s._id === studentID ? { ...s, feesPaid3rd: true } : s
+    );
+
+    mutateStudents(
+      { ...students, data: { ...students.data, students: updatedList } },
+      false
+    );
 
     verifyPayment3rd(UI?._id, studentID!).then((res: any) => {
       if (res.status === 200) {
@@ -185,11 +217,12 @@ const ViewStudent = () => {
         }).then(() => {
           setID("");
           toast.success("3rd term SchoolFees has been Approved");
-          mutate(`api/read-student/${UI?._id}`);
+          mutateStudents();
         });
       } else {
         setID("");
         toast.error("Fail to approve this 3rd term SchoolFees");
+        mutateStudents(prevData);
       }
     });
   };
@@ -217,7 +250,7 @@ const ViewStudent = () => {
     bulkUploadofStudent(UI?._id, formData)
       .then(() => {
         toast.success("Students Have Been Successfully Imported");
-        mutate(`api/read-student/${UI?._id}`);
+        mutateStudents();
       })
       .finally(() => {
         setToggle(false);
@@ -235,16 +268,30 @@ const ViewStudent = () => {
     try {
       setShowButton(true);
       setLoading(true);
-      // deleteStudent(schoolID, studentID)
+
+      // Optimistic Update
+      const prevData = students;
+      const filteredStudentsList =
+        students?.data?.students?.filter((s: any) => s._id !== studentID) || [];
+
+      mutateStudents(
+        {
+          ...students,
+          data: { ...students.data, students: filteredStudentsList },
+        },
+        false
+      );
+
       outGoneStudent(schoolID, studentID)
         .then((res) => {
-          if (res.status === 201) {
+          if (res?.status === 201 || res?.status === 200) {
             toast.success("Student Has Been Successfully Deleted");
-            mutate(`api/read-student/${schoolID}`);
+            mutateStudents(); // Revalidate
             setShowButton(false);
             setLoading(false);
           } else {
             toast.error("Failed to delete student");
+            mutateStudents(prevData); // Revert
             setShowButton(false);
             setLoading(false);
           }
@@ -255,26 +302,34 @@ const ViewStudent = () => {
         });
     } catch (error) {
       toast.error("An error occurred while deleting student");
+      mutateStudents(); // Revert
       setShowButton(false);
       setLoading(false);
-      toast.error("Error In Deleting Student");
       console.log(error);
     }
   };
 
-  const sortedStudents = students?.data?.students?.sort((a: any, b: any) =>
-    a.studentLastName?.localeCompare(b.studentLastName)
-  );
+  const sortedStudents = useMemo(() => {
+    return students?.data?.students
+      ? [...students.data.students].sort((a: any, b: any) =>
+          a.studentLastName?.localeCompare(b.studentLastName)
+        )
+      : [];
+  }, [students]);
+
   // Search Function
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchStudents(e.target.value);
   };
 
-  const filteredStudents = sortedStudents?.filter((student: any) => {
-    const fullName =
-      `${student?.studentLastName} ${student?.studentFirstName} ${student?.classAssigned}`.toLowerCase();
-    return fullName.includes(searchStudents.toLowerCase());
-  });
+  const filteredStudents = useMemo(() => {
+    const search = searchStudents.toLowerCase();
+    return sortedStudents?.filter((student: any) => {
+      const fullName =
+        `${student?.studentLastName} ${student?.studentFirstName} ${student?.classAssigned}`.toLowerCase();
+      return fullName.includes(search);
+    });
+  }, [sortedStudents, searchStudents]);
 
   const [stateID, setStateID] = useState<string>("");
   const [toggleView, setToggleView] = useState<boolean>(false);
@@ -338,7 +393,7 @@ const ViewStudent = () => {
   };
 
   // Pagination
-  const STUDENTS_PER_PAGE = 15;
+  const STUDENTS_PER_PAGE = 18;
   const [currentPage, setCurrentPage] = useState(1);
 
   // Reset to page 1 when search changes
@@ -346,11 +401,15 @@ const ViewStudent = () => {
     setCurrentPage(1);
   }, [searchStudents]);
 
-  const totalPages = Math.ceil((filteredStudents?.length || 0) / STUDENTS_PER_PAGE);
-  const paginatedStudents = filteredStudents?.slice(
-    (currentPage - 1) * STUDENTS_PER_PAGE,
-    currentPage * STUDENTS_PER_PAGE
+  const totalPages = Math.ceil(
+    (filteredStudents?.length || 0) / STUDENTS_PER_PAGE
   );
+  const paginatedStudents = useMemo(() => {
+    return filteredStudents?.slice(
+      (currentPage - 1) * STUDENTS_PER_PAGE,
+      currentPage * STUDENTS_PER_PAGE
+    );
+  }, [filteredStudents, currentPage, STUDENTS_PER_PAGE]);
 
   const handleDownloadAllStudentsPDF = () => {
     const doc = new jsPDF();
@@ -492,7 +551,7 @@ const ViewStudent = () => {
           <div className="w-[100px] border-r">Student's Attendance Ratio</div>
           <div className="w-[200px] border-r">Performance Rating</div>
 
-          <div className="w-[80px] border-r">Rate</div>
+          <div className="w-[80px] border-r">QR Code</div>
           <div className="w-[180px] border-r">View Detail</div>
           <div className="w-[80px] border-r">QR ID</div>
           <div className="w-[180px] border-r">Student Action</div>

@@ -16,12 +16,12 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
 // ?working
 // ?working
-// export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
-// const URL2: string = "https://startschoolbe-lsda.onrender.com";
+export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
+const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
 // ?New Try
-export const URL: string = "https://start-school-be.vercel.app/api";
-const URL2: string = "https://start-school-be.vercel.app";
+// export const URL: string = "https://start-school-be.vercel.app/api";
+// const URL2: string = "https://start-school-be.vercel.app";
 
 export const updateSchoolResumptionTeamInfo = async (
   schoolID: string,

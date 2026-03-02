@@ -780,7 +780,7 @@ export const useSchoolStudents = (schoolID: string) => {
     };
   }, []);
 
-  const { data: students, mutate } = useSWR(
+  const { data: students, mutate, isLoading } = useSWR(
     x,
     () => {
       return getSchoolStudents(schoolID!).then((res) => {
@@ -789,17 +789,14 @@ export const useSchoolStudents = (schoolID: string) => {
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       refreshInterval: 0,
-      revalidateOnMount: true,
+      revalidateIfStale: false,
+      dedupingInterval: 60000,
     }
   );
 
-  const handleUpdate = async (newData: any) => {
-    mutate(newData, false);
-  };
-
-  return { students, mutate: handleUpdate };
+  return { students, mutate, isLoading };
 };
 
 export const useSchoolStudentDetail = (studentID: string) => {
