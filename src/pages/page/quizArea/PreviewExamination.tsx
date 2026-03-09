@@ -71,6 +71,7 @@ const PreviewExamination: FC<any> = ({
               console.log(res);
               if (res.message === "Exam created successfully!") {
                 mutate(`api/view-subject-quiz/${subjectID}`);
+                mutate(`api/view-subject-exam/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
               } else {
                 toast.error(

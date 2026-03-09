@@ -8,6 +8,7 @@ import {
   useMidTest,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 import TimeTableScreen from "./TimeTableScreen";
 import { FaCheckDouble, FaStar } from "react-icons/fa6";
 import pix from "../../../assets/pix.jpg";
@@ -24,7 +25,10 @@ interface iProps {
   props?: string;
 }
 
-const ClassSubjectScreen: FC<iProps> = ({ props }) => {
+const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
+  props,
+  classInfo,
+}) => {
   const { subjectData } = useClassSubject(props!);
 
   // Do not clear localStorage here — this would reset in-progress exams for other pages
@@ -59,7 +63,11 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                 </div>
               </div>
 
-              <StartTestComp props={props} subjectID={props?._id} />
+              <StartTestComp
+                props={props}
+                subjectID={props?._id}
+                classInfo={classInfo}
+              />
             </div>
           ))}
         </div>
@@ -75,13 +83,28 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
   );
 };
 
-const StartTestComp: any = ({ props, subjectID }) => {
+const StartTestComp: any = ({ props, subjectID, classInfo }) => {
   const { examination } = useExamination(subjectID!);
   const { midTest } = useMidTest(subjectID!);
+  const { data: schoolData } = useSchoolData();
+
+  const normalize = (val: string) => val?.trim()?.toLowerCase();
+  const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
+
+  const schoolTerm = normalize(currentTerm || "");
+
+  const midMatch =
+    midTest?.startMidTest &&
+    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+
+  const examMatch =
+    examination?.startExam &&
+    (schoolTerm === "" ||
+      normalize(examination?.exam?.term || "") === schoolTerm);
 
   return (
     <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
-      {midTest?.startMidTest && (
+      {midMatch && (
         <Link
           to={`/mid-test/details/${props?._id}/${
             props?.midTest[props?.midTest?.length - 1]
@@ -92,7 +115,7 @@ const StartTestComp: any = ({ props, subjectID }) => {
         </Link>
       )}
 
-      {examination?.startExam && (
+      {examMatch && (
         <Link
           to={`/examination/details/${
             props?.examination[props?.examination?.length - 1]
@@ -103,7 +126,7 @@ const StartTestComp: any = ({ props, subjectID }) => {
         </Link>
       )}
 
-      {!examination?.startExam && !midTest?.startMidTest && (
+      {!examMatch && !midMatch && (
         <div className="text-white bg-red-500 rounded-md px-4 py-2 text-[13px] cursor-pointer">
           No Mid-Test/Examination Available yet
         </div>
@@ -215,7 +238,7 @@ const MyClassRoomScreen = () => {
           Below are all the subject this CLASS offers!
         </p>
 
-        <ClassSubjectScreen props={oneClass?._id} />
+        <ClassSubjectScreen props={oneClass?._id} classInfo={classInfo} />
       </div>
 
       {/* Top Students */}

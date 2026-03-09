@@ -59,12 +59,24 @@ import {
   useSubjectAssignment,
   useSujectQuiz,
   useTeacherInfo,
+  useSchoolAnnouncement,
 } from "@/pagesForTeachers/hooks/useTeacher";
+import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 const ExamQuizSetupScreen = () => {
-  //   const { teacherInfo } = useTeacherInfo();
-
+  const { teacherInfo } = useTeacherInfo();
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+  const { data: schoolInfoData } = useSchoolData();
   const { subjectID } = useParams();
+
+  const [state, setState] = useState<any>({});
+
+  const normalize:any = (val: string) => val?.trim()?.toLowerCase();
+  const currentTerm =
+    schoolInfoData?.presentTerm ||
+    schoolAnnouncement?.presentTerm ||
+    state?.presentTerm;
+
   const { subjectQuiz } = useSujectQuiz(subjectID!);
 
   const { data: examination, mutate: examMutate } = useExaminationQuiz(
@@ -72,7 +84,6 @@ const ExamQuizSetupScreen = () => {
   );
   const { midTest, midTestMutate } = useMidTest(subjectID!);
 
-  const [state, setState] = useState<any>({});
   const [isModalOpen, setModalOpen] = useState<Boolean>(false);
   const [isModalOpenExam, setModalOpenExam] = useState<Boolean>(false);
   const [examToDelete, setExamToDelete] = useState<string | null>(null);
@@ -238,10 +249,10 @@ const ExamQuizSetupScreen = () => {
           setLoading(true);
           try {
             await deleteExamination(subjectID!, examToDelete);
-            examMutate(`api/api/view-subject-exam/${subjectID}`);
+            examMutate(`api/view-subject-exam/${subjectID}`);
           } catch (error) {
             console.error(error);
-            toast.error("Failed to delete examination");
+            toast.error(`Failed to delete ${currentTerm} examination`);
           } finally {
             setLoading(false);
             setModalOpen(false);
@@ -262,7 +273,7 @@ const ExamQuizSetupScreen = () => {
             midTestMutate(`api/view-subject-mid-test/${subjectID}`);
           } catch (error) {
             console.error(error);
-            toast.error("Failed to delete mid-test");
+            toast.error(`Failed to delete ${currentTerm} mid-test`);
           } finally {
             setLoading(false);
             setMidTestModalOpen(false);
@@ -277,9 +288,9 @@ const ExamQuizSetupScreen = () => {
       {showMidTestConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
-            <h3 className="font-semibold text-lg mb-3">Create Mid-Test CBT</h3>
+            <h3 className="font-semibold text-lg mb-3">Create {currentTerm} Mid-Test CBT</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Are you sure you're ready to create Mid-Test's CBT for this
+              Are you sure you're ready to create {currentTerm} Mid-Test's CBT for this
               subject?
               <br />
               <br />
@@ -312,10 +323,10 @@ const ExamQuizSetupScreen = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
             <h3 className="font-semibold text-lg mb-3">
-              Create Examination CBT
+              Create {currentTerm} Examination CBT
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Are you sure you're ready to create Examination's CBT for this
+              Are you sure you're ready to create {currentTerm} Examination's CBT for this
               subject?
               <br />
               <br />
@@ -357,13 +368,13 @@ const ExamQuizSetupScreen = () => {
               onClick={() => setShowMidTestConfirm(true)}
               className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
             >
-              + Create Mid-Test
+              + Create {currentTerm} Mid-Test
             </button>
             <button
               onClick={() => setShowExamConfirm(true)}
               className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
             >
-              + Create Exam
+              + Create {currentTerm} Exam
             </button>
             <Link
               to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}
@@ -377,7 +388,9 @@ const ExamQuizSetupScreen = () => {
       </div>
 
       <div>
-        {examination?.exam && (
+        {examination?.exam &&
+        (normalize(examination?.exam?.term) === normalize(currentTerm) ||
+          !examination?.exam?.term) ? (
           <div className="relative overflow-hidden">
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
@@ -400,8 +413,8 @@ const ExamQuizSetupScreen = () => {
                       <FaTrashAlt size={20} className="mr-1" />
                     )}
                     {loading
-                      ? " Deleting Examination Question"
-                      : " Delete Examination Question"}
+                      ? ` Deleting ${currentTerm} Examination Question`
+                      : ` Delete ${currentTerm} Examination Question`}
                   </button>
 
                   {/* Confirm delete modal for Examination */}
@@ -410,10 +423,10 @@ const ExamQuizSetupScreen = () => {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                       <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
                         <h3 className="font-semibold text-lg mb-3">
-                          Delete Examination
+                          Delete {currentTerm} Examination
                         </h3>
                         <p className="text-sm text-gray-600 mb-4">
-                          Are you sure you want to delete this examination? This
+                          Are you sure you want to delete this {currentTerm} examination? This
                           action cannot be undone.
                         </p>
                         <div className="flex justify-end gap-3">
@@ -438,11 +451,11 @@ const ExamQuizSetupScreen = () => {
                                   examToDelete
                                 );
                                 examMutate(
-                                  `api/api/view-subject-exam/${subjectID}`
+                                  `api/view-subject-exam/${subjectID}`
                                 );
                               } catch (error) {
                                 console.error(error);
-                                toast.error("Failed to delete examination");
+                                toast.error(`Failed to delete ${currentTerm} examination`);
                               } finally {
                                 setLoading(false);
                                 setModalOpen(false);
@@ -481,7 +494,7 @@ const ExamQuizSetupScreen = () => {
               <div className="flex flex-col mb-3">
                 <div className="flex">
                   <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 tracking-widest font-medium">
-                    {examination?.exam?.term} Examination
+                    {examination?.exam?.term || currentTerm} Examination
                   </p>
                 </div>
                 <div className="flex">
@@ -531,7 +544,7 @@ const ExamQuizSetupScreen = () => {
 
               <div>
                 <p className="text-[14px] my-5 italic">
-                  Students can't access this Examination Questions yet, <br />{" "}
+                  Students can't access this {currentTerm} Examination Questions yet, <br />{" "}
                   change the accessibility of students to take test!{" "}
                 </p>
               </div>
@@ -908,11 +921,20 @@ const ExamQuizSetupScreen = () => {
               </div>
             )}
           </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-md bg-white shadow-sm">
+            <MdVisibilityOff size={40} className="text-gray-300 mb-2" />
+            <p className="text-gray-500 font-bold">
+              No examination record yet for {currentTerm || "this term"}
+            </p>
+          </div>
         )}
       </div>
 
       <div className="mt-10 bg-slate-50">
-        {midTest && (
+        {midTest &&
+        normalize(midTest?.term) ===
+          normalize(currentTerm) ? (
           <div className="relative">
             <Toaster />
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 ">
@@ -935,17 +957,17 @@ const ExamQuizSetupScreen = () => {
                     ) : (
                       <FaTrashAlt size={20} className="mr-1" />
                     )}
-                    {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
+                    {loading ? ` Deleting ${currentTerm} Mid-Test` : ` Delete ${currentTerm} Mid-Test`}
                   </button>
 
                   {false && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                       <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
                         <h3 className="font-semibold text-lg mb-3">
-                          Delete Mid-Test
+                          Delete {currentTerm} Mid-Test
                         </h3>
                         <p className="text-sm text-gray-600 mb-4">
-                          Are you sure you want to delete this mid-test? This
+                          Are you sure you want to delete this {currentTerm} mid-test? This
                           action cannot be undone.
                         </p>
                         <div className="flex justify-end gap-3 mt-10">
@@ -974,7 +996,7 @@ const ExamQuizSetupScreen = () => {
                                 );
                               } catch (error) {
                                 console.error(error);
-                                toast.error("Failed to delete mid-test");
+                                toast.error(`Failed to delete ${currentTerm} mid-test`);
                               } finally {
                                 setLoading(false);
                                 setMidTestModalOpen(false);
@@ -1010,7 +1032,7 @@ const ExamQuizSetupScreen = () => {
               <div className="flex flex-col mb-3">
                 <div className="flex">
                   <p className="px-4 tracking-widest font-semibold capitalize py-1 rounded-md text-[12px] border bg-purple-200">
-                    {midTest?.term} mid Term Test
+                    {midTest?.term || currentTerm} Mid-Test
                   </p>
                 </div>
                 <div className="flex">
@@ -1059,7 +1081,7 @@ const ExamQuizSetupScreen = () => {
               </div>
               <div>
                 <p className="text-[14px] my-5 italic">
-                  Students can't access this midTest Questions yet, <br />{" "}
+                  Students can't access this {currentTerm} Mid-Test Questions yet, <br />{" "}
                   change the accessibility of students to take test!{" "}
                 </p>
               </div>
@@ -1234,6 +1256,13 @@ const ExamQuizSetupScreen = () => {
                 </div>
               )}
             </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-md bg-white shadow-sm">
+            <FaCheckDouble size={40} className="text-gray-300 mb-2" />
+            <p className="text-gray-500 font-bold">
+              No mid-test record yet for {currentTerm || "this term"}
+            </p>
           </div>
         )}
       </div>

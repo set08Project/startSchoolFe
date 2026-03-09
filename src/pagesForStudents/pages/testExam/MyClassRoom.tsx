@@ -19,6 +19,7 @@ import { readClassInfo } from "../../api/studentAPI";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { Link } from "react-router-dom";
 import { useStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
+import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: string;
@@ -27,13 +28,18 @@ interface iProps {
 }
 
 // New component to check individual subject test status
-const SubjectCard: FC<{ subject: any; dept?: string }> = ({
+const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   subject,
   dept,
+  classInfo,
 }) => {
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
+  const { data: schoolData } = useSchoolData();
+
+  const normalize = (val: string) => val?.trim()?.toLowerCase();
+  const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
 
   // Only render if at least one test is active
   const examDept = String(examination?.quiz?.instruction?.dept || "")
@@ -50,8 +56,18 @@ const SubjectCard: FC<{ subject: any; dept?: string }> = ({
     examDept === normalizedFilter ||
     midDept === normalizedFilter;
 
-  const shouldDisplay =
-    (midTest?.startMidTest || examination?.startExam) && matchesDept;
+  const schoolTerm = normalize(currentTerm || "");
+
+  const midMatch =
+    midTest?.startMidTest &&
+    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+
+  const examMatch =
+    examination?.startExam &&
+    (schoolTerm === "" ||
+      normalize(examination?.exam?.term || "") === schoolTerm);
+
+  const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
   if (!shouldDisplay) return null;
   const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -110,7 +126,7 @@ const SubjectCard: FC<{ subject: any; dept?: string }> = ({
       </div>
       {/* suuuuu */}
       <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
-        {midTest?.startMidTest &&
+        {midMatch &&
           (hasCompletedMidTest ? (
             <p className="text-[13px] text-green-600 border px-6 py-2 rounded-md border-green-400 bg-green-50 cursor-not-allowed">
               Test Done
@@ -126,7 +142,7 @@ const SubjectCard: FC<{ subject: any; dept?: string }> = ({
             </Link>
           ))}
 
-        {examination?.startExam &&
+        {examMatch &&
           (hasCompletedExam ? (
             <p className="text-[13px] text-green-600 border px-6 py-2 rounded-md border-green-400 bg-green-50 cursor-not-allowed">
               Examination Done
@@ -146,7 +162,12 @@ const SubjectCard: FC<{ subject: any; dept?: string }> = ({
   );
 };
 
-const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
+const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
+  props,
+  onTestCountChange,
+  dept,
+  classInfo,
+}) => {
   const { subjectData } = useClassSubject(props!);
   const [visibleSubjectCount, setVisibleSubjectCount] = useState(0);
 
@@ -161,11 +182,37 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
   }> = ({ subject, onTestCountChange }) => {
     const { examination } = useExamination(subject?._id);
     const { midTest } = useMidTest(subject?._id);
-    const examDept = examination?.quiz?.instruction?.dept;
-    const midDept = midTest?.quiz?.instruction?.dept;
-    const matchesDept = !dept || examDept === dept || midDept === dept;
-    const shouldDisplay =
-      (midTest?.startMidTest || examination?.startExam) && matchesDept;
+    const { data: schoolData } = useSchoolData();
+    const normalize = (val: string) => val?.trim()?.toLowerCase();
+    const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
+
+    const examDept = String(examination?.quiz?.instruction?.dept || "")
+      .toLowerCase()
+      .trim();
+    const midDept = String(midTest?.quiz?.instruction?.dept || "")
+      .toLowerCase()
+      .trim();
+    const normalizedFilter = String(dept || "")
+      .toLowerCase()
+      .trim();
+
+    const matchesDept =
+      !normalizedFilter ||
+      examDept === normalizedFilter ||
+      midDept === normalizedFilter;
+
+    const schoolTerm = normalize(currentTerm || "");
+
+    const midMatch =
+      midTest?.startMidTest &&
+      (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+
+    const examMatch =
+      examination?.startExam &&
+      (schoolTerm === "" ||
+        normalize(examination?.exam?.term || "") === schoolTerm);
+
+    const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -199,10 +246,8 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
         setVisibleSubjectCount((prev) => prev + 1);
 
         // compute remaining tests individually: mid + exam
-        const midRemaining =
-          midTest?.startMidTest && !hasCompletedMidTest ? 1 : 0;
-        const examRemaining =
-          examination?.startExam && !hasCompletedExam ? 1 : 0;
+        const midRemaining = midMatch && !hasCompletedMidTest ? 1 : 0;
+        const examRemaining = examMatch && !hasCompletedExam ? 1 : 0;
 
         const testCount = midRemaining + examRemaining;
 
@@ -212,10 +257,8 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
         if (shouldDisplay) {
           setVisibleSubjectCount((prev) => prev - 1);
 
-          const midRemaining =
-            midTest?.startMidTest && !hasCompletedMidTest ? 1 : 0;
-          const examRemaining =
-            examination?.startExam && !hasCompletedExam ? 1 : 0;
+          const midRemaining = midMatch && !hasCompletedMidTest ? 1 : 0;
+          const examRemaining = examMatch && !hasCompletedExam ? 1 : 0;
           const testCount = midRemaining + examRemaining;
 
           onTestCountChange(-testCount);
@@ -232,7 +275,7 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange, dept }) => {
       midTest?.quiz?.instruction?.dept,
     ]);
 
-    return <SubjectCard subject={subject} dept={dept} />;
+    return <SubjectCard subject={subject} dept={dept} classInfo={classInfo} />;
   };
 
   useEffect(() => {
@@ -388,6 +431,7 @@ const MyClassRoomTestExamScreen = () => {
         <ClassSubjectScreen
           dept={dept}
           props={oneClass?._id}
+          classInfo={classInfo}
           onTestCountChange={(count) => {
             setTotalAvailableTests((prev) => prev + count);
           }}

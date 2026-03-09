@@ -19,6 +19,7 @@ import { readClassInfo } from "../../api/studentAPI";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { Link } from "react-router-dom";
 import { useStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
+import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: string;
@@ -29,8 +30,23 @@ const SubjectCard: FC<any> = ({ subject }) => {
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
+  const { data: schoolData } = useSchoolData();
 
-  const shouldDisplay = midTest?.startMidTest || examination?.startExam;
+  const normalize = (val: string) => val?.trim()?.toLowerCase();
+  const currentTerm = schoolData?.presentTerm;
+
+  const schoolTerm = normalize(currentTerm || "");
+
+  const midMatch =
+    midTest?.startMidTest &&
+    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+
+  const examMatch =
+    examination?.startExam &&
+    (schoolTerm === "" ||
+      normalize(examination?.exam?.term || "") === schoolTerm);
+
+  const shouldDisplay = midMatch || examMatch;
   if (!shouldDisplay) return null;
 
   const { performance } = useStudentPerfomance(studentInfo?._id);
@@ -130,6 +146,11 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
   }> = ({ subject, onTestCountChange }) => {
     const { examination } = useExamination(subject?._id);
     const { midTest } = useMidTest(subject?._id);
+    const { data: schoolData } = useSchoolData();
+
+    const normalize = (val: string) => val?.trim()?.toLowerCase();
+    const currentTerm = schoolData?.presentTerm;
+
     const examDept = String(examination?.exam?.quiz?.instruction?.dept || "")
       .toLowerCase()
       .trim();
@@ -143,8 +164,19 @@ const ClassSubjectScreen: FC<iProps> = ({ props, onTestCountChange }) => {
       !normalizedFilter ||
       examDept === normalizedFilter ||
       midDept === normalizedFilter;
-    const shouldDisplay =
-      (midTest?.startMidTest || examination?.startExam) && matchesDept;
+
+    const schoolTerm = normalize(currentTerm || "");
+
+    const midMatch =
+      midTest?.startMidTest &&
+      (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+
+    const examMatch =
+      examination?.startExam &&
+      (schoolTerm === "" ||
+        normalize(examination?.exam?.term || "") === schoolTerm);
+
+    const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);

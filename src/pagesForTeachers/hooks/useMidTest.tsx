@@ -20,7 +20,7 @@ export const useExaminationQuiz = (subjectID: string) => {
     data,
     error,
     mutate,
-  } = useSWR(`api/api/view-subject-exam/${subjectID}`, () =>
+  } = useSWR(`api/view-subject-exam/${subjectID}`, () =>
     viewExamination(subjectID)
   );
 

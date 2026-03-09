@@ -27,6 +27,7 @@ import {
   useSubjectAssignment,
   useSujectQuiz,
   useTeacherInfo,
+  useSchoolAnnouncement,
 } from "../../hooks/useTeacher";
 import {
   deleteExamination,
@@ -53,6 +54,7 @@ import { displayDelay, displayStudent } from "@/global/reduxState";
 import Button from "@/components/reUse/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
+import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 const QuizSetupScreen = () => {
   const { teacherInfo } = useTeacherInfo();
@@ -62,6 +64,14 @@ const QuizSetupScreen = () => {
     subjectID!
   );
   const { midTest, midTestMutate } = useMidTest(subjectID!);
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+  const { data: schoolInfoData } = useSchoolData();
+
+  const normalize = (val: string) => val?.trim()?.toLowerCase();
+  const currentTerm =
+    schoolInfoData?.presentTerm ||
+    schoolAnnouncement?.presentTerm ||
+    state?.presentTerm;
 
   const [state, setState] = useState<any>({});
 
@@ -237,7 +247,7 @@ const QuizSetupScreen = () => {
             examMutate(`api/api/view-subject-exam/${subjectID}`);
           } catch (error) {
             console.error(error);
-            toast.error("Failed to delete examination");
+            toast.error(`Failed to delete ${currentTerm} examination`);
           } finally {
             setLoading(false);
             setModalOpenExam(false);
@@ -275,10 +285,10 @@ const QuizSetupScreen = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
               <h3 className="font-semibold text-lg mb-3">
-                Create Mid-Test CBT
+                Create {currentTerm} Mid-Test CBT
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Are you sure you're ready to create Mid-Test's CBT for this
+                Are you sure you're ready to create {currentTerm} Mid-Test's CBT for this
                 subject?
                 <br />
                 <br />
@@ -310,10 +320,10 @@ const QuizSetupScreen = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-md p-6 w-[90%] max-w-md">
               <h3 className="font-semibold text-lg mb-3">
-                Create Examination CBT
+                Create {currentTerm} Examination CBT
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Are you sure you're ready to create Examination's CBT for this
+                Are you sure you're ready to create {currentTerm} Examination's CBT for this
                 subject?
                 <br />
                 <br />
@@ -354,13 +364,13 @@ const QuizSetupScreen = () => {
               onClick={() => setShowMidTestConfirm(true)}
               className="font-medium cursor-pointer bg-purple-500 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
             >
-              + Create Mid-Test
+              + Create {currentTerm} Mid-Test
             </button>
             <button
               onClick={() => setShowExamConfirm(true)}
               className="font-medium cursor-pointer bg-pink-500 blue-950 text-white px-6 py-2 rounded-sm uppercase text-[12px] text-center"
             >
-              + Create Exam
+              + Create {currentTerm} Exam
             </button>
             <Link
               to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}
@@ -374,7 +384,9 @@ const QuizSetupScreen = () => {
       </div>
 
       <div>
-        {examination?.exam && (
+        {examination?.exam &&
+        normalize(examination?.exam?.term) ===
+          normalize(currentTerm) ? (
           <div>
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="absolute top-0 right-0 text-[200px] opacity-5 font-bold text-red-300">
@@ -397,8 +409,8 @@ const QuizSetupScreen = () => {
                       <FaTrashAlt size={20} className="mr-1" />
                     )}
                     {loading
-                      ? " Deleting Examination Question"
-                      : " Delete Examination Question"}
+                      ? ` Deleting ${currentTerm} Examination Question`
+                      : ` Delete ${currentTerm} Examination Question`}
                   </button>
                 </>
               </div>
@@ -425,7 +437,7 @@ const QuizSetupScreen = () => {
               <div className="flex flex-col mb-3">
                 <div className="flex">
                   <p className="px-4 py-1 rounded-md text-[12px] border bg-blue-50 tracking-widest font-medium">
-                    {examination?.exam?.term} Examination
+                    {examination?.exam?.term || currentTerm} Examination
                   </p>
                 </div>
                 <div className="flex">
@@ -475,7 +487,7 @@ const QuizSetupScreen = () => {
 
               <div>
                 <p className="text-[14px] my-5 italic">
-                  Students can't access this Examination Questions yet, <br />{" "}
+                  Students can't access this {currentTerm} Examination Questions yet, <br />{" "}
                   change the accessibility of students to take test!{" "}
                 </p>
               </div>
@@ -764,11 +776,20 @@ const QuizSetupScreen = () => {
               )}
             </div>
           </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-md bg-white shadow-sm">
+            <MdVisibilityOff size={40} className="text-gray-300 mb-2" />
+            <p className="text-gray-500 font-bold">
+              No examination record yet for {currentTerm || "this term"}
+            </p>
+          </div>
         )}
       </div>
 
       <div className="mt-10 bg-slate-50">
-        {midTest && (
+        {midTest &&
+        normalize(midTest?.term) ===
+          normalize(currentTerm) ? (
           <div className="relative">
             <Toaster />
             <div className="border p-6 rounded-md min-h-[300px] flex flex-col relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 ">
@@ -791,7 +812,7 @@ const QuizSetupScreen = () => {
                     ) : (
                       <FaTrashAlt size={20} className="mr-1" />
                     )}
-                    {loading ? " Deleting Mid-Test" : " Delete Mid-Test"}
+                    {loading ? ` Deleting ${currentTerm} Mid-Test` : ` Delete ${currentTerm} Mid-Test`}
                   </button>
                 </>
               </div>
@@ -817,7 +838,7 @@ const QuizSetupScreen = () => {
               <div className="flex flex-col mb-3">
                 <div className="flex">
                   <p className="px-4 tracking-widest font-semibold capitalize py-1 rounded-md text-[12px] border bg-purple-200">
-                    {midTest?.term} mid Term Test
+                    {midTest?.term || currentTerm} Mid-Test
                   </p>
                 </div>
                 <div className="flex">
@@ -867,7 +888,7 @@ const QuizSetupScreen = () => {
 
               <div>
                 <p className="text-[14px] my-5 italic">
-                  Students can't access this midTest Questions yet, <br />{" "}
+                  Students can't access this {currentTerm} Mid-Test Questions yet, <br />{" "}
                   change the accessibility of students to take test!{" "}
                 </p>
               </div>
@@ -1071,6 +1092,13 @@ const QuizSetupScreen = () => {
                 </div>
               )}
             </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-md bg-white shadow-sm border-purple-200">
+            <FaCheckDouble size={40} className="text-purple-200 mb-2" />
+            <p className="text-purple-400 font-bold">
+              No mid-test record yet for {currentTerm || "this term"}
+            </p>
           </div>
         )}
       </div>
