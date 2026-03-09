@@ -67,13 +67,14 @@ const QuizSetupScreen = () => {
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   const { data: schoolInfoData } = useSchoolData();
 
-  const normalize = (val: string) => val?.trim()?.toLowerCase();
-  const currentTerm =
+  const [state, setState] = useState<any>({});
+
+  const normalize: any = (val: string) => val?.trim()?.toLowerCase();
+
+  const currentTerm: any =
     schoolInfoData?.presentTerm ||
     schoolAnnouncement?.presentTerm ||
     state?.presentTerm;
-
-  const [state, setState] = useState<any>({});
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [loadingExam, setLoadingExam] = useState<Boolean>(false);
