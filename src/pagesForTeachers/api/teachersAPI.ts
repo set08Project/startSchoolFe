@@ -249,6 +249,7 @@ export const readClassInfoTimeTable = async (classID: string) => {
 
 export const readClassInfoSubject = async (classID: string) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .get(`${URL}/view-classroom-info-subject/${classID}`)
       .then((res: any) => {

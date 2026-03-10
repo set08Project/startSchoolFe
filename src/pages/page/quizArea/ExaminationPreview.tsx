@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
-import { useExamination, useQuiz } from "@/pagesForTeachers/hooks/useTeacher";
+import { useExam, useExamination, useQuiz } from "@/pagesForTeachers/hooks/useTeacher";
 
 function MathRenderer({ text }) {
   if (!text) return null;
@@ -316,7 +316,8 @@ const ExaminationPreviewScreen = () => {
   const navigate = useNavigate();
   const { quizID, subjectID } = useParams();
   const { quizData } = useQuiz(quizID!);
-  const { examination } = useExamination(subjectID!);
+  // Load the exam directly by its ID so term-based filtering doesn't interfere
+  const { examData: examination } = useExam(quizID!);
 
   const [state, setState] = useState<any>({});
   const [start, setStart] = useState<boolean>(false);
@@ -394,7 +395,7 @@ const ExaminationPreviewScreen = () => {
     <div>
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
-        name={`${examination?.subjectTitle} Examination Preview Screen`}
+        name={examination?.subjectTitle ? `${examination.subjectTitle} Examination Preview Screen` : "Loading..."}
       />
 
       <div className="relative">
@@ -566,12 +567,14 @@ const ExaminationPreviewScreen = () => {
             </div>
             <div className="text-[16px] italic font-semibold">Section B </div>
 
-            <p
-              className="mt-5 text-blue-950 text-[16px"
-              dangerouslySetInnerHTML={{
-                __html: `${examination?.quiz?.theory}`,
-              }}
-            />
+            {examination?.quiz?.theory ? (
+              <p
+                className="mt-5 text-blue-950 text-[16px"
+                dangerouslySetInnerHTML={{
+                  __html: examination.quiz.theory,
+                }}
+              />
+            ) : null}
 
             {/* <p>{examination?.quiz?.theory}</p> */}
 

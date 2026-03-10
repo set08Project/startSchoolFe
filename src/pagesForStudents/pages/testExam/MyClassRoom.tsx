@@ -39,7 +39,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   const { data: schoolData } = useSchoolData();
 
   const normalize = (val: string) => val?.trim()?.toLowerCase();
-  const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
+  const currentTerm = classInfo?.presentTerm || schoolData?.presentTerm;
 
   // Only render if at least one test is active
   const examDept = String(examination?.quiz?.instruction?.dept || "")
@@ -64,8 +64,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
 
   const examMatch =
     examination?.startExam &&
-    (schoolTerm === "" ||
-      normalize(examination?.exam?.term || "") === schoolTerm);
+    (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm);
 
   const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
@@ -76,18 +75,23 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   const midQuizID = subject?.midTest?.[subject?.midTest?.length - 1];
   const examQuizID = subject?.examination?.[subject?.examination?.length - 1];
 
-  // Check completion by matching the student's performance entries by quizID and quizDone
+  // Only mark done if the student completed THIS TERM's active exam/midTest
+  // (examination._id / midTest._id is the DB _id of the current term's document)
+  const activeExamID = examination?._id?.toString?.();
+  const activeMidTestID = midTest?._id?.toString?.();
+
   const hasCompletedMidTest = Boolean(
-    performance?.performance?.some(
-      (perf: any) => perf?.quizDone && subject?.midTest?.includes(perf?.quizID)
-    )
+    activeMidTestID &&
+      performance?.performance?.some(
+        (perf: any) => perf?.quizDone && perf?.quizID === activeMidTestID
+      )
   );
 
   const hasCompletedExam = Boolean(
-    performance?.performance?.some(
-      (perf: any) =>
-        perf?.quizDone && subject?.examination?.includes(perf?.quizID)
-    )
+    activeExamID &&
+      performance?.performance?.some(
+        (perf: any) => perf?.quizDone && perf?.quizID === activeExamID
+      )
   );
 
   // overall completed (only counts active test types)
@@ -124,6 +128,22 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           {subject?.subjectTeacherName}
         </div>
       </div>
+      {(examination || midTest) && (
+        <div className="flex gap-2 mb-2">
+          {examination && (
+            <div className="text-[10px] bg-purple-50 text-purple-700 px-2 py-1 rounded border border-purple-100">
+              Exam: {examination.term} 
+              {/* ({examination.session}) */}
+            </div>
+          )}
+          {midTest && (
+            <div className="text-[10px] bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-100">
+              Mid: {midTest.term} 
+              {/* ({midTest.session}) */}
+            </div>
+          )}
+        </div>
+      )}
       {/* suuuuu */}
       <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
         {midMatch &&
@@ -169,6 +189,7 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
   classInfo,
 }) => {
   const { subjectData } = useClassSubject(props!);
+  console.log("subjectData", subjectData);
   const [visibleSubjectCount, setVisibleSubjectCount] = useState(0);
 
   // Do not clear localStorage on mount to avoid wiping in-progress exams for users
@@ -184,7 +205,7 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
     const { midTest } = useMidTest(subject?._id);
     const { data: schoolData } = useSchoolData();
     const normalize = (val: string) => val?.trim()?.toLowerCase();
-    const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
+    const currentTerm = classInfo?.presentTerm || schoolData?.presentTerm;
 
     const examDept = String(examination?.quiz?.instruction?.dept || "")
       .toLowerCase()
@@ -209,31 +230,30 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
 
     const examMatch =
       examination?.startExam &&
-      (schoolTerm === "" ||
-        normalize(examination?.exam?.term || "") === schoolTerm);
+      (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm);
 
     const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
     const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
 
-    // derive the most recent quiz IDs for midTest and examination
-    const midQuizID = subject?.midTest?.[subject?.midTest?.length - 1];
-    const examQuizID = subject?.examination?.[subject?.examination?.length - 1];
+    // Only mark done if the student completed THIS TERM's active exam/midTest
+    const activeExamID = examination?._id?.toString?.();
+    const activeMidTestID = midTest?._id?.toString?.();
 
     // Check specific completion flags for this subject by quizID
     const hasCompletedMidTest = Boolean(
-      performance?.performance?.some(
-        (perf: any) =>
-          perf?.quizDone && subject?.midTest?.includes(perf?.quizID)
-      )
+      activeMidTestID &&
+        performance?.performance?.some(
+          (perf: any) => perf?.quizDone && perf?.quizID === activeMidTestID
+        )
     );
 
     const hasCompletedExam = Boolean(
-      performance?.performance?.some(
-        (perf: any) =>
-          perf?.quizDone && subject?.examination?.includes(perf?.quizID)
-      )
+      activeExamID &&
+        performance?.performance?.some(
+          (perf: any) => perf?.quizDone && perf?.quizID === activeExamID
+        )
     );
 
     const hasCompletedTest = Boolean(
@@ -327,12 +347,6 @@ const MyClassRoomTestExamScreen = () => {
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
 
   const [dept, setDept] = useState<string>("");
-
-  useEffect(() => {
-    readClassInfo(studentInfo?.classAssigned).then((res: any) => {
-      setClassInfo(res?.data);
-    });
-  }, []);
 
   return (
     <div className="text-blue-950">
@@ -431,7 +445,7 @@ const MyClassRoomTestExamScreen = () => {
         <ClassSubjectScreen
           dept={dept}
           props={oneClass?._id}
-          classInfo={classInfo}
+          classInfo={oneClass}
           onTestCountChange={(count) => {
             setTotalAvailableTests((prev) => prev + count);
           }}
