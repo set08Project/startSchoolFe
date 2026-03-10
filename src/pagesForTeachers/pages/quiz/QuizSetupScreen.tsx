@@ -57,6 +57,7 @@ import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
 import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 const QuizSetupScreen = () => {
+  const [state, setState] = useState<any>({});
   const { teacherInfo } = useTeacherInfo();
   const { subjectID } = useParams();
   const { subjectQuiz } = useSujectQuiz(subjectID!);
@@ -66,8 +67,6 @@ const QuizSetupScreen = () => {
   const { midTest, midTestMutate } = useMidTest(subjectID!);
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   const { data: schoolInfoData } = useSchoolData();
-
-  const [state, setState] = useState<any>({});
 
   const normalize: any = (val: string) => val?.trim()?.toLowerCase();
 

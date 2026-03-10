@@ -8,7 +8,7 @@ export const useMidTest = (subjectID: string) => {
   );
 
   return {
-    midTest: midTestData?.data,
+    midTest: midTestData?.midTest,
     midTestLoading: !error && !midTestData,
     midTestError: error,
     mutate,
