@@ -74,13 +74,13 @@ const PreviewExamination: FC<any> = ({
                 mutate(`api/view-subject-exam/${subjectID}`);
                 navigate(`/subjects/${subjectID}`);
               } else {
-                toast.error(
-                  `Errors In:\n${
-                    res?.response?.data?.errors
-                      ?.map((el: string) => `- ${el} \n`.replace(/,/g, " "))
-                      .join(",", "") || "Failed to create"
-                  }`
-                );
+                const errData = res?.response?.data;
+                const errMsg = errData?.hint
+                  ? `${errData.message}\n${errData.hint}`
+                  : errData?.errors?.length > 0
+                  ? errData.errors.map((e: string) => `- ${e}`).join("\n")
+                  : errData?.message || "Failed to create examination";
+                toast.error(errMsg, { duration: 6000 });
               }
             })
             .finally(() => {
