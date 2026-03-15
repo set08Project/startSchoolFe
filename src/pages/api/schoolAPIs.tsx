@@ -7,15 +7,10 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 // export const URL: string = import.meta.env.VITE_MAIN_URL;
 
 // const URL2: string = "http://localhost:2244";
-// const URL: string = "http://localhost:2244/api";
-
-// Working Online1
-// Working Online
-// export const URL: string = "https://startschoolbe-4.onrender.com/api";
-// const URL2: string = "https://startschoolbe-4.onrender.com";
+// export const URL: string = "http://localhost:2244/api";
 
 // ?working
-// ?working
+
 export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
 const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
@@ -1937,11 +1932,15 @@ export const verifySMSPayment = async (schoolID: string, ref: string) => {
     return error;
   }
 };
-export const testSchoolSMS = async (phone: string, channel: string = "generic") => {
+export const testSchoolSMS = async (phone: string, channel: string = "generic", customMsg?: string) => {
   try {
     // const URL = "http://localhost:2244/api";
+    let endpoint = `${URL}/test-sms/${phone}?action=send&channel=${channel}`;
+    if (customMsg) {
+      endpoint += `&customMsg=${encodeURIComponent(customMsg)}`;
+    }
     return await axios
-      .get(`${URL}/test-sms/${phone}?action=send&channel=${channel}`)
+      .get(endpoint)
       .then((res: any) => {
         return res;
       });

@@ -39,8 +39,9 @@ const PersonalInfoScreen = () => {
   const [smsToggle, setSmsToggle] = useState<boolean>(false);
   const [smsLoadingText, setSmsLoadingText] = useState<string>("");
   const [testPhone, setTestPhone] = useState<string>("");
+  const [testMessage, setTestMessage] = useState<string>("");
   const [testLoading, setTestLoading] = useState<boolean>(false);
-  const [selectedChannel, setSelectedChannel] = useState<string>("generic");
+  const [selectedChannel, setSelectedChannel] = useState<string>("dnd");
 
   useEffect(() => {
     if (data) {
@@ -175,7 +176,7 @@ const PersonalInfoScreen = () => {
 
     try {
       setTestLoading(true);
-      const res = await testSchoolSMS(testPhone, selectedChannel);
+      const res = await testSchoolSMS(testPhone, selectedChannel, testMessage);
       if (res.status === 200) {
         toast.success(`Test SMS (${selectedChannel}) Triggered!`);
       } else {
@@ -514,7 +515,7 @@ const PersonalInfoScreen = () => {
                     />
                   </div>
                 </div>
-                <p className="text-[12px] text-gray-500 mt-1">
+                {/* <p className="text-[12px] text-gray-500 mt-1">
                   Enable this to send SMS notifications to parents when their child
                   clocks in or out.
                 </p>
@@ -545,18 +546,24 @@ const PersonalInfoScreen = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2">
                     <input
                       type="text"
                       placeholder="Phone (e.g. 080123...)"
-                      className="border rounded px-2 py-1 text-[13px] outline-none flex-1 border-gray-300 focus:border-blue-500"
+                      className="border rounded px-2 py-1 text-[13px] outline-none border-gray-300 focus:border-blue-500"
                       value={testPhone}
                       onChange={(e) => setTestPhone(e.target.value)}
+                    />
+                    <textarea
+                      placeholder="Optional Custom Message..."
+                      className="border rounded px-2 py-1 text-[13px] outline-none border-gray-300 focus:border-blue-500 h-[60px] resize-none"
+                      value={testMessage}
+                      onChange={(e) => setTestMessage(e.target.value)}
                     />
                     <button
                       disabled={testLoading}
                       onClick={handleTestSMS}
-                      className={`px-3 py-1 rounded text-[12px] font-bold text-white transition-all ${
+                      className={`px-3 py-2 rounded text-[12px] font-bold text-white transition-all w-full ${
                         testLoading
                           ? "bg-gray-400 cursor-not-allowed"
                           : "bg-blue-600 hover:bg-blue-700"
@@ -568,7 +575,7 @@ const PersonalInfoScreen = () => {
                   <p className="text-[11px] text-gray-400 italic leading-tight">
                     Try **DND** channel if Generic gives a 404 (Sender Not Found) error.
                   </p>
-                </div>
+                </div> */}
               </div>
 
               <div className="flex gap-2 items-center w-full ">

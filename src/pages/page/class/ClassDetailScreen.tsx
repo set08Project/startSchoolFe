@@ -55,7 +55,10 @@ interface ModalProps {
   className: string;
 }
 
-const ClassSubjectScreen: FC = () => {
+const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
+  classroom,
+  school,
+}) => {
   // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
@@ -65,44 +68,78 @@ const ClassSubjectScreen: FC = () => {
     <div className="">
       {readSubject?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
-          {readSubject?.map((props: any) => (
-            <div
-              key={props._id}
-              className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4"
-            >
-              <div className="mt-3 flex justify-between items-center font-bold">
-                <p>{props?.subjectTitle}</p>
-                <Link
-                  to={`/admin-test-exam-grade/${props._id}`}
-                  className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center"
-                >
-                  <MdEditDocument className="hover:text-blue-900" />
-                </Link>
-              </div>
-              <div className="flex">
-                <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
-                  class subject
+          {readSubject?.map((props: any) => {
+            const hasExam = props?.examination?.some((exam: any) => {
+              const matchesTerm =
+                exam?.term?.toLowerCase()?.trim() ===
+                classroom?.presentTerm?.toLowerCase()?.trim();
+              const matchesSession = school?.presentSession
+                ? exam?.session?.toLowerCase()?.trim() ===
+                  school?.presentSession?.toLowerCase()?.trim()
+                : true;
+              return matchesTerm && matchesSession;
+            });
+
+            const hasMidTest = props?.midTest?.some((test: any) => {
+              const matchesTerm =
+                test?.term?.toLowerCase()?.trim() ===
+                classroom?.presentTerm?.toLowerCase()?.trim();
+              const matchesSession = school?.presentSession
+                ? test?.session?.toLowerCase()?.trim() ===
+                  school?.presentSession?.toLowerCase()?.trim()
+                : true;
+              return matchesTerm && matchesSession;
+            });
+
+            return (
+              <div
+                key={props._id}
+                className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4"
+              >
+                <div className="mt-3 flex justify-between items-center font-bold">
+                  <p>{props?.subjectTitle}</p>
+                  <Link
+                    to={`/admin-test-exam-grade/${props._id}`}
+                    className="w-8 h-8 transition-all duration-300 rounded-full hover:bg-slate-50 cursor-pointer flex justify-center items-center"
+                  >
+                    <MdEditDocument className="hover:text-blue-900" />
+                  </Link>
+                </div>
+                <div className="flex gap-2">
+                  <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
+                    class subject
+                  </p>
+                  {hasExam && (
+                    <p className="text-[10px] bg-green-100 text-green-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-green-200">
+                      Exam Added
+                    </p>
+                  )}
+                  {hasMidTest && (
+                    <p className="text-[10px] bg-orange-100 text-orange-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-orange-200">
+                      Mid-Test Added
+                    </p>
+                  )}
+                </div>
+                <div className="flex-1" />
+                <p className="text-[13px] font-medium">
+                  Subject Teacher Name: <span></span>
                 </p>
-              </div>
-              <div className="flex-1" />
-              <p className="text-[13px] font-medium">
-                Subject Teacher Name: <span></span>
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
-                  {props?.subjectTeacherName}
+                <div className="flex gap-2 flex-wrap">
+                  <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
+                    {props?.subjectTeacherName}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <Link to={`/subjects/${props?._id}`}>
+                    <p className="text-[12px] font-medium bg-blue-950 hover:bg-blue-900 cursor-pointer text-white rounded-md py-2 px-4">
+                      Goto CBT Area
+                    </p>
+                  </Link>
                 </div>
               </div>
-
-              <div className="flex">
-                <Link to={`/subjects/${props?._id}`}>
-                  <p className="text-[12px] font-medium bg-blue-950 hover:bg-blue-900 cursor-pointer text-white rounded-md py-2 px-4">
-                    Goto CBT Area
-                  </p>
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div>
@@ -1011,7 +1048,7 @@ const ClassDetailScreen = () => {
         </div>
 
         {/* Populate Class St */}
-        <ClassSubjectScreen />
+        <ClassSubjectScreen classroom={classroom} school={data} />
       </div>
 
       {/* Performance */}
