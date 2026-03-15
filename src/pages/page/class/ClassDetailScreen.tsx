@@ -59,35 +59,49 @@ const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
   classroom,
   school,
 }) => {
-  // useClassAttendance;
   const { classID } = useParams();
   const { readSubject } = useClassSubjects(classID!);
-  // console.log("This classID", classID);
+
+  if (!classroom || !school) {
+    return (
+      <div className="flex flex-col items-center justify-center p-10">
+        <FaSpinner className="animate-spin text-blue-950" size={30} />
+        <p className="mt-4 text-[14px] font-medium text-gray-500">
+          Loading class details from server...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="">
       {readSubject?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
           {readSubject?.map((props: any) => {
+            const currentTerm = classroom?.presentTerm?.toLowerCase()?.trim();
+            const currentSession = school?.presentSession?.toLowerCase()?.trim();
+
             const hasExam = props?.examination?.some((exam: any) => {
+              if (!currentTerm) return false;
               const matchesTerm =
-                exam?.term?.toLowerCase()?.trim() ===
-                classroom?.presentTerm?.toLowerCase()?.trim();
-              const matchesSession = school?.presentSession
-                ? exam?.session?.toLowerCase()?.trim() ===
-                  school?.presentSession?.toLowerCase()?.trim()
-                : true;
+                exam?.term?.toLowerCase()?.trim() === currentTerm;
+
+              const matchesSession =
+                !currentSession ||
+                exam?.session?.toLowerCase()?.trim() === currentSession;
+
               return matchesTerm && matchesSession;
             });
 
             const hasMidTest = props?.midTest?.some((test: any) => {
+              if (!currentTerm) return false;
               const matchesTerm =
-                test?.term?.toLowerCase()?.trim() ===
-                classroom?.presentTerm?.toLowerCase()?.trim();
-              const matchesSession = school?.presentSession
-                ? test?.session?.toLowerCase()?.trim() ===
-                  school?.presentSession?.toLowerCase()?.trim()
-                : true;
+                test?.term?.toLowerCase()?.trim() === currentTerm;
+
+              const matchesSession =
+                !currentSession ||
+                test?.session?.toLowerCase()?.trim() === currentSession;
+
               return matchesTerm && matchesSession;
             });
 
