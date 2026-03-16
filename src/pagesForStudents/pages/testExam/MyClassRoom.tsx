@@ -154,6 +154,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           ) : (
             <Link
               to={`/mid-test/details/${subject?._id}/${
+                subject?.midTest[subject?.midTest?.length - 1]?._id ||
                 subject?.midTest[subject?.midTest?.length - 1]
               }`}
               className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer hover:bg-orange-600 transition-colors"
@@ -170,6 +171,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           ) : (
             <Link
               to={`/examination/details/${
+                subject?.examination[subject?.examination?.length - 1]?._id ||
                 subject?.examination[subject?.examination?.length - 1]
               }`}
               className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer hover:bg-purple-700 transition-colors"

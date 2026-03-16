@@ -107,6 +107,7 @@ const StartTestComp: any = ({ props, subjectID, classInfo }) => {
       {midMatch && (
         <Link
           to={`/mid-test/details/${props?._id}/${
+            props?.midTest[props?.midTest?.length - 1]?._id ||
             props?.midTest[props?.midTest?.length - 1]
           }`}
           className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer"
@@ -118,6 +119,7 @@ const StartTestComp: any = ({ props, subjectID, classInfo }) => {
       {examMatch && (
         <Link
           to={`/examination/details/${
+            props?.examination[props?.examination?.length - 1]?._id ||
             props?.examination[props?.examination?.length - 1]
           }`}
           className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer"
