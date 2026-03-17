@@ -6,8 +6,8 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 // const URL2: string = import.meta.env.VITE_URL;
 // export const URL: string = import.meta.env.VITE_MAIN_URL;
 
-const URL2: string = "http://localhost:2244";
-export const URL: string = "http://localhost:2244/api";
+// const URL2: string = "http://localhost:2244";
+// export const URL: string = "http://localhost:2244/api";
 
 // ?working
 
