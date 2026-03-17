@@ -11,8 +11,8 @@ export const URL: string = "http://localhost:2244/api";
 
 // ?working
 
-// export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
-// const URL2: string = "https://startschoolbe-lsda.onrender.com";
+export const URL: string = "https://startschoolbe-lsda.onrender.com/api";
+const URL2: string = "https://startschoolbe-lsda.onrender.com";
 
 // ?New Try
 // export const URL: string = "https://start-school-be.vercel.app/api";
