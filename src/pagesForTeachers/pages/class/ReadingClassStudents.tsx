@@ -116,6 +116,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
               Image
             </div>
             <div className="w-[200px] border-r">student Name</div>
+            <div className="w-[180px] border-r">View Detail</div>
             <div className="w-[120px] border-r">Today's Attendance</div>
             <div className="w-[100px] border-r">Student's Attendance Ratio</div>
 
@@ -128,7 +129,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
             <div className="w-[200px] border-r">Performance Ratio</div>
 
             <div className="w-[80px] border-r">Rate</div>
-            <div className="w-[180px] border-r">View Detail</div>
+            
 
             <div className="w-[180px] border-r">
               View{" "}
@@ -153,6 +154,8 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                         }`}
                       >
                         <div className="w-[50px] border-r">{i + 1}</div>
+
+                        
                         {/* Image and Name */}
                         <div className="w-[100px] flex justify-center border-r">
                           <img
@@ -171,6 +174,28 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                               {props?.enrollmentID}
                             </span>
                           </p>
+                        </div>
+
+                         <div className="w-[180px] border-r flex gap-1">
+                          <div className="w-[80px] relative">
+                            <Button
+                              name="Edit"
+                              className="pl-5 py-3 w-[92%] bg-blue-950 text-white  hover:bg-blue-900 transition-all duration-300"
+                              onClick={() => {
+                                updated(props?._id);
+                              }}
+                            />
+                          </div>
+                          <Link
+                            to={`student-details/:studentID`}
+                            className="w-[80px]"
+                          >
+                            <Button
+                              name="View"
+                              className="pl-5 py-3 w-[92%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                              onClick={() => {}}
+                            />
+                          </Link>
                         </div>
 
                         <div className="w-[120px]">
@@ -209,27 +234,7 @@ const ReadingClassStudents: FC<iProps> = ({ props }) => {
                           of 5
                         </div>
 
-                        <div className="w-[180px] border-r flex gap-1">
-                          <div className="w-[80px] relative">
-                            <Button
-                              name="Edit"
-                              className="pl-5 py-3 w-[92%] bg-blue-950 text-white  hover:bg-blue-900 transition-all duration-300"
-                              onClick={() => {
-                                updated(props?._id);
-                              }}
-                            />
-                          </div>
-                          <Link
-                            to={`student-details/:studentID`}
-                            className="w-[80px]"
-                          >
-                            <Button
-                              name="View"
-                              className="pl-5 py-3 w-[92%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                              onClick={() => {}}
-                            />
-                          </Link>
-                        </div>
+                       
                         <View props={props} />
                       </div>
                     </div>

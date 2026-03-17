@@ -515,7 +515,7 @@ const PersonalInfoScreen = () => {
                     />
                   </div>
                 </div>
-                {/* <p className="text-[12px] text-gray-500 mt-1">
+                <p className="text-[12px] text-gray-500 mt-1">
                   Enable this to send SMS notifications to parents when their child
                   clocks in or out.
                 </p>
@@ -575,7 +575,7 @@ const PersonalInfoScreen = () => {
                   <p className="text-[11px] text-gray-400 italic leading-tight">
                     Try **DND** channel if Generic gives a 404 (Sender Not Found) error.
                   </p>
-                </div> */}
+                </div>
               </div>
 
               <div className="flex gap-2 items-center w-full ">

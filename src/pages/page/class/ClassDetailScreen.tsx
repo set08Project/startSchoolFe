@@ -93,6 +93,18 @@ const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
               return matchesTerm && matchesSession;
             });
 
+            const hasVisibleExam = props?.examination?.some((exam: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                exam?.term?.toLowerCase()?.trim() === currentTerm;
+
+              const matchesSession =
+                !currentSession ||
+                exam?.session?.toLowerCase()?.trim() === currentSession;
+
+              return matchesTerm && matchesSession && exam?.startExam === true;
+            });
+
             const hasMidTest = props?.midTest?.some((test: any) => {
               if (!currentTerm) return false;
               const matchesTerm =
@@ -103,6 +115,18 @@ const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
                 test?.session?.toLowerCase()?.trim() === currentSession;
 
               return matchesTerm && matchesSession;
+            });
+
+            const hasVisibleMidTest = props?.midTest?.some((test: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                test?.term?.toLowerCase()?.trim() === currentTerm;
+
+              const matchesSession =
+                !currentSession ||
+                test?.session?.toLowerCase()?.trim() === currentSession;
+
+              return matchesTerm && matchesSession && test?.startMidTest === true;
             });
 
             return (
@@ -124,13 +148,25 @@ const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
                     class subject
                   </p>
                   {hasExam && (
-                    <p className="text-[10px] bg-green-100 text-green-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-green-200">
-                      Exam Added
+                    <p className="flex items-center gap-2 text-[10px] bg-green-100 text-green-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-green-200">
+                      {hasVisibleExam && (
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                      )}
+                      <span>Exam Added</span>
                     </p>
                   )}
                   {hasMidTest && (
-                    <p className="text-[10px] bg-orange-100 text-orange-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-orange-200">
-                      Mid-Test Added
+                    <p className="flex items-center gap-2 text-[10px] bg-orange-100 text-orange-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-orange-200">
+                      {hasVisibleMidTest && (
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                        </span>
+                      )}
+                      <span>Mid-Test Added</span>
                     </p>
                   )}
                 </div>

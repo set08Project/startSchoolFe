@@ -428,7 +428,7 @@ export const useSchoolClassRMDetail = (classID: string) => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      refreshInterval: 0,
+      refreshInterval: 3000,
       revalidateOnMount: hasCache,
     }
   );
@@ -705,7 +705,7 @@ export const useClassSubjects = (classID: string) => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      refreshInterval: 0,
+      refreshInterval: 3000,
       revalidateOnMount: hasCache,
     }
   );

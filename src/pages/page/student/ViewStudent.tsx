@@ -536,7 +536,10 @@ const ViewStudent = () => {
           <div className="w-[50px] border-r">S/N</div>
           <div className="w-[150px] border-r">student Image</div>
           <div className="w-[200px] border-r">student Name</div>
+          <div className="w-[180px] border-r">View Detail</div>
+
           <div className="w-[130px] border-r">Reg. Date</div>
+
 
           <div className="w-[270px] border-r">Session Fee</div>
           <div className="w-[130px] border-r">Receipt</div>
@@ -552,7 +555,7 @@ const ViewStudent = () => {
           <div className="w-[200px] border-r">Performance Rating</div>
 
           <div className="w-[80px] border-r">QR Code</div>
-          <div className="w-[180px] border-r">View Detail</div>
+          
           <div className="w-[80px] border-r">QR ID</div>
           <div className="w-[180px] border-r">Student Action</div>
         </div>
@@ -585,9 +588,22 @@ const ViewStudent = () => {
                             RegID: {props?.enrollmentID}
                           </div>
                         </div>
+
+                          <Link
+                          to={`student-details/${props?._id}`}
+                          className="w-[180px] border-r"
+                        >
+                          <Button
+                            name="View Detail"
+                            className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
+                            onClick={() => {}}
+                          />
+                        </Link>
                         <div className="w-[130px] border-r">
                           {moment(props?.createdAt).format("ll")}
                         </div>
+
+                       
 
                         <div className="w-[270px] border-r flex gap-4">
                           <div className="flex flex-col items-center">
@@ -939,16 +955,7 @@ const ViewStudent = () => {
                           />
                         </div>
                         <div className="w-[80px] border-r">3 of 5</div>
-                        <Link
-                          to={`student-details/${props?._id}`}
-                          className="w-[180px] border-r"
-                        >
-                          <Button
-                            name="View Detail"
-                            className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300 hover:scale-105"
-                            onClick={() => {}}
-                          />
-                        </Link>
+                       
 
                         {/* Delete Toggle Modal And Fuctions Are Below */}
                         <div
