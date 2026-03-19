@@ -198,6 +198,7 @@ const ClassRoomScreen = () => {
       >
         <div className="text-[gray] w-[1550px] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4">
           <div className="w-[80px] border-r">Class</div>
+           <div className="w-[180px] border-r">View Detail</div>
           <div className="w-[100px] border-r">Number of Students</div>
 
           <div className="w-[100px] border-r">Number of Subjects Offered</div>
@@ -211,7 +212,7 @@ const ClassRoomScreen = () => {
 
           <div className="w-[150px] border-r">Class Academic Performance</div>
 
-          <div className="w-[180px] border-r">View Detail</div>
+         
           <div className="w-[70px] border-r">Delete</div>
         </div>
 
@@ -228,6 +229,17 @@ const ClassRoomScreen = () => {
                     }`}
                   >
                     <div className="w-[80px] border-r">{props?.className}</div>
+
+                     <Link
+                      to={`class-details/${props?._id}`}
+                      className="w-[180px] border-r"
+                    >
+                      <Button
+                        name="View class"
+                        className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
+                        onClick={() => {}}
+                      />
+                    </Link>
 
                     <div className={`w-[100px] border-r`}>
                       {props?.students?.length}
@@ -402,16 +414,7 @@ const ClassRoomScreen = () => {
                       <ClassStudents props={props?._id} />
                     </div>
 
-                    <Link
-                      to={`class-details/${props?._id}`}
-                      className="w-[180px] border-r"
-                    >
-                      <Button
-                        name="View class"
-                        className="py-3 w-[85%] bg-black text-white  hover:bg-neutral-800 transition-all duration-300"
-                        onClick={() => {}}
-                      />
-                    </Link>
+                   
 
                     <div className="w-[70px] border-r flex items-center justify-center">
                       <button
