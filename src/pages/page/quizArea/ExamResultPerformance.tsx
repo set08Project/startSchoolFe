@@ -5,7 +5,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import LittleHeader from "@/components/layout/LittleHeader";
 import Button from "@/components/reUse/Button";
-import { useExam } from "@/pagesForTeachers/hooks/useTeacher";
+import { useExam, useSujectInfo } from "@/pagesForTeachers/hooks/useTeacher";
 import { useExamSubjectPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
 import {
   removePerformance,
@@ -20,6 +20,7 @@ const ExamResultSetupRecordScreen = () => {
   const { subjectID, examID } = useParams();
 
   const { examPerformance, mutate } = useExamSubjectPerfomance(examID!);
+  const { subjectInfo } = useSujectInfo(subjectID!);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,12 +60,14 @@ const ExamResultSetupRecordScreen = () => {
       format: "a4",
       orientation: "landscape",
     },
+    resolution: 1,
     canvas: {
-      mimeType: "image/png",
-      qualityRatio: 1,
+      mimeType: "image/jpeg",
+      qualityRatio: 0.5,
     },
     overrides: {
       canvas: {
+        useCORS: true,
         onclone: (clonedDoc: Document) => {
           // Find all elements in the cloned document
           const allElements = clonedDoc.querySelectorAll("*");
@@ -112,10 +115,66 @@ const ExamResultSetupRecordScreen = () => {
     }
   };
 
+  const handlePrint = () => {
+    const printContents = targetRef.current?.innerHTML;
+    if (!printContents) return;
+
+    // Create a temporary print div
+    const printDiv = document.createElement("div");
+    printDiv.id = "temp-print-area";
+    printDiv.className = "w-[1600px] bg-white";
+    printDiv.innerHTML = printContents;
+    
+    // Create the style block
+    const style = document.createElement("style");
+    style.id = "temp-print-style";
+    style.innerHTML = `
+      @media print {
+        @page { size: landscape !important; margin: 5mm !important; }
+        html, body {
+          width: auto !important;
+          height: auto !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          visibility: visible !important;
+        }
+        body > *:not(#temp-print-area):not(#temp-print-style) {
+          display: none !important;
+        }
+        #temp-print-area, #temp-print-area * {
+          visibility: visible !important;
+        }
+        #temp-print-area {
+          display: block !important;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1600px !important;
+          zoom: 0.65;
+          margin: 10mm;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          background: white !important;
+        }
+      }
+    `;
+    
+    document.body.appendChild(style);
+    document.body.appendChild(printDiv);
+    
+    // Trigger print
+    setTimeout(() => {
+      window.print();
+      // Cleanup
+      document.body.removeChild(printDiv);
+      document.body.removeChild(style);
+    }, 100);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 print:bg-white">
       <Toaster position="top-center" reverseOrder={true} />
-      <div className="ml-5 pt-2">
+      <div className="ml-5 pt-2 print:hidden">
         <LittleHeader
           name={` Students ${quizData?.status
             .charAt(0)
@@ -140,11 +199,11 @@ const ExamResultSetupRecordScreen = () => {
                 No Test Results Submitted.
               </p>
             ) : (
-              <div className="flex flex-col overflow-auto">
+              <div className="flex flex-col overflow-auto print:overflow-visible">
                 {/* Search bar */}
 
                 {/* Download button above the table */}
-                <div className="absolute">
+                <div className="absolute print:hidden">
                   <div className=" py-3 flex gap-3 mb-4">
                     <div className="mb-4">
                       <div className="relative max-w-md">
@@ -188,6 +247,12 @@ const ExamResultSetupRecordScreen = () => {
                         "Download PDF"
                       )}
                     </button>
+                    <button
+                      className="text-[12px] transition-all duration-300 hover:bg-neutral-800 px-8 py-0.5 h-12 bg-black text-white rounded-md shadow-md ml-3 tracking-widest"
+                      onClick={handlePrint}
+                    >
+                      Print
+                    </button>
                     <Button
                       className={`px-6 h-12 mt-0 rounded-md shadow-md transition-colors duration-300 !text-[14px] ${
                         localStudents?.performance?.length > 0
@@ -211,11 +276,16 @@ const ExamResultSetupRecordScreen = () => {
                   </div>
                 </div>
 
-                <hr />
+                <hr className="print:hidden" />
                 {/* <div className="mt-10" /> */}
                 {/* Attach targetRef here for PDF capture */}
-                <div ref={targetRef} className="bg-white mt-20">
-                  <div className="w-[1600px] flex bg-white rounded-lg shadow-md">
+                <div ref={targetRef} className="bg-white mt-20 pt-8 px-4 w-[1600px]">
+                  <div className="mb-6 w-[1600px]">
+                    <h2 className="text-2xl font-bold text-blue-950 uppercase">
+                      {subjectInfo?.subjectTitle || "Subject"} - Examination Results
+                    </h2>
+                  </div>
+                  <div className="w-[1600px] flex bg-white rounded-lg shadow-md mt-4">
                     <div className=" w-[50px] py-3 px-6 bg-blue-50 text-left text-xs font-medium text-blue-950 uppercase tracking-wider flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -583,7 +653,7 @@ const ExamResultSetupRecordScreen = () => {
           </div>
         )}
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center print:hidden">
           <Button
             className="bg-blue-950 px-6 py-3 text-white rounded-lg shadow-md hover:bg-blue-800 transition-colors duration-300 !text-[16px]"
             name="Go Back"
@@ -599,3 +669,4 @@ const ExamResultSetupRecordScreen = () => {
 };
 
 export default ExamResultSetupRecordScreen;
+
