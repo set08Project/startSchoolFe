@@ -282,6 +282,7 @@ const ExamResultSetupRecordScreen = () => {
                 <div ref={targetRef} className="bg-white mt-20 pt-8 px-4 w-[1600px]">
                   <div className="mb-6 w-[1600px]">
                     <h2 className="text-2xl font-bold text-blue-950 uppercase">
+                      {subjectInfo?.designated ? `${subjectInfo?.designated} - ` : ""}
                       {subjectInfo?.subjectTitle || "Subject"} - Examination Results
                     </h2>
                   </div>
