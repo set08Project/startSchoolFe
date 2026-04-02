@@ -473,12 +473,14 @@ const MidTestScreen = () => {
                         </span>
                       )}
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                      {readQuestion[currentQuestion]?.question?.replace(
-                        /^\d+\.\s*/,
-                        ""
-                      )}
-                    </h2>
+                    <h2 
+                      className="text-xl font-semibold text-gray-800 mb-6"
+                      dangerouslySetInnerHTML={{
+                        __html: typeof readQuestion[currentQuestion]?.question === 'string' 
+                          ? readQuestion[currentQuestion]?.question?.replace(/^\d+\.\s*/, "") 
+                          : ""
+                      }}
+                    />
 
                     {readQuestion[currentQuestion]?.images && (
                       <div>
@@ -557,7 +559,7 @@ const MidTestScreen = () => {
                                 <div className="w-2 h-2 bg-white rounded-full"></div>
                               )}
                             </div>
-                            <span className="text-gray-700">{option}</span>
+                            <span className="text-gray-700" dangerouslySetInnerHTML={{ __html: typeof option === "string" ? option : JSON.stringify(option) }} />
                           </div>
                         </button>
                       ))}

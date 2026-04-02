@@ -219,7 +219,7 @@ const QuizTestScreen = () => {
                       Question {index + 1}.
                     </p>
                     <div className="ml-4">
-                      <p className="text-[18px]">{question?.question}</p>
+                      <div className="text-[18px]" dangerouslySetInnerHTML={{ __html: question?.question }} />
                       <div className="ml-8">
                         <p className="text-[12px] mt-5">
                           Choose your options carefully
@@ -239,11 +239,9 @@ const QuizTestScreen = () => {
                                   }}
                                   checked={state[index] === el.trim()}
                                 />
-                                <label>
-                                  {typeof el === "string"
+                                  <label dangerouslySetInnerHTML={{ __html: typeof el === "string"
                                     ? el
-                                    : JSON.stringify(el)}
-                                </label>
+                                    : JSON.stringify(el) }} />
                               </div>
                             )}
                           </div>

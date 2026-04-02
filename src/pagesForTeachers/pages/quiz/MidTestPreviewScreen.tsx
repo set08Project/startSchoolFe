@@ -106,7 +106,7 @@ const MidTestPreviewScreen = () => {
                     Question {index + 1}.
                   </p>
                   <div className="ml-4">
-                    <p className="text-[18px]">{question?.question}</p>
+                    <div className="text-[18px]" dangerouslySetInnerHTML={{ __html: question?.question }} />
 
                     {question?.images && (
                       <div>
@@ -137,11 +137,9 @@ const MidTestPreviewScreen = () => {
                                 onChange={() => handleStateChange(index, el)}
                                 checked={state[index] === el}
                               />
-                              <label>
-                                {typeof el === "string"
+                              <label dangerouslySetInnerHTML={{ __html: typeof el === "string"
                                   ? el
-                                  : JSON.stringify(el)}
-                              </label>
+                                  : JSON.stringify(el) }} />
                             </div>
                           )}
                         </div>

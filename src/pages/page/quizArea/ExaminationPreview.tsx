@@ -296,7 +296,7 @@ function MathRenderer({ text }) {
       return renderDeterminant(part.content);
     }
 
-    return <span>{part.content}</span>;
+    return <span dangerouslySetInnerHTML={{ __html: part.content }} />;
   }
 
   const parsed = parseMath(str);

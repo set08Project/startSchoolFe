@@ -1034,6 +1034,7 @@ export const viewSchoolTeacher = async (schoolID: string) => {
 
 export const createSchoolSubject = async (schoolID: string, data: any) => {
   try {
+    // const URL = "http://localhost:2244/api";
     return await axios
       .post(`${URL}/create-subject/${schoolID}`, data)
       .then((res: any) => {
