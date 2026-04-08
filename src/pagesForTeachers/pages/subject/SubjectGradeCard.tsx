@@ -118,6 +118,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     (el: any) => el.subject === subjectInfo?.subjectTitle
   );
 
+  // Check if current user is the actual subject teacher
+  const isSubjectTeacher = teacherInfo?._id === subjectInfo?.teacherID;
+  
+  // Permission logic: if global setting is off, only subject teacher can edit.
+  // We assume Admins use a different component (AdminGradeExam.tsx), 
+  // so this check is specific to the teacher's view.
+  const canEdit = schoolAnnouncement?.allowClassTeacherGrading || isSubjectTeacher;
 
   // Use lifted state if available
   const studentScores = allScores?.[props?._id] || {};
@@ -301,7 +308,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
       {/* Test Score Input */}
       <div className="w-[100px] border-r">
         <input
-          className="w-[70px] h-8 outline-none border rounded-md px-2"
+          disabled={!canEdit}
+          className={`w-[70px] h-8 outline-none border rounded-md px-2 ${!canEdit ? "bg-gray-100 cursor-not-allowed" : ""}`}
           type="number"
           min="0"
           max="40"
@@ -330,7 +338,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
           {computedExamDefault === "NaN" ? "0" : computedExamDefault}
         </p>
         <input
-          className="w-[80px] h-8 outline-none border rounded-md px-2"
+          disabled={!canEdit}
+          className={`w-[80px] h-8 outline-none border rounded-md px-2 ${!canEdit ? "bg-gray-100 cursor-not-allowed" : ""}`}
           type="number"
           min="0"
           max="60"
@@ -353,7 +362,8 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
       {/* Teacher Comment Input */}
       <div className="w-[200px] border-r">
         <input
-          className="w-[95%] h-8 outline-none border rounded-md px-2 text-[11px]"
+          disabled={!canEdit}
+          className={`w-[95%] h-8 outline-none border rounded-md px-2 text-[11px] ${!canEdit ? "bg-gray-100 cursor-not-allowed" : ""}`}
           type="text"
           placeholder={`${
             result?.teacherComment ? result?.teacherComment : "Add a comment"
@@ -374,9 +384,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
               <ClipLoader color="white" size={12} className="absolute" />
             )
           }
-          className="pl-4 py-3 w-[85%] bg-black text-white hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`pl-4 py-3 w-[85%] bg-black text-white hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
           onClick={makeGrade}
-          disabled={loading}
+          disabled={loading || !canEdit}
         />
       </div>
     </div>
@@ -407,9 +417,13 @@ const AttendanceRatio: FC<iProps> = ({ props }) => {
 
 const SubjectGradeCard = () => {
   const { teacherInfo } = useTeacherInfo();
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   const { subjectID } = useParams();
   const { subjectInfo } = useSujectInfo(subjectID);
   const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs);
+
+  // Permission logic for the bulk button
+  const canEdit = schoolAnnouncement?.allowClassTeacherGrading || (teacherInfo?._id === subjectInfo?.teacherID);
 
   const [allScores, setAllScores] = useState<Record<string, any>>({});
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
@@ -536,7 +550,7 @@ const SubjectGradeCard = () => {
         </div>
       </div>
 
-      {sortedStudents.length > 0 && (
+      {sortedStudents.length > 0 && canEdit && (
         <div className="mt-8 flex justify-end pb-10 px-4">
           <Button
             name="Add All Scores"

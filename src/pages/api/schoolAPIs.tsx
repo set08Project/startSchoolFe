@@ -1950,3 +1950,20 @@ export const testSchoolSMS = async (phone: string, channel: string = "generic", 
   }
 };
 
+export const updateClassTeacherGradingToggle = async (
+  schoolID: string,
+  allowClassTeacherGrading: boolean
+) => {
+  try {
+    // const URL = "http://localhost:2244/api"
+    return await axios
+      .patch(`${URL}/update-class-teacher-grading/${schoolID}`, {
+        allowClassTeacherGrading,
+      })
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
