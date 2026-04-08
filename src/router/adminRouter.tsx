@@ -455,6 +455,14 @@ export const adminRouter = createBrowserRouter([
             ),
           },
           {
+            path: "final-exam-grade/:subjectID/",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <SubjectGradeCard />
+              </Suspense>
+            ),
+          },
+          {
             path: "final-exam-grade/:subjectID/:examID",
             element: (
               <Suspense fallback={<LoadingScreen />}>

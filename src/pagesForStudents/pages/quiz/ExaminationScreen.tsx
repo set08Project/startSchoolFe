@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { isAnswerMatched } from "../../../lib/utils";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useExam, useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
@@ -506,9 +507,9 @@ const ExaminationTestScreen = () => {
 
       let score = 0;
       readQuestion?.forEach((question: any, index: number) => {
-        const correctAnswer = question.answer?.trim() || "";
-        const studentAnswer = state[index]?.trim() || "";
-        if (correctAnswer === studentAnswer) score++;
+        const correctAnswer = question.answer;
+        const studentAnswer = state[index];
+        if (isAnswerMatched(studentAnswer, correctAnswer)) score++;
       });
 
       const totalForCalc = correctAnswers.length || 1;

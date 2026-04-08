@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { isAnswerMatched } from "../../../lib/utils";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useQuiz } from "../../../pagesForTeachers/hooks/useTeacher";
@@ -69,8 +70,8 @@ const QuizTestScreen = () => {
 
     let score = 0;
 
-    correctAnswers.forEach((correctAnswer: string, index: number) => {
-      if (correctAnswer === state[index]?.trim()) {
+    correctAnswers.forEach((correctAnswer: any, index: number) => {
+      if (isAnswerMatched(state[index], correctAnswer)) {
         score++;
       }
     });
@@ -237,7 +238,7 @@ const QuizTestScreen = () => {
                                   onChange={() => {
                                     handleStateChange(index, el);
                                   }}
-                                  checked={state[index] === el.trim()}
+                                  checked={isAnswerMatched(state[index], el)}
                                 />
                                   <label dangerouslySetInnerHTML={{ __html: typeof el === "string"
                                     ? el

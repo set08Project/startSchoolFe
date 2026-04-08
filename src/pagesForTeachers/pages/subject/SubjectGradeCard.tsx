@@ -122,13 +122,24 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     studentScores.teacherComment !== undefined ? studentScores.teacherComment : (result?.teacherComment ? result.teacherComment : "")
   );
 
+  const computedExamDefault =
+    performanceRatingII !== null && performanceRatingII !== undefined
+      ? performanceRatingII.toString()
+      : "";
+
   // Sync with parent
   useEffect(() => {
     if (updateScore) {
-       updateScore(props?._id, { test4, exam, teacherComment });
+       updateScore(props?._id, { 
+         test4, 
+         exam, 
+         teacherComment,
+         computedExamDefault,
+         existingTest4: result?.test4 || 0,
+         existingExam: result?.exam || 0
+       });
     }
-  }, [test4, exam, teacherComment]);
-
+  }, [test4, exam, teacherComment, computedExamDefault, result?.test4, result?.exam]);
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";
@@ -140,10 +151,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     return "F";
   };
 
-  const computedExamDefault =
-    performanceRatingII !== null && performanceRatingII !== undefined
-      ? performanceRatingII.toString()
-      : "";
 
   const makeGrade = async () => {
     try {
@@ -408,12 +415,24 @@ const SubjectGradeCard = () => {
     try {
       setBulkLoading(true);
       
-      const promises = studentsWithInput.map(async (student: any) => {
-        const score = allScores[student._id];
+      const promises = sortedStudents.map(async (student: any) => {
+        const score = allScores[student._id] || {};
+
+        const test4Score = score.test4 && score.test4 !== "" ? parseInt(score.test4) : score.existingTest4 || 0;
+        
+        let examScore = 0;
+        if (score.exam && score.exam !== "") {
+          examScore = parseInt(score.exam, 10);
+        } else if (score.existingExam !== undefined && score.existingExam !== null && score.existingExam !== 0) {
+          examScore = score.existingExam;
+        } else if (score.computedExamDefault !== undefined && score.computedExamDefault !== "" && !isNaN(Number(score.computedExamDefault))) {
+          examScore = Math.round(Number(score.computedExamDefault));
+        }
+
         return createGradeScore(student._id, {
           subject: subjectInfo?.subjectTitle,
-          test4: score.test4 ? parseInt(score.test4) : 0,
-          exam: score.exam ? parseInt(score.exam) : 0,
+          test4: test4Score,
+          exam: examScore,
           teacherComment: score.teacherComment || "",
         });
       });
@@ -421,12 +440,12 @@ const SubjectGradeCard = () => {
       await Promise.all(promises);
       
       // Refresh all students data
-      const mutatePromises = studentsWithInput.map((student: any) => 
+      const mutatePromises = sortedStudents.map((student: any) => 
         mutate(`api/student-report-card/${student._id}`)
       );
       await Promise.all(mutatePromises);
 
-      toast.success(`Successfully added scores for ${studentsWithInput.length} students`);
+      toast.success(`Successfully added scores for ${sortedStudents.length} students`);
       setIsBulkModalOpen(false);
       setBulkLoading(false);
       // Clear inputs that were saved
@@ -481,7 +500,7 @@ const SubjectGradeCard = () => {
         </div>
       </div>
 
-      {studentsWithInput.length > 0 && (
+      {sortedStudents.length > 0 && (
         <div className="mt-8 flex justify-end pb-10 px-4">
           <Button
             name="Add All Scores"
@@ -496,9 +515,9 @@ const SubjectGradeCard = () => {
         isOpen={isBulkModalOpen}
         onClose={() => setIsBulkModalOpen(false)}
         onConfirm={handleBulkSave}
-        count={studentsWithInput.length}
+        count={sortedStudents.length}
         loading={bulkLoading}
-        message={`This will add grades for all ${studentsWithInput.length} students you have entered scores for. This action will update the report cards for the current session and term.`}
+        message={`This will add grades for all ${sortedStudents.length} students viewing. This action will update the report cards for the current session and term.`}
       />
     </div>
   );

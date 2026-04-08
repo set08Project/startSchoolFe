@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { isAnswerMatched } from "../../../lib/utils";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
@@ -541,7 +542,7 @@ const ExaminationPreviewScreen = () => {
 
                       <div className="space-y-2 ml-6 flex flex-col max-w-[600px]">
                         {question.options.map((opt, optIdx) => {
-                          const isCorrect = opt === question.answer;
+                          const isCorrect = isAnswerMatched(opt, question.answer);
                           return (
                             <div
                               key={optIdx}

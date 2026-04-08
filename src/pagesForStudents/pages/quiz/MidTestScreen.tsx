@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { isAnswerMatched } from "../../../lib/utils";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { useMidTest } from "../../../pagesForTeachers/hooks/useTeacher";
@@ -142,9 +143,9 @@ const MidTestScreen = () => {
 
     let score = 0;
     readQuestion?.forEach((question: any, index: number) => {
-      const correctAnswer = question.answer?.trim() || "";
-      const studentAnswer = state[index]?.trim() || "";
-      if (correctAnswer === studentAnswer) {
+      const correctAnswer = question.answer;
+      const studentAnswer = state[index];
+      if (isAnswerMatched(studentAnswer, correctAnswer)) {
         score++;
       }
     });

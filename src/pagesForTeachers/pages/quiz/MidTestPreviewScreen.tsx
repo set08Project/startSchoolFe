@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { isAnswerMatched } from "../../../lib/utils";
 import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import {
@@ -135,7 +136,7 @@ const MidTestPreviewScreen = () => {
                                 className="radio radio-sm"
                                 type="radio"
                                 onChange={() => handleStateChange(index, el)}
-                                checked={state[index] === el}
+                                checked={isAnswerMatched(state[index], el)}
                               />
                               <label dangerouslySetInnerHTML={{ __html: typeof el === "string"
                                   ? el

@@ -373,7 +373,7 @@ const QuizSetupScreen = () => {
               + Create {currentTerm} Exam
             </button>
             <Link
-              to={`/final-exam-grade/${subjectID}/${examination?.exam?._id}`}
+              to={examination?.exam?._id ? `/final-exam-grade/${subjectID}/${examination?.exam?._id}` : `/final-exam-grade/${subjectID}`}
             >
               <p className="font-medium cursor-pointer text-[12px] bg-orange-500 text-white px-6 py-2 rounded-sm uppercase text-center">
                 + Record Report Card Scores

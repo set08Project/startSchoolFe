@@ -2,6 +2,7 @@
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { isAnswerMatched } from "../../../lib/utils";
 import Button from "../../../components/reUse/Button";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useStudentInfo } from "../../hooks/useStudentHook";
@@ -193,7 +194,7 @@ const QuizResultScreen = () => {
             <div
               key={index}
               className={`p-6 rounded-lg shadow-md border-l-4 ${
-                studentAnswers[index] === correctAnswer
+                isAnswerMatched(studentAnswers[index], correctAnswer)
                   ? "border-green-500 bg-green-50"
                   : "border-red-500 bg-red-50"
               } transition-transform duration-500 hover:scale-105`}
@@ -202,7 +203,7 @@ const QuizResultScreen = () => {
                 <h2 className="lg:text-xl text-[18px] font-semibold text-blue-950 underline">
                   Question {index + 1}
                 </h2>
-                {studentAnswers[index] === correctAnswer ? (
+                {isAnswerMatched(studentAnswers[index], correctAnswer) ? (
                   <FaCheckCircle className="h-6 w-6 text-green-500" />
                 ) : (
                   <FaTimesCircle className="h-6 w-6 text-red-500" />
@@ -210,7 +211,7 @@ const QuizResultScreen = () => {
               </div>
               <p
                 className={`mt-1 text-[14px] font-medium ${
-                  studentAnswers[index] === correctAnswer
+                  isAnswerMatched(studentAnswers[index], correctAnswer)
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
