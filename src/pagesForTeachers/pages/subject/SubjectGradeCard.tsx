@@ -88,12 +88,35 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-  // Find the subject result by searching ALL report cards for a matching subject entry.
-  // This avoids the brittle session/term string match which breaks when schoolAnnouncement
-  // loads asynchronously (resulting in undefined values at first render).
-  const result = gradeData?.reportCard
-    ?.flatMap((card: any) => card.result ?? [])
-    ?.find((el: any) => el.subject === subjectInfo?.subjectTitle);
+  // Find the report card entry for the CURRENT term only.
+  // We match on classInfo which encodes: "<class> session: <session>(<term>)"
+  // Using schoolAnnouncement (presentSession, presentTerm) + subjectInfo.designated.
+  const currentSession = schoolAnnouncement?.presentSession;
+  const currentTerm = schoolAnnouncement?.presentTerm;
+
+  const normalize = (s: string) =>
+    s?.trim().replace(/\s+/g, " ").replace(/\n/g, "").trim();
+
+  const currentReportCard = gradeData?.reportCard?.find((card: any) => {
+    if (!currentSession || !currentTerm || !subjectInfo?.designated) return false;
+    const expected = normalize(
+      `${subjectInfo.designated} session: ${currentSession}(${currentTerm})`
+    );
+    return normalize(card.classInfo) === expected;
+  });
+
+  // Fallback: if term/session not yet loaded, use the LAST report card entry
+  // (most recent term) rather than the first (oldest term).
+  const fallbackCard =
+    gradeData?.reportCard?.length > 0
+      ? gradeData.reportCard[gradeData.reportCard.length - 1]
+      : null;
+
+  const activeCard = currentReportCard ?? fallbackCard;
+
+  const result = activeCard?.result?.find(
+    (el: any) => el.subject === subjectInfo?.subjectTitle
+  );
 
 
   // Use lifted state if available

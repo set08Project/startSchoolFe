@@ -52,6 +52,11 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, upda
   const { schoolInfo } = useSchoolSessionData(data?._id);
   const { data: schoolData } = useSchoolData();
 
+  // Force refresh school data on mount to ensure presentTerm is current (not stale cached)
+  useEffect(() => {
+    mutate(`api/view-school/${schoolData?._id}/seconded-data`);
+  }, []);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const { gradeData } = useStudentGrade(props?._id);
@@ -59,13 +64,18 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, upda
   // Use lifted state
   const studentScores = allScores?.[props?._id] || {};
 
+  // Use schoolInfo (freshly fetched per-school session) as primary source of term/session,
+  // falling back to schoolData to ensure we always match the CURRENT term's report card entry.
+  const currentSession = schoolData?.presentSession || schoolInfo?.[0]?.presentSession;
+  const currentTerm = schoolData?.presentTerm || schoolInfo?.[0]?.presentTerm;
+
   let reportData = gradeData?.reportCard?.find((el: any) => {
     const x = el.classInfo
       ?.trim()
       ?.replace(/\s+/g, " ")
       ?.replace(/\n/g, "")
       .trim();
-    const y = `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
+    const y = `${subjectInfo?.designated} session: ${currentSession}(${currentTerm})`
       ?.trim()
       ?.replace(/\s+/g, " ")
       ?.replace(/\n/g, "")
