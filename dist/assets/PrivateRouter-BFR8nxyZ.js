@@ -1,1 +1,0 @@
-import{aU as a,r as o,c9 as c,j as e,ca as i}from"./index-VZ_8731J.js";const u=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{c()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(i,{to:"/"})})};export{u as default};
