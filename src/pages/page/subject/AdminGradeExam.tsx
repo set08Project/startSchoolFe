@@ -100,12 +100,14 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, upda
     }
   }, [test4, exam, result?.test4, result?.exam]);
 
+  // Sync inputs when DB data loads asynchronously after mount
   useEffect(() => {
     if (result) {
-      setTest4(result.test4?.toString() || "");
-      setExam(result.exam?.toString() || "");
+      // Use != null so 0 values are correctly set (0 is falsy but a valid score)
+      if (result.test4 != null) setTest4(result.test4.toString());
+      if (result.exam != null) setExam(result.exam.toString());
     }
-  }, [result]);
+  }, [result?.test4, result?.exam]);
 
   const readResultData = (props: any) => {
     let readData: any = oneStudentPerformance?.find((el: any) => {

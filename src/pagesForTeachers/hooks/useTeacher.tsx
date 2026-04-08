@@ -892,7 +892,6 @@ export const useStudentGrade = (studentID: string) => {
     x,
     () => {
       return viewStudentGrade(studentID!).then((res) => {
-        
         return res.data;
       });
     },
@@ -900,7 +899,7 @@ export const useStudentGrade = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true, // Always fetch fresh grade data on mount
     }
   );
 

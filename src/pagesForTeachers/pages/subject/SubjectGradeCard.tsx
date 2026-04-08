@@ -8,7 +8,6 @@ import {
   useSchoolClassRMDetail,
   useViewSchoolClassRM,
   useStudentAttendance,
-  useSchoolData,
 } from "../../../pages/hook/useSchoolAuth";
 import {
   useClassStudent,
@@ -43,7 +42,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
   const { subjectID, examID } = useParams();
   const { teacherInfo } = useTeacherInfo();
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
-  const { data: schoolInfoData } = useSchoolData();
   const { subjectInfo } = useSujectInfo(subjectID);
   const { examPerformance } = useExamSubjectPerfomance(examID!);
 
@@ -90,42 +88,35 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
 
   const { gradeData } = useStudentGrade(props?._id);
 
-  // Find the current report card entry
-  const reportData = gradeData?.reportCard?.find((el: any) => {
-    const x = el.classInfo
-      ?.trim()
-      ?.replace(/\s+/g, " ")
-      ?.replace(/\n/g, "")
-      .trim();
-    const currentSessionStr = schoolAnnouncement?.presentSession;
-    const currentTermStr = schoolAnnouncement?.presentTerm;  
-    
-    // We match the DB's format: "ClassName session: SessionYear(TermName)"
-    const y = `${subjectInfo?.designated} session: ${currentSessionStr}(${currentTermStr})`
-      ?.trim()
-      ?.replace(/\s+/g, " ")
-      ?.replace(/\n/g, "")
-      .trim();
+  // Find the subject result by searching ALL report cards for a matching subject entry.
+  // This avoids the brittle session/term string match which breaks when schoolAnnouncement
+  // loads asynchronously (resulting in undefined values at first render).
+  const result = gradeData?.reportCard
+    ?.flatMap((card: any) => card.result ?? [])
+    ?.find((el: any) => el.subject === subjectInfo?.subjectTitle);
 
-    return x === y;
-  });
-
-  // Find the subject result
-  const result = reportData?.result?.find((el: any) => {
-    return el.subject === subjectInfo?.subjectTitle;
-  });
 
   // Use lifted state if available
   const studentScores = allScores?.[props?._id] || {};
 
   const [test4, setTest4] = useState(
-    studentScores.test4 !== undefined ? studentScores.test4 : (result?.test4 ? result.test4.toString() : "")
+    studentScores.test4 !== undefined
+      ? studentScores.test4
+      : result?.test4 != null
+      ? result.test4.toString()
+      : ""
   );
   const [exam, setExam] = useState<string>(
-    studentScores.exam !== undefined ? studentScores.exam : (result?.exam ? result.exam.toString() : "")
+    studentScores.exam !== undefined
+      ? studentScores.exam
+      : result?.exam != null
+      ? result.exam.toString()
+      : ""
   );
   const [teacherComment, setTeacherComment] = useState(
-    studentScores.teacherComment !== undefined ? studentScores.teacherComment : (result?.teacherComment ? result.teacherComment : "")
+    studentScores.teacherComment !== undefined
+      ? studentScores.teacherComment
+      : result?.teacherComment ?? ""
   );
 
   const computedExamDefault =
@@ -147,16 +138,17 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     }
   }, [test4, exam, teacherComment, computedExamDefault, result?.test4, result?.exam]);
 
-  // Keep inputs in sync with DB values when they load/change
+  // Keep inputs in sync with DB values when they async-load after mount
   useEffect(() => {
     if (result) {
-      if (result.test4 !== undefined && result.test4 !== null) {
+      // Use != null to correctly handle 0 values (0 is a valid score)
+      if (result.test4 != null) {
         setTest4(result.test4.toString());
       }
-      if (result.exam !== undefined && result.exam !== null) {
+      if (result.exam != null) {
         setExam(result.exam.toString());
       }
-      if (result.teacherComment !== undefined && result.teacherComment !== null) {
+      if (result.teacherComment != null) {
         setTeacherComment(result.teacherComment);
       }
     }
