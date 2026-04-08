@@ -8,6 +8,7 @@ import {
   useSchoolClassRMDetail,
   useViewSchoolClassRM,
   useStudentAttendance,
+  useSchoolData,
 } from "../../../pages/hook/useSchoolAuth";
 import {
   useClassStudent,
@@ -42,6 +43,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
   const { subjectID, examID } = useParams();
   const { teacherInfo } = useTeacherInfo();
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+  const { data: schoolInfoData } = useSchoolData();
   const { subjectInfo } = useSujectInfo(subjectID);
   const { examPerformance } = useExamSubjectPerfomance(examID!);
 
@@ -95,7 +97,11 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
       ?.replace(/\s+/g, " ")
       ?.replace(/\n/g, "")
       .trim();
-    const y = `${subjectInfo?.designated} session: ${schoolAnnouncement?.presentSession}(${schoolAnnouncement?.presentTerm})`
+    const currentSessionStr = schoolAnnouncement?.presentSession;
+    const currentTermStr = schoolAnnouncement?.presentTerm;  
+    
+    // We match the DB's format: "ClassName session: SessionYear(TermName)"
+    const y = `${subjectInfo?.designated} session: ${currentSessionStr}(${currentTermStr})`
       ?.trim()
       ?.replace(/\s+/g, " ")
       ?.replace(/\n/g, "")
@@ -140,6 +146,21 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
        });
     }
   }, [test4, exam, teacherComment, computedExamDefault, result?.test4, result?.exam]);
+
+  // Keep inputs in sync with DB values when they load/change
+  useEffect(() => {
+    if (result) {
+      if (result.test4 !== undefined && result.test4 !== null) {
+        setTest4(result.test4.toString());
+      }
+      if (result.exam !== undefined && result.exam !== null) {
+        setExam(result.exam.toString());
+      }
+      if (result.teacherComment !== undefined && result.teacherComment !== null) {
+        setTeacherComment(result.teacherComment);
+      }
+    }
+  }, [result?.test4, result?.exam, result?.teacherComment]);
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";

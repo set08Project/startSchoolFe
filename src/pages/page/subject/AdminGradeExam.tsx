@@ -59,6 +59,25 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, upda
   // Use lifted state
   const studentScores = allScores?.[props?._id] || {};
 
+  let reportData = gradeData?.reportCard?.find((el: any) => {
+    const x = el.classInfo
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+    const y = `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
+      ?.trim()
+      ?.replace(/\s+/g, " ")
+      ?.replace(/\n/g, "")
+      .trim();
+
+    return x === y;
+  });
+
+  let result = reportData?.result.find((el: any) => {
+    return el.subject === subjectInfo?.subjectTitle;
+  });
+
   const [test4, setTest4] = useState<string>(
     studentScores.test4 !== undefined ? studentScores.test4 : ""
   );
@@ -80,27 +99,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, teacherID, allScores, upda
        });
     }
   }, [test4, exam, result?.test4, result?.exam]);
-
-  let reportData = gradeData?.reportCard?.find((el: any) => {
-    const x = el.classInfo
-      ?.trim()
-      ?.replace(/\s+/g, " ")
-      ?.replace(/\n/g, "")
-      .trim();
-    const y = `${subjectInfo?.designated} session: ${schoolData?.presentSession}(${schoolData?.presentTerm})`
-      ?.trim()
-      ?.replace(/\s+/g, " ")
-      ?.replace(/\n/g, "")
-      .trim();
-
-    return x === y;
-  });
-
-  console.log("Report Data:: ", reportData);
-
-  let result = reportData?.result.find((el: any) => {
-    return el.subject === subjectInfo?.subjectTitle;
-  });
 
   useEffect(() => {
     if (result) {
