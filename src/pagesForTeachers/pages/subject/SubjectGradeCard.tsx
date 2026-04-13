@@ -16,7 +16,7 @@ import {
   useTeacherInfo,
   useSchoolAnnouncement,
 } from "../../hooks/useTeacher";
-import { createGradeScore } from "../../api/teachersAPI";
+import { createGradeScore, removeGradeScore } from "../../api/teachersAPI";
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -27,6 +27,7 @@ import {
   useOneExamSubjectStudentPerfomance,
 } from "../../hooks/useQuizHook";
 import { ConfirmBulkSaveModal } from "@/components/modals/ConfirmBulkSaveModal";
+import { ConfirmDeleteModal } from "@/components/modals/ConfirmDeleteModal";
 import { Save } from "lucide-react";
 
 interface iProps {
@@ -82,11 +83,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     );
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Local state for immediate display after submission
   const [displayGrade, setDisplayGrade] = useState<any>(null);
 
-  const { gradeData } = useStudentGrade(props?._id);
+  const { gradeData, mutate: updateGradeData } = useStudentGrade(props?._id);
 
   // Find the report card entry for the CURRENT term only.
   // We match on classInfo which encodes: "<class> session: <session>(<term>)"
@@ -262,6 +265,46 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     }
   };
 
+  const handleDeleteClick = () => {
+      setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+      const res = await removeGradeScore(props?._id, subjectInfo?.subjectTitle);
+      
+      if (res) {
+          // Construct optimistic update
+          const updatedGradeData = { ...gradeData };
+          const reportIndex = updatedGradeData?.reportCard?.findIndex((r: any) => r._id === res._id);
+          
+          if (reportIndex !== -1 && updatedGradeData?.reportCard) {
+            updatedGradeData.reportCard[reportIndex] = res;
+            await updateGradeData(updatedGradeData);
+          } else {
+             await mutate(`api/student-report-card/${props?._id}`); 
+          }
+      }
+
+      // Clear local state
+      setDisplayGrade(null);
+      setTest4("");
+      setExam("");
+      setTeacherComment("");
+      
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      
+      toast.success("Grade removed successfully");
+    } catch (error) {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      toast.error("Failed to remove grade.");
+      console.error(error);
+    }
+  };
+
   // Use displayGrade if available, otherwise fall back to result from database
   const currentResult = displayGrade || result;
 
@@ -375,8 +418,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
         />
       </div>
 
-      {/* Submit Button */}
-      <div className="w-[180px] relative">
+      <div className="w-[180px] relative flex gap-2">
         <Button
           name={loading ? "Loading..." : "Add Score"}
           icon={
@@ -386,9 +428,27 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
           }
           className={`pl-4 py-3 w-[85%] bg-black text-white hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
           onClick={makeGrade}
-          disabled={loading || !canEdit}
+          disabled={loading || !canEdit || ((!test4 || test4 === "0") && (!exam || exam === "0") && (!teacherComment || teacherComment.trim() === ""))}
         />
+        {result && canEdit && (
+          <div 
+            onClick={handleDeleteClick}
+            className="w-10 h-10 rounded-md bg-red-50 text-red-600 flex items-center justify-center cursor-pointer hover:bg-red-100 transition-colors mt-2"
+            title="Remove Score"
+          >
+            {isDeleting ? <ClipLoader color="red" size={12} /> : "🗑️"}
+          </div>
+        )}
       </div>
+
+      <ConfirmDeleteModal 
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Remove Grade Score?"
+        message={`Are you sure you want to remove the ${subjectInfo?.subjectTitle} score for ${props?.studentFirstName} ${props?.studentLastName}? This action cannot be undone.`}
+        loading={isDeleting}
+      />
     </div>
   );
 };

@@ -412,7 +412,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
           }
           className="pl-4 py-3 w-[85%] bg-black text-white hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={makeGrade}
-          disabled={loading}
+          disabled={loading || ((!test4 || test4 === "0") && (!exam || exam === "0") && (!teacherComment || teacherComment.trim() === ""))}
         />
         {result && (
           <div 

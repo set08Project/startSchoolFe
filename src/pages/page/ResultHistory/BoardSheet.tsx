@@ -535,7 +535,7 @@ const SubjectScore: FC<SubjectScoreProps> = ({
   const { schoolInfo } = useSchoolSessionData(student?.schoolIDs);
 
   const result = gradeData?.reportCard?.find((el: any) => {
-    return el.classInfo === classInfo || ` ${classInfo}`;
+    return el.classInfo?.trim() === classInfo;
   });
 
   const subjectResult = result?.result?.find(
@@ -587,7 +587,7 @@ const StudentRow: FC<StudentRowProps> = ({
   const { gradeData } = useStudentGrade(student?._id);
 
   const studentResult = gradeData?.reportCard?.find((el: any) => {
-    return el.classInfo.trim() === classInfo || ` ${classInfo}`;
+    return el.classInfo?.trim() === classInfo;
   });
 
   const results = studentResult?.result || [];
@@ -721,7 +721,7 @@ const BroadSheetReportCardApproved: FC = () => {
 
   const classInfo = `${oneClass?.className?.trim() || ""} session: ${
     data?.presentSession || ""
-  }(${oneClass?.presentTerm || ""})`.trim();
+  }(${data?.data?.presentTerm || data?.presentTerm || ""})`.trim();
 
   const sortedSubjects = lodash.sortBy(
     subjectData?.classSubjects || [],

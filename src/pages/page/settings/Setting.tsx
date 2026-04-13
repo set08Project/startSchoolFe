@@ -261,6 +261,60 @@ const SettingScreen: FC = () => {
           );
         })}
       </div>
+
+      
+<div className="mt-5">
+  <hr/>
+</div>
+
+
+
+        <p className="text-lg font-semibold mb-4 mt-10">Administrative Permissions</p>
+
+        {/* Grading Permission Toggle */}
+        <div className="border rounded-lg p-6 bg-white shadow-md max-w-4xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-semibold text-blue-950">
+                Class Teacher Grading Access
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Toggle whether Class Teachers are allowed to enter or edit scores for subjects they do not teach personally.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              {gradingLoading && <FaSpinner className="animate-spin text-blue-950" />}
+              <div 
+                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
+                  data?.allowClassTeacherGrading ? "bg-green-500" : "bg-gray-300"
+                }`}
+                onClick={async () => {
+                  if (gradingLoading) return;
+                  setGradingLoading(true);
+                  try {
+                    const res = await updateClassTeacherGradingToggle(data?._id, !data?.allowClassTeacherGrading);
+                    if (res.status === 201) {
+                      toast.success(`Permission ${!data?.allowClassTeacherGrading ? 'Enabled' : 'Disabled'} Successfully`);
+                      mutate(`api/view-school/${data?._id}`);
+                    }
+                  } catch (err) {
+                    toast.error("Failed to update setting");
+                  } finally {
+                    setGradingLoading(false);
+                  }
+                }}
+              >
+                <div 
+                  className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${
+                    data?.allowClassTeacherGrading ? "translate-x-6" : ""
+                  }`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       <main className="flex flex-col w-full">
         <div className="my-10 border-t" />
         <p className="text-lg font-semibold mb-4">Team's Data</p>
@@ -593,51 +647,9 @@ const SettingScreen: FC = () => {
           />
         </div>
 
-        <p className="text-lg font-semibold mb-4 mt-10">Administrative Permissions</p>
-
-        {/* Grading Permission Toggle */}
-        <div className="border rounded-lg p-6 bg-white shadow-md max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-semibold text-blue-950">
-                Class Teacher Grading Access
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">
-                Toggle whether Class Teachers are allowed to enter or edit scores for subjects they do not teach personally.
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              {gradingLoading && <FaSpinner className="animate-spin text-blue-950" />}
-              <div 
-                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  data?.allowClassTeacherGrading ? "bg-green-500" : "bg-gray-300"
-                }`}
-                onClick={async () => {
-                  if (gradingLoading) return;
-                  setGradingLoading(true);
-                  try {
-                    const res = await updateClassTeacherGradingToggle(data?._id, !data?.allowClassTeacherGrading);
-                    if (res.status === 201) {
-                      toast.success(`Permission ${!data?.allowClassTeacherGrading ? 'Enabled' : 'Disabled'} Successfully`);
-                      mutate(`api/view-school/${data?._id}`);
-                    }
-                  } catch (err) {
-                    toast.error("Failed to update setting");
-                  } finally {
-                    setGradingLoading(false);
-                  }
-                }}
-              >
-                <div 
-                  className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${
-                    data?.allowClassTeacherGrading ? "translate-x-6" : ""
-                  }`}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
+
+
       <div className="flex-1 " />
       <div className="flex justify-end gap-4">
         <label
