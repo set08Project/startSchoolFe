@@ -65,7 +65,21 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const studentInfo =
     propStudentInfo || stateData.studentInfo || hookStudentInfo;
 
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard[0];
+  const { schoolAnnouncement }: any = useSchoolAnnouncement(
+    studentInfo?.schoolIDs
+  );
+  let school: any = schoolAnnouncement;
+
+  const grade =
+    propGrade ||
+    stateData.grade ||
+    hookGradeData?.reportCard?.find((el: any) => {
+      return (
+        el.classInfo ===
+        `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
+      );
+    }) ||
+    hookGradeData?.reportCard?.[0];
 
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
@@ -113,16 +127,11 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
   const subjects = propSubjectData?.students || defaultSubjects;
 
-  const { schoolAnnouncement }: any = useSchoolAnnouncement(
-    studentInfo?.schoolIDs
-  );
-
   const { gradeData } = useStudentGrade(studentID);
   const { subjectData: hookSubjectData } = useClassSubject(
     studentInfo?.presentClassID
   );
 
-  let school: any = schoolAnnouncement;
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
 
