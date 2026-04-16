@@ -6,6 +6,7 @@ import Button from "../../../components/reUse/Button";
 import LittleHeader from "../../../components/static/LittleHeader";
 import moment from "moment";
 import { FC, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   useSchoolSessionData,
   useStudentAttendance,
@@ -104,7 +105,7 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     });
 
   return (
-    <div className="w-[260px] border-r-2 border-blue-950 py-3 ">
+    <div className="w-[260px] shrink-0 border-r-2 border-blue-950 py-3 ">
       <div>
         <div className=" flex ">
           <div className="w-[260px]  ">
@@ -155,13 +156,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
 
   return (
     <div
-      className={`w-full flex items-center gap-2 text-[12px] font-medium  h-24 px-4 my-2  overflow-hidden ${
+      className={`min-w-max w-max flex items-center gap-2 text-[12px] font-medium  h-24 px-4 my-2  overflow-hidden ${
         i % 2 === 0 ? "bg-slate-50" : "bg-white"
       }`}
     >
-      <div className={`w-[100px] border-r font-bold`}>{i + 1}</div>
+      <div className={`w-[100px] shrink-0 border-r font-bold`}>{i + 1}</div>
       {/* name */}
-      <div className="w-[250px] flex border-r">
+      <div className="w-[250px] shrink-0 flex border-r">
         <div className="flex gap-2">
           <img
             className=" mask mask-squircle w-14 h-14 rounded-md border object-cover"
@@ -187,11 +188,18 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
           </div>
         </div>
       </div>
-      <div className="w-[100px] border-r">
+      <div className="w-[100px] shrink-0 border-r">
         <AttendanceRatio mainData={mainData} />
       </div>
-      <div className="w-[100px] border-r">{props?.points}</div>
-      <div className="w-[100px] border-r text-[15px] leading-tight font-bold">
+
+      <div className="w-[100px] shrink-0 border-r flex justify-center items-center">
+        <Link to={`/print-result?classInfo=${encodeURIComponent(props?.classInfo || "")}`}>
+          <Button name="View Result" className="text-[10px] py-2 px-3 bg-blue-950 text-white" />
+        </Link>
+      </div>
+
+      <div className="w-[100px] shrink-0 border-r">{props?.points}</div>
+      <div className="w-[100px] shrink-0 border-r text-[15px] leading-tight font-bold">
         {props?.grade !== "Not Recorded Yet" ? (
           props?.grade
         ) : (
@@ -200,11 +208,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
       </div>
 
       <div
-        className={`w-[${
-          subjectData?.classSubjects.length * 260
-        }px]  border-r items-center flex`}
+        className={`shrink-0 border-r items-center flex`}
       >
-        <div className="flex gap-4 ">
+        <div className="flex gap-4 min-w-max">
           {lodash.sortBy(props?.result, "subject")?.map((el: any) => (
             <SubjectScore props={props} el={el} />
           ))}
@@ -248,31 +254,43 @@ const CardReportHistory = () => {
 
       <div className="mt-10" />
 
-      <div className="flex w-full justify-end"></div>
-      <div className="py-6 px-2 border rounded-md min-w-[300px] overflow-y-hidden ">
+      <div className="flex w-full justify-end mb-4">
+        <Link to="/print-result">
+          <Button
+            name="View Report Card"
+            className="bg-blue-950 text-white hover:bg-blue-900 transition-all duration-300"
+          />
+        </Link>
+      </div>
+      <div 
+        className="py-6 px-2 border rounded-md w-full max-w-full overflow-y-hidden overflow-x-auto"
+        style={{ maxWidth: "calc(100vw - 250px)" }}
+      >
         <div
-          className={`text-[gray] flex  gap-2 text-[12px] font-medium uppercase mb-10 px-4`}
+          className={`text-[gray] flex gap-2 text-[12px] shrink-0 font-medium uppercase mb-10 px-4 min-w-max`}
           style={{
-            width: `${1000 + subjectData?.classSubjects.length * 260}px`,
+            minWidth: `${1100 + (subjectData?.classSubjects?.length || 0) * 260}px`,
           }}
         >
-          <div className="w-[100px] border-r">Sequence </div>
-          <div className="w-[250px] border-r">student Info</div>
-          <div className="w-[100px] border-r">Student's Attendance Ratio</div>
-          <div className="w-[100px] border-r">Class Performance</div>
-          <div className="w-[100px] border-r">Class Grade</div>
+          <div className="w-[100px] shrink-0 border-r">Sequence </div>
+          <div className="w-[250px] shrink-0 border-r">student Info</div>
+          <div className="w-[100px] shrink-0 border-r">Student's Attendance Ratio</div>
+          <div className="w-[100px] shrink-0 border-r">Action</div>
+          <div className="w-[100px] shrink-0 border-r">Class Performance</div>
+          <div className="w-[100px] shrink-0 border-r">Class Grade</div>
           {/* 260px */}
           <div
-            className={`w-[${
-              subjectData?.classSubjects.length * 260
-            }px] border-r`}
+            className={`border-r`}
+            style={{
+              minWidth: `${(subjectData?.classSubjects?.length || 0) * 260}px`
+            }}
           />
         </div>
 
         <div
-          className={` overflow-hidden`}
+          className={` overflow-hidden min-w-max`}
           style={{
-            width: `${1000 + subjectData?.classSubjects.length * 260}px`,
+            minWidth: `${1100 + (subjectData?.classSubjects?.length || 0) * 260}px`,
           }}
         >
           {gradeData?.reportCard?.length > 0 ? (

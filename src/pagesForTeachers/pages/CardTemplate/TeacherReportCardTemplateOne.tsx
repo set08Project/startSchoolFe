@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSpinner } from "react-icons/fa6";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 // import {
 //   useReadOneClassInfo,
 //   useStudentInfo,
@@ -70,10 +70,16 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   );
   let school: any = schoolAnnouncement;
 
+  const [searchParams] = useSearchParams();
+  const queryClassInfo = searchParams.get("classInfo");
+
   const grade =
     propGrade ||
     stateData.grade ||
     hookGradeData?.reportCard?.find((el: any) => {
+      if (queryClassInfo) {
+        return el.classInfo === queryClassInfo;
+      }
       return (
         el.classInfo ===
         `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`

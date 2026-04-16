@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSpinner } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import {
   useReadOneClassInfo,
   useSchoolArticle,
@@ -73,17 +73,21 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
 
     console.log("view data: ", timetbale)
 
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.find((el:any)=>{
-    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
+  const [searchParams] = useSearchParams();
+  const queryClassInfo = searchParams.get("classInfo");
 
+  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.find((el:any)=>{
+    if (queryClassInfo) {
+      return el.classInfo === queryClassInfo;
+    }
+    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
   });
 
-
-
-
   console.log("DataII ", hookGradeData?.reportCard?.find((el:any)=>{
+    if (queryClassInfo) {
+      return el.classInfo === queryClassInfo;
+    }
     return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
-
   }))
 
 
