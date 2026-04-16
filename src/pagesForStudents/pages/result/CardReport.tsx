@@ -87,30 +87,24 @@ const SubjectScore: FC<iProps> = ({ props, el }) => {
     });
 
   return (
-    <div className="w-[260px] shrink-0 border-r-2 border-blue-950 py-3 ">
+    <div className="w-[180px] shrink-0 border-r-2 border-blue-950 py-3 ">
       <div>
         <div className=" flex ">
-          <div className="w-[260px]  ">
+          <div className="w-[180px]  ">
             <p className="pl-3 font-bold text-[15px]">{el?.subject}</p>
             <div className="pl-1 flex gap-1 mt-2 text-[10px] ">
-              <p className="w-[30px] border-r">1st</p>
-              <p className="w-[30px] border-r">2nd</p>
-              <p className="w-[30px] border-r">3rd</p>
-              <p className="w-[30px] border-r">4th</p>
-              <p className="w-[35px] border-r">Exam</p>
-              <p className="w-[35px] ">Total</p>
+              <p className="w-[40px] border-r">Test</p>
+              <p className="w-[40px] border-r">Exam</p>
+              <p className="w-[40px] ">Total</p>
               <p className="w-[35px] ">Grade</p>
             </div>
           </div>
         </div>
       </div>
       <div className="pl-1 flex gap-1 mt-2 text-[12px] ">
-        <p className="w-[30px] border-r">{el?.test1 ? el?.test1 : 0}</p>
-        <p className="w-[30px] border-r">{el?.test2 ? el?.test2 : 0}</p>
-        <p className="w-[30px] border-r">{el?.test3 ? el?.test3 : 0}</p>
-        <p className="w-[30px] border-r">{el?.test4 ? el?.test4 : 0}</p>
-        <p className="w-[35px] border-r">{el?.exam ? el?.exam : 0}</p>
-        <p className="w-[35px] font-bold border-r">{el?.mark ? el?.mark : 0}</p>
+        <p className="w-[40px] border-r">{el?.test4 ? el?.test4 : 0}</p>
+        <p className="w-[40px] border-r">{el?.exam ? el?.exam : 0}</p>
+        <p className="w-[40px] font-bold border-r">{el?.mark ? el?.mark : 0}</p>
         <p className="w-[35px] font-bold">{el?.grade ? el?.grade : "Nill"}</p>
       </div>
     </div>
@@ -254,7 +248,7 @@ const CardReportHistory = () => {
           
           <div className="flex gap-4">
             {subjectData?.classSubjects?.map((el: any, i: number) => (
-              <div key={i} className="w-[260px] shrink-0 border-r-2 border-slate-200">
+              <div key={i} className="w-[180px] shrink-0 border-r-2 border-slate-200">
                 {el?.subjectTitle}
               </div>
             ))}
