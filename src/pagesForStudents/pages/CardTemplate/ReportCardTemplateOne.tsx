@@ -902,7 +902,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                         <Label className="text-xs">
                           Position:{" "}
                           <span className="text-sm font-semibold mt-1">
-                            <span className="text-xs font-bold">
+                            {/* <span className="text-xs font-bold">
                               {formatOrdinal(positionLabel)} of{" "}
                               {subjectData?.students?.length ?? "N/A"}
                               {percentLabel != null && (
@@ -915,7 +915,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                                   (computing...)
                                 </span>
                               ) : null}
-                            </span>
+                            </span> */}
                           </span>
                         </Label>
                       </td>

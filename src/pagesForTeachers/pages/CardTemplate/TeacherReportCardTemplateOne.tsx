@@ -816,13 +816,13 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                           Position:{" "}
                           <span className="text-sm font-semibold mt-1">
                             <span className="text-xs font-bold">
-                              {formatOrdinal(positionLabel)} of{" "}
+                              {/* {formatOrdinal(positionLabel)} of{" "}
                               {subjectData?.students?.length ?? "N/A"}
                               {!positionLabel ? (
                                 <span className="text-xs italic ml-2">
                                   (computing...)
                                 </span>
-                              ) : null}
+                              ) : null} */}
                             </span>
                           </span>
                         </Label>
@@ -987,8 +987,8 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
             </div>
 
             {/* Comments and Signatures */}
-            <div className="border-t my-5" />
-            <div className="space-y-3">
+            <div className="border-t my-1" />
+            <div className="space-y-1">
               <div className="grid grid-cols-2 gap-12 ">
                 <div>
                   <Label className="text-xs font-semibold">
@@ -999,7 +999,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       </span>
                     </p>
                   </Label>
-                  <div className="w-full  border-gray-300 rounded leading-5 text-sm italic mt-1 h-16">
+                  <div className="w-full  border-gray-300 rounded leading-5 text-sm italic mt-1 h-10">
                     {grade?.classTeacherComment}
                   </div>
                 </div>
@@ -1023,7 +1023,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       {school?.name} {school?.name2}
                     </p>
                   </Label>
-                  <div className="w-full border-gray-300 rounded leading-5 text-sm italic mt-1 h-16 ">
+                  <div className="w-full border-gray-300 rounded leading-5 text-sm italic mt-1 h-10 ">
                     {" "}
                     {grade?.adminComment}
                   </div>
@@ -1036,7 +1036,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                     </span>
                     )
                   </Label>
-                  <div className="w-[160px] h-[60px] border mt-2">
+                  <div className="w-[120px] h-[40px] border mt-1">
                     <img
                       src={school?.signature}
                       className="w-full h-full object-contain"
