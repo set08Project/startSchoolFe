@@ -262,47 +262,37 @@ const CardReportHistory = () => {
           />
         </Link>
       </div>
-      <div 
-        className="py-6 px-2 border rounded-md w-full max-w-full overflow-y-hidden overflow-x-auto"
-        style={{ maxWidth: "calc(100vw - 250px)" }}
-      >
-        <div
-          className={`text-[gray] flex gap-2 text-[12px] shrink-0 font-medium uppercase mb-10 px-4 min-w-max`}
-          style={{
-            minWidth: `${1100 + (subjectData?.classSubjects?.length || 0) * 260}px`,
-          }}
-        >
+      <div className="py-6 px-2 border rounded-md w-full overflow-x-auto min-w-0">
+        <div className="text-[gray] flex gap-2 text-[12px] shrink-0 font-medium uppercase mb-10 px-4 w-max">
           <div className="w-[100px] shrink-0 border-r">Sequence </div>
           <div className="w-[250px] shrink-0 border-r">student Info</div>
           <div className="w-[100px] shrink-0 border-r">Student's Attendance Ratio</div>
-          <div className="w-[100px] shrink-0 border-r">Action</div>
-          <div className="w-[100px] shrink-0 border-r">Class Performance</div>
-          <div className="w-[100px] shrink-0 border-r">Class Grade</div>
-          {/* 260px */}
-          <div
-            className={`border-r`}
-            style={{
-              minWidth: `${(subjectData?.classSubjects?.length || 0) * 260}px`
-            }}
-          />
+          <div className="w-[100px] shrink-0 border-r text-center">Action</div>
+          <div className="w-[100px] shrink-0 border-r text-center">Class Performance</div>
+          <div className="w-[100px] shrink-0 border-r text-center">Class Grade</div>
+          
+          <div className="flex gap-4">
+            {subjectData?.classSubjects?.map((el: any, i: number) => (
+              <div key={i} className="w-[260px] shrink-0 border-r-2 border-slate-200">
+                {el?.subjectTitle}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div
-          className={` overflow-hidden min-w-max`}
-          style={{
-            minWidth: `${1100 + (subjectData?.classSubjects?.length || 0) * 260}px`,
-          }}
-        >
+        <div className="overflow-visible w-max">
           {gradeData?.reportCard?.length > 0 ? (
             <div>
               {gradeData?.reportCard?.map((props: any, i: number) => (
-                <div key={props}>
+                <div key={`${props?._id}-${i}`}>
                   <MainStudentRow props={props} i={i} mainData={gradeData} />
                 </div>
               ))}
             </div>
           ) : (
-            <div>No student yet</div>
+            <div className="flex flex-col items-center justify-center px-4 py-8 mt-4">
+              <p className="text-[12px] font-medium">No Result Yet</p>
+            </div>
           )}
         </div>
       </div>
