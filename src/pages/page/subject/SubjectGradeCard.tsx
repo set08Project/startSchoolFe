@@ -50,11 +50,21 @@ interface iProps {
 
 const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
   const { subjectID, examID } = useParams();
-  // const { teacherInfo } = useTeacherInfo();
   const { data } = useSchoolData();
   const { schoolAnnouncement } = useSchoolAnnouncement(data?._id);
   const { subjectInfo } = useSujectInfo(subjectID);
-  const { examPerformance } = useExamSubjectPerfomance(examID!);
+
+  const activeExamID = examID || (subjectInfo?.examination?.length > 0 
+    ? subjectInfo.examination[subjectInfo.examination.length - 1] 
+    : undefined);
+  
+  const { examPerformance } = useExamSubjectPerfomance(activeExamID!);
+
+  const { oneStudentPerformanceExam: oneStudentPerformance } =
+    useOneExamSubjectStudentPerfomance(
+      subjectID,
+      activeExamID
+    );
 
   // console.clear()
   // console.log(examPerformance?.performance)
@@ -70,9 +80,9 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     .trim()
     .toLowerCase();
 
-  const performanceList: any[] = Array.isArray(examPerformance)
-    ? examPerformance
-    : examPerformance?.performance ?? [];
+  const performanceList: any[] = Array.isArray(oneStudentPerformance)
+    ? oneStudentPerformance
+    : oneStudentPerformance?.performance ?? [];
 
   const matchedPerformance =
     performanceList.find((p: any) => {
@@ -85,11 +95,6 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     matchedPerformance?.studentScore *
     parseInt(matchedPerformance?.markPerQuestion);
 
-  const { oneStudentPerformanceExam: oneStudentPerformance } =
-    useOneExamSubjectStudentPerfomance(
-      subjectID,
-      subjectInfo?.examination[subjectInfo?.examination.length - 1]
-    );
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

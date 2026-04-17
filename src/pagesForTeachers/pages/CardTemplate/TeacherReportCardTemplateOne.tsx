@@ -80,12 +80,15 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
       if (queryClassInfo) {
         return el.classInfo === queryClassInfo;
       }
-      return (
-        el.classInfo ===
+      const normalize = (s: string) =>
+        s?.trim().replace(/\s+/g, " ").replace(/\n/g, "").trim();
+
+      const expected = normalize(
         `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
       );
-    }) ||
-    hookGradeData?.reportCard?.[0];
+
+      return normalize(el.classInfo) === expected;
+    });
 
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
@@ -143,12 +146,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
   const totalScore =
     grade?.result?.reduce((acc: number, el: any) => {
-      const subjectTotal =
-        (el.test1 ?? 0) +
-        (el.test2 ?? 0) +
-        (el.test3 ?? 0) +
-        (el.test4 ?? 0) +
-        (el.exam ?? 0);
+      const subjectTotal = el.mark ?? (el.test4 ?? 0) + (el.exam ?? 0);
       return acc + subjectTotal;
     }, 0) ?? 0;
 
@@ -222,32 +220,14 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
               const infos = (reportArray || []).map((r: any) => r?.classInfo);
               const report = reportArray.find((el: any) => {
-                const info = normalize(el?.classInfo || "");
-                const matchesClass =
-                  (classAssignedNorm && info.includes(classAssignedNorm)) ||
-                  (targetClassInfo && info.includes(targetClassInfo)) ||
-                  (compact(info) &&
-                    compact(info).includes(compact(classAssignedNorm))) ||
-                  (targetClassInfo &&
-                    compact(info).includes(compact(targetClassInfo)));
-                const matchesSessionOrTerm =
-                  (sessionNorm && info.includes(sessionNorm)) ||
-                  (termNorm && info.includes(termNorm));
-                const found =
-                  matchesClass &&
-                  (matchesSessionOrTerm ||
-                    (school?.presentSession &&
-                      info.includes(
-                        normalize(String(school?.presentSession))
-                      )));
-                if (!found)
-                  console.log(
-                    "ReportCardTemplateOne - skipped report for student",
-                    sid,
-                    "classInfo:",
-                    el?.classInfo
-                  );
-                return found;
+                if (!school?.presentSession || !school?.presentTerm) return false;
+                const normalize = (s: string) =>
+                  s?.trim().replace(/\s+/g, " ").replace(/\n/g, "").trim();
+
+                const expected = normalize(
+                  `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
+                );
+                return normalize(el.classInfo) === expected;
               });
 
               // Skip if no matching report found OR if report has no results
@@ -261,14 +241,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
               }
 
               const tot = report.result.reduce((acc: number, r: any) => {
-                return (
-                  acc +
-                  (r.test1 || 0) +
-                  (r.test2 || 0) +
-                  (r.test3 || 0) +
-                  (r.test4 || 0) +
-                  (r.exam || 0)
-                );
+                return acc + (r.mark ?? (r.test4 || 0) + (r.exam || 0));
               }, 0);
               totals.push({
                 id: sid,
@@ -822,13 +795,13 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                           Position:{" "}
                           <span className="text-sm font-semibold mt-1">
                             <span className="text-xs font-bold">
-                              {/* {formatOrdinal(positionLabel)} of{" "}
+                               {formatOrdinal(positionLabel)} of{" "}
                               {subjectData?.students?.length ?? "N/A"}
                               {!positionLabel ? (
                                 <span className="text-xs italic ml-2">
                                   (computing...)
                                 </span>
-                              ) : null} */}
+                              ) : null}
                             </span>
                           </span>
                         </Label>

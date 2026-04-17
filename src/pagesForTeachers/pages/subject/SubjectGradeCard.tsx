@@ -44,7 +44,12 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
   const { teacherInfo } = useTeacherInfo();
   const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
   const { subjectInfo } = useSujectInfo(subjectID);
-  const { examPerformance } = useExamSubjectPerfomance(examID!);
+
+  const activeExamID = examID || (subjectInfo?.examination?.length > 0 
+    ? subjectInfo.examination[subjectInfo.examination.length - 1] 
+    : undefined);
+
+  const { examPerformance } = useExamSubjectPerfomance(activeExamID);
 
   // console.clear()
   // console.log(examPerformance?.performance)
@@ -101,21 +106,17 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     s?.trim().replace(/\s+/g, " ").replace(/\n/g, "").trim();
 
   const currentReportCard = gradeData?.reportCard?.find((card: any) => {
-    if (!currentSession || !currentTerm || !subjectInfo?.designated) return false;
+    if (!currentSession || !currentTerm) return false;
+    const normalize = (s: string) =>
+      s?.trim().replace(/\s+/g, " ").replace(/\n/g, "").trim();
+
     const expected = normalize(
-      `${subjectInfo.designated} session: ${currentSession}(${currentTerm})`
+      `${props?.classAssigned || subjectInfo?.designated} session: ${currentSession}(${currentTerm})`
     );
     return normalize(card.classInfo) === expected;
   });
 
-  // Fallback: if term/session not yet loaded, use the LAST report card entry
-  // (most recent term) rather than the first (oldest term).
-  const fallbackCard =
-    gradeData?.reportCard?.length > 0
-      ? gradeData.reportCard[gradeData.reportCard.length - 1]
-      : null;
-
-  const activeCard = currentReportCard ?? fallbackCard;
+  const activeCard = currentReportCard;
 
   const result = activeCard?.result?.find(
     (el: any) => el.subject === subjectInfo?.subjectTitle
@@ -135,17 +136,12 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
   const [test4, setTest4] = useState(
     studentScores.test4 !== undefined
       ? studentScores.test4
-      : result?.test4 != null
-      ? result.test4.toString()
-      : ""
+      : (result?.test4 !== undefined && result?.test4 !== null ? result.test4.toString() : "")
   );
   const [exam, setExam] = useState<string>(
-    studentScores.exam !== undefined
-      ? studentScores.exam
-      : result?.exam != null
-      ? result.exam.toString()
-      : ""
+    studentScores.exam !== undefined ? studentScores.exam : ""
   );
+  const [isEditingExam, setIsEditingExam] = useState<boolean>(false);
   const [teacherComment, setTeacherComment] = useState(
     studentScores.teacherComment !== undefined
       ? studentScores.teacherComment
@@ -171,21 +167,21 @@ const MainStudentRow: FC<iProps> = ({ props, i, allScores, updateScore }) => {
     }
   }, [test4, exam, teacherComment, computedExamDefault, result?.test4, result?.exam]);
 
-  // Keep inputs in sync with DB values when they async-load after mount
+  // Sync exam with CBT score or DB value
   useEffect(() => {
-    if (result) {
-      // Use != null to correctly handle 0 values (0 is a valid score)
-      if (result.test4 != null) {
-        setTest4(result.test4.toString());
+    try {
+      // If user hasn't typed anything, reflect the server value or the computed default
+      if (!isEditingExam && exam === "") {
+        if (result?.exam !== undefined && result?.exam !== null) {
+          setExam(String(result.exam));
+        } else if (computedExamDefault !== "") {
+          setExam(computedExamDefault);
+        }
       }
-      if (result.exam != null) {
-        setExam(result.exam.toString());
-      }
-      if (result.teacherComment != null) {
-        setTeacherComment(result.teacherComment);
-      }
+    } catch (err) {
+      console.error("sync exam effect error:", err);
     }
-  }, [result?.test4, result?.exam, result?.teacherComment]);
+  }, [result?.exam, computedExamDefault, exam, isEditingExam]);
   // Calculate grade based on total marks
   const calculateGrade = (totalMark: number): string => {
     if (totalMark >= 90) return "A+";
