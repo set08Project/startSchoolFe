@@ -1,7 +1,12 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useSchoolAnnouncement, useSchoolEvent } from "../hook/useSchoolAuth";
+import {
+  useSchoolAnnouncement,
+  useSchoolData,
+  useSchoolEvent,
+  useViewSingleSession,
+} from "../hook/useSchoolAuth";
 import lodash from "lodash";
 import moment from "moment";
 import { MdChecklist } from "react-icons/md";
@@ -17,9 +22,31 @@ const Announcement = () => {
   };
   const { schoolAnnouncement, mutate } = useSchoolAnnouncement();
   const { schoolEvent } = useSchoolEvent();
+  const { data: schoolData } = useSchoolData();
+  const { sessionData } = useViewSingleSession(schoolData?.presentSessionID!);
 
-  let announce = schoolAnnouncement?.announcements?.slice(0, 5);
-  let eve = schoolEvent?.events?.slice(0, 5);
+  const termData = sessionData?.term?.[0];
+
+  let announce = schoolAnnouncement?.announcements
+    ?.filter((el: any) => {
+      if (termData?.createdAt) {
+        return moment(el.createdAt).isSameOrAfter(
+          moment(termData?.createdAt).subtract(1, "day")
+        );
+      }
+      return true;
+    })
+    ?.slice(0, 5);
+  let eve = schoolEvent?.events
+    ?.filter((el: any) => {
+      if (termData?.createdAt) {
+        return moment(el.createdAt).isSameOrAfter(
+          moment(termData?.createdAt).subtract(1, "day")
+        );
+      }
+      return true;
+    })
+    ?.slice(0, 5);
 
   let reader: Array<{}> = [];
   let value = reader.concat(announce, eve);
@@ -29,7 +56,7 @@ const Announcement = () => {
   // mutate(`api/view-announcement/${dataID}`, announcementData, false);
   return (
     <div className="w-90% mx-7">
-      {data1?.length > 0 ? (
+      {data?.length > 0 ? (
         <Slider {...settings}>
           {data?.map((props: any, i: number) => (
             <div className="px-5" key={i}>

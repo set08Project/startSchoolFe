@@ -70,7 +70,7 @@ const MakeComplains: FC<iProps> = ({ props }) => {
             <div className="text-[20px] mr-[10px]">
               <MdOutlineMarkChatRead />
             </div>
-            <div>Make Complains</div>
+            <div  className="text-left">Make Complains</div>
           </div>
         </label>
         <div className="" />

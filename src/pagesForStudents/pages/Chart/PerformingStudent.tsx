@@ -34,11 +34,10 @@ const StudentPerformance = () => {
   const { oneClass } = useReadOneClassInfo(studentInfo?.presentClassID);
   const { classStudents } = useClassStudent(oneClass?._id);
 
-  const rate = lodash.sortBy(classStudents?.students, [
-    (el: any) => {
-      return el.totalPerformance;
-    },
-  ]);
+  const rate =
+    oneClass?.topStudents?.length > 0
+      ? oneClass?.topStudents
+      : lodash.orderBy(classStudents?.students, ["totalPerformance"], ["desc"]);
 
   return (
     <div className="">

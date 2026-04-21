@@ -10,6 +10,7 @@ import {
   useSchoolAnnouncement,
   useSchoolEvent,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { useSchool, useViewSingleSession } from "../../../pages/hook/useSchoolAuth";
 
 const GetAnnouncement = () => {
   var settings = {
@@ -24,8 +25,31 @@ const GetAnnouncement = () => {
   const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs!);
   const { schoolEvent } = useSchoolEvent(studentInfo?.schoolIDs!);
 
-  let announce = schoolAnnouncement?.announcements?.slice(0, 5);
-  let eve = schoolEvent?.events?.slice(0, 5);
+  const { data: schoolData } = useSchool(studentInfo?.schoolIDs!);
+  const { sessionData } = useViewSingleSession(schoolData?.presentSessionID!);
+
+  const termData = sessionData?.term?.[0];
+
+  let announce = schoolAnnouncement?.announcements
+    ?.filter((el: any) => {
+      if (termData?.createdAt) {
+        return moment(el.createdAt).isSameOrAfter(
+          moment(termData?.createdAt).subtract(1, "day")
+        );
+      }
+      return true;
+    })
+    ?.slice(0, 5);
+  let eve = schoolEvent?.events
+    ?.filter((el: any) => {
+      if (termData?.createdAt) {
+        return moment(el.createdAt).isSameOrAfter(
+          moment(termData?.createdAt).subtract(1, "day")
+        );
+      }
+      return true;
+    })
+    ?.slice(0, 5);
 
   let reader: Array<{}> = [];
   let value = reader.concat(announce, eve);
@@ -35,7 +59,7 @@ const GetAnnouncement = () => {
 
   return (
     <div className="w-90% mx-7">
-      {data1?.length > 0 ? (
+      {data?.length > 0 ? (
         <Slider {...settings}>
           {data?.map((props: any, i: number) => (
             <div className="px-5" key={i}>

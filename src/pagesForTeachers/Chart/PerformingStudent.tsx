@@ -15,12 +15,19 @@ const StudentPerformance: FC<iProps> = ({ oneClass }) => {
 
   const { classStudents } = useClassStudent(oneClass?._id);
 
+  const rate =
+    oneClass?.topStudents?.length > 0
+      ? oneClass?.topStudents
+      : classStudents?.students?.sort(
+          (a: any, b: any) => b.totalPerformance - a.totalPerformance
+        );
+
   return (
     <div className="">
       <div className="carousel carousel-center h-[400px] rounded-box *:bg-slate-100 gap-2">
-        {classStudents?.students?.map((props: any, i: number) => (
+        {rate?.map((props: any, i: number) => (
           <div key={props?._id} className="carousel-item">
-            {i < 5 && (
+            {i < 3 && (
               <div>
                 <UnLazyImage
                   alt={"image"}

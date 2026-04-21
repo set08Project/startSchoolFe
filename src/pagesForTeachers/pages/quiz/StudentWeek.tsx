@@ -56,7 +56,7 @@ const StudentOfTheWeek: FC<iProps> = ({ oneClass }) => {
             <div className="text-[20px] mr-[10px]">
               <PiStudentFill />
             </div>
-            <div>Student of the week</div>
+            <div  className="text-left">Student of the week</div>
           </div>
         </label>
         <div className="" />

@@ -794,6 +794,18 @@ export const studentOfTheWeek = async (teacherID: string, data: any) => {
   }
 };
 
+export const setTopStudents = async (teacherID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/set-top-students/${teacherID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const makeComplains = async (teacherID: string, data: any) => {
   try {
     return await axios

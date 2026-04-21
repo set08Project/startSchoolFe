@@ -9,6 +9,7 @@ import { useReadOneClassInfo } from "../pagesForStudents/hooks/useStudentHook";
 
 import pix from "./../assets/pix.jpg";
 import MakeComplains from "./pages/quiz/MarkCOmplains";
+import TopStudents from "./pages/quiz/TopStudents";
 import {
   useSchool,
   useSchoolSessionData,
@@ -129,6 +130,9 @@ const TeacherDashboard = () => {
                 <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-4 rounded-md text-center">
                   <StudentOfTheWeek oneClass={oneClass} />
                 </div>
+                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-green-700 text-white px-6 py-4 rounded-md text-center">
+                  <TopStudents oneClass={oneClass} />
+                </div>
                 <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4 rounded-md  text-center">
                   <MakeComplains />
                 </div>
@@ -169,7 +173,7 @@ const TeacherDashboard = () => {
                 {/* from complain */}
                 <div className="w-full">
                   <p className="font-bold text-left pb-5 text-[15px] ">
-                    Top 5 Performancing Students
+                    Top 3 Performing Students
                   </p>
                 </div>
 
