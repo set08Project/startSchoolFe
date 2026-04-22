@@ -126,14 +126,14 @@ const TeacherDashboard = () => {
         <div className="min-w-[300px] overflow-hidden min-h-[300px] flex flex-col rounded-md border p-4 col-span-2">
           <div>
             <div>
-              <div className=" flex gap-2  mb-10">
-                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-6 py-4 rounded-md text-center">
+              <div className=" flex flex-wrap gap-2 mb-10">
+                <div className="flex-1 min-w-[150px] flex justify-center gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-blue-950 text-white px-4 py-3 xl:px-6 xl:py-4 rounded-md text-center">
                   <StudentOfTheWeek oneClass={oneClass} />
                 </div>
-                <div className="flex gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-green-700 text-white px-6 py-4 rounded-md text-center">
+                <div className="flex-1 min-w-[150px] flex justify-center gap-6 font-medium leading-tight cursor-pointer text-[12px] bg-green-700 text-white px-4 py-3 xl:px-6 xl:py-4 rounded-md text-center">
                   <TopStudents oneClass={oneClass} />
                 </div>
-                <div className="flex gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-6 py-4 rounded-md  text-center">
+                <div className="flex-1 min-w-[150px] flex justify-center gap-6 font-medium cursor-pointer text-[12px] bg-orange-600 leading-tight text-white px-4 py-3 xl:px-6 xl:py-4 rounded-md  text-center">
                   <MakeComplains />
                 </div>
               </div>

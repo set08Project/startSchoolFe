@@ -66,11 +66,11 @@ const MakeComplains: FC<iProps> = ({ props }) => {
           htmlFor="mark_complains"
           className=" transition-all duration-300 cursor-pointer "
         >
-          <div className="flex">
-            <div className="text-[20px] mr-[10px]">
+          <div className="flex items-center gap-2">
+            <div className="text-[20px]">
               <MdOutlineMarkChatRead />
             </div>
-            <div  className="text-left">Make Complains</div>
+            <div className="whitespace-nowrap">Make Complains</div>
           </div>
         </label>
         <div className="" />

@@ -55,11 +55,11 @@ const TopStudents: FC<iProps> = ({ oneClass }) => {
           htmlFor="set_top_students_modal"
           className=" transition-all duration-300 cursor-pointer "
         >
-          <div className="flex">
-            <div className="text-[20px] mr-[10px]">
+          <div className="flex items-center gap-2">
+            <div className="text-[20px]">
               <MdGrade />
             </div>
-            <div className="text-left">Top Students</div>
+            <div className="whitespace-nowrap">Top Students</div>
           </div>
         </label>
 
