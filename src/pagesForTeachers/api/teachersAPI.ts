@@ -796,6 +796,7 @@ export const studentOfTheWeek = async (teacherID: string, data: any) => {
 
 export const setTopStudents = async (teacherID: string, data: any) => {
   try {
+    // const URL = "http://localhost:2244/api"
     return await axios
       .patch(`${URL}/set-top-students/${teacherID}`, data)
       .then((res: any) => {
