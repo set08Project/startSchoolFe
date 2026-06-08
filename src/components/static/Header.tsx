@@ -334,9 +334,19 @@ const Header = () => {
                   to: "store",
                 },
                 {
+                  title: "Scheme of Work",
+                  icon: <FaSchoolFlag />,
+                  to: "schemes",
+                },
+                {
                   title: "History",
                   icon: <MdDataExploration />,
                   to: "result-history",
+                },
+                {
+                  title: "Result History",
+                  icon: <FaAddressBook />,
+                  to: "view-student-result-history",
                 },
                 {
                   title: "Settings",

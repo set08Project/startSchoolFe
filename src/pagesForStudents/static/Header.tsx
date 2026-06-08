@@ -3,6 +3,7 @@ import {
   FaArrowDown,
   FaBarsProgress,
   FaCalendar,
+  FaCertificate,
   FaPhotoFilm,
   FaStore,
   FaTable,
@@ -211,6 +212,11 @@ const Header = () => {
                     to: "my-finances",
                   },
                   {
+                    title: "NEXT Teach",
+                    icon: <MdQuiz />,
+                    to: "/learning",
+                  },
+                  {
                     title: `CBT (For SSS 3 Only)`,
                     icon: <MdQuiz />,
                     to: studentInfo?.classAssigned?.includes("SSS 3")
@@ -252,7 +258,11 @@ const Header = () => {
                     icon: <MdRadio />,
                     to: "complain",
                   },
-
+                  {
+                    title: "Result History",
+                    icon: <FaCertificate />,
+                    to: "result",
+                  },
                   {
                     title: "Settings",
                     icon: <MdSettings />,
@@ -327,7 +337,11 @@ const Header = () => {
                     icon: <MdRadio />,
                     to: "complain",
                   },
-
+                  {
+                    title: "Result History",
+                    icon: <FaCertificate />,
+                    to: "result",
+                  },
                   {
                     title: "Settings",
                     icon: <MdSettings />,
