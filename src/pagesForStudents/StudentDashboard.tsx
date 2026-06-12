@@ -34,7 +34,7 @@ const StudentDashboard = () => {
   document.title = `${studentInfo?.studentFirstName}'s Mid-Term Record and Stats`;
 
   const { schoolInfo, loading }: any = useSchoolSessionData(
-    studentInfo?.schoolIDs
+    studentInfo?.schoolIDs,
   );
 
   let refID = schoolInfo;
@@ -118,13 +118,13 @@ const StudentDashboard = () => {
             <div>
               <p
                 className={`capitalize font-medium ${
-                  resultData?.approve || true ? "text-red-500" : "text-blue-950"
+                  resultData?.approve ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {resultData?.approve || true ? (
+                {resultData?.approve ? (
                   <p>
                     Ready Now <br />
-                    {gradeData?.viewReportCard && (
+                    {studentInfo?.viewReportCard && (
                       <span className="text-red-500 text-[14px]">
                         {" "}
                         (Please see Admin!)
@@ -136,7 +136,7 @@ const StudentDashboard = () => {
                 )}
               </p>
               <div className="flex ">
-                {resultData?.approve && !gradeData?.viewReportCard  || true? (
+                {resultData?.approve && !studentInfo?.viewReportCard ? (
                   <Link to={`/print-result`}>
                     <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view this term's report card
@@ -152,13 +152,13 @@ const StudentDashboard = () => {
             <div>
               <p
                 className={`capitalize font-medium ${
-                  resultData?.approve ? "text-red-500" : "text-blue-950"
+                  midResultData?.approve ? "text-red-500" : "text-blue-950"
                 }`}
               >
                 {midResultData?.approve ? (
                   <p>
                     Ready Now <br />
-                    {gradeData?.viewReportCard && (
+                    {studentInfo?.viewReportCard && (
                       <span className="text-red-500 text-[14px]">
                         {" "}
                         (Please see Admin!)
@@ -170,7 +170,7 @@ const StudentDashboard = () => {
                 )}
               </p>
               <div className="flex ">
-                {midResultData?.approve && !gradeData?.viewReportCard ? (
+                {midResultData?.approve && !studentInfo?.viewReportCard ? (
                   <Link to={`/mid`}>
                     <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view Mid term's report card

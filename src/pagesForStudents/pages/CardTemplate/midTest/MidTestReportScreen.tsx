@@ -548,21 +548,16 @@ const MidTestReportScreen: React.FC = () => {
                   </main>
                   <main className="flex flex-col mt-1">
                     {lodash
-                      .sortBy(midTestPerformace, "subjectTitle")
-                      ?.map((el: any, i: number) => (
-                        <section
-                          className={`min-w-[${
-                            school?.presentTerm === "1st Term"
-                              ? "994px"
-                              : school?.presentTerm === "2nd Term"
-                              ? "1072px"
-                              : school?.presentTerm === "3rd Term"
-                              ? "1150px"
-                              : null
-                          }] flex my-1 bg-blue-50 h-[40px]`}
-                          key={i - el?._id}
-                          style={{
-                            width: `${
+                      .sortBy(midResultData?.result, "subject")
+                      ?.map((el: any, i: number) => {
+                        const perfRecord = midTestPerformace?.find(
+                          (p: any) =>
+                            p?.subjectTitle === el?.subject &&
+                            p?.studentGrade === el?.grade
+                        );
+                        return (
+                          <section
+                            className={`min-w-[${
                               school?.presentTerm === "1st Term"
                                 ? "994px"
                                 : school?.presentTerm === "2nd Term"
@@ -570,94 +565,104 @@ const MidTestReportScreen: React.FC = () => {
                                 : school?.presentTerm === "3rd Term"
                                 ? "1150px"
                                 : null
-                            }`,
-                          }}
-                        >
-                          <div className="p-2 w-[40px]">{i + 1}</div>
-                          <div className="p-2 w-[180px] border-x ">
-                            {el?.subjectTitle}
-                          </div>
+                            }] flex my-1 bg-blue-50 h-[40px]`}
+                            key={i}
+                            style={{
+                              width: `${
+                                school?.presentTerm === "1st Term"
+                                  ? "994px"
+                                  : school?.presentTerm === "2nd Term"
+                                  ? "1072px"
+                                  : school?.presentTerm === "3rd Term"
+                                  ? "1150px"
+                                  : null
+                              }`,
+                            }}
+                          >
+                            <div className="p-2 w-[40px]">{i + 1}</div>
+                            <div className="p-2 w-[180px] border-x ">
+                              {el?.subject}
+                            </div>
 
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">
-                              {el?.performanceRating}
-                            </p>
-                          </div>
-                          <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">
-                              {el?.performanceRating}
-                            </p>
-                          </div>
-                          <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px]">
-                              {" "}
-                              {resultMax?.find(
-                                (item: any) => item.subject === el?.subjectTitle
-                              )?.score || 0}
-                            </p>
-                          </div>
+                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">
+                                {el?.exam ? el?.exam : 0}
+                              </p>
+                            </div>
+                            <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">
+                                {el?.mark ? el?.mark : 0}
+                              </p>
+                            </div>
+                            <div className=" w-[100px] border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px]">
+                                {" "}
+                                {resultMax?.find(
+                                  (item: any) => item.subject === el?.subject
+                                )?.score || 0}
+                              </p>
+                            </div>
 
-                          {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                            <p className="text">
-                              {resultMin?.find(
-                                (item: any) => item.subject === el?.subjectTitle
-                              )?.score || 0}
-                            </p>
-                          </div> */}
-                          <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                            <p className="text-[18px]">{el?.studentGrade}</p>
-                          </div>
+                            {/* <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                              <p className="text">
+                                {resultMin?.find(
+                                  (item: any) => item.subject === el?.subjectTitle
+                                )?.score || 0}
+                              </p>
+                            </div> */}
+                            <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                              <p className="text-[18px]">{el?.grade}</p>
+                            </div>
 
-                          <div className=" w-[110px]  text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
-                            <p className="text-[12px] w-[110px] pl-4">
-                              {el?.studentGrade === "A1"
-                                ? "Execellent"
-                                : el?.studentGrade === "B2" ||
-                                  el?.studentGrade === "B3"
-                                ? "Very Good"
-                                : el?.studentGrade === "C4" ||
-                                  el?.studentGrade === "C5" ||
-                                  el?.studentGrade === "C6"
-                                ? "Credit"
-                                : el?.studentGrade === "D7"
-                                ? "Pass"
-                                : el?.studentGrade === "E8"
+                            <div className=" w-[110px]  text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
+                              <p className="text-[12px] w-[110px] pl-4">
+                                {el?.grade === "A1"
+                                  ? "Execellent"
+                                  : el?.grade === "B2" ||
+                                    el?.grade === "B3"
+                                  ? "Very Good"
+                                  : el?.grade === "C4" ||
+                                    el?.grade === "C5" ||
+                                    el?.grade === "C6"
+                                  ? "Credit"
+                                  : el?.grade === "D7"
+                                  ? "Pass"
+                                  : el?.grade === "E8"
+                                  ? "Poor Pass"
+                                  : el?.grade === "F9" || el?.grade === "F"
+                                  ? "Fail"
+                                  : null}
+                              </p>
+                            </div>
+                            <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-start items-center">
+                              <p
+                                className={`
+                            ${
+                              el?.grade === "A1"
+                                ? "text-green-600"
+                                : el?.grade === "B2" ||
+                                  el?.grade === "B3"
+                                ? "text-purple-800"
+                                : el?.grade === "C4" ||
+                                  el?.grade === "C5" ||
+                                  el?.grade === "C6"
+                                ? "text-gray-600"
+                                : el?.grade === "D7"
+                                ? "text-purple-600"
+                                : el?.grade === "E8"
                                 ? "Poor Pass"
-                                : el?.studentGrade === "F9" ||
-                                  el?.studentGrade === "F"
-                                ? "Fail"
-                                : null}
-                            </p>
-                          </div>
-                          <div className=" flex-1 text-[12px] px-2 leading-tight font-medium border-r pt-1 normal-case flex justify-start items-center">
-                            <p
-                              className={`
-                          ${
-                            el?.studentGrade === "A1"
-                              ? "text-green-600"
-                              : el?.studentGrade === "B2" ||
-                                el?.studentGrade === "B3"
-                              ? "text-purple-800"
-                              : el?.studentGrade === "C4" ||
-                                el?.studentGrade === "C5" ||
-                                el?.studentGrade === "C6"
-                              ? "text-gray-600"
-                              : el?.studentGrade === "D7"
-                              ? "text-purple-600"
-                              : el?.studentGrade === "E8"
-                              ? "Poor Pass"
-                              : el?.studentGrade === "F9" ||
-                                el?.studentGrade === "F"
-                              ? "text-red-500"
-                              : null
-                          } 
-                          `}
-                            >
-                              {el?.remark}
-                            </p>
-                          </div>
-                        </section>
-                      ))}
+                                : el?.grade === "F9" || el?.grade === "F"
+                                ? "text-red-500"
+                                : null
+                            } 
+                            `}
+                              >
+                                {el?.remark || perfRecord?.remark}
+                              </p>
+                            </div>
+                          </section>
+                        );
+                      })}
                   </main>
                 </section>
               </main>
