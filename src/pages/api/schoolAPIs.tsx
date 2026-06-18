@@ -11,8 +11,8 @@ import { enqueue, QueueEntry } from "@/lib/offlineQueue";
 
 // ?working
 
-export const URL: string = "https://startschoolbe-4.onrender.com/api";
-const URL2: string = "https://startschoolbe-4.onrender.com";
+export const URL: string = "https://startschoolbe-1-toq0.onrender.com/api";
+const URL2: string = "https://startschoolbe-1-toq0.onrender.com";
 
 // ?New Try
 // export const URL: string = "https://start-school-be.vercel.app/api";
@@ -24,7 +24,7 @@ export const updateSchoolResumptionTeamInfo = async (
     NumberOfDays: string;
     SchoolTeamResumption: string;
     SchoolTeamCloses: string;
-  }
+  },
 ): Promise<any> => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -39,7 +39,7 @@ export const updateSchoolResumptionTeamInfo = async (
 };
 
 export const removeAllPerformance = async (
-  performanceID: string
+  performanceID: string,
 ): Promise<any> => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -55,7 +55,7 @@ export const removeAllPerformance = async (
 
 export const removeSelectedPerformance = async (
   quizID: string,
-  studentIDs: string[]
+  studentIDs: string[],
 ): Promise<any> => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -72,7 +72,7 @@ export const removeSelectedPerformance = async (
 };
 
 export const removePerformance = async (
-  performanceID: string
+  performanceID: string,
 ): Promise<any> => {
   try {
     return await axios
@@ -87,7 +87,7 @@ export const removePerformance = async (
 
 export const removeOptions = async (
   schoolID: string,
-  refID: string
+  refID: string,
 ): Promise<any> => {
   try {
     return await axios
@@ -104,7 +104,7 @@ export const removeOptions = async (
 export const createStudentHistory = async (
   schoolID: string,
   studentID: string,
-  data: any
+  data: any,
 ): Promise<any> => {
   try {
     return await axios
@@ -133,7 +133,7 @@ export const viewStudentHistory = async (studentID: string): Promise<any> => {
 
 export const deleteStudentHistory = async (
   studentID: string,
-  resultID: string
+  resultID: string,
 ): Promise<any> => {
   try {
     return await axios
@@ -186,7 +186,7 @@ export const analyticPayment = async (termID: string) => {
 
 export const updateSchoolPaymentOptions = async (
   schoolID: string,
-  data: any
+  data: any,
 ) => {
   try {
     return await axios
@@ -245,7 +245,11 @@ export const bulkUploadofSubject = async (schoolID: string, data: any) => {
     const config: any = {
       "Content-Type": "multipart/form-data",
     };
-    const res = await axios.post(`${URL}/create-bulk-subject/${schoolID}`, data, config);
+    const res = await axios.post(
+      `${URL}/create-bulk-subject/${schoolID}`,
+      data,
+      config,
+    );
     return res;
   } catch (error: any) {
     console.error("bulkUploadofSubject error:", error);
@@ -255,7 +259,7 @@ export const bulkUploadofSubject = async (schoolID: string, data: any) => {
 
 export const bulkUploadofSubjectWithQueue = async (
   schoolID: string,
-  formData: FormData
+  formData: FormData,
 ) => {
   if (typeof window !== "undefined" && !navigator.onLine) {
     const fdEntries: Array<any> = [];
@@ -309,7 +313,7 @@ export const bulkUploadofClassroom = async (schoolID: string, data: any) => {
 
 export const bulkUploadofClassroomWithQueue = async (
   schoolID: string,
-  formData: FormData
+  formData: FormData,
 ) => {
   if (typeof window !== "undefined" && !navigator.onLine) {
     // convert FormData to serializable object: store entries as array of [key, {type, value}]
@@ -378,11 +382,11 @@ export const bulkUploadSchemeOfWork = async (data: any) => {
 export const fetchSchemeOfWork = async (
   selectedClass,
   selectedSubject,
-  selectTerm
+  selectTerm,
 ) => {
   try {
     const response = await axios.get(
-      `${URL}/schemes/${selectedClass}/${selectedSubject}/${selectTerm}`
+      `${URL}/schemes/${selectedClass}/${selectedSubject}/${selectTerm}`,
     );
 
     return response.data;
@@ -479,7 +483,7 @@ export const recordFeesPayment = async (
   feePaid: number,
   feePaidDate: string,
   paidByWho: string,
-  paymentMode: string
+  paymentMode: string,
 ) => {
   try {
     return await axios
@@ -529,7 +533,7 @@ export const updateSchoolSignature = async (schoolID: string, data: any) => {
 export const updateClassName = async (
   schoolID: string,
   classID: string,
-  data: string
+  data: string,
 ) => {
   try {
     return await axios
@@ -587,7 +591,7 @@ export const getOneRecord = async (studentID: string) => {
 export const deleteRecord = async (
   schoolID: string,
   studentID: string,
-  recordID: string
+  recordID: string,
 ) => {
   try {
     return await axios
@@ -728,7 +732,7 @@ export const deleteStaff = async (schoolID: string, staffID: string) => {
 export const updateStudentRestrictMode = async (
   schoolID: string,
   studentID: string,
-  toggle: boolean
+  toggle: boolean,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -744,7 +748,7 @@ export const updateStudentRestrictMode = async (
 
 export const deleteTimeTableSubject = async (
   schoolID: string,
-  tableID: string
+  tableID: string,
 ) => {
   try {
     return await axios
@@ -761,7 +765,7 @@ export const updateTimeTableSubject = async (
   schoolID: string,
   classID: string,
   tableID: string,
-  data: any
+  data: any,
 ) => {
   try {
     return await axios
@@ -848,7 +852,7 @@ export const getSchoolCookie = async () => {
   try {
     return await axios
       .get(
-        `${URL}/read-school-cookie`
+        `${URL}/read-school-cookie`,
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -896,7 +900,7 @@ export const loginSchool = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-school`,
-        data
+        data,
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -935,7 +939,7 @@ export const logout = async () => {
   try {
     return await axios
       .delete(
-        `${URL}/logout-school`
+        `${URL}/logout-school`,
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -1073,7 +1077,7 @@ export const getSchoolClassroom = async (schoolID: string) => {
 export const updateClassroomTeacher = async (
   schoolID: string,
   classID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -1231,7 +1235,7 @@ export const getSchoolStudentDetail = async (studentID: string) => {
 export const createTimeTable = async (
   schoolID: string,
   classID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -1247,7 +1251,7 @@ export const createTimeTable = async (
 export const updateSchoolSubjectTeacher = async (
   schoolID: string,
   classID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -1352,12 +1356,12 @@ export const viewStore = async (schoolID: string) => {
 export const deleteArticle = async (
   schoolID: string,
   studentID: string,
-  articleID: string
+  articleID: string,
 ) => {
   try {
     return await axios
       .delete(
-        `${URL}/delete-school-article/${schoolID}/${studentID}/${articleID}`
+        `${URL}/delete-school-article/${schoolID}/${studentID}/${articleID}`,
       )
       .then((res: any) => {
         return res?.data;
@@ -1543,7 +1547,7 @@ export const viewComplains = async (schoolID: string) => {
 
 export const markSeenComplains = async (
   schoolID: string,
-  complainID: string
+  complainID: string,
 ) => {
   try {
     return await axios
@@ -1558,7 +1562,7 @@ export const markSeenComplains = async (
 
 export const markResolveComplains = async (
   schoolID: string,
-  complainID: string
+  complainID: string,
 ) => {
   try {
     return await axios
@@ -1760,7 +1764,7 @@ export const updateSchoolFee = async (schoolFeeID: string) => {
 export const adminReport = async (
   schoolID: string,
   studentID: string,
-  adminComment: string
+  adminComment: string,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -1779,7 +1783,7 @@ export const adminReport = async (
 export const adminMidReport = async (
   schoolID: string,
   studentID: string,
-  adminComment: string
+  adminComment: string,
 ) => {
   try {
     return await axios
@@ -1823,13 +1827,13 @@ export const deletSubject = async (schoolID: string, subjectID: string) => {
 export const removeTeacherSubject = async (
   schoolID: string,
   teacherID: string,
-  subjectID: string
+  subjectID: string,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
     return await axios
       .patch(
-        `${URL}/remove-teacher-subject/${schoolID}/${teacherID}/${subjectID}/`
+        `${URL}/remove-teacher-subject/${schoolID}/${teacherID}/${subjectID}/`,
       )
       .then((res: any) => {
         return res;
@@ -1933,18 +1937,20 @@ export const verifySMSPayment = async (schoolID: string, ref: string) => {
     return error;
   }
 };
-export const testSchoolSMS = async (phone: string, channel: string = "generic", customMsg?: string) => {
+export const testSchoolSMS = async (
+  phone: string,
+  channel: string = "generic",
+  customMsg?: string,
+) => {
   try {
     // const URL = "http://localhost:2244/api";
     let endpoint = `${URL}/test-sms/${phone}?action=send&channel=${channel}`;
     if (customMsg) {
       endpoint += `&customMsg=${encodeURIComponent(customMsg)}`;
     }
-    return await axios
-      .get(endpoint)
-      .then((res: any) => {
-        return res;
-      });
+    return await axios.get(endpoint).then((res: any) => {
+      return res;
+    });
   } catch (error: any) {
     return error;
   }
@@ -1952,7 +1958,7 @@ export const testSchoolSMS = async (phone: string, channel: string = "generic", 
 
 export const updateClassTeacherGradingToggle = async (
   schoolID: string,
-  allowClassTeacherGrading: boolean
+  allowClassTeacherGrading: boolean,
 ) => {
   try {
     // const URL = "http://localhost:2244/api"

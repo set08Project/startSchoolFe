@@ -8,7 +8,7 @@ import axios from "axios";
 //   import.meta.env.VITE_MAIN_URL || import.meta.env.VITE_PRODUCTION_URL;
 
 // const URL: string = "http://localhost:2244/api";
-const URL: string = "https://startschoolbe-4.onrender.com/api";
+const URL: string = "https://startschoolbe-1-toq0.onrender.com/api";
 // const URL: string = "https://start-school-be.vercel.app/api";
 
 export const viewMidTestAPI = async (subjectID: string) => {
@@ -62,7 +62,7 @@ export const getStudentSubjectPerformance = async (subjectID: string) => {
 
 export const getOneStudentExamSubjectPerformance = async (
   subjectID: string,
-  quizID: string
+  quizID: string,
 ) => {
   try {
     return await axios
@@ -91,13 +91,13 @@ export const getExamSubjectPerformance = async (subjectID: string) => {
 
 export const getMidTestPerformanceResut = async (
   subjectID: string,
-  quizID: string
+  quizID: string,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
     return await axios
       .get(
-        `${URL}/view-one-subject-mid-test-performance/${subjectID}/${quizID}`
+        `${URL}/view-one-subject-mid-test-performance/${subjectID}/${quizID}`,
       )
       .then((res) => {
         console.log("show me: ", res);
@@ -125,7 +125,7 @@ export const getMidTestPerformance = async (quizID: string) => {
 
 export const getOneStudentSubjectPerformance = async (
   subjectID: string,
-  quizID: string
+  quizID: string,
 ) => {
   try {
     return await axios
@@ -326,7 +326,7 @@ export const createQuiz = async (
   classID: string,
   subjectID: string,
   totalQuestions: number,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -489,7 +489,7 @@ export const viewMidTest = async (subjectID: string) => {
 export const createExaminationData = async (
   classID: string,
   subjectID: string,
-  data: any
+  data: any,
 ) => {
   try {
     const config: any = {
@@ -497,7 +497,7 @@ export const createExaminationData = async (
     };
 
     // const URL = "http://localhost:2244/api";
-    // const URL = "https://startschoolbe-4.onrender.com/api";
+    // const URL = "https://startschoolbe-1-toq0.onrender.com/api";
 
     // const URL = "https://start-school-be.vercel.app/api";
 
@@ -505,7 +505,7 @@ export const createExaminationData = async (
       .post(
         `${URL}/create-subject-examination-post/${classID}/${subjectID}`,
         data,
-        config
+        config,
       )
       .then((res: any) => {
         return res?.data;
@@ -518,7 +518,7 @@ export const createExaminationData = async (
 export const createMidTestData = async (
   classID: string,
   subjectID: string,
-  data: any
+  data: any,
 ) => {
   try {
     const config: any = {
@@ -530,7 +530,7 @@ export const createMidTestData = async (
       .post(
         `${URL}/create-subject-mid-test/${classID}/${subjectID}`,
         data,
-        config
+        config,
       )
       .then((res: any) => {
         return res?.data;
@@ -543,7 +543,7 @@ export const createMidTestData = async (
 export const createQuizData = async (
   classID: string,
   subjectID: string,
-  data: any
+  data: any,
 ) => {
   try {
     const config: any = {
@@ -555,7 +555,7 @@ export const createQuizData = async (
       .post(
         `${URL}/create-subject-quiz-file/${classID}/${subjectID}`,
         data,
-        config
+        config,
       )
       .then((res: any) => {
         return res?.data;
@@ -605,7 +605,7 @@ export const deleteExamination = async (subjectID: string, examID: string) => {
 
 export const deleteMidTestData = async (
   subjectID: string,
-  midTestID: string
+  midTestID: string,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -653,7 +653,7 @@ export const readQuiz = async (quizID: string) => {
 
 export const markAttendancePresent = async (
   teacherID: string,
-  studentID: string
+  studentID: string,
 ) => {
   try {
     return await axios
@@ -668,7 +668,7 @@ export const markAttendancePresent = async (
 
 export const markAttendanceAbsent = async (
   teacherID: string,
-  studentID: string
+  studentID: string,
 ) => {
   try {
     return await axios
@@ -696,7 +696,7 @@ export const classAttendance = async (classID: string) => {
 export const createAssignment = async (
   classID: string,
   subjectID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -724,7 +724,7 @@ export const classAssignment = async (subjectID: string) => {
 export const createTeacherLessonNote = async (
   schoolID: string,
   teacherID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -740,7 +740,7 @@ export const createTeacherLessonNote = async (
 export const adminlessonNoteReply = async (
   schoolID: string,
   lessonNotedID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -768,7 +768,7 @@ export const lessonNote = async (lessonID: string) => {
 export const remark = async (
   teacherID: string,
   studentID: string,
-  data: any
+  data: any,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -836,7 +836,7 @@ export const viewComplains = async (teacherID: string) => {
 export const updateTeacherFullName = async (
   schoolID: string,
   staffID: string,
-  staffName: string
+  staffName: string,
 ) => {
   try {
     return await axios
@@ -855,7 +855,7 @@ export const updateTeacherFullName = async (
 export const updateStaffFacebook = async (
   schoolID: string,
   staffID: string,
-  facebookAcct: string
+  facebookAcct: string,
 ) => {
   try {
     return await axios
@@ -874,7 +874,7 @@ export const updateStaffFacebook = async (
 export const updateStaffXAcct = async (
   schoolID: string,
   staffID: string,
-  xAcct: string
+  xAcct: string,
 ) => {
   try {
     return await axios
@@ -891,7 +891,7 @@ export const updateStaffXAcct = async (
 export const updateStaffInstagramAcct = async (
   schoolID: string,
   staffID: string,
-  instagramAcct: string
+  instagramAcct: string,
 ) => {
   try {
     return await axios
@@ -910,7 +910,7 @@ export const updateStaffInstagramAcct = async (
 export const updateStaffLinkinAcct = async (
   schoolID: string,
   staffID: string,
-  linkedinAcct: string
+  linkedinAcct: string,
 ) => {
   try {
     return await axios
@@ -930,12 +930,12 @@ export const updateStaffLinkinAcct = async (
 export const updateTeacherPhoneNum = async (
   schoolID: string,
   staffID: string,
-  phone: string
+  phone: string,
 ) => {
   try {
     return await axios.patch(
       `${URL}/update-phoneNumber/${schoolID}/${staffID}`,
-      { phone }
+      { phone },
     );
   } catch (error) {
     console.error();
@@ -946,12 +946,12 @@ export const updateTeacherPhoneNum = async (
 export const updateTeacherGender = async (
   schoolID: string,
   staffID: string,
-  gender: string
+  gender: string,
 ) => {
   try {
     return await axios.patch(
       `${URL}/update-staffgender/${schoolID}/${staffID}`,
-      { gender }
+      { gender },
     );
   } catch (error) {
     console.error();
@@ -961,12 +961,12 @@ export const updateTeacherGender = async (
 export const updateTeacherAddress = async (
   schoolID: string,
   staffID: string,
-  staffAddress: string
+  staffAddress: string,
 ) => {
   try {
     return await axios.patch(
       `${URL}/update-staff-address/${schoolID}/${staffID}`,
-      { staffAddress }
+      { staffAddress },
     );
   } catch (error) {
     console.error();
@@ -1005,7 +1005,7 @@ export const createGradeScore = async (studentID: string, data: {}) => {
 export const createMidGradeScore = async (
   // teacherID: string,
   studentID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -1018,12 +1018,8 @@ export const createMidGradeScore = async (
   }
 };
 
-export const removeGradeScore = async (
-  studentID: string,
-  subject: string
-) => {
+export const removeGradeScore = async (studentID: string, subject: string) => {
   try {
-    
     return await axios
       .patch(`${URL}/remove-report-card/${studentID}`, { subject })
       .then((res: any) => {
@@ -1047,7 +1043,7 @@ export const createMidGradeScoreRecord = async (performanceID: string) => {
 };
 
 export const removeMidGradeScoreRecordPerformance = async (
-  performanceID: string
+  performanceID: string,
 ) => {
   try {
     return await axios
@@ -1062,7 +1058,7 @@ export const removeMidGradeScoreRecordPerformance = async (
 
 export const removeMidGradeScoreRecord = async (
   studentID: string,
-  subject: string
+  subject: string,
 ) => {
   try {
     return await axios
@@ -1102,7 +1098,7 @@ export const viewStudentMidGrade = async (studentID: string) => {
 export const reportCardRemark = async (
   teacherID: string,
   studentID: string,
-  data: any
+  data: any,
 ) => {
   try {
     return await axios
@@ -1118,7 +1114,7 @@ export const reportCardRemark = async (
 export const midReportCardRemark = async (
   teacherID: string,
   studentID: string,
-  data: any
+  data: any,
 ) => {
   try {
     return await axios
@@ -1147,7 +1143,7 @@ export const udatedStudentBulkInfo = async (studentID: string, data: any) => {
 export const psychoReportCardRemark = async (
   teacherID: string,
   studentID: string,
-  data: any
+  data: any,
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
@@ -1213,7 +1209,7 @@ export const viewTeacherLessonNote = async (staffID: string) => {
 export const editTeacherLessonNote = async (
   staffID: string,
   lessonNodeID: string,
-  data: any
+  data: any,
 ) => {
   try {
     return await axios
@@ -1228,7 +1224,7 @@ export const editTeacherLessonNote = async (
 
 export const assignClassMonitor = async (
   staffID: string,
-  studentID: string
+  studentID: string,
 ) => {
   try {
     return await axios

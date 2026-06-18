@@ -8,23 +8,19 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // const URL: string = "http://localhost:2244/api";
 
-
-const URL: string = "https://startschoolbe-4.onrender.com/api";
+const URL: string = "https://startschoolbe-1-toq0.onrender.com/api";
 // const URL: string = "https://start-school-be.vercel.app/api";
-
 
 // const URLII: string = "https://server.justnext.com.ng/api";
 
 export const getSubjects = async () => {
   try {
-    return await axios
-      .get(`${URL}/teach-subject/`, )
-      .then((res) => {
-        return res?.data;
-      });
+    return await axios.get(`${URL}/teach-subject/`).then((res) => {
+      return res?.data;
+    });
   } catch (error) {
     console.error();
-    
+
     return error;
   }
 };

@@ -8,8 +8,8 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // export const URL: string = "http://localhost:2244/api";
 
-// const URL: string = "https://startschoolbe-4.onrender.comapi";
-export const URL: string = "https://startschoolbe-4.onrender.com/api";
+// const URL: string = "https://startschoolbe-1-toq0.onrender.comapi";
+export const URL: string = "https://startschoolbe-1-toq0.onrender.com/api";
 // export const URL: string = "https://start-school-be.vercel.app/api";
 
 // const URL: string = "https://server.justnext.com.ng/api";
@@ -29,7 +29,7 @@ export const clockInWithID = async (schoolID: string, enrollmentID: string) => {
 
 export const clockOutWidthID = async (
   schoolID: string,
-  enrollmentID: string
+  enrollmentID: string,
 ) => {
   try {
     return await axios
@@ -112,7 +112,7 @@ export const loginStudent = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-student/`,
-        data
+        data,
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -128,7 +128,7 @@ export const loginStudentToken = async (data: {}) => {
     return await axios
       .post(
         `${URL}/login-student-token/`,
-        data
+        data,
         // { withCredentials: true }
       )
       .then((res: any) => {
@@ -192,14 +192,14 @@ export const performanceExamination = async (
   studentID: string,
   quizID: string,
   subjectID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     // const URL="http://localhost:2244/api"
     return await axios
       .post(
         `${URL}/create-subject-exam-performance/${studentID}/${quizID}/${subjectID}`,
-        data
+        data,
       )
       .then((res: any) => {
         return res?.data;
@@ -213,13 +213,13 @@ export const performanceMidTest = async (
   studentID: string,
   quizID: string,
   subjectID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
       .post(
         `${URL}/create-subject-mid-test-performance/${studentID}/${quizID}/${subjectID}`,
-        data
+        data,
       )
       .then((res: any) => {
         return res?.data;
@@ -260,14 +260,14 @@ export const performanceTest = async (
   studentID: string,
   quizID: string,
   subjectID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     // const URL = "http://localhost:2244/api";
     return await axios
       .post(
         `${URL}/create-subject-quiz-performance/${studentID}/${quizID}/${subjectID}`,
-        data
+        data,
       )
       .then((res: any) => {
         return res?.data;
@@ -340,7 +340,7 @@ export const classLessonNotes = async (classID: string) => {
 export const rateNote = async (
   studentID: string,
   lessonID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -356,7 +356,7 @@ export const rateNote = async (
 export const createStudentArticle = async (
   schoolID: string,
   studentID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -374,7 +374,7 @@ export const createStudentArticle = async (
 
 export const createPastQuestionHistory = async (
   studentID: string,
-  data: {}
+  data: {},
 ) => {
   try {
     return await axios
@@ -456,7 +456,7 @@ export const updateStudentFirstName = async (
   schoolID: string,
   studentID: string,
   studentFirstName: string,
-  studentLastName: string
+  studentLastName: string,
 ) => {
   try {
     return axios
@@ -477,7 +477,7 @@ export const updateStudentLastName = async (
   schoolID: string,
   studentID: string,
   studentLastName: string,
-  studentFirstName: string
+  studentFirstName: string,
 ) => {
   try {
     return axios
@@ -497,7 +497,7 @@ export const updateStudentLastName = async (
 export const updateStudentAddress = async (
   schoolID: string,
   studentID: string,
-  studentAddress: string
+  studentAddress: string,
 ) => {
   try {
     return axios
@@ -516,7 +516,7 @@ export const updateStudentAddress = async (
 export const updateStudentParentNumber = async (
   schoolID: string,
   studentID: string,
-  parentPhoneNumber: string
+  parentPhoneNumber: string,
 ) => {
   try {
     return axios
@@ -535,7 +535,7 @@ export const updateStudentParentNumber = async (
 export const updateStudentPhoneNumber = async (
   schoolID: string,
   studentID: string,
-  phone: string
+  phone: string,
 ) => {
   try {
     return axios
@@ -552,7 +552,7 @@ export const updateStudentPhoneNumber = async (
 export const updateStudentGender = async (
   schoolID: string,
   studentID: string,
-  gender: string
+  gender: string,
 ) => {
   try {
     return axios
@@ -571,7 +571,7 @@ export const updateStudentGender = async (
 export const updateParentEmail = async (
   schoolID: string,
   studentID: string,
-  parentEmail: string
+  parentEmail: string,
 ) => {
   try {
     return await axios
@@ -592,7 +592,7 @@ export const updateParentEmail = async (
 export const updateStudentFacebook = async (
   schoolID: string,
   studentID: string,
-  facebookAccount: string
+  facebookAccount: string,
 ) => {
   try {
     return await axios
@@ -611,7 +611,7 @@ export const updateStudentFacebook = async (
 export const updateStudentInstagram = async (
   schoolID: string,
   studentID: string,
-  instagramAccount: string
+  instagramAccount: string,
 ) => {
   try {
     return await axios
@@ -630,7 +630,7 @@ export const updateStudentInstagram = async (
 export const updateLinkedin = async (
   schoolID: string,
   studentID: string,
-  linkedinAccount: string
+  linkedinAccount: string,
 ) => {
   try {
     return await axios
@@ -649,7 +649,7 @@ export const updateLinkedin = async (
 export const updateXAccount = async (
   schoolID: string,
   studentID: string,
-  xAccount: string
+  xAccount: string,
 ) => {
   try {
     return await axios
@@ -704,7 +704,7 @@ export const viewClassTimetable = async (classID: string) => {
 
 export const updateTeacherActiveness = async (
   studentID: string,
-  data: string
+  data: string,
 ) => {
   try {
     return await axios
@@ -759,7 +759,7 @@ export const getOneHistory = async (historyID: string) => {
 export const updateStudentParentEmail = async (
   schoolID: string,
   studentID: string,
-  parentEmail: string
+  parentEmail: string,
 ) => {
   try {
     return await axios
@@ -826,7 +826,7 @@ export const schoolFeePayment = async (data: {}) => {
 export const updateTermFee = async (
   schoolID: string,
   classID: string,
-  data
+  data,
 ) => {
   try {
     return await axios
@@ -910,7 +910,7 @@ export const makeOtherPayment = async (data: any) => {
 export const verifyOtherPayment = async (
   studentID: string,
   refID: string,
-  paymentName: any
+  paymentName: any,
 ) => {
   try {
     // const urli: string = "http://localhost:2244/api";
