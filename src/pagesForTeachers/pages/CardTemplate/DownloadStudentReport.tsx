@@ -649,11 +649,15 @@ const TeacherPrintReportCardScreen: React.FC = () => {
                                       </div> */}
                           <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">
-                              {el?.test1 +
-                                el?.test2 +
-                                el?.test3 +
-                                el?.test4 +
-                                el?.exam}
+                              {(() => {
+                                const s1 = st1?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
+                                const s2 = st2?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
+                                const s3 = st3?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
+                                const activeScores = [s1, s2, s3].slice(0, school?.presentTerm === "1st Term" ? 1 : school?.presentTerm === "2nd Term" ? 2 : 3).filter(s => s > 0);
+                                return activeScores.length > 0
+                                  ? (activeScores.reduce((a, b) => a + b, 0) / activeScores.length).toFixed(1)
+                                  : 0;
+                              })()}
                             </p>
                           </div>
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
@@ -746,11 +750,18 @@ const TeacherPrintReportCardScreen: React.FC = () => {
                   <h1 className="uppercase text-[12px] font-semibold">
                     Percenatge score
                   </h1>
-                  {/* school?.presentTerm === "3rd Term"
-                      ? (pointsArray?.reduce((a, b) => a + b) / 3).toFixed(2)
-                      :  */}
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {commulationScore.toFixed(2)}%
+                    {school?.presentTerm === "3rd Term"
+                      ? (() => {
+                          const p1 = st1?.points || 0;
+                          const p2 = st2?.points || 0;
+                          const p3 = st3?.points || 0;
+                          const active = [p1, p2, p3].filter(p => p > 0);
+                          return active.length > 0
+                            ? (active.reduce((a, b) => a + b, 0) / active.length).toFixed(2)
+                            : "0.00";
+                        })()
+                      : commulationScore.toFixed(2)}%
                   </h1>
                 </div>
               </main>
