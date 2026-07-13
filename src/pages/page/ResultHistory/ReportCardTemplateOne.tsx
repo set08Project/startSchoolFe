@@ -136,6 +136,18 @@ const {schoolClassroom} = useSchoolClassRM()
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
 
+  // Derive per-term records from gradeData for cumulative display
+  const gradeReportCard = gradeData?.reportCard || hookGradeData?.reportCard || [];
+  const st1 = propSt1 || gradeReportCard.find((el: any) =>
+    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(1st Term)`
+  );
+  const st2 = propSt2 || gradeReportCard.find((el: any) =>
+    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(2nd Term)`
+  );
+  const st3 = propSt3 || gradeReportCard.find((el: any) =>
+    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
+  );
+
   const totalScore =
     grade?.result?.reduce((acc: number, el: any) => {
       const subjectTotal =
@@ -786,7 +798,7 @@ const {schoolClassroom} = useSchoolClassRM()
                 ACADEMIC PERFORMANCE
               </div>
               <div className="border border-gray-800 overflow-x-auto">
-                <table className="w-full text-[10px]">
+                <table className="w-full text-xs">
                   <thead>
                     <tr className="bg-gray-200">
                       <th className="border border-gray-800 p-0.5 text-left text-[10px]">
@@ -798,18 +810,27 @@ const {schoolClassroom} = useSchoolClassRM()
                       <th className="border border-gray-800 p-0.5 w-[90px]">
                         Exam Marks
                       </th>
-                      <th className="border border-gray-800 p-0.5 w-[140px]">
-                        Total Average MKS
+                      <th className="border border-gray-800 p-0.5 w-[110px]">
+                        Total MKS
                       </th>
+                      {(school?.presentTerm === "1st Term" || school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                        <th className="border border-gray-800 p-0.5 w-[70px]">1st Term</th>
+                      )}
+                      {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                        <th className="border border-gray-800 p-0.5 w-[70px]">2nd Term</th>
+                      )}
+                      {school?.presentTerm === "3rd Term" && (
+                        <th className="border border-gray-800 p-0.5 w-[70px]">3rd Term</th>
+                      )}
+                      {school?.presentTerm === "3rd Term" && (
+                        <th className="border border-gray-800 p-0.5 w-[80px]">Cumul. Avg</th>
+                      )}
                       <th className="border border-gray-800 p-0.5 w-20">
                         GRADE
                       </th>
                       <th className="border border-gray-800 p-0.5 w-[250px]">
                         Teacher's Comment
                       </th>
-                      {/* <th className="border border-gray-800 p-1 w-20">
-                      Signature
-                    </th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -842,6 +863,34 @@ const {schoolClassroom} = useSchoolClassRM()
                               (subject.test4 ?? 0) +
                               (subject.exam ?? 0)}
                         </td>
+                        {(school?.presentTerm === "1st Term" || school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                          <td className="border border-gray-800 p-0.5 text-center text-[13px]">
+                            {typeof subject === "string" ? "" : (st1?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
+                          </td>
+                        )}
+                        {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                          <td className="border border-gray-800 p-0.5 text-center text-[13px]">
+                            {typeof subject === "string" ? "" : (st2?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
+                          </td>
+                        )}
+                        {school?.presentTerm === "3rd Term" && (
+                          <td className="border border-gray-800 p-0.5 text-center text-[13px]">
+                            {typeof subject === "string" ? "" : (st3?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
+                          </td>
+                        )}
+                        {school?.presentTerm === "3rd Term" && (
+                          <td className="border border-gray-800 p-0.5 text-center text-[14px] font-semibold">
+                            {typeof subject === "string" ? "" : (() => {
+                              const s1 = st1?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
+                              const s2 = st2?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
+                              const s3 = st3?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
+                              const activeScores = [s1, s2, s3].filter((s: number) => s > 0);
+                              return activeScores.length > 0
+                                ? (activeScores.reduce((a: number, b: number) => a + b, 0) / activeScores.length).toFixed(1)
+                                : 0;
+                            })()}
+                          </td>
+                        )}
                         <td className="border border-gray-800 p-0.5 text-center text-[14px] font-semibold">
                           {typeof subject === "string"
                             ? ""

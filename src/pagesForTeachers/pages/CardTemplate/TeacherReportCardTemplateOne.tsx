@@ -698,7 +698,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       {school?.presentTerm === "3rd Term" && (
                         <th className="border border-gray-800 p-1 w-[80px]">3rd Term</th>
                       )}
-                      {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                      {school?.presentTerm === "3rd Term" && (
                         <th className="border border-gray-800 p-1 w-[90px]">Cumul. Avg</th>
                       )}
                       <th className="border border-gray-800 p-1 w-20">GRADE</th>
@@ -752,7 +752,7 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                             {typeof subject === "string" ? "" : (st3?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
                           </td>
                         )}
-                        {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                        {school?.presentTerm === "3rd Term" && (
                           <td className="border border-gray-800 p-1 text-center font-semibold">
                             {typeof subject === "string" ? "" : (() => {
                               const s1 = st1?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;

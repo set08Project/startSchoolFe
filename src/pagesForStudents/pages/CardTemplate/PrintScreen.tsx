@@ -627,15 +627,15 @@ const PrintReportCardScreen: React.FC = () => {
                                       </div> */}
                           <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                             <p className="text-[12px]">
-                              {(() => {
+                              {school?.presentTerm === "3rd Term" ? (() => {
                                 const s1 = st1?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
                                 const s2 = st2?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
                                 const s3 = st3?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
-                                const activeScores = [s1, s2, s3].slice(0, school?.presentTerm === "1st Term" ? 1 : school?.presentTerm === "2nd Term" ? 2 : 3).filter(s => s > 0);
+                                const activeScores = [s1, s2, s3].filter(s => s > 0);
                                 return activeScores.length > 0
                                   ? (activeScores.reduce((a, b) => a + b, 0) / activeScores.length).toFixed(1)
                                   : 0;
-                              })()}
+                              })() : (el?.mark || 0)}
                             </p>
                           </div>
                           <div className=" w-[78px] text-[12px] px-2 leading-tight font-medium border-r flex flex-col justify-center items-center ">
