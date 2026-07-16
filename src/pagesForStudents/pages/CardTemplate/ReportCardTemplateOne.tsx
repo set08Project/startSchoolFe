@@ -225,8 +225,17 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
     el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
   );
 
+  // Filter out unoffered subjects (where all marks are 0 across all terms)
+  const filteredResult = (grade?.result || []).filter((el: any) => {
+    const s1 = st1?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s2 = st2?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s3 = st3?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const currentTotal = el.mark ?? ((el.test1 ?? 0) + (el.test2 ?? 0) + (el.test3 ?? 0) + (el.test4 ?? 0) + (el.exam ?? 0));
+    return currentTotal > 0 || s1 > 0 || s2 > 0 || s3 > 0;
+  });
+
   const totalScore =
-    grade?.result?.reduce((acc: number, el: any) => {
+    filteredResult.reduce((acc: number, el: any) => {
       const subjectTotal =
         (el.test1 ?? 0) +
         (el.test2 ?? 0) +
@@ -237,7 +246,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
     }, 0) ?? 0;
 
   const subjectsCount =
-    grade?.result?.filter((el: any) => el?.subject != null)?.length || 0;
+    filteredResult.filter((el: any) => el?.subject != null)?.length || 0;
 
   // average score across offered subjects (0-100), safe when no subjects exist
   const commulationScore = subjectsCount > 0 ? totalScore / subjectsCount : 0;
@@ -822,8 +831,8 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                     </tr>
                   </thead>
                   <tbody>
-                    {(grade?.result && grade?.result.length
-                      ? grade?.result
+                    {(filteredResult && filteredResult.length
+                      ? filteredResult
                       : subjects
                     ).map((subject: any, index: number) => (
                       <tr key={index} className={index === 0 ? "" : ""}>
@@ -987,7 +996,7 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                           <Label className="text-xs">
                             No. Of Subjects Offered:{" "}
                             <span className="text-sm font-semibold mt-1">
-                              {grade?.result?.length}
+                              {filteredResult.length}
                             </span>
                           </Label>
                         </div>

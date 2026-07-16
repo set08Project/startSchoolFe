@@ -65,26 +65,60 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
 
   const { schoolInfo } = useSchoolSessionData(studentInfo?.schoolIDs);
 
+  const st1 = gradeData?.reportCard.find(
+    (el: any) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(1st Term)`
+  );
+
+  const st2 = gradeData?.reportCard.find(
+    (el: any) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(2nd Term)`
+  );
+
+  const st3 = gradeData?.reportCard.find(
+    (el: any) =>
+      el.classInfo ===
+      `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
+  );
+
+  // Filter out unoffered subjects (where all marks are 0 across all terms)
+  const filteredResult = (grade?.result || []).filter((el: any) => {
+    const s1 = st1?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s2 = st2?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s3 = st3?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const currentTotal =
+      el.mark ??
+      (el.test1 ?? 0) + (el.test2 ?? 0) + (el.test3 ?? 0) + (el.test4 ?? 0) + (el.exam ?? 0);
+    return currentTotal > 0 || s1 > 0 || s2 > 0 || s3 > 0;
+  });
+
   let numbPassed =
     lodash.sortBy(
-      grade?.result?.filter((el: any) => {
+      filteredResult.filter((el: any) => {
         if (studentInfo?.classAssigned === "JSS 1A") {
           return el?.subject !== "Diction";
         }
         return true;
       }),
       "subject"
-    )?.length - lodash.filter(grade?.result, { grade: "F" })?.length;
+    )?.length - lodash.filter(filteredResult, { grade: "F" })?.length;
 
   let commulationScore =
-    (grade?.result
+    (filteredResult
       ?.map((el: any) => {
-        return el.exam + el.test1 + el.test2 + el.test3 + el.test4;
+        return (el.exam || 0) + (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0);
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (grade?.result?.length * 100)) *
+      (filteredResult
+        ?.map((el: any) => {
+          return el.subject !== null;
+        })
+        ?.filter(Boolean)?.length *
+        100)) *
     100;
 
   let holdeAll = [];
@@ -441,7 +475,7 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
                   <main className="flex flex-col mt-1">
                     {lodash
                       .sortBy(
-                        grade?.result?.filter((el: any) => {
+                        filteredResult.filter((el: any) => {
                           if (studentInfo?.classAssigned === "JSS 1A") {
                             return el?.subject !== "Diction";
                           }
@@ -606,7 +640,7 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
                     {
                       lodash.sortBy(
-                        grade?.result?.filter((el: any) => {
+                        filteredResult.filter((el: any) => {
                           if (studentInfo?.classAssigned === "JSS 1A") {
                             return el?.subject !== "Diction";
                           }
@@ -742,7 +776,7 @@ const ReportCardScreenDone: React.FC<any> = ({ student: studentInfo }) => {
 
               <main className="mt-5">
                 <div className="bg-slate-50 flex-wrap h-[100px] flex items-end pb-2 ">
-                  {grade?.result?.map((el: any, i: number) => (
+                  {filteredResult.map((el: any, i: number) => (
                     <ChartPerformance
                       low={resultMin[i]?.score}
                       max={resultMax[i]?.score}

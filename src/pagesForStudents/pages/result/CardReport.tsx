@@ -187,7 +187,10 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
         className={`shrink-0 border-r items-center flex`}
       >
         <div className="flex gap-4 min-w-max">
-          {lodash.sortBy(props?.result, "subject")?.map((el: any) => (
+          {lodash.sortBy(props?.result, "subject")?.filter((el: any) => {
+            const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (el.exam || 0);
+            return total > 0;
+          })?.map((el: any) => (
             <SubjectScore props={props} el={el} />
           ))}
         </div>

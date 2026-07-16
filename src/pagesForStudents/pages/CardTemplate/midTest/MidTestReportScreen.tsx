@@ -77,15 +77,21 @@ const MidTestReportScreen: React.FC = () => {
   //   lodash.filter(gradeMidData?.midReportCard[0]?.result, { grade: "F" })
   //     ?.length;
 
+  // Filter out unoffered subjects (where all marks are 0)
+  const filteredMidResult = (gradeMidData?.midReportCard[0]?.result || []).filter((el: any) => {
+    const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (isNaN(el.exam) ? 0 : el.exam);
+    return total > 0;
+  });
+
   let commulationScore =
-    (gradeMidData?.midReportCard[0]?.result
+    (filteredMidResult
       ?.map((el: any) => {
         return isNaN(el.exam) ? 0 : el.exam;
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (gradeMidData?.midReportCard[0]?.result?.length * 100)) *
+      (filteredMidResult.length * 100)) *
     100;
 
   let holdeAll = [];
@@ -216,15 +222,21 @@ const MidTestReportScreen: React.FC = () => {
     preprocessContent();
   }, []);
 
+  // Filter out unoffered subjects for mid-result data
+  const filteredMidResultData = (midResultData?.result || []).filter((el: any) => {
+    const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (isNaN(el.exam) ? 0 : el.exam);
+    return total > 0;
+  });
+
   const numbPassed =
-    midResultData?.result?.filter((item: any) => {
+    filteredMidResultData.filter((item: any) => {
       // Count all grades that are not "F"
       return item.grade !== "F" && item.grade !== "F9";
     })?.length || 0;
 
   // Calculate percentage of passed subjects
-  const passPercentage = midResultData?.result?.length
-    ? ((numbPassed / midResultData?.result?.length) * 100).toFixed(1)
+  const passPercentage = filteredMidResultData.length
+    ? ((numbPassed / filteredMidResultData.length) * 100).toFixed(1)
     : 0;
 
   console.log(numbPassed, passPercentage);
@@ -548,7 +560,7 @@ const MidTestReportScreen: React.FC = () => {
                   </main>
                   <main className="flex flex-col mt-1">
                     {lodash
-                      .sortBy(midResultData?.result, "subject")
+                      .sortBy(filteredMidResultData, "subject")
                       ?.map((el: any, i: number) => {
                         const perfRecord = midTestPerformace?.find(
                           (p: any) =>

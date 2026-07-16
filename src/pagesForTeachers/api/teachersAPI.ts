@@ -1095,6 +1095,20 @@ export const viewStudentMidGrade = async (studentID: string) => {
   }
 };
 
+/**
+ * Bulk-fetch all students' report cards for a class in one request.
+ * Dramatically faster than calling viewStudentGrade per student.
+ */
+export const getClassReportCards = async (classID: string) => {
+  try {
+    return await axios
+      .get(`${URL}/class-report-cards/${classID}`)
+      .then((res: any) => res?.data);
+  } catch (error) {
+    return error;
+  }
+};
+
 export const reportCardRemark = async (
   teacherID: string,
   studentID: string,

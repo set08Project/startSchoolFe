@@ -99,20 +99,29 @@ const ReportCardDesignAdminScreen: React.FC = () => {
 
   const schoolAddress = school?.address;
 
+  // Filter out unoffered subjects (where all marks are 0 across all terms)
+  const filteredResult = (grade?.result || []).filter((el: any) => {
+    const s1 = st1?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s2 = st2?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const s3 = st3?.result?.find((e: any) => e.subject === el.subject)?.mark || 0;
+    const currentTotal = el.mark ?? ((el.test1 ?? 0) + (el.test2 ?? 0) + (el.test3 ?? 0) + (el.test4 ?? 0) + (el.exam ?? 0));
+    return currentTotal > 0 || s1 > 0 || s2 > 0 || s3 > 0;
+  });
+
   let numbPassed =
-    grade?.result?.length -
-    lodash.filter(grade?.result, { grade: "F" })?.length;
+    filteredResult.length -
+    lodash.filter(filteredResult, { grade: "F" })?.length;
 
   let commulationScore =
-    (grade?.result
+    (filteredResult
       ?.map((el: any) => {
         return el.exam + el.test1 + el.test2 + el.test3 + el.test4;
       })
       .reduce((a: number, b: number) => {
         return a + b;
       }, 0) /
-      (grade?.result
-        ?.map((el) => {
+      (filteredResult
+        ?.map((el: any) => {
           return el.subject !== null;
         })
         ?.filter(Boolean)?.length *
@@ -512,7 +521,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
 
                 <main className="flex flex-col mt-1">
                   {lodash
-                    .sortBy(grade?.result, "subject")
+                    .sortBy(filteredResult, "subject")
                     ?.map((el: any, i: number) => (
                       <section
                         className="flex my-1 bg-blue-50 min-h-[40px] py-1"
@@ -702,7 +711,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
                   No. of subject taken
                 </h1>
                 <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                  {grade?.result?.length}
+                  {filteredResult.length}
                 </h1>
               </div>
               <div className=" border p-2 ">
@@ -836,7 +845,7 @@ const ReportCardDesignAdminScreen: React.FC = () => {
             </main>
             <main className="mt-10">
               <div className="bg-slate-50 overflow-auto h-[100px] flex items-end pb-2 ">
-                {grade?.result?.map((el: any, i: number) => (
+                {filteredResult.map((el: any, i: number) => (
                   <ChartPerformance
                     low={resultMin[i]?.score}
                     max={resultMax[i]?.score}

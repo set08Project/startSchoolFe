@@ -208,7 +208,10 @@ const ReportCardTemplate: FC<iSchool> = ({
                 </tr>
               </thead>
               <tbody>
-                {subjects?.result.map((props: any, i: any) => (
+                {(subjects?.result || []).filter((el: any) => {
+                  const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (el.exam || 0);
+                  return total > 0;
+                }).map((props: any, i: any) => (
                   <tr key={i} className={i % 2 === 0 ? "bg-gray-100" : ""}>
                     <td className="border border-gray-300 lg:px-6 px-8 py-3 text-[12px] lg:text-[15px]">
                       {i + 1}
@@ -282,12 +285,18 @@ const ReportCardTemplate: FC<iSchool> = ({
                     Total Mark
                   </th>
                   <th className="border border-gray-300 py-2 px-3 text-center text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px]">
-                    {`${subjects?.result
+                    {`${(subjects?.result || []).filter((el: any) => {
+                      const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (el.exam || 0);
+                      return total > 0;
+                    })
                       ?.map((el: any) => el.points)
                       .reduce(
                         (a: number, b: number) => a + b,
                         0
-                      )}/${subjects?.result
+                      )}/${(subjects?.result || []).filter((el: any) => {
+                      const total = (el.test1 || 0) + (el.test2 || 0) + (el.test3 || 0) + (el.test4 || 0) + (el.exam || 0);
+                      return total > 0;
+                    })
                       ?.map((el: any) => el.score)
                       .reduce((a: number, b: number) => a + b, 0)}`}
                   </th>
