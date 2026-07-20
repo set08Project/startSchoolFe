@@ -18,7 +18,7 @@ import ReportCardTemplateOne from "./ReportCardTemplateOne";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
 import { comment } from "./comment";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { viewStudentGrade } from "../../../pagesForTeachers/api/teachersAPI";
 import jsPDF from "jspdf";
@@ -40,6 +40,10 @@ const PrintReportCard: React.FC = () => {
     });
   };
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const classInfoQuery = searchParams.get("classInfo");
+
   const { studentInfo } = useStudentInfo();
   const { schoolAnnouncement }: any = useSchoolAnnouncement(
     studentInfo?.schoolIDs
@@ -52,7 +56,7 @@ const PrintReportCard: React.FC = () => {
   let grade = gradeData?.reportCard?.find((el: any) => {
     return (
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession}(${school?.presentTerm})`
+      `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
     );
   });
 
@@ -71,19 +75,19 @@ const PrintReportCard: React.FC = () => {
   const st1 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession}(1st Term)`
+      `${studentInfo?.classAssigned} session: ${targetSession}(1st Term)`
   );
 
   const st2 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession}(2nd Term)`
+      `${studentInfo?.classAssigned} session: ${targetSession}(2nd Term)`
   );
 
   const st3 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
+      `${studentInfo?.classAssigned} session: ${targetSession}(3rd Term)`
   );
 
   // Filter out unoffered subjects (where all marks are 0 across all terms)
@@ -245,7 +249,7 @@ const PrintReportCard: React.FC = () => {
             .trim();
         const classAssignedNorm = normalize(studentInfo?.classAssigned || "");
         const sessionNorm = normalize(
-          schoolInfo?.[0]?.year || school?.presentSession || ""
+          schoolInfo?.[0]?.year || targetSession || ""
         );
         const targetClassInfo = normalize(
           grade?.classInfo || gradeData?.reportCard?.[0]?.classInfo || ""
@@ -286,9 +290,9 @@ const PrintReportCard: React.FC = () => {
                 const found =
                   matchesClass &&
                   (matchesYearOrTerm ||
-                    (school?.presentSession &&
+                    (targetSession &&
                       info.includes(
-                        normalize(String(school?.presentSession))
+                        normalize(String(targetSession))
                       )));
                 if (!found)
                   console.log(
@@ -416,8 +420,8 @@ const PrintReportCard: React.FC = () => {
 
   const { toPDF, targetRef }: any = usePDF({
     filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
-      school?.presentSession
-    }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
+      targetSession
+    }-${targetTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
 
   const handleDownloadPdf = async () => {
@@ -449,7 +453,7 @@ const PrintReportCard: React.FC = () => {
   useEffect(() => {
     preprocessContent();
   }, []);
-  console.log(school?.presentTerm);
+  console.log(targetTerm);
 
 
 
@@ -545,21 +549,21 @@ const PrintReportCard: React.FC = () => {
       </div>
       <div ref={targetRef}>
         <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
-          {studentInfo?.classAssigned} {school?.presentSession}
-          <span className="mx-1">{school?.presentTerm}</span> Student Report
+          {studentInfo?.classAssigned} {targetSession}
+          <span className="mx-1">{targetTerm}</span> Student Report
         </h1>
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
-        <div className="relative ">
-          <main className="flex justify-center mt-10">
+        <div className="relative w-full overflow-x-auto">
+          <main className="flex md:justify-center mt-10 w-max min-w-full">
             <div
               className="p-4 overflow-hidden border"
               style={{
                 width: `${
-                  school?.presentTerm === "1st Term"
+                  targetTerm === "1st Term"
                     ? "994px"
-                    : school?.presentTerm === "2nd Term"
+                    : targetTerm === "2nd Term"
                     ? "1072px"
-                    : school?.presentTerm === "3rd Term"
+                    : targetTerm === "3rd Term"
                     ? "1150px"
                     : null
                 }`,
@@ -667,8 +671,8 @@ const PrintReportCard: React.FC = () => {
               </div>
               {/* end */}
               <div className="text-[12px] md:text-[15px] h-14 my-5 uppercase bg-blue-950 text-white flex justify-center items-center">
-                {school?.presentSession}
-                <span className="mx-1">{school?.presentTerm}</span> Student
+                {targetSession}
+                <span className="mx-1">{targetTerm}</span> Student
                 Report
               </div>
               <main className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mb-10">
@@ -705,7 +709,7 @@ const PrintReportCard: React.FC = () => {
                     Academic Session
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {school?.presentSession}
+                    {targetSession}
                   </h1>
                 </div>
                 <div className=" border p-2 ">
@@ -764,11 +768,11 @@ const PrintReportCard: React.FC = () => {
                       className="flex  bg-blue-50"
                       style={{
                         width: `${
-                          school?.presentTerm === "1st Term"
+                          targetTerm === "1st Term"
                             ? "994px"
-                            : school?.presentTerm === "2nd Term"
+                            : targetTerm === "2nd Term"
                             ? "1072px"
-                            : school?.presentTerm === "3rd Term"
+                            : targetTerm === "3rd Term"
                             ? "1150px"
                             : null
                         }`,
@@ -788,15 +792,15 @@ const PrintReportCard: React.FC = () => {
                         <p className="text">Total</p>
                         <p className="text-[12px]">
                           {" "}
-                          {school?.presentTerm === "3rd Term"
+                          {targetTerm === "3rd Term"
                             ? "(300)"
                             : "(100)"}
                         </p>
                       </div> */}
                       {/* Always show 1st Term if current term is 1st, 2nd, or 3rd */}
-                      {(school?.presentTerm === "1st Term" ||
-                        school?.presentTerm === "2nd Term" ||
-                        school?.presentTerm === "3rd Term") && (
+                      {(targetTerm === "1st Term" ||
+                        targetTerm === "2nd Term" ||
+                        targetTerm === "3rd Term") && (
                         <div className="w-[78px] border-r flex flex-col justify-center items-center">
                           <p className="text">1st Term</p>
                           <p className="text-[12px]">(100)</p>
@@ -804,8 +808,8 @@ const PrintReportCard: React.FC = () => {
                       )}
 
                       {/* Show 2nd Term only if current term is 2nd or 3rd */}
-                      {(school?.presentTerm === "2nd Term" ||
-                        school?.presentTerm === "3rd Term") && (
+                      {(targetTerm === "2nd Term" ||
+                        targetTerm === "3rd Term") && (
                         <div className="w-[78px] border-r flex flex-col justify-center items-center">
                           <p className="text">2nd Term</p>
                           <p className="text-[12px]">(100)</p>
@@ -813,7 +817,7 @@ const PrintReportCard: React.FC = () => {
                       )}
 
                       {/* Show 3rd Term only if current term is 3rd */}
-                      {school?.presentTerm === "3rd Term" && (
+                      {targetTerm === "3rd Term" && (
                         <div className="w-[78px] border-r flex flex-col justify-center items-center">
                           <p className="text">3rd Term</p>
                           <p className="text-[12px]">(100)</p>
@@ -853,11 +857,11 @@ const PrintReportCard: React.FC = () => {
                             key={i - el?._id}
                             style={{
                               width: `${
-                                school?.presentTerm === "1st Term"
+                                targetTerm === "1st Term"
                                   ? "994px"
-                                  : school?.presentTerm === "2nd Term"
+                                  : targetTerm === "2nd Term"
                                   ? "1072px"
-                                  : school?.presentTerm === "3rd Term"
+                                  : targetTerm === "3rd Term"
                                   ? "1150px"
                                   : null
                               }`,
@@ -896,9 +900,9 @@ const PrintReportCard: React.FC = () => {
                                   0}
                               </p>
                             </div> */}
-                            {(school?.presentTerm === "1st Term" ||
-                              school?.presentTerm === "2nd Term" ||
-                              school?.presentTerm === "3rd Term") && (
+                            {(targetTerm === "1st Term" ||
+                              targetTerm === "2nd Term" ||
+                              targetTerm === "3rd Term") && (
                               <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                                 <p className="text-[12px]">
                                   {" "}
@@ -915,8 +919,8 @@ const PrintReportCard: React.FC = () => {
                                 </p>
                               </div>
                             )}
-                            {school?.presentTerm === "2nd Term" ||
-                              (school?.presentTerm === "3rd Term" && (
+                            {targetTerm === "2nd Term" ||
+                              (targetTerm === "3rd Term" && (
                                 <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                                   <p className="text-[12px]">
                                     {/* {el?.test1 +
@@ -932,7 +936,7 @@ const PrintReportCard: React.FC = () => {
                                 </div>
                               ))}
 
-                            {school?.presentTerm === "3rd Term" && (
+                            {targetTerm === "3rd Term" && (
                               <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                                 <p className="text-[12px]">
                                   {/* {el?.test1 +
@@ -958,7 +962,7 @@ const PrintReportCard: React.FC = () => {
                                                      </div> */}
                             <div className=" w-[78px] border-r flex flex-col justify-center items-center ">
                               <p className="text-[12px]">
-                                 {school?.presentTerm === "3rd Term" ? (() => {
+                                 {targetTerm === "3rd Term" ? (() => {
                                    const s1 = st1?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
                                    const s2 = st2?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
                                    const s3 = st3?.result?.find((e: any) => e.subject === el?.subject)?.mark || 0;
@@ -1067,7 +1071,7 @@ const PrintReportCard: React.FC = () => {
                     Percenatge score
                   </h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {school?.presentTerm === "3rd Term"
+                    {targetTerm === "3rd Term"
                       ? (() => {
                           const p1 = st1?.points || 0;
                           const p2 = st2?.points || 0;
