@@ -8,8 +8,8 @@ import axios from "axios";
 // const URL: string = import.meta.env.VITE_MAIN_URL;
 // export const URL: string = "http://localhost:2244/api";
 
-// const URL: string = "https://startschoolbe-1-toq0.onrender.comapi";
-export const URL: string = "https://startschoolbe-1-toq0.onrender.com/api";
+// const URL: string = "https://startschoolbe-3.onrender.comapi";
+export const URL: string = "https://startschoolbe-3.onrender.com/api";
 // export const URL: string = "https://start-school-be.vercel.app/api";
 
 // const URL: string = "https://server.justnext.com.ng/api";

@@ -53,11 +53,20 @@ const PrintReportCard: React.FC = () => {
 
   let school: any = schoolAnnouncement;
 
+  let targetSession = school?.presentSession;
+  let targetTerm = school?.presentTerm;
+  let targetClassInfo = classInfoQuery || `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`;
+
+  if (classInfoQuery) {
+    const sessionMatch = classInfoQuery.match(/session:\s*(.*?)\((.*?)\)/);
+    if (sessionMatch) {
+      targetSession = sessionMatch[1].trim();
+      targetTerm = sessionMatch[2].trim();
+    }
+  }
+
   let grade = gradeData?.reportCard?.find((el: any) => {
-    return (
-      el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
-    );
+    return el.classInfo === targetClassInfo;
   });
 
   const { oneClass: classDetails } = useReadOneClassInfo(

@@ -13,16 +13,13 @@ if (!fs.existsSync(indexFile)) {
   process.exit(1);
 }
 
-const copies = ['200.html', '404.html'];
-for (const name of copies) {
-  const dest = path.join(distDir, name);
-  try {
-    fs.copyFileSync(indexFile, dest);
-    console.log(`Wrote ${name}`);
-  } catch (err) {
-    console.error(`Failed to write ${name}:`, err);
-    process.exitCode = 1;
+// Remove stale react-snap output files so react-snap can run cleanly
+for (const name of ['200.html', '404.html']) {
+  const filePath = path.join(distDir, name);
+  if (fs.existsSync(filePath)) {
+    fs.rmSync(filePath);
+    console.log(`Removed stale ${name} from dist.`);
   }
 }
 
-console.log('SPA fallback files written to dist (200.html, 404.html)');
+console.log('dist/index.html verified. react-snap will generate 200.html and 404.html.');

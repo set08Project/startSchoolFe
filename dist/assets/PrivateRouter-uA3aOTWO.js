@@ -1,1 +1,0 @@
-import{aV as a,r as o,ca as c,j as e,cb as i}from"./index-BKL_tGbi.js";const u=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{c()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(i,{to:"/"})})};export{u as default};

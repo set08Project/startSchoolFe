@@ -80,16 +80,27 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
     if (queryClassInfo) {
       return el.classInfo === queryClassInfo;
     }
-    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
+    return el.classInfo === `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
   });
 
   console.log("DataII ", hookGradeData?.reportCard?.find((el:any)=>{
     if (queryClassInfo) {
       return el.classInfo === queryClassInfo;
     }
-    return el.classInfo === `${studentInfo?.classAssigned} session: ${timetbale?.data?.presentSession}(${timetbale?.data?.presentTerm})`
+    return el.classInfo === `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
   }))
 
+
+    let targetSession = timetbale?.data?.presentSession;
+  let targetTerm = timetbale?.data?.presentTerm;
+
+  if (queryClassInfo) {
+    const sessionMatch = queryClassInfo.match(/session:\s*(.*?)\((.*?)\)/);
+    if (sessionMatch) {
+      targetSession = sessionMatch[1].trim();
+      targetTerm = sessionMatch[2].trim();
+    }
+  }
 
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
