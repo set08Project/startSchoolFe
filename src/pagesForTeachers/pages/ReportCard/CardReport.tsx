@@ -27,6 +27,7 @@ import {
 import { mutate } from "swr";
 import toast, { Toaster } from "react-hot-toast";
 import Input from "../../components/reUse/Input";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 import {
   useReadMyClassInfoData,
   useReadOneClassInfo,
@@ -196,9 +197,29 @@ const MainStudentRow: FC<iProps> = ({ props, i, oneClass: theClass }) => {
             src={pix}
           />
 
-          <div className="w-[180px] ">
-            {" "}
-            {props?.studentFirstName} {props?.studentLastName}
+          <div className="w-[180px] flex flex-col justify-center">
+            <div>
+              {props?.studentFirstName} {props?.studentLastName}
+            </div>
+            {(() => {
+              const prom = checkPromotionStatus(
+                schoolAnnouncement,
+                result?.result || [],
+                result?.points || 0
+              );
+              return (
+                <div
+                  className={`text-[10px] font-bold uppercase mt-1 px-1.5 py-0.5 rounded border max-w-fit ${
+                    prom.isRepeat
+                      ? "bg-red-100 text-red-700 border-red-300"
+                      : "bg-green-100 text-green-700 border-green-300"
+                  }`}
+                  title={prom.reason}
+                >
+                  {prom.status}
+                </div>
+              );
+            })()}
           </div>
         </div>
       </div>

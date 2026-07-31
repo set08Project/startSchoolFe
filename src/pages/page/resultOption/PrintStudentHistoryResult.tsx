@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 
 const PrintReportCardDesignAdminScreen: React.FC = () => {
   useEffect(() => {
@@ -700,6 +701,32 @@ const PrintReportCardDesignAdminScreen: React.FC = () => {
                 </h1>
               </div>
             </main>
+
+            {/* Promotion Decision / Recommendation */}
+            {(() => {
+              const prom = checkPromotionStatus(
+                school,
+                data?.results || [],
+                commulationScore
+              );
+              return (
+                <div className="my-4 p-3 border rounded bg-slate-50 flex items-center justify-between">
+                  <span className="text-[12px] font-bold uppercase tracking-wider text-gray-700">
+                    Recommendation / Decision:
+                  </span>
+                  <span
+                    className={`text-[13px] font-extrabold uppercase px-3 py-1 rounded ${
+                      prom.isRepeat
+                        ? "bg-red-100 text-red-700 border border-red-300"
+                        : "bg-green-100 text-green-700 border border-green-300"
+                    }`}
+                  >
+                    {prom.reason}
+                  </span>
+                </div>
+              );
+            })()}
+
             <main className="flex justify-center text-[12px] gap-2">
               <div className="border-r pr-2 ">
                 <h1>

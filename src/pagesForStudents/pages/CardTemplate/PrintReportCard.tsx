@@ -22,6 +22,7 @@ import { Link, useLocation } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { viewStudentGrade } from "../../../pagesForTeachers/api/teachersAPI";
 import jsPDF from "jspdf";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 
 const PrintReportCard: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -561,6 +562,56 @@ const PrintReportCard: React.FC = () => {
           {studentInfo?.classAssigned} {targetSession}
           <span className="mx-1">{targetTerm}</span> Student Report
         </h1>
+        {/* ===== PROMOTION DECISION BANNER (TOP OF PAGE) ===== */}
+        {(() => {
+          const percVal = parseFloat(
+            targetTerm === "3rd Term"
+              ? (() => {
+                  const p1 = st1?.points || 0;
+                  const p2 = st2?.points || 0;
+                  const p3 = st3?.points || 0;
+                  const active = [p1, p2, p3].filter((p: number) => p > 0);
+                  return active.length > 0
+                    ? (active.reduce((a: number, b: number) => a + b, 0) / active.length).toFixed(2)
+                    : "0.00";
+                })()
+              : commulationScore.toFixed(2)
+          );
+          const prom = checkPromotionStatus(
+            school || (schoolInfo && schoolInfo[0]),
+            filteredResult,
+            percVal
+          );
+          return (
+            <div
+              className={`w-full my-4 p-4 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm border-2 ${
+                prom.isRepeat
+                  ? "bg-red-50 border-red-400"
+                  : "bg-green-50 border-green-400"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`text-3xl ${prom.isRepeat ? "text-red-500" : "text-green-500"}`}>
+                  {prom.isRepeat ? "⚠️" : "✅"}
+                </span>
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+                    Recommendation / Decision
+                  </p>
+                  <p className={`text-[15px] font-extrabold uppercase tracking-wide ${prom.isRepeat ? "text-red-700" : "text-green-700"}`}>
+                    {prom.reason}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-[11px] text-gray-500">Percentage Score</p>
+                <p className={`text-[18px] font-bold ${prom.isRepeat ? "text-red-600" : "text-green-600"}`}>
+                  {percVal.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          );
+        })()}
         {/* <main className="min-h-[30vh] border rounded-sm p-2">jj</main> */}
         <div className="relative w-full overflow-x-auto">
           <main className="flex md:justify-center mt-10 w-max min-w-full">
@@ -1094,6 +1145,45 @@ const PrintReportCard: React.FC = () => {
                   </h1>
                 </div>
               </main>
+
+              {/* Promotion Decision / Recommendation */}
+              {(() => {
+                const percVal = parseFloat(
+                  targetTerm === "3rd Term"
+                    ? (() => {
+                        const p1 = st1?.points || 0;
+                        const p2 = st2?.points || 0;
+                        const p3 = st3?.points || 0;
+                        const active = [p1, p2, p3].filter((p: number) => p > 0);
+                        return active.length > 0
+                          ? (active.reduce((a: number, b: number) => a + b, 0) / active.length).toFixed(2)
+                          : "0.00";
+                      })()
+                    : commulationScore.toFixed(2)
+                );
+                const prom = checkPromotionStatus(
+                  school || (schoolInfo && schoolInfo[0]),
+                  filteredResult,
+                  percVal
+                );
+                return (
+                  <div className="my-4 p-3 border rounded bg-slate-50 flex items-center justify-between">
+                    <span className="text-[12px] font-bold uppercase tracking-wider text-gray-700">
+                      Recommendation / Decision:
+                    </span>
+                    <span
+                      className={`text-[13px] font-extrabold uppercase px-3 py-1 rounded ${
+                        prom.isRepeat
+                          ? "bg-red-100 text-red-700 border border-red-300"
+                          : "bg-green-100 text-green-700 border border-green-300"
+                      }`}
+                    >
+                      {prom.reason}
+                    </span>
+                  </div>
+                );
+              })()}
+
               <main className="flex justify-center text-[12px] gap-2">
                 <div className="border-r pr-2 ">
                   <h1>

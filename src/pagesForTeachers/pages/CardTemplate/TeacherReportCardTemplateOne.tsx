@@ -22,6 +22,7 @@ import toast, { Toaster } from "react-hot-toast";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 import { usePDF } from "react-to-pdf";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 import {
   useReadOneClassInfo,
   useStudentInfo,
@@ -1022,6 +1023,31 @@ const TeacherReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* Promotion Decision / Recommendation */}
+            {(() => {
+              const prom = checkPromotionStatus(
+                school,
+                filteredResult,
+                commulationScore
+              );
+              return (
+                <div className="my-2 p-2 border border-gray-800 rounded bg-slate-50 flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                    Recommendation / Decision:
+                  </span>
+                  <span
+                    className={`text-xs font-extrabold uppercase px-3 py-1 rounded ${
+                      prom.isRepeat
+                        ? "bg-red-100 text-red-700 border border-red-300"
+                        : "bg-green-100 text-green-700 border border-green-300"
+                    }`}
+                  >
+                    {prom.reason}
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* Comments and Signatures */}
             <div className="border-t my-1" />

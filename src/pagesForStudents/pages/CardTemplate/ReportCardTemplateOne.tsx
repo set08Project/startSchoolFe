@@ -20,10 +20,9 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { viewStudentGrade } from "../../../pagesForTeachers/api/teachersAPI";
 import toast, { Toaster } from "react-hot-toast";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
 import { usePDF } from "react-to-pdf";
-import { useNotes, useSchoolClassRMDetail, useSchoolData, useSchoolTeacher } from "@/pages/hook/useSchoolAuth";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
+import { useNotes } from "../../../pages/hook/useSchoolAuth";
 
 interface ReportCardTemplateOneProps {
   studentInfo?: any;
@@ -1030,6 +1029,31 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
                 </table>
               </div>
             </div>
+
+            {/* Promotion Decision / Recommendation */}
+            {(() => {
+              const prom = checkPromotionStatus(
+                school,
+                filteredResult,
+                commulationScore
+              );
+              return (
+                <div className="my-3 p-3 border border-gray-800 rounded bg-slate-50 flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                    Recommendation / Decision:
+                  </span>
+                  <span
+                    className={`text-xs font-extrabold uppercase px-3 py-1 rounded ${
+                      prom.isRepeat
+                        ? "bg-red-100 text-red-700 border border-red-300"
+                        : "bg-green-100 text-green-700 border border-green-300"
+                    }`}
+                  >
+                    {prom.reason}
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* Class Performance */}
             {/* <div className="mb-4">

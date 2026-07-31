@@ -21,6 +21,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 
 const AdminPrintReportCardScreen: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -773,6 +774,45 @@ const AdminPrintReportCardScreen: React.FC = () => {
                   </h1>
                 </div>
               </main>
+
+              {/* Promotion Decision / Recommendation */}
+              {(() => {
+                const percVal = parseFloat(
+                  school?.presentTerm === "3rd Term"
+                    ? (() => {
+                        const p1 = st1?.points || 0;
+                        const p2 = st2?.points || 0;
+                        const p3 = st3?.points || 0;
+                        const active = [p1, p2, p3].filter((p: number) => p > 0);
+                        return active.length > 0
+                          ? (active.reduce((a: number, b: number) => a + b, 0) / active.length).toFixed(2)
+                          : "0.00";
+                      })()
+                    : commulationScore.toFixed(2)
+                );
+                const prom = checkPromotionStatus(
+                  school || (schoolInfo && schoolInfo[0]),
+                  filteredResult,
+                  percVal
+                );
+                return (
+                  <div className="my-4 p-3 border rounded bg-slate-50 flex items-center justify-between">
+                    <span className="text-[12px] font-bold uppercase tracking-wider text-gray-700">
+                      Recommendation / Decision:
+                    </span>
+                    <span
+                      className={`text-[13px] font-extrabold uppercase px-3 py-1 rounded ${
+                        prom.isRepeat
+                          ? "bg-red-100 text-red-700 border border-red-300"
+                          : "bg-green-100 text-green-700 border border-green-300"
+                      }`}
+                    >
+                      {prom.reason}
+                    </span>
+                  </div>
+                );
+              })()}
+
               <main className="flex justify-center text-[12px] gap-2">
                 <div className="border-r pr-2 ">
                   <h1>

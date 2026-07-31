@@ -20,6 +20,7 @@ import {
   useStudentGrade,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
+import { checkPromotionStatus } from "../../../utils/promotionUtils";
 
 // Types
 interface Student {
@@ -127,12 +128,13 @@ const SubjectHeader: FC<SubjectHeaderProps> = ({ subject }) => {
   );
 };
 
-const StudentRow: FC<StudentRowProps> = ({
+const StudentRow: FC<StudentRowProps & { schoolData?: any }> = ({
   student,
   index,
   subjects,
   classInfo,
   position = null,
+  schoolData,
 }) => {
   const { gradeData } = useStudentGrade(student?._id);
 
@@ -149,6 +151,8 @@ const StudentRow: FC<StudentRowProps> = ({
   const numberOfSubjects = results.length;
   const averageScore = numberOfSubjects > 0 ? totalScore / numberOfSubjects : 0;
   const grade = calculateGrade(averageScore);
+
+  const promotionInfo = checkPromotionStatus(schoolData, results, averageScore);
 
   const isEvenRow = index % 2 === 0;
 
@@ -188,6 +192,14 @@ const StudentRow: FC<StudentRowProps> = ({
       <div className="w-[60px] border-r">{averageScore.toFixed(2)}</div>
       <div className="w-[40px] border-r">{grade}</div>
       <div className="w-[40px] border-r">{propsPositionToString(position)}</div>
+      <div
+        className={`w-[90px] border-r font-bold text-[11px] uppercase ${
+          promotionInfo.isRepeat ? "text-red-600" : "text-green-600"
+        }`}
+        title={promotionInfo.reason}
+      >
+        {promotionInfo.status}
+      </div>
     </div>
   );
 };
@@ -466,6 +478,7 @@ const BroadSheetReportCardApproved: FC = () => {
           <RotatedHeader text="Total Points" width="w-[60px]" />
           <RotatedHeader text="Grade" width="w-[40px]" />
           <RotatedHeader text="Position" width="w-[40px]" />
+          <RotatedHeader text="Decision" width="w-[90px]" />
         </div>
 
         {/* Student Rows */}
@@ -479,6 +492,7 @@ const BroadSheetReportCardApproved: FC = () => {
                 subjects={sortedSubjects}
                 classInfo={classInfo}
                 position={rankMap[student._id]}
+                schoolData={data?.data || data}
               />
             ))
           ) : (
