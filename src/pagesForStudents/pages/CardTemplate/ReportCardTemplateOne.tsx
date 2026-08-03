@@ -61,36 +61,17 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
     hookStudentInfo?._id || propStudentInfo?._id
   );
   
-  
   const studentInfo =
-  propStudentInfo || stateData.studentInfo || hookStudentInfo;
+    propStudentInfo || stateData.studentInfo || hookStudentInfo;
 
-  // const {schoolAnnouncement} = useSchoolAnnouncement(hookStudentInfo?.schoolIDs)
+  const { timetbale } = useNotes(studentInfo?.schoolIDs);
 
-    // const {classroom} = useSchoolClassRMDetail(studentInfo?.schoolIDs)
-const {timetbale} = useNotes(studentInfo?.schoolIDs)
-
-    console.log("view data: ", timetbale)
+  console.log("view data: ", timetbale);
 
   const [searchParams] = useSearchParams();
   const queryClassInfo = searchParams.get("classInfo");
 
-  const grade = propGrade || stateData.grade || hookGradeData?.reportCard?.find((el:any)=>{
-    if (queryClassInfo) {
-      return el.classInfo === queryClassInfo;
-    }
-    return el.classInfo === `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
-  });
-
-  console.log("DataII ", hookGradeData?.reportCard?.find((el:any)=>{
-    if (queryClassInfo) {
-      return el.classInfo === queryClassInfo;
-    }
-    return el.classInfo === `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
-  }))
-
-
-    let targetSession = timetbale?.data?.presentSession;
+  let targetSession = timetbale?.data?.presentSession;
   let targetTerm = timetbale?.data?.presentTerm;
 
   if (queryClassInfo) {
@@ -100,6 +81,32 @@ const {timetbale} = useNotes(studentInfo?.schoolIDs)
       targetTerm = sessionMatch[2].trim();
     }
   }
+
+  const grade =
+    propGrade ||
+    stateData.grade ||
+    hookGradeData?.reportCard?.find((el: any) => {
+      if (queryClassInfo) {
+        return el.classInfo === queryClassInfo;
+      }
+      return (
+        el.classInfo ===
+        `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
+      );
+    });
+
+  console.log(
+    "DataII ",
+    hookGradeData?.reportCard?.find((el: any) => {
+      if (queryClassInfo) {
+        return el.classInfo === queryClassInfo;
+      }
+      return (
+        el.classInfo ===
+        `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`
+      );
+    })
+  );
 
   const positionFromState = stateData?.studentPosition || propStudentPosition;
   const [computedPosition, setComputedPosition] = useState<number | null>(null);
