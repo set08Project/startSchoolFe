@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 
 import MakeComplains from "./pages/report/MarkCOmplains";
 import {
+  useSchoolAnnouncement,
   useStudentGrade,
   useStudentMidGrade,
 } from "../pagesForTeachers/hooks/useTeacher";
@@ -62,22 +63,81 @@ const StudentDashboard = () => {
   const { gradeMidData } = useStudentMidGrade(studentInfo?._id);
   const { schoolInfo: schl } = useSchoolDataByName(studentInfo?.schoolName);
   const { studentInfoData } = useStudentInfoData(studentInfo?.studentID);
+  const { schoolAnnouncement }: any = useSchoolAnnouncement(
+    studentInfo?.schoolIDs
+  );
 
-  let resultData = gradeData?.reportCard?.find((el: any) => {
-    return (
-      el?.classInfo.trim() ===
-      `${oneClass?.className.trim()} session: ${schl?.presentSession}(${
-        oneClass?.presentTerm
-      })`
-    );
-  });
+  const normalizeStr = (str: string) =>
+    (str || "").toLowerCase().replace(/\s+/g, "").trim();
 
-  let midResultData = gradeMidData?.midReportCard?.find((el: any) => {
-    return (
-      el?.classInfo ===
-      `${oneClass?.className} session: ${schl?.presentSession}(${oneClass?.presentTerm})`
-    );
-  });
+  const currentClassAssigned =
+    studentInfo?.classAssigned || oneClass?.className || "";
+  const currentClassName =
+    oneClass?.className || studentInfo?.classAssigned || "";
+  const currentSession =
+    schoolAnnouncement?.presentSession || schl?.presentSession || "";
+  const currentTerm =
+    schoolAnnouncement?.presentTerm || oneClass?.presentTerm || "";
+
+  let resultData =
+    gradeData?.reportCard?.find((el: any) => {
+      if (!el?.classInfo) return false;
+      const ci = normalizeStr(el.classInfo);
+
+      const expectedAssigned = normalizeStr(
+        `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
+      );
+      if (expectedAssigned && ci === expectedAssigned) return true;
+
+      const expectedClass = normalizeStr(
+        `${currentClassName} session: ${currentSession}(${currentTerm})`
+      );
+      if (expectedClass && ci === expectedClass) return true;
+
+      if (
+        (ci.includes(normalizeStr(currentClassAssigned)) ||
+          ci.includes(normalizeStr(currentClassName))) &&
+        (currentSession ? ci.includes(normalizeStr(currentSession)) : true) &&
+        (currentTerm ? ci.includes(normalizeStr(currentTerm)) : true)
+      ) {
+        return true;
+      }
+      return false;
+    }) ||
+    gradeData?.reportCard?.find((el: any) => el?.approve === true) ||
+    (gradeData?.reportCard && gradeData.reportCard.length > 0
+      ? gradeData.reportCard[gradeData.reportCard.length - 1]
+      : undefined);
+
+  let midResultData =
+    gradeMidData?.midReportCard?.find((el: any) => {
+      if (!el?.classInfo) return false;
+      const ci = normalizeStr(el.classInfo);
+
+      const expectedAssigned = normalizeStr(
+        `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
+      );
+      if (expectedAssigned && ci === expectedAssigned) return true;
+
+      const expectedClass = normalizeStr(
+        `${currentClassName} session: ${currentSession}(${currentTerm})`
+      );
+      if (expectedClass && ci === expectedClass) return true;
+
+      if (
+        (ci.includes(normalizeStr(currentClassAssigned)) ||
+          ci.includes(normalizeStr(currentClassName))) &&
+        (currentSession ? ci.includes(normalizeStr(currentSession)) : true) &&
+        (currentTerm ? ci.includes(normalizeStr(currentTerm)) : true)
+      ) {
+        return true;
+      }
+      return false;
+    }) ||
+    gradeMidData?.midReportCard?.find((el: any) => el?.approve === true) ||
+    (gradeMidData?.midReportCard && gradeMidData.midReportCard.length > 0
+      ? gradeMidData.midReportCard[gradeMidData.midReportCard.length - 1]
+      : undefined);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -140,7 +200,7 @@ const StudentDashboard = () => {
               </p>
               <div className="flex ">
                 {resultData?.approve && !studentInfo?.viewReportCard ? (
-                  <Link to={`/print-result`}>
+                  <Link to={`/print-result?classInfo=${encodeURIComponent(resultData?.classInfo || "")}`}>
                     <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view this term's report card
                     </div>
@@ -174,7 +234,7 @@ const StudentDashboard = () => {
               </p>
               <div className="flex ">
                 {midResultData?.approve && !studentInfo?.viewReportCard ? (
-                  <Link to={`/mid`}>
+                  <Link to={`/mid?classInfo=${encodeURIComponent(midResultData?.classInfo || "")}`}>
                     <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view Mid term's report card
                     </div>
