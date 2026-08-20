@@ -13,6 +13,7 @@ import {
   URL,
   updateSchoolResumptionTeamInfo,
   updateClassTeacherGradingToggle,
+  changeSchoolEnrollmentID,
 } from "@/pages/api/schoolAPIs";
 import toast from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
@@ -66,6 +67,126 @@ const parseOrdinalDate = (str: string): string => {
     2,
     "0"
   )}`;
+};
+
+const ChangeEnrollmentIDCard = () => {
+  const { data } = useSchoolData();
+  const [currentEnrollmentID, setCurrentEnrollmentID] = useState("");
+  const [newEnrollmentID, setNewEnrollmentID] = useState("");
+  const [confirmEnrollmentID, setConfirmEnrollmentID] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentEnrollmentID.trim()) {
+      toast.error("Please enter your present Enrollment ID");
+      return;
+    }
+    if (!newEnrollmentID.trim()) {
+      toast.error("Please enter a new Enrollment ID");
+      return;
+    }
+    if (newEnrollmentID.trim() !== confirmEnrollmentID.trim()) {
+      toast.error("New Enrollment ID and Confirmation do not match");
+      return;
+    }
+    if (currentEnrollmentID.trim() === newEnrollmentID.trim()) {
+      toast.error("New Enrollment ID must be different from present Enrollment ID");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res: any = await changeSchoolEnrollmentID(data?._id, {
+        currentEnrollmentID: currentEnrollmentID.trim(),
+        newEnrollmentID: newEnrollmentID.trim(),
+      });
+
+      if (res?.status === 201 || res?.data?.status === 201) {
+        toast.success("Enrollment ID updated successfully!");
+        setCurrentEnrollmentID("");
+        setNewEnrollmentID("");
+        setConfirmEnrollmentID("");
+        mutate(`api/view-school/${data?._id}`);
+      } else {
+        const errorMsg =
+          res?.response?.data?.message ||
+          res?.data?.message ||
+          "Present Enrollment ID is incorrect";
+        toast.error(errorMsg);
+      }
+    } catch (err: any) {
+      toast.error("An error occurred while updating Enrollment ID");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="border rounded-lg p-6 bg-white shadow-md max-w-4xl mt-6">
+      <div className="mb-4">
+        <h3 className="text-base font-semibold text-blue-950">
+          Change Admin Enrollment ID
+        </h3>
+        <p className="text-sm text-gray-500 mt-1">
+          Provide your present Enrollment ID to verify your authorization before setting a new Enrollment ID.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Present Enrollment ID <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="password"
+              placeholder="Enter present Enrollment ID"
+              value={currentEnrollmentID}
+              onChange={(e) => setCurrentEnrollmentID(e.target.value)}
+              className="w-full h-11 mt-0 ml-0"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              New Enrollment ID <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="text"
+              placeholder="Enter new Enrollment ID"
+              value={newEnrollmentID}
+              onChange={(e) => setNewEnrollmentID(e.target.value)}
+              className="w-full h-11 mt-0 ml-0"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Confirm New Enrollment ID <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="text"
+              placeholder="Confirm new Enrollment ID"
+              value={confirmEnrollmentID}
+              onChange={(e) => setConfirmEnrollmentID(e.target.value)}
+              className="w-full h-11 mt-0 ml-0"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-2">
+          <Button
+            name={loading ? "Updating..." : "Update Enrollment ID"}
+            icon={loading ? <FaSpinner className="animate-spin" size={18} /> : undefined}
+            className="bg-blue-950 text-white px-6 py-2.5 rounded-md hover:bg-blue-900 transition-all font-medium"
+            onClick={() => {}}
+            type="submit"
+          />
+        </div>
+      </form>
+    </div>
+  );
 };
 
 const SettingScreen: FC = () => {
@@ -314,6 +435,8 @@ const SettingScreen: FC = () => {
           </div>
         </div>
 
+        {/* Change Enrollment ID Card */}
+        <ChangeEnrollmentIDCard />
 
       <main className="flex flex-col w-full">
         <div className="my-10 border-t" />

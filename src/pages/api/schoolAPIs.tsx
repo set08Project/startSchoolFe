@@ -1973,3 +1973,19 @@ export const updateClassTeacherGradingToggle = async (
     return error;
   }
 };
+
+export const changeSchoolEnrollmentID = async (
+  schoolID: string,
+  data: { currentEnrollmentID: string; newEnrollmentID: string }
+) => {
+  try {
+    return await axios
+      .patch(`${URL}/change-enrollment-id/${schoolID}`, data)
+      .then((res: any) => {
+        return res;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
