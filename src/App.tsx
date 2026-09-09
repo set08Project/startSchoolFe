@@ -21,8 +21,9 @@ const App = () => {
     <div className="bg-white">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>The Best School Management Platform</title>
-        {/* <link rel="canonical" href="http" /> */}
+        <title>Just Next - Best School Management Platform</title>
+        <meta name="description" content="Just Next provides standard, all-in-one school management solutions, portal access for admins, teachers, and students." />
+        <link rel="canonical" href="https://justnext.ng/" />
       </Helmet>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

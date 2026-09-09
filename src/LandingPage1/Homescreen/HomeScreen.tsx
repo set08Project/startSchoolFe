@@ -11,9 +11,16 @@ import HeroScreen from "../Hero";
 import UnlockScreen from "./UnlockScreen";
 import PeopleScreen from "./PeopleScreen";
 
+import { Helmet } from "react-helmet";
+
 const LandingScreen = () => {
   return (
     <div>
+      <Helmet>
+        <title>Just Next - School Management System & Portal</title>
+        <meta name="description" content="Just Next is Nigeria's leading school management platform. Streamline student records, report cards, fees, attendance, and administrative tasks effortlessly." />
+        <link rel="canonical" href="https://justnext.ng/" />
+      </Helmet>
       <ABetter />
       <TrustedBy />
       <div className="my-5" />

@@ -29,10 +29,16 @@ export const CardProps: FC<iCardProps> = ({ text, num, bgColor, module }) => {
   );
 };
 
+import { Helmet } from "react-helmet";
+
 const Feature = () => {
-  document.title = "Features";
   return (
     <div className="mt-[70px] w-full bg-white-400 flex justify-center items-start">
+      <Helmet>
+        <title>Features - Just Next School Management Software</title>
+        <meta name="description" content="Explore Just Next features: Student Management, Staff & Teacher Portals, Automated Report Cards, Attendance Tracking, Timetable & Expenditure Management." />
+        <link rel="canonical" href="https://justnext.ng/features" />
+      </Helmet>
       <div className="w-[97%]">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 pb-[30px]">
           <div className="pt-[20px] md:pt-[50px]">
