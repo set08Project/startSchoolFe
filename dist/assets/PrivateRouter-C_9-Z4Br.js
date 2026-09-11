@@ -1,0 +1,1 @@
+import{aW as a,r as o,cb as c,j as e,cc as i}from"./index-DH5OA5VQ.js";const u=({children:s})=>{const t=a(r=>r.user);return o.useEffect(()=>{c()},[]),e.jsx("div",{children:t?e.jsx("div",{children:s}):e.jsx(i,{to:"/"})})};export{u as default};

@@ -1989,3 +1989,16 @@ export const changeSchoolEnrollmentID = async (
   }
 };
 
+export const updateStaffBulkInfo = async (staffID: string, data: any) => {
+  try {
+    return await axios
+      .patch(`${URL}/update-staff-bulk-info/${staffID}`, data)
+      .then((res: any) => {
+        return res?.data;
+      });
+  } catch (error: any) {
+    return error;
+  }
+};
+
+

@@ -236,6 +236,7 @@ import { Link, useParams } from "react-router-dom";
 import {
   updaetTeacherSalary,
   updateTeacherAvatar,
+  updateStaffBulkInfo,
 } from "../../../pagesForTeachers/api/teachersAPI";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
@@ -247,11 +248,66 @@ import { IoClose } from "react-icons/io5";
 
 const StaffDetail = () => {
   const [show, setShow] = useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [salary, setSalary] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [updatingStaff, setUpdatingStaff] = useState(false);
 
   const { staffID } = useParams();
   const { teacherDetail } = useTeacherDetail(staffID!);
+
+  // Edit form state
+  const [editName, setEditName] = useState("");
+  const [editGender, setEditGender] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+  const [editSalary, setEditSalary] = useState("");
+  const [editRole, setEditRole] = useState("");
+  const [editAvatarFile, setEditAvatarFile] = useState<any>(null);
+
+  const openEditModal = () => {
+    setEditName(teacherDetail?.staffName || "");
+    setEditGender(teacherDetail?.gender || "");
+    setEditPhone(teacherDetail?.phone || "");
+    setEditAddress(teacherDetail?.staffAddress || "");
+    setEditSalary(teacherDetail?.salary ? String(teacherDetail?.salary) : "");
+    setEditRole(teacherDetail?.staffRole || "");
+    setEditAvatarFile(null);
+    setShowEditModal(true);
+  };
+
+  const handleSaveStaffInfo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setUpdatingStaff(true);
+
+      const updatePayload = {
+        staffName: editName,
+        gender: editGender,
+        phone: editPhone,
+        staffAddress: editAddress,
+        salary: editSalary,
+        staffRole: editRole,
+      };
+
+      const res = await updateStaffBulkInfo(staffID!, updatePayload);
+
+      if (editAvatarFile) {
+        const formData = new FormData();
+        formData.append("avatar", editAvatarFile);
+        await updateTeacherAvatar(staffID!, formData);
+      }
+
+      toast.success("Staff details updated successfully!");
+      mutate(`api/view-teacher-detail/${staffID}`);
+      mutate(`api/view-school-teacher/${teacherDetail?.schoolIDs}`);
+      setShowEditModal(false);
+    } catch (err: any) {
+      toast.error("Failed to update staff info");
+    } finally {
+      setUpdatingStaff(false);
+    }
+  };
 
   const initials =
     teacherDetail?.staffName?.charAt(0) +
@@ -260,7 +316,7 @@ const StaffDetail = () => {
   return (
     <div className="freshh">
       <div>
-        <div className="w-full mb-7 pb-5 flex justify-between items-center border-b">
+        <div className="w-full mb-7 pb-5 flex flex-wrap justify-between items-center border-b gap-4">
           <div className="flex items-center gap-4">
             <div className="rounded-full shadow-sm border w-10 h-10 flex justify-center items-center font-semibold bg-gray-50">
               {initials}
@@ -269,22 +325,30 @@ const StaffDetail = () => {
               {teacherDetail?.staffName}
             </div>
           </div>
-          <div className="w-[100px] md:w-[150px] lg:w-auto flex justify-end flex-col">
-            <div className="mb-1 text-[14px]">Increase Staff Salary</div>
+          <div className="flex items-center gap-3">
             <button
-              className="uppercase py-2 px-2 text-[13px bg-blue-950 text-white rounded-md hover:scale-[1.01]"
-              onClick={() => {
-                if (!document.startViewTransition) {
-                  setShow(!show);
-                } else {
-                  document.startViewTransition(() => {
-                    setShow(!show);
-                  });
-                }
-              }}
+              className="uppercase py-2 px-4 text-[13px] bg-blue-950 text-white font-medium rounded-md hover:scale-[1.01] flex items-center gap-2 transition-all"
+              onClick={openEditModal}
             >
-              upgrade
+              <FaUserEdit className="text-[16px]" /> Edit Staff Info
             </button>
+
+            <div className="flex flex-col items-end">
+              <button
+                className="uppercase py-2 px-4 text-[13px] bg-green-700 text-white font-medium rounded-md hover:scale-[1.01] transition-all"
+                onClick={() => {
+                  if (!document.startViewTransition) {
+                    setShow(!show);
+                  } else {
+                    document.startViewTransition(() => {
+                      setShow(!show);
+                    });
+                  }
+                }}
+              >
+                Upgrade Salary
+              </button>
+            </div>
           </div>
 
           {show && (

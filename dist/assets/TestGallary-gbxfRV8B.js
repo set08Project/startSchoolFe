@@ -1,0 +1,1 @@
+import{r as t,j as e}from"./index-DH5OA5VQ.js";function r(){return t.useState(-1),e.jsxs(e.Fragment,{children:[e.jsx("p",{children:"Gallery"}),e.jsx("p",{children:"Here is an example of a photo gallery with a lightbox. You can click any photo to open it in a lightbox."})]})}export{r as default};
