@@ -974,7 +974,7 @@ export const updateTeacherAddress = async (
   }
 };
 
-export const updateTeacherAvatar = async (teacherID: string, data: string) => {
+export const updateTeacherAvatar = async (teacherID: string, data: any) => {
   try {
     const config: any = {
       "Content-Type": "multipart/form-data",
