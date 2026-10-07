@@ -62,7 +62,7 @@ export const useTeacherCookie = () => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -103,7 +103,7 @@ export const useTeacherDetail = (teacherID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -147,7 +147,7 @@ export const useTeacherInfo = () => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -188,7 +188,7 @@ export const useClassSubject = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -229,7 +229,7 @@ export const useClassTimeTable = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -270,7 +270,7 @@ export const useTeacherSchedule = (teacherID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -311,7 +311,7 @@ export const useTeacherStudent = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -365,7 +365,7 @@ export const useSujectInfo = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -406,7 +406,7 @@ export const useSujectQuiz = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -447,7 +447,7 @@ export const useExam = (quizID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -488,7 +488,7 @@ export const useQuiz = (quizID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -529,7 +529,7 @@ export const useAttendance = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -570,7 +570,7 @@ export const useSchoolAnnouncement = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -611,7 +611,7 @@ export const useSchoolEvent = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -652,7 +652,7 @@ export const useSubjectAssignment = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -693,7 +693,7 @@ export const useLessonNote = (lessonID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -735,7 +735,7 @@ export const useComplain = (teacherID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -776,7 +776,7 @@ export const useSubjectPerformance = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -817,7 +817,7 @@ export const useExamination = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -858,7 +858,7 @@ export const useMidTest = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -940,7 +940,7 @@ export const useStudentMidGrade = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -981,7 +981,7 @@ export const useMidTestResultPerformance = (quizID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -1025,7 +1025,7 @@ export const useMidTestResultPerformanceData = (
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -1066,7 +1066,7 @@ export const useClassAcademicHistory = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -1107,7 +1107,7 @@ export const usePurchasedData = (staffID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -1148,7 +1148,7 @@ export const useTeacherNote = (staffID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 

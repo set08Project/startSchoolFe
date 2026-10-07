@@ -30,7 +30,7 @@ const SignIn = () => {
     setLoading(true);
     const val = { email: state?.trim(), enrollmentID: password?.trim() };
 
-    getSchoolCookie().then((res) => {});
+
 
     loginSchool(val)
       .then((res) => {
@@ -40,13 +40,10 @@ const SignIn = () => {
           toast.success("login successful");
           setLoading(false);
 
-          {
-            !loading && navigate("/dashboard");
+          if (!loading) {
+            sessionStorage.clear();
+            navigate("/dashboard");
           }
-          const x = setTimeout(() => {
-            window.location.reload();
-            clearTimeout(x);
-          }, 10);
         } else {
           if (res?.response?.data?.message === "Error finding school") {
             setLoading(false);
@@ -68,9 +65,6 @@ const SignIn = () => {
             toast.error(`${res?.response?.data?.message}`);
           }
         }
-      })
-      .then(() => {
-        // window.location.reload();
       });
   };
 

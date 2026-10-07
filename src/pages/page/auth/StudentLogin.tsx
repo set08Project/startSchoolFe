@@ -42,9 +42,9 @@ const StudentLogin = () => {
           setLoading(false);
 
           setTimeout(() => {
-            {
-              !loading && navigate("/dashboard");
-              window.location.reload();
+            if (!loading) {
+              sessionStorage.clear();
+              navigate("/dashboard");
             }
           }, 2000);
         } else {
@@ -68,9 +68,9 @@ const StudentLogin = () => {
           toast.success("login successful");
           setLoading(false);
 
-          {
-            !loading && navigate("/dashboard");
-            window.location.reload();
+          if (!loading) {
+            sessionStorage.clear();
+            navigate("/dashboard");
           }
         } else {
           if (res?.response?.data?.message === undefined || "undefined") {

@@ -212,6 +212,14 @@ export const mainRouter = createBrowserRouter([
       </Suspense>
     ),
   },
+  {
+    path: "/dashboard",
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <LoadingScreen />
+      </Suspense>
+    ),
+  },
 
   {
     path: "/school/:schoolName",

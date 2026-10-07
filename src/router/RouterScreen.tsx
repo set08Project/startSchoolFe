@@ -61,7 +61,7 @@ const RouterScreen = () => {
       }
       clearTimeout(timing);
     }, 10);
-  }, []);
+  }, [userStatus, user]);
 
   return (
     <div>

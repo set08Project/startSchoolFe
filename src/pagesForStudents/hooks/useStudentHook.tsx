@@ -70,7 +70,7 @@ export const useMidTestStudentPerformance = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -111,7 +111,7 @@ export const useMidTestStudent = (subjectID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -152,7 +152,7 @@ export const useTermBudget = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -199,7 +199,7 @@ export const useTermExpenses = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -243,7 +243,7 @@ export const useStudentInfo = () => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -284,7 +284,7 @@ export const useStudentInfoData = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -325,7 +325,7 @@ export const useStudentAttendant = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -366,7 +366,7 @@ export const useAssignment = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -407,7 +407,7 @@ export const useLessonNote = (schoolID: string, staffID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -448,7 +448,7 @@ export const useClassLessonNote = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -502,7 +502,7 @@ export const useReadOneClassInfo = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -543,7 +543,7 @@ export const useOneArticle = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -585,7 +585,7 @@ export const useSchoolArticle = (schoolID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -645,7 +645,7 @@ export const useComplain = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -686,7 +686,7 @@ export const usePastQuestionHistory = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -727,7 +727,7 @@ export const useClassTimeTableViewer = (classID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -768,7 +768,7 @@ export const usePurchasedStore = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -809,7 +809,7 @@ export const useStudentSchoolFee = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -850,7 +850,7 @@ export const useViewPerformance = (studentID: string) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       refreshInterval: 0,
-      revalidateOnMount: hasCache,
+      revalidateOnMount: true,
     }
   );
 
@@ -902,7 +902,7 @@ export const useStudentFeePayment = (studentID: string) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         refreshInterval: 0,
-        revalidateOnMount: hasCache,
+        revalidateOnMount: true,
       }
     );
 
@@ -948,7 +948,7 @@ export const useStudentEnrollmentID = (studentID: string) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         refreshInterval: 0,
-        revalidateOnMount: hasCache,
+        revalidateOnMount: true,
       }
     );
 

@@ -42,9 +42,9 @@ const SwitchLogin = () => {
           toast.success("login successful");
           setLoading(false);
 
-          {
-            !loading && navigate("/dashboard");
-            window.location.reload();
+          if (!loading) {
+            sessionStorage.clear();
+            navigate("/dashboard");
           }
         } else {
           if (res?.response?.data?.message === undefined || "undefined") {
@@ -73,9 +73,9 @@ const SwitchLogin = () => {
           toast.success("login successful");
           setLoading(false);
 
-          {
-            !loading && navigate("/dashboard");
-            window.location.reload();
+          if (!loading) {
+            sessionStorage.clear();
+            navigate("/dashboard");
           }
         } else {
           if (res?.response?.data?.message === undefined || "undefined") {
