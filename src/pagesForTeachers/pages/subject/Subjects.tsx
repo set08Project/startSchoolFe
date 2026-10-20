@@ -6,6 +6,8 @@ import pix from "../../../assets/pix.jpg";
 import { useSujectInfo, useTeacherInfo } from "../../hooks/useTeacher";
 import LittleHeader from "../../components/layout/LittleHeader";
 
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+
 document.title = "view teacher subject";
 
 interface iProp {
@@ -13,24 +15,44 @@ interface iProp {
   midTest?: boolean;
   quiz?: boolean;
   exam?: boolean;
+  term?: string;
+  session?: string;
 }
 
-const SubjectRecord: FC<iProp> = ({ props, midTest, quiz, exam }) => {
+const SubjectRecord: FC<iProp> = ({ props, midTest, quiz, exam, term, session }) => {
   const { subjectInfo } = useSujectInfo(props);
+
+  const normTerm = term?.trim()?.toLowerCase();
+  const normSession = session?.trim()?.toLowerCase();
+
+  const hasMidTest = subjectInfo?.midTest?.some((t: any) => {
+    const matchTerm = !normTerm || t?.term?.trim()?.toLowerCase() === normTerm;
+    const matchSession =
+      !normSession || t?.session?.trim()?.toLowerCase() === normSession;
+    return matchTerm && matchSession;
+  });
+
+  const hasExam = subjectInfo?.examination?.some((e: any) => {
+    const matchTerm = !normTerm || e?.term?.trim()?.toLowerCase() === normTerm;
+    const matchSession =
+      !normSession || e?.session?.trim()?.toLowerCase() === normSession;
+    return matchTerm && matchSession;
+  });
 
   return (
     <div>
       {quiz && <div>{subjectInfo?.quiz?.length > 0 ? "Yes" : "No"}</div>}
 
-      {midTest && <div>{subjectInfo?.midTest?.length > 0 ? "Yes" : "No"}</div>}
+      {midTest && <div>{hasMidTest ? "Yes" : "No"}</div>}
 
-      {exam && <div>{subjectInfo?.examination?.length > 0 ? "Yes" : "No"}</div>}
+      {exam && <div>{hasExam ? "Yes" : "No"}</div>}
     </div>
   );
 };
 
 const TeacherSubject: FC = () => {
   const { teacherInfo } = useTeacherInfo();
+  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
 
   return (
     <div className="">
@@ -75,13 +97,28 @@ const TeacherSubject: FC = () => {
                       </span>
                     </div>
                     <div className="w-[100px] border-r text-black font-bold">
-                      <SubjectRecord props={props.id} quiz />
+                      <SubjectRecord
+                        props={props.id}
+                        quiz
+                        term={schoolInfo?.presentTerm}
+                        session={schoolInfo?.presentSession}
+                      />
                     </div>
                     <div className="w-[100px] border-r text-black font-bold">
-                      <SubjectRecord props={props.id} midTest />
+                      <SubjectRecord
+                        props={props.id}
+                        midTest
+                        term={schoolInfo?.presentTerm}
+                        session={schoolInfo?.presentSession}
+                      />
                     </div>
                     <div className="w-[100px] border-r text-black font-bold">
-                      <SubjectRecord props={props.id} exam />
+                      <SubjectRecord
+                        props={props.id}
+                        exam
+                        term={schoolInfo?.presentTerm}
+                        session={schoolInfo?.presentSession}
+                      />
                     </div>
                     <div className="w-[250px] border-r text-black">
                       no caption yet

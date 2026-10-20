@@ -53,7 +53,7 @@ const MainStudentRow: FC<iProps> = ({ props, i, data, subject }) => {
   const { oneStudentPerformanceExam: oneStudentPerformance } =
     useOneExamSubjectStudentPerfomance(
       subjectID,
-      subjectInfo?.examination[subjectInfo?.examination.length - 1]
+      quizID || subjectInfo?.midTest?.[subjectInfo?.midTest?.length - 1]
     );
 
   const [loading, setLoading] = useState<boolean>(false);

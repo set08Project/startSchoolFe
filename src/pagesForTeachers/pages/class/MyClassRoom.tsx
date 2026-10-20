@@ -16,6 +16,7 @@ import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
 import { Link, useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
+import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import GenerateAllResult from "../CardTemplate/GenerateAllStudentResult";
@@ -25,13 +26,59 @@ interface iProps {
 }
 
 const ClassSubjectScreen: FC<iProps> = ({ props }) => {
+  const { teacherInfo } = useTeacherInfo();
   const { subjectData } = useClassSubject(props!);
+  const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
 
   return (
     <div>
       {subjectData?.classSubjects?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
-          {subjectData?.classSubjects?.map((props: any) => (
+          {subjectData?.classSubjects?.map((props: any) => {
+            const currentTerm = subjectData?.presentTerm?.toLowerCase()?.trim();
+            const currentSession = schoolInfo?.presentSession?.toLowerCase()?.trim();
+
+            const hasExam = props?.examination?.some((exam: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                exam?.term?.toLowerCase()?.trim() === currentTerm;
+              const matchesSession =
+                !currentSession ||
+                exam?.session?.toLowerCase()?.trim() === currentSession;
+              return matchesTerm && matchesSession;
+            });
+
+            const hasVisibleExam = props?.examination?.some((exam: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                exam?.term?.toLowerCase()?.trim() === currentTerm;
+              const matchesSession =
+                !currentSession ||
+                exam?.session?.toLowerCase()?.trim() === currentSession;
+              return matchesTerm && matchesSession && exam?.startExam === true;
+            });
+
+            const hasMidTest = props?.midTest?.some((test: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                test?.term?.toLowerCase()?.trim() === currentTerm;
+              const matchesSession =
+                !currentSession ||
+                test?.session?.toLowerCase()?.trim() === currentSession;
+              return matchesTerm && matchesSession;
+            });
+
+            const hasVisibleMidTest = props?.midTest?.some((test: any) => {
+              if (!currentTerm) return false;
+              const matchesTerm =
+                test?.term?.toLowerCase()?.trim() === currentTerm;
+              const matchesSession =
+                !currentSession ||
+                test?.session?.toLowerCase()?.trim() === currentSession;
+              return matchesTerm && matchesSession && test?.startMidTest === true;
+            });
+
+            return (
             <div
               key={props?._id}
               className="bg-white border flex flex-col rounded-2xl pb-2 min-h-[200px] px-4 pt-4"
@@ -44,16 +91,38 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                   </Link>
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex gap-2">
                 <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
                   compulsory
                 </p>
+                {hasExam && (
+                  <p className="flex items-center gap-2 text-[10px] bg-green-100 text-green-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-green-200">
+                    {hasVisibleExam && (
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                    )}
+                    <span>Exam Added</span>
+                  </p>
+                )}
+                {hasMidTest && (
+                  <p className="flex items-center gap-2 text-[10px] bg-orange-100 text-orange-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-orange-200">
+                    {hasVisibleMidTest && (
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                      </span>
+                    )}
+                    <span>Mid-Test Added</span>
+                  </p>
+                )}
               </div>
               <div className="flex-1" />
               <p className="text-[13px] font-medium">
                 Subject Teacher Name: <span></span>
               </p>
-              <div className="flexgap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap">
                 <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] ">
                   {props?.subjectTeacherName}
                 </div>
@@ -66,7 +135,8 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                 </Link>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div>

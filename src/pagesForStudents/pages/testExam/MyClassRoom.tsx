@@ -57,14 +57,17 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
     midDept === normalizedFilter;
 
   const schoolTerm = normalize(currentTerm || "");
+  const schoolSession = normalize(schoolData?.presentSession || "");
 
   const midMatch =
     midTest?.startMidTest &&
-    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
+    (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
 
   const examMatch =
     examination?.startExam &&
-    (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm);
+    (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm) &&
+    (schoolSession === "" || normalize(examination?.session || "") === schoolSession);
 
   const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
@@ -72,8 +75,8 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   const { performance } = useStudentPerfomance(studentInfo?._id);
 
   // derive the most recent quiz IDs for midTest and examination (used in links)
-  const midQuizID = subject?.midTest?.[subject?.midTest?.length - 1];
-  const examQuizID = subject?.examination?.[subject?.examination?.length - 1];
+  const midQuizID = midTest?._id || subject?.midTest?.[subject?.midTest?.length - 1];
+  const examQuizID = examination?._id || subject?.examination?.[subject?.examination?.length - 1];
 
   // Only mark done if the student completed THIS TERM's active exam/midTest
   // (examination._id / midTest._id is the DB _id of the current term's document)
@@ -132,14 +135,12 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
         <div className="flex gap-2 mb-2">
           {examination && (
             <div className="text-[10px] bg-purple-50 text-purple-700 px-2 py-1 rounded border border-purple-100">
-              Exam: {examination.term} 
-              {/* ({examination.session}) */}
+              Exam: {examination.term} {examination.session ? `(${examination.session})` : ""}
             </div>
           )}
           {midTest && (
             <div className="text-[10px] bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-100">
-              Mid: {midTest.term} 
-              {/* ({midTest.session}) */}
+              Mid: {midTest.term} {midTest.session ? `(${midTest.session})` : ""}
             </div>
           )}
         </div>
@@ -154,6 +155,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           ) : (
             <Link
               to={`/mid-test/details/${subject?._id}/${
+                midTest?._id ||
                 subject?.midTest[subject?.midTest?.length - 1]?._id ||
                 subject?.midTest[subject?.midTest?.length - 1]
               }`}
@@ -171,6 +173,7 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           ) : (
             <Link
               to={`/examination/details/${
+                examination?._id ||
                 subject?.examination[subject?.examination?.length - 1]?._id ||
                 subject?.examination[subject?.examination?.length - 1]
               }`}
@@ -225,14 +228,17 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
       midDept === normalizedFilter;
 
     const schoolTerm = normalize(currentTerm || "");
+    const schoolSession = normalize(schoolData?.presentSession || "");
 
     const midMatch =
       midTest?.startMidTest &&
-      (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+      (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
+      (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
 
     const examMatch =
       examination?.startExam &&
-      (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm);
+      (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm) &&
+      (schoolSession === "" || normalize(examination?.session || "") === schoolSession);
 
     const shouldDisplay = (midMatch || examMatch) && matchesDept;
 

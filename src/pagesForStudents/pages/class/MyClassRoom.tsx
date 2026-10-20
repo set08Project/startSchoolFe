@@ -92,37 +92,46 @@ const StartTestComp: any = ({ props, subjectID, classInfo }) => {
   const currentTerm = schoolData?.presentTerm || classInfo?.presentTerm;
 
   const schoolTerm = normalize(currentTerm || "");
+  const schoolSession = normalize(schoolData?.presentSession || "");
 
   const midMatch =
     midTest?.startMidTest &&
-    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm);
+    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
+    (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
 
   const examMatch =
     examination?.startExam &&
     (schoolTerm === "" ||
-      normalize(examination?.exam?.term || "") === schoolTerm);
+      normalize(examination?.exam?.term || examination?.term || "") === schoolTerm) &&
+    (schoolSession === "" ||
+      normalize(examination?.exam?.session || examination?.session || "") === schoolSession);
+
+  const activeMidTestID =
+    midTest?._id ||
+    props?.midTest?.[props?.midTest?.length - 1]?._id ||
+    props?.midTest?.[props?.midTest?.length - 1];
+
+  const activeExamID =
+    examination?.exam?._id ||
+    examination?._id ||
+    props?.examination?.[props?.examination?.length - 1]?._id ||
+    props?.examination?.[props?.examination?.length - 1];
 
   return (
-    <div className="text-blue-950  rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
+    <div className="text-blue-950 rounded-mlg mt-1 px-0 border-t font-medium py-2 text-[17px] flex items-center gap-2">
       {midMatch && (
         <Link
-          to={`/mid-test/details/${props?._id}/${
-            props?.midTest[props?.midTest?.length - 1]?._id ||
-            props?.midTest[props?.midTest?.length - 1]
-          }`}
-          className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+          to={`/mid-test/details/${props?._id}/${activeMidTestID}`}
+          className="text-white bg-orange-500 rounded-md px-4 py-2 text-[13px] cursor-pointer hover:bg-orange-600 transition-colors"
         >
-          Start Mid Text
+          Start Mid Test
         </Link>
       )}
 
       {examMatch && (
         <Link
-          to={`/examination/details/${
-            props?.examination[props?.examination?.length - 1]?._id ||
-            props?.examination[props?.examination?.length - 1]
-          }`}
-          className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer"
+          to={`/examination/details/${activeExamID}`}
+          className="text-white bg-purple-600 rounded-md px-4 py-2 text-[13px] cursor-pointer hover:bg-purple-700 transition-colors"
         >
           Start Examination
         </Link>
