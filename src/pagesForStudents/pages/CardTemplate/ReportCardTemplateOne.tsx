@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSpinner } from "react-icons/fa6";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { readClassInfo } from "../../api/studentAPI";
 import {
+  useReadMyClassInfoData,
   useReadOneClassInfo,
   useSchoolArticle,
   useStudentInfo,
@@ -73,6 +75,11 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
 
   let targetSession = timetbale?.data?.presentSession;
   let targetTerm = timetbale?.data?.presentTerm;
+
+  // Extract the class name from the classInfo query (e.g. "SSS 2A session: 2025/2026(1st Term)" → "SSS 2A")
+  const reportClass = queryClassInfo
+    ? queryClassInfo.split(/\s*session:/i)[0].trim()
+    : (propStudentInfo?.classAssigned || stateData.studentInfo?.classAssigned || hookStudentInfo?.classAssigned || "");
 
   if (queryClassInfo) {
     const sessionMatch = queryClassInfo.match(/session:\s*(.*?)\((.*?)\)/);
@@ -225,22 +232,52 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const { subjectData: hookSubjectData } = useClassSubject(
     studentInfo?.presentClassID
   );
+  // Fetch the historical class data based on the reportClass (class from the history entry being viewed)
+  const { state: historyClassData } = useReadMyClassInfoData(reportClass);
 
   let school: any = schoolAnnouncement;
   const schoolName = school?.schoolName!;
   const schoolAddress = school?.address;
 
-  // Derive per-term records from gradeData for cumulative display
+    // Derive per-term records from gradeData for cumulative display
   const gradeReportCard = gradeData?.reportCard || hookGradeData?.reportCard || [];
-  const st1 = propSt1 || gradeReportCard.find((el: any) =>
-    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(1st Term)`
-  );
-  const st2 = propSt2 || gradeReportCard.find((el: any) =>
-    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(2nd Term)`
-  );
-  const st3 = propSt3 || gradeReportCard.find((el: any) =>
-    el.classInfo === `${studentInfo?.classAssigned} session: ${school?.presentSession}(3rd Term)`
-  );
+  const normalizeTermStr = (s: any) =>
+    (s || "")
+      .toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "")
+      .trim();
+
+  const reportClassNorm = normalizeTermStr(reportClass);
+  const targetSessionNorm = normalizeTermStr(targetSession || "");
+
+  const st1 = propSt1 || gradeReportCard.find((el: any) => {
+    if (!el?.classInfo) return false;
+    const ci = normalizeTermStr(el.classInfo);
+    return (
+      ci.includes(reportClassNorm) &&
+      (targetSessionNorm ? ci.includes(targetSessionNorm) : true) &&
+      ci.includes(normalizeTermStr("1st Term"))
+    );
+  });
+  const st2 = propSt2 || gradeReportCard.find((el: any) => {
+    if (!el?.classInfo) return false;
+    const ci = normalizeTermStr(el.classInfo);
+    return (
+      ci.includes(reportClassNorm) &&
+      (targetSessionNorm ? ci.includes(targetSessionNorm) : true) &&
+      ci.includes(normalizeTermStr("2nd Term"))
+    );
+  });
+  const st3 = propSt3 || gradeReportCard.find((el: any) => {
+    if (!el?.classInfo) return false;
+    const ci = normalizeTermStr(el.classInfo);
+    return (
+      ci.includes(reportClassNorm) &&
+      (targetSessionNorm ? ci.includes(targetSessionNorm) : true) &&
+      ci.includes(normalizeTermStr("3rd Term"))
+    );
+  });
 
   // Filter out unoffered subjects (where all marks are 0 across all terms)
   const filteredResult = (grade?.result || []).filter((el: any) => {
@@ -283,7 +320,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
         // If a position was passed from state/props, don't compute
         if (positionFromState != null) return;
         const studentIDs =
-          propSubjectData?.students || hookSubjectData?.students || [];
+          propSubjectData?.students || historyClassData?.students || hookSubjectData?.students || [];
 
         const normalize = (s: any) =>
           (s || "")
@@ -298,12 +335,12 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "")
             .trim();
-        const classAssignedNorm = normalize(studentInfo?.classAssigned || "");
+        const classAssignedNorm = normalize(reportClass || studentInfo?.classAssigned || "");
         const targetClassInfo = normalize(
           grade?.classInfo || hookGradeData?.reportCard?.[0]?.classInfo || ""
         );
-        const sessionNorm = normalize(school?.presentSession || "");
-        const termNorm = normalize(school?.presentTerm || "");
+        const sessionNorm = normalize(targetSession || school?.presentSession || "");
+        const termNorm = normalize(targetTerm || school?.presentTerm || "");
         const totals: Array<{
           id: string;
           total: number;
@@ -538,7 +575,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   const [loading, setLoading] = useState(false);
 
   const { toPDF, targetRef }: any = usePDF({
-    filename: `${studentInfo?.studentFirstName}-${studentInfo?.classAssigned}-${
+    filename: `${studentInfo?.studentFirstName}-${reportClass || studentInfo?.classAssigned}-${
       school?.presentSession
     }-${school?.presentTerm}-${moment(Date.now()).format("lll")}.pdf`,
   });
@@ -548,6 +585,35 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
   );
 
   const { teacherDetail } = useTeacherDetail(classDetails?.teacherID);
+
+  if (
+    (hookGradeData || gradeData) &&
+    (!grade || !grade?.approve || studentInfo?.viewReportCard)
+  ) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
+        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 max-w-md w-full">
+          <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+            !
+          </div>
+          <h2 className="text-xl font-bold text-blue-950 mb-2">
+            Result Not Ready
+          </h2>
+          <p className="text-sm text-slate-600 mb-6">
+            {studentInfo?.viewReportCard
+              ? "Access to report card is restricted. Please see the School Admin."
+              : "This term's result has not been approved by the Admin yet. Please check back later."}
+          </p>
+          <Link
+            to="/dashboard"
+            className="inline-block bg-blue-950 text-white text-sm font-medium py-2 px-6 rounded-md hover:bg-blue-900 transition-colors"
+          >
+            Back to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="max-w-5xl mx-auto">
@@ -700,7 +766,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         Class
                       </Label>
                       <div className="h-7 text-sm flex-1 flex items-center">
-                        {studentInfo?.classAssigned || ""}
+                        {reportClass || studentInfo?.classAssigned || ""}
                       </div>
                     </div>
                     <div className="border-b border-gray-800 px-2 flex items-center gap-2">
@@ -726,7 +792,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                         Class
                       </Label>
                       <div className="h-7 text-sm flex-1 flex items-center">
-                        {studentInfo?.classAssigned || ""}
+                        {reportClass || studentInfo?.classAssigned || ""}
                       </div>
                     </div>
                     <div className="px-2 flex items-center gap-2">
@@ -829,16 +895,16 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                       <th className="border border-gray-800 p-1 w-[110px]">
                         Total MKS
                       </th>
-                      {(school?.presentTerm === "1st Term" || school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                      {((targetTerm || school?.presentTerm) === "1st Term" || (targetTerm || school?.presentTerm) === "2nd Term" || (targetTerm || school?.presentTerm) === "3rd Term") && (
                         <th className="border border-gray-800 p-1 w-[80px]">1st Term</th>
                       )}
-                      {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                      {((targetTerm || school?.presentTerm) === "2nd Term" || (targetTerm || school?.presentTerm) === "3rd Term") && (
                         <th className="border border-gray-800 p-1 w-[80px]">2nd Term</th>
                       )}
-                      {school?.presentTerm === "3rd Term" && (
+                      {(targetTerm || school?.presentTerm) === "3rd Term" && (
                         <th className="border border-gray-800 p-1 w-[80px]">3rd Term</th>
                       )}
-                      {school?.presentTerm === "3rd Term" && (
+                      {(targetTerm || school?.presentTerm) === "3rd Term" && (
                         <th className="border border-gray-800 p-1 w-[90px]">Cumul. Avg</th>
                       )}
                       <th className="border border-gray-800 p-1 w-20">GRADE</th>
@@ -877,28 +943,28 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                               (subject.test4 ?? 0) +
                               (subject.exam ?? 0)}
                         </td>
-                        {(school?.presentTerm === "1st Term" || school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                        {((targetTerm || school?.presentTerm) === "1st Term" || (targetTerm || school?.presentTerm) === "2nd Term" || (targetTerm || school?.presentTerm) === "3rd Term") && (
                           <td className="border border-gray-800 p-1 text-center">
                             {typeof subject === "string" ? "" : (st1?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
                           </td>
                         )}
-                        {(school?.presentTerm === "2nd Term" || school?.presentTerm === "3rd Term") && (
+                        {((targetTerm || school?.presentTerm) === "2nd Term" || (targetTerm || school?.presentTerm) === "3rd Term") && (
                           <td className="border border-gray-800 p-1 text-center">
                             {typeof subject === "string" ? "" : (st2?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
                           </td>
                         )}
-                        {school?.presentTerm === "3rd Term" && (
+                        {(targetTerm || school?.presentTerm) === "3rd Term" && (
                           <td className="border border-gray-800 p-1 text-center">
                             {typeof subject === "string" ? "" : (st3?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0)}
                           </td>
                         )}
-                        {school?.presentTerm === "3rd Term" && (
+                        {(targetTerm || school?.presentTerm) === "3rd Term" && (
                           <td className="border border-gray-800 p-1 text-center font-semibold">
                             {typeof subject === "string" ? "" : (() => {
                               const s1 = st1?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
                               const s2 = st2?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
                               const s3 = st3?.result?.find((e: any) => e.subject === subject.subject)?.mark || 0;
-                              const activeScores = [s1, s2, s3].slice(0, school?.presentTerm === "1st Term" ? 1 : school?.presentTerm === "2nd Term" ? 2 : 3).filter((s: number) => s > 0);
+                              const activeScores = [s1, s2, s3].slice(0, (targetTerm || school?.presentTerm) === "1st Term" ? 1 : (targetTerm || school?.presentTerm) === "2nd Term" ? 2 : 3).filter((s: number) => s > 0);
                               return activeScores.length > 0
                                 ? (activeScores.reduce((a: number, b: number) => a + b, 0) / activeScores.length).toFixed(1)
                                 : 0;
@@ -1250,7 +1316,7 @@ const ReportCardTemplateOne: React.FC<ReportCardTemplateOneProps> = ({
                     Class Teacher's Comment:
                     <p>
                       <span className="font-semibold">
-                        {teacherDetail?.staffName}
+                        {historyClassData?.classTeacherName || (reportClass === studentInfo?.classAssigned ? teacherDetail?.staffName : "")}
                       </span>
                     </p>
                   </Label>

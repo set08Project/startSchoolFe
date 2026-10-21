@@ -75,69 +75,72 @@ const StudentDashboard = () => {
   const currentClassName =
     oneClass?.className || studentInfo?.classAssigned || "";
   const currentSession =
-    schoolAnnouncement?.presentSession || schl?.presentSession || "";
+    schoolAnnouncement?.presentSession ||
+    schoolInfo?.[0]?.year ||
+    schl?.presentSession ||
+    "";
   const currentTerm =
-    schoolAnnouncement?.presentTerm || oneClass?.presentTerm || "";
+    schoolAnnouncement?.presentTerm ||
+    schoolInfo?.[0]?.presentTerm ||
+    oneClass?.presentTerm ||
+    "";
 
-  let resultData =
-    gradeData?.reportCard?.find((el: any) => {
-      if (!el?.classInfo) return false;
-      const ci = normalizeStr(el.classInfo);
+  let resultData = gradeData?.reportCard?.find((el: any) => {
+    if (!el?.classInfo) return false;
+    const ci = normalizeStr(el.classInfo);
 
-      const expectedAssigned = normalizeStr(
-        `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
-      );
-      if (expectedAssigned && ci === expectedAssigned) return true;
+    const expectedAssigned = normalizeStr(
+      `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
+    );
+    if (expectedAssigned && ci === expectedAssigned) return true;
 
-      const expectedClass = normalizeStr(
-        `${currentClassName} session: ${currentSession}(${currentTerm})`
-      );
-      if (expectedClass && ci === expectedClass) return true;
+    const expectedClass = normalizeStr(
+      `${currentClassName} session: ${currentSession}(${currentTerm})`
+    );
+    if (expectedClass && ci === expectedClass) return true;
 
-      if (
-        (ci.includes(normalizeStr(currentClassAssigned)) ||
-          ci.includes(normalizeStr(currentClassName))) &&
-        (currentSession ? ci.includes(normalizeStr(currentSession)) : true) &&
-        (currentTerm ? ci.includes(normalizeStr(currentTerm)) : true)
-      ) {
-        return true;
-      }
-      return false;
-    }) ||
-    gradeData?.reportCard?.find((el: any) => el?.approve === true) ||
-    (gradeData?.reportCard && gradeData.reportCard.length > 0
-      ? gradeData.reportCard[gradeData.reportCard.length - 1]
-      : undefined);
+    const hasClass =
+      (currentClassAssigned && ci.includes(normalizeStr(currentClassAssigned))) ||
+      (currentClassName && ci.includes(normalizeStr(currentClassName)));
+    const hasSession = currentSession
+      ? ci.includes(normalizeStr(currentSession))
+      : false;
+    const hasTerm = currentTerm
+      ? ci.includes(normalizeStr(currentTerm))
+      : false;
 
-  let midResultData =
-    gradeMidData?.midReportCard?.find((el: any) => {
-      if (!el?.classInfo) return false;
-      const ci = normalizeStr(el.classInfo);
+    return hasClass && hasSession && hasTerm;
+  });
 
-      const expectedAssigned = normalizeStr(
-        `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
-      );
-      if (expectedAssigned && ci === expectedAssigned) return true;
+  let midResultData = gradeMidData?.midReportCard?.find((el: any) => {
+    if (!el?.classInfo) return false;
+    const ci = normalizeStr(el.classInfo);
 
-      const expectedClass = normalizeStr(
-        `${currentClassName} session: ${currentSession}(${currentTerm})`
-      );
-      if (expectedClass && ci === expectedClass) return true;
+    const expectedAssigned = normalizeStr(
+      `${currentClassAssigned} session: ${currentSession}(${currentTerm})`
+    );
+    if (expectedAssigned && ci === expectedAssigned) return true;
 
-      if (
-        (ci.includes(normalizeStr(currentClassAssigned)) ||
-          ci.includes(normalizeStr(currentClassName))) &&
-        (currentSession ? ci.includes(normalizeStr(currentSession)) : true) &&
-        (currentTerm ? ci.includes(normalizeStr(currentTerm)) : true)
-      ) {
-        return true;
-      }
-      return false;
-    }) ||
-    gradeMidData?.midReportCard?.find((el: any) => el?.approve === true) ||
-    (gradeMidData?.midReportCard && gradeMidData.midReportCard.length > 0
-      ? gradeMidData.midReportCard[gradeMidData.midReportCard.length - 1]
-      : undefined);
+    const expectedClass = normalizeStr(
+      `${currentClassName} session: ${currentSession}(${currentTerm})`
+    );
+    if (expectedClass && ci === expectedClass) return true;
+
+    const hasClass =
+      (currentClassAssigned && ci.includes(normalizeStr(currentClassAssigned))) ||
+      (currentClassName && ci.includes(normalizeStr(currentClassName)));
+    const hasSession = currentSession
+      ? ci.includes(normalizeStr(currentSession))
+      : false;
+    const hasTerm = currentTerm
+      ? ci.includes(normalizeStr(currentTerm))
+      : false;
+
+    return hasClass && hasSession && hasTerm;
+  });
+
+  const isTermResultApproved = Boolean(resultData && resultData?.approve === true);
+  const isMidResultApproved = Boolean(midResultData && midResultData?.approve === true);
 
   return (
     <div className="text-blue-950 flex flex-col h-full">
@@ -181,10 +184,10 @@ const StudentDashboard = () => {
             <div>
               <p
                 className={`capitalize font-medium ${
-                  resultData?.approve ? "text-red-500" : "text-blue-950"
+                  isTermResultApproved ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {resultData?.approve ? (
+                {isTermResultApproved ? (
                   <p>
                     Ready Now <br />
                     {studentInfo?.viewReportCard && (
@@ -195,18 +198,18 @@ const StudentDashboard = () => {
                     )}
                   </p>
                 ) : (
-                  "not yet Ready"
+                  "Not Ready"
                 )}
               </p>
               <div className="flex ">
-                {resultData?.approve && !studentInfo?.viewReportCard ? (
+                {isTermResultApproved && !studentInfo?.viewReportCard ? (
                   <Link to={`/print-result?classInfo=${encodeURIComponent(resultData?.classInfo || "")}`}>
                     <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view this term's report card
                     </div>
                   </Link>
                 ) : (
-                  <div className="bg-orange-500 hover:bg-orange-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[12px] md:text-[12px]">
+                  <div className="bg-orange-400 opacity-60 p-2 text-white rounded-md cursor-not-allowed transition-all duration-300 capitalize text-[12px] md:text-[12px]">
                     Term's report card (Not Ready)
                   </div>
                 )}
@@ -215,10 +218,10 @@ const StudentDashboard = () => {
             <div>
               <p
                 className={`capitalize font-medium ${
-                  midResultData?.approve ? "text-red-500" : "text-blue-950"
+                  isMidResultApproved ? "text-red-500" : "text-blue-950"
                 }`}
               >
-                {midResultData?.approve ? (
+                {isMidResultApproved ? (
                   <p>
                     Ready Now <br />
                     {studentInfo?.viewReportCard && (
@@ -229,18 +232,18 @@ const StudentDashboard = () => {
                     )}
                   </p>
                 ) : (
-                  "not yet Ready"
+                  "Not Ready"
                 )}
               </p>
               <div className="flex ">
-                {midResultData?.approve && !studentInfo?.viewReportCard ? (
+                {isMidResultApproved && !studentInfo?.viewReportCard ? (
                   <Link to={`/mid?classInfo=${encodeURIComponent(midResultData?.classInfo || "")}`}>
                     <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize">
                       view Mid term's report card
                     </div>
                   </Link>
                 ) : (
-                  <div className="bg-purple-500 hover:bg-purple-600 p-2 text-white rounded-md cursor-pointer transition-all duration-300 capitalize text-[12px] md:text-[12px]">
+                  <div className="bg-purple-400 opacity-60 p-2 text-white rounded-md cursor-not-allowed transition-all duration-300 capitalize text-[12px] md:text-[12px]">
                     Mid Term's report card (Not Ready)
                   </div>
                 )}

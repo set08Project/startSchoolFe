@@ -169,9 +169,13 @@ const MainStudentRow: FC<iProps> = ({ props, i, mainData }) => {
       </div>
 
       <div className="w-[100px] shrink-0 border-r flex justify-center items-center">
-        <Link to={`/print-result?classInfo=${encodeURIComponent(props?.classInfo || "")}`}>
-          <Button name="View Result" className="text-[10px] py-2 px-3 bg-blue-950 text-white" />
-        </Link>
+        {props?.approve ? (
+          <Link to={`/print-result?classInfo=${encodeURIComponent(props?.classInfo || "")}`}>
+            <Button name="View Result" className="text-[10px] py-2 px-3 bg-blue-950 text-white" />
+          </Link>
+        ) : (
+          <span className="text-[10px] text-red-500 font-semibold">Not Ready</span>
+        )}
       </div>
 
       <div className="w-[100px] shrink-0 border-r">{props?.points}</div>
@@ -222,6 +226,11 @@ const CardReportHistory = () => {
   const { state } = useReadMyClassInfoData(studentInfo?.classAssigned);
   const { subjectData } = useClassSubject(state?._id);
   const { gradeData } = useStudentGrade(studentInfo?._id);
+  const hasApprovedReport = gradeData?.reportCard?.some((el: any) => el?.approve === true);
+  // Get the most recently approved report's classInfo for the top button
+  const latestApprovedReport = gradeData?.reportCard
+    ?.filter((el: any) => el?.approve === true)
+    ?.slice(-1)?.[0];
 
   return (
     <div className="text-blue-950">
@@ -233,12 +242,19 @@ const CardReportHistory = () => {
       <div className="mt-10" />
 
       <div className="flex w-full justify-end mb-4">
-        <Link to="/print-result">
+        {hasApprovedReport && !studentInfo?.viewReportCard ? (
+          <Link to={`/print-result?classInfo=${encodeURIComponent(latestApprovedReport?.classInfo || "")}`}>
+            <Button
+              name="View Report Card"
+              className="bg-blue-950 text-white hover:bg-blue-900 transition-all duration-300"
+            />
+          </Link>
+        ) : (
           <Button
-            name="View Report Card"
-            className="bg-blue-950 text-white hover:bg-blue-900 transition-all duration-300"
+            name="Report Card Not Ready"
+            className="bg-gray-300 text-gray-500 cursor-not-allowed"
           />
-        </Link>
+        )}
       </div>
       <div className="py-6 px-2 border rounded-md w-full overflow-x-auto">
         <div className="text-[gray] flex gap-2 text-[12px] shrink-0 font-medium uppercase mb-10 px-4 w-max">

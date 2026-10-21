@@ -56,6 +56,12 @@ const PrintReportCard: React.FC = () => {
 
   let targetSession = school?.presentSession;
   let targetTerm = school?.presentTerm;
+
+  // Extract the class name from the classInfo query (e.g. "SSS 2A session: 2025/2026(1st Term)" -> "SSS 2A")
+  const reportClass = classInfoQuery
+    ? classInfoQuery.split(" session:")[0].trim()
+    : (studentInfo?.classAssigned || "");
+
   let targetClassInfo = classInfoQuery || `${studentInfo?.classAssigned} session: ${targetSession}(${targetTerm})`;
 
   if (classInfoQuery) {
@@ -85,19 +91,19 @@ const PrintReportCard: React.FC = () => {
   const st1 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${targetSession}(1st Term)`
+      `${reportClass} session: ${targetSession}(1st Term)`
   );
 
   const st2 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${targetSession}(2nd Term)`
+      `${reportClass} session: ${targetSession}(2nd Term)`
   );
 
   const st3 = gradeData?.reportCard.find(
     (el) =>
       el.classInfo ===
-      `${studentInfo?.classAssigned} session: ${targetSession}(3rd Term)`
+      `${reportClass} session: ${targetSession}(3rd Term)`
   );
 
   // Filter out unoffered subjects (where all marks are 0 across all terms)
@@ -557,7 +563,7 @@ const PrintReportCard: React.FC = () => {
       </div>
       <div ref={targetRef}>
         <h1 className="text-[10px] md:text-[12px] text-center mt-10 uppercase font-medium mb-10 italic">
-          {studentInfo?.classAssigned} {targetSession}
+          {reportClass || studentInfo?.classAssigned} {targetSession}
           <span className="mx-1">{targetTerm}</span> Student Report
         </h1>
         {/* ===== PROMOTION DECISION BANNER (TOP OF PAGE) ===== */}
@@ -757,7 +763,7 @@ const PrintReportCard: React.FC = () => {
                 <div className=" border p-2 ">
                   <h1 className="uppercase text-[12px] font-semibold">Class</h1>
                   <h1 className="uppercase text-[12px] font-normal -mt-[2px]">
-                    {studentInfo?.classAssigned}
+                    {reportClass || studentInfo?.classAssigned}
                   </h1>
                 </div>
                 <div className=" border p-2 ">
