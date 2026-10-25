@@ -5,6 +5,7 @@ import {
   useClassSubject,
   useExamination,
   useMidTest,
+  useSchoolAnnouncement,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import TimeTableScreen from "./TimeTableScreen";
@@ -19,7 +20,6 @@ import { readClassInfo } from "../../api/studentAPI";
 import LittleHeader from "../../../components/layout/LittleHeader";
 import { Link } from "react-router-dom";
 import { useStudentPerfomance } from "@/pagesForTeachers/hooks/useQuizHook";
-import { useSchoolData } from "@/pages/hook/useSchoolAuth";
 
 interface iProps {
   props?: string;
@@ -36,10 +36,16 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   const { examination } = useExamination(subject?._id);
   const { midTest } = useMidTest(subject?._id);
   const { studentInfo } = useStudentInfo();
-  const { data: schoolData } = useSchoolData();
+  const { schoolAnnouncement } = useSchoolAnnouncement(studentInfo?.schoolIDs);
 
-  const normalize = (val: string) => val?.trim()?.toLowerCase();
-  const currentTerm = classInfo?.presentTerm || schoolData?.presentTerm;
+  const normalize = (val: any) =>
+    String(val || "")
+      .trim()
+      .toLowerCase();
+  const currentTerm = normalize(
+    classInfo?.presentTerm || schoolAnnouncement?.presentTerm
+  );
+  const currentSession = normalize(schoolAnnouncement?.presentSession);
 
   // Only render if at least one test is active
   const examDept = String(examination?.quiz?.instruction?.dept || "")
@@ -56,40 +62,27 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
     examDept === normalizedFilter ||
     midDept === normalizedFilter;
 
-  const schoolTerm = normalize(currentTerm || "");
-  const schoolSession = normalize(schoolData?.presentSession || "");
-
-  const matchesCurrentTerm = (termValue: any) => {
-    const term = normalize(termValue || "");
-    return schoolTerm === "" || term === schoolTerm || term === "";
-  };
-
-  const matchesCurrentSession = (sessionValue: any) => {
-    const session = normalize(sessionValue || "");
-    return schoolSession === "" || session === schoolSession || session === "";
-  };
-
-  const isRelevantTest = (termValue: any, sessionValue: any) => {
-    const termMatches = matchesCurrentTerm(termValue);
-    const sessionMatches = matchesCurrentSession(sessionValue);
-    return termMatches && sessionMatches ? true : termMatches || sessionMatches;
-  };
+  const isCurrentAssessment = (assessment: any) =>
+    Boolean(
+      currentTerm &&
+        currentSession &&
+        normalize(assessment?.term || assessment?.exam?.term) === currentTerm &&
+        normalize(assessment?.session || assessment?.exam?.session) ===
+          currentSession
+    );
 
   const midMatch =
     !!midTest?.startMidTest &&
-    isRelevantTest(midTest?.term || midTest?.exam?.term, midTest?.session || midTest?.exam?.session);
+    isCurrentAssessment(midTest);
 
   const examMatch =
     !!examination?.startExam &&
-    isRelevantTest(
-      examination?.term || examination?.exam?.term,
-      examination?.session || examination?.exam?.session
-    );
+    isCurrentAssessment(examination);
 
   const shouldDisplay = (midMatch || examMatch) && matchesDept;
+  const { performance } = useStudentPerfomance(studentInfo?._id);
 
   if (!shouldDisplay) return null;
-  const { performance } = useStudentPerfomance(studentInfo?._id);
 
   // derive the most recent quiz IDs for midTest and examination (used in links)
   const midQuizID = midTest?._id || subject?.midTest?.[subject?.midTest?.length - 1];
@@ -148,14 +141,14 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
           {subject?.subjectTeacherName}
         </div>
       </div>
-      {(examination || midTest) && (
+      {(examMatch || midMatch) && (
         <div className="flex gap-2 mb-2">
-          {examination && (
+          {examMatch && (
             <div className="text-[10px] bg-purple-50 text-purple-700 px-2 py-1 rounded border border-purple-100">
               Exam: {examination.term} {examination.session ? `(${examination.session})` : ""}
             </div>
           )}
-          {midTest && (
+          {midMatch && (
             <div className="text-[10px] bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-100">
               Mid: {midTest.term} {midTest.session ? `(${midTest.session})` : ""}
             </div>
@@ -225,9 +218,18 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
   }> = ({ subject, onTestCountChange }) => {
     const { examination } = useExamination(subject?._id);
     const { midTest } = useMidTest(subject?._id);
-    const { data: schoolData } = useSchoolData();
-    const normalize = (val: string) => val?.trim()?.toLowerCase();
-    const currentTerm = classInfo?.presentTerm || schoolData?.presentTerm;
+    const { studentInfo } = useStudentInfo();
+    const { schoolAnnouncement } = useSchoolAnnouncement(
+      studentInfo?.schoolIDs
+    );
+    const normalize = (val: any) =>
+      String(val || "")
+        .trim()
+        .toLowerCase();
+    const currentTerm = normalize(
+      classInfo?.presentTerm || schoolAnnouncement?.presentTerm
+    );
+    const currentSession = normalize(schoolAnnouncement?.presentSession);
 
     const examDept = String(examination?.quiz?.instruction?.dept || "")
       .toLowerCase()
@@ -244,39 +246,26 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
       examDept === normalizedFilter ||
       midDept === normalizedFilter;
 
-    const schoolTerm = normalize(currentTerm || "");
-    const schoolSession = normalize(schoolData?.presentSession || "");
-
-    const matchesCurrentTerm = (termValue: any) => {
-      const term = normalize(termValue || "");
-      return schoolTerm === "" || term === schoolTerm || term === "";
-    };
-
-    const matchesCurrentSession = (sessionValue: any) => {
-      const session = normalize(sessionValue || "");
-      return schoolSession === "" || session === schoolSession || session === "";
-    };
-
-    const isRelevantTest = (termValue: any, sessionValue: any) => {
-      const termMatches = matchesCurrentTerm(termValue);
-      const sessionMatches = matchesCurrentSession(sessionValue);
-      return termMatches && sessionMatches ? true : termMatches || sessionMatches;
-    };
+    const isCurrentAssessment = (assessment: any) =>
+      Boolean(
+        currentTerm &&
+          currentSession &&
+          normalize(assessment?.term || assessment?.exam?.term) ===
+            currentTerm &&
+          normalize(assessment?.session || assessment?.exam?.session) ===
+            currentSession
+      );
 
     const midMatch =
       !!midTest?.startMidTest &&
-      isRelevantTest(midTest?.term || midTest?.exam?.term, midTest?.session || midTest?.exam?.session);
+      isCurrentAssessment(midTest);
 
     const examMatch =
       !!examination?.startExam &&
-      isRelevantTest(
-        examination?.term || examination?.exam?.term,
-        examination?.session || examination?.exam?.session
-      );
+      isCurrentAssessment(examination);
 
     const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
-    const { studentInfo } = useStudentInfo();
     const { performance } = useStudentPerfomance(studentInfo?._id);
 
     // Only mark done if the student completed THIS TERM's active exam/midTest
@@ -333,6 +322,8 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
       hasCompletedMidTest,
       hasCompletedExam,
       dept,
+      currentTerm,
+      currentSession,
       examination?.quiz?.instruction?.dept,
       midTest?.quiz?.instruction?.dept,
     ]);
