@@ -18,7 +18,7 @@ import {
   clockOut,
   findStudentWidthID,
 } from "../../pagesForStudents/api/studentAPI";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { mutate } from "swr";
 import MakeOtherPayment from "../../pages/page/payment/MakeOtherPayment";
 import { Countdown } from "./CountDown";
@@ -321,7 +321,6 @@ const Sider = () => {
         </div>
       </div>
       <div>
-        <Toaster />
         {/* <div className="mt-2 flex items-center gap-2">
           <button onClick={() => setShowQueueAdmin(true)} className="px-3 py-2 bg-neutral-100 rounded flex items-center gap-2">
             Queued Requests

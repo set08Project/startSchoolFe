@@ -11,7 +11,7 @@ import Input from "../../../components/reUse/Input";
 import { Link, useParams } from "react-router-dom";
 import { X, DollarSign, TrendingUp } from "lucide-react";
 import BeatLoader from "react-spinners/ClipLoader";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   useClassAttendance,
   useClassSubjects,
@@ -277,21 +277,36 @@ const ClassDetailScreen = () => {
     }
   };
 
-  const addClassSubject = () => {
-    createSchoolSubject(dataID!, {
-      subjectTeacherName: teacher,
-      subjectTitle: subject,
-      designated: classroom?.className,
-    }).then((res) => {
-      if (res.status === 201) {
-        mutate(`api/view-class-info/${classID}`);
-        toast.success("class teacher updated");
+  const addClassSubject = async () => {
+    try {
+      const res = await createSchoolSubject(dataID!, {
+        classID,
+        subjectTeacherName: teacher,
+        subjectTitle: subject,
+        designated: classroom?.className,
+      });
+
+      if (res?.status !== 201) {
+        toast.error(
+          res?.response?.data?.message ||
+            res?.message ||
+            "Unable to add subject to this class"
+        );
         handleToggleMenuFalse();
-      } else {
-        toast.error(`${res?.response?.data?.messgae}`);
-        handleToggleMenuFalse();
+        return;
       }
-    });
+
+      void mutate(`api/view-class-info/${classID}`);
+      toast.success("Subject added successfully");
+      handleToggleMenuFalse();
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to add subject to this class"
+      );
+      handleToggleMenuFalse();
+    }
   };
 
   const updateTeacher = () => {
@@ -567,7 +582,6 @@ const ClassDetailScreen = () => {
   return (
     <div className="text-blue-950">
       <LittleHeader name="Class room Details" back />
-      <Toaster position="top-center" reverseOrder={true} />
       <div>Class: {classroom?.className} </div>
       <span
         className="text-[12px] bg-red-500 text-white px-4 py-1 mb-10 rounded-[4px] cursor-pointer"

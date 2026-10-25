@@ -94,17 +94,34 @@ const StartTestComp: any = ({ props, subjectID, classInfo }) => {
   const schoolTerm = normalize(currentTerm || "");
   const schoolSession = normalize(schoolData?.presentSession || "");
 
+  const matchesCurrentTerm = (termValue: any) => {
+    const term = normalize(termValue || "");
+    return schoolTerm === "" || term === schoolTerm || term === "";
+  };
+
+  const matchesCurrentSession = (sessionValue: any) => {
+    const session = normalize(sessionValue || "");
+    return schoolSession === "" || session === schoolSession || session === "";
+  };
+
+  const isRelevantTest = (termValue: any, sessionValue: any) => {
+    const termMatches = matchesCurrentTerm(termValue);
+    const sessionMatches = matchesCurrentSession(sessionValue);
+    return termMatches && sessionMatches
+      ? true
+      : termMatches || sessionMatches;
+  };
+
   const midMatch =
-    midTest?.startMidTest &&
-    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
-    (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
+    !!midTest?.startMidTest &&
+    isRelevantTest(midTest?.term || midTest?.exam?.term, midTest?.session || midTest?.exam?.session);
 
   const examMatch =
-    examination?.startExam &&
-    (schoolTerm === "" ||
-      normalize(examination?.exam?.term || examination?.term || "") === schoolTerm) &&
-    (schoolSession === "" ||
-      normalize(examination?.exam?.session || examination?.session || "") === schoolSession);
+    !!examination?.startExam &&
+    isRelevantTest(
+      examination?.exam?.term || examination?.term,
+      examination?.exam?.session || examination?.session
+    );
 
   const activeMidTestID =
     midTest?._id ||

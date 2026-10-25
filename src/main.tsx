@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { registerSW } from "virtual:pwa-register";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { processQueue, defaultProcessor } from "@/lib/offlineQueue";
 import { mutate } from "swr";
 
@@ -174,10 +174,10 @@ const updateSW = registerSW({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
-  <App />
-
-  // </React.StrictMode>
+  <>
+    <App />
+    <Toaster position="top-center" reverseOrder={true} />
+  </>
 );
 
 // Handle service worker updates and cache management

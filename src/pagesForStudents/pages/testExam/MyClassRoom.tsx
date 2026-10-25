@@ -59,15 +59,32 @@ const SubjectCard: FC<{ subject: any; dept?: string; classInfo?: any }> = ({
   const schoolTerm = normalize(currentTerm || "");
   const schoolSession = normalize(schoolData?.presentSession || "");
 
+  const matchesCurrentTerm = (termValue: any) => {
+    const term = normalize(termValue || "");
+    return schoolTerm === "" || term === schoolTerm || term === "";
+  };
+
+  const matchesCurrentSession = (sessionValue: any) => {
+    const session = normalize(sessionValue || "");
+    return schoolSession === "" || session === schoolSession || session === "";
+  };
+
+  const isRelevantTest = (termValue: any, sessionValue: any) => {
+    const termMatches = matchesCurrentTerm(termValue);
+    const sessionMatches = matchesCurrentSession(sessionValue);
+    return termMatches && sessionMatches ? true : termMatches || sessionMatches;
+  };
+
   const midMatch =
-    midTest?.startMidTest &&
-    (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
-    (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
+    !!midTest?.startMidTest &&
+    isRelevantTest(midTest?.term || midTest?.exam?.term, midTest?.session || midTest?.exam?.session);
 
   const examMatch =
-    examination?.startExam &&
-    (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm) &&
-    (schoolSession === "" || normalize(examination?.session || "") === schoolSession);
+    !!examination?.startExam &&
+    isRelevantTest(
+      examination?.term || examination?.exam?.term,
+      examination?.session || examination?.exam?.session
+    );
 
   const shouldDisplay = (midMatch || examMatch) && matchesDept;
 
@@ -230,15 +247,32 @@ const ClassSubjectScreen: FC<iProps & { classInfo?: any }> = ({
     const schoolTerm = normalize(currentTerm || "");
     const schoolSession = normalize(schoolData?.presentSession || "");
 
+    const matchesCurrentTerm = (termValue: any) => {
+      const term = normalize(termValue || "");
+      return schoolTerm === "" || term === schoolTerm || term === "";
+    };
+
+    const matchesCurrentSession = (sessionValue: any) => {
+      const session = normalize(sessionValue || "");
+      return schoolSession === "" || session === schoolSession || session === "";
+    };
+
+    const isRelevantTest = (termValue: any, sessionValue: any) => {
+      const termMatches = matchesCurrentTerm(termValue);
+      const sessionMatches = matchesCurrentSession(sessionValue);
+      return termMatches && sessionMatches ? true : termMatches || sessionMatches;
+    };
+
     const midMatch =
-      midTest?.startMidTest &&
-      (schoolTerm === "" || normalize(midTest?.term || "") === schoolTerm) &&
-      (schoolSession === "" || normalize(midTest?.session || "") === schoolSession);
+      !!midTest?.startMidTest &&
+      isRelevantTest(midTest?.term || midTest?.exam?.term, midTest?.session || midTest?.exam?.session);
 
     const examMatch =
-      examination?.startExam &&
-      (schoolTerm === "" || normalize(examination?.term || "") === schoolTerm) &&
-      (schoolSession === "" || normalize(examination?.session || "") === schoolSession);
+      !!examination?.startExam &&
+      isRelevantTest(
+        examination?.term || examination?.exam?.term,
+        examination?.session || examination?.exam?.session
+      );
 
     const shouldDisplay = (midMatch || examMatch) && matchesDept;
 

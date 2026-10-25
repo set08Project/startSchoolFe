@@ -1976,7 +1976,7 @@ export const updateClassTeacherGradingToggle = async (
 
 export const changeSchoolEnrollmentID = async (
   schoolID: string,
-  data: { currentEnrollmentID: string; newEnrollmentID: string }
+  data: { currentEnrollmentID: string; newEnrollmentID: string },
 ) => {
   try {
     return await axios
@@ -2000,5 +2000,3 @@ export const updateStaffBulkInfo = async (staffID: string, data: any) => {
     return error;
   }
 };
-
-
