@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Fallback } from "../components/static/error/Fallbacks";
 import { ErrorBoundary } from "react-error-boundary";
 import ViewWeekReport from "@/pagesForTeachers/pages/report/ViewWeekReport";
@@ -167,6 +167,10 @@ const MyProfile = React.lazy(
 );
 
 export const teacherRouter = createBrowserRouter([
+  {
+    path: "/index.html",
+    element: <Navigate to="/" replace />,
+  },
   {
     path: "/",
     element: (

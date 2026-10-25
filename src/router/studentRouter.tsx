@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import LoadingScreen from "../pagesForStudents/static/LoadingScreen";
 import { Fallback } from "../components/static/error/Fallbacks";
@@ -152,6 +152,10 @@ const ViewStoreItems = React.lazy(
 );
 
 export const studentRouter = createBrowserRouter([
+  {
+    path: "/index.html",
+    element: <Navigate to="/" replace />,
+  },
   {
     path: "/",
     element: (

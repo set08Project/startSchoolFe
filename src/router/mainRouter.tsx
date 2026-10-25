@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 const AuthLayout = React.lazy(() => import("../components/layout/AuthLayout"));
 const Register = React.lazy(() => import("../pages/page/auth/Register"));
@@ -56,6 +56,10 @@ import { Fallback } from "../components/static/error/Fallbacks";
 const EnquiryForm = React.lazy(() => import("../pages/page/auth/EnquiryForm"));
 
 export const mainRouter = createBrowserRouter([
+  {
+    path: "/index.html",
+    element: <Navigate to="/" replace />,
+  },
   {
     path: "/",
     element: (

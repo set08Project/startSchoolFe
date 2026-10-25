@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import ClockingScreen from "../pages/page/clocking/ClockingScreen";
 
 const PersonalSetting = React.lazy(
@@ -207,6 +207,10 @@ const BroadSheetReportCardApproved = React.lazy(
   () => import("@/pages/page/ResultHistory/BoardSheet")
 );
 export const adminRouter = createBrowserRouter([
+  {
+    path: "/index.html",
+    element: <Navigate to="/" replace />,
+  },
   {
     path: "/",
     element: (
