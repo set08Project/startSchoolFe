@@ -91,49 +91,71 @@ const CreateExamination = () => {
                   id="upload_instruction_modal_title"
                   className="font-bold text-lg"
                 >
-                  Please this is the format to follow when uploading questions
+                  Follow these instructions when preparing the question file
                 </h3>
                 <div className="py-4 text-sm text-gray-700">
                   <p className="mb-2">
-                    Please upload a <strong>.docx</strong> file containing
-                    questions in a clear format. The parser supports typical
-                    multiple-choice formatting (numbered question blocks
-                    followed by options labeled A., B., C., etc.).
+                    Upload a <strong>.docx</strong> file. Keep it under{" "}
+                    <strong>5 MB</strong>. Type each question and option as
+                    plain text in this format:
                   </p>
+                  <div className="mb-4 rounded bg-gray-100 p-3 font-mono text-xs leading-6">
+                    <p>1. Which of the following is correct</p>
+                    <p>A. First option</p>
+                    <p>B. Second option</p>
+                    <p>C. Third option</p>
+                    <p>D. Fourth option</p>
+                    <p>Answer: Second option</p>
+                  </div>
+                  <p className="mb-2 font-semibold">Important rules</p>
+                  <ul className="mb-4 list-disc space-y-1 pl-5">
+                    <li>
+                      Start every question at the far left with its number,
+                      followed by a period and a space: <code>1. </code>.
+                      Do not indent it with spaces or tabs.
+                    </li>
+                    <li>
+                      Type the number yourself. Do not use Word bullets,
+                      automatic numbered lists, or bullet symbols for question
+                      numbers.
+                    </li>
+                    <li>
+                      Put each question, option, and answer on its own line.
+                      Leave a blank line between questions if you want.
+                    </li>
+                    <li>
+                      Write question options with a letter, period, and space:
+                      <code> A. option text</code>. Use labels A through E;
+                      do not write options as <code>A)</code> or use bullets.
+                    </li>
+                    <li>
+                      Include at least two non-empty options for every
+                      question.
+                    </li>
+                    <li>
+                      Add a non-empty answer on its own line starting exactly
+                      with <code>Answer:</code>. Use the full text of the
+                      correct option, as in the example.
+                    </li>
+                    <li>
+                      Do not end the question text with a period or comma, and
+                      do not include parentheses <code>( )</code> in question
+                      text.
+                    </li>
+                    <li>
+                      Do not add explanations or extra lines after an answer;
+                      they may be read as part of the next option.
+                    </li>
+                  </ul>
                   <p className="mb-2">
-                    Special scientific characters (Greek letters, μ, subscripts,
-                    superscripts, fractions, and basic math notation) are
-                    preserved using our DOCX to HTML conversion. If you include
-                    images, they will be embedded as data URIs.
+                    Make sure every question starts with a number (for example,
+                    <code> 1. </code>), has question text, at least two
+                    options, and an answer. Upload a <strong>.docx</strong>{" "}
+                    file—not <strong>.doc</strong>, PDF, or CSV.
                   </p>
-                  <br />
-                  <br />
                   <p className="text-xs text-gray-500">
-                    1. Which of the following best describes commercial farming.
-                    <br />
-                    <br />
-                    A. Production of plants and animal for family consumption.
-                    <br />
-                    B. Large scale agricultural production for sales. <br />
-                    C. Large scale agricultural production for family
-                    consumption. <br />
-                    D. Use of family labor for large scale agricultural
-                    production. <br />
-                    Answer: Large scale agricultural production for sales.
-                    <br />
-                    <br />
-                    2. In which year did the World War II end?
-                    <br />
-                    <br />
-                    A. 1945
-                    <br />
-                    B. 1949 <br />
-                    C. 1941 <br />
-                    D. 1942
-                    <br />
-                    Answer: 1945
-                    <br />
-                    <br />
+                    Greek letters, subscripts, superscripts, fractions, and
+                    basic math notation are supported in DOCX files.
                   </p>
                 </div>
                 <div className="modal-action">
