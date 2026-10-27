@@ -17,8 +17,11 @@ import lodash from "lodash";
 
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { FaSpinner } from "react-icons/fa6";
+import { useAssessmentProtection } from "../../hooks/useAssessmentProtection";
 
 const MidTestScreen = () => {
+  useAssessmentProtection();
+
   const navigate = useNavigate();
   const { midTestID, subjectID } = useParams();
 
@@ -341,7 +344,7 @@ const MidTestScreen = () => {
   };
 
   return (
-    <div>
+    <div className="assessment-protected select-none">
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
         name={`

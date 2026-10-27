@@ -16,6 +16,7 @@ import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHoo
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 import { FaSpinner } from "react-icons/fa6";
 import lodash from "lodash";
+import { useAssessmentProtection } from "../../hooks/useAssessmentProtection";
 
 function MathRenderer({ text }) {
   if (!text) return null;
@@ -400,6 +401,8 @@ function MathRenderer({ text }) {
 }
 
 const ExaminationTestScreen = () => {
+  useAssessmentProtection();
+
   const navigate = useNavigate();
   const { examID } = useParams();
 
@@ -1012,7 +1015,7 @@ const ExaminationTestScreen = () => {
   }
 
   return (
-    <div>
+    <div className="assessment-protected select-none">
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
         name={

@@ -13,8 +13,11 @@ import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
 import { FaSpinner } from "react-icons/fa";
+import { useAssessmentProtection } from "../../hooks/useAssessmentProtection";
 
 const QuizTestScreen = () => {
+  useAssessmentProtection();
+
   const navigate = useNavigate();
   const { quizID } = useParams();
   const { quizData } = useQuiz(quizID!);
@@ -152,7 +155,7 @@ const QuizTestScreen = () => {
   // ${quizData?.term && quizData?.term}
 
   return (
-    <div>
+    <div className="assessment-protected select-none">
       <Toaster position="top-center" reverseOrder={true} />
       <LittleHeader
         name={`
