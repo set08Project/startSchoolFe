@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import Button from "../../components/reUse/Button";
 import { useQuiz } from "../../hooks/useTeacher";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const QuizSetupScreen = () => {
   const { subjectID } = useParams();
@@ -34,6 +35,7 @@ const QuizSetupScreen = () => {
             .toUpperCase()
             .concat(quizData?.status.slice(1))} Results`}
         />
+        <SubjectClassLabel subjectID={subjectID} />
       </div>
 
       <div className="container mx-auto px-4 py-8">

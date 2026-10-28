@@ -19,6 +19,7 @@ import {
 import { MdArrowBack } from "react-icons/md";
 import { removePerformance } from "@/pages/api/schoolAPIs";
 import { FaSpinner } from "react-icons/fa6";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const MidTestResultPerformance = () => {
   const { subjectID, quizID, midQuizID } = useParams();
@@ -61,6 +62,7 @@ const MidTestResultPerformance = () => {
             ?.toUpperCase()
             ?.concat(quizData?.status.slice(1))} Results`}
         />
+        <SubjectClassLabel subjectID={subjectID} />
 
         <Link
           to={`/mid-test-grade/${subjectID}/${midQuizID}`}

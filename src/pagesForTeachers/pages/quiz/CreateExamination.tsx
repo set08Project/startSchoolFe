@@ -10,8 +10,11 @@ import PreviewExamination from "./PreviewExamination";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Toaster } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const CreateExamination = () => {
+  const { subjectID } = useParams();
   const dispatch = useDispatch();
   const testQuestion = useSelector((state: any) => state.test);
   const [toggle, setToggle] = useState<boolean>(false);
@@ -47,6 +50,7 @@ const CreateExamination = () => {
   return (
     <div>
       <LittleHeader name="Create Examination Question Screen" />
+      <SubjectClassLabel subjectID={subjectID} />
       <Toaster />
 
       <div className="mt-10" />

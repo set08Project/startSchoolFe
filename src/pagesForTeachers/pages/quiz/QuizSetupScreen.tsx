@@ -55,6 +55,7 @@ import Button from "@/components/reUse/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { useExaminationQuiz } from "@/pagesForTeachers/hooks/useMidTest";
 import { useSchoolData } from "@/pages/hook/useSchoolAuth";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const QuizSetupScreen = () => {
   const [state, setState] = useState<any>({});
@@ -235,6 +236,7 @@ const QuizSetupScreen = () => {
   return (
     <div className="text-blue-950  relative">
       <LittleHeader name={`Viewing ${subjectQuiz?.subjectTitle} Quiz`} />
+      <SubjectClassLabel subjectID={subjectID} />
 
       <ConfirmDeleteModal
         isOpen={isModalOpenExam}

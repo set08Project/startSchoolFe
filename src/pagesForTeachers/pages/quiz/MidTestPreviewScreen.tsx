@@ -14,6 +14,7 @@ import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const MidTestPreviewScreen = () => {
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ const MidTestPreviewScreen = () => {
       <LittleHeader
         name={`${examination?.subjectTitle} Mid Test Preview Screen`}
       />
+      <SubjectClassLabel subjectID={subjectID} />
 
       <div className="relative">
         {/* Timer */}

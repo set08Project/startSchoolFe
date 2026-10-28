@@ -13,6 +13,7 @@ import { useSujectQuiz } from "../../hooks/useTeacher";
 import { useMidTest } from "../../hooks/useMidTest";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const PreviewQuizScreen: FC<any> = ({
   instruction,
@@ -38,6 +39,7 @@ const PreviewQuizScreen: FC<any> = ({
 
   return (
     <div>
+      <SubjectClassLabel subjectID={subjectID} />
       <Button
         name={
           loading ? (

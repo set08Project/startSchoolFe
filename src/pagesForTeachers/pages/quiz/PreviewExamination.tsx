@@ -9,6 +9,7 @@ import { mutate } from "swr";
 import { FaSpinner } from "react-icons/fa";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import toast from "react-hot-toast";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const PreviewExamination: FC<any> = ({
   instruction,
@@ -32,6 +33,7 @@ const PreviewExamination: FC<any> = ({
 
   return (
     <div>
+      <SubjectClassLabel subjectID={subjectID} />
       <Button
         name={
           loading ? (

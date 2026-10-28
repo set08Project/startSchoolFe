@@ -13,6 +13,7 @@ import { MdPlayCircle } from "react-icons/md";
 import CountdownTimer from "../../../components/static/CountdownTimer";
 import { MdOutlineTimer } from "react-icons/md";
 import { useStudentPerfomance } from "../../../pagesForTeachers/hooks/useQuizHook";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 function MathRenderer({ text }) {
   if (!text) return null;
@@ -477,6 +478,7 @@ const ExaminationPreviewScreen = () => {
       <LittleHeader
         name={`${examination?.subjectTitle} Examination Preview Screen`}
       />
+      <SubjectClassLabel subjectID={subjectID} />
 
       <div className="relative">
         {/* Timer */}

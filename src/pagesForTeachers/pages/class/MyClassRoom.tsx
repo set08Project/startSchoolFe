@@ -6,7 +6,8 @@ import { FC, useEffect, useState } from "react";
 import { FaAddressBook } from "react-icons/fa";
 import {
   useClassStudent,
-  useClassSubject,
+  useExamination,
+  useMidTest,
   useTeacherInfo,
 } from "../../../pagesForTeachers/hooks/useTeacher";
 import { readClassInfo } from "../../api/teachersAPI";
@@ -16,68 +17,103 @@ import pix from "../../../assets/pix.jpg";
 import ReadingClassStudents from "./ReadingClassStudents";
 import { Link, useParams } from "react-router-dom";
 import { useReadOneClassInfo } from "../../../pagesForStudents/hooks/useStudentHook";
-import { useSchoolSessionData } from "../../../pages/hook/useSchoolAuth";
+import {
+  useClassSubjects,
+  useSchoolSessionData,
+} from "../../../pages/hook/useSchoolAuth";
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import GenerateAllResult from "../CardTemplate/GenerateAllStudentResult";
 
 interface iProps {
   props?: string;
+  presentTerm?: string;
+  presentSession?: string;
 }
 
-const ClassSubjectScreen: FC<iProps> = ({ props }) => {
+interface SubjectAssessmentBadgesProps {
+  subjectID: string;
+  subject: any;
+  presentTerm?: string;
+  presentSession?: string;
+}
+
+const normalize = (value?: string) =>
+  String(value ?? "")
+    .trim()
+    .toLowerCase();
+
+const assessmentMatchesPeriod = (
+  assessment: any,
+  presentTerm?: string,
+  presentSession?: string
+) => {
+  const record = assessment?.exam || assessment;
+  const term = normalize(record?.term);
+  const session = normalize(record?.session);
+  const termMatches = !presentTerm || term === normalize(presentTerm);
+  const sessionMatches =
+    !presentSession || session === normalize(presentSession);
+
+  return termMatches && sessionMatches;
+};
+
+const SubjectAssessmentBadges: FC<SubjectAssessmentBadgesProps> = ({
+  subjectID,
+  subject,
+  presentTerm,
+  presentSession,
+}) => {
+  const { examination } = useExamination(subjectID);
+  const { midTest } = useMidTest(subjectID);
+
+  const hasExam =
+    (Array.isArray(subject?.examination) &&
+      subject.examination.some((record: any) =>
+        assessmentMatchesPeriod(record, presentTerm, presentSession)
+      )) ||
+    (examination &&
+      assessmentMatchesPeriod(examination, presentTerm, presentSession));
+  const hasMidTest =
+    (Array.isArray(subject?.midTest) &&
+      subject.midTest.some((record: any) =>
+        assessmentMatchesPeriod(record, presentTerm, presentSession)
+      )) ||
+    (midTest &&
+      assessmentMatchesPeriod(midTest, presentTerm, presentSession));
+
+  return (
+    <>
+      {hasExam && (
+        <p className="flex items-center gap-2 rounded-sm border border-green-200 bg-green-100 px-2 py-1 text-[10px] font-bold uppercase text-green-700">
+          Exam Added
+        </p>
+      )}
+      {hasMidTest && (
+        <p className="flex items-center gap-2 rounded-sm border border-orange-200 bg-orange-100 px-2 py-1 text-[10px] font-bold uppercase text-orange-700">
+          Mid-Test Added
+        </p>
+      )}
+    </>
+  );
+};
+
+const ClassSubjectScreen: FC<iProps> = ({
+  props,
+  presentTerm,
+  presentSession,
+}) => {
   const { teacherInfo } = useTeacherInfo();
-  const { subjectData } = useClassSubject(props!);
+  const { readSubject } = useClassSubjects(props || "");
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
+  const currentTerm = presentTerm || schoolInfo?.presentTerm;
+  const currentSession = presentSession || schoolInfo?.presentSession;
 
   return (
     <div>
-      {subjectData?.classSubjects?.length > 0 ? (
+      {readSubject?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
-          {subjectData?.classSubjects?.map((props: any) => {
-            const currentTerm = subjectData?.presentTerm?.toLowerCase()?.trim();
-            const currentSession = schoolInfo?.presentSession?.toLowerCase()?.trim();
-
-            const hasExam = props?.examination?.some((exam: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                exam?.term?.toLowerCase()?.trim() === currentTerm;
-              const matchesSession =
-                !currentSession ||
-                exam?.session?.toLowerCase()?.trim() === currentSession;
-              return matchesTerm && matchesSession;
-            });
-
-            const hasVisibleExam = props?.examination?.some((exam: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                exam?.term?.toLowerCase()?.trim() === currentTerm;
-              const matchesSession =
-                !currentSession ||
-                exam?.session?.toLowerCase()?.trim() === currentSession;
-              return matchesTerm && matchesSession && exam?.startExam === true;
-            });
-
-            const hasMidTest = props?.midTest?.some((test: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                test?.term?.toLowerCase()?.trim() === currentTerm;
-              const matchesSession =
-                !currentSession ||
-                test?.session?.toLowerCase()?.trim() === currentSession;
-              return matchesTerm && matchesSession;
-            });
-
-            const hasVisibleMidTest = props?.midTest?.some((test: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                test?.term?.toLowerCase()?.trim() === currentTerm;
-              const matchesSession =
-                !currentSession ||
-                test?.session?.toLowerCase()?.trim() === currentSession;
-              return matchesTerm && matchesSession && test?.startMidTest === true;
-            });
-
+          {readSubject.map((props: any) => {
             return (
             <div
               key={props?._id}
@@ -95,28 +131,12 @@ const ClassSubjectScreen: FC<iProps> = ({ props }) => {
                 <p className="text-[12px] bg-slate-100 rounded-sm py-2 pl-1 shadow-sm pr-4 mb-5">
                   compulsory
                 </p>
-                {hasExam && (
-                  <p className="flex items-center gap-2 text-[10px] bg-green-100 text-green-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-green-200">
-                    {hasVisibleExam && (
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
-                    )}
-                    <span>Exam Added</span>
-                  </p>
-                )}
-                {hasMidTest && (
-                  <p className="flex items-center gap-2 text-[10px] bg-orange-100 text-orange-700 rounded-sm py-1 px-2 shadow-sm mb-7 font-bold uppercase border border-orange-200">
-                    {hasVisibleMidTest && (
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
-                      </span>
-                    )}
-                    <span>Mid-Test Added</span>
-                  </p>
-                )}
+                <SubjectAssessmentBadges
+                  subjectID={props?._id}
+                  subject={props}
+                  presentTerm={currentTerm}
+                  presentSession={currentSession}
+                />
               </div>
               <div className="flex-1" />
               <p className="text-[13px] font-medium">
@@ -180,9 +200,25 @@ const MyClassRoomScreen = () => {
   const { teacherInfo } = useTeacherInfo();
   const [classInfo, setClassInfo] = useState<any>();
   const { classID } = useParams();
-  const [state, setState] = useState<string>(
-    teacherInfo?.classesAssigned[0]?.classID
-  );
+  const [state, setState] = useState<string>(classID || "");
+
+  useEffect(() => {
+    const assignedClasses = teacherInfo?.classesAssigned || [];
+    const selectedClassIsAssigned = assignedClasses.some(
+      (assignedClass: any) => assignedClass?.classID === state
+    );
+
+    if (!selectedClassIsAssigned && assignedClasses.length > 0) {
+      const requestedClassIsAssigned = assignedClasses.some(
+        (assignedClass: any) => assignedClass?.classID === classID
+      );
+      setState(
+        requestedClassIsAssigned
+          ? classID!
+          : assignedClasses[0]?.classID || ""
+      );
+    }
+  }, [teacherInfo?.classesAssigned, classID, state]);
 
   const { oneClass } = useReadOneClassInfo(state);
 
@@ -216,7 +252,9 @@ const MyClassRoomScreen = () => {
       >
         {teacherInfo?.classesAssigned?.length > 0 ? (
           teacherInfo?.classesAssigned?.map((el: any) => (
-            <option value={el?.classID}>{el?.className}</option>
+            <option key={el?.classID} value={el?.classID}>
+              {el?.className}
+            </option>
           ))
         ) : (
           <option value="No class Assigned yet" disabled>
@@ -275,7 +313,10 @@ const MyClassRoomScreen = () => {
           Below are all the subjects this CLASS offers!
         </p>
 
-        <ClassSubjectScreen props={oneClass?._id} />
+        <ClassSubjectScreen
+          props={oneClass?._id}
+          presentTerm={oneClass?.presentTerm}
+        />
       </div>
 
       {/* Top Students */}

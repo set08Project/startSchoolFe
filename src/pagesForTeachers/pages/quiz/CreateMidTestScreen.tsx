@@ -11,8 +11,11 @@ import PreviewMidTestScreen from "./PreviewMidTestQuestions";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const CreateMidTestScreen = () => {
+  const { subjectID } = useParams();
   const [editorValue, setEditorValue] = useState("");
 
   const dispatch = useDispatch();
@@ -111,6 +114,7 @@ const CreateMidTestScreen = () => {
   return (
     <div>
       <LittleHeader name="Create Mid-Test Question Screen" />
+      <SubjectClassLabel subjectID={subjectID} />
 
       <div className="mt-10" />
 

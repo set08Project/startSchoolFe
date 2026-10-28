@@ -14,6 +14,7 @@ import { useExam, useQuiz } from "../../hooks/useTeacher";
 import { MdArrowBack } from "react-icons/md";
 import { FaSpinner } from "react-icons/fa6";
 import { removePerformance } from "@/pages/api/schoolAPIs";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const ExamResultSetupScreen = () => {
   const { subjectID, quizID } = useParams();
@@ -50,6 +51,7 @@ const ExamResultSetupScreen = () => {
             .toUpperCase()
             .concat(quizData?.status.slice(1))} Results`}
         />
+        <SubjectClassLabel subjectID={subjectID} />
       </div>
 
       <div className="container mx-auto px-4 py-8">

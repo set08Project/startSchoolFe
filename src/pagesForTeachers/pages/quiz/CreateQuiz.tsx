@@ -6,8 +6,11 @@ import JustQuestionScreen from "./JustQuestionScreen";
 import PreviewTest from "./PreviewTest";
 import { useDispatch, useSelector } from "react-redux";
 import { addTestInstruction } from "../../../global/reduxState";
+import { useParams } from "react-router-dom";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const CreateQuiz = () => {
+  const { subjectID } = useParams();
   const dispatch = useDispatch();
   const testQuestion = useSelector((state: any) => state.test);
   const [toggle, setToggle] = useState<boolean>(false);
@@ -19,6 +22,7 @@ const CreateQuiz = () => {
   return (
     <div>
       <LittleHeader name="Create Test Screen" />
+      <SubjectClassLabel subjectID={subjectID} />
 
       <div className="mt-10" />
 

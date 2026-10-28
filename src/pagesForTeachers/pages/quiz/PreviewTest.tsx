@@ -8,6 +8,7 @@ import { useSujectQuiz } from "../../hooks/useTeacher";
 import { mutate } from "swr";
 import { useReadMyClassInfoData } from "../../../pagesForStudents/hooks/useStudentHook";
 import { FaSpinner } from "react-icons/fa";
+import SubjectClassLabel from "../../components/SubjectClassLabel";
 
 const PreviewTest = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const PreviewTest = () => {
 
   return (
     <div>
+      <SubjectClassLabel subjectID={subjectID} />
       <p>Preview Test Entries</p>
       <p className="mt-10 font-bold">Test Instructions</p>
       <p className="mr-6 mt-2">{testQuestion[0]?.instruction?.instruction}</p>
