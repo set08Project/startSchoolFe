@@ -20,7 +20,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { useAssessmentProtection } from "../../hooks/useAssessmentProtection";
 
 const MidTestScreen = () => {
-  useAssessmentProtection();
+  const enterAssessmentMode = useAssessmentProtection();
 
   const navigate = useNavigate();
   const { midTestID, subjectID } = useParams();
@@ -370,6 +370,7 @@ const MidTestScreen = () => {
                 size={200}
                 className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
                 onClick={() => {
+                  enterAssessmentMode();
                   // initialize per-test countdown so refresh continues the timer
                   try {
                     const existing = localStorage.getItem(countdownKey);

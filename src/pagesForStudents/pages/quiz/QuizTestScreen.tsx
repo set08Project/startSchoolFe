@@ -16,7 +16,7 @@ import { FaSpinner } from "react-icons/fa";
 import { useAssessmentProtection } from "../../hooks/useAssessmentProtection";
 
 const QuizTestScreen = () => {
-  useAssessmentProtection();
+  const enterAssessmentMode = useAssessmentProtection();
 
   const navigate = useNavigate();
   const { quizID } = useParams();
@@ -180,6 +180,7 @@ const QuizTestScreen = () => {
                 size={200}
                 className="cursor-pointer text-red-500 hover:text-red-600 transition-all duration-300"
                 onClick={() => {
+                  enterAssessmentMode();
                   if (!document.startViewTransition) {
                     setStart(true);
                     setActivate(true);
