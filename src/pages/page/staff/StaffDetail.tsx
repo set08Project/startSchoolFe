@@ -238,6 +238,7 @@ import {
   updateTeacherAvatar,
   updateStaffBulkInfo,
 } from "../../../pagesForTeachers/api/teachersAPI";
+import { updateClassroomTeacher } from "../../api/schoolAPIs";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -252,9 +253,61 @@ const StaffDetail = () => {
   const [salary, setSalary] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [updatingStaff, setUpdatingStaff] = useState(false);
+  const [removingClassID, setRemovingClassID] = useState("");
 
   const { staffID } = useParams();
   const { teacherDetail } = useTeacherDetail(staffID!);
+
+  const handleRemoveClass = async (classAssignment: {
+    classID?: string;
+    className?: string;
+  }) => {
+    const classID = classAssignment.classID;
+    const schoolID = teacherDetail?.schoolIDs;
+
+    if (!classID || !schoolID) {
+      toast.error("Unable to remove this class assignment");
+      return;
+    }
+
+    if (
+      !window.confirm(
+        `Remove ${classAssignment.className || "this classroom"} from ${
+          teacherDetail?.staffName || "this teacher"
+        }?`
+      )
+    ) {
+      return;
+    }
+
+    setRemovingClassID(classID);
+    try {
+      const response = await updateClassroomTeacher(schoolID, classID, {
+        classTeacherName: "",
+      });
+
+      if (response?.status !== 201) {
+        toast.error(response?.message || "Unable to remove class assignment");
+        return;
+      }
+
+      await Promise.all([
+        mutate(`api/view-teacher-detail/${staffID}`),
+        mutate(`api/view-school-teacher/${schoolID}`),
+        mutate("api/view-classrooms/"),
+        mutate(`api/view-classrooms/${classID}`),
+      ]);
+      toast.success("Class removed from teacher successfully");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to remove class assignment"
+      );
+    } finally {
+      setRemovingClassID("");
+    }
+  };
 
   // Edit form state
   const [editName, setEditName] = useState("");
@@ -620,12 +673,30 @@ const StaffDetail = () => {
               Assigned Classes:
             </div>
             {teacherDetail?.classesAssigned?.length > 0 ? (
-              teacherDetail?.classesAssigned?.map((props) => (
-                <div className="border-b mb-1 py-2 flex items-center gap-5 justify-start font-medium">
-                  <h1>Class Teacher :</h1>
-                  <h1 className="font-semibold text-[18px] uppercase">
-                    {props?.className}
-                  </h1>
+              teacherDetail?.classesAssigned?.map((classAssignment) => (
+                <div
+                  key={classAssignment?.classID}
+                  className="border-b mb-1 py-2 flex flex-wrap items-center gap-3 justify-between font-medium"
+                >
+                  <div className="flex items-center gap-3">
+                    <h1>Class Teacher:</h1>
+                    <h1 className="font-semibold text-[18px] uppercase">
+                      {classAssignment?.className}
+                    </h1>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={
+                      !classAssignment?.classID ||
+                      removingClassID === classAssignment.classID
+                    }
+                    onClick={() => handleRemoveClass(classAssignment)}
+                    className="rounded-md border border-red-200 px-3 py-1.5 text-sm font-semibold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {removingClassID === classAssignment?.classID
+                      ? "Removing…"
+                      : "Remove class"}
+                  </button>
                 </div>
               ))
             ) : (
