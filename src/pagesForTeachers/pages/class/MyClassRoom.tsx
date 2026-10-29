@@ -24,11 +24,10 @@ import {
 import { usePDF } from "react-to-pdf";
 import moment from "moment";
 import GenerateAllResult from "../CardTemplate/GenerateAllStudentResult";
+import { matchesCurrentAssessmentPeriod } from "../../../lib/assessmentPeriod";
 
 interface iProps {
   props?: string;
-  presentTerm?: string;
-  presentSession?: string;
 }
 
 interface SubjectAssessmentBadgesProps {
@@ -37,26 +36,6 @@ interface SubjectAssessmentBadgesProps {
   presentTerm?: string;
   presentSession?: string;
 }
-
-const normalize = (value?: string) =>
-  String(value ?? "")
-    .trim()
-    .toLowerCase();
-
-const assessmentMatchesPeriod = (
-  assessment: any,
-  presentTerm?: string,
-  presentSession?: string
-) => {
-  const record = assessment?.exam || assessment;
-  const term = normalize(record?.term);
-  const session = normalize(record?.session);
-  const termMatches = !presentTerm || term === normalize(presentTerm);
-  const sessionMatches =
-    !presentSession || session === normalize(presentSession);
-
-  return termMatches && sessionMatches;
-};
 
 const SubjectAssessmentBadges: FC<SubjectAssessmentBadgesProps> = ({
   subjectID,
@@ -68,19 +47,19 @@ const SubjectAssessmentBadges: FC<SubjectAssessmentBadgesProps> = ({
   const { midTest } = useMidTest(subjectID);
 
   const hasExam =
-    (Array.isArray(subject?.examination) &&
-      subject.examination.some((record: any) =>
-        assessmentMatchesPeriod(record, presentTerm, presentSession)
-      )) ||
-    (examination &&
-      assessmentMatchesPeriod(examination, presentTerm, presentSession));
+    matchesCurrentAssessmentPeriod(
+      subject?.examination,
+      presentTerm,
+      presentSession
+    ) ||
+    matchesCurrentAssessmentPeriod(examination, presentTerm, presentSession);
   const hasMidTest =
-    (Array.isArray(subject?.midTest) &&
-      subject.midTest.some((record: any) =>
-        assessmentMatchesPeriod(record, presentTerm, presentSession)
-      )) ||
-    (midTest &&
-      assessmentMatchesPeriod(midTest, presentTerm, presentSession));
+    matchesCurrentAssessmentPeriod(
+      subject?.midTest,
+      presentTerm,
+      presentSession
+    ) ||
+    matchesCurrentAssessmentPeriod(midTest, presentTerm, presentSession);
 
   return (
     <>
@@ -100,14 +79,12 @@ const SubjectAssessmentBadges: FC<SubjectAssessmentBadgesProps> = ({
 
 const ClassSubjectScreen: FC<iProps> = ({
   props,
-  presentTerm,
-  presentSession,
 }) => {
   const { teacherInfo } = useTeacherInfo();
   const { readSubject } = useClassSubjects(props || "");
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
-  const currentTerm = presentTerm || schoolInfo?.presentTerm;
-  const currentSession = presentSession || schoolInfo?.presentSession;
+  const currentTerm = schoolInfo?.presentTerm;
+  const currentSession = schoolInfo?.presentSession;
 
   return (
     <div>
@@ -315,7 +292,6 @@ const MyClassRoomScreen = () => {
 
         <ClassSubjectScreen
           props={oneClass?._id}
-          presentTerm={oneClass?.presentTerm}
         />
       </div>
 

@@ -1,41 +1,28 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { useSujectInfo, useTeacherInfo } from "../../hooks/useTeacher";
+import {
+  useExamination,
+  useMidTest,
+  useSchoolAnnouncement,
+  useSujectInfo,
+  useTeacherInfo,
+} from "../../hooks/useTeacher";
 import LittleHeader from "../../components/layout/LittleHeader";
 import {
   useClassSubjects,
+  useSchoolData,
   useSchoolSessionData,
+  useViewSchoolClassRM,
 } from "../../../pages/hook/useSchoolAuth";
 import pix from "../../../assets/pix.jpg";
+import { matchesCurrentAssessmentPeriod } from "../../../lib/assessmentPeriod";
 
 document.title = "View teacher subjects";
 
-interface AssignedSubject {
-  id?: string;
-  _id?: string;
-  subjectID?: string;
-  title?: string;
-  subjectTitle?: string;
-  classMeant?: string;
-  classID?: string;
-  subject?: {
-    id?: string;
-    _id?: string;
-    subjectID?: string;
-    subjectTitle?: string;
-  };
-}
-
 interface ClassAssignment {
+  _id?: string;
   classID?: string;
   className?: string;
-}
-
-interface SubjectRowProps {
-  assignment: AssignedSubject;
-  classID?: string;
-  term?: string;
-  session?: string;
 }
 
 interface SubjectReadinessProps {
@@ -43,27 +30,6 @@ interface SubjectReadinessProps {
   term?: string;
   session?: string;
 }
-
-const normalize = (value?: string) =>
-  String(value ?? "")
-    .trim()
-    .toLowerCase();
-
-const normalizeClassName = (value?: string) =>
-  normalize(value).replace(/[^a-z0-9]/g, "");
-
-const normalizeSubjectName = (value?: string) =>
-  normalize(value)
-    .replace(/\bmaths?\b/g, "mathematics")
-    .replace(/[^a-z0-9]/g, "");
-
-const getAssignedSubjectId = (assignment: AssignedSubject) =>
-  assignment.subjectID ||
-  assignment.id ||
-  assignment._id ||
-  assignment.subject?.subjectID ||
-  assignment.subject?.id ||
-  assignment.subject?._id;
 
 const Status: FC<{ label: string; ready: boolean | undefined }> = ({
   label,
@@ -91,22 +57,8 @@ const SubjectReadiness: FC<SubjectReadinessProps> = ({
   session,
 }) => {
   const { subjectInfo } = useSujectInfo(subjectID);
-  const currentTerm = normalize(term);
-  const currentSession = normalize(session);
-
-  const matchesCurrentPeriod = (assessment: {
-    term?: string;
-    session?: string;
-  }) => {
-    const assessmentTerm = normalize(assessment.term);
-    const assessmentSession = normalize(assessment.session);
-
-    return (
-      (!currentTerm || assessmentTerm === currentTerm) &&
-      (!currentSession || assessmentSession === currentSession)
-    );
-  };
-
+  const { examination } = useExamination(subjectID);
+  const { midTest } = useMidTest(subjectID);
   const assessmentsLoaded = Boolean(subjectInfo);
 
   return (
@@ -121,7 +73,12 @@ const SubjectReadiness: FC<SubjectReadinessProps> = ({
         label="Mid-test"
         ready={
           assessmentsLoaded
-            ? Boolean(subjectInfo?.midTest?.some(matchesCurrentPeriod))
+            ? matchesCurrentAssessmentPeriod(
+                subjectInfo?.midTest,
+                term,
+                session
+              ) ||
+              matchesCurrentAssessmentPeriod(midTest, term, session)
             : undefined
         }
       />
@@ -129,7 +86,12 @@ const SubjectReadiness: FC<SubjectReadinessProps> = ({
         label="Examination"
         ready={
           assessmentsLoaded
-            ? Boolean(subjectInfo?.examination?.some(matchesCurrentPeriod))
+            ? matchesCurrentAssessmentPeriod(
+                subjectInfo?.examination,
+                term,
+                session
+              ) ||
+              matchesCurrentAssessmentPeriod(examination, term, session)
             : undefined
         }
       />
@@ -137,118 +99,123 @@ const SubjectReadiness: FC<SubjectReadinessProps> = ({
   );
 };
 
-const ResolvedSubject: FC<SubjectRowProps & { title: string }> = ({
-  assignment,
-  classID,
+interface ClassSubject {
+  _id?: string;
+  subjectTitle?: string;
+  subjectTeacherName?: string;
+  teacherID?: string;
+}
+
+interface ClassSubjectCardProps {
+  subject: ClassSubject;
+  className?: string;
+  term?: string;
+  session?: string;
+}
+
+const ClassSubjectCard: FC<ClassSubjectCardProps> = ({
+  subject,
+  className,
   term,
   session,
-  title,
 }) => {
-  const { readSubject } = useClassSubjects(classID || "");
-  const canonicalSubject = readSubject?.find(
-    (subject: { subjectTitle?: string }) =>
-      normalizeSubjectName(subject?.subjectTitle) ===
-      normalizeSubjectName(title)
-  );
-  const canonicalSubjectID = canonicalSubject?._id;
+  const subjectID = subject._id;
 
-  if (!readSubject) {
-    return <p className="text-sm text-slate-500">Loading classroom subject…</p>;
-  }
-
-  if (!canonicalSubjectID) {
-    return (
-      <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
-        This subject assignment does not match a subject in its assigned class.
-        Ask your school administrator to correct the assignment.
-      </p>
-    );
-  }
+  if (!subjectID) return null;
 
   return (
-    <>
+    <article className="min-w-0 rounded-xl border bg-white p-4 shadow-sm">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="break-words text-lg font-semibold text-blue-950">
-            {canonicalSubject.subjectTitle || title}
+            {subject.subjectTitle || "Assigned subject"}
           </h2>
           <p className="mt-1 text-sm text-slate-600">
-            {assignment.classMeant
-              ? `Class: ${assignment.classMeant}`
-              : "Class not specified"}
+            Class: {className || "Assigned class"}
           </p>
         </div>
         <Link
-          to={`/subjects/${canonicalSubjectID}`}
+          to={`/subjects/${subjectID}`}
           className="shrink-0 rounded-lg bg-blue-950 px-4 py-2 text-sm font-medium capitalize text-white transition-colors hover:bg-blue-900"
         >
           View Subject
         </Link>
       </div>
-      <SubjectReadiness
-        subjectID={canonicalSubjectID}
-        term={term}
-        session={session}
-      />
-    </>
+      {subject.subjectTeacherName && (
+        <p className="mb-3 text-sm text-slate-600">
+          Teacher: {subject.subjectTeacherName}
+        </p>
+      )}
+      <SubjectReadiness subjectID={subjectID} term={term} session={session} />
+    </article>
   );
 };
 
-const SubjectRow: FC<SubjectRowProps> = ({
-  assignment,
-  classID,
+interface AssignedClassSubjectsProps {
+  classroom: ClassAssignment;
+  teacherID: string;
+  term?: string;
+  session?: string;
+}
+
+const AssignedClassSubjects: FC<AssignedClassSubjectsProps> = ({
+  classroom,
+  teacherID,
   term,
   session,
 }) => {
-  const title =
-    assignment.title ||
-    assignment.subjectTitle ||
-    assignment.subject?.subjectTitle ||
-    "Assigned subject";
+  const classID = classroom._id || classroom.classID || "";
+  const { readSubject } = useClassSubjects(classID);
+
+  if (!readSubject) {
+    return (
+      <p className="rounded-xl border bg-white p-4 text-sm text-slate-500">
+        Loading {classroom.className || "classroom"} subjects…
+      </p>
+    );
+  }
+
+  const teacherSubjects = readSubject.filter(
+    (subject: ClassSubject) =>
+      subject.teacherID && String(subject.teacherID) === teacherID
+  );
 
   return (
-    <article className="min-w-0 rounded-xl border bg-white p-4 shadow-sm">
-      {classID ? (
-        <ResolvedSubject
-          assignment={assignment}
-          classID={classID}
+    <>
+      {teacherSubjects.map((subject: ClassSubject) => (
+        <ClassSubjectCard
+          key={subject._id}
+          subject={subject}
+          className={classroom.className}
           term={term}
           session={session}
-          title={title}
         />
-      ) : (
-        <>
-          <h2 className="break-words text-lg font-semibold text-blue-950">
-            {title}
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            {assignment.classMeant
-              ? `Class: ${assignment.classMeant}`
-              : "Class not specified"}
-          </p>
-          <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
-            This assignment is not linked to one of your assigned classes.
-            Please ask your school administrator to correct the assignment.
-          </p>
-        </>
-      )}
-    </article>
+      ))}
+    </>
   );
 };
 
 const TeacherSubject: FC = () => {
   const { teacherInfo } = useTeacherInfo();
   const { schoolInfo } = useSchoolSessionData(teacherInfo?.schoolIDs);
-  const assignments: AssignedSubject[] = Array.isArray(
-    teacherInfo?.subjectAssigned
+  const { data: schoolData } = useSchoolData();
+  const { schoolAnnouncement } = useSchoolAnnouncement(teacherInfo?.schoolIDs);
+  const { viewClasses } = useViewSchoolClassRM(teacherInfo?.schoolIDs || "");
+  const currentTerm =
+    schoolData?.presentTerm ||
+    schoolAnnouncement?.presentTerm ||
+    schoolInfo?.presentTerm;
+  const currentSession =
+    schoolData?.presentSession ||
+    schoolAnnouncement?.presentSession ||
+    schoolInfo?.presentSession;
+  const schoolClassrooms: ClassAssignment[] = Array.isArray(
+    viewClasses?.classRooms
   )
-    ? teacherInfo.subjectAssigned
+    ? viewClasses.classRooms
     : [];
-  const assignedClasses: ClassAssignment[] = Array.isArray(
-    teacherInfo?.classesAssigned
-  )
-    ? teacherInfo.classesAssigned
-    : [];
+  const teacherID = String(teacherInfo?._id || "");
+  const teacherSubjectsLoaded = Boolean(teacherInfo && viewClasses);
 
   return (
     <div className="w-full min-w-0">
@@ -268,11 +235,11 @@ const TeacherSubject: FC = () => {
         </div>
       </section>
 
-      {schoolInfo?.presentTerm || schoolInfo?.presentSession ? (
+      {currentTerm || currentSession ? (
         <p className="mt-4 text-sm text-slate-600">
           Current period:{" "}
           <span className="font-medium text-blue-950">
-            {[schoolInfo?.presentSession, schoolInfo?.presentTerm]
+            {[currentSession, currentTerm]
               .filter(Boolean)
               .join(" · ")}
           </span>
@@ -280,32 +247,30 @@ const TeacherSubject: FC = () => {
       ) : null}
 
       <section className="mt-5 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-        {assignments.map((assignment, index) => {
-          const assignedClass = assignedClasses.find(
-            (classAssignment) =>
-              normalizeClassName(classAssignment.className) ===
-              normalizeClassName(assignment.classMeant)
-          );
-          const classID = assignment.classID || assignedClass?.classID;
-
-          return (
-            <SubjectRow
-              key={`${classID || "unlinked"}-${
-                getAssignedSubjectId(assignment) ||
-                `${assignment.title}-${index}`
-              }`}
-              assignment={assignment}
-              classID={classID}
-              term={schoolInfo?.presentTerm}
-              session={schoolInfo?.presentSession}
-            />
-          );
-        })}
+        {teacherSubjectsLoaded &&
+          schoolClassrooms
+            .filter((classroom) => classroom._id || classroom.classID)
+            .map((classroom) => (
+              <AssignedClassSubjects
+                key={classroom._id || classroom.classID}
+                classroom={classroom}
+                teacherID={teacherID}
+                term={currentTerm}
+                session={currentSession}
+              />
+            ))}
       </section>
 
-      {assignments.length === 0 && (
+      {teacherSubjectsLoaded &&
+        schoolClassrooms.length > 0 &&
+        schoolClassrooms.every((classroom) => !(classroom._id || classroom.classID)) && (
+          <div className="mt-5 rounded-xl border border-dashed p-8 text-center text-slate-600">
+            No classroom subjects are available yet.
+          </div>
+        )}
+      {teacherSubjectsLoaded && schoolClassrooms.length === 0 && (
         <div className="mt-5 rounded-xl border border-dashed p-8 text-center text-slate-600">
-          No subjects have been assigned to your account yet.
+          No classroom subjects are assigned to your account yet.
         </div>
       )}
     </div>

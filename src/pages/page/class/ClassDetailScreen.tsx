@@ -42,6 +42,7 @@ import ReportCardScreenDone from "./ResultCardDone";
 import moment from "moment";
 import { usePDF } from "react-to-pdf";
 import { opacity } from "html2canvas/dist/types/css/property-descriptors/opacity";
+import { matchesCurrentAssessmentPeriod } from "../../../lib/assessmentPeriod";
 
 // import { updateTermFee } from "../../../pagesForStudents/api/studentAPI";
 
@@ -78,55 +79,39 @@ const ClassSubjectScreen: FC<{ classroom: any; school: any }> = ({
       {readSubject?.length > 0 ? (
         <div className="mt-1 w-full gap-2 grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-3">
           {readSubject?.map((props: any) => {
-            const currentTerm = classroom?.presentTerm?.toLowerCase()?.trim();
-            const currentSession = school?.presentSession?.toLowerCase()?.trim();
+            const currentTerm = school?.presentTerm;
+            const currentSession = school?.presentSession;
 
-            const hasExam = props?.examination?.some((exam: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                exam?.term?.toLowerCase()?.trim() === currentTerm;
-
-              const matchesSession =
-                !currentSession ||
-                exam?.session?.toLowerCase()?.trim() === currentSession;
-
-              return matchesTerm && matchesSession;
-            });
+            const hasExam = matchesCurrentAssessmentPeriod(
+              props?.examination,
+              currentTerm,
+              currentSession
+            );
 
             const hasVisibleExam = props?.examination?.some((exam: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                exam?.term?.toLowerCase()?.trim() === currentTerm;
-
-              const matchesSession =
-                !currentSession ||
-                exam?.session?.toLowerCase()?.trim() === currentSession;
-
-              return matchesTerm && matchesSession && exam?.startExam === true;
+              return (
+                matchesCurrentAssessmentPeriod(
+                  exam,
+                  currentTerm,
+                  currentSession
+                ) && exam?.startExam === true
+              );
             });
 
-            const hasMidTest = props?.midTest?.some((test: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                test?.term?.toLowerCase()?.trim() === currentTerm;
-
-              const matchesSession =
-                !currentSession ||
-                test?.session?.toLowerCase()?.trim() === currentSession;
-
-              return matchesTerm && matchesSession;
-            });
+            const hasMidTest = matchesCurrentAssessmentPeriod(
+              props?.midTest,
+              currentTerm,
+              currentSession
+            );
 
             const hasVisibleMidTest = props?.midTest?.some((test: any) => {
-              if (!currentTerm) return false;
-              const matchesTerm =
-                test?.term?.toLowerCase()?.trim() === currentTerm;
-
-              const matchesSession =
-                !currentSession ||
-                test?.session?.toLowerCase()?.trim() === currentSession;
-
-              return matchesTerm && matchesSession && test?.startMidTest === true;
+              return (
+                matchesCurrentAssessmentPeriod(
+                  test,
+                  currentTerm,
+                  currentSession
+                ) && test?.startMidTest === true
+              );
             });
 
             return (
