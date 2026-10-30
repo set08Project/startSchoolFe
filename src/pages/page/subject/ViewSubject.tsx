@@ -29,6 +29,17 @@ interface iProps {
   props?: any;
 }
 
+interface SubjectRecord {
+  _id?: string;
+  subjectTitle?: string;
+  designated?: string;
+  subjectClassID?: string;
+  subjectClassIDs?: string;
+  classID?: string;
+  classDetails?: { _id?: string };
+  teacherID?: string;
+}
+
 const TeacherInfo: FC<iProps> = ({ props }) => {
   const { schoolSubjectTeacherDetail } = useSchoolTeacherDetail(props);
 
@@ -129,6 +140,66 @@ const ViewSubjects = () => {
   };
   const [propsID, setPropsID] = useState<string | null>("");
   const [propsIDII, setPropsIDII] = useState<string | null>("");
+
+  const handleDeleteSubject = async (subject: SubjectRecord) => {
+    const subjectID = subject._id;
+    if (!dataID || !subjectID) {
+      toast.error("Unable to identify this subject");
+      return;
+    }
+
+    if (
+      !window.confirm(
+        `Delete ${subject?.subjectTitle || "this subject"} from ${
+          subject?.designated || "its classroom"
+        }? This cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    setPropsIDII(subjectID);
+    try {
+      const response = await deletSubject(dataID, subjectID);
+      if (response?.status !== 201) {
+        toast.error(
+          response?.response?.data?.message ||
+            response?.data?.message ||
+            "Unable to delete subject"
+        );
+        return;
+      }
+
+      const classroomIDs = new Set(
+        [
+          subject?.subjectClassID,
+          subject?.subjectClassIDs,
+          subject?.classID,
+          subject?.classDetails?._id,
+        ]
+          .filter(Boolean)
+          .map(String)
+      );
+      await Promise.all([
+        mutate(`api/view-school-subject/${dataID}`),
+        mutate("api/view-classrooms/"),
+        mutate(`api/view-classrooms/${dataID}`),
+        ...Array.from(classroomIDs, (classID) =>
+          mutate(`api/view-class-info/${classID}`)
+        ),
+        ...(subject?.teacherID
+          ? [mutate(`api/view-teacher-detail/${subject.teacherID}`)]
+          : []),
+      ]);
+      toast.success("Subject deleted from the school and classroom");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to delete subject"
+      );
+    } finally {
+      setPropsIDII(null);
+    }
+  };
 
   return (
     <div>
@@ -361,41 +432,7 @@ const ViewSubjects = () => {
                   </label>
                   <label
                     className="w-[200px] my-3 bg-red-500 text-white py-2 px-4 flex justify-center items-center rounded-md text-[12px] transition-all duration-300 cursor-pointer "
-                    onClick={() => {
-                      setPropsIDII(props._id);
-                      {
-                        !!props?.teacherID
-                          ? removeTeacherSubject(
-                              dataID,
-                              props?.teacherID,
-                              props?._id
-                            ).then((res: any) => {
-                              if (res.status === 200) {
-                                mutate(
-                                  `api/view-teacher-detail/${props?.teacherID}`
-                                );
-                                deletSubject(dataID, props?._id).then(
-                                  (res: any) => {
-                                    setPropsIDII(null);
-                                    mutate(`api/view-school-subject/${dataID}`);
-                                    toast.success(
-                                      "subject Remove from Teacher's Archieve"
-                                    );
-                                  }
-                                );
-                              } else {
-                                toast.error("something went wrong");
-                                setPropsIDII(null);
-                              }
-                            })
-                          : deletSubject(dataID, props?._id).then(
-                              (res: any) => {
-                                mutate(`api/view-school-subject/${dataID}`);
-                                toast.success("subject Remove from Archieve");
-                              }
-                            );
-                      }
-                    }}
+                    onClick={() => handleDeleteSubject(props)}
                   >
                     {propsIDII === props._id ? (
                       <span className="flex items-center gap-2">
