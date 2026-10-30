@@ -74,23 +74,75 @@ const TeacherInfo: FC<iProps> = ({ props }) => {
 
 const ViewSubjects = () => {
   const { schoolSubject } = useSchoolSubject();
-  const [subjectTeacher, setSubjectTeacher] = useState("");
+  const [subjectTeacherID, setSubjectTeacherID] = useState("");
+  const [assigningSubjectID, setAssigningSubjectID] = useState<string | null>(
+    null
+  );
   const [searchSubject, setSearchSubject] = useState("");
   const { dataID } = useSchoolCookie();
   const { data } = useSchoolData();
   const { schoolTeacher } = useSchoolTeacher();
 
-  const onTeacherSubject = (subjectID: string) => {
-    updateSchoolSubjectTeacher(dataID, subjectID, subjectTeacher).then(
-      (res) => {
-        if (res.status === 201) {
-          mutate(`api/view-school-subject/${dataID}`);
-          toast.success("Teacher Assigned Successfully");
-        } else {
-          toast.error(`${res.response.data.message}`);
-        }
+  const onTeacherSubject = async (subject: SubjectRecord) => {
+    const subjectID = subject._id;
+    if (!dataID || !subjectID || !subjectTeacherID) {
+      toast.error("Select a teacher before assigning this subject");
+      return;
+    }
+
+    setAssigningSubjectID(subjectID);
+    try {
+      const response = await updateSchoolSubjectTeacher(
+        dataID,
+        subjectID,
+        subjectTeacherID
+      );
+      if (response?.status !== 201) {
+        toast.error(
+          response?.response?.data?.message ||
+            response?.message ||
+            "Unable to assign subject"
+        );
+        return;
       }
-    );
+
+      const teacherIDs = new Set(
+        [subject.teacherID, subjectTeacherID].filter(Boolean).map(String)
+      );
+      const classIDs = new Set(
+        [
+          subject.subjectClassID,
+          subject.subjectClassIDs,
+          subject.classID,
+          subject.classDetails?._id,
+        ]
+          .filter(Boolean)
+          .map(String)
+      );
+      await Promise.all([
+        mutate(`api/view-school-subject/${dataID}`),
+        ...Array.from(teacherIDs, (teacherID) =>
+          mutate(`api/view-teacher-detail/${teacherID}`)
+        ),
+        ...Array.from(classIDs, (classID) =>
+          mutate(`api/view-class-info/${classID}`)
+        ),
+        mutate("api/view-classrooms/"),
+      ]);
+
+      const modal = document.getElementById(
+        `assign_class_subject_${subjectID}`
+      ) as HTMLInputElement | null;
+      if (modal) modal.checked = false;
+      setSubjectTeacherID("");
+      toast.success("Teacher assigned to subject successfully");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to assign subject"
+      );
+    } finally {
+      setAssigningSubjectID(null);
+    }
   };
 
   const [state, setState] = useState("");
@@ -289,10 +341,11 @@ const ViewSubjects = () => {
                   <div className="w-[150px] border-r">
                     <div className="mt-5 text-[13px] font-medium">
                       <label
-                        htmlFor="assign_class_subject"
+                        htmlFor={`assign_class_subject_${props._id}`}
                         className=" my-3 bg-blue-950 text-white py-2 px-4 rounded-md text-[12px] transition-all duration-300 hover:text-white cursor-pointer "
                         onClick={() => {
                           setState(props._id);
+                          setSubjectTeacherID("");
                         }}
                       >
                         + Assign Teacher
@@ -301,7 +354,7 @@ const ViewSubjects = () => {
                       {/* Put this part before </body> tag */}
                       <input
                         type="checkbox"
-                        id="assign_class_subject"
+                        id={`assign_class_subject_${props._id}`}
                         className="modal-toggle"
                       />
                       <div className="modal  rounded-md" role="dialog">
@@ -310,7 +363,7 @@ const ViewSubjects = () => {
                             <p className="font-bold">Add New Subject</p>
 
                             <label
-                              htmlFor="assign_class_subject"
+                              htmlFor={`assign_class_subject_${props._id}`}
                               className="hover:bg-blue-50 transition-all duration-300  cursor-pointer rounded-full flex items-center justify-center w-6 h-6 font-bold "
                             >
                               <MdClose />
@@ -325,8 +378,16 @@ const ViewSubjects = () => {
                             <br />
                             <br />
                             <div className="flex gap-2  items-center">
-                              <p> Subject: {subjectTeacher}</p>
-                              {subjectTeacher && (
+                              <p>
+                                Subject:{" "}
+                                {
+                                  schoolTeacher?.staff?.find(
+                                    (teacher: any) =>
+                                      String(teacher?._id) === subjectTeacherID
+                                  )?.staffName
+                                }
+                              </p>
+                              {subjectTeacherID && (
                                 <div className="flex items-center font-bold">
                                   <span>selected</span>
                                   <MdCheck className="text-green-500 text-[25px] mb-1 " />
@@ -343,19 +404,19 @@ const ViewSubjects = () => {
                               </label>
                               <select
                                 className="select bg-gray-100 select-info mt-1 text-[12px] py-0 px-2 w-full max-w-xs mb-3"
-                                value={subjectTeacher}
+                                value={subjectTeacherID}
                                 onChange={(
                                   e: React.ChangeEvent<HTMLSelectElement>
                                 ) => {
-                                  setSubjectTeacher(e.target.value);
+                                  setSubjectTeacherID(e.target.value);
                                 }}
                               >
-                                <option disabled selected>
+                                <option value="" disabled>
                                   Select the subject Teacher
                                 </option>
                                 {schoolTeacher?.staff.map(
                                   (props: any, i: number) => (
-                                    <option value={props?.staffName} key={i}>
+                                    <option value={props?._id} key={props?._id || i}>
                                       {props.staffName}
                                       {/* Peter */}
                                     </option>
@@ -366,18 +427,24 @@ const ViewSubjects = () => {
                           </div>
 
                           <div className="w-full flex justify-end transition-all duration-300">
-                            {subjectTeacher !== "" ? (
-                              <label
-                                htmlFor="assign_class_subject"
-                                className="
-                                bg-blue-950 text-white px-6 py-2 rounded-md cursor-pointer
-                                "
-                                onClick={() => {
-                                  onTeacherSubject(state);
+                            {subjectTeacherID !== "" ? (
+                              <button
+                                type="button"
+                                disabled={assigningSubjectID === state}
+                                className={`rounded-md bg-blue-950 px-6 py-2 text-white ${
+                                  assigningSubjectID === state
+                                    ? "cursor-not-allowed opacity-60"
+                                    : "cursor-pointer"
+                                }`}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  void onTeacherSubject(props);
                                 }}
                               >
-                                Proceed
-                              </label>
+                                {assigningSubjectID === state
+                                  ? "Assigning…"
+                                  : "Proceed"}
+                              </button>
                             ) : (
                               <Button
                                 name="Can't Proceed"
@@ -389,7 +456,7 @@ const ViewSubjects = () => {
 
                         <label
                           className="modal-backdrop"
-                          htmlFor="assign_class_subject"
+                          htmlFor={`assign_class_subject_${props._id}`}
                         >
                           Close
                         </label>

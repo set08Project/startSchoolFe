@@ -1250,13 +1250,13 @@ export const createTimeTable = async (
 
 export const updateSchoolSubjectTeacher = async (
   schoolID: string,
-  classID: string,
-  data: {},
+  subjectID: string,
+  teacherID: string,
 ) => {
   try {
     return await axios
-      .patch(`${URL}/update-subject-teacher/${schoolID}/${classID}`, {
-        subjectTeacherName: data,
+      .patch(`${URL}/update-subject-teacher/${schoolID}/${subjectID}`, {
+        subjectTeacherID: teacherID,
       })
       .then((res: any) => {
         return res?.data;
