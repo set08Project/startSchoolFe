@@ -54,8 +54,19 @@ server.listen(PORT, async () => {
 
     console.log('Launching browser via puppeteer v' + require('../node_modules/puppeteer/package.json').version + '...');
 
+    const browserPaths = process.platform === 'win32'
+      ? [
+          process.env.CHROME_PATH,
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+        ].filter(Boolean)
+      : [];
+    const executablePath = browserPaths.find((path) => existsSync(path));
+
     const browser = await puppeteer.launch({
       headless: true,
+      executablePath,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
